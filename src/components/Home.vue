@@ -7,43 +7,24 @@ const outputQuality = ref<number>(80)
 const aspectRatio = ref<string>('1:1')
 const outputFormat = ref<string>('jpg')
 const isLoading = ref<boolean>(false)
-const image = ref<string>('')
-function generateImage() {
-  const myToken = 'r8_4GE7yf9OrL4IBF9qKoolk1NVWesuyrd3XAKRe'
-  const url = `https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions`
-  const { isFetching, error, data } = useFetch(url, {
+
+async function generateImage() {
+  const url = `http://localhost:3001/api/generate`
+  const { isFetching, error, data } = await useFetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${myToken}`
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       prompt: prompt.value,
-      no_of_outputs: noOfOutputs.value,
+      num_outputs: noOfOutputs.value,
       output_quality: outputQuality.value,
       aspect_ratio: aspectRatio.value,
       output_format: outputFormat.value
     })
   })
-  console.log('isLoading', isLoading)
-  console.log('error', error)
-  console.log('data', data)
-  isLoading.value = isFetching.value
 
-  //   async beforeFetch({ url, options, cancel }) {
-
-  //       if (!myToken) cancel()
-
-  //       options.headers = {
-  //         ...options.headers,
-  //         Authorization: `Bearer ${myToken}`,
-  //         'Content-Type': 'application/json'
-  //       }
-
-  //       return {
-  //         options
-  //       }
-  //     }
+  console.log(isFetching, error, data)
 }
 </script>
 <template>
@@ -119,12 +100,6 @@ function generateImage() {
       <v-col cols="8">
         <div class="h-100 rounded-lg border-thin">
           <v-skeleton-loader v-if="isLoading" type="image"></v-skeleton-loader>
-          <!-- <v-img
-          v-else
-        :aspect-ratio="1"
-        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-        width="300"
-      ></v-img> -->
         </div>
       </v-col>
     </v-row>
