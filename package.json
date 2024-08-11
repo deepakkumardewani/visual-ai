@@ -8,11 +8,13 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@clerk/clerk-js": "^5.14.0",
     "@mdi/font": "7.4.47",
     "@vueuse/core": "^10.11.1",
     "core-js": "^3.37.1",
     "roboto-fontface": "*",
     "vue": "^3.4.31",
+    "vue-clerk": "^0.4.17",
     "vuetify": "^3.6.11"
   },
   "devDependencies": {
@@ -20,6 +22,7 @@
     "@types/node": "^20.14.10",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-typescript": "^13.0.0",
+    "@trivago/prettier-plugin-sort-imports": "4.3.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard": "^17.1.0",
