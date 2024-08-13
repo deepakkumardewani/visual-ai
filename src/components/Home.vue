@@ -4,30 +4,30 @@ import PricingCard from '@/components/PricingCard.vue'
 const examples = [
   {
     prompt: 'POV someone holding their hand up, stunning black forest mountains',
-    url: '/src/assets/examples/1.jpg'
+    url: '/src/assets/1.jpg'
   },
   {
     prompt:
       '3 magical wizards stand on a yellow table. On the left, a wizard in black robes holds a sign that says ‘AI’. In the middle, a witch in red robes holds a sign that says ‘is’ and on the right, a wizard in blue robes holds a sign that says ‘cool’. Behind them a purple dragon',
-    url: '/src/assets/examples/2.jpg'
+    url: '/src/assets/2.jpg'
   },
   {
     prompt: 'a tiny astronaut hatching from an egg on the moon',
-    url: '/src/assets/examples/3.jpg'
+    url: '/src/assets/3.jpg'
   },
   {
     prompt: 'Baby hedgehog wearing a flower crown in a garden',
-    url: '/src/assets/examples/4.jpg'
+    url: '/src/assets/4.jpg'
   },
   {
     prompt:
       'a man and woman are standing together against a backdrop, the backdrop is divided equally in half down the middle, left side is red, right side is gold, the woman is wearing a t-shirt with a yoda motif, she has a long skirt with birds on it, the man is wearing a three piece purple suit, he has spiky blue hair',
-    url: '/src/assets/examples/5.jpg'
+    url: '/src/assets/5.jpg'
   },
   {
     prompt:
       'black forest gateau cake spelling out the words "FLUX SCHNELL", tasty, food photography, dynamic shot',
-    url: '/src/assets/examples/6.jpg'
+    url: '/src/assets/6.jpg'
   }
 ]
 
