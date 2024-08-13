@@ -1,4 +1,48 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import PricingCard from '@/components/PricingCard.vue'
+
+const examples = [
+  {
+    prompt: 'POV someone holding their hand up, stunning black forest mountains',
+    url: '/src/assets/examples/1.webp'
+  },
+  {
+    prompt:
+      '3 magical wizards stand on a yellow table. On the left, a wizard in black robes holds a sign that says ‘AI’. In the middle, a witch in red robes holds a sign that says ‘is’ and on the right, a wizard in blue robes holds a sign that says ‘cool’. Behind them a purple dragon',
+    url: '/src/assets/examples/2.webp'
+  },
+  {
+    prompt: 'a tiny astronaut hatching from an egg on the moon',
+    url: '/src/assets/examples/3.webp'
+  },
+  {
+    prompt: 'Baby hedgehog wearing a flower crown in a garden',
+    url: '/src/assets/examples/4.webp'
+  },
+  {
+    prompt:
+      'a man and woman are standing together against a backdrop, the backdrop is divided equally in half down the middle, left side is red, right side is gold, the woman is wearing a t-shirt with a yoda motif, she has a long skirt with birds on it, the man is wearing a three piece purple suit, he has spiky blue hair',
+    url: '/src/assets/examples/5.webp'
+  },
+  {
+    prompt:
+      'black forest gateau cake spelling out the words "FLUX SCHNELL", tasty, food photography, dynamic shot',
+    url: '/src/assets/examples/6.webp'
+  }
+]
+
+const starterPlan = {
+  title: 'Starter',
+  price: '0',
+  features: ['5 credits/day', 'Standard quality images', 'Only Webp format']
+}
+
+const proPlan = {
+  title: 'Pro',
+  price: '4.99',
+  features: ['300 credits/month', 'High quality images', 'Webp, PNG & JPG formats']
+}
+</script>
 <template>
   <v-container>
     <div id="hero">
@@ -19,7 +63,7 @@
           </div>
         </v-col>
       </v-row>
-      <v-row class="align-center justify-center">
+      <!-- <v-row class="align-center justify-center">
         <v-col cols="6">
           <v-text-field
             variant="outlined"
@@ -32,12 +76,12 @@
         <v-col cols="2">
           <v-btn dark>Generate Image</v-btn>
         </v-col>
-      </v-row>
+      </v-row> -->
     </div>
     <div id="about" class="mt-16">
       <v-row class="align-start justify-start">
         <v-col cols="6">
-          <v-chip class="my-4" label> About </v-chip>
+          <v-chip class="my-4" color="purple-lighten-2" label> About </v-chip>
           <div class="text-h4 font-weight-bold my-4">
             <span> Unleash the Power of AI Image Generation </span>
           </div>
@@ -51,18 +95,14 @@
           </div>
         </v-col>
         <v-col cols="6">
-          <v-img
-            aspect-ratio="16/9"
-            cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-          ></v-img>
+          <v-img aspect-ratio="1/1" cover src="/src/assets/about.jpg"></v-img>
         </v-col>
       </v-row>
     </div>
     <div id="gallery" class="mt-16">
       <v-row>
         <v-col cols="12">
-          <v-chip class="my-4" label> Gallery </v-chip>
+          <v-chip class="my-4" color="purple-lighten-2" label> Gallery </v-chip>
           <div class="text-h4 font-weight-bold my-4">
             <span> Explore Our Gallery </span>
           </div>
@@ -72,59 +112,57 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="4">
-          <v-img
-            aspect-ratio="16/9"
-            cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-          ></v-img>
-        </v-col>
-        <v-col cols="4">
-          <v-img
-            aspect-ratio="16/9"
-            cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-          ></v-img>
-        </v-col>
-        <v-col cols="4">
-          <v-img
-            aspect-ratio="16/9"
-            cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-          ></v-img>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="4">
-          <v-img
-            aspect-ratio="16/9"
-            cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-          ></v-img>
-        </v-col>
-        <v-col cols="4">
-          <v-img
-            aspect-ratio="16/9"
-            cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-          ></v-img>
-        </v-col>
-        <v-col cols="4">
-          <v-img
-            aspect-ratio="16/9"
-            cover
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-          ></v-img>
-        </v-col>
+        <div class="grid-container">
+          <div v-for="(img, index) in examples" :key="index" class="grid-item">
+            <v-hover v-slot="{ isHovering, props }">
+              <v-card class="mx-auto" color="grey-lighten-4" max-width="600" v-bind="props">
+                <v-img :aspect-ratio="1 / 1" :src="img.url" cover>
+                  <v-expand-transition>
+                    <div
+                      v-if="isHovering"
+                      class="d-flex pa-4 opacity-80 transition-fast-in-fast-out bg-purple-lighten-2 v-card--reveal text-h5"
+                      style="height: 100%"
+                    >
+                      {{ img.prompt }}
+                    </div>
+                  </v-expand-transition>
+                </v-img>
+              </v-card>
+            </v-hover>
+          </div>
+        </div>
       </v-row>
     </div>
     <div id="pricing" class="mt-16">
       <v-row>
-        <v-col cols="12"> Pricing section </v-col>
+        <v-col cols="12">
+          <v-chip class="my-4" color="purple-lighten-2" label> Pricing </v-chip>
+          <div class="text-h4 font-weight-bold my-4">
+            <span> Compare the prices </span>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="6">
+          <PricingCard :plan="starterPlan" />
+        </v-col>
+        <v-col cols="6">
+          <PricingCard :plan="proPlan" />
+        </v-col>
       </v-row>
     </div>
   </v-container>
 </template>
 
-<!-- <style scoped lang="scss">
-</style> -->
+<style scoped lang="scss">
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0px;
+  width: 100%;
+}
+.grid-item {
+  border-width: 0.5px;
+  padding: 15px 10px;
+}
+</style>
