@@ -1,8 +1,15 @@
 <template>
-  <v-footer app height="40">
-    <div class="text-caption text-disabled" style="position: absolute; right: 16px">
-      &copy; 2024
-      <span class="d-none d-sm-inline-block">Visual AI</span>
+  <v-footer app absolute min-height="60" class="d-flex flex-column">
+    <div class="d-flex w-100 align-center justify-center px-4">
+      <div class="text-caption text-disabled">
+        &copy; 2024
+        <span class="d-none d-sm-inline-block">Visual AI</span>
+      </div>
+
+      <v-spacer></v-spacer>
+
+      <v-btn class="mx-4" variant="text">Contact US</v-btn>
+      <v-btn class="mx-4" variant="text">FAQ</v-btn>
     </div>
   </v-footer>
 </template>
