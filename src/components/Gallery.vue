@@ -95,7 +95,6 @@ const examples = [
   width: 100%;
 }
 .grid-item {
-  border-width: 0.5px;
   padding: 15px 10px;
 }
 

@@ -9,6 +9,7 @@ import { clerkPlugin } from 'vue-clerk'
 
 // Plugins
 import { registerPlugins } from '@/plugins'
+import '@/style.scss'
 
 // Components
 import App from './App.vue'
