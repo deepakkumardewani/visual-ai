@@ -1,6 +1,9 @@
 <script lang="ts" setup>
+import { useRoute } from 'vue-router'
+
 import { useLocal } from '@/composables/local'
 
+const route = useRoute()
 const { setLocal, getLocal } = useLocal()
 onMounted(() => {
   const details = getLocal('details')
@@ -11,7 +14,7 @@ onMounted(() => {
 </script>
 <template>
   <v-app>
-    <v-main>
+    <v-main :class="{ 'tw-h-screen tw-overflow-y-hidden': route.path === '/dashboard' }">
       <router-view />
     </v-main>
   </v-app>

@@ -4,6 +4,6 @@ import { SignIn } from 'vue-clerk'
 
 <template>
   <v-container class="d-flex align-center justify-center h-100">
-    <SignIn path="/login" />
+    <SignIn path="/signin" />
   </v-container>
 </template>

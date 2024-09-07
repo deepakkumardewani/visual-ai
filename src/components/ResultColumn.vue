@@ -15,13 +15,16 @@ function downloadImage() {
 }
 </script>
 <template>
-  <div class="h-100 image rounded-lg border-thin align-center justify-center">
+  <div
+    class="image rounded-lg align-center justify-center"
+    :class="{ 'tw-h-full border-thin': image === '' }"
+  >
     <v-skeleton-loader v-if="isLoading" type="image"></v-skeleton-loader>
     <div v-else>
       <v-hover>
         <template v-slot:default="{ isHovering, props }">
           <div v-bind="props" class="image-container">
-            <v-img width="auto" cover :src="image">
+            <v-img width="auto" height="auto" cover :src="image">
               <template v-slot:placeholder>
                 <div class="d-flex align-center justify-center fill-height">
                   <v-skeleton-loader type="image"></v-skeleton-loader>

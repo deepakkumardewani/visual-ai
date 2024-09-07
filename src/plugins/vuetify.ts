@@ -7,20 +7,60 @@
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@mdi/font/css/materialdesignicons.css'
 // Composables
-import { createVuetify } from 'vuetify'
+import { IconAliases, createVuetify } from 'vuetify'
 // Ensure your project is capable of handling css files
-import { aliases, fa } from 'vuetify/iconsets/fa'
+import { aliases as defaultAliases, fa } from 'vuetify/iconsets/fa'
+import { mdi } from 'vuetify/iconsets/mdi-svg'
 import 'vuetify/styles'
 
-// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
+import customAliases from '@/components/icons'
+
+const aliases: IconAliases = {
+  ...defaultAliases,
+  ...customAliases
+}
+console.log(customAliases)
+
+const light = {
+  dark: false,
+  colors: {
+    background: '#F7F7F7',
+    headerBg: '#edf2ef',
+    heading: 'hsl(272, 20%, 40%)',
+    cardTitle: '#888',
+    cardTextBG: '#fff',
+    btnBg: '#3f51b5',
+    btnText: '#fff',
+    asideBg: '#fff'
+  }
+}
+const dark = {
+  dark: true,
+  colors: {
+    background: '#000',
+    headerBg: 'hsl(272, 10%, 10%)',
+    heading: '#fff',
+    cardTitle: '#647692',
+    cardTextBG: '#ebebeb',
+    btnBg: '#3f51b5',
+    btnText: '#fff',
+    asideBg: 'hsl(272, 10%, 10%)'
+  }
+}
+
 export default createVuetify({
   theme: {
-    defaultTheme: 'dark'
+    defaultTheme: 'dark',
+    themes: {
+      light,
+      dark
+    }
   },
   icons: {
     defaultSet: 'fa',
     aliases,
     sets: {
+      mdi,
       fa
     }
   }
