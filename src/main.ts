@@ -28,9 +28,7 @@ app.use(clerkPlugin, {
   publishableKey: PUBLISHABLE_KEY,
   afterSignInUrl: AFTER_SIGN_IN_URL,
   afterSignUpUrl: AFTER_SIGN_UP_URL,
-  jwtKey: JWT_KEY,
-  
-
+  jwtKey: JWT_KEY
 })
 
 registerPlugins(app)

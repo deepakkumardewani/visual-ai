@@ -15,6 +15,7 @@ defineProps({
     <v-col cols="12" sm="8">
       <Accordion
         v-for="(faq, index) in faqs"
+        :key="index"
         :title="faq.question"
         :id="`faqs-${index}`"
         :active="faq.active"

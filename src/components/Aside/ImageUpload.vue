@@ -10,7 +10,7 @@ let isEventListenerAdded = false
 
 const isDragging = ref(false)
 
-function handleDragLeave(e: DragEvent) {
+function handleDragLeave() {
   isDragging.value = false
 }
 
@@ -85,11 +85,6 @@ defineExpose({
 })
 </script>
 <template>
-  <!-- <div class="tw-flex tw-items-center tw-justify-center">
-    <v-btn block @click="uploadInput?.click()" variant="outlined" color="purple-lighten-2"
-      >Upload</v-btn
-    >
-  </div> -->
   <div class="tw-max-w-sm tw-mx-auto tw-rounded-lg tw-overflow-hidden tw-items-center">
     <div class="tw-py-3">
       <div

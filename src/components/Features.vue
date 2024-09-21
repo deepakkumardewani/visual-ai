@@ -51,7 +51,7 @@ const features = ref<string[]>([
             class="mr-4 mb-2"
             size="x-large"
             v-for="(feature, index) in features"
-            :index="index"
+            :key="index"
             >{{ feature }}</v-chip
           >
         </div>

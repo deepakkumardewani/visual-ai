@@ -2,7 +2,6 @@
 import { storeToRefs } from 'pinia'
 import { SignedIn, SignedOut, useClerk, useUser } from 'vue-clerk'
 import { useRoute } from 'vue-router'
-import { useDisplay } from 'vuetify'
 
 import Coin from '@/components/Coin.vue'
 import PricingDialog from '@/components/PricingDialog.vue'
@@ -21,7 +20,6 @@ type Feature = {
   icon: string
 }
 
-const { xs } = useDisplay()
 const { user } = useUser()
 const { signOut } = useClerk()
 const route = useRoute()
@@ -55,7 +53,6 @@ const userInitials = ref<string | undefined>('')
 const fullName = ref<string | undefined>('')
 const email = ref<string | undefined>('')
 const userImage = ref<string | undefined>('')
-const creditsRemaining = ref<number>(20)
 
 function getUserInitials() {
   if (!user.value) return ''
