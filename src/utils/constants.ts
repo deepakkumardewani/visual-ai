@@ -1,3 +1,5 @@
+import { type Plan } from '@/stores/app'
+
 export const MODEL_IDS = {
   FLUX_STARTER: 'FLUX_STARTER',
   FLUX_BASIC: 'FLUX_BASIC',
@@ -10,6 +12,7 @@ export const MODEL_IDS = {
   UPSCALE_IMAGE: 'UPSCALE_IMAGE'
 }
 
+// Prompt Examples
 export const PROMPTS = [
   'A futuristic cityscape at night with neon lights and flying cars.',
   'A cozy cabin in the woods during a snowy winter evening.',
@@ -32,6 +35,8 @@ export const PROMPTS = [
   'A grand ballroom filled with elegantly dressed dancers under a chandelier.',
   'A post-apocalyptic wasteland with a lone survivor walking through the ruins.'
 ]
+
+// Image Examples
 export const EXAMPLES = [
   {
     prompt: 'POV someone holding their hand up, stunning black forest mountains',
@@ -62,6 +67,7 @@ export const EXAMPLES = [
   }
 ]
 
+// Pricing FAQs
 export const PRICING_FAQS = [
   {
     question: 'What is the pricing for the service?',
@@ -92,7 +98,8 @@ export const GENERAL_FAQS = [
   }
 ]
 
-export const STARTER_PLAN = {
+// Plans
+export const STARTER_PLAN: Plan = {
   title: 'Starter',
   price: '0',
   description: 'Free forever',
@@ -103,8 +110,9 @@ export const STARTER_PLAN = {
       available: true
     },
     {
-      title: 'No Rollover Credits Capacity',
-      available: false
+      title: 'Rollover Credits Capacity',
+      available: false,
+      tooltip: 'Coming soon'
     },
     {
       title: 'Standard quality images',
@@ -115,16 +123,24 @@ export const STARTER_PLAN = {
       available: true
     },
     {
-      title: 'No colorize images',
-      available: false
+      title: 'Colorize Images',
+      available: false,
+      tooltip: 'Coming soon'
     },
     {
-      title: 'No remove background',
-      available: false
+      title: 'Remove Background',
+      available: false,
+      tooltip: 'Coming soon'
     },
     {
-      title: 'No upscale images',
-      available: false
+      title: 'Upscale Images',
+      available: false,
+      tooltip: 'Coming soon'
+    },
+    {
+      title: 'Deoldify Images',
+      available: false,
+      tooltip: 'Coming soon'
     }
   ]
 }
@@ -152,70 +168,111 @@ export const PRO_PLAN = {
       available: true
     },
     {
-      title: 'Colorize images',
+      title: 'Colorize Images',
       available: true
     },
     {
-      title: 'Remove background',
+      title: 'Remove Background',
       available: true
     },
     {
-      title: 'Upscale images',
+      title: 'Upscale Images',
+      available: true
+    },
+    {
+      title: 'Deoldify Images',
       available: true
     }
   ]
 }
 
+// Image Formats
 export const IMAGE_FORMATS = [
   {
-    title: 'JPG',
+    title: 'jpg',
     isPro: false
   },
   {
-    title: 'PNG',
+    title: 'png',
     isPro: true
   },
   {
-    title: 'WEBP',
+    title: 'webp',
     isPro: true
   }
 ]
 
+export const IMAGE_VARIATIONS = [
+  {
+    title: '1',
+    value: 1,
+    isPro: false
+  },
+  {
+    title: '2',
+    value: 2,
+    isPro: true
+  },
+  {
+    title: '3',
+    value: 3,
+    isPro: true
+  },
+  {
+    title: '4',
+    value: 4,
+    isPro: true
+  }
+]
+// Aspect Ratios
 export const ASPECT_RATIOS = [
   {
-    title: '1:1',
-    isPro: false
+    title: '1:1'
   },
   {
-    title: '16:9',
-    isPro: false
+    title: '16:9'
   },
   {
-    title: '21:9',
-    isPro: true
+    title: '21:9'
   },
   {
-    title: '2:3',
-    isPro: true
+    title: '2:3'
   },
   {
-    title: '3:2',
-    isPro: true
+    title: '3:2'
   },
   {
-    title: '4:5',
-    isPro: true
+    title: '4:5'
   },
   {
-    title: '5:4',
-    isPro: true
+    title: '5:4'
   },
   {
-    title: '9:16',
-    isPro: true
+    title: '9:16'
   },
   {
-    title: '9:21',
-    isPro: true
+    title: '9:21'
+  }
+]
+
+// Flux Modes
+export const FLUX_MODES = [
+  {
+    title: 'Flux Fast',
+    id: MODEL_IDS.FLUX_BASIC,
+    description: 'Combines speed with high quality. Great prompt adherence.',
+    icon: '$fluxFast'
+  },
+  {
+    title: 'Flux Pro',
+    id: MODEL_IDS.FLUX_PRO,
+    description: 'State-of-the-art image generation. Top of the line prompt following.',
+    icon: '$fluxPro'
+  },
+  {
+    title: 'Flux Realism',
+    id: MODEL_IDS.FLUX_REALISM,
+    description: 'Best at ultra realistic photos. Prioritizes details and textures.',
+    icon: '$fluxRealism'
   }
 ]

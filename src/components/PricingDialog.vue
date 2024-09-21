@@ -19,12 +19,10 @@ const { isRevealed } = storeToRefs(dialogStore)
       </v-toolbar>
 
       <v-card-text>
-        <!-- <v-row> -->
-        <div class="d-flex justify-center align-center tw-font-semibold text-h2">
-          Unlock the power of Visual AI
+        <div class="d-flex text-center justify-center align-center tw-font-semibold text-h2">
+          Unlock the Full Power of Visual AI
         </div>
 
-        <!-- </v-row> -->
         <Pricing />
 
         <FAQ :faqs="PRICING_FAQS" />

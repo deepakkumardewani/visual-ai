@@ -2,7 +2,14 @@ import { defineStore } from 'pinia'
 
 export const useDialogStore = defineStore('dialog', () => {
   const isRevealed = ref(false)
+  const showPremiumDialog = ref(false)
 
+  function showPremium() {
+    showPremiumDialog.value = true
+  }
+  function hidePremium() {
+    showPremiumDialog.value = false
+  }
   function reveal() {
     isRevealed.value = true
   }
@@ -12,7 +19,10 @@ export const useDialogStore = defineStore('dialog', () => {
 
   return {
     isRevealed,
+    showPremiumDialog,
     reveal,
-    cancel
+    cancel,
+    showPremium,
+    hidePremium
   }
 })

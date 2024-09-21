@@ -4,6 +4,7 @@ import { useTheme } from 'vuetify'
 export interface Feature {
   title: string
   available: boolean
+  tooltip?: string
 }
 
 export interface Plan {
@@ -23,6 +24,12 @@ export const useAppStore = defineStore('app', () => {
   function toggleTheme() {
     theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
   }
+
+  watch(isDark, (newVal) => {
+    newVal
+      ? document.documentElement.classList.add('tw-dark')
+      : document.documentElement.classList.remove('tw-dark')
+  })
 
   return { feature, setFeature, isDark, toggleTheme }
 })

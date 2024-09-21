@@ -6,6 +6,8 @@ import { useLocal } from '@/composables/local'
 const route = useRoute()
 const { setLocal, getLocal } = useLocal()
 onMounted(() => {
+  // add dark mode for tailwind css on load
+  document.documentElement.classList.add('tw-dark')
   const details = getLocal('details')
   if (!details) {
     setLocal('details', { prompt: '', image: '', isImageGenerated: false })

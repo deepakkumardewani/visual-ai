@@ -19,7 +19,6 @@ const aliases: IconAliases = {
   ...defaultAliases,
   ...customAliases
 }
-console.log(customAliases)
 
 const light = {
   dark: false,

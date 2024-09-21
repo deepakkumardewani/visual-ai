@@ -16,10 +16,10 @@ import { PRO_PLAN, STARTER_PLAN } from '@/utils/constants'
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="5">
+      <v-col cols="12" sm="5">
         <PricingCard :plan="STARTER_PLAN" />
       </v-col>
-      <v-col cols="5">
+      <v-col cols="12" sm="5">
         <PricingCard :plan="PRO_PLAN" />
       </v-col>
     </v-row>

@@ -8,9 +8,12 @@ import Coin from '@/components/Coin.vue'
 import PricingDialog from '@/components/PricingDialog.vue'
 import ThemeButton from '@/components/ThemeButton.vue'
 import { useAppStore } from '@/stores/app'
-import { useDialogStore } from '@/stores/dialog'
+// import { useDialogStore } from '@/stores/dialog'
+import { useUserStore } from '@/stores/user'
 
-const dialogStore = useDialogStore()
+const userStore = useUserStore()
+const { credits } = storeToRefs(userStore)
+// const dialogStore = useDialogStore()
 
 type Feature = {
   id: string
@@ -24,17 +27,6 @@ const { signOut } = useClerk()
 const route = useRoute()
 const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
-const feature = ref<Feature>({
-  id: 'ai_image',
-  title: 'AI Image Generator',
-  icon: '$imageFrame'
-})
-const userInitials = ref<string | undefined>('')
-const fullName = ref<string | undefined>('')
-const email = ref<string | undefined>('')
-const userImage = ref<string | undefined>('')
-const creditsRemaining = ref<number>(20)
-
 const features = ref<Feature[]>([
   {
     id: 'ai_image',
@@ -57,6 +49,14 @@ const features = ref<Feature[]>([
     icon: '$camera'
   }
 ])
+
+const feature = ref<Feature>(features.value[0])
+const userInitials = ref<string | undefined>('')
+const fullName = ref<string | undefined>('')
+const email = ref<string | undefined>('')
+const userImage = ref<string | undefined>('')
+const creditsRemaining = ref<number>(20)
+
 function getUserInitials() {
   if (!user.value) return ''
   if (!user.value.firstName || !user.value.lastName) return ''
@@ -76,7 +76,7 @@ watch(user, (value) => {
 })
 
 onMounted(() => {
-  appStore.setFeature('ai_image')
+  appStore.setFeature(feature.value.id)
 })
 </script>
 <template>
@@ -87,9 +87,15 @@ onMounted(() => {
           <div class="ml-2">
             <img src="/src/assets/logo.png" width="30" />
           </div>
-          <div class="tw-hidden lg:tw-block">
-            <span class="gradient-text">Visual AI</span>
-            <span class="trademark">TM</span>
+          <div class="tw-hidden lg:tw-block tw-text-xl">
+            <span
+              class="tw-bg-gradient-to-r tw-from-purple-400 tw-to-purple-600 tw-bg-clip-text tw-text-transparent"
+              >Visual AI</span
+            >
+            <span
+              class="trademark tw-bg-gradient-to-r tw-from-purple-400 tw-to-purple-600 tw-bg-clip-text tw-text-transparent"
+              >TM</span
+            >
           </div>
 
           <div class="tw-relative tw-min-w-0 tw-flex-1 tw-lg:tw-flex-none">
@@ -142,7 +148,7 @@ onMounted(() => {
                 variant="tonal"
                 color="purple-lighten-2"
                 size="small"
-                to="/signin"
+                to="/signup"
               >
                 Sign Up
               </v-btn>
@@ -151,7 +157,7 @@ onMounted(() => {
             <!-- SignedIn -->
 
             <SignedIn>
-              <Coin />
+              <Coin v-if="credits > 0" />
               <ThemeButton />
               <v-btn
                 v-if="route.path !== '/dashboard'"
@@ -163,7 +169,7 @@ onMounted(() => {
               >
                 Launch App
               </v-btn>
-              <v-btn
+              <!-- <v-btn
                 v-if="route.path === '/dashboard' && !xs"
                 @click="dialogStore.reveal"
                 class="mx-4"
@@ -172,11 +178,14 @@ onMounted(() => {
                 color="purple-lighten-2"
               >
                 Subscribe to Pro
-              </v-btn>
+              </v-btn> -->
             </SignedIn>
           </div>
           <SignedIn>
-            <div id="user" class="tw-flex tw-shrink-0 tw-items-center tw-gap-2 tw-lg:tw-gap-3">
+            <div
+              id="user"
+              class="tw-flex tw-cursor-pointer tw-shrink-0 tw-items-center tw-gap-2 tw-lg:tw-gap-3"
+            >
               <v-menu min-width="200px" rounded>
                 <template v-slot:activator="{ props }">
                   <div v-if="user" v-bind="props" class="mr-4">
@@ -208,7 +217,6 @@ onMounted(() => {
                       <p class="text-caption mt-1">
                         {{ email }}
                       </p>
-                      <v-divider class="my-3"></v-divider>
                       <v-divider class="my-3"></v-divider>
                       <v-btn @click="signOut({ redirectUrl: '/' })" variant="text"> Logout </v-btn>
                     </div>
