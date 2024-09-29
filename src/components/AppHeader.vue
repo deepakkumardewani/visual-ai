@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 import { SignedIn, SignedOut, useClerk, useUser } from 'vue-clerk'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import Coin from '@/components/Coin.vue'
 import PricingDialog from '@/components/PricingDialog.vue'
@@ -23,6 +24,7 @@ type Feature = {
 const { user } = useUser()
 const { signOut } = useClerk()
 const route = useRoute()
+const router = useRouter()
 const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
 const features = ref<Feature[]>([
@@ -48,11 +50,13 @@ const features = ref<Feature[]>([
   }
 ])
 
-const feature = ref<Feature>(features.value[0])
+const feature = ref<Feature>(features.value[1])
 const userInitials = ref<string | undefined>('')
 const fullName = ref<string | undefined>('')
 const email = ref<string | undefined>('')
 const userImage = ref<string | undefined>('')
+
+const showLowCreditsDialog = ref(false)
 
 function getUserInitials() {
   if (!user.value) return ''
@@ -72,6 +76,12 @@ watch(user, (value) => {
   }
 })
 
+watch(credits, (newCredits) => {
+  if (newCredits < 5) {
+    showLowCreditsDialog.value = true
+  }
+})
+
 onMounted(() => {
   appStore.setFeature(feature.value.id)
 })
@@ -79,20 +89,22 @@ onMounted(() => {
 <template>
   <v-app-bar :elevation="0" color="transparent" class="bg-asideBg">
     <v-row class="align-center">
-      <v-col cols="8">
+      <v-col :cols="route.path !== '/dashboard' ? 4 : 7">
         <div class="tw-relative tw-flex tw-min-w-0 tw-shrink-0 tw-items-center tw-gap-3">
-          <div class="ml-2">
-            <img src="/src/assets/logo.png" width="30" />
-          </div>
-          <div class="tw-hidden lg:tw-block tw-text-xl">
-            <span
-              class="tw-bg-gradient-to-r tw-from-purple-400 tw-to-purple-600 tw-bg-clip-text tw-text-transparent"
-              >Visual AI</span
-            >
-            <span
-              class="trademark tw-bg-gradient-to-r tw-from-purple-400 tw-to-purple-600 tw-bg-clip-text tw-text-transparent"
-              >TM</span
-            >
+          <div class="tw-cursor-pointer tw-flex tw-gap-3" @click="router.push('/')">
+            <div class="ml-4">
+              <img src="/src/assets/logo.png" width="30" height="30" />
+            </div>
+            <div class="tw-hidden lg:tw-block tw-text-xl">
+              <span
+                class="tw-bg-gradient-to-r tw-from-purple-400 tw-to-purple-600 tw-bg-clip-text tw-text-transparent"
+                >Visual AI</span
+              >
+              <span
+                class="trademark tw-bg-gradient-to-r tw-from-purple-400 tw-to-purple-600 tw-bg-clip-text tw-text-transparent"
+                >TM</span
+              >
+            </div>
           </div>
 
           <div class="tw-relative tw-min-w-0 tw-flex-1 tw-lg:tw-flex-none">
@@ -105,7 +117,6 @@ onMounted(() => {
               bg-color="transparent"
               color="purple-lighten-3"
               variant="outlined"
-              :prepend-inner-icon="isDark ? `${feature.icon}Dark` : feature.icon"
               density="compact"
               hide-details
               item-title="title"
@@ -124,9 +135,9 @@ onMounted(() => {
         </div>
       </v-col>
 
-      <v-col cols="4">
+      <v-col :cols="route.path !== '/dashboard' ? 8 : 5">
         <div class="tw-flex tw-shrink-0 tw-gap-4">
-          <div id="export-area" class="ml-auto tw-flex tw-items-center tw-gap-2 tw-lg:tw-gap-4">
+          <div id="export-area" class="ml-auto tw-flex tw-items-center tw-gap-4 tw-lg:tw-gap-4">
             <!-- SignedOut -->
             <SignedOut>
               <v-btn
@@ -154,9 +165,9 @@ onMounted(() => {
             <!-- SignedIn -->
 
             <SignedIn>
-              <Coin v-if="credits > 0" />
-              <ThemeButton />
-              <v-btn
+              <Coin v-if="route.path === '/dashboard'" />
+              <ThemeButton v-if="route.path === '/dashboard'" />
+              <!-- <v-btn
                 v-if="route.path !== '/dashboard'"
                 class="mx-4"
                 size="small"
@@ -165,63 +176,71 @@ onMounted(() => {
                 to="/dashboard"
               >
                 Launch App
-              </v-btn>
-              <!-- <v-btn
-                v-if="route.path === '/dashboard' && !xs"
-                @click="dialogStore.reveal"
-                class="mx-4"
-                size="small"
-                variant="tonal"
-                color="purple-lighten-2"
-              >
-                Subscribe to Pro
               </v-btn> -->
-            </SignedIn>
-          </div>
-          <SignedIn>
-            <div
-              id="user"
-              class="tw-flex tw-cursor-pointer tw-shrink-0 tw-items-center tw-gap-2 tw-lg:tw-gap-3"
-            >
-              <v-menu min-width="200px" rounded>
-                <template v-slot:activator="{ props }">
-                  <div v-if="user" v-bind="props" class="mr-4">
-                    <v-avatar class="mr-2" size="small">
-                      <v-img alt="user image" :src="userImage">
-                        <template v-slot:error>
-                          <span class="text-body-1">{{ userInitials }}</span>
-                        </template>
-                      </v-img>
-                    </v-avatar>
-                    <v-icon
-                      size="x-small"
-                      class="tw-cursor-pointer"
-                      icon="fas fa-caret-down"
-                    ></v-icon>
-                  </div>
-                </template>
-                <v-card>
-                  <v-card-text>
-                    <div class="mx-auto text-center">
-                      <v-avatar>
+              <button
+                v-if="route.path !== '/dashboard'"
+                @click="router.push('/dashboard')"
+                class="tw-relative tw-py-1 tw-px-3 tw-mx-3 tw-rounded-lg tw-font-medium tw-text-sm tw-text-slate-100 tw-bg-gradient-to-b tw-from-[#19022e] tw-to-[#742cab] tw-shadow-[0px_0px_12px_#8c45ff]"
+              >
+                <div class="tw-absolute tw-inset-0">
+                  <div
+                    class="tw-rounded-lg tw-border-white/20 tw-absolute tw-inset-0 [mask-image:linear-gradient(to_bottom, black, transparent)]"
+                  ></div>
+                  <div
+                    class="tw-rounded-lg tw-border tw-absolute tw-inset-0 tw-border-white/40 [mask-image:linear-gradient(to_top, black, transparent)]"
+                  ></div>
+                  <div
+                    class="tw-absolute tw-inset-0 tw-shadow-[0_0_10px_rgb(140, 69, 255, 0.7)] tw-rounded-lg"
+                  ></div>
+                </div>
+                <span>Launch App</span>
+              </button>
+              <div
+                id="user"
+                class="tw-flex tw-cursor-pointer tw-shrink-0 tw-items-center tw-gap-2 tw-lg:tw-gap-3"
+              >
+                <v-menu min-width="200px" rounded>
+                  <template v-slot:activator="{ props }">
+                    <div v-if="user" v-bind="props" class="mr-4">
+                      <v-avatar class="mr-2" size="small">
                         <v-img alt="user image" :src="userImage">
                           <template v-slot:error>
                             <span class="text-body-1">{{ userInitials }}</span>
                           </template>
                         </v-img>
                       </v-avatar>
-                      <h3 class="tw-font-bold">{{ fullName }}</h3>
-                      <p class="text-caption mt-1">
-                        {{ email }}
-                      </p>
-                      <v-divider class="my-3"></v-divider>
-                      <v-btn @click="signOut({ redirectUrl: '/' })" variant="text"> Logout </v-btn>
+                      <v-icon
+                        size="x-small"
+                        class="tw-cursor-pointer"
+                        icon="fas fa-caret-down"
+                      ></v-icon>
                     </div>
-                  </v-card-text>
-                </v-card>
-              </v-menu>
-            </div>
-          </SignedIn>
+                  </template>
+                  <v-card>
+                    <v-card-text>
+                      <div class="mx-auto text-center">
+                        <v-avatar>
+                          <v-img alt="user image" :src="userImage">
+                            <template v-slot:error>
+                              <span class="text-body-1">{{ userInitials }}</span>
+                            </template>
+                          </v-img>
+                        </v-avatar>
+                        <h3 class="tw-font-bold">{{ fullName }}</h3>
+                        <p class="text-caption mt-1">
+                          {{ email }}
+                        </p>
+                        <v-divider class="my-3"></v-divider>
+                        <v-btn @click="signOut({ redirectUrl: '/' })" variant="text">
+                          Logout
+                        </v-btn>
+                      </div>
+                    </v-card-text>
+                  </v-card>
+                </v-menu>
+              </div>
+            </SignedIn>
+          </div>
         </div>
       </v-col>
 
@@ -331,6 +350,17 @@ onMounted(() => {
     </v-row>
   </v-app-bar>
   <PricingDialog />
+  <v-dialog v-model="showLowCreditsDialog" max-width="400">
+    <v-card>
+      <v-card-title class="text-h5">Low Credits</v-card-title>
+      <v-card-text> You're low on credits. Please buy more to continue generating. </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" @click="showLowCreditsDialog = false">Close</v-btn>
+        <v-btn color="primary">Buy Credits</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped lang="scss">

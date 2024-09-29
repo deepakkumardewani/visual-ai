@@ -3,49 +3,30 @@ import { storeToRefs } from 'pinia'
 
 import { useAppStore } from '@/stores/app'
 import { useGenerateStore } from '@/stores/generate'
+import { downloadImage } from '@/utils/helpers'
 
 import { ImgComparisonSlider } from '@img-comparison-slider/vue'
 
 const generateStore = useGenerateStore()
 const appStore = useAppStore()
-const { isLoading, image, originalImage, enhancedImage } = storeToRefs(generateStore)
+const { isLoading, image, originalImage, enhancedImage, upscaleInProgress } =
+  storeToRefs(generateStore)
 const { feature } = storeToRefs(appStore)
-// const original = ref(
-//   'https://res.cloudinary.com/ddzuitkzt/image/upload/v1726428714/private/development/uploads/deepak_kumar_sH03wK/colorize/original-294282f0-7399-11ef-b184-67d6ad997806.jpg'
-// )
-// const enhanced = ref(
-//   'https://replicate.delivery/pbxt/lhsjqIR4JE4LLZtGLA0w44FwyyeXytAI4CIg4eLiGmT8gOdTA/out.png'
-// )
-const downloadImage = () => {
-  let imageUrl = ''
-  if (feature.value === 'ai_image') {
-    imageUrl = image.value
-  } else if (feature.value === 'image_upscaler' || feature.value === 'colorize_image') {
-    imageUrl = enhancedImage.value
-  }
-
-  if (imageUrl) {
-    fetch(imageUrl)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.style.display = 'none'
-        a.href = url
-        a.download = 'generated_image.png'
-        document.body.appendChild(a)
-        a.click()
-        window.URL.revokeObjectURL(url)
-      })
-      .catch((error) => console.error('Error downloading image:', error))
-  }
-}
 
 const showBorder = computed(() => {
   return image.value === '' && enhancedImage.value === '' && originalImage.value === ''
 })
 </script>
 <template>
+  <v-alert
+    :model-value="upscaleInProgress"
+    class="my-4"
+    color="info"
+    icon="$info"
+    title="Upscaling in progress"
+    text="You can close this dialog and check later on the history tab"
+    closable
+  ></v-alert>
   <div
     class="image rounded-lg align-center justify-center"
     :class="{ 'tw-h-full tw-border tw-border-purple-300': showBorder }"

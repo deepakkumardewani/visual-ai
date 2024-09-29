@@ -17,6 +17,8 @@ export const useGenerateStore = defineStore('generate', () => {
   const image = ref<string>('')
   const originalImage = ref<string>('')
   const enhancedImage = ref<string>('')
+  const upscaleInProgress = ref<boolean>(false)
+  const colorizeInProgress = ref<boolean>(false)
   const userStore = useUserStore()
   const { userId, credits } = storeToRefs(userStore)
 
@@ -155,6 +157,8 @@ export const useGenerateStore = defineStore('generate', () => {
     isLoading,
     image,
     originalImage,
-    enhancedImage
+    enhancedImage,
+    upscaleInProgress,
+    colorizeInProgress
   }
 })

@@ -39,16 +39,17 @@ export const PROMPTS = [
 // Image Examples
 export const EXAMPLES = [
   {
-    prompt: 'POV someone holding their hand up, stunning black forest mountains',
+    prompt:
+      'black forest gateau cake spelling out the words "FLUX SCHNELL", tasty, food photography, dynamic shot',
     url: 'https://res.cloudinary.com/ddzuitkzt/image/upload/v1724555480/gallery/bnutjse8nkqmhm3xxpb5.webp'
   },
   {
-    prompt:
-      '3 magical wizards stand on a yellow table. On the left, a wizard in black robes holds a sign that says ‘AI’. In the middle, a witch in red robes holds a sign that says ‘is’ and on the right, a wizard in blue robes holds a sign that says ‘cool’. Behind them a purple dragon',
+    prompt: 'a tiny astronaut hatching from an egg on the moon',
     url: 'https://res.cloudinary.com/ddzuitkzt/image/upload/v1724555480/gallery/qi1wdpvgxzpddklbwcbg.webp'
   },
   {
-    prompt: 'a tiny astronaut hatching from an egg on the moon',
+    prompt:
+      'a man and woman are standing together against a backdrop, the backdrop is divided equally in half down the middle, left side is red, right side is gold, the woman is wearing a t-shirt with a yoda motif, she has a long skirt with birds on it, the man is wearing a three piece purple suit, he has spiky blue hair',
     url: 'https://res.cloudinary.com/ddzuitkzt/image/upload/v1724555480/gallery/rtbfdjd7mhwggdwav4wz.webp'
   },
   {
@@ -57,12 +58,11 @@ export const EXAMPLES = [
   },
   {
     prompt:
-      'a man and woman are standing together against a backdrop, the backdrop is divided equally in half down the middle, left side is red, right side is gold, the woman is wearing a t-shirt with a yoda motif, she has a long skirt with birds on it, the man is wearing a three piece purple suit, he has spiky blue hair',
+      '3 magical wizards stand on a yellow table. On the left, a wizard in black robes holds a sign that says ‘AI’. In the middle, a witch in red robes holds a sign that says ‘is’ and on the right, a wizard in blue robes holds a sign that says ‘cool’. Behind them a purple dragon',
     url: 'https://res.cloudinary.com/ddzuitkzt/image/upload/v1724555480/gallery/hfzszwiatujblscjghm1.webp'
   },
   {
-    prompt:
-      'black forest gateau cake spelling out the words "FLUX SCHNELL", tasty, food photography, dynamic shot',
+    prompt: 'POV someone holding their hand up, stunning black forest mountains',
     url: 'https://res.cloudinary.com/ddzuitkzt/image/upload/v1724555480/gallery/uc7plkdj78vrgy9u6daj.webp'
   }
 ]

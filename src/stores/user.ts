@@ -27,17 +27,17 @@ export const useUserStore = defineStore('user', () => {
     }
     if (userDetails.value) {
       const data = userDetails.value as any
-      console.log(typeof data)
-
+      if (localStorage.getItem('userDetails') === null) {
+        localStorage.setItem('userDetails', JSON.stringify(data))
+      }
       credits.value = data.credits
     }
-    console.log('credits.value', credits.value)
   }
   watch(user, () => {
     if (user.value) {
       const { id, firstName, lastName } = user.value
       userId.value = `${firstName?.toLowerCase()}_${lastName?.toLowerCase()}_${id?.slice(-6)}`
-      console.log('user', userId.value)
+      // console.log('user', userId.value)
       getUserDetails()
     }
   })

@@ -1,21 +1,23 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { useDisplay } from 'vuetify'
 
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
 
+const { smAndUp } = useDisplay()
 const userStore = useUserStore()
 const { credits } = storeToRefs(userStore)
 const dialogStore = useDialogStore()
 </script>
 <template>
-  <v-menu open-on-hover location="bottom end" offset="5">
+  <v-menu :open-on-hover="smAndUp" location="bottom end" offset="5">
     <template v-slot:activator="{ props }">
       <div
         v-bind="props"
         class="tw-flex tw-items-center tw-p-4 tw-gap-3 tw-h-8 tw-justify-center tw-border-2 tw-border-purple-900 tw-rounded-full"
       >
-        <div>
+        <div v-if="smAndUp">
           <v-icon size="x-small" icon="$coin" />
         </div>
         <div class="tw-font-bold">{{ credits }}</div>

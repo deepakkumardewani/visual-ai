@@ -8,7 +8,7 @@ import ResultColumn from '@/components/ResultColumn.vue'
       <Aside />
     </div>
 
-    <div class="tw-w-full sm:tw-w-3/4 tw-h-full tw-overflow-y-auto tw-p-4">
+    <div class="tw-w-full sm:tw-w-3/4 tw-h-[55%] sm:tw-h-full tw-overflow-y-auto tw-p-4">
       <ResultColumn />
     </div>
   </div>

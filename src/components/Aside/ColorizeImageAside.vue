@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useEventSource } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
 import { useUser } from 'vue-clerk'
 import { useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
@@ -6,15 +8,27 @@ import { useDisplay } from 'vuetify'
 import Heading from '@/components/Aside/Heading.vue'
 import ImageUpload from '@/components/Aside/ImageUpload.vue'
 import { type Mode } from '@/stores/aside'
+import { useAuthStore } from '@/stores/auth'
 import { useGenerateStore } from '@/stores/generate'
+import { useUserStore } from '@/stores/user'
 import { MODEL_IDS } from '@/utils/constants'
 
+const userStore = useUserStore()
+const { userId } = storeToRefs(userStore)
 const router = useRouter()
 // const route = useRoute()
 const { isSignedIn } = useUser()
 const { smAndUp } = useDisplay()
 const generateStore = useGenerateStore()
+const { colorizeInProgress, originalImage, enhancedImage } = storeToRefs(generateStore)
 
+const { getToken } = useAuthStore()
+const token = await getToken()
+let progressUrl = ref(`${import.meta.env.VITE_API_BASEPATH}/colorize/progress`)
+const { data, close, open } = useEventSource(progressUrl, [], {
+  immediate: false
+})
+const showAlert = ref<boolean>(false)
 const imageUpload = ref()
 const modes = ref([
   {
@@ -42,14 +56,46 @@ async function generateImage() {
       image: imageUpload?.value?.image,
       modelId: mode.value.id
     }
-    console.log('body', body)
-
     generateStore.colorizeImage(body)
+
+    progressUrl.value = `${progressUrl.value}?userId=${userId.value}&token=${token}`
+    showAlert.value = true
+    open()
+    localStorage.setItem('colorizeInProgress', 'true')
+    colorizeInProgress.value = true
   } else {
     // Show sign in modal
     router.push('/signin')
   }
 }
+
+watch(data, (newVal) => {
+  const data = JSON.parse(newVal as string)
+  if (data.status === 'processing') {
+    showAlert.value = true
+    localStorage.setItem('colorizeInProgress', 'true')
+    colorizeInProgress.value = true
+  }
+  if (data.status === 'completed') {
+    close()
+    showAlert.value = false
+    localStorage.setItem('colorizeInProgress', 'false')
+    colorizeInProgress.value = false
+    originalImage.value = data.original
+    enhancedImage.value = data.enhanced
+    userStore.setCredits(data.userCreditsRemaining)
+  }
+})
+
+onMounted(async () => {
+  const inProgress = JSON.parse(localStorage.getItem('colorizeInProgress') as string)
+  if (inProgress === true) {
+    const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
+    colorizeInProgress.value = true
+    progressUrl.value = `${progressUrl.value}?userId=${userDetails.userId}&token=${token}`
+    open()
+  }
+})
 </script>
 <template>
   <div class="mb-6">
