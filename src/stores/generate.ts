@@ -64,15 +64,17 @@ export const useGenerateStore = defineStore('generate', () => {
 
   async function upscaleImage(data: any) {
     isLoading.value = true
-    const { prompt, image, creativity, scale, negativePrompt } = data
+    const { prompt, image, format, creativity, scale, negativePrompt } = data
     const formData = new FormData()
     formData.append('feature', 'upscale')
-    formData.append('image', image)
     formData.append('prompt', prompt)
     formData.append('negativePrompt', negativePrompt)
     formData.append('userId', userId.value)
     formData.append('creativity', creativity)
     formData.append('scale', scale)
+    formData.append('format', format)
+    formData.append('image', image)
+
     const url = `/generate/upscale/image`
     const { error, data: enhancedImageData } = await useFetch(url, {
       method: 'POST',
@@ -96,12 +98,11 @@ export const useGenerateStore = defineStore('generate', () => {
     isLoading.value = true
     const url = `/generate/colorize/image`
     const { image, modelId } = data
-    console.log('image', image)
     const formData = new FormData()
     formData.append('feature', 'colorize')
-    formData.append('image', image)
     formData.append('userId', userId.value)
     formData.append('modelId', modelId)
+    formData.append('image', image)
     const { error, data: colorizedImageData } = await useFetch(url, {
       method: 'POST',
       body: formData
@@ -127,9 +128,9 @@ export const useGenerateStore = defineStore('generate', () => {
     const formData = new FormData()
     formData.append('userId', userId.value)
     formData.append('feature', 'revive')
-    formData.append('image', image)
     formData.append('scratched', scratched)
     formData.append('highResolution', highResolution)
+    formData.append('image', image)
     const url = `/generate/revive/image`
     const { error, data: revivedImageData } = await useFetch(url, {
       method: 'POST',

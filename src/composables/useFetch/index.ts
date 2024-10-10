@@ -5,7 +5,7 @@ import { useAuthStore } from '@/stores/auth'
 export const CANCELLED_REQUEST = 20
 
 export const useFetch = createFetch({
-  baseUrl: import.meta.env.VITE_API_BASEPATH,
+  baseUrl: `${import.meta.env.VITE_API_BASEPATH}`,
   options: {
     async beforeFetch({ options }) {
       const { getToken } = useAuthStore()

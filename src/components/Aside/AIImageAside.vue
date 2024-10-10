@@ -11,8 +11,8 @@ import { type Mode } from '@/stores/aside'
 import { useDialogStore } from '@/stores/dialog'
 import { type ImageBody, useGenerateStore } from '@/stores/generate'
 import { FLUX_MODES } from '@/utils/constants'
-import { PROMPTS } from '@/utils/constants'
 import { ASPECT_RATIOS, IMAGE_FORMATS, IMAGE_VARIATIONS } from '@/utils/constants'
+import PROMPTS from '@/utils/prompts.json'
 
 type ImageVariation = {
   title: string

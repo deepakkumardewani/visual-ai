@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 
+import SideBySide from '@/components/SideBySide.vue'
 import { useAppStore } from '@/stores/app'
 import { useGenerateStore } from '@/stores/generate'
 import { downloadImage } from '@/utils/helpers'
-
-import { ImgComparisonSlider } from '@img-comparison-slider/vue'
 
 const generateStore = useGenerateStore()
 const appStore = useAppStore()
@@ -27,6 +26,7 @@ const showBorder = computed(() => {
     text="You can close this dialog and check later on the history tab"
     closable
   ></v-alert>
+
   <div
     class="image rounded-lg align-center justify-center"
     :class="{ 'tw-h-full tw-border tw-border-purple-300': showBorder }"
@@ -54,12 +54,7 @@ const showBorder = computed(() => {
               </v-img>
             </div>
             <div v-if="feature === 'image_upscaler' || feature === 'colorize_image'">
-              <ImgComparisonSlider class="tw-w-full">
-                <!-- eslint-disable -->
-                <img class="tw-w-full" slot="first" :src="originalImage" />
-                <img class="tw-w-full" slot="second" :src="enhancedImage" />
-                <!-- eslint-enable -->
-              </ImgComparisonSlider>
+              <SideBySide :original-image="originalImage" :enhanced-image="enhancedImage" />
             </div>
             <div v-if="isHovering" class="download-btn">
               <v-btn @click="downloadImage" icon>
@@ -82,6 +77,9 @@ const showBorder = computed(() => {
 
 .image-container {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 img-comparison-slider {
   outline: none;

@@ -1,12 +1,46 @@
-// Utilities
 import { defineStore } from 'pinia'
 import { useUser } from 'vue-clerk'
 
 import { useFetch } from '@/composables/useFetch'
+import { ImageObject } from '@/pages/utils'
 
+interface User {
+  userId: string
+  referralCode: string
+  referredBy: string
+  credits: number
+  plan: string
+  monthlyCredits: number
+  isPro: boolean
+  subscriptionEnd: Date
+  payments?: any[]
+  history?: any[]
+  activities?: any[]
+  createdAt: Date
+  updatedAt: Date
+}
+// interface Image {
+//   user: string
+//   prompt: string
+//   imageUrl: string
+//   original: string
+//   enhanced: string
+//   isFavorite: boolean
+//   human_readable_date: string
+//   resolution: string
+//   createdAt: Date
+//   creditCost: number
+//   width: number
+//   height: number
+//   format: string
+//   bytes: number
+// }
 export const useUserStore = defineStore('user', () => {
   const { user } = useUser()
+  const userDetails = ref<User | null>(null)
+  const history = ref<ImageObject[]>([])
   const userId = ref('')
+  const referralCode = ref('')
   const credits = ref(0)
 
   function setCredits(value: number) {
@@ -14,32 +48,36 @@ export const useUserStore = defineStore('user', () => {
   }
   async function getUserDetails() {
     const url = `users/${userId.value}`
-    const { error, data: userDetails } = await useFetch(url, {
+    const { error, data: userData } = await useFetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         mode: 'cors'
       }
     }).json()
+
+    if (userData.value) {
+      userDetails.value = userData.value
+      history.value = userData.value.history
+      const dataToStoreInLocalStorage = {
+        userId: userData.value.userId
+      }
+      if (localStorage.getItem('userDetails') === null) {
+        localStorage.setItem('userDetails', JSON.stringify(dataToStoreInLocalStorage))
+      }
+      credits.value = userData.value.credits
+    }
     if (error.value) {
       console.error('Error fetching user details:', error.value)
       return
     }
-    if (userDetails.value) {
-      const data = userDetails.value as any
-      if (localStorage.getItem('userDetails') === null) {
-        localStorage.setItem('userDetails', JSON.stringify(data))
-      }
-      credits.value = data.credits
-    }
   }
   watch(user, () => {
     if (user.value) {
-      const { id, firstName, lastName } = user.value
-      userId.value = `${firstName?.toLowerCase()}_${lastName?.toLowerCase()}_${id?.slice(-6)}`
-      // console.log('user', userId.value)
+      const { id } = user.value
+      userId.value = id
       getUserDetails()
     }
   })
-  return { userId, credits, setCredits }
+  return { userId, credits, setCredits, referralCode, userDetails, history }
 })

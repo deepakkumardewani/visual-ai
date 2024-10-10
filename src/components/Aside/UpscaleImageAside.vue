@@ -44,9 +44,11 @@ async function generateImage() {
       prompt: prompt.value,
       negativePrompt: negativePrompt.value,
       image: imageUpload?.value?.image,
+      format: imageUpload?.value?.image.name.split('.').pop(),
       creativity: creativity.value,
       scale: SCALE[scale.value as keyof typeof SCALE]
     }
+    console.log(data)
 
     generateStore.upscaleImage(data)
     progressUrl.value = `${progressUrl.value}?userId=${userId.value}&token=${token}`

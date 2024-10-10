@@ -17,6 +17,7 @@ export interface Plan {
 export const useAppStore = defineStore('app', () => {
   const feature = ref<string>('')
   const theme = useTheme()
+  const tab = ref(1)
   const isDark = computed(() => theme.global.name.value === 'dark')
   function setFeature(id: string) {
     feature.value = id
@@ -31,5 +32,5 @@ export const useAppStore = defineStore('app', () => {
       : document.documentElement.classList.remove('tw-dark')
   })
 
-  return { feature, setFeature, isDark, toggleTheme }
+  return { feature, setFeature, isDark, toggleTheme, tab }
 })

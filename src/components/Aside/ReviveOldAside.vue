@@ -6,9 +6,7 @@ import ImageUpload from '@/components/Aside/ImageUpload.vue'
 import { useGenerateStore } from '@/stores/generate'
 
 const router = useRouter()
-
 const { isSignedIn } = useUser()
-
 const generateStore = useGenerateStore()
 
 const imageUpload = ref()
@@ -22,8 +20,6 @@ async function generateImage() {
       scratched: scratched.value,
       highResolution: highResolution.value
     }
-    console.log(body)
-
     generateStore.reviveOldImage(body)
   } else {
     router.push('/signin')
@@ -41,11 +37,10 @@ async function generateImage() {
         hide-details
       ></v-checkbox>
 
-      <v-tooltip>
+      <v-tooltip text="Select this if the image is High Resolution">
         <template v-slot:activator="{ props }">
           <v-icon v-bind="props" size="x-small" icon="fas fa-circle-info"></v-icon>
         </template>
-        <span>Select this if the image is High Resolution</span>
       </v-tooltip>
     </div>
     <div class="tw-flex tw-items-center tw-gap-2">
@@ -55,11 +50,10 @@ async function generateImage() {
         label="Scratched"
         hide-details
       ></v-checkbox>
-      <v-tooltip>
+      <v-tooltip text="Select this if the image has scratches">
         <template v-slot:activator="{ props }">
           <v-icon v-bind="props" size="x-small" icon="fas fa-circle-info"></v-icon>
         </template>
-        <span>Select this if the image is Scratched</span>
       </v-tooltip>
     </div>
   </div>

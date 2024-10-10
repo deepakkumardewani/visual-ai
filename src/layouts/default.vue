@@ -2,7 +2,7 @@
 import { useRoute } from 'vue-router'
 
 import AppFooter from '@/components/AppFooter.vue'
-import AppHeader from '@/components/AppHeader.vue'
+import AppHeader from '@/components/Header/AppHeader.vue'
 
 const route = useRoute()
 

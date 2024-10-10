@@ -3,17 +3,19 @@ import { storeToRefs } from 'pinia'
 import { useAppStore } from '@/stores/app'
 import { useGenerateStore } from '@/stores/generate'
 
-export const downloadImage = () => {
+export const downloadImage = (imgUrl?: string) => {
   const appStore = useAppStore()
 
   const generateStore = useGenerateStore()
   const { image, enhancedImage } = storeToRefs(generateStore)
   const { feature } = storeToRefs(appStore)
-  let imageUrl = ''
-  if (feature.value === 'ai_image') {
-    imageUrl = image.value
-  } else if (feature.value === 'image_upscaler' || feature.value === 'colorize_image') {
-    imageUrl = enhancedImage.value
+  let imageUrl = imgUrl
+  if (!imageUrl) {
+    if (feature.value === 'ai_image') {
+      imageUrl = image.value
+    } else if (feature.value === 'image_upscaler' || feature.value === 'colorize_image') {
+      imageUrl = enhancedImage.value
+    }
   }
 
   if (imageUrl) {

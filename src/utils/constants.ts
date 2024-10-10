@@ -12,30 +12,6 @@ export const MODEL_IDS = {
   UPSCALE_IMAGE: 'UPSCALE_IMAGE'
 }
 
-// Prompt Examples
-export const PROMPTS = [
-  'A futuristic cityscape at night with neon lights and flying cars.',
-  'A cozy cabin in the woods during a snowy winter evening.',
-  'An enchanted forest filled with glowing mushrooms and mythical creatures.',
-  'A majestic dragon soaring above a medieval castle at sunset.',
-  'A steampunk-inspired airship floating over a bustling Victorian-era city.',
-  'A serene beach at sunrise with palm trees and gentle waves.',
-  'A dystopian landscape with abandoned skyscrapers and overgrown vegetation.',
-  'A magical library with floating books and glowing orbs of light.',
-  'A vibrant underwater scene with colorful coral reefs and diverse marine life.',
-  'A group of adventurers exploring ancient ruins in a dense jungle.',
-  'A futuristic robot in a sleek, high-tech laboratory.',
-  'A surreal dreamscape with floating islands and impossible landscapes.',
-  'A tranquil Japanese garden with a stone bridge and koi pond.',
-  'A warrior in ornate armor standing on a battlefield at dawn.',
-  'A cozy coffee shop interior with warm lighting and people reading books.',
-  'A gothic cathedral with intricate stained glass windows and dark shadows.',
-  'A futuristic sports car racing down a winding mountain road.',
-  'A fantasy village built into the side of a mountain with waterfalls.',
-  'A grand ballroom filled with elegantly dressed dancers under a chandelier.',
-  'A post-apocalyptic wasteland with a lone survivor walking through the ruins.'
-]
-
 // Image Examples
 export const EXAMPLES = [
   {
