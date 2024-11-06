@@ -1,19 +1,25 @@
+export enum FeatureType {
+  IMAGE = 'image',
+  UPSCALE = 'upscale',
+  COLORIZE = 'colorize',
+  REVIVE = 'revive'
+}
 export interface ImageObject {
+  _id: string
   userId: string
   prompt: string
-  featureType: string
+  featureType: FeatureType
   imageUrl: string
   original: string
   enhanced: string
   humanReadableDate: string
-  isFavorite: string
+  isFavorite: boolean
   resolution: string
   createdAt: string
   width: number
   height: number
   format: string
   bytes: number
-  _id: string
 }
 
 export interface GroupedObject {
@@ -23,15 +29,16 @@ export interface GroupedObject {
 
 export function groupByDate(data: ImageObject[]): GroupedObject[] {
   const grouped: { [key: string]: ImageObject[] } = {}
-
-  // Group objects by humanReadableDate
-  data.forEach((item) => {
-    const date = item.humanReadableDate
-    if (!grouped[date]) {
-      grouped[date] = []
-    }
-    grouped[date].push(item)
-  })
+  // Group objects by humanReadableDate in descending order
+  data
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .forEach((item) => {
+      const date = item.humanReadableDate
+      if (!grouped[date]) {
+        grouped[date] = []
+      }
+      grouped[date].push(item)
+    })
 
   // Convert the grouped data into the desired format
   const result: GroupedObject[] = Object.keys(grouped).map((date) => ({
@@ -43,7 +50,6 @@ export function groupByDate(data: ImageObject[]): GroupedObject[] {
 }
 
 function formatDate(date: string): string {
-  console.log(date)
   // Assuming the input date is in "MM/DD/YYYY" format
   const months = [
     'Jan',
@@ -67,8 +73,3 @@ function formatDate(date: string): string {
 
   return `${day} ${monthName}`
 }
-
-const data: ImageObject[] = []
-
-const groupedArray = groupByDate(data)
-console.log(groupedArray)

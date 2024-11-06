@@ -14,9 +14,8 @@ const { isDark } = storeToRefs(appStore)
     :text="isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
   >
     <template v-slot:activator="{ props }">
-      <div @click="appStore.toggleTheme" v-bind="props" class="px-1">
-        <v-icon v-if="isDark" size="xl" icon="fas fa-sun"></v-icon>
-        <v-icon v-else size="xl" icon="fas fa-moon"></v-icon>
+      <div @click="appStore.toggleTheme" v-bind="props" class="tw-cursor-pointer">
+        <v-icon size="small" :icon="isDark ? 'fas fa-sun' : 'fas fa-moon'"></v-icon>
       </div>
     </template>
   </v-tooltip>

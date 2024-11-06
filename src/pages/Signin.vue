@@ -1,5 +1,11 @@
 <script setup>
+import { definePage } from 'unplugin-vue-router/runtime'
 import { SignIn } from 'vue-clerk'
+
+definePage({
+  alias: ['/login'],
+  name: 'signin'
+})
 </script>
 
 <template>
@@ -23,7 +29,7 @@ import { SignIn } from 'vue-clerk'
     <div
       class="tw-absolute md:tw-relative tw-inset-0 md:tw-w-[30%] tw-flex tw-items-center tw-justify-center tw-bg-gradient-to-br tw-from-purple-900 tw-via-purple-800 tw-to-purple-700"
     >
-      <SignIn path="/signin" />
+      <SignIn />
     </div>
   </div>
 </template>

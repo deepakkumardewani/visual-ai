@@ -7,7 +7,8 @@ const uploadInput = ref<HTMLInputElement | null>(null)
 const imagePreview = ref<HTMLElement | null>(null)
 
 let isEventListenerAdded = false
-
+const UPLOAD_TEXT = 'Click, or Drag image, here to upload'
+const IMAGE_FORMAT_TEXT = 'JPG, PNG, or WEBP upto 5MB'
 const isDragging = ref(false)
 
 function handleDragLeave() {
@@ -86,7 +87,7 @@ defineExpose({
 </script>
 <template>
   <div class="tw-max-w-sm tw-mx-auto tw-rounded-lg tw-overflow-hidden tw-items-center">
-    <div class="tw-py-3">
+    <div class="tw-py-1">
       <div
         id="image-preview"
         class="tw-max-w-sm tw-p-4 tw-mb-4 tw-rounded-lg tw-items-center tw-mx-auto tw-text-center tw-border-dashed tw-border-2 tw-border-gray-400"
@@ -111,11 +112,10 @@ defineExpose({
           <h5
             class="tw-mb-2 tw-text-xl tw-font-bold tw-tracking-tight tw-text-black dark:tw-text-white"
           >
-            Click or drag image here to upload
+            {{ UPLOAD_TEXT }}
           </h5>
           <p class="tw-font-normal tw-text-sm tw-text-black dark:tw-text-white md:tw-px-6">
-            The image should be in
-            <b class="tw-text-black dark:tw-text-white">JPG, PNG, or WEBP</b> format.
+            {{ IMAGE_FORMAT_TEXT }}
           </p>
         </label>
       </div>

@@ -10,25 +10,15 @@ import FeatureSelect from '@/components/Header/FeatureSelect.vue'
 import Logo from '@/components/Header/Logo.vue'
 import PricingDialog from '@/components/Header/PricingDialog.vue'
 import Tabs from '@/components/Header/Tabs.vue'
-import ThemeButton from '@/components/Header/ThemeButton.vue'
 import UserMenu from '@/components/Header/UserMenu.vue'
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
 
 const { smAndUp } = useDisplay()
-// const { user } = useUser()
 const userStore = useUserStore()
 const { credits } = storeToRefs(userStore)
 const dialogStore = useDialogStore()
-
 const route = useRoute()
-
-// watch(user, () => {
-//   console.log('user', user.value)
-//   if (user.value) {
-//     console.log('user', user.value)
-//   }
-// })
 
 watch(credits, (newCredits) => {
   if (newCredits < 5) {
@@ -37,9 +27,9 @@ watch(credits, (newCredits) => {
 })
 </script>
 <template>
-  <v-app-bar :elevation="0" color="transparent" class="bg-asideBg">
+  <v-app-bar :elevation="0" color="transparent">
     <v-row class="align-center">
-      <v-col :cols="smAndUp ? 4 : 6">
+      <v-col :cols="smAndUp ? 4 : route.path === '/dashboard' ? 7 : 5">
         <div class="tw-relative tw-flex tw-min-w-0 tw-shrink-0 tw-items-center tw-gap-3">
           <Logo />
           <div class="tw-relative tw-min-w-0 tw-flex-1 tw-lg:tw-flex-none">
@@ -53,7 +43,7 @@ watch(credits, (newCredits) => {
           <Tabs v-if="route.path === '/dashboard'" />
         </SignedIn>
       </v-col>
-      <v-col :cols="smAndUp ? 3 : 6">
+      <v-col :cols="smAndUp ? 3 : route.path === '/dashboard' ? 5 : 7">
         <div class="tw-flex tw-shrink-0 tw-gap-4">
           <div id="export-area" class="ml-auto tw-flex tw-items-center tw-gap-4 tw-lg:tw-gap-4">
             <!-- SignedOut -->
@@ -74,16 +64,16 @@ watch(credits, (newCredits) => {
                 variant="tonal"
                 color="purple-lighten-2"
                 size="small"
-                to="/signup"
+                to="/signin"
               >
-                Sign Up
+                Sign In
               </v-btn>
             </SignedOut>
 
             <!-- SignedIn -->
             <SignedIn>
               <Coin v-if="route.path === '/dashboard'" />
-              <ThemeButton v-if="route.path === '/dashboard'" />
+              <!-- <ThemeButton v-if="route.path === '/dashboard'" /> -->
               <!-- <v-btn
                 v-if="route.path !== '/dashboard'"
                 class="mx-4"
@@ -120,5 +110,3 @@ watch(credits, (newCredits) => {
   </v-app-bar>
   <PricingDialog />
 </template>
-
-<style scoped lang="scss"></style>

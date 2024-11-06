@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { useDisplay } from 'vuetify'
 
 import { useDialogStore } from '@/stores/dialog'
+
+const { mobile } = useDisplay()
 
 const dialogStore = useDialogStore()
 const { showPremiumDialog } = storeToRefs(dialogStore)
@@ -9,33 +12,39 @@ const { showPremiumDialog } = storeToRefs(dialogStore)
 const features = [
   {
     title: 'AI Image Generator',
-    description: 'Create images in realtime'
+    description: 'Create High Quality Images using Text'
   },
   {
     title: 'Upscale Images',
-    description: 'Upscale images in high resolution'
+    description: 'Upscale Images in High Resolution'
   },
   {
     title: 'Colorize Images',
-    description: 'Put color back into your images'
+    description: 'Put Color back into your Images'
   },
   {
     title: 'Deoldify Images',
-    description: 'Bring your old photos back to life'
+    description: 'Bring your Old photos back to Life'
   }
 ]
 </script>
 <template>
   <div class="text-center">
-    <v-dialog max-width="1000" v-model="showPremiumDialog" width="auto">
-      <v-card class="no-scrollbar">
+    <v-dialog
+      width="auto"
+      v-model="showPremiumDialog"
+      :fullscreen="mobile"
+      :max-width="mobile ? '100%' : '1000'"
+      content-class="tw-flex tw-items-center tw-justify-center"
+    >
+      <v-card class="no-scrollbar tw-flex tw-flex-col tw-h-full purple-gradient">
         <v-card-text class="pa-0">
           <div
-            class="tw-flex tw-flex-col md:tw-flex-row tw-bg-gradient-to-br tw-from-purple-950 tw-via-purple-900 tw-to-purple-800 tw-p-4 tw-pb-0"
+            class="tw-flex tw-h-screen tw-items-center tw-justify-center tw-flex-col md:tw-flex-row tw-p-4 tw-pb-0"
           >
             <!-- Features column -->
             <div
-              class="tw-absolute md:tw-relative tw-inset-0 md:tw-w-[50%] tw-items-center tw-justify-center tw-p-4 tw-px-7 tw-pr-20"
+              class="md:tw-relative tw-inset-0 tw-w-full md:tw-w-[50%] tw-h-screen tw-justify-center tw-p-4 tw-px-7 md:tw-pr-20 tw-flex tw-flex-col"
             >
               <h1 class="tw-text-white tw-text-5xl tw-font-medium tw-py-6">
                 Unlock the full potential of Visual AI
@@ -46,10 +55,12 @@ const features = [
               <div class="tw-py-4">
                 <ul class="tw-list-none tw-text-white tw-space-y-2 tw-flex tw-flex-col">
                   <li v-for="feature in features" :key="feature.title" class="tw-flex">
-                    <v-icon icon="fas fa-circle" size="8" color="white" class="tw-mr-2 tw-mt-2" />
+                    <v-icon icon="fas fa-circle" size="8" color="white" class="tw-mr-2 tw-mt-2.5" />
                     <div>
                       <span class="tw-font-bold tw-text-xl">{{ feature.title }}</span>
-                      <span class="tw-ml-2 tw-text-lg">{{ feature.description }}</span>
+                      <div>
+                        <span class="tw-text-lg">{{ feature.description }}</span>
+                      </div>
                     </div>
                   </li>
                 </ul>
@@ -72,9 +83,9 @@ const features = [
             <!-- Image column -->
             <div class="tw-hidden md:tw-block tw-relative tw-w-full md:tw-w-[50%] tw-h-screen">
               <img
-                src="../assets/about.jpg"
+                src="../../assets/about.jpg"
                 alt="AI Generated Image"
-                class="tw-object-cover tw-w-full tw-h-full tw-rounded-t-full"
+                class="tw-object-cover tw-w-full tw-h-[90%] tw-rounded-t-full"
               />
             </div>
           </div>
@@ -85,7 +96,7 @@ const features = [
 </template>
 
 <style scoped>
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+.purple-gradient {
+  background: linear-gradient(to bottom, #8733cc, #691bef);
 }
 </style>

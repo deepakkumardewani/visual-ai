@@ -23,7 +23,7 @@ const aliases: IconAliases = {
 const light = {
   dark: false,
   colors: {
-    background: '#F7F7F7',
+    background: '#f1f5f9',
     headerBg: '#edf2ef',
     heading: 'hsl(272, 20%, 40%)',
     cardTitle: '#888',
@@ -37,13 +37,13 @@ const dark = {
   dark: true,
   colors: {
     background: '#000',
-    headerBg: 'hsl(272, 10%, 10%)',
+    headerBg: '#1A171C',
     heading: '#fff',
     cardTitle: '#647692',
     cardTextBG: '#ebebeb',
     btnBg: '#3f51b5',
     btnText: '#fff',
-    asideBg: 'hsl(272, 10%, 10%)'
+    asideBg: '#1A171C'
   }
 }
 

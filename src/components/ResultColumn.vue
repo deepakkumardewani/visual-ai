@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { useDisplay } from 'vuetify'
 
 import SideBySide from '@/components/SideBySide.vue'
 import { useAppStore } from '@/stores/app'
 import { useGenerateStore } from '@/stores/generate'
 import { downloadImage } from '@/utils/helpers'
 
+const { mobile } = useDisplay()
 const generateStore = useGenerateStore()
 const appStore = useAppStore()
 const { isLoading, image, originalImage, enhancedImage, upscaleInProgress } =
   storeToRefs(generateStore)
 const { feature } = storeToRefs(appStore)
 
-const showBorder = computed(() => {
-  return image.value === '' && enhancedImage.value === '' && originalImage.value === ''
-})
+// const showBorder = computed(() => {
+//   return image.value === '' && enhancedImage.value === '' && originalImage.value === ''
+// })
 </script>
 <template>
   <v-alert
@@ -27,19 +29,23 @@ const showBorder = computed(() => {
     closable
   ></v-alert>
 
-  <div
-    class="image rounded-lg align-center justify-center"
-    :class="{ 'tw-h-full tw-border tw-border-purple-300': showBorder }"
-  >
+  <div class="image rounded-lg">
     <v-skeleton-loader v-if="isLoading" type="image"></v-skeleton-loader>
-    <div v-else>
+    <div v-else class="tw-justify-center tw-flex" :class="{ 'tw-h-full': feature === 'ai_image' }">
       <v-hover>
         <template v-slot:default="{ isHovering, props }">
-          <div v-bind="props" class="image-container">
-            <div v-if="feature === 'ai_image'">
-              <v-img width="auto" height="auto" cover :src="image">
+          <div
+            v-if="image !== '' || (originalImage !== '' && enhancedImage !== '')"
+            v-bind="props"
+            class="tw-relative tw-w-full tw-flex tw-items-center tw-justify-center"
+          >
+            <div
+              v-if="feature === 'ai_image'"
+              class="tw-w-full tw-h-full tw-flex tw-items-center tw-justify-center"
+            >
+              <v-img :src="image" class="tw-w-full" contain>
                 <template v-slot:placeholder>
-                  <div class="d-flex align-center justify-center fill-height">
+                  <div class="tw-flex tw-items-center tw-justify-center tw-h-full">
                     <v-skeleton-loader type="image"></v-skeleton-loader>
                   </div>
                 </template>
@@ -53,10 +59,17 @@ const showBorder = computed(() => {
                 </template>
               </v-img>
             </div>
-            <div v-if="feature === 'image_upscaler' || feature === 'colorize_image'">
+            <div
+              v-if="
+                feature === 'image_upscaler' ||
+                feature === 'colorize_image' ||
+                feature === 'revive_old_photos'
+              "
+              class="tw-w-full tw-h-full tw-flex tw-items-center tw-justify-center"
+            >
               <SideBySide :original-image="originalImage" :enhanced-image="enhancedImage" />
             </div>
-            <div v-if="isHovering" class="download-btn">
+            <div v-if="isHovering || mobile" class="download-btn">
               <v-btn @click="downloadImage" icon>
                 <v-icon icon="fas fa-download"></v-icon>
               </v-btn>
@@ -75,33 +88,29 @@ const showBorder = computed(() => {
   right: 10px;
 }
 
-.image-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 img-comparison-slider {
   outline: none;
 }
 
 .image {
   position: relative;
-  overflow: hidden;
-  // height: 100vh;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -100%;
-    left: -100%;
-    right: -100%;
-    bottom: -100%;
-    background: radial-gradient(circle at 50% 50%, #261f2a, #251531, #2f032f, #2e0854);
-    opacity: 0.7;
-    background-size: 200% 200%;
-    animation: moveGradient 10s ease infinite;
-  }
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, #261f2a, #251531, #2f032f, #2e0854);
+  opacity: 0.7;
+  background-size: 200% 200%;
+  animation: moveGradient 10s ease infinite;
+  // &::before {
+  //   content: '';
+  //   position: absolute;
+  //   top: -100%;
+  //   left: -100%;
+  //   right: -100%;
+  //   bottom: -100%;
+  //   background: radial-gradient(circle at 50% 50%, #261f2a, #251531, #2f032f, #2e0854);
+  //   opacity: 0.7;
+  //   background-size: 200% 200%;
+  //   animation: moveGradient 10s ease infinite;
+  // }
 }
 
 @keyframes moveGradient {

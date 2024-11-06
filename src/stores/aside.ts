@@ -5,6 +5,7 @@ export type Mode = {
   id: string
   description: string
   icon: string
+  isPro: boolean
 }
 
 export const useAsideStore = defineStore('aside', () => {})

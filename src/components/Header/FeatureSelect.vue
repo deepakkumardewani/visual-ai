@@ -37,7 +37,7 @@ const features = ref<Feature[]>([
   }
 ])
 
-const feature = ref<Feature>(features.value[1])
+const feature = ref<Feature>(features.value[0])
 
 function handleSelected(item: Feature) {
   appStore.setFeature(item.id)

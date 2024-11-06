@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import About from '@/components/About.vue'
-import Features from '@/components/Features.vue'
+import About from '@/components/Home/About.vue'
+import Features from '@/components/Home/Features.vue'
 import Gallery from '@/components/Home/Gallery.vue'
 import Hero from '@/components/Home/Hero.vue'
 
@@ -9,11 +9,10 @@ import Hero from '@/components/Home/Hero.vue'
 <template>
   <v-container>
     <Hero />
+
     <About />
-    <Gallery />
     <Features />
+    <Gallery />
     <!-- <Pricing /> -->
   </v-container>
 </template>
-
-<style scoped lang="scss"></style>

@@ -1,9 +1,47 @@
 import { storeToRefs } from 'pinia'
 
+import { useFetch } from '@/composables/useFetch'
 import { useAppStore } from '@/stores/app'
 import { useGenerateStore } from '@/stores/generate'
+import { useUserStore } from '@/stores/user'
 
-export const downloadImage = (imgUrl?: string) => {
+export const deleteImage = (event: Event, imageId: string) => {
+  event.stopPropagation()
+  // Implement delete functionality
+  console.log('Deleting image:', imageId)
+}
+export const favoriteImage = async (event: Event, imageId: string) => {
+  event.stopPropagation()
+  const userStore = useUserStore()
+  const { userId, history } = storeToRefs(userStore)
+  const url = `/image/favorite`
+  const { error, data } = await useFetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      mode: 'cors'
+    },
+    body: JSON.stringify({
+      imageId,
+      userId: userId.value
+    })
+  }).json()
+  if (error.value) {
+    console.error('error', error.value)
+    return
+  }
+  if (data.value) {
+    console.log('data', data.value)
+    history.value = history.value.map((item) => {
+      if (item._id === imageId) {
+        return { ...item, isFavorite: data.value.isFavorite }
+      }
+      return item
+    })
+  }
+}
+export const downloadImage = (event: Event, imgUrl?: string) => {
+  event.stopPropagation()
   const appStore = useAppStore()
 
   const generateStore = useGenerateStore()

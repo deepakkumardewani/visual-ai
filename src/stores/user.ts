@@ -6,6 +6,11 @@ import { ImageObject } from '@/pages/utils'
 
 interface User {
   userId: string
+  userName: string
+  firstName: string
+  lastName: string
+  fullName: string
+  email: string
   referralCode: string
   referredBy: string
   credits: number
@@ -13,9 +18,9 @@ interface User {
   monthlyCredits: number
   isPro: boolean
   subscriptionEnd: Date
-  payments?: any[]
-  history?: any[]
-  activities?: any[]
+  payments: any[]
+  history: ImageObject[]
+  activities: any[]
   createdAt: Date
   updatedAt: Date
 }
@@ -42,6 +47,7 @@ export const useUserStore = defineStore('user', () => {
   const userId = ref('')
   const referralCode = ref('')
   const credits = ref(0)
+  const isPro = ref(false)
 
   function setCredits(value: number) {
     credits.value = value
@@ -54,11 +60,12 @@ export const useUserStore = defineStore('user', () => {
         'Content-Type': 'application/json',
         mode: 'cors'
       }
-    }).json()
+    }).json<User>()
 
     if (userData.value) {
       userDetails.value = userData.value
       history.value = userData.value.history
+      isPro.value = userData.value.isPro
       const dataToStoreInLocalStorage = {
         userId: userData.value.userId
       }

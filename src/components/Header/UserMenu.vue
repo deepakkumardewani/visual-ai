@@ -1,59 +1,44 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
-import { useClerk, useUser } from 'vue-clerk'
+import { useClerk } from 'vue-clerk'
+import { useRouter } from 'vue-router'
 
-import { useFetch } from '@/composables/useFetch'
+import Avatar from '@/components/Avatar.vue'
+import ThemeButton from '@/components/Header/ThemeButton.vue'
+import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
 
+const router = useRouter()
+
+const dialogStore = useDialogStore()
+
 const userStore = useUserStore()
-const { user } = useUser()
 const { signOut } = useClerk()
-const { userId, referralCode } = storeToRefs(userStore)
-const userInitials = ref<string | undefined>('')
+const { userDetails } = storeToRefs(userStore)
 const fullName = ref<string | undefined>('')
 const email = ref<string | undefined>('')
-const userImage = ref<string | undefined>('')
+const menu = ref(false)
 
-function getUserInitials() {
-  if (!user.value) return ''
-  if (!user.value.firstName || !user.value.lastName) return ''
-  return user.value?.firstName?.charAt(0) + user.value?.lastName?.charAt(0)
+function showReferralDialog() {
+  menu.value = false
+  dialogStore.showReferral()
 }
 
-function copyReferralLink() {
-  console.log('copyReferralLink')
-  const referralLink = `${import.meta.env.VITE_API_BASEPATH}/signup?referral=${referralCode.value}`
-  navigator.clipboard.writeText(referralLink)
-}
-
-async function deleteAccount() {
-  console.log('deleteAccount')
-  const { error, data } = await useFetch(`/api/users/${userId.value}`, {
-    method: 'DELETE',
-    headers: {
-      mode: 'cors'
-    }
-  })
-  if (data) {
-    console.log(data)
-  }
-  if (error) {
-    console.error(error)
-  }
-}
+// function copyReferralLink() {
+//   const referralLink = `${import.meta.env.VITE_API_BASEPATH}/signup?referral=${referralCode.value}`
+//   navigator.clipboard.writeText(referralLink)
+// }
 
 function updateUserInfo() {
-  if (user.value) {
-    userInitials.value = getUserInitials()
-    fullName.value = user.value.fullName ?? ''
-    email.value = user.value.primaryEmailAddress?.emailAddress
-    userImage.value = user.value.imageUrl
+  if (userDetails.value) {
+    fullName.value = userDetails.value.fullName ?? ''
+    email.value = userDetails.value.email ?? ''
   }
 }
 
 watch(
-  () => user.value,
+  () => userDetails.value,
   () => {
     updateUserInfo()
   },
@@ -65,39 +50,70 @@ watch(
     id="user"
     class="tw-flex tw-cursor-pointer tw-shrink-0 tw-items-center tw-gap-2 tw-lg:tw-gap-3"
   >
-    <v-menu min-width="200px" rounded>
+    <v-menu v-model="menu" min-width="200px" rounded :close-on-content-click="false" offset="10">
       <template v-slot:activator="{ props }">
-        <div v-if="user" v-bind="props" class="mr-4">
-          <v-avatar class="mr-2" size="small">
-            <v-img alt="user image" :src="userImage">
-              <template v-slot:error>
-                <span class="text-body-1">{{ userInitials }}</span>
-              </template>
-            </v-img>
-          </v-avatar>
+        <div v-if="userDetails" v-bind="props" class="mr-4">
+          <Avatar />
           <v-icon size="x-small" class="tw-cursor-pointer" icon="fas fa-caret-down"></v-icon>
         </div>
       </template>
       <v-card>
-        <v-card-text>
-          <div class="mx-auto text-center">
-            <v-avatar>
-              <v-img alt="user image" :src="userImage">
-                <template v-slot:error>
-                  <span class="text-body-1">{{ userInitials }}</span>
-                </template>
-              </v-img>
-            </v-avatar>
-            <h3 class="tw-font-bold">{{ fullName }}</h3>
-            <p class="text-caption mt-1">
-              {{ email }}
-            </p>
-            <v-divider class="my-3"></v-divider>
-            <v-btn @click="copyReferralLink" variant="text"> Copy Referral Link </v-btn>
-            <v-divider class="my-3"></v-divider>
-            <v-btn @click="deleteAccount" variant="text"> Delete Account </v-btn>
-            <v-divider class="my-3"></v-divider>
-            <v-btn @click="signOut({ redirectUrl: '/' })" variant="text"> Logout </v-btn>
+        <v-card-text class="pa-2">
+          <v-list>
+            <v-list-item>
+              <template v-slot:prepend>
+                <Avatar />
+              </template>
+              <v-list-item-title>{{ fullName }}</v-list-item-title>
+              <v-list-item-subtitle>{{ email }}</v-list-item-subtitle>
+            </v-list-item>
+
+            <!-- <v-divider class="my-1"></v-divider> -->
+            <!-- <v-list-item class="tw-cursor-pointer">
+              <div class="tw-flex tw-items-center tw-gap-2">
+                <v-icon size="small" :icon="isDark ? 'fas fa-sun' : 'fas fa-moon'"></v-icon>
+                <v-list-item-title>{{ isDark ? 'Light Mode' : 'Dark Mode' }}</v-list-item-title>
+              </div>
+              <template v-slot:append>
+                <v-switch
+                  @click="appStore.toggleTheme"
+                  v-model="isDark"
+                  hide-details
+                  inset
+                ></v-switch>
+              </template>
+            </v-list-item> -->
+            <v-divider class="my-1"></v-divider>
+            <v-list-item
+              class="tw-cursor-pointer"
+              @click="router.push({ name: 'profile' }), (menu = false)"
+            >
+              <div class="tw-flex tw-items-center tw-gap-2">
+                <v-icon size="small" icon="fas fa-user"></v-icon>
+                <v-list-item-title>View Profile</v-list-item-title>
+              </div>
+            </v-list-item>
+            <v-divider class="my-1"></v-divider>
+            <v-list-item class="tw-cursor-pointer">
+              <div @click="showReferralDialog" class="tw-flex tw-items-center tw-gap-2">
+                <v-icon size="small" icon="fas fa-copy"></v-icon>
+                <v-list-item-title>Refer and Earn Credits</v-list-item-title>
+              </div>
+            </v-list-item>
+            <v-divider class="my-1"></v-divider>
+            <v-list-item class="tw-cursor-pointer">
+              <div
+                class="tw-flex tw-items-center tw-gap-2"
+                @click="signOut({ redirectUrl: '/' }), (menu = false)"
+              >
+                <v-icon size="small" icon="fas fa-sign-out-alt"></v-icon>
+                <v-list-item-title>Logout</v-list-item-title>
+              </div>
+            </v-list-item>
+          </v-list>
+          <div class="tw-flex tw-items-center tw-gap-2">
+            <v-spacer />
+            <ThemeButton />
           </div>
         </v-card-text>
       </v-card>

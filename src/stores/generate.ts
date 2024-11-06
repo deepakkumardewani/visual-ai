@@ -1,15 +1,17 @@
 import { defineStore, storeToRefs } from 'pinia'
 
 import { useFetch } from '@/composables/useFetch'
+// import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
 import { MODEL_IDS } from '@/utils/constants'
 
 export type ImageBody = {
+  modelId: string
   prompt: string
-  noOfOutputs?: number
-  outputQuality?: number
-  aspectRatio?: string
-  outputFormat?: string
+  noOfOutputs: number
+  outputQuality: number
+  aspectRatio: string
+  outputFormat: string
 }
 
 export const useGenerateStore = defineStore('generate', () => {
@@ -20,9 +22,11 @@ export const useGenerateStore = defineStore('generate', () => {
   const upscaleInProgress = ref<boolean>(false)
   const colorizeInProgress = ref<boolean>(false)
   const userStore = useUserStore()
-  const { userId, credits } = storeToRefs(userStore)
+  const { userId, credits, history } = storeToRefs(userStore)
 
   async function generateImage(imgData?: ImageBody) {
+    console.log('imgData', imgData)
+
     if (credits.value <= 0) {
       console.log('no credits')
       //TODO: redirect to subscription page
@@ -40,7 +44,7 @@ export const useGenerateStore = defineStore('generate', () => {
         mode: 'cors'
       },
       body: JSON.stringify({
-        modelId: MODEL_IDS.FLUX_BASIC,
+        modelId: imgData?.modelId ?? MODEL_IDS.FLUX_BASIC,
         userId: userId.value,
         prompt: imgData?.prompt ?? '',
         num_outputs: imgData?.noOfOutputs ?? 1,
@@ -48,17 +52,16 @@ export const useGenerateStore = defineStore('generate', () => {
         aspect_ratio: imgData?.aspectRatio ?? '16:9',
         output_format: imgData?.outputFormat ?? 'jpg'
       })
-    })
+    }).json()
     isLoading.value = false
     if (error.value) {
       console.error('error', error.value)
       return
     }
     if (imageData.value) {
-      const result = JSON.parse(imageData.value as string)
-      console.log(result)
-      userStore.setCredits(result.userCreditsRemaining)
-      image.value = result.image[0]
+      userStore.setCredits(imageData.value.userCreditsRemaining)
+      history.value.push(imageData.value.image)
+      image.value = imageData.value.image.imageUrl
     }
   }
 
@@ -79,7 +82,7 @@ export const useGenerateStore = defineStore('generate', () => {
     const { error, data: enhancedImageData } = await useFetch(url, {
       method: 'POST',
       body: formData
-    })
+    }).json()
     isLoading.value = false
     if (error.value) {
       console.error('error', error.value)
@@ -87,10 +90,9 @@ export const useGenerateStore = defineStore('generate', () => {
       return
     }
     if (enhancedImageData.value) {
-      const result = JSON.parse(enhancedImageData.value as string)
-      userStore.setCredits(result.userCreditsRemaining)
-      originalImage.value = result.original
-      enhancedImage.value = result.enhanced
+      userStore.setCredits(enhancedImageData.value.userCreditsRemaining)
+      originalImage.value = enhancedImageData.value.original
+      enhancedImage.value = enhancedImageData.value.enhanced
     }
   }
 
@@ -106,7 +108,7 @@ export const useGenerateStore = defineStore('generate', () => {
     const { error, data: colorizedImageData } = await useFetch(url, {
       method: 'POST',
       body: formData
-    })
+    }).json()
 
     isLoading.value = false
     if (error.value) {
@@ -115,27 +117,24 @@ export const useGenerateStore = defineStore('generate', () => {
       return
     }
     if (colorizedImageData.value) {
-      const result = JSON.parse(colorizedImageData.value as string)
-      userStore.setCredits(result.userCreditsRemaining)
-      originalImage.value = result.original
-      enhancedImage.value = result.enhanced
+      userStore.setCredits(colorizedImageData.value.userCreditsRemaining)
+      originalImage.value = colorizedImageData.value.original
+      enhancedImage.value = colorizedImageData.value.enhanced
     }
   }
 
   async function reviveOldImage(data: any) {
     isLoading.value = true
-    const { image, scratched, highResolution } = data
+    const { image } = data
     const formData = new FormData()
     formData.append('userId', userId.value)
     formData.append('feature', 'revive')
-    formData.append('scratched', scratched)
-    formData.append('highResolution', highResolution)
     formData.append('image', image)
     const url = `/generate/revive/image`
     const { error, data: revivedImageData } = await useFetch(url, {
       method: 'POST',
       body: formData
-    })
+    }).json()
     isLoading.value = false
     if (error.value) {
       console.error('error', error.value)
@@ -143,12 +142,19 @@ export const useGenerateStore = defineStore('generate', () => {
       return
     }
     if (revivedImageData.value) {
-      const result = JSON.parse(revivedImageData.value as string)
-      userStore.setCredits(result.userCreditsRemaining)
-      originalImage.value = result.original
-      enhancedImage.value = result.enhanced
+      userStore.setCredits(revivedImageData.value.userCreditsRemaining)
+      originalImage.value = revivedImageData.value.original
+      enhancedImage.value = revivedImageData.value.enhanced
     }
   }
+
+  watch(isLoading, (newVal) => {
+    if (newVal) {
+      image.value = ''
+      originalImage.value = ''
+      enhancedImage.value = ''
+    }
+  })
 
   return {
     generateImage,

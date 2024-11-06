@@ -1,30 +1,39 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
+import { useDisplay } from 'vuetify'
 
 import Aside from '@/components/Aside/Aside.vue'
+import Tabs from '@/components/Header/Tabs.vue'
 import History from '@/components/History.vue'
 import ResultColumn from '@/components/ResultColumn.vue'
 import { useAppStore } from '@/stores/app'
 
-// import historyData from '@/utils/history.json'
-
 const appStore = useAppStore()
 const { tab } = storeToRefs(appStore)
+const route = useRoute()
+const { mobile } = useDisplay()
 </script>
 <template>
-  <v-tabs-window v-model="tab">
-    <v-tabs-window-item :value="1">
-      <div class="pa-2 sm:tw-flex tw-h-screen dashboard">
-        <div class="tw-w-full sm:tw-w-1/4 tw-p-4">
+  <div class="bg-asideBg tw-mt-1" v-if="route.path === '/dashboard' && mobile">
+    <Tabs />
+    <v-divider />
+  </div>
+  <v-tabs-window v-model="tab" class="tw-bg-black">
+    <v-tabs-window-item :value="1" :transition="false" :reverse-transition="false">
+      <div class="sm:tw-flex tw-h-screen dashboard">
+        <div class="tw-w-full sm:tw-w-1/4 tw-p-2">
           <Aside />
         </div>
 
-        <div class="tw-w-full sm:tw-w-3/4 tw-h-[55%] sm:tw-h-full tw-overflow-y-auto tw-p-4">
+        <div
+          class="tw-w-full sm:tw-w-3/4 tw-h-[50%] sm:tw-h-full tw-overflow-y-auto tw-p-1 no-scrollbar"
+        >
           <ResultColumn />
         </div>
       </div>
     </v-tabs-window-item>
-    <v-tabs-window-item :value="2">
+    <v-tabs-window-item :value="2" :transition="false" :reverse-transition="false">
       <History />
     </v-tabs-window-item>
   </v-tabs-window>
@@ -32,7 +41,7 @@ const { tab } = storeToRefs(appStore)
 
 <style scoped lang="scss">
 .dashboard {
-  max-height: calc(100vh - 50px) !important;
+  max-height: calc(100vh - 60px) !important;
 }
 :deep(.v-skeleton-loader) {
   height: 100%;

@@ -7,16 +7,18 @@ import { useDisplay } from 'vuetify'
 
 import Heading from '@/components/Aside/Heading.vue'
 import ImageUpload from '@/components/Aside/ImageUpload.vue'
+import PremiumDialog from '@/components/Dialogs/PremiumDialog.vue'
 import { type Mode } from '@/stores/aside'
 import { useAuthStore } from '@/stores/auth'
+import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
 import { MODEL_IDS } from '@/utils/constants'
 
 const userStore = useUserStore()
-const { userId } = storeToRefs(userStore)
+const dialogStore = useDialogStore()
+const { userId, userDetails } = storeToRefs(userStore)
 const router = useRouter()
-// const route = useRoute()
 const { isSignedIn } = useUser()
 const { smAndUp } = useDisplay()
 const generateStore = useGenerateStore()
@@ -35,19 +37,27 @@ const modes = ref([
     title: 'Basic',
     id: MODEL_IDS.COLORIZE_BASIC,
     description: 'Applies Basic coloring',
-    icon: 'fas fa-palette'
+    icon: 'fas fa-palette',
+    isPro: false
   },
   {
     title: 'Advanced',
     id: MODEL_IDS.COLORIZE_ADVANCED,
     description: 'Applies Advanced photo-realistic coloring',
-    icon: 'fas fa-eraser'
+    icon: 'fas fa-eraser',
+    isPro: true
   }
 ])
 const mode = ref<Mode>(modes.value[0])
 
 function handleSelected(item: Mode) {
-  mode.value = item
+  if (!userDetails.value?.isPro && item.isPro) {
+    console.log('show premium')
+    mode.value = modes.value[0]
+    dialogStore.showPremium()
+  } else {
+    mode.value = item
+  }
 }
 
 async function generateImage() {
@@ -102,7 +112,6 @@ onMounted(async () => {
     <ImageUpload ref="imageUpload" />
     <Heading title="Mode" />
     <v-select
-      @update:model-value="handleSelected"
       :items="modes"
       v-model="mode"
       bg-color="transparent"
@@ -112,9 +121,10 @@ onMounted(async () => {
       hide-details
       item-title="title"
       return-object
+      @update:model-value="handleSelected"
     >
       <template v-slot:item="{ item, props }">
-        <v-list-item v-bind="props" :max-width="smAndUp ? '300' : '350'">
+        <v-list-item v-bind="props" :max-width="smAndUp ? '330' : '350'">
           <template v-slot:prepend>
             <div
               class="tw-flex tw-justify-start tw-align-top mr-2"
@@ -122,6 +132,9 @@ onMounted(async () => {
             >
               <v-icon ize="small" :icon="item.raw.icon" />
             </div>
+          </template>
+          <template v-slot:append>
+            <v-icon v-if="!userDetails?.isPro && item.raw.isPro" size="x-small" icon="$star" />
           </template>
           <v-list-item-subtitle v-html="item.raw.description" class="wrap-text">
           </v-list-item-subtitle>
@@ -139,6 +152,7 @@ onMounted(async () => {
       >Colorize</v-btn
     >
   </div>
+  <PremiumDialog />
 </template>
 <style scoped>
 .wrap-text {

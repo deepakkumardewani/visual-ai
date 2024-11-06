@@ -37,7 +37,7 @@ const activeTabIndex = computed(() => tabs.findIndex((t) => t.id === tab.value))
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 1rem;
+  padding: 0.5rem 0.5rem;
 }
 
 .tabs {

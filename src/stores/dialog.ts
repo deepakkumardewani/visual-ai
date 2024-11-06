@@ -4,7 +4,13 @@ export const useDialogStore = defineStore('dialog', () => {
   const isRevealed = ref(false)
   const showPremiumDialog = ref(false)
   const showLowCreditsDialog = ref(false)
-
+  const showImageDialog = ref(false)
+  const showReferralDialog = ref(false)
+  const showDeleteDialog = ref(false)
+  const imageUrl = ref('')
+  const prompt = ref('')
+  const originalImage = ref('')
+  const enhancedImage = ref('')
   function showPremium() {
     showPremiumDialog.value = true
   }
@@ -17,6 +23,24 @@ export const useDialogStore = defineStore('dialog', () => {
   function hideLowCredits() {
     showLowCreditsDialog.value = false
   }
+  function showImage() {
+    showImageDialog.value = true
+  }
+  function hideImage() {
+    showImageDialog.value = false
+  }
+  function showReferral() {
+    showReferralDialog.value = true
+  }
+  function hideReferral() {
+    showReferralDialog.value = false
+  }
+  function showDelete() {
+    showDeleteDialog.value = true
+  }
+  function hideDelete() {
+    showDeleteDialog.value = false
+  }
   function reveal() {
     isRevealed.value = true
   }
@@ -27,11 +51,23 @@ export const useDialogStore = defineStore('dialog', () => {
   return {
     isRevealed,
     showPremiumDialog,
+    showImageDialog,
+    showDeleteDialog,
+    imageUrl,
+    originalImage,
+    enhancedImage,
+    prompt,
     reveal,
     cancel,
     showPremium,
     hidePremium,
     showLowCredits,
-    hideLowCredits
+    hideLowCredits,
+    showImage,
+    hideImage,
+    showReferral,
+    hideReferral,
+    showDelete,
+    hideDelete
   }
 })

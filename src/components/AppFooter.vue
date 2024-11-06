@@ -1,5 +1,5 @@
 <template>
-  <v-footer app absolute min-height="60" color="transparent" class="d-flex flex-column">
+  <v-footer app absolute min-height="60" color="transparent" class="tw-flex flex-column">
     <div class="d-flex w-100 align-center justify-center px-4">
       <div class="text-caption text-disabled">
         &copy; 2024
@@ -9,8 +9,10 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn class="mx-4" variant="text">Contact US</v-btn>
-      <v-btn class="mx-4" variant="text">FAQ</v-btn>
+      <v-btn to="/contact" size="small" class="mx-4 text-none" variant="text">Contact US</v-btn>
+      <v-btn to="/privacy" size="small" class="mx-4 text-none" variant="text">Privacy Policy</v-btn>
+      <v-btn to="/terms" size="small" class="mx-4 text-none" variant="text">Terms of Service</v-btn>
+      <v-btn to="/faq" size="small" class="mx-4 text-none" variant="text">FAQ</v-btn>
     </div>
   </v-footer>
 </template>

@@ -1,15 +1,17 @@
 import { type Plan } from '@/stores/app'
+import { Mode } from '@/stores/aside'
 
 export const MODEL_IDS = {
-  FLUX_STARTER: 'FLUX_STARTER',
+  FLUX_QUICK: 'FLUX_QUICK',
   FLUX_BASIC: 'FLUX_BASIC',
   FLUX_PRO: 'FLUX_PRO',
+  FLUX_1_1_PRO: 'FLUX_1_1_PRO',
   FLUX_REALISM: 'FLUX_REALISM',
-  OLD_PHOTOS: 'OLD_PHOTOS',
+  UPSCALE_IMAGE: 'UPSCALE_IMAGE',
   COLORIZE_BASIC: 'COLORIZE_BASIC',
   COLORIZE_ADVANCED: 'COLORIZE_ADVANCED',
-  REMOVE_BACKGROUND: 'REMOVE_BACKGROUND',
-  UPSCALE_IMAGE: 'UPSCALE_IMAGE'
+  REVIVE: 'REVIVE',
+  REMOVE_BACKGROUND: 'REMOVE_BACKGROUND'
 }
 
 // Image Examples
@@ -165,90 +167,119 @@ export const PRO_PLAN = {
 // Image Formats
 export const IMAGE_FORMATS = [
   {
-    title: 'jpg',
+    title: 'JPG',
     isPro: false
   },
   {
-    title: 'png',
-    isPro: true
+    title: 'PNG',
+    isPro: false
   },
   {
-    title: 'webp',
-    isPro: true
+    title: 'WEBP',
+    isPro: false
   }
 ]
 
-export const IMAGE_VARIATIONS = [
-  {
-    title: '1',
-    value: 1,
-    isPro: false
-  },
-  {
-    title: '2',
-    value: 2,
-    isPro: true
-  },
-  {
-    title: '3',
-    value: 3,
-    isPro: true
-  },
-  {
-    title: '4',
-    value: 4,
-    isPro: true
-  }
-]
+// export const IMAGE_VARIATIONS = [
+//   {
+//     title: '1',
+//     value: 1,
+//     isPro: false
+//   },
+//   {
+//     title: '2',
+//     value: 2,
+//     isPro: true
+//   },
+//   {
+//     title: '3',
+//     value: 3,
+//     isPro: true
+//   },
+//   {
+//     title: '4',
+//     value: 4,
+//     isPro: true
+//   }
+// ]
+
+export const IMAGE_SIZES = ['2X', '4X', '6X', '8X']
 // Aspect Ratios
 export const ASPECT_RATIOS = [
   {
-    title: '1:1'
+    title: '1:1',
+    isPro: false
   },
   {
-    title: '16:9'
+    title: '16:9',
+    isPro: false
   },
   {
-    title: '21:9'
+    title: '21:9',
+    isPro: true
   },
   {
-    title: '2:3'
+    title: '2:3',
+    isPro: true
   },
   {
-    title: '3:2'
+    title: '3:2',
+    isPro: true
   },
   {
-    title: '4:5'
+    title: '4:5',
+    isPro: false
   },
   {
-    title: '5:4'
+    title: '5:4',
+    isPro: true
   },
   {
-    title: '9:16'
+    title: '9:16',
+    isPro: true
   },
   {
-    title: '9:21'
+    title: '9:21',
+    isPro: true
   }
 ]
 
 // Flux Modes
-export const FLUX_MODES = [
+export const FLUX_MODES: Mode[] = [
+  {
+    title: 'Flux Lightening',
+    id: MODEL_IDS.FLUX_BASIC,
+    description: 'Prefers speed over quality. Good prompt adherence.',
+    icon: '$fluxFast',
+    isPro: false
+  },
   {
     title: 'Flux Fast',
     id: MODEL_IDS.FLUX_BASIC,
     description: 'Combines speed with high quality. Great prompt adherence.',
-    icon: '$fluxFast'
+    icon: '$fluxFast',
+    isPro: false
   },
+
   {
     title: 'Flux Pro',
     id: MODEL_IDS.FLUX_PRO,
     description: 'State-of-the-art image generation. Top of the line prompt following.',
-    icon: '$fluxPro'
+    icon: '$fluxPro',
+    isPro: true
+  },
+  {
+    title: 'Flux 1.1 Pro',
+    id: MODEL_IDS.FLUX_1_1_PRO,
+    description: 'Faster, better FLUX Pro. Excellent image quality & prompt adherence.',
+    icon: '$fluxPro',
+    isPro: true
   },
   {
     title: 'Flux Realism',
     id: MODEL_IDS.FLUX_REALISM,
     description: 'Best at ultra realistic photos. Prioritizes details and textures.',
-    icon: '$fluxRealism'
+    icon: '$fluxRealism',
+    isPro: true
   }
 ]

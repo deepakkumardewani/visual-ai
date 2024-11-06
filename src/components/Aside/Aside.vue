@@ -12,7 +12,9 @@ const appStore = useAppStore()
 const { feature } = storeToRefs(appStore)
 </script>
 <template>
-  <div class="pa-4 dark:tw-bg-neutral-900 tw-rounded bg-asideBg tw-h-full tw-overflow-y-auto">
+  <div
+    class="pa-3 dark:tw-bg-neutral-900 tw-rounded bg-asideBg tw-h-full tw-overflow-y-auto no-scrollbar"
+  >
     <AIImageAside v-if="feature === 'ai_image'" />
     <UpscaleImageAside v-if="feature === 'image_upscaler'" />
     <ReviveOldAside v-if="feature === 'revive_old_photos'" />

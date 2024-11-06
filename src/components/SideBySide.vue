@@ -1,25 +1,43 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue'
+
+// import { useDisplay } from 'vuetify'
 import { ImgComparisonSlider } from '@img-comparison-slider/vue'
+
+// const { mobile } = useDisplay()
 
 defineProps<{
   originalImage: string
   enhancedImage: string
 }>()
+
+const originalImageLoaded = ref(false)
+const enhancedImageLoaded = ref(false)
+const ready = ref(false)
+
+watch([originalImageLoaded, enhancedImageLoaded], ([original, enhanced]) => {
+  if (original && enhanced) {
+    ready.value = true
+  }
+})
 </script>
+
 <template>
-  <ImgComparisonSlider class="tw-w-full">
-    <!-- eslint-disable -->
-    <!-- <img class="tw-w-full" slot="first" :src="originalImage" />
-                <img class="tw-w-full" slot="second" :src="enhancedImage" /> -->
-    <figure slot="first" class="before">
-      <img class="tw-w-full" width="100%" :src="originalImage" />
-      <figcaption>Before</figcaption>
-    </figure>
-    <figure slot="second" class="after">
-      <img class="tw-w-full" width="100%" :src="enhancedImage" />
-      <figcaption>After</figcaption>
-    </figure>
-    <!-- eslint-enable -->
+  <ImgComparisonSlider :class="{ 'tw-outline-none': ready }" hover="hover" value="25">
+    <img
+      v-show="ready"
+      class="tw-h-[90vh]"
+      slot="first"
+      :src="originalImage"
+      @load="originalImageLoaded = true"
+    />
+    <img
+      v-show="ready"
+      class="tw-h-[90vh]"
+      slot="second"
+      :src="enhancedImage"
+      @load="enhancedImageLoaded = true"
+    />
   </ImgComparisonSlider>
 </template>
 
@@ -49,5 +67,9 @@ defineProps<{
 
 .after figcaption {
   right: 12px;
+}
+
+.v-skeleton-loader {
+  height: 100% !important;
 }
 </style>

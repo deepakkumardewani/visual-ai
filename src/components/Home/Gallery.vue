@@ -9,14 +9,24 @@ const { xs, smAndUp } = useDisplay()
   <div id="gallery" class="mt-16">
     <v-row>
       <v-col cols="12">
-        <div class="d-flex justify-center align-center justify-sm-start align-sm-start">
-          <v-chip class="my-4" color="purple-lighten-2" label> Gallery </v-chip>
-        </div>
-        <div class="text-h4 font-weight-bold my-2">
-          <span> Explore Our Gallery </span>
-        </div>
-        <div class="my-2">
-          <p>Check out our collection of stunning images created by others.</p>
+        <div class="tw-flex tw-flex-col tw-justify-center tw-items-center">
+          <v-chip v-motion-pop-visible-once class="my-4" color="purple-lighten-2" label>
+            Gallery
+          </v-chip>
+          <div class="text-h4 font-weight-bold my-2">
+            <span> Explore Our Gallery </span>
+          </div>
+          <div>
+            <v-btn
+              color="purple-lighten-2"
+              class="text-center"
+              variant="outlined"
+              text="Show all"
+            ></v-btn>
+          </div>
+          <!-- <div class="my-2">
+            <p>Check out our collection of stunning images created by others.</p>
+          </div> -->
         </div>
       </v-col>
     </v-row>
@@ -25,12 +35,25 @@ const { xs, smAndUp } = useDisplay()
         <div v-if="smAndUp" class="grid-container">
           <div v-for="(img, index) in EXAMPLES" :key="index" class="grid-item">
             <v-hover v-slot="{ isHovering, props }">
-              <v-card class="mx-auto" color="grey-lighten-4" max-width="600" v-bind="props">
+              <v-card
+                v-motion
+                :initial="{
+                  opacity: 0
+                }"
+                :visibleOnce="{
+                  opacity: 1
+                }"
+                :duration="300"
+                class="mx-auto"
+                color="grey-lighten-4"
+                max-width="300"
+                v-bind="props"
+              >
                 <v-img :aspect-ratio="1 / 1" :src="img.url" cover>
                   <v-expand-transition>
                     <div
                       v-if="isHovering"
-                      class="d-flex pa-4 opacity-80 transition-fast-in-fast-out bg-purple-lighten-2 v-card--reveal text-h6"
+                      class="d-flex pa-4 opacity-80 transition-fast-in-fast-out bg-purple-lighten-2 v-card--reveal tw-font-normal"
                       style="height: 100%"
                     >
                       {{ img.prompt }}
