@@ -7,7 +7,7 @@ import { SignUp } from 'vue-clerk'
     <!-- Image column -->
     <div class="tw-relative tw-w-full md:tw-w-[70%] tw-h-screen">
       <img
-        src="../assets/about.jpg"
+        src="https://res.cloudinary.com/ddzuitkzt/image/upload/v1730915826/assets/about.jpg"
         alt="AI Generated Image"
         class="tw-object-cover tw-w-full tw-h-full"
       />

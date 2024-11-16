@@ -5,39 +5,70 @@ import { useFetch } from '@/composables/useFetch'
 import { useUserStore } from '@/stores/user'
 import { MODEL_IDS } from '@/utils/constants'
 
+export interface IImage {
+  aiImageUrl?: string
+  originalImageUrl?: string
+  enhancedImageUrl?: string
+  name: string
+  publicId: string
+  resolution: string
+  width: number
+  height: number
+  format: string
+  bytes: number
+  aspectRatio: string
+}
+export interface IImageObject {
+  _id: string
+  userId: string
+  prompt: string
+  featureType: string
+  modelName: string
+  imageType: string
+  isFavorite: boolean
+  images: IImage[]
+  humanReadableDate: string
+  createdAt: Date
+}
+
 export type ImageBody = {
   modelId: string
+  modelName: string
   prompt: string
   noOfOutputs: number
   outputQuality: number
   aspectRatio: string
   outputFormat: string
+  imageType: string
+}
+
+export interface IGenerateResponse {
+  image: IImageObject
+  userCreditsRemaining: number
 }
 
 export const useGenerateStore = defineStore('generate', () => {
   const isLoading = ref(false)
-  const image = ref<string>('')
-  const originalImage = ref<string>('')
-  const enhancedImage = ref<string>('')
+  const isDeleting = ref(false)
+  const images = ref<IImage[]>([])
+  const imageData = ref<any>({})
   const upscaleInProgress = ref<boolean>(false)
   const colorizeInProgress = ref<boolean>(false)
   const userStore = useUserStore()
   const { userId, credits, history } = storeToRefs(userStore)
 
   async function generateImage(imgData?: ImageBody) {
-    console.log('imgData', imgData)
-
     if (credits.value <= 0) {
       console.log('no credits')
       //TODO: redirect to subscription page
       return
     }
     isLoading.value = true
-    image.value = ''
+    images.value = []
 
     const url = `/generate/image`
 
-    const { error, data: imageData } = await useFetch(url, {
+    const { error, data } = await useFetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -45,29 +76,32 @@ export const useGenerateStore = defineStore('generate', () => {
       },
       body: JSON.stringify({
         modelId: imgData?.modelId ?? MODEL_IDS.FLUX_BASIC,
+        imageType: imgData?.imageType ?? 'horizontal',
+        modelName: imgData?.modelName ?? 'Flux Lightening',
         userId: userId.value,
         prompt: imgData?.prompt ?? '',
-        num_outputs: imgData?.noOfOutputs ?? 1,
-        output_quality: imgData?.outputQuality ?? 70,
-        aspect_ratio: imgData?.aspectRatio ?? '16:9',
-        output_format: imgData?.outputFormat ?? 'jpg'
+        numOfOutputs: imgData?.noOfOutputs ?? 1,
+        outputQuality: imgData?.outputQuality ?? 70,
+        aspectRatio: imgData?.aspectRatio ?? '16:9',
+        outputFormat: imgData?.outputFormat ?? 'jpg'
       })
-    }).json()
+    }).json<IGenerateResponse>()
     isLoading.value = false
     if (error.value) {
       console.error('error', error.value)
       return
     }
-    if (imageData.value) {
-      userStore.setCredits(imageData.value.userCreditsRemaining)
-      history.value.push(imageData.value.image)
-      image.value = imageData.value.image.imageUrl
+    if (data.value) {
+      userStore.setCredits(data.value.userCreditsRemaining)
+      imageData.value = data.value.image
+      history.value.push(data.value.image)
+      images.value = data.value.image.images
     }
   }
 
-  async function upscaleImage(data: any) {
+  async function upscaleImage(imgData: any) {
     isLoading.value = true
-    const { prompt, image, format, creativity, scale, negativePrompt } = data
+    const { prompt, image, format, creativity, scale, negativePrompt } = imgData
     const formData = new FormData()
     formData.append('feature', 'upscale')
     formData.append('prompt', prompt)
@@ -79,7 +113,7 @@ export const useGenerateStore = defineStore('generate', () => {
     formData.append('image', image)
 
     const url = `/generate/upscale/image`
-    const { error, data: enhancedImageData } = await useFetch(url, {
+    const { error } = await useFetch(url, {
       method: 'POST',
       body: formData
     }).json()
@@ -89,11 +123,13 @@ export const useGenerateStore = defineStore('generate', () => {
       isLoading.value = false
       return
     }
-    if (enhancedImageData.value) {
-      userStore.setCredits(enhancedImageData.value.userCreditsRemaining)
-      originalImage.value = enhancedImageData.value.original
-      enhancedImage.value = enhancedImageData.value.enhanced
-    }
+    // console.log('enhancedImageData', enhancedImageData.value)
+
+    // if (enhancedImageData.value) {
+    //   userStore.setCredits(enhancedImageData.value.userCreditsRemaining)
+    //   originalImage.value = enhancedImageData.value.original
+    //   enhancedImage.value = enhancedImageData.value.enhanced
+    // }
   }
 
   async function colorizeImage(data: any) {
@@ -118,8 +154,6 @@ export const useGenerateStore = defineStore('generate', () => {
     }
     if (colorizedImageData.value) {
       userStore.setCredits(colorizedImageData.value.userCreditsRemaining)
-      originalImage.value = colorizedImageData.value.original
-      enhancedImage.value = colorizedImageData.value.enhanced
     }
   }
 
@@ -143,16 +177,12 @@ export const useGenerateStore = defineStore('generate', () => {
     }
     if (revivedImageData.value) {
       userStore.setCredits(revivedImageData.value.userCreditsRemaining)
-      originalImage.value = revivedImageData.value.original
-      enhancedImage.value = revivedImageData.value.enhanced
     }
   }
 
   watch(isLoading, (newVal) => {
     if (newVal) {
-      image.value = ''
-      originalImage.value = ''
-      enhancedImage.value = ''
+      images.value = []
     }
   })
 
@@ -162,9 +192,9 @@ export const useGenerateStore = defineStore('generate', () => {
     colorizeImage,
     reviveOldImage,
     isLoading,
-    image,
-    originalImage,
-    enhancedImage,
+    isDeleting,
+    images,
+    imageData,
     upscaleInProgress,
     colorizeInProgress
   }

@@ -7,7 +7,7 @@ import { useUserStore } from '@/stores/user'
 
 const { smAndUp } = useDisplay()
 const userStore = useUserStore()
-const { credits } = storeToRefs(userStore)
+const { credits, isPro } = storeToRefs(userStore)
 const dialogStore = useDialogStore()
 </script>
 <template>
@@ -28,12 +28,19 @@ const dialogStore = useDialogStore()
         <span class="tw-font-bold">{{ credits }}</span> images left for today
       </div>
       <div>
+        <template v-if="!isPro">
+          <span
+            @click="dialogStore.reveal"
+            class="tw-text-yellow-500 tw-underline hover:tw-text-decoration-none tw-cursor-pointer"
+            >Subscribe to Pro</span
+          >
+          for more or
+        </template>
         <span
-          @click="dialogStore.reveal"
+          @click="dialogStore.showBuyCredits"
           class="tw-text-yellow-500 tw-underline hover:tw-text-decoration-none tw-cursor-pointer"
-          >Subscribe to Pro</span
+          >Buy Credits</span
         >
-        for more
       </div>
     </v-card>
   </v-menu>

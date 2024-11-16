@@ -208,39 +208,52 @@ export const IMAGE_SIZES = ['2X', '4X', '6X', '8X']
 export const ASPECT_RATIOS = [
   {
     title: '1:1',
-    isPro: false
-  },
-  {
-    title: '16:9',
-    isPro: false
-  },
-  {
-    title: '21:9',
-    isPro: true
+    isPro: false,
+    name: 'Square',
+    icon: '$square',
+    type: 'square'
   },
   {
     title: '2:3',
-    isPro: true
+    isPro: true,
+    name: 'Portrait',
+    icon: '$portrait',
+    type: 'vertical'
   },
   {
     title: '3:2',
-    isPro: true
+    isPro: true,
+    name: 'Standard',
+    icon: '$standard',
+    type: 'horizontal'
   },
   {
     title: '4:5',
-    isPro: false
-  },
-  {
-    title: '5:4',
-    isPro: true
+    isPro: false,
+    name: 'Social Post',
+    icon: '$socialPost',
+    type: 'vertical'
   },
   {
     title: '9:16',
-    isPro: true
+    isPro: true,
+    name: 'Social Story',
+    icon: '$socialStory',
+    type: 'vertical'
   },
   {
-    title: '9:21',
-    isPro: true
+    title: '16:9',
+    isPro: false,
+    name: 'Widescreen',
+    icon: '$widescreen',
+    type: 'horizontal'
+  },
+  {
+    title: '21:9',
+    isPro: true,
+    name: 'Cinematic',
+    icon: '$cinematic',
+    type: 'horizontal'
   }
 ]
 
@@ -283,3 +296,10 @@ export const FLUX_MODES: Mode[] = [
     isPro: true
   }
 ]
+
+export const FeatureType = {
+  AI_IMAGE: 'AI Image',
+  UPSCALE: 'Upscale',
+  REVIVE: 'Revive'
+  // Add other feature types as needed
+} as const

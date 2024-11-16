@@ -16,6 +16,7 @@
     "@clerk/clerk-js": "^5.14.0",
     "@img-comparison-slider/vue": "^8.0.0",
     "@mdi/font": "7.4.47",
+    "@paddle/paddle-js": "^1.3.2",
     "@vueuse/core": "^10.11.1",
     "@vueuse/motion": "^2.2.6",
     "core-js": "^3.37.1",

@@ -1,34 +1,26 @@
+import { IImageObject } from '@/stores/generate'
+
 export enum FeatureType {
   IMAGE = 'image',
   UPSCALE = 'upscale',
   COLORIZE = 'colorize',
   REVIVE = 'revive'
 }
-export interface ImageObject {
-  _id: string
-  userId: string
-  prompt: string
-  featureType: FeatureType
-  imageUrl: string
-  original: string
-  enhanced: string
-  humanReadableDate: string
-  isFavorite: boolean
-  resolution: string
-  createdAt: string
-  width: number
-  height: number
-  format: string
-  bytes: number
+
+export const FeatureIcon = {
+  image: '$imageFrame',
+  upscale: '$expand',
+  colorize: '$dropper',
+  revive: '$camera'
 }
 
 export interface GroupedObject {
   title: string
-  data: ImageObject[]
+  data: IImageObject[]
 }
 
-export function groupByDate(data: ImageObject[]): GroupedObject[] {
-  const grouped: { [key: string]: ImageObject[] } = {}
+export function groupByDate(data: IImageObject[]): GroupedObject[] {
+  const grouped: { [key: string]: IImageObject[] } = {}
   // Group objects by humanReadableDate in descending order
   data
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())

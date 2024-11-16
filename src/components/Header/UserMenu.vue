@@ -5,6 +5,7 @@ import { useClerk } from 'vue-clerk'
 import { useRouter } from 'vue-router'
 
 import Avatar from '@/components/Avatar.vue'
+import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue'
 import ThemeButton from '@/components/Header/ThemeButton.vue'
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
@@ -19,16 +20,22 @@ const { userDetails } = storeToRefs(userStore)
 const fullName = ref<string | undefined>('')
 const email = ref<string | undefined>('')
 const menu = ref(false)
+const snackbar = ref(false)
+const snackbarTimeout = ref(2000)
 
 function showReferralDialog() {
   menu.value = false
   dialogStore.showReferral()
 }
 
-// function copyReferralLink() {
-//   const referralLink = `${import.meta.env.VITE_API_BASEPATH}/signup?referral=${referralCode.value}`
-//   navigator.clipboard.writeText(referralLink)
-// }
+async function copyReferralCode() {
+  try {
+    await navigator.clipboard.writeText(userDetails.value?.referralCode ?? '')
+    snackbar.value = true
+  } catch (err) {
+    console.error('Failed to copy referral code:', err)
+  }
+}
 
 function updateUserInfo() {
   if (userDetails.value) {
@@ -97,6 +104,12 @@ watch(
             <v-list-item class="tw-cursor-pointer">
               <div @click="showReferralDialog" class="tw-flex tw-items-center tw-gap-2">
                 <v-icon size="small" icon="fas fa-copy"></v-icon>
+                <v-list-item-title>Use Referral Code</v-list-item-title>
+              </div>
+            </v-list-item>
+            <v-list-item class="tw-cursor-pointer">
+              <div @click="copyReferralCode" class="tw-flex tw-items-center tw-gap-2">
+                <v-icon size="small" icon="fas fa-copy"></v-icon>
                 <v-list-item-title>Refer and Earn Credits</v-list-item-title>
               </div>
             </v-list-item>
@@ -119,6 +132,15 @@ watch(
       </v-card>
     </v-menu>
   </div>
+  <ReferralDialog />
+  <v-snackbar
+    v-model="snackbar"
+    :timeout="snackbarTimeout"
+    location="bottom right"
+    color="purple-accent-4"
+  >
+    Referral code copied to clipboard!
+  </v-snackbar>
 </template>
 
 <style scoped></style>

@@ -21,19 +21,23 @@ const isFooterVisible = computed(() => {
 })
 </script>
 <template>
-  <v-app :class="isDark ? 'purple-gradient' : ''">
+  <v-app :class="isDark ? 'dark-bg' : 'light-bg'">
     <AppHeader v-if="isHeaderVisible" />
 
     <v-main>
       <router-view />
-      <v-divider></v-divider>
     </v-main>
+
+    <v-divider v-if="isFooterVisible" class="tw-w-full" thickness="1"></v-divider>
     <AppFooter v-if="isFooterVisible" />
   </v-app>
 </template>
 
 <style scoped lang="scss">
-.purple-gradient {
+.dark-bg {
   background: linear-gradient(to bottom, #20112d, #19063a);
+}
+.light-bg {
+  background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
 }
 </style>

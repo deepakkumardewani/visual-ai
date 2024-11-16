@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { SignedOut } from 'vue-clerk'
+import { useRoute, useRouter } from 'vue-router'
 
+const route = useRoute()
 const router = useRouter()
 </script>
 <template>
@@ -8,16 +10,18 @@ const router = useRouter()
     <div class="ml-4">
       <img src="/src/assets/logo.png" width="30" height="30" />
     </div>
-    <div class="tw-hidden lg:tw-block tw-text-xl">
-      <span
-        class="tw-bg-gradient-to-r tw-from-purple-400 tw-to-purple-600 tw-bg-clip-text tw-text-transparent"
-        >Visual AI</span
-      >
-      <span
-        class="trademark tw-bg-gradient-to-r tw-from-purple-400 tw-to-purple-600 tw-bg-clip-text tw-text-transparent"
-        >TM</span
-      >
-    </div>
+    <SignedOut>
+      <div class="tw-text-xl" v-if="route.path !== '/dashboard'">
+        <span
+          class="tw-bg-gradient-to-r tw-from-purple-400 tw-to-purple-600 tw-bg-clip-text tw-text-transparent"
+          >Visual AI</span
+        >
+        <span
+          class="trademark tw-bg-gradient-to-r tw-from-purple-400 tw-to-purple-600 tw-bg-clip-text tw-text-transparent"
+          >TM</span
+        >
+      </div>
+    </SignedOut>
   </div>
 </template>
 

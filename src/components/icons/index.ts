@@ -13,7 +13,15 @@ import IconFluxRealism from '@/components/icons/IconFluxRealism.vue'
 import IconFluxRealismDark from '@/components/icons/IconFluxRealismDark.vue'
 import IconImageFrame from '@/components/icons/IconImageFrame.vue'
 import IconImageFrameDark from '@/components/icons/IconImageFrameDark.vue'
+import IconLayers from '@/components/icons/IconLayers.vue'
 import IconStar from '@/components/icons/IconStar.vue'
+import IconCinematic from '@/components/icons/sizes/IconCinematic.vue'
+import IconPortrait from '@/components/icons/sizes/IconPortrait.vue'
+import IconSocialPost from '@/components/icons/sizes/IconSocialPost.vue'
+import IconSocialStory from '@/components/icons/sizes/IconSocialStory.vue'
+import IconSquare from '@/components/icons/sizes/IconSquare.vue'
+import IconStandard from '@/components/icons/sizes/IconStandard.vue'
+import IconWidescreen from '@/components/icons/sizes/IconWidescreen.vue'
 
 export default {
   camera: IconCamera,
@@ -31,5 +39,13 @@ export default {
   fluxRealism: IconFluxRealism,
   fluxRealismDark: IconFluxRealismDark,
   fluxPro: IconFluxPro,
-  fluxProDark: IconFluxProDark
+  fluxProDark: IconFluxProDark,
+  square: IconSquare,
+  portrait: IconPortrait,
+  standard: IconStandard,
+  socialPost: IconSocialPost,
+  socialStory: IconSocialStory,
+  widescreen: IconWidescreen,
+  cinematic: IconCinematic,
+  layers: IconLayers
 }

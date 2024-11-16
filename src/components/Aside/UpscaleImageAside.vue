@@ -9,22 +9,25 @@ import Heading from '@/components/Aside/Heading.vue'
 import ImageUpload from '@/components/Aside/ImageUpload.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useGenerateStore } from '@/stores/generate'
+import { IImageObject } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
 import { IMAGE_SIZES } from '@/utils/constants'
+
+interface JobStatus {
+  status: string
+  image: IImageObject
+  userCreditsRemaining: number
+}
 
 const { getToken } = useAuthStore()
 
 const userStore = useUserStore()
-
-const progressUrl = ref('')
-const { data, close, open } = useEventSource(progressUrl, [], {
-  immediate: false
-})
 const router = useRouter()
 const { isSignedIn } = useUser()
 const generateStore = useGenerateStore()
-const { userId } = storeToRefs(userStore)
-const { upscaleInProgress, originalImage, enhancedImage } = storeToRefs(generateStore)
+const { userId, history } = storeToRefs(userStore)
+const { upscaleInProgress, images } = storeToRefs(generateStore)
+
 const SCALE = {
   '2X': 2,
   '4X': 4,
@@ -32,6 +35,10 @@ const SCALE = {
   '8X': 8
 }
 
+const progressUrl = ref('')
+const { data, close, open } = useEventSource(progressUrl, [], {
+  immediate: false
+})
 const imageUpload = ref()
 const scale = ref<string>('2X')
 const creativity = ref<number>(0.1)
@@ -63,9 +70,7 @@ async function generateImage() {
 }
 
 watch(data, (newVal) => {
-  const data = JSON.parse(newVal as string)
-  console.log(data.status)
-
+  const data: JobStatus = JSON.parse(newVal as string)
   if (data.status === 'processing') {
     showAlert.value = true
     localStorage.setItem('upscaleInProgress', 'true')
@@ -76,8 +81,8 @@ watch(data, (newVal) => {
     showAlert.value = false
     localStorage.setItem('upscaleInProgress', 'false')
     upscaleInProgress.value = false
-    originalImage.value = data.original
-    enhancedImage.value = data.enhanced
+    images.value = data.image.images
+    history.value.push(data.image)
     userStore.setCredits(data.userCreditsRemaining)
   }
 })

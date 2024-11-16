@@ -1,3 +1,4 @@
+import { Paddle } from '@paddle/paddle-js'
 import { defineStore } from 'pinia'
 import { useTheme } from 'vuetify'
 
@@ -15,6 +16,7 @@ export interface Plan {
   isFree: boolean
 }
 export const useAppStore = defineStore('app', () => {
+  const paddle = ref<Paddle | undefined>(undefined)
   const feature = ref<string>('')
   const theme = useTheme()
   const tab = ref(1)
@@ -32,5 +34,5 @@ export const useAppStore = defineStore('app', () => {
       : document.documentElement.classList.remove('tw-dark')
   })
 
-  return { feature, setFeature, isDark, toggleTheme, tab }
+  return { feature, setFeature, isDark, toggleTheme, tab, paddle }
 })

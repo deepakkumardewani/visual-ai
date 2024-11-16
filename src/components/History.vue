@@ -1,66 +1,230 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
 
 import ImageDialog from '@/components/Dialogs/ImageDialog.vue'
-import { FeatureType, GroupedObject, ImageObject, groupByDate } from '@/pages/utils'
+import { FeatureIcon } from '@/pages/utils'
+import { GroupedObject, groupByDate } from '@/pages/utils'
 import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
+import { useGenerateStore } from '@/stores/generate'
+import { IImage, IImageObject } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
 import { deleteImage, downloadImage, favoriteImage } from '@/utils/helpers'
 
-const { mobile } = useDisplay()
+const router = useRouter()
 const userStore = useUserStore()
 const dialogStore = useDialogStore()
-const { history } = storeToRefs(userStore)
 const appStore = useAppStore()
+const generateStore = useGenerateStore()
+
+const { mobile } = useDisplay()
+const { history } = storeToRefs(userStore)
 const { tab } = storeToRefs(appStore)
+const { isDeleting } = storeToRefs(generateStore)
+
 const groupedHistory = ref<GroupedObject[]>([])
-const imageDialogItem = ref<ImageObject | null>(null)
-const showImage = (item: ImageObject) => {
-  imageDialogItem.value = item
-  dialogStore.showImage()
+const imageDialogItem = ref<IImageObject | undefined>()
+const featureTypes = ref<any[]>([
+  {
+    id: 'image',
+    title: 'Text-to-Image'
+  },
+  {
+    id: 'upscale',
+    title: 'Upscale'
+  },
+  {
+    id: 'colorize',
+    title: 'Colorize'
+  },
+  {
+    id: 'revive',
+    title: 'Revive'
+  }
+])
+const imageSizes = ref([
+  { value: 'mini', title: 'Mini' },
+  { value: 'small', title: 'Small' },
+  { value: 'medium', title: 'Medium' },
+  { value: 'large', title: 'Large' }
+])
+const selectedSize = ref('medium')
+const selectedFeatureType = ref<string[]>([])
+const searchQuery = ref('')
+
+const sizeClasses = {
+  mini: 'tw-grid-cols-3 sm:tw-grid-cols-4 md:tw-grid-cols-6 lg:tw-grid-cols-8',
+  small: 'tw-grid-cols-2 sm:tw-grid-cols-3 md:tw-grid-cols-5 lg:tw-grid-cols-6',
+  medium: 'tw-grid-cols-2 sm:tw-grid-cols-3 md:tw-grid-cols-4 lg:tw-grid-cols-5',
+  large: 'tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-3 lg:tw-grid-cols-4'
 }
 
 const props = withDefaults(defineProps<{ isFavorites?: boolean }>(), {
   isFavorites: false
 })
 
+const showImage = (item: IImageObject) => {
+  imageDialogItem.value = item
+  dialogStore.showImage()
+}
+
 function create() {
+  if (props.isFavorites) {
+    router.push('/dashboard')
+  }
   tab.value = 1
 }
+
 watch(
-  history,
-  (newHistory) => {
+  [history, selectedFeatureType, searchQuery],
+  ([newHistory, newFeatureTypes, query]) => {
     if (newHistory) {
-      if (props.isFavorites) {
-        groupedHistory.value = groupByDate(newHistory.filter((item) => item.isFavorite))
-      } else {
-        groupedHistory.value = groupByDate(newHistory)
+      let filteredHistory = newHistory
+
+      // Feature type filter
+      if (newFeatureTypes.length > 0) {
+        filteredHistory = filteredHistory.filter((item: IImageObject) =>
+          newFeatureTypes.includes(item.featureType)
+        )
       }
+
+      // Search query filter
+      if (query.trim()) {
+        const searchTerm = query.toLowerCase().trim()
+        filteredHistory = filteredHistory.filter((item: IImageObject) =>
+          item.prompt?.toLowerCase().includes(searchTerm)
+        )
+      }
+
+      // Favorites filter
+      if (props.isFavorites) {
+        filteredHistory = filteredHistory.filter((item: IImageObject) => item.isFavorite)
+      }
+
+      groupedHistory.value = groupByDate(filteredHistory)
     }
   },
   { immediate: true, deep: true }
 )
+
+const carouselIndexes = ref<{ [key: string]: number }>({})
+const carouselIntervals = ref<{ [key: string]: number }>({})
+const isCarouselActive = ref<{ [key: string]: boolean }>({})
+const carouselTimeouts = ref<{ [key: string]: number }>({})
+
+const startCarousel = (itemId: string, images: IImage[]) => {
+  if (carouselIntervals.value[itemId]) return
+
+  // Create a timeout before starting the carousel
+  carouselTimeouts.value[itemId] = window.setTimeout(() => {
+    // Only start if the timeout wasn't cleared
+    if (carouselTimeouts.value[itemId]) {
+      // Set active state for smooth transition
+      isCarouselActive.value[itemId] = true
+
+      carouselIndexes.value[itemId] = 0
+      carouselIntervals.value[itemId] = window.setInterval(() => {
+        carouselIndexes.value[itemId] = (carouselIndexes.value[itemId] + 1) % images.length
+      }, 1000)
+
+      // Clear the timeout reference
+      delete carouselTimeouts.value[itemId]
+    }
+  }, 500)
+}
+
+const stopCarousel = (itemId: string) => {
+  // Clear the timeout if it exists
+  if (carouselTimeouts.value[itemId]) {
+    clearTimeout(carouselTimeouts.value[itemId])
+    delete carouselTimeouts.value[itemId]
+  }
+
+  // Clear the interval if it exists
+  if (carouselIntervals.value[itemId]) {
+    clearInterval(carouselIntervals.value[itemId])
+    delete carouselIntervals.value[itemId]
+    delete carouselIndexes.value[itemId]
+    isCarouselActive.value[itemId] = false
+  }
+}
+const getImageUrl = (image: IImage) => {
+  return image.aiImageUrl ?? image.enhancedImageUrl
+}
 </script>
 
 <template>
+  <div v-if="groupedHistory.length > 0" class="tw-flex tw-justify-end tw-mt-4 tw-px-4 tw-gap-4">
+    <v-select
+      v-model="selectedSize"
+      :items="imageSizes"
+      label="Image size"
+      density="compact"
+      variant="outlined"
+      class="tw-max-w-[150px]"
+      hide-details
+      item-title="title"
+      item-value="value"
+    ></v-select>
+
+    <v-select
+      v-model="selectedFeatureType"
+      :items="featureTypes"
+      label="Filter by feature"
+      density="compact"
+      variant="outlined"
+      class="tw-max-w-[200px]"
+      hide-details
+      item-title="title"
+      item-value="id"
+      multiple
+      chips
+      closable-chips
+    ></v-select>
+
+    <v-text-field
+      v-model="searchQuery"
+      label="Search by prompt"
+      density="compact"
+      variant="outlined"
+      class="tw-max-w-[200px]"
+      hide-details
+    >
+      <template v-slot:prepend-inner>
+        <v-icon class="tw-mr-1" size="x-small" icon="fas fa-search" />
+      </template>
+      <template v-slot:append-inner>
+        <v-btn icon size="x-small" variant="text" v-if="searchQuery" @click="searchQuery = ''">
+          <v-icon icon="fas fa-xmark" />
+        </v-btn>
+      </template>
+    </v-text-field>
+  </div>
+
   <div
     v-if="groupedHistory.length === 0"
-    class="tw-flex tw-justify-center tw-items-center tw-h-full"
+    class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl"
   >
     <div class="tw-text-center tw-text-neutral-400">
-      You have not created any thing yet. Go ahead and
-      <span @click="create" class="tw-text-[#ba68c8] tw-cursor-pointer tw-font-bold">create</span>
-      something.
+      <div>You have not created any thing yet.</div>
+      <div>
+        Go ahead and
+
+        <span
+          @click="create"
+          class="tw-text-[#ba68c8] tw-cursor-pointer tw-font-bold hover:tw-underline"
+          >create</span
+        >
+        something.
+      </div>
     </div>
   </div>
   <div v-for="item in groupedHistory" :key="item.title" class="tw-mb-6 tw-p-4">
     <div class="tw-text-xl tw-font-bold tw-mb-2 tw-text-neutral-400">{{ item.title }}</div>
 
-    <div
-      class="tw-grid tw-grid-cols-2 sm:tw-grid-cols-3 md:tw-grid-cols-4 lg:tw-grid-cols-5 tw-gap-4"
-    >
+    <div :class="['tw-grid tw-gap-4', sizeClasses[selectedSize as keyof typeof sizeClasses]]">
       <template v-for="subItem in item.data" :key="subItem._id">
         <v-hover v-slot="{ isHovering, props }">
           <TransitionGroup name="image-list" tag="div">
@@ -73,42 +237,88 @@ watch(
                 @click="showImage(subItem)"
                 class="tw-cursor-pointer tw-bg-darkBorder dark:tw-bg-lightBorder tw-p-1 lg:tw-p-1.5 tw-aspect-square"
               >
-                <v-img
-                  :aspect-ratio="1"
-                  cover
-                  :src="subItem.imageUrl !== '' ? subItem.imageUrl : subItem.enhanced"
-                  :alt="subItem.featureType"
-                  class="tw-rounded-sm"
-                >
-                  <template v-slot:placeholder>
-                    <div class="d-flex align-center justify-center fill-height">
-                      <v-progress-circular
-                        color="grey-lighten-4"
-                        indeterminate
-                      ></v-progress-circular>
-                    </div>
-                  </template>
-                </v-img>
+                <template v-if="subItem.images.length === 1">
+                  <v-img
+                    :aspect-ratio="1"
+                    cover
+                    :src="getImageUrl(subItem.images[0])"
+                    :alt="subItem.featureType"
+                    class="tw-rounded-sm"
+                  >
+                    <template v-slot:placeholder>
+                      <div class="d-flex align-center justify-center fill-height">
+                        <v-progress-circular
+                          color="grey-lighten-4"
+                          indeterminate
+                        ></v-progress-circular>
+                      </div>
+                    </template>
+                  </v-img>
+                </template>
+
+                <template v-else>
+                  <div
+                    class="tw-relative tw-flex tw-h-full"
+                    @mouseenter="startCarousel(subItem._id, subItem.images)"
+                    @mouseleave="stopCarousel(subItem._id)"
+                  >
+                    <template v-for="(img, index) in subItem.images" :key="index">
+                      <v-img
+                        cover
+                        :src="img.aiImageUrl"
+                        :alt="subItem.featureType"
+                        class="tw-rounded-sm"
+                        :class="{
+                          'tw-border-black tw-border-2': !isCarouselActive[subItem._id]
+                        }"
+                        :style="{
+                          transition: 'all 0.5s ease-in-out',
+                          width: isHovering
+                            ? carouselIndexes[subItem._id] === index
+                              ? '100%'
+                              : '0%'
+                            : '25%',
+                          transform: !isHovering ? `translateX(${index * 1}px)` : `translateX(0)`,
+                          zIndex: 100
+                        }"
+                      >
+                        <template v-slot:placeholder>
+                          <div class="d-flex align-center justify-center fill-height">
+                            <v-progress-circular
+                              color="grey-lighten-4"
+                              indeterminate
+                            ></v-progress-circular>
+                          </div>
+                        </template>
+                      </v-img>
+                    </template>
+                  </div>
+                </template>
+
                 <div
-                  v-if="(isHovering || mobile) && subItem.featureType !== FeatureType.IMAGE"
-                  class="tw-absolute tw-inset-0 tw-flex tw-flex-row tw-items-start lg:tw-mx-3 lg:tw-my-3 tw-mx-2 tw-my-2"
+                  v-if="isHovering || mobile"
+                  class="tw-absolute tw-inset-0 tw-flex tw-flex-row tw-items-start lg:tw-mx-3 lg:tw-my-3 tw-mx-2 tw-my-2 tw-opacity-90"
                 >
                   <v-chip size="small" color="black" label variant="flat">
                     <div>
-                      <v-icon icon="fas fa-expand" size="x-small" start></v-icon>
+                      <v-icon
+                        :icon="FeatureIcon[subItem.featureType as keyof typeof FeatureIcon]"
+                        size="x-small"
+                        start
+                      ></v-icon>
                     </div>
                     <div class="tw-text-xs">{{ subItem.featureType }}</div>
                   </v-chip>
                 </div>
                 <div
-                  v-if="isHovering"
+                  v-if="isHovering && subItem.images.length === 1"
                   class="tw-absolute tw-inset-0 tw-flex tw-flex-col tw-gap-2 tw-items-end tw-pr-2 tw-mr-2 tw-mt-4"
                 >
                   <v-btn
                     icon
                     size="x-small"
                     color="black"
-                    @click="downloadImage($event, subItem.imageUrl)"
+                    @click="downloadImage($event, subItem.images[0].aiImageUrl)"
                   >
                     <v-icon color="white">fas fa-download</v-icon>
                   </v-btn>
@@ -124,6 +334,7 @@ watch(
                   </v-btn>
                   <v-btn
                     icon
+                    :loading="isDeleting"
                     size="x-small"
                     color="black"
                     @click="deleteImage($event, subItem._id)"
@@ -164,5 +375,9 @@ watch(
 
 .image-list-leave-active {
   position: absolute;
+}
+
+.v-img {
+  transition: clip-path 0.3s ease;
 }
 </style>

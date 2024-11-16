@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue'
 import { useUser } from 'vue-clerk'
 import { useRoute, useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
+import { VListItemTitle } from 'vuetify/components'
 
 import Heading from '@/components/Aside/Heading.vue'
 import PremiumDialog from '@/components/Dialogs/PremiumDialog.vue'
@@ -16,11 +17,6 @@ import { FLUX_MODES, MODEL_IDS } from '@/utils/constants'
 import { ASPECT_RATIOS, IMAGE_FORMATS } from '@/utils/constants'
 import PROMPTS from '@/utils/prompts.json'
 
-// type ImageVariation = {
-//   title: string
-//   isPro: boolean
-//   value: number
-// }
 const route = useRoute()
 const router = useRouter()
 const generateStore = useGenerateStore()
@@ -35,14 +31,13 @@ const { isDark } = storeToRefs(appStore)
 const prompt = ref<string>('')
 const typingPrompt = ref<string>('')
 const isTyping = ref(false)
-const isThinking = ref(false)
 const noOfOutputs = ref<number>(1)
 const outputQuality = ref<number>(0)
 const aspectRatio = ref<any>(ASPECT_RATIOS[0])
 const outputFormat = ref<string>('JPG')
 const menu = ref(false)
 const textAreaFocused = ref(false)
-const mode = ref<Mode>(FLUX_MODES[1])
+const mode = ref<Mode>(FLUX_MODES[0])
 const textareaRef = ref()
 
 const disableModifyVariations = computed(() => {
@@ -54,6 +49,9 @@ function handleSelected(item: Mode) {
     dialogStore.showPremium()
   } else {
     mode.value = item
+    if (item.id === MODEL_IDS.FLUX_PRO || item.id === MODEL_IDS.FLUX_1_1_PRO) {
+      noOfOutputs.value = 1
+    }
   }
 }
 
@@ -70,6 +68,8 @@ async function generateImage() {
   if (isSignedIn.value) {
     const input: ImageBody = {
       modelId: mode.value.id,
+      imageType: aspectRatio.value.type,
+      modelName: mode.value.title,
       prompt: typingPrompt.value,
       noOfOutputs: noOfOutputs.value,
       outputQuality: outputQuality.value === 0 ? 70 : 100,
@@ -86,18 +86,8 @@ async function generateImage() {
 function randomPrompt() {
   const randomIndex = Math.floor(Math.random() * PROMPTS.length)
   const newPrompt = PROMPTS[randomIndex]
-  showThinking(newPrompt)
-}
-
-function showThinking(text: string) {
-  isThinking.value = true
   typingPrompt.value = ''
-
-  const delay = Math.random() * (2000 - 1500) + 1500
-  setTimeout(() => {
-    isThinking.value = false
-    typePrompt(text)
-  }, delay)
+  typePrompt(newPrompt)
 }
 
 function typePrompt(text: string) {
@@ -115,17 +105,25 @@ function typePrompt(text: string) {
       prompt.value = typingPrompt.value
       isTyping.value = false
     }
-  }, 5) // Adjust the typing speed here (in milliseconds)
+  }, 5)
 }
 
 function handleImageVariations(type: string) {
   if (type === 'subtract') {
-    noOfOutputs.value = Math.max(1, noOfOutputs.value - 1)
-  } else {
-    noOfOutputs.value = Math.min(4, noOfOutputs.value + 1)
-    if (!userDetails.value?.isPro && noOfOutputs.value > 2) {
+    if (noOfOutputs.value === 4) {
       noOfOutputs.value = 2
-      dialogStore.showPremium()
+    } else if (noOfOutputs.value > 1) {
+      noOfOutputs.value = 1
+    }
+  } else {
+    if (noOfOutputs.value === 2) {
+      if (!userDetails.value?.isPro) {
+        dialogStore.showPremium()
+      } else {
+        noOfOutputs.value = 4
+      }
+    } else if (noOfOutputs.value === 1) {
+      noOfOutputs.value = 2
     }
   }
 }
@@ -152,20 +150,10 @@ onMounted(() => {
         rows="3"
         no-resize
         hide-details
-        :placeholder="isThinking ? '' : 'Describe your image'"
+        placeholder="Describe your image"
         density="compact"
-        :readonly="isTyping || isThinking"
-        :class="{ thinking: isThinking }"
+        :readonly="isTyping"
       ></v-textarea>
-
-      <div v-if="isThinking" class="tw-flex tw-absolute tw-top-2 tw-left-4 tw-w-full tw-h-full">
-        <div class="tw-font-normal tw-text-neutral-500">Thinking</div>
-        <div class="ellipsis tw-flex tw-ml-1 tw-gap-1 tw-text-neutral-500">
-          <span>.</span>
-          <span>.</span>
-          <span>.</span>
-        </div>
-      </div>
     </div>
     <div v-else class="d-flex">
       <div class="tw-w-[85%]">
@@ -181,8 +169,7 @@ onMounted(() => {
           hide-details
           density="compact"
           @update:focused="focusTextArea"
-          :readonly="isTyping || isThinking"
-          :class="{ thinking: isThinking }"
+          :readonly="isTyping"
         ></v-textarea>
       </div>
 
@@ -213,8 +200,32 @@ onMounted(() => {
                     hide-details
                     v-model="aspectRatio"
                   >
-                    <template v-slot:item="{ props }">
-                      <v-list-item v-bind="props"> </v-list-item>
+                    <template v-slot:item="{ props, item }">
+                      <v-list-item v-bind="props">
+                        <template v-slot:title>
+                          <div class="tw-flex tw-gap-3 tw-items-start tw-justify-start">
+                            <div>
+                              <v-icon :icon="item.raw.icon" />
+                            </div>
+                            <div>
+                              <VListItemTitle>{{ item.raw.title }}</VListItemTitle>
+                            </div>
+                            <div>
+                              <VListItemTitle>{{ item.raw.name }}</VListItemTitle>
+                            </div>
+                          </div>
+                        </template>
+                      </v-list-item>
+                    </template>
+                    <template v-slot:selection="{ item }">
+                      <div class="tw-flex tw-gap-3">
+                        <div>
+                          <v-icon :icon="item.raw.icon" />
+                        </div>
+                        <div>
+                          <VListItemTitle>{{ item.raw.title }}</VListItemTitle>
+                        </div>
+                      </div>
                     </template>
                   </v-select>
                 </div>
@@ -283,7 +294,12 @@ onMounted(() => {
 
     <div class="d-flex mt-2 mb-4">
       <div class="text-caption">No inspiration?</div>
-      <v-btn @click="randomPrompt" variant="text" size="x-small" class="text-caption mx-2"
+      <v-btn
+        :disabled="isTyping"
+        @click="randomPrompt"
+        variant="text"
+        size="x-small"
+        class="text-caption mx-2"
         >Ask Visual AI</v-btn
       >
     </div>
@@ -315,7 +331,7 @@ onMounted(() => {
 
             <template v-slot:title>
               <div class="tw-flex tw-gap-1 tw-items-center">
-                <v-list-title>{{ item.raw.title }}</v-list-title>
+                <VListItemTitle>{{ item.raw.title }}</VListItemTitle>
                 <v-icon
                   icon="$star"
                   v-if="!userDetails?.isPro && item.raw.isPro"
@@ -352,8 +368,12 @@ onMounted(() => {
           <div
             class="tw-flex tw-justify-between tw-items-center tw-border tw-border-neutral-500 tw-rounded tw-h-[36px]"
           >
+            <div class="tw-flex-1 tw-mb-1 tw-justify-center tw-text-center">
+              <v-icon size="small" icon="$layers" />
+            </div>
             <div class="tw-flex-1 tw-text-center">
               <v-btn
+                size="small"
                 :disabled="disableModifyVariations"
                 variant="text"
                 @click="handleImageVariations('subtract')"
@@ -366,6 +386,7 @@ onMounted(() => {
             </div>
             <div class="tw-flex-1 tw-text-center">
               <v-btn
+                size="small"
                 :disabled="disableModifyVariations"
                 variant="text"
                 @click="handleImageVariations('add')"
@@ -393,7 +414,7 @@ onMounted(() => {
             @update:model-value="handleSizeSelected"
           >
             <template v-slot:item="{ props, item }">
-              <v-list-item v-bind="props">
+              <v-list-item v-bind="props" width="250">
                 <template v-slot:append>
                   <v-icon
                     v-if="!userDetails?.isPro && item.raw.isPro"
@@ -401,7 +422,30 @@ onMounted(() => {
                     icon="$star"
                   />
                 </template>
+                <template v-slot:title>
+                  <div class="tw-flex tw-gap-3 tw-items-start tw-justify-start">
+                    <div>
+                      <v-icon :icon="item.raw.icon" />
+                    </div>
+                    <div>
+                      <VListItemTitle>{{ item.raw.title }}</VListItemTitle>
+                    </div>
+                    <div>
+                      <VListItemTitle>{{ item.raw.name }}</VListItemTitle>
+                    </div>
+                  </div>
+                </template>
               </v-list-item>
+            </template>
+            <template v-slot:selection="{ item }">
+              <div class="tw-flex tw-gap-3">
+                <div>
+                  <v-icon :icon="item.raw.icon" />
+                </div>
+                <div>
+                  <VListItemTitle>{{ item.raw.title }}</VListItemTitle>
+                </div>
+              </div>
             </template>
           </v-select>
         </div>
@@ -453,33 +497,5 @@ onMounted(() => {
 }
 .v-textarea :deep(.v-field__input) {
   transition: none;
-}
-
-.ellipsis span {
-  opacity: 0;
-  animation: blink 1.5s infinite;
-}
-
-/* Apply delay to each dot */
-.ellipsis span:nth-child(1) {
-  animation-delay: 0s;
-}
-.ellipsis span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.ellipsis span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-/* Keyframes for the blink effect */
-@keyframes blink {
-  0%,
-  20% {
-    opacity: 1;
-  }
-  40%,
-  100% {
-    opacity: 0;
-  }
 }
 </style>

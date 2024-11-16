@@ -1,20 +1,44 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const currentYear = computed(() => new Date().getFullYear())
+
+const footerLinks = [
+  { text: 'Contact Us', path: '/contact', icon: 'fas fa-envelope' },
+  { text: 'Privacy Policy', path: '/privacy', icon: 'fas fa-shield-alt' },
+  { text: 'Terms of Service', path: '/terms', icon: 'fas fa-file-contract' },
+  { text: 'Refund Policy', path: '/refund', icon: 'fas fa-hand-holding-usd' },
+  { text: 'FAQ', path: '/faq', icon: 'fas fa-question-circle' }
+]
+</script>
+
 <template>
-  <v-footer app absolute min-height="60" color="transparent" class="tw-flex flex-column">
-    <div class="d-flex w-100 align-center justify-center px-4">
-      <div class="text-caption text-disabled">
-        &copy; 2024
-        <span class="d-none d-sm-inline-block">Visual AI | </span>
-        <span class="d-none d-sm-inline-block ml-1"> All rights reserved</span>
+  <v-footer color="transparent">
+    <v-container>
+      <!-- Main Footer Content -->
+      <div class="tw-flex tw-flex-col md:tw-flex-row tw-items-center tw-justify-between">
+        <!-- Copyright Section -->
+        <div class="tw-text-gray-400 tw-text-sm tw-mb-4 md:tw-mb-0">
+          <span>&copy; {{ currentYear }} Visual AI</span>
+          <span class="tw-hidden md:tw-inline-block tw-mx-2">|</span>
+          <span class="tw-hidden md:tw-inline-block">All rights reserved</span>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-2 md:tw-gap-4">
+          <v-btn
+            v-for="(link, index) in footerLinks"
+            :key="index"
+            :to="link.path"
+            variant="text"
+            class="tw-text-gray-400 hover:tw-text-white tw-text-sm tw-px-3"
+            size="small"
+          >
+            <v-icon :icon="link.icon" size="small" class="tw-mr-2" />
+            {{ link.text }}
+          </v-btn>
+        </div>
       </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn to="/contact" size="small" class="mx-4 text-none" variant="text">Contact US</v-btn>
-      <v-btn to="/privacy" size="small" class="mx-4 text-none" variant="text">Privacy Policy</v-btn>
-      <v-btn to="/terms" size="small" class="mx-4 text-none" variant="text">Terms of Service</v-btn>
-      <v-btn to="/faq" size="small" class="mx-4 text-none" variant="text">FAQ</v-btn>
-    </div>
+    </v-container>
   </v-footer>
 </template>
-
-<script setup lang="ts"></script>

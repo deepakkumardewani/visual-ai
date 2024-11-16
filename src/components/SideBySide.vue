@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
-// import { useDisplay } from 'vuetify'
 import { ImgComparisonSlider } from '@img-comparison-slider/vue'
-
-// const { mobile } = useDisplay()
 
 defineProps<{
   originalImage: string
   enhancedImage: string
+  inDialog?: boolean
 }>()
 
 const originalImageLoaded = ref(false)
@@ -26,14 +24,16 @@ watch([originalImageLoaded, enhancedImageLoaded], ([original, enhanced]) => {
   <ImgComparisonSlider :class="{ 'tw-outline-none': ready }" hover="hover" value="25">
     <img
       v-show="ready"
-      class="tw-h-[90vh]"
+      class="tw-rounded-md"
+      :class="inDialog ? 'tw-h-[80vh] tw-w-auto' : 'tw-h-[90vh]'"
       slot="first"
       :src="originalImage"
       @load="originalImageLoaded = true"
     />
     <img
       v-show="ready"
-      class="tw-h-[90vh]"
+      class="tw-rounded-md"
+      :class="inDialog ? 'tw-h-[80vh] tw-w-auto' : 'tw-h-[90vh]'"
       slot="second"
       :src="enhancedImage"
       @load="enhancedImageLoaded = true"

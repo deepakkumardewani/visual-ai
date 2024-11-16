@@ -17,12 +17,12 @@ import { MODEL_IDS } from '@/utils/constants'
 
 const userStore = useUserStore()
 const dialogStore = useDialogStore()
-const { userId, userDetails } = storeToRefs(userStore)
+const { userId, userDetails, history } = storeToRefs(userStore)
 const router = useRouter()
 const { isSignedIn } = useUser()
 const { smAndUp } = useDisplay()
 const generateStore = useGenerateStore()
-const { colorizeInProgress, originalImage, enhancedImage } = storeToRefs(generateStore)
+const { colorizeInProgress, images } = storeToRefs(generateStore)
 
 const { getToken } = useAuthStore()
 const token = await getToken()
@@ -91,8 +91,8 @@ watch(data, (newVal) => {
     showAlert.value = false
     localStorage.setItem('colorizeInProgress', 'false')
     colorizeInProgress.value = false
-    originalImage.value = data.original
-    enhancedImage.value = data.enhanced
+    images.value = data.image.images
+    history.value.push(data.image)
     userStore.setCredits(data.userCreditsRemaining)
   }
 })

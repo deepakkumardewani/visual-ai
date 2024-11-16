@@ -1,20 +1,46 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 
 import SideBySide from '@/components/SideBySide.vue'
-import { FeatureType, ImageObject } from '@/pages/utils'
+import { FeatureType } from '@/pages/utils'
 import { useDialogStore } from '@/stores/dialog'
-import { deleteImage, downloadImage } from '@/utils/helpers'
+import { useGenerateStore } from '@/stores/generate'
+import { IImageObject } from '@/stores/generate'
+import { deleteImage, downloadImage, favoriteImage, formatFileSize } from '@/utils/helpers'
 
 const { mobile } = useDisplay()
 const dialogStore = useDialogStore()
 const { showImageDialog } = storeToRefs(dialogStore)
+const generateStore = useGenerateStore()
+const { isDeleting } = storeToRefs(generateStore)
+const currentImageIndex = ref(0)
 
-defineProps<{
-  item: ImageObject | null
+const props = defineProps<{
+  item: IImageObject | undefined
 }>()
+
+const nextImage = () => {
+  if (!props.item?.images) return
+  const urls = Array.isArray(props.item.images) ? props.item.images : []
+  if (currentImageIndex.value < urls.length - 1) {
+    currentImageIndex.value++
+  }
+}
+
+const previousImage = () => {
+  if (currentImageIndex.value > 0) {
+    currentImageIndex.value--
+  }
+}
+
+const getCurrentImageUrl = () => {
+  if (!props.item?.images) return ''
+  return props.item.images[currentImageIndex.value].aiImageUrl
+}
 </script>
+
 <template>
   <v-dialog
     :fullscreen="mobile"
@@ -23,48 +49,151 @@ defineProps<{
     v-model="showImageDialog"
     content-class="tw-flex tw-items-center tw-justify-center"
   >
-    <v-card class="tw-flex tw-flex-col tw-h-[95vh] tw-w-[95vw]">
+    <v-card class="tw-flex tw-flex-col tw-h-[98vh] tw-w-[95vw]">
       <div class="action-buttons tw-flex tw-p-4">
-        <div class="tw-flex tw-flex-1 tw-justify-start">
+        <div class="tw-flex tw-flex-2 tw-items-center tw-justify-start">
           <v-btn icon size="small" variant="text" @click="dialogStore.hideImage()">
             <v-icon>fas fa-times</v-icon>
           </v-btn>
-        </div>
-        <div class="tw-flex tw-flex-1 tw-gap-3 tw-justify-end">
-          <v-btn icon size="x-small" variant="text" @click="downloadImage($event, item?.imageUrl)">
-            <v-icon>fas fa-download</v-icon>
-          </v-btn>
 
-          <v-btn icon size="x-small" variant="text" @click="deleteImage($event, item?._id ?? '')">
-            <v-icon>fas fa-trash-alt</v-icon>
-          </v-btn>
+          <div v-if="item?.prompt" class="tw-flex tw-items-center tw-font-normal tw-ml-3 tw-mr-10">
+            {{ item.prompt }}
+          </div>
+        </div>
+
+        <div class="tw-flex tw-flex-1 tw-gap-3 tw-justify-end">
+          <v-tooltip location="bottom" text="Download">
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                icon
+                size="x-small"
+                variant="text"
+                @click="favoriteImage($event, item?._id ?? '')"
+              >
+                <v-icon>{{ item?.isFavorite ? 'fas fa-heart' : 'far fa-heart' }}</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
+          <v-tooltip location="bottom" text="Download">
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                icon
+                size="x-small"
+                variant="text"
+                @click="downloadImage($event, getCurrentImageUrl())"
+              >
+                <v-icon>fas fa-download</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
+
+          <v-tooltip location="bottom" text="Delete">
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                icon
+                :loading="isDeleting"
+                size="x-small"
+                variant="text"
+                @click="deleteImage($event, item?._id ?? '')"
+              >
+                <v-icon>fas fa-trash-alt</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
         </div>
       </div>
-      <div v-if="item?.prompt" class="tw-font-normal tw-px-6">
-        {{ item?.prompt }}
-      </div>
+
       <div class="image tw-flex-grow tw-flex tw-items-center tw-justify-center tw-p-0">
-        <div v-if="item?.featureType === FeatureType.IMAGE">
+        <div v-if="item?.featureType === FeatureType.IMAGE" class="tw-relative tw-w-full tw-h-full">
+          <div
+            v-if="item?.images?.length > 1"
+            class="tw-absolute tw-inset-0 tw-flex tw-items-center tw-justify-between tw-px-4 tw-pointer-events-none"
+          >
+            <v-btn
+              icon
+              variant="tonal"
+              class="nav-btn tw-pointer-events-auto tw-z-10"
+              @click="previousImage"
+              :disabled="currentImageIndex === 0"
+            >
+              <v-icon>fas fa-chevron-left</v-icon>
+            </v-btn>
+
+            <v-btn
+              icon
+              variant="tonal"
+              class="nav-btn tw-pointer-events-auto tw-z-10"
+              @click="nextImage"
+              :disabled="currentImageIndex === item.images.length - 1"
+            >
+              <v-icon>fas fa-chevron-right</v-icon>
+            </v-btn>
+          </div>
+
           <v-img
-            :src="item?.imageUrl"
-            height="70vh"
-            :width="mobile ? '100vw' : '60vw'"
+            :key="currentImageIndex"
+            :src="getCurrentImageUrl()"
+            height="80vh"
+            :width="mobile ? '100vw' : 'auto'"
             contain
+            class="tw-mx-auto"
           ></v-img>
         </div>
+
         <div v-if="item?.featureType !== FeatureType.IMAGE">
           <SideBySide
-            :original-image="item?.original ?? ''"
-            :enhanced-image="item?.enhanced ?? ''"
+            :original-image="item?.images?.[0]?.originalImageUrl ?? ''"
+            :enhanced-image="item?.images?.[0]?.enhancedImageUrl ?? ''"
+            :in-dialog="true"
           />
         </div>
       </div>
 
-      <div class="tw-flex tw-gap-2 tw-justify-end tw-p-4 dimension">
-        <v-icon size="small">far fa-file</v-icon>
-        <div>{{ item?.width }} x {{ item?.height }}</div>
+      <div class="tw-flex">
+        <div
+          v-if="item?.images && item?.images?.length > 1"
+          class="tw-flex tw-flex-1 tw-items-center tw-justify-end tw-py-2"
+        >
+          {{ currentImageIndex + 1 }} / {{ item.images?.length }}
+        </div>
+        <div class="tw-flex tw-flex-1 tw-gap-4 tw-justify-end tw-p-4">
+          <div v-if="item?.modelName" class="tw-flex tw-gap-2">
+            <v-chip size="small">{{ item.modelName }}</v-chip>
+          </div>
+          <div v-if="item?.images?.[0]?.aspectRatio" class="tw-flex tw-gap-2">
+            <v-chip size="small">{{ item.images?.[0]?.aspectRatio }}</v-chip>
+          </div>
+          <div v-if="item?.images?.[0]?.bytes" class="tw-flex tw-gap-2">
+            <v-chip size="small">{{
+              formatFileSize(item?.images?.[currentImageIndex]?.bytes)
+            }}</v-chip>
+          </div>
+          <div class="tw-flex tw-items-center">
+            <v-chip size="small">
+              <v-icon size="small">far fa-file</v-icon>
+              <div class="tw-ml-1">
+                {{ item?.images?.[0]?.width }} x {{ item?.images?.[0]?.height }}
+              </div>
+            </v-chip>
+          </div>
+        </div>
       </div>
     </v-card>
   </v-dialog>
 </template>
-<style scoped lang="scss"></style>
+
+<style scoped lang="scss">
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+</style>

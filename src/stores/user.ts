@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { useUser } from 'vue-clerk'
 
 import { useFetch } from '@/composables/useFetch'
-import { ImageObject } from '@/pages/utils'
+import { IImageObject } from '@/stores/generate'
 
 interface User {
   userId: string
@@ -19,7 +19,7 @@ interface User {
   isPro: boolean
   subscriptionEnd: Date
   payments: any[]
-  history: ImageObject[]
+  history: IImageObject[]
   activities: any[]
   createdAt: Date
   updatedAt: Date
@@ -43,9 +43,8 @@ interface User {
 export const useUserStore = defineStore('user', () => {
   const { user } = useUser()
   const userDetails = ref<User | null>(null)
-  const history = ref<ImageObject[]>([])
+  const history = ref<IImageObject[]>([])
   const userId = ref('')
-  const referralCode = ref('')
   const credits = ref(0)
   const isPro = ref(false)
 
@@ -86,5 +85,5 @@ export const useUserStore = defineStore('user', () => {
       getUserDetails()
     }
   })
-  return { userId, credits, setCredits, referralCode, userDetails, history }
+  return { userId, credits, setCredits, userDetails, history, isPro }
 })

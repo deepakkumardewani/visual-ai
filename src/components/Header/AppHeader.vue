@@ -5,11 +5,13 @@ import { useRoute } from 'vue-router'
 import { useDisplay } from 'vuetify'
 
 import CustomButton from '@/components/CustomButton.vue'
+import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue'
+import PricingDialog from '@/components/Dialogs/PricingDialog.vue'
 import Coin from '@/components/Header/Coin.vue'
 import FeatureSelect from '@/components/Header/FeatureSelect.vue'
 import Logo from '@/components/Header/Logo.vue'
-import PricingDialog from '@/components/Header/PricingDialog.vue'
 import Tabs from '@/components/Header/Tabs.vue'
+import ThemeButton from '@/components/Header/ThemeButton.vue'
 import UserMenu from '@/components/Header/UserMenu.vue'
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
@@ -48,6 +50,11 @@ watch(credits, (newCredits) => {
           <div id="export-area" class="ml-auto tw-flex tw-items-center tw-gap-4 tw-lg:tw-gap-4">
             <!-- SignedOut -->
             <SignedOut>
+              <ThemeButton
+                v-if="
+                  route.path !== '/privacy' && route.path !== '/terms' && route.path !== '/refund'
+                "
+              />
               <v-btn
                 v-if="route.path === '/'"
                 class="mx-4"
@@ -109,4 +116,5 @@ watch(credits, (newCredits) => {
     </v-row>
   </v-app-bar>
   <PricingDialog />
+  <BuyMoreCreditsDialog />
 </template>
