@@ -17,17 +17,20 @@ const activeTabIndex = computed(() => tabs.findIndex((t) => t.id === tab.value))
 
 <template>
   <div class="tabs-container">
-    <div class="tabs">
+    <div class="tabs tw-bg-black/50">
       <button
         v-for="tabItem in tabs"
         :key="tabItem.id"
         @click="tab = tabItem.id"
-        class="tab"
+        class="tab tw-text-neutral-400"
         :class="{ active: tab === tabItem.id }"
       >
         {{ tabItem.name }}
       </button>
-      <div class="slider" :style="{ transform: `translateX(${activeTabIndex * 100}%)` }"></div>
+      <div
+        class="slider tw-bg-[#9333ea] dark:tw-bg-[#6b21a8]"
+        :style="{ transform: `translateX(${activeTabIndex * 100}%)` }"
+      ></div>
     </div>
   </div>
 </template>
@@ -44,7 +47,6 @@ const activeTabIndex = computed(() => tabs.findIndex((t) => t.id === tab.value))
   position: relative;
   display: flex;
   width: 70%;
-  background-color: #000000;
   border-radius: 9999px;
   padding: 0.25rem;
 }
@@ -57,9 +59,8 @@ const activeTabIndex = computed(() => tabs.findIndex((t) => t.id === tab.value))
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
-  color: #4b5563;
   transition: color 0.3s ease;
 }
 
@@ -74,7 +75,6 @@ const activeTabIndex = computed(() => tabs.findIndex((t) => t.id === tab.value))
   right: 0.25rem;
   bottom: 0.25rem;
   width: calc(50% - 0.25rem);
-  background-color: #ba68c8;
   border-radius: 9999px;
   transition: transform 0.3s ease;
 }

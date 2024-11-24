@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { SignedOut } from 'vue-clerk'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -8,20 +7,18 @@ const router = useRouter()
 <template>
   <div class="tw-cursor-pointer tw-flex tw-gap-3" @click="router.push('/')">
     <div class="ml-4">
-      <img src="/src/assets/logo.png" width="30" height="30" />
+      <img src="/src/assets/logo.png" width="35" height="35" />
     </div>
-    <SignedOut>
-      <div class="tw-text-xl" v-if="route.path !== '/dashboard'">
-        <span
-          class="tw-bg-gradient-to-r tw-from-purple-400 tw-to-purple-600 tw-bg-clip-text tw-text-transparent"
-          >Visual AI</span
-        >
-        <span
-          class="trademark tw-bg-gradient-to-r tw-from-purple-400 tw-to-purple-600 tw-bg-clip-text tw-text-transparent"
-          >TM</span
-        >
-      </div>
-    </SignedOut>
+    <div class="tw-text-3xl" v-if="route.path !== '/dashboard'">
+      <span
+        class="tw-bg-gradient-to-r dark:tw-from-purple-400 dark:tw-to-purple-600 tw-from-purple-900 tw-to-purple-800 tw-bg-clip-text tw-text-transparent"
+        >Visual AI</span
+      >
+      <span
+        class="trademark tw-bg-gradient-to-r dark:tw-from-purple-400 dark:tw-to-purple-600 tw-from-purple-900 tw-to-purple-800 tw-bg-clip-text tw-text-transparent"
+        >TM</span
+      >
+    </div>
   </div>
 </template>
 

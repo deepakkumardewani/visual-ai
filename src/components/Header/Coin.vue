@@ -5,22 +5,33 @@ import { useDisplay } from 'vuetify'
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
 
+import AnimatedCounter from '@/components/Header/AnimatedCounter.vue'
+
 const { smAndUp } = useDisplay()
 const userStore = useUserStore()
+
 const { credits, isPro } = storeToRefs(userStore)
 const dialogStore = useDialogStore()
+
+watch(isPro, (newVal) => {
+  if (newVal) {
+    console.log('isPro', newVal)
+  }
+})
 </script>
 <template>
   <v-menu :open-on-hover="smAndUp" location="bottom end" offset="5">
     <template v-slot:activator="{ props }">
       <div
         v-bind="props"
-        class="tw-flex tw-items-center tw-p-4 tw-gap-3 tw-h-8 tw-justify-center tw-border-2 tw-border-purple-900 tw-rounded-full"
+        class="tw-flex tw-items-center tw-p-4 tw-gap-3 tw-h-8 tw-justify-center tw-border-2 tw-border-[#3b0764] dark:tw-border-white tw-rounded-full"
       >
         <div v-if="smAndUp">
           <v-icon size="x-small" icon="$coin" />
         </div>
-        <div class="tw-font-bold">{{ credits }}</div>
+        <div class="tw-font-bold">
+          <AnimatedCounter :number="credits" />
+        </div>
       </div>
     </template>
     <v-card class="pa-3 text-center tw-text-sm">
@@ -30,15 +41,15 @@ const dialogStore = useDialogStore()
       <div>
         <template v-if="!isPro">
           <span
-            @click="dialogStore.reveal"
-            class="tw-text-yellow-500 tw-underline hover:tw-text-decoration-none tw-cursor-pointer"
+            @click="dialogStore.showPricing"
+            class="tw-text-yellow-600 dark:tw-text-yellow-500 tw-underline hover:tw-text-decoration-none tw-cursor-pointer"
             >Subscribe to Pro</span
           >
           for more or
         </template>
         <span
           @click="dialogStore.showBuyCredits"
-          class="tw-text-yellow-500 tw-underline hover:tw-text-decoration-none tw-cursor-pointer"
+          class="tw-text-yellow-600 dark:tw-text-yellow-500 tw-underline hover:tw-text-decoration-none tw-cursor-pointer"
           >Buy Credits</span
         >
       </div>

@@ -2,15 +2,20 @@
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 
+import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
-import { PADDLE_PRODUCTS, openPaddleCheckout } from '@/utils/helpers'
+
+import { PADDLE_PRODUCTS } from '@/utils/constants'
+import { openPaddleCheckout } from '@/utils/helpers'
 
 const dialogStore = useDialogStore()
 const { showBuyCreditsDialog } = storeToRefs(dialogStore)
 
+const appStore = useAppStore()
+const { isDark } = storeToRefs(appStore)
 const loading = ref(false)
 const price = ref(0)
-const packages = ref(PADDLE_PRODUCTS)
+const packages = ref(PADDLE_PRODUCTS.filter((product) => product.type === 'single'))
 
 const currentPackageIndex = ref(0)
 const currentPackage = computed(() => packages.value[currentPackageIndex.value])
@@ -20,7 +25,7 @@ watch(price, (newVal) => {
 })
 
 const getTrackColor = (index: number) => {
-  return index <= currentPackageIndex.value ? 'purple-accent-4' : 'grey'
+  return index <= currentPackageIndex.value ? '#6b21a8' : 'grey'
 }
 
 const handlePurchase = async () => {
@@ -38,7 +43,10 @@ const handlePurchase = async () => {
 <template>
   <v-dialog v-model="showBuyCreditsDialog" width="600" opacity="0.7" scrim="black">
     <v-card class="tw-rounded-xl">
-      <div class="tw-text-2xl tw-font-bold tw-p-6">Buy More Credits</div>
+      <div class="tw-flex tw-justify-between tw-items-center tw-p-4">
+        <div class="tw-text-2xl tw-font-bold">Buy More Credits</div>
+        <v-btn icon="$close" variant="text" @click="showBuyCreditsDialog = false"></v-btn>
+      </div>
       <v-divider></v-divider>
 
       <div class="tw-p-6">
@@ -47,7 +55,7 @@ const handlePurchase = async () => {
             <v-icon size="40" icon="$coin" class="tw-text-purple-accent-4" />
             <div class="tw-flex tw-flex-col">
               <div class="tw-text-4xl tw-font-bold tw-text-purple-accent-4">
-                {{ currentPackage.coins }}
+                {{ currentPackage.credits }}
               </div>
               <div class="tw-text-gray-500 tw-text-sm">Credits</div>
             </div>
@@ -65,14 +73,14 @@ const handlePurchase = async () => {
           min="1"
           max="4"
           step="1"
-          color="purple-accent-4"
+          :color="isDark ? '#6b21a8' : '#9333ea'"
           :track-color="getTrackColor"
           show-ticks="always"
           :ticks="{ 1: '200', 2: '450', 3: '960', 4: '2000' }"
         ></v-slider>
 
         <v-btn
-          color="purple-accent-4"
+          :color="isDark ? '#6b21a8' : '#9333ea'"
           size="large"
           block
           class="tw-mt-6"
@@ -92,7 +100,7 @@ const handlePurchase = async () => {
   background: linear-gradient(90deg, #9c27b0 0%, #aa00ff 100%);
 }
 
-:deep(.v-slider .v-slider-thumb__surface) {
-  border: 3px solid #9c27b0;
-}
+// :deep(.v-slider .v-slider-thumb__surface) {
+//   border: 3px solid #9c27b0;
+// }
 </style>

@@ -1,5 +1,13 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+import { useAppStore } from '@/stores/app'
+
+const route = useRoute()
+const appStore = useAppStore()
+const { isDark } = storeToRefs(appStore)
 
 const currentYear = computed(() => new Date().getFullYear())
 
@@ -13,7 +21,7 @@ const footerLinks = [
 </script>
 
 <template>
-  <v-footer color="transparent">
+  <v-footer :color="route.path === '/' ? 'transparent' : isDark ? '#170220' : '#efebf3'">
     <v-container>
       <!-- Main Footer Content -->
       <div class="tw-flex tw-flex-col md:tw-flex-row tw-items-center tw-justify-between">
@@ -31,7 +39,7 @@ const footerLinks = [
             :key="index"
             :to="link.path"
             variant="text"
-            class="tw-text-gray-400 hover:tw-text-white tw-text-sm tw-px-3"
+            class="tw-text-gray-400 tw-text-sm tw-px-3"
             size="small"
           >
             <v-icon :icon="link.icon" size="small" class="tw-mr-2" />

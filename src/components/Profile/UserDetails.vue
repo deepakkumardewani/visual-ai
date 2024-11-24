@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 
-import Avatar from '@/components/Avatar.vue'
-import DeleteDialog from '@/components/Dialogs/DeleteDialog.vue'
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
+
+import Avatar from '@/components/Avatar.vue'
+import DeleteDialog from '@/components/Dialogs/DeleteDialog.vue'
 
 const dialogStore = useDialogStore()
 const userStore = useUserStore()

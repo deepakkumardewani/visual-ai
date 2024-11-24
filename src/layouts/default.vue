@@ -2,9 +2,10 @@
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
+import { useAppStore } from '@/stores/app'
+
 import AppFooter from '@/components/AppFooter.vue'
 import AppHeader from '@/components/Header/AppHeader.vue'
-import { useAppStore } from '@/stores/app'
 
 const route = useRoute()
 const { isDark } = storeToRefs(useAppStore())
@@ -27,8 +28,9 @@ const isFooterVisible = computed(() => {
     <v-main>
       <router-view />
     </v-main>
-
-    <v-divider v-if="isFooterVisible" class="tw-w-full" thickness="1"></v-divider>
+    <div class="tw-relative tw-flex tw-py-1 tw-items-center">
+      <div class="tw-flex-grow tw-border-t tw-border-neutral-600"></div>
+    </div>
     <AppFooter v-if="isFooterVisible" />
   </v-app>
 </template>
@@ -38,6 +40,6 @@ const isFooterVisible = computed(() => {
   background: linear-gradient(to bottom, #20112d, #19063a);
 }
 .light-bg {
-  background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+  background: linear-gradient(to bottom, #fafafa, #f4e9fb);
 }
 </style>

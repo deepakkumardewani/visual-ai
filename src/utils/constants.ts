@@ -1,5 +1,7 @@
-import { type Plan } from '@/stores/app'
-import { Mode } from '@/stores/aside'
+import type { FeatureSelect, Mode, PaddleProduct, Plan } from '@/types'
+
+import generalFAQ from './generalFAQ.json'
+import pricingFAQ from './pricingFAQ.json'
 
 export const MODEL_IDS = {
   FLUX_QUICK: 'FLUX_QUICK',
@@ -14,67 +16,10 @@ export const MODEL_IDS = {
   REMOVE_BACKGROUND: 'REMOVE_BACKGROUND'
 }
 
-// Image Examples
-export const EXAMPLES = [
-  {
-    prompt:
-      'black forest gateau cake spelling out the words "FLUX SCHNELL", tasty, food photography, dynamic shot',
-    url: 'https://res.cloudinary.com/ddzuitkzt/image/upload/v1724555480/gallery/bnutjse8nkqmhm3xxpb5.webp'
-  },
-  {
-    prompt: 'a tiny astronaut hatching from an egg on the moon',
-    url: 'https://res.cloudinary.com/ddzuitkzt/image/upload/v1724555480/gallery/qi1wdpvgxzpddklbwcbg.webp'
-  },
-  {
-    prompt:
-      'a man and woman are standing together against a backdrop, the backdrop is divided equally in half down the middle, left side is red, right side is gold, the woman is wearing a t-shirt with a yoda motif, she has a long skirt with birds on it, the man is wearing a three piece purple suit, he has spiky blue hair',
-    url: 'https://res.cloudinary.com/ddzuitkzt/image/upload/v1724555480/gallery/rtbfdjd7mhwggdwav4wz.webp'
-  },
-  {
-    prompt: 'Baby hedgehog wearing a flower crown in a garden',
-    url: 'https://res.cloudinary.com/ddzuitkzt/image/upload/v1724555480/gallery/z13kdz1mbwsyn6iymd5z.webp'
-  },
-  {
-    prompt:
-      '3 magical wizards stand on a yellow table. On the left, a wizard in black robes holds a sign that says ‘AI’. In the middle, a witch in red robes holds a sign that says ‘is’ and on the right, a wizard in blue robes holds a sign that says ‘cool’. Behind them a purple dragon',
-    url: 'https://res.cloudinary.com/ddzuitkzt/image/upload/v1724555480/gallery/hfzszwiatujblscjghm1.webp'
-  },
-  {
-    prompt: 'POV someone holding their hand up, stunning black forest mountains',
-    url: 'https://res.cloudinary.com/ddzuitkzt/image/upload/v1724555480/gallery/uc7plkdj78vrgy9u6daj.webp'
-  }
-]
-
 // Pricing FAQs
-export const PRICING_FAQS = [
-  {
-    question: 'What is the pricing for the service?',
-    answer: 'The pricing for the service is $10 per month.'
-  },
-  {
-    question: 'How do I pay for the service?',
-    answer: 'You can pay for the service using a credit card.'
-  },
-  {
-    question: 'Is there a free trial?',
-    answer: 'Yes, there is a 30-day free trial.'
-  }
-]
+export const PRICING_FAQS = pricingFAQ
 
-export const GENERAL_FAQS = [
-  {
-    question: 'What is the service?',
-    answer: 'The service is a platform for managing your tasks.'
-  },
-  {
-    question: 'How do I sign up for the service?',
-    answer: 'You can sign up for the service by creating an account.'
-  },
-  {
-    question: 'Is the service secure?',
-    answer: 'Yes, the service is secure.'
-  }
-]
+export const GENERAL_FAQS = [...generalFAQ, ...pricingFAQ]
 
 // Plans
 export const STARTER_PLAN: Plan = {
@@ -84,46 +29,44 @@ export const STARTER_PLAN: Plan = {
   isFree: true,
   features: [
     {
-      title: '5 credits/day Resets Daily',
+      title: '20 credits/day Resets Daily',
       available: true
     },
     {
-      title: 'Rollover Credits Capacity',
-      available: false,
-      tooltip: 'Coming soon'
+      title: 'No rollover credits',
+      available: false
     },
     {
       title: 'Standard quality images',
-      available: true
+      available: false
     },
     {
-      title: 'Only Webp format',
-      available: true
+      title: 'Only 2 image variations',
+      available: false
+    },
+    {
+      title: 'Only JPG format',
+      available: false
     },
     {
       title: 'Colorize Images',
-      available: false,
-      tooltip: 'Coming soon'
-    },
-    {
-      title: 'Remove Background',
-      available: false,
-      tooltip: 'Coming soon'
+      available: true,
+      tooltip: 'Uses 3 credits per image'
     },
     {
       title: 'Upscale Images',
-      available: false,
-      tooltip: 'Coming soon'
+      available: true,
+      tooltip: 'Uses 3 credits per image'
     },
     {
-      title: 'Deoldify Images',
-      available: false,
-      tooltip: 'Coming soon'
+      title: 'Revive Old Photos',
+      available: true,
+      tooltip: 'Uses 3 credits per image'
     }
   ]
 }
 
-export const PRO_PLAN = {
+export const PRO_PLAN: Plan = {
   title: 'Pro',
   price: '5',
   description: 'Billed monthly',
@@ -134,11 +77,16 @@ export const PRO_PLAN = {
       available: true
     },
     {
-      title: '1000 Rollover Credits Capacity',
-      available: true
+      title: '2000 Rollover Credits Capacity',
+      available: true,
+      tooltip: 'Unused monthly credits will rollover to a maxiumum of 2000 rollover credits'
     },
     {
       title: 'High quality images',
+      available: true
+    },
+    {
+      title: 'Upto 4 image variations',
       available: true
     },
     {
@@ -147,19 +95,18 @@ export const PRO_PLAN = {
     },
     {
       title: 'Colorize Images',
-      available: true
-    },
-    {
-      title: 'Remove Background',
-      available: true
+      available: true,
+      tooltip: 'Uses 1 credit per image'
     },
     {
       title: 'Upscale Images',
-      available: true
+      available: true,
+      tooltip: 'Uses 1 credit per image'
     },
     {
-      title: 'Deoldify Images',
-      available: true
+      title: 'Revive Old Photos',
+      available: true,
+      tooltip: 'Uses 1 credit per image'
     }
   ]
 }
@@ -172,11 +119,11 @@ export const IMAGE_FORMATS = [
   },
   {
     title: 'PNG',
-    isPro: false
+    isPro: true
   },
   {
     title: 'WEBP',
-    isPro: false
+    isPro: true
   }
 ]
 
@@ -204,6 +151,21 @@ export const IMAGE_FORMATS = [
 // ]
 
 export const IMAGE_SIZES = ['2X', '4X', '6X', '8X']
+
+export const IMAGE_SIZE_OPTIONS = [
+  { value: 'mini', title: 'Mini' },
+  { value: 'small', title: 'Small' },
+  { value: 'medium', title: 'Medium' },
+  { value: 'large', title: 'Large' }
+]
+
+export const SIZE_CLASSES = {
+  mini: 'tw-grid-cols-3 sm:tw-grid-cols-4 md:tw-grid-cols-6 lg:tw-grid-cols-8',
+  small: 'tw-grid-cols-2 sm:tw-grid-cols-3 md:tw-grid-cols-5 lg:tw-grid-cols-6',
+  medium: 'tw-grid-cols-2 sm:tw-grid-cols-3 md:tw-grid-cols-4 lg:tw-grid-cols-5',
+  large: 'tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-3 lg:tw-grid-cols-4'
+}
+
 // Aspect Ratios
 export const ASPECT_RATIOS = [
   {
@@ -229,14 +191,14 @@ export const ASPECT_RATIOS = [
   },
   {
     title: '4:5',
-    isPro: false,
+    isPro: true,
     name: 'Social Post',
     icon: '$socialPost',
     type: 'vertical'
   },
   {
     title: '9:16',
-    isPro: true,
+    isPro: false,
     name: 'Social Story',
     icon: '$socialStory',
     type: 'vertical'
@@ -301,5 +263,60 @@ export const FeatureType = {
   AI_IMAGE: 'AI Image',
   UPSCALE: 'Upscale',
   REVIVE: 'Revive'
-  // Add other feature types as needed
 } as const
+
+export const FEATURES: FeatureSelect[] = [
+  {
+    id: 'ai_image',
+    name: 'image',
+    title: 'AI Image Generator',
+    icon: '$imageFrame'
+  },
+  {
+    id: 'image_upscaler',
+    name: 'upscaler',
+    title: 'Image Upscaler',
+    icon: '$expand'
+  },
+  {
+    id: 'colorize_image',
+    name: 'colorizer',
+    title: 'Colorize Image',
+    icon: '$dropper'
+  },
+  {
+    id: 'revive_old_photos',
+    name: 'reviver',
+    title: 'Revive Old Photos',
+    icon: '$camera'
+  }
+]
+
+export const PADDLE_PRODUCTS: PaddleProduct[] = [
+  { id: 1, type: 'single', credits: 200, price: 4.99, priceId: 'pri_01jbx7ay8gdya88d5q5a80kdmb' },
+  {
+    id: 2,
+    type: 'single',
+    credits: 450,
+    price: 9.99,
+    priceId: 'pri_01jcdfc7tppg16ephxjs9z7j6w',
+    savings: '10%'
+  },
+  {
+    id: 3,
+    type: 'single',
+    credits: 960,
+    price: 14.99,
+    priceId: 'pri_01jcdfd9vxecgyehhvafreavnj',
+    savings: '20%'
+  },
+  {
+    id: 4,
+    type: 'single',
+    credits: 2000,
+    price: 19.99,
+    priceId: 'pri_01jcdfe1451rnbhdgtja6wrtzy',
+    savings: '30%'
+  },
+  { id: 5, type: 'monthly', credits: 300, price: 4.99, priceId: 'pri_01jbx76xqnmyy9v3tmkf62c3cp' }
+]

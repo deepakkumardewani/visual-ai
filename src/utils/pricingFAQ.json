@@ -1,0 +1,26 @@
+[
+  {
+    "question": "Will I own the images I make?",
+    "answer": "Yes, you will own the images you make."
+  },
+  {
+    "question": "Tokens and Token Rollover on Visual AI",
+    "answer": "Tokens are effectively your 'currency' on the Visual AI platform, deducted from your account balance as you perform various actions—including generating images, creating videos, post-processing tasks like background removal, and upscale conversions<br>The number of tokens used is based on the computational intensity of the action you're taking—the more GPU load required, the more tokens are charged. One key thing to note: a single token doesn't correspond to a specific image size or a specific action. The token cost adjusts based on the complexity and computational requirements of the task you're performing<br>If you're a free user, you're allocated a certain number of tokens each day, and these reset for you daily, allowing you to perform actions within this limit<br>As a paid subscriber, you receive a monthly token allowance that gives you much wider flexibility to use Visual AI's premium features at your own pace. Importantly, these tokens reset and replenish at the beginning of each billing month, so you always start with a fresh balance<br>Additionally, Visual AI offers on premium plans a Token Rollover feature, allowing you to retain unused tokens from the previous cycle. These leftover tokens are transferred to a Rollover Bank, with limits based on your plan type. This ensures you can maximize the value of your premium plan by carrying over unused tokens instead of losing them. You can check your Rollover Bank by hovering over the token counter on the app's main page."
+  },
+  {
+    "question": "What is Token Rollover and How Does it Work?",
+    "answer": "Token Rollover allows users to retain unused tokens from the previous cycle when their tokens reset. This ensures users can maximize the value of their premium plans by carrying over unused tokens instead of losing them<br>Visual AI transfers leftover tokens to a Rollover Bank, with the maximum limit based on the user's plan type. Users can check their Rollover Bank by hovering over the token counter on the app's main page."
+  },
+  {
+    "question": "Can I use my generated images for commercial projects?",
+    "answer": "Yes, you can use your generated images for commercial projects."
+  },
+  {
+    "question": "How do I pay for the service?",
+    "answer": "You can pay for the service using a credit card."
+  },
+  {
+    "question": "How do models work?",
+    "answer": "At Visual AI, we believe in versatility. Our platform isn't restricted to a single generalised model; instead, we have an assortment of both general and finely-tuned models, each crafted to excel in various types of content generation. This variety lets users go beyond a one-size-fits-all approach and select the model that best suits their specific image type or use case<br>To provide even greater customisation, we offer the option for users to train/fine-tune their own models. Users can upload a small collection of images (typically 10-20) to train a unique model that recreates a specific style, theme, or subject. This fine-tuning process can pick up nuanced aspects, like colour patterns, composition, and even aesthetic concepts, resulting in style-consistent image generation<br>Remember, these models aren't restricted to any specific field. From art and design to gaming and beyond, our models can cater to just about any creative pursuit."
+  }
+]

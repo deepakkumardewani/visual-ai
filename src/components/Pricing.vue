@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import PricingCard from '@/components/PricingCard.vue'
+
 import { PRO_PLAN, STARTER_PLAN } from '@/utils/constants'
 </script>
 <template>
   <div id="pricing" class="mt-5">
     <v-row class="text-center">
       <v-col cols="12">
-        <div>
+        <!-- <div>
           <v-chip class="my-4" color="purple-lighten-2" label> Pricing </v-chip>
-        </div>
+        </div> -->
 
         <!-- <div class="text-h4 font-weight-bold my-4">
           <span> Compare the prices </span>

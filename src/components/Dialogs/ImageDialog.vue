@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import { FeatureType } from '@/pages/utils'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 
-import SideBySide from '@/components/SideBySide.vue'
-import { FeatureType } from '@/pages/utils'
+import { IImageObject } from '@/types'
+
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
-import { IImageObject } from '@/stores/generate'
+
+import SideBySide from '@/components/SideBySide.vue'
+
 import { deleteImage, downloadImage, favoriteImage, formatFileSize } from '@/utils/helpers'
 
 const { mobile } = useDisplay()

@@ -1,13 +1,20 @@
 <script setup lang="ts">
+// import { definePage } from 'unplugin-vue-router/runtime'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import { useDisplay } from 'vuetify'
+
+import { useAppStore } from '@/stores/app'
 
 import Aside from '@/components/Aside/Aside.vue'
 import Tabs from '@/components/Header/Tabs.vue'
 import History from '@/components/History.vue'
 import ResultColumn from '@/components/ResultColumn.vue'
-import { useAppStore } from '@/stores/app'
+
+definePage({
+  alias: ['/dashboard'],
+  name: 'dashboard'
+})
 
 const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
@@ -20,7 +27,7 @@ const { mobile } = useDisplay()
     <Tabs />
     <v-divider />
   </div>
-  <v-tabs-window v-model="tab" :class="isDark ? 'tw-bg-black' : ''">
+  <v-tabs-window v-model="tab" :class="isDark ? 'tw-bg-black' : 'tw-bg-white'">
     <v-tabs-window-item :value="1" :transition="false" :reverse-transition="false">
       <div class="sm:tw-flex tw-h-screen dashboard">
         <div class="tw-w-full sm:tw-w-1/4 tw-p-1 tw-pb-2">
@@ -36,7 +43,7 @@ const { mobile } = useDisplay()
       :value="2"
       :transition="false"
       :reverse-transition="false"
-      class="tw-h-[calc(100vh-60px)]"
+      class="tw-h-[calc(100vh-60px)] tw-overflow-y-auto no-scrollbar"
     >
       <History />
     </v-tabs-window-item>

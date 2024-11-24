@@ -3,17 +3,87 @@ import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import { useDisplay } from 'vuetify'
 
-import SideBySide from '@/components/SideBySide.vue'
 import { useAppStore } from '@/stores/app'
 import { useGenerateStore } from '@/stores/generate'
+
+import SideBySide from '@/components/SideBySide.vue'
+
 import { downloadImage } from '@/utils/helpers'
 
 const { mobile } = useDisplay()
 const generateStore = useGenerateStore()
 const appStore = useAppStore()
-const { isLoading, images, upscaleInProgress, imageData } = storeToRefs(generateStore)
+const {
+  isLoading,
+  images,
+  upscaleInProgress,
+  colorizeInProgress,
+  reviveInProgress,
+  imageData,
+  errMsg
+} = storeToRefs(generateStore)
 const { feature } = storeToRefs(appStore)
+const snackbar = ref(false)
+const snackbarTimeout = ref(2000)
 
+const alertTitle = computed(() => {
+  const action = upscaleInProgress.value
+    ? 'Upscaling'
+    : colorizeInProgress.value
+      ? 'Colorizing'
+      : reviveInProgress.value
+        ? 'Reviving'
+        : ''
+  if (action) {
+    return `${action} your image`
+  }
+  return ''
+})
+const alertText = computed(() => {
+  const action = upscaleInProgress.value
+    ? 'upscaling'
+    : colorizeInProgress.value
+      ? 'colorizing'
+      : reviveInProgress.value
+        ? 'reviving'
+        : ''
+
+  if (action) {
+    return `You can keep working -- ${action} runs in the background. Close this dialog and check later on the history tab`
+  }
+  return ''
+})
+
+const showSkeleton = computed(() => {
+  if (feature.value === 'ai_image') {
+    return isLoading.value
+  }
+  if (feature.value === 'image_upscaler') {
+    return upscaleInProgress.value
+  }
+  if (feature.value === 'colorize_image') {
+    return colorizeInProgress.value
+  }
+  if (feature.value === 'revive_old_photos') {
+    return reviveInProgress.value
+  }
+  return false
+})
+const showAlert = computed(() => {
+  if (feature.value === 'ai_image') {
+    return false
+  }
+  if (feature.value === 'image_upscaler') {
+    return upscaleInProgress.value
+  }
+  if (feature.value === 'colorize_image') {
+    return colorizeInProgress.value
+  }
+  if (feature.value === 'revive_old_photos') {
+    return reviveInProgress.value
+  }
+  return false
+})
 const gridClass = computed(() => {
   if (!images.value) return ''
 
@@ -28,15 +98,21 @@ const gridClass = computed(() => {
 
   return 'tw-flex tw-flex-wrap tw-gap-4 tw-justify-center' // default flex layout
 })
+
+watch(errMsg, (newVal) => {
+  if (newVal !== '') {
+    snackbar.value = true
+  }
+})
 </script>
 <template>
   <v-alert
-    :model-value="upscaleInProgress"
+    :model-value="showAlert"
     class="my-4"
     color="info"
     icon="$info"
-    title="Upscaling in progress"
-    text="You can close this dialog and check later on the history tab"
+    :title="alertTitle"
+    :text="alertText"
     closable
   ></v-alert>
 
@@ -44,7 +120,7 @@ const gridClass = computed(() => {
     class="image rounded-lg"
     :class="{ 'tw-h-full': !mobile, 'tw-h-[59%] tw-overflow-scroll': mobile }"
   >
-    <v-skeleton-loader v-if="isLoading" type="image"></v-skeleton-loader>
+    <v-skeleton-loader v-if="showSkeleton" type="image"></v-skeleton-loader>
     <div v-else class="tw-justify-center tw-flex" :class="{ 'tw-h-full': feature === 'ai_image' }">
       <div
         v-if="feature === 'ai_image'"
@@ -118,7 +194,7 @@ const gridClass = computed(() => {
           <template v-slot:default="{ isHovering, props }">
             <div
               v-bind="props"
-              class="tw-w-full tw-h-full tw-flex tw-items-center tw-justify-center"
+              class="tw-w-full tw-h-[90vh] tw-flex tw-items-center tw-justify-center"
             >
               <SideBySide
                 :original-image="images?.[0]?.originalImageUrl ?? ''"
@@ -143,6 +219,14 @@ const gridClass = computed(() => {
       </div>
     </div>
   </div>
+  <v-snackbar
+    v-model="snackbar"
+    :timeout="snackbarTimeout"
+    location="bottom right"
+    color="purple-accent-4"
+  >
+    {{ errMsg }}
+  </v-snackbar>
 </template>
 
 <style scoped lang="scss">

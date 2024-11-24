@@ -22,22 +22,26 @@ watch([originalImageLoaded, enhancedImageLoaded], ([original, enhanced]) => {
 
 <template>
   <ImgComparisonSlider :class="{ 'tw-outline-none': ready }" hover="hover" value="25">
-    <img
-      v-show="ready"
-      class="tw-rounded-md"
-      :class="inDialog ? 'tw-h-[80vh] tw-w-auto' : 'tw-h-[90vh]'"
-      slot="first"
-      :src="originalImage"
-      @load="originalImageLoaded = true"
-    />
-    <img
-      v-show="ready"
-      class="tw-rounded-md"
-      :class="inDialog ? 'tw-h-[80vh] tw-w-auto' : 'tw-h-[90vh]'"
-      slot="second"
-      :src="enhancedImage"
-      @load="enhancedImageLoaded = true"
-    />
+    <figure slot="first" class="before">
+      <img
+        v-show="ready"
+        class="tw-rounded-md"
+        :class="inDialog ? 'tw-h-[80vh] tw-w-auto' : 'tw-h-[85vh] tw-w-full'"
+        :src="originalImage"
+        @load="originalImageLoaded = true"
+      />
+      <figcaption>Before</figcaption>
+    </figure>
+    <figure slot="second" class="after">
+      <img
+        v-show="ready"
+        class="tw-rounded-md"
+        :class="inDialog ? 'tw-h-[80vh] tw-w-auto' : 'tw-h-[85vh] tw-w-full'"
+        :src="enhancedImage"
+        @load="enhancedImageLoaded = true"
+      />
+      <figcaption>After</figcaption>
+    </figure>
   </ImgComparisonSlider>
 </template>
 
@@ -71,5 +75,32 @@ watch([originalImageLoaded, enhancedImageLoaded], ([original, enhanced]) => {
 
 .v-skeleton-loader {
   height: 100% !important;
+}
+
+.before,
+.after {
+  margin: 0;
+}
+
+.before figcaption,
+.after figcaption {
+  background: #fff;
+  border: 1px solid #c0c0c0;
+  border-radius: 12px;
+  color: #2e3452;
+  opacity: 0.8;
+  padding: 12px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  line-height: 100%;
+}
+
+.before figcaption {
+  left: 12px;
+}
+
+.after figcaption {
+  right: 12px;
 }
 </style>

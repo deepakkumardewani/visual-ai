@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 
 export const useDialogStore = defineStore('dialog', () => {
-  const isRevealed = ref(false)
+  const showPricingDialog = ref(false)
   const showPremiumDialog = ref(false)
   const showLowCreditsDialog = ref(false)
   const showImageDialog = ref(false)
   const showReferralDialog = ref(false)
+  const showCopyReferralDialog = ref(false)
   const showDeleteDialog = ref(false)
   const showBuyCreditsDialog = ref(false)
   const imageUrl = ref('')
@@ -33,6 +34,9 @@ export const useDialogStore = defineStore('dialog', () => {
   function showReferral() {
     showReferralDialog.value = true
   }
+  function showCopyReferral() {
+    showCopyReferralDialog.value = true
+  }
   function showBuyCredits() {
     showBuyCreditsDialog.value = true
   }
@@ -42,34 +46,39 @@ export const useDialogStore = defineStore('dialog', () => {
   function hideReferral() {
     showReferralDialog.value = false
   }
+  function hideCopyReferral() {
+    showCopyReferralDialog.value = false
+  }
   function showDelete() {
     showDeleteDialog.value = true
   }
   function hideDelete() {
     showDeleteDialog.value = false
   }
-  function reveal() {
-    isRevealed.value = true
+  function showPricing() {
+    showPricingDialog.value = true
   }
-  function cancel() {
-    isRevealed.value = false
+  function hidePricing() {
+    showPricingDialog.value = false
+    console.log('hidePricing')
   }
 
   return {
-    isRevealed,
+    showPricingDialog,
     showPremiumDialog,
     showImageDialog,
     showReferralDialog,
+    showCopyReferralDialog,
     showBuyCreditsDialog,
     showDeleteDialog,
     imageUrl,
     originalImage,
     enhancedImage,
     prompt,
-    reveal,
-    cancel,
     showPremium,
     hidePremium,
+    showPricing,
+    hidePricing,
     showLowCredits,
     hideLowCredits,
     showImage,
@@ -79,6 +88,8 @@ export const useDialogStore = defineStore('dialog', () => {
     showDelete,
     hideDelete,
     showBuyCredits,
-    hideBuyCredits
+    hideBuyCredits,
+    showCopyReferral,
+    hideCopyReferral
   }
 })

@@ -1,37 +1,52 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { useUser } from 'vue-clerk'
 import { useRoute } from 'vue-router'
 
-import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue'
-import { useLocal } from '@/composables/local'
 import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
+import { useUserStore } from '@/stores/user'
 
-const { user } = useUser()
+import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue'
+
+import { PADDLE_PRODUCTS } from '@/utils/constants'
+
+const userStore = useUserStore()
 const appStore = useAppStore()
 const dialogStore = useDialogStore()
-
+const { credits, isPro } = storeToRefs(userStore)
 const { tab } = storeToRefs(appStore)
 const route = useRoute()
-const { setLocal, getLocal } = useLocal()
 
-watch(user, (value) => {
-  const referralCode = value?.publicMetadata?.referralCode
-  if (referralCode) {
-    setLocal('referralCode', referralCode)
-  }
-})
+// watch(user, (value) => {
+// const referralCode = value?.publicMetadata?.referralCode
+// if (referralCode) {
+//   setLocal('referralCode', referralCode)
+// }
+// })
 
 function initializePaddle() {
   if (window.Paddle) {
     window.Paddle.Environment.set('sandbox')
     window.Paddle.Initialize({
-      token: 'test_2df34569fd84de9cd178e282cfa',
+      token: import.meta.env.VITE_PADDLE_TOKEN,
       eventCallback: function (data) {
-        if (data.name == 'checkout.completed') {
-          console.log(data)
-          dialogStore.hideBuyCredits()
+        if (data.name == 'checkout.completed' && data?.data?.items && data?.data?.items[0]) {
+          const price_id = data?.data?.items[0].price_id
+          const { custom_data } = data?.data as any
+          if (custom_data?.subscribe) {
+            isPro.value = true
+          }
+          const product = PADDLE_PRODUCTS.find((product) => product.priceId === price_id)
+          if (product) {
+            dialogStore.hideBuyCredits()
+            dialogStore.hidePricing()
+            window.Paddle?.Checkout.close()
+
+            setTimeout(() => {
+              const newCredits = (credits?.value ?? 0) + product.credits
+              userStore.setCredits(newCredits)
+            }, 700)
+          }
         }
       }
     })
@@ -41,10 +56,6 @@ function initializePaddle() {
 onMounted(() => {
   // add dark mode for tailwind css on load
   document.documentElement.classList.add('tw-dark')
-  const details = getLocal('details')
-  if (!details) {
-    setLocal('details', { prompt: '', image: '', isImageGenerated: false })
-  }
   initializePaddle()
 })
 </script>

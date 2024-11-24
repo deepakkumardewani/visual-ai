@@ -6,16 +6,23 @@ import { useRoute, useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
 import { VListItemTitle } from 'vuetify/components'
 
-import Heading from '@/components/Aside/Heading.vue'
-import PremiumDialog from '@/components/Dialogs/PremiumDialog.vue'
+import { type ImageBody } from '@/types'
+
 import { useAppStore } from '@/stores/app'
 import { type Mode } from '@/stores/aside'
 import { useDialogStore } from '@/stores/dialog'
-import { type ImageBody, useGenerateStore } from '@/stores/generate'
+import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
+
+import CreateButton from '@/components/Aside/CreateButton.vue'
+import Heading from '@/components/Aside/Heading.vue'
+import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue'
+import PremiumDialog from '@/components/Dialogs/PremiumDialog.vue'
+
 import { FLUX_MODES, MODEL_IDS } from '@/utils/constants'
 import { ASPECT_RATIOS, IMAGE_FORMATS } from '@/utils/constants'
 import PROMPTS from '@/utils/prompts.json'
+import REALISTIC_PROMPTS from '@/utils/realisticPrompts.json'
 
 const route = useRoute()
 const router = useRouter()
@@ -25,8 +32,11 @@ const dialogStore = useDialogStore()
 const userStore = useUserStore()
 const { smAndUp } = useDisplay()
 const { isSignedIn } = useUser()
-const { userDetails } = storeToRefs(userStore)
+const { userDetails, isPro } = storeToRefs(userStore)
 const { isDark } = storeToRefs(appStore)
+
+const snackbar = ref(false)
+const snackbarMessage = ref('')
 
 const prompt = ref<string>('')
 const typingPrompt = ref<string>('')
@@ -44,9 +54,9 @@ const disableModifyVariations = computed(() => {
   return mode.value.id === MODEL_IDS.FLUX_PRO || mode.value.id === MODEL_IDS.FLUX_1_1_PRO
 })
 function handleSelected(item: Mode) {
-  if (!userDetails.value?.isPro && item.isPro) {
+  if (!isPro.value && item.isPro) {
     mode.value = FLUX_MODES[1]
-    dialogStore.showPremium()
+    dialogStore.showPricing()
   } else {
     mode.value = item
     if (item.id === MODEL_IDS.FLUX_PRO || item.id === MODEL_IDS.FLUX_1_1_PRO) {
@@ -56,38 +66,52 @@ function handleSelected(item: Mode) {
 }
 
 function handleSizeSelected(item: any) {
-  if (!userDetails.value?.isPro && item.isPro) {
+  if (!isPro.value && item.isPro) {
     aspectRatio.value = ASPECT_RATIOS[0]
-    dialogStore.showPremium()
+    dialogStore.showPricing()
   } else {
     aspectRatio.value = item
   }
 }
 
 async function generateImage() {
-  if (isSignedIn.value) {
-    const input: ImageBody = {
-      modelId: mode.value.id,
-      imageType: aspectRatio.value.type,
-      modelName: mode.value.title,
-      prompt: typingPrompt.value,
-      noOfOutputs: noOfOutputs.value,
-      outputQuality: outputQuality.value === 0 ? 70 : 100,
-      aspectRatio: aspectRatio.value.title,
-      outputFormat: outputFormat.value.toLowerCase()
-    }
-    generateStore.generateImage(input)
-  } else {
-    // Show sign in modal
+  if (!isSignedIn.value) {
     router.push('/signin')
+    return
   }
+
+  if (userDetails.value?.credits === 0) {
+    snackbar.value = true
+    snackbarMessage.value =
+      'You have run out of credits. Purchase more credits to continue generating images.'
+    return
+  }
+
+  const input: ImageBody = {
+    modelId: mode.value.id,
+    imageType: aspectRatio.value.type,
+    modelName: mode.value.title,
+    prompt: typingPrompt.value,
+    noOfOutputs: noOfOutputs.value,
+    outputQuality: outputQuality.value === 0 ? 70 : 100,
+    aspectRatio: aspectRatio.value.title,
+    outputFormat: outputFormat.value.toLowerCase()
+  }
+  generateStore.generateImage(input)
 }
 
 function randomPrompt() {
-  const randomIndex = Math.floor(Math.random() * PROMPTS.length)
-  const newPrompt = PROMPTS[randomIndex]
-  typingPrompt.value = ''
-  typePrompt(newPrompt)
+  if (mode.value.id === MODEL_IDS.FLUX_REALISM) {
+    const randomIndex = Math.floor(Math.random() * REALISTIC_PROMPTS.length)
+    const newPrompt = REALISTIC_PROMPTS[randomIndex]
+    typingPrompt.value = ''
+    typePrompt(newPrompt)
+  } else {
+    const randomIndex = Math.floor(Math.random() * PROMPTS.length)
+    const newPrompt = PROMPTS[randomIndex]
+    typingPrompt.value = ''
+    typePrompt(newPrompt)
+  }
 }
 
 function typePrompt(text: string) {
@@ -117,8 +141,8 @@ function handleImageVariations(type: string) {
     }
   } else {
     if (noOfOutputs.value === 2) {
-      if (!userDetails.value?.isPro) {
-        dialogStore.showPremium()
+      if (!isPro.value) {
+        dialogStore.showPricing()
       } else {
         noOfOutputs.value = 4
       }
@@ -132,6 +156,18 @@ function focusTextArea(event: any) {
   textareaRef.value.focus()
   event ? (textAreaFocused.value = true) : (textAreaFocused.value = false)
 }
+
+function showBuyCredits() {
+  snackbar.value = false
+  dialogStore.showBuyCredits()
+}
+
+watch(outputQuality, (newVal) => {
+  if (!isPro.value && newVal === 1) {
+    outputQuality.value = 0
+    dialogStore.showPricing()
+  }
+})
 
 onMounted(() => {
   focusTextArea(true)
@@ -205,7 +241,7 @@ onMounted(() => {
                         <template v-slot:title>
                           <div class="tw-flex tw-gap-3 tw-items-start tw-justify-start">
                             <div>
-                              <v-icon :icon="item.raw.icon" />
+                              <v-icon :icon="isDark ? `${item.raw.icon}Dark` : item.raw.icon" />
                             </div>
                             <div>
                               <VListItemTitle>{{ item.raw.title }}</VListItemTitle>
@@ -220,7 +256,7 @@ onMounted(() => {
                     <template v-slot:selection="{ item }">
                       <div class="tw-flex tw-gap-3">
                         <div>
-                          <v-icon :icon="item.raw.icon" />
+                          <v-icon :icon="isDark ? `${item.raw.icon}Dark` : item.raw.icon" />
                         </div>
                         <div>
                           <VListItemTitle>{{ item.raw.title }}</VListItemTitle>
@@ -260,8 +296,13 @@ onMounted(() => {
                     mandatory
                     variant="outlined"
                   >
-                    <v-btn>SD</v-btn>
-                    <v-btn>HD</v-btn>
+                    <v-btn :color="isDark ? '#9333ea' : '#6b21a8'"> SD </v-btn>
+                    <v-btn :color="isDark ? '#9333ea' : '#6b21a8'"
+                      >HD
+                      <template v-slot:append>
+                        <v-icon size="x-small" icon="$star" />
+                      </template>
+                    </v-btn>
                   </v-btn-toggle>
                 </div>
                 <div class="tw-w-1/2">
@@ -311,6 +352,7 @@ onMounted(() => {
         v-model="mode"
         bg-color="transparent"
         variant="outlined"
+        :color="isDark ? '#9333ea' : '#6b21a8'"
         :prepend-inner-icon="isDark ? `${mode.icon}Dark` : mode.icon"
         density="compact"
         item-title="title"
@@ -330,17 +372,13 @@ onMounted(() => {
             </template>
 
             <template v-slot:title>
-              <div class="tw-flex tw-gap-1 tw-items-center">
-                <VListItemTitle>{{ item.raw.title }}</VListItemTitle>
-                <v-icon
-                  icon="$star"
-                  v-if="!userDetails?.isPro && item.raw.isPro"
-                  size="x-small"
-                ></v-icon>
+              <div class="tw-flex tw-gap-2 tw-items-center">
+                <VListItemTitle class="tw-text-white">{{ item.raw.title }}</VListItemTitle>
+                <v-icon icon="$star" v-if="!isPro && item.raw.isPro" size="x-small"></v-icon>
               </div>
             </template>
 
-            <v-list-item-subtitle v-html="item.raw.description" class="wrap-text">
+            <v-list-item-subtitle v-html="item.raw.description" class="wrap-text tw-text-white">
             </v-list-item-subtitle>
           </v-list-item>
           <v-divider v-if="item.raw.id === MODEL_IDS.FLUX_PRO" />
@@ -359,8 +397,13 @@ onMounted(() => {
             block
             divided
           >
-            <v-btn> SD </v-btn>
-            <v-btn> HD </v-btn>
+            <v-btn :color="isDark ? '#9333ea' : '#6b21a8'"> SD </v-btn>
+            <v-btn :color="isDark ? '#9333ea' : '#6b21a8'"
+              >HD
+              <template v-if="!isPro" v-slot:append>
+                <v-icon size="x-small" icon="$star" />
+              </template>
+            </v-btn>
           </v-btn-toggle>
         </div>
         <div class="tw-flex-1">
@@ -369,7 +412,7 @@ onMounted(() => {
             class="tw-flex tw-justify-between tw-items-center tw-border tw-border-neutral-500 tw-rounded tw-h-[36px]"
           >
             <div class="tw-flex-1 tw-mb-1 tw-justify-center tw-text-center">
-              <v-icon size="small" icon="$layers" />
+              <v-icon size="small" :icon="isDark ? '$layersDark' : '$layers'" />
             </div>
             <div class="tw-flex-1 tw-text-center">
               <v-btn
@@ -405,10 +448,11 @@ onMounted(() => {
           <Heading title="Size" />
           <v-select
             :items="ASPECT_RATIOS"
+            v-model="aspectRatio"
+            :color="isDark ? '#9333ea' : '#6b21a8'"
             density="compact"
             variant="outlined"
             hide-details
-            v-model="aspectRatio"
             item-title="title"
             return-object
             @update:model-value="handleSizeSelected"
@@ -416,16 +460,12 @@ onMounted(() => {
             <template v-slot:item="{ props, item }">
               <v-list-item v-bind="props" width="250">
                 <template v-slot:append>
-                  <v-icon
-                    v-if="!userDetails?.isPro && item.raw.isPro"
-                    size="x-small"
-                    icon="$star"
-                  />
+                  <v-icon v-if="!isPro && item.raw.isPro" size="x-small" icon="$star" />
                 </template>
                 <template v-slot:title>
                   <div class="tw-flex tw-gap-3 tw-items-start tw-justify-start">
                     <div>
-                      <v-icon :icon="item.raw.icon" />
+                      <v-icon :icon="isDark ? `${item.raw.icon}Dark` : item.raw.icon" />
                     </div>
                     <div>
                       <VListItemTitle>{{ item.raw.title }}</VListItemTitle>
@@ -440,7 +480,7 @@ onMounted(() => {
             <template v-slot:selection="{ item }">
               <div class="tw-flex tw-gap-3">
                 <div>
-                  <v-icon :icon="item.raw.icon" />
+                  <v-icon :icon="isDark ? `${item.raw.icon}Dark` : item.raw.icon" />
                 </div>
                 <div>
                   <VListItemTitle>{{ item.raw.title }}</VListItemTitle>
@@ -457,10 +497,15 @@ onMounted(() => {
             density="compact"
             variant="outlined"
             hide-details
+            :color="isDark ? '#9333ea' : '#6b21a8'"
             v-model="outputFormat"
           >
-            <template v-slot:item="{ props }">
-              <v-list-item v-bind="props"> </v-list-item>
+            <template v-slot:item="{ props, item }">
+              <v-list-item v-bind="props">
+                <template v-slot:append>
+                  <v-icon v-if="!isPro && item.raw.isPro" size="x-small" icon="$star" />
+                </template>
+              </v-list-item>
             </template>
           </v-select>
         </div>
@@ -470,17 +515,19 @@ onMounted(() => {
   </div>
 
   <div>
-    <v-btn
-      @click="generateImage"
-      :disabled="typingPrompt === ''"
-      color="purple-lighten-2"
-      block
-      dark
-      >Create</v-btn
-    >
+    <CreateButton @click="generateImage" :disabled="typingPrompt === ''" />
   </div>
 
   <PremiumDialog />
+  <BuyMoreCreditsDialog />
+
+  <v-snackbar v-model="snackbar" timeout="-1" location="bottom right" color="purple-accent-4">
+    {{ snackbarMessage }}
+    <template v-slot:actions>
+      <v-btn color="yellow" variant="text" @click="showBuyCredits"> Buy Credits </v-btn>
+      <v-btn color="yellow" variant="text" @click="snackbar = false"> Close </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <style lang="scss" scoped>

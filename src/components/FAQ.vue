@@ -20,7 +20,7 @@ defineProps({
         :id="`faqs-${index}`"
         :active="faq.active"
       >
-        {{ faq.answer }}
+        <div v-html="faq.answer"></div>
       </Accordion>
     </v-col>
   </v-row>

@@ -1,64 +1,30 @@
 import { defineStore, storeToRefs } from 'pinia'
 
-import { useFetch } from '@/composables/useFetch'
-// import { useAppStore } from '@/stores/app'
+import type { IGenerateResponse, IImage, ImageBody } from '@/types'
+
 import { useUserStore } from '@/stores/user'
+
+// import { useLocal } from '@/composables/local'
+import { useFetch } from '@/composables/useFetch'
+
 import { MODEL_IDS } from '@/utils/constants'
-
-export interface IImage {
-  aiImageUrl?: string
-  originalImageUrl?: string
-  enhancedImageUrl?: string
-  name: string
-  publicId: string
-  resolution: string
-  width: number
-  height: number
-  format: string
-  bytes: number
-  aspectRatio: string
-}
-export interface IImageObject {
-  _id: string
-  userId: string
-  prompt: string
-  featureType: string
-  modelName: string
-  imageType: string
-  isFavorite: boolean
-  images: IImage[]
-  humanReadableDate: string
-  createdAt: Date
-}
-
-export type ImageBody = {
-  modelId: string
-  modelName: string
-  prompt: string
-  noOfOutputs: number
-  outputQuality: number
-  aspectRatio: string
-  outputFormat: string
-  imageType: string
-}
-
-export interface IGenerateResponse {
-  image: IImageObject
-  userCreditsRemaining: number
-}
 
 export const useGenerateStore = defineStore('generate', () => {
   const isLoading = ref(false)
   const isDeleting = ref(false)
   const images = ref<IImage[]>([])
   const imageData = ref<any>({})
+  const errMsg = ref<string>('')
+  const deletingImageIds = ref<string[]>([])
   const upscaleInProgress = ref<boolean>(false)
   const colorizeInProgress = ref<boolean>(false)
+  const reviveInProgress = ref<boolean>(false)
   const userStore = useUserStore()
   const { userId, credits, history } = storeToRefs(userStore)
+  // const { setLocal } = useLocal()
 
   async function generateImage(imgData?: ImageBody) {
-    if (credits.value <= 0) {
+    if (credits.value === undefined || credits.value <= 0) {
       console.log('no credits')
       //TODO: redirect to subscription page
       return
@@ -100,7 +66,8 @@ export const useGenerateStore = defineStore('generate', () => {
   }
 
   async function upscaleImage(imgData: any) {
-    isLoading.value = true
+    // isLoading.value = true
+    upscaleInProgress.value = true
     const { prompt, image, format, creativity, scale, negativePrompt } = imgData
     const formData = new FormData()
     formData.append('feature', 'upscale')
@@ -117,23 +84,24 @@ export const useGenerateStore = defineStore('generate', () => {
       method: 'POST',
       body: formData
     }).json()
-    isLoading.value = false
+
+    // isLoading.value = false
+    upscaleInProgress.value = false
     if (error.value) {
-      console.error('error', error.value)
-      isLoading.value = false
+      console.log('error', error.value)
+      // if (typeof error.value === 'object' && !isEmpty(error.value)) {
+      //   setLocal('upscaleInProgress', false)
+      //   upscaleInProgress.value = false
+      //   isLoading.value = false
+      //   errMsg.value = 'Sorry, there was an error processing your request. Please try again.'
+      // }
       return
     }
-    // console.log('enhancedImageData', enhancedImageData.value)
-
-    // if (enhancedImageData.value) {
-    //   userStore.setCredits(enhancedImageData.value.userCreditsRemaining)
-    //   originalImage.value = enhancedImageData.value.original
-    //   enhancedImage.value = enhancedImageData.value.enhanced
-    // }
   }
 
   async function colorizeImage(data: any) {
-    isLoading.value = true
+    // isLoading.value = true
+    colorizeInProgress.value = true
     const url = `/generate/colorize/image`
     const { image, modelId } = data
     const formData = new FormData()
@@ -141,43 +109,46 @@ export const useGenerateStore = defineStore('generate', () => {
     formData.append('userId', userId.value)
     formData.append('modelId', modelId)
     formData.append('image', image)
-    const { error, data: colorizedImageData } = await useFetch(url, {
+    const { error } = await useFetch(url, {
       method: 'POST',
       body: formData
     }).json()
 
-    isLoading.value = false
+    // isLoading.value = false
+    colorizeInProgress.value = false
     if (error.value) {
       console.error('error', error.value)
-      isLoading.value = false
+      // isLoading.value = false
       return
     }
-    if (colorizedImageData.value) {
-      userStore.setCredits(colorizedImageData.value.userCreditsRemaining)
-    }
+    // if (colorizedImageData.value) {
+    //   userStore.setCredits(colorizedImageData.value.userCreditsRemaining)
+    // }
   }
 
   async function reviveOldImage(data: any) {
-    isLoading.value = true
+    // isLoading.value = true
+    reviveInProgress.value = true
     const { image } = data
     const formData = new FormData()
     formData.append('userId', userId.value)
     formData.append('feature', 'revive')
     formData.append('image', image)
     const url = `/generate/revive/image`
-    const { error, data: revivedImageData } = await useFetch(url, {
+    const { error } = await useFetch(url, {
       method: 'POST',
       body: formData
     }).json()
-    isLoading.value = false
+    // isLoading.value = false
+    reviveInProgress.value = false
     if (error.value) {
       console.error('error', error.value)
       isLoading.value = false
       return
     }
-    if (revivedImageData.value) {
-      userStore.setCredits(revivedImageData.value.userCreditsRemaining)
-    }
+    // if (revivedImageData.value) {
+    //   userStore.setCredits(revivedImageData.value.userCreditsRemaining)
+    // }
   }
 
   watch(isLoading, (newVal) => {
@@ -192,10 +163,13 @@ export const useGenerateStore = defineStore('generate', () => {
     colorizeImage,
     reviveOldImage,
     isLoading,
+    deletingImageIds,
     isDeleting,
     images,
     imageData,
     upscaleInProgress,
-    colorizeInProgress
+    colorizeInProgress,
+    reviveInProgress,
+    errMsg
   }
 })

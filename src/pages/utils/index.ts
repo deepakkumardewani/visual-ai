@@ -1,4 +1,4 @@
-import { IImageObject } from '@/stores/generate'
+import { IImageObject } from '@/types'
 
 export enum FeatureType {
   IMAGE = 'image',
@@ -35,7 +35,8 @@ export function groupByDate(data: IImageObject[]): GroupedObject[] {
   // Convert the grouped data into the desired format
   const result: GroupedObject[] = Object.keys(grouped).map((date) => ({
     title: formatDate(date), // Formatting date to desired format like "08 Oct"
-    data: grouped[date]
+    data: grouped[date],
+    isDeleting: false
   }))
 
   return result

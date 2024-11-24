@@ -1,25 +1,41 @@
 <script setup lang="ts">
-import { useTheme } from 'vuetify'
+import { storeToRefs } from 'pinia'
 
 import { type Plan } from '@/stores/app'
+import { useAppStore } from '@/stores/app'
+import { useUserStore } from '@/stores/user'
 
-const theme = useTheme()
+import { openPaddleCheckout } from '@/utils/helpers'
+
 const props = defineProps<{
   plan: Plan
 }>()
 
-// Compute background color based on theme and whether it's a premium plan
+const appStore = useAppStore()
+const { isDark } = storeToRefs(appStore)
+const userStore = useUserStore()
+const { isPro } = storeToRefs(userStore)
 const cardBackground = computed(() => {
   if (!props.plan.isFree) {
-    return theme.global.current.value.dark ? 'bg-purple-darken-4' : 'bg-purple-lighten-5'
+    return isDark.value ? 'bg-purple-darken-4' : 'bg-purple-lighten-5'
   }
   return ''
 })
 
-// Compute text color based on theme
 const priceColor = computed(() => {
-  return theme.global.current.value.dark ? 'text-purple-lighten-2' : 'text-purple-darken-2'
+  return isDark.value ? 'text-purple-lighten-2' : 'text-purple-darken-2'
 })
+
+async function handleUpgrade() {
+  if (!props.plan.isFree) {
+    try {
+      const PRICE_ID = 'pri_01jbx76xqnmyy9v3tmkf62c3cp'
+      await openPaddleCheckout(PRICE_ID, true)
+    } catch (error) {
+      console.error('Purchase failed:', error)
+    }
+  }
+}
 </script>
 
 <template>
@@ -46,6 +62,7 @@ const priceColor = computed(() => {
     <v-card-text>
       <div class="my-2">
         <v-btn
+          @click="handleUpgrade"
           :disabled="plan.isFree"
           :color="plan.isFree ? 'grey' : 'purple'"
           :variant="plan.isFree ? 'outlined' : 'elevated'"
@@ -53,7 +70,7 @@ const priceColor = computed(() => {
           block
           class="transition-transform hover:scale-102"
         >
-          {{ plan.isFree ? 'Current Plan' : 'Upgrade Now' }}
+          {{ plan.isFree ? 'Current Plan' : isPro ? 'Subscribed' : 'Upgrade Now' }}
         </v-btn>
       </div>
 
@@ -72,12 +89,12 @@ const priceColor = computed(() => {
             class="mr-2"
           />
           <p class="text-body-1">{{ feature.title }}</p>
-          <v-tooltip v-if="!feature.available" location="top">
+          <v-tooltip v-if="feature.tooltip" location="top">
             <template #activator="{ props }">
               <v-icon
                 size="small"
                 v-bind="props"
-                :icon="!feature.available ? 'fa:far fa-circle-question' : ''"
+                :icon="feature.tooltip ? 'fa:far fa-circle-question' : ''"
                 class="ml-2"
                 color="grey"
               />

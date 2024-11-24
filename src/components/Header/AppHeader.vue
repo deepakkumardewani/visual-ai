@@ -4,6 +4,10 @@ import { SignedIn, SignedOut } from 'vue-clerk'
 import { useRoute } from 'vue-router'
 import { useDisplay } from 'vuetify'
 
+import { useAppStore } from '@/stores/app'
+import { useDialogStore } from '@/stores/dialog'
+import { useUserStore } from '@/stores/user'
+
 import CustomButton from '@/components/CustomButton.vue'
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue'
 import PricingDialog from '@/components/Dialogs/PricingDialog.vue'
@@ -13,14 +17,14 @@ import Logo from '@/components/Header/Logo.vue'
 import Tabs from '@/components/Header/Tabs.vue'
 import ThemeButton from '@/components/Header/ThemeButton.vue'
 import UserMenu from '@/components/Header/UserMenu.vue'
-import { useDialogStore } from '@/stores/dialog'
-import { useUserStore } from '@/stores/user'
 
 const { smAndUp } = useDisplay()
 const userStore = useUserStore()
 const { credits } = storeToRefs(userStore)
 const dialogStore = useDialogStore()
 const route = useRoute()
+const appStore = useAppStore()
+const { isDark } = storeToRefs(appStore)
 
 watch(credits, (newCredits) => {
   if (newCredits < 5) {
@@ -29,13 +33,16 @@ watch(credits, (newCredits) => {
 })
 </script>
 <template>
-  <v-app-bar :elevation="0" color="transparent">
+  <v-app-bar
+    :elevation="0"
+    :color="route.path === '/' ? 'transparent' : isDark ? '#3b0764' : '#a855f7'"
+  >
     <v-row class="align-center">
-      <v-col :cols="smAndUp ? 4 : route.path === '/dashboard' ? 7 : 5">
+      <v-col :cols="smAndUp ? 4 : route.path === '/dashboard' ? 7 : 6">
         <div class="tw-relative tw-flex tw-min-w-0 tw-shrink-0 tw-items-center tw-gap-3">
           <Logo />
           <div class="tw-relative tw-min-w-0 tw-flex-1 tw-lg:tw-flex-none">
-            <FeatureSelect />
+            <FeatureSelect v-if="route.path === '/dashboard'" />
           </div>
         </div>
       </v-col>
@@ -45,7 +52,7 @@ watch(credits, (newCredits) => {
           <Tabs v-if="route.path === '/dashboard'" />
         </SignedIn>
       </v-col>
-      <v-col :cols="smAndUp ? 3 : route.path === '/dashboard' ? 5 : 7">
+      <v-col :cols="smAndUp ? 3 : route.path === '/dashboard' ? 5 : 6">
         <div class="tw-flex tw-shrink-0 tw-gap-4">
           <div id="export-area" class="ml-auto tw-flex tw-items-center tw-gap-4 tw-lg:tw-gap-4">
             <!-- SignedOut -->

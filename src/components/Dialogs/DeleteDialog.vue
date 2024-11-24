@@ -2,9 +2,10 @@
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
-import { useFetch } from '@/composables/useFetch'
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
+
+import { useFetch } from '@/composables/useFetch'
 
 const userStore = useUserStore()
 const { userId } = storeToRefs(userStore)

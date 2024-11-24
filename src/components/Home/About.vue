@@ -6,7 +6,7 @@ const { mobile } = useDisplay()
 const container = ref(null)
 const { tilt, roll } = useParallax(container)
 const SCALE_FACTOR = mobile.value ? 0 : 25
-console.log(mobile)
+const aboutImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/about.jpg`
 </script>
 <template>
   <div id="about" class="tw-mt-16 md:tw-mt-16">
@@ -52,7 +52,7 @@ console.log(mobile)
             rotateY(${tilt * SCALE_FACTOR}deg)
             `
             }"
-            src="https://res.cloudinary.com/ddzuitkzt/image/upload/v1730915826/assets/about.jpg"
+            :src="aboutImage"
           ></v-parallax>
         </div>
       </v-col>

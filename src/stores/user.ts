@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
 import { useUser } from 'vue-clerk'
 
-import { useFetch } from '@/composables/useFetch'
-import { IImageObject } from '@/stores/generate'
+import type { IImageObject } from '@/types'
 
-interface User {
+import { useFetch } from '@/composables/useFetch'
+
+interface IUser {
   userId: string
   userName: string
   firstName: string
@@ -24,6 +25,15 @@ interface User {
   createdAt: Date
   updatedAt: Date
 }
+export interface IPayment {
+  transactionId: string
+  amount: number
+  description: string
+  status: string
+  paymentMethod: string
+  createdAt: Date
+  humanReadableDate: string
+}
 // interface Image {
 //   user: string
 //   prompt: string
@@ -42,13 +52,15 @@ interface User {
 // }
 export const useUserStore = defineStore('user', () => {
   const { user } = useUser()
-  const userDetails = ref<User | null>(null)
+  const userDetails = ref<IUser | null>(null)
   const history = ref<IImageObject[]>([])
+  const payments = ref<IPayment[]>([])
   const userId = ref('')
   const credits = ref(0)
   const isPro = ref(false)
 
   function setCredits(value: number) {
+    console.log(value)
     credits.value = value
   }
   async function getUserDetails() {
@@ -59,11 +71,12 @@ export const useUserStore = defineStore('user', () => {
         'Content-Type': 'application/json',
         mode: 'cors'
       }
-    }).json<User>()
+    }).json<IUser>()
 
     if (userData.value) {
       userDetails.value = userData.value
       history.value = userData.value.history
+      payments.value = userData.value.payments
       isPro.value = userData.value.isPro
       const dataToStoreInLocalStorage = {
         userId: userData.value.userId
@@ -85,5 +98,5 @@ export const useUserStore = defineStore('user', () => {
       getUserDetails()
     }
   })
-  return { userId, credits, setCredits, userDetails, history, isPro }
+  return { userId, credits, setCredits, userDetails, history, isPro, payments }
 })

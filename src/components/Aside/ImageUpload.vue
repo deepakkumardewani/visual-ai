@@ -106,15 +106,18 @@ defineExpose({
           for="upload"
           class="tw-cursor-pointer tw-p-4 tw-rounded-lg tw-block tw-transition-all tw-duration-300"
         >
-          <v-icon class="tw-w-8 tw-h-8 tw-text-black dark:tw-text-white tw-mx-auto tw-mb-4"
+          <v-icon
+            class="tw-w-8 tw-h-8 tw-mx-auto tw-mb-4 tw-text-neutral-600 dark:tw-text-neutral-300"
             >fas fa-upload</v-icon
           >
           <h5
-            class="tw-mb-2 tw-text-xl tw-font-bold tw-tracking-tight tw-text-black dark:tw-text-white"
+            class="tw-mb-2 tw-text-xl tw-font-bold tw-tracking-tight tw-text-neutral-600 dark:tw-text-neutral-300"
           >
             {{ UPLOAD_TEXT }}
           </h5>
-          <p class="tw-font-normal tw-text-sm tw-text-black dark:tw-text-white md:tw-px-6">
+          <p
+            class="tw-font-normal tw-text-sm md:tw-px-6 tw-text-neutral-600 dark:tw-text-neutral-300"
+          >
             {{ IMAGE_FORMAT_TEXT }}
           </p>
         </label>

@@ -5,14 +5,17 @@ import { useUser } from 'vue-clerk'
 import { useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
 
-import Heading from '@/components/Aside/Heading.vue'
-import ImageUpload from '@/components/Aside/ImageUpload.vue'
-import PremiumDialog from '@/components/Dialogs/PremiumDialog.vue'
-import { type Mode } from '@/stores/aside'
+import type { JobStatus, Mode } from '@/types'
+
 import { useAuthStore } from '@/stores/auth'
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
+
+import Heading from '@/components/Aside/Heading.vue'
+import ImageUpload from '@/components/Aside/ImageUpload.vue'
+import PremiumDialog from '@/components/Dialogs/PremiumDialog.vue'
+
 import { MODEL_IDS } from '@/utils/constants'
 
 const userStore = useUserStore()
@@ -26,11 +29,10 @@ const { colorizeInProgress, images } = storeToRefs(generateStore)
 
 const { getToken } = useAuthStore()
 const token = await getToken()
-let progressUrl = ref(`${import.meta.env.VITE_API_BASEPATH}/colorize/progress`)
+const progressUrl = ref('')
 const { data, close, open } = useEventSource(progressUrl, [], {
   immediate: false
 })
-const showAlert = ref<boolean>(false)
 const imageUpload = ref()
 const modes = ref([
   {
@@ -67,9 +69,7 @@ async function generateImage() {
       modelId: mode.value.id
     }
     generateStore.colorizeImage(body)
-
-    progressUrl.value = `${progressUrl.value}?userId=${userId.value}&token=${token}`
-    showAlert.value = true
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}&token=${token}`
     open()
     localStorage.setItem('colorizeInProgress', 'true')
     colorizeInProgress.value = true
@@ -80,15 +80,14 @@ async function generateImage() {
 }
 
 watch(data, (newVal) => {
-  const data = JSON.parse(newVal as string)
+  const data: JobStatus = JSON.parse(newVal as string)
   if (data.status === 'processing') {
-    showAlert.value = true
     localStorage.setItem('colorizeInProgress', 'true')
     colorizeInProgress.value = true
   }
   if (data.status === 'completed') {
+    console.log('completed')
     close()
-    showAlert.value = false
     localStorage.setItem('colorizeInProgress', 'false')
     colorizeInProgress.value = false
     images.value = data.image.images
@@ -102,7 +101,7 @@ onMounted(async () => {
   if (inProgress === true) {
     const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
     colorizeInProgress.value = true
-    progressUrl.value = `${progressUrl.value}?userId=${userDetails.userId}&token=${token}`
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}&token=${token}`
     open()
   }
 })

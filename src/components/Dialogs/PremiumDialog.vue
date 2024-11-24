@@ -9,6 +9,7 @@ const { mobile } = useDisplay()
 const dialogStore = useDialogStore()
 const { showPremiumDialog } = storeToRefs(dialogStore)
 
+const aboutImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/about.jpg`
 const features = [
   {
     title: 'AI Image Generator',
@@ -83,9 +84,10 @@ const features = [
             <!-- Image column -->
             <div class="tw-hidden md:tw-block tw-relative tw-w-full md:tw-w-[50%] tw-h-screen">
               <img
-                src="../../assets/about.jpg"
+                :src="aboutImage"
                 alt="AI Generated Image"
                 class="tw-object-cover tw-w-full tw-h-[90%] tw-rounded-t-full"
+              />
               />
             </div>
           </div>

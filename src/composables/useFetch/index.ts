@@ -14,8 +14,7 @@ export const useFetch = createFetch({
       options.headers = {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
-        // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content,
-        'X-Requested-With': 'XMLHttpRequest', // we have to fake an "ajax" request because of authenticate puppeteer. Can be removed with that abomination.
+        'X-Requested-With': 'XMLHttpRequest',
         ...options.headers
       }
       return {

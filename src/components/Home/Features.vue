@@ -55,7 +55,7 @@ const features = ref<Feature[]>([
 
 <template>
   <div id="features" class="tw-relative">
-    <div class="tw-text-center tw-py-8 md:tw-py-16 tw-top-0 tw-z-10 tw-bg-background">
+    <div class="tw-text-center tw-mt-8 tw-py-2 tw-top-0 tw-z-10 tw-bg-background">
       <v-chip class="tw-mb-3 md:tw-mb-4" color="purple-lighten-2" label>Features</v-chip>
       <div class="tw-text-3xl md:tw-text-4xl lg:tw-text-5xl font-weight-bold tw-mb-4">
         What We Offer
@@ -109,8 +109,8 @@ const features = ref<Feature[]>([
                 }
               }
             }"
-            :delay="100"
-            :duration="700"
+            :delay="300"
+            :duration="800"
           >
             <video
               class="tw-w-full tw-rounded-lg"
@@ -135,7 +135,7 @@ const features = ref<Feature[]>([
 
 .feature-section {
   width: 100%;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
   display: flex;
   align-items: center;
   justify-content: center;

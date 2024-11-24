@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import About from '@/components/Home/About.vue'
 import Features from '@/components/Home/Features.vue'
-import Gallery from '@/components/Home/Gallery.vue'
 import Hero from '@/components/Home/Hero.vue'
+import Gallery from '@/components/Home/MiniGallery.vue'
 
 // import Pricing from '@/components/Pricing.vue'
 </script>

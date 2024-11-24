@@ -1,16 +1,20 @@
 <script setup lang="ts">
+import { FeatureIcon } from '@/pages/utils'
+import { GroupedObject, groupByDate } from '@/pages/utils'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
 
-import ImageDialog from '@/components/Dialogs/ImageDialog.vue'
-import { FeatureIcon } from '@/pages/utils'
-import { GroupedObject, groupByDate } from '@/pages/utils'
+import type { IImage, IImageObject } from '@/types'
+
 import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
-import { IImage, IImageObject } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
+
+import ImageDialog from '@/components/Dialogs/ImageDialog.vue'
+
+import { IMAGE_SIZE_OPTIONS, SIZE_CLASSES } from '@/utils/constants'
 import { deleteImage, downloadImage, favoriteImage } from '@/utils/helpers'
 
 const router = useRouter()
@@ -19,10 +23,11 @@ const dialogStore = useDialogStore()
 const appStore = useAppStore()
 const generateStore = useGenerateStore()
 
+const { isDark } = storeToRefs(appStore)
 const { mobile } = useDisplay()
 const { history } = storeToRefs(userStore)
 const { tab } = storeToRefs(appStore)
-const { isDeleting } = storeToRefs(generateStore)
+const { deletingImageIds } = storeToRefs(generateStore)
 
 const groupedHistory = ref<GroupedObject[]>([])
 const imageDialogItem = ref<IImageObject | undefined>()
@@ -44,22 +49,12 @@ const featureTypes = ref<any[]>([
     title: 'Revive'
   }
 ])
-const imageSizes = ref([
-  { value: 'mini', title: 'Mini' },
-  { value: 'small', title: 'Small' },
-  { value: 'medium', title: 'Medium' },
-  { value: 'large', title: 'Large' }
-])
+const imageSizes = ref(IMAGE_SIZE_OPTIONS)
 const selectedSize = ref('medium')
 const selectedFeatureType = ref<string[]>([])
 const searchQuery = ref('')
 
-const sizeClasses = {
-  mini: 'tw-grid-cols-3 sm:tw-grid-cols-4 md:tw-grid-cols-6 lg:tw-grid-cols-8',
-  small: 'tw-grid-cols-2 sm:tw-grid-cols-3 md:tw-grid-cols-5 lg:tw-grid-cols-6',
-  medium: 'tw-grid-cols-2 sm:tw-grid-cols-3 md:tw-grid-cols-4 lg:tw-grid-cols-5',
-  large: 'tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-3 lg:tw-grid-cols-4'
-}
+const sizeClasses = SIZE_CLASSES
 
 const props = withDefaults(defineProps<{ isFavorites?: boolean }>(), {
   isFavorites: false
@@ -108,6 +103,10 @@ watch(
   },
   { immediate: true, deep: true }
 )
+
+watch(deletingImageIds, (newVal) => {
+  console.log('deletingImageIds', newVal)
+})
 
 const carouselIndexes = ref<{ [key: string]: number }>({})
 const carouselIntervals = ref<{ [key: string]: number }>({})
@@ -205,13 +204,12 @@ const getImageUrl = (image: IImage) => {
 
   <div
     v-if="groupedHistory.length === 0"
-    class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl"
+    class="tw-flex tw-justify-center tw-items-center tw-h-[calc(100vh-200px)] tw-text-xl tw-mx-auto"
   >
     <div class="tw-text-center tw-text-neutral-400">
       <div>You have not created any thing yet.</div>
       <div>
         Go ahead and
-
         <span
           @click="create"
           class="tw-text-[#ba68c8] tw-cursor-pointer tw-font-bold hover:tw-underline"
@@ -222,7 +220,9 @@ const getImageUrl = (image: IImage) => {
     </div>
   </div>
   <div v-for="item in groupedHistory" :key="item.title" class="tw-mb-6 tw-p-4">
-    <div class="tw-text-xl tw-font-bold tw-mb-2 tw-text-neutral-400">{{ item.title }}</div>
+    <div class="tw-text-xl tw-font-bold tw-mb-2 tw-text-neutral-500 dark:tw-text-neutral-400">
+      {{ item.title }}
+    </div>
 
     <div :class="['tw-grid tw-gap-4', sizeClasses[selectedSize as keyof typeof sizeClasses]]">
       <template v-for="subItem in item.data" :key="subItem._id">
@@ -235,7 +235,7 @@ const getImageUrl = (image: IImage) => {
             >
               <div
                 @click="showImage(subItem)"
-                class="tw-cursor-pointer tw-bg-darkBorder dark:tw-bg-lightBorder tw-p-1 lg:tw-p-1.5 tw-aspect-square"
+                class="tw-cursor-pointer dark:tw-bg-darkBorder tw-bg-lightBorder tw-p-1 tw-aspect-square"
               >
                 <template v-if="subItem.images.length === 1">
                   <v-img
@@ -243,7 +243,7 @@ const getImageUrl = (image: IImage) => {
                     cover
                     :src="getImageUrl(subItem.images[0])"
                     :alt="subItem.featureType"
-                    class="tw-rounded-sm"
+                    class="tw-rounded-lg"
                   >
                     <template v-slot:placeholder>
                       <div class="d-flex align-center justify-center fill-height">
@@ -299,15 +299,21 @@ const getImageUrl = (image: IImage) => {
                   v-if="isHovering || mobile"
                   class="tw-absolute tw-inset-0 tw-flex tw-flex-row tw-items-start lg:tw-mx-3 lg:tw-my-3 tw-mx-2 tw-my-2 tw-opacity-90"
                 >
-                  <v-chip size="small" color="black" label variant="flat">
+                  <v-chip size="small" :color="isDark ? 'black' : 'white'" label variant="flat">
                     <div>
                       <v-icon
-                        :icon="FeatureIcon[subItem.featureType as keyof typeof FeatureIcon]"
-                        size="x-small"
+                        :icon="
+                          isDark
+                            ? `${FeatureIcon[subItem.featureType as keyof typeof FeatureIcon]}Dark`
+                            : FeatureIcon[subItem.featureType as keyof typeof FeatureIcon]
+                        "
+                        size="medium"
                         start
                       ></v-icon>
                     </div>
-                    <div class="tw-text-xs">{{ subItem.featureType }}</div>
+                    <div class="tw-text-xs tw-text-black dark:tw-text-white">
+                      {{ subItem.featureType }}
+                    </div>
                   </v-chip>
                 </div>
                 <div
@@ -317,29 +323,29 @@ const getImageUrl = (image: IImage) => {
                   <v-btn
                     icon
                     size="x-small"
-                    color="black"
+                    :color="isDark ? 'black' : 'white'"
                     @click="downloadImage($event, subItem.images[0].aiImageUrl)"
                   >
-                    <v-icon color="white">fas fa-download</v-icon>
+                    <v-icon :color="isDark ? 'white' : 'black'">fas fa-download</v-icon>
                   </v-btn>
                   <v-btn
                     icon
                     size="x-small"
-                    color="black"
+                    :color="isDark ? 'black' : 'white'"
                     @click="favoriteImage($event, subItem._id)"
                   >
-                    <v-icon color="white">{{
+                    <v-icon :color="isDark ? 'white' : 'black'">{{
                       subItem.isFavorite ? 'fas fa-heart' : 'far fa-heart'
                     }}</v-icon>
                   </v-btn>
                   <v-btn
                     icon
-                    :loading="isDeleting"
+                    :loading="deletingImageIds.includes(subItem._id)"
                     size="x-small"
-                    color="black"
+                    :color="isDark ? 'black' : 'white'"
                     @click="deleteImage($event, subItem._id)"
                   >
-                    <v-icon color="white">fas fa-trash-alt</v-icon>
+                    <v-icon :color="isDark ? 'white' : 'black'">fas fa-trash-alt</v-icon>
                   </v-btn>
                 </div>
               </div>

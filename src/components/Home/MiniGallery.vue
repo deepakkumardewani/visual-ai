@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { ref as vueRef } from 'vue'
 import { useDisplay } from 'vuetify'
 
-import { EXAMPLES } from '@/utils/constants'
+import gallery from '@/utils/gallery.json'
+
+// Get 5 random images from gallery data
+const randomImages = vueRef([...gallery].sort(() => 0.5 - Math.random()).slice(0, 6))
 
 const { xs, smAndUp } = useDisplay()
 const selectedImage = ref(null)
@@ -35,6 +39,8 @@ const showImageDetails = (img: any) => {
             see what's possible with our technology.
           </p>
           <v-btn
+            to="/gallery"
+            v-motion-pop-visible-once
             color="purple-lighten-2"
             size="large"
             class="text-center"
@@ -51,7 +57,7 @@ const showImageDetails = (img: any) => {
       <v-col cols="12">
         <div v-if="smAndUp" class="masonry-grid">
           <div
-            v-for="(img, index) in EXAMPLES"
+            v-for="(img, index) in randomImages"
             :key="index"
             class="masonry-item"
             @click="showImageDetails(img)"
@@ -78,7 +84,7 @@ const showImageDetails = (img: any) => {
                   <v-expand-transition>
                     <div
                       v-if="isHovering"
-                      class="tw-absolute tw-inset-0 tw-bg-purple-500/80 tw-p-6 tw-flex tw-flex-col tw-justify-end"
+                      class="tw-absolute tw-inset-0 tw-bg-purple-900/50 tw-p-6 tw-flex tw-flex-col tw-justify-end"
                     >
                       <p class="text-body-1 font-weight-medium tw-text-white">{{ img.prompt }}</p>
                       <!-- <v-btn
@@ -101,7 +107,7 @@ const showImageDetails = (img: any) => {
         <!-- Mobile view -->
         <div v-if="xs" class="tw-space-y-6">
           <v-fade-transition group>
-            <div v-for="(img, index) in EXAMPLES" :key="index">
+            <div v-for="(img, index) in randomImages" :key="index">
               <v-card
                 v-motion
                 :initial="{ opacity: 0, y: 50 }"

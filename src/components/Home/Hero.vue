@@ -3,7 +3,6 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import { SignedOut } from 'vue-clerk'
 
-import LoginDialog from '@/components/Dialogs/LoginDialog.vue'
 import FeatureScroll from '@/components/Home/FeatureScroll.vue'
 
 const showScrollIndicator = ref(true)
@@ -125,8 +124,6 @@ const scrollToAbout = () => {
         />
       </div>
     </Transition>
-
-    <LoginDialog />
   </div>
 </template>
 

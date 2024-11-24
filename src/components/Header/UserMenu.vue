@@ -4,14 +4,19 @@ import { ref, watch } from 'vue'
 import { useClerk } from 'vue-clerk'
 import { useRouter } from 'vue-router'
 
-import Avatar from '@/components/Avatar.vue'
-import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue'
-import ThemeButton from '@/components/Header/ThemeButton.vue'
+import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
 
+import Avatar from '@/components/Avatar.vue'
+import ReferralCopyDialog from '@/components/Dialogs/ReferralCopyDialog.vue'
+import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue'
+import ThemeButton from '@/components/Header/ThemeButton.vue'
+
 const router = useRouter()
 
+const appStore = useAppStore()
+const { isDark } = storeToRefs(appStore)
 const dialogStore = useDialogStore()
 
 const userStore = useUserStore()
@@ -29,12 +34,13 @@ function showReferralDialog() {
 }
 
 async function copyReferralCode() {
-  try {
-    await navigator.clipboard.writeText(userDetails.value?.referralCode ?? '')
-    snackbar.value = true
-  } catch (err) {
-    console.error('Failed to copy referral code:', err)
-  }
+  dialogStore.showCopyReferral()
+  // try {
+  //   await navigator.clipboard.writeText(userDetails.value?.referralCode ?? '')
+  //   snackbar.value = true
+  // } catch (err) {
+  //   console.error('Failed to copy referral code:', err)
+  // }
 }
 
 function updateUserInfo() {
@@ -103,13 +109,13 @@ watch(
             <v-divider class="my-1"></v-divider>
             <v-list-item class="tw-cursor-pointer">
               <div @click="showReferralDialog" class="tw-flex tw-items-center tw-gap-2">
-                <v-icon size="small" icon="fas fa-copy"></v-icon>
+                <v-icon size="small" :icon="isDark ? '$usersDark' : '$users'"></v-icon>
                 <v-list-item-title>Use Referral Code</v-list-item-title>
               </div>
             </v-list-item>
             <v-list-item class="tw-cursor-pointer">
               <div @click="copyReferralCode" class="tw-flex tw-items-center tw-gap-2">
-                <v-icon size="small" icon="fas fa-copy"></v-icon>
+                <v-icon size="small" :icon="isDark ? '$connectionDark' : '$connection'"></v-icon>
                 <v-list-item-title>Refer and Earn Credits</v-list-item-title>
               </div>
             </v-list-item>
@@ -133,6 +139,7 @@ watch(
     </v-menu>
   </div>
   <ReferralDialog />
+  <ReferralCopyDialog />
   <v-snackbar
     v-model="snackbar"
     :timeout="snackbarTimeout"

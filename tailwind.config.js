@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        darkBorder: '#1A171C',
-        lightBorder: '#4e4554'
+        darkBorder: '#3b0764',
+        lightBorder: '#d8b4fe '
       },
       animation: {
         'infinite-scroll': 'infinite-scroll 25s linear infinite'

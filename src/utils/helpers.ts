@@ -1,31 +1,27 @@
 import { storeToRefs } from 'pinia'
 
-import { useFetch } from '@/composables/useFetch'
+import type { IImageObject } from '@/types'
+
 import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
-import { IImageObject } from '@/stores/generate'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
 
+import { useFetch } from '@/composables/useFetch'
+
 export const deleteImage = async (event: Event, imageId: string) => {
   event.stopPropagation()
-  // Implement delete functionality
-  console.log('Deleting image:', imageId)
   const generateStore = useGenerateStore()
-  const { isDeleting } = storeToRefs(generateStore)
+  const { isDeleting, deletingImageIds } = storeToRefs(generateStore)
   const dialogStore = useDialogStore()
   const userStore = useUserStore()
 
   isDeleting.value = true
-
+  deletingImageIds.value.push(imageId)
   const { userId, history } = storeToRefs(userStore)
   const url = `/image/delete`
   const { error, data } = await useFetch(url, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      mode: 'cors'
-    },
     body: JSON.stringify({
       imageId,
       userId: userId.value
@@ -36,8 +32,8 @@ export const deleteImage = async (event: Event, imageId: string) => {
     return
   }
   if (data.value) {
-    console.log('data', data.value)
     isDeleting.value = false
+    deletingImageIds.value = deletingImageIds.value.filter((id) => id === data.value.imageId)
     dialogStore.hideImage()
     history.value = history.value.filter((item: IImageObject) => item._id !== imageId)
   }
@@ -49,10 +45,7 @@ export const favoriteImage = async (event: Event, imageId: string) => {
   const url = `/image/favorite`
   const { error, data } = await useFetch(url, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      mode: 'cors'
-    },
+
     body: JSON.stringify({
       imageId,
       userId: userId.value
@@ -100,10 +93,6 @@ export const applyReferralCode = async (code: string) => {
   const url = `/users/apply-referral`
   const { error, data, response } = await useFetch(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      mode: 'cors'
-    },
     body: JSON.stringify({
       userId: userId.value,
       userEmail: userDetails.value?.email,
@@ -139,40 +128,7 @@ export const formatFileSize = (bytes: number | undefined): string => {
   return `${mb.toFixed(1)} MB`
 }
 
-interface PaddleProduct {
-  id: number
-  coins: string
-  priceId: string
-  price: number
-  savings?: string
-}
-
-export const PADDLE_PRODUCTS: PaddleProduct[] = [
-  { id: 1, coins: '200', price: 4.99, priceId: 'pri_01jbx7ay8gdya88d5q5a80kdmb' },
-  {
-    id: 2,
-    coins: '450',
-    price: 9.99,
-    priceId: 'pri_01jcdfc7tppg16ephxjs9z7j6w',
-    savings: '10%'
-  },
-  {
-    id: 3,
-    coins: '960',
-    price: 14.99,
-    priceId: 'pri_01jcdfd9vxecgyehhvafreavnj',
-    savings: '20%'
-  },
-  {
-    id: 4,
-    coins: '2000',
-    price: 19.99,
-    priceId: 'pri_01jcdfe1451rnbhdgtja6wrtzy',
-    savings: '30%'
-  }
-]
-
-export const openPaddleCheckout = async (priceId: string) => {
+export const openPaddleCheckout = async (priceId: string, subscribe: boolean = false) => {
   try {
     if (!window.Paddle) {
       console.error('Paddle is not initialized')
@@ -192,7 +148,8 @@ export const openPaddleCheckout = async (priceId: string) => {
       },
       items: [{ priceId, quantity: 1 }],
       customData: {
-        userId: userDetails.value?.userId
+        userId: userDetails.value?.userId,
+        subscribe
       }
     })
   } catch (error) {

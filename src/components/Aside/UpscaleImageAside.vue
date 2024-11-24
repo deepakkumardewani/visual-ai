@@ -5,19 +5,16 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useUser } from 'vue-clerk'
 import { useRouter } from 'vue-router'
 
-import Heading from '@/components/Aside/Heading.vue'
-import ImageUpload from '@/components/Aside/ImageUpload.vue'
+import type { JobStatus } from '@/types'
+
 import { useAuthStore } from '@/stores/auth'
 import { useGenerateStore } from '@/stores/generate'
-import { IImageObject } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
-import { IMAGE_SIZES } from '@/utils/constants'
 
-interface JobStatus {
-  status: string
-  image: IImageObject
-  userCreditsRemaining: number
-}
+import Heading from '@/components/Aside/Heading.vue'
+import ImageUpload from '@/components/Aside/ImageUpload.vue'
+
+import { IMAGE_SIZES } from '@/utils/constants'
 
 const { getToken } = useAuthStore()
 
@@ -45,6 +42,7 @@ const creativity = ref<number>(0.1)
 const showAlert = ref<boolean>(false)
 const prompt = ref<string>('')
 const negativePrompt = ref<string>('')
+
 async function generateImage() {
   progressUrl.value = ''
   if (isSignedIn.value) {
@@ -59,11 +57,12 @@ async function generateImage() {
     }
 
     generateStore.upscaleImage(data)
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/upscale/progress?userId=${userId.value}&token=${token}`
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}&token=${token}`
     showAlert.value = true
     open()
     localStorage.setItem('upscaleInProgress', 'true')
     upscaleInProgress.value = true
+    console.log('upscaleInProgress', upscaleInProgress.value)
   } else {
     router.push('/signin')
   }
@@ -89,19 +88,21 @@ watch(data, (newVal) => {
 
 onMounted(async () => {
   const inProgress = JSON.parse(localStorage.getItem('upscaleInProgress') as string)
+  console.log('inProgress', inProgress)
   if (inProgress === true) {
     const token = await getToken()
     const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
     upscaleInProgress.value = true
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/upscale/progress?userId=${userDetails.userId}&token=${token}`
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}&token=${token}`
     open()
   }
 })
 
 onUnmounted(() => {
-  showAlert.value = false
-  localStorage.setItem('upscaleInProgress', 'false')
-  upscaleInProgress.value = false
+  // close()
+  // showAlert.value = false
+  // // localStorage.setItem('upscaleInProgress', 'false')
+  // upscaleInProgress.value = false
 })
 </script>
 <template>

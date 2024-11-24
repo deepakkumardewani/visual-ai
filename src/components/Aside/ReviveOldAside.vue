@@ -1,27 +1,72 @@
 <script setup lang="ts">
+import { useEventSource } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
 import { useUser } from 'vue-clerk'
 import { useRouter } from 'vue-router'
 
-import ImageUpload from '@/components/Aside/ImageUpload.vue'
+import type { JobStatus } from '@/types'
+
+import { useAuthStore } from '@/stores/auth'
 import { useGenerateStore } from '@/stores/generate'
+import { useUserStore } from '@/stores/user'
+
+import ImageUpload from '@/components/Aside/ImageUpload.vue'
 
 const router = useRouter()
 const { isSignedIn } = useUser()
+const userStore = useUserStore()
 const generateStore = useGenerateStore()
-
+const { userId, history } = storeToRefs(userStore)
+const { reviveInProgress, images } = storeToRefs(generateStore)
+const { getToken } = useAuthStore()
+const token = await getToken()
+const progressUrl = ref('')
+const { data, close, open } = useEventSource(progressUrl, [], {
+  immediate: false
+})
 const imageUpload = ref()
-// const highResolution = ref<boolean>(false)
-// const scratched = ref<boolean>(false)
+
 async function generateImage() {
   if (isSignedIn.value) {
     const body = {
       image: imageUpload?.value?.image
     }
     generateStore.reviveOldImage(body)
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}&token=${token}`
+    open()
+    localStorage.setItem('reviveInProgress', 'true')
+    reviveInProgress.value = true
   } else {
     router.push('/signin')
   }
 }
+
+watch(data, (newVal) => {
+  const data: JobStatus = JSON.parse(newVal as string)
+  if (data.status === 'processing') {
+    localStorage.setItem('reviveInProgress', 'true')
+    reviveInProgress.value = true
+  }
+  if (data.status === 'completed') {
+    console.log('completed')
+    close()
+    localStorage.setItem('reviveInProgress', 'false')
+    reviveInProgress.value = false
+    images.value = data.image.images
+    history.value.push(data.image)
+    userStore.setCredits(data.userCreditsRemaining)
+  }
+})
+
+onMounted(async () => {
+  const inProgress = JSON.parse(localStorage.getItem('reviveInProgress') as string)
+  if (inProgress === true) {
+    const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
+    reviveInProgress.value = true
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}&token=${token}`
+    open()
+  }
+})
 </script>
 <template>
   <ImageUpload ref="imageUpload" />

@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
+
 import { applyReferralCode } from '@/utils/helpers'
 
 const userStore = useUserStore()
@@ -29,7 +30,7 @@ const isValidCode = computed(() => {
 
 const validateCode = () => {
   if (!referralCode.value) {
-    errorMessage.value = 'Please enter a referral code'
+    errorMessage.value = ''
     return false
   }
   if (referralCode.value.length !== 6) {
