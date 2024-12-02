@@ -101,6 +101,7 @@ const features = ref<Feature[]>([
               rotateX: 0,
               transition: {
                 onComplete: () => {
+                  console.log('feature.videoRef', Array.isArray(feature.videoRef), feature.videoRef)
                   if (Array.isArray(feature.videoRef)) {
                     feature.videoRef[0]?.play()
                   } else {

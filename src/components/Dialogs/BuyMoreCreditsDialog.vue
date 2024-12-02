@@ -24,7 +24,7 @@ watch(price, (newVal) => {
   currentPackageIndex.value = newVal - 1
 })
 
-const getTrackColor = (index: number) => {
+const getTrackColor = (index: number): string => {
   return index <= currentPackageIndex.value ? '#6b21a8' : 'grey'
 }
 

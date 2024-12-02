@@ -1,55 +1,10 @@
 import { defineStore } from 'pinia'
 import { useUser } from 'vue-clerk'
 
-import type { IImageObject } from '@/types'
+import type { IImageObject, IPayment, IUser } from '@/types'
 
 import { useFetch } from '@/composables/useFetch'
 
-interface IUser {
-  userId: string
-  userName: string
-  firstName: string
-  lastName: string
-  fullName: string
-  email: string
-  referralCode: string
-  referredBy: string
-  credits: number
-  plan: string
-  monthlyCredits: number
-  isPro: boolean
-  subscriptionEnd: Date
-  payments: any[]
-  history: IImageObject[]
-  activities: any[]
-  createdAt: Date
-  updatedAt: Date
-}
-export interface IPayment {
-  transactionId: string
-  amount: number
-  description: string
-  status: string
-  paymentMethod: string
-  createdAt: Date
-  humanReadableDate: string
-}
-// interface Image {
-//   user: string
-//   prompt: string
-//   imageUrl: string
-//   original: string
-//   enhanced: string
-//   isFavorite: boolean
-//   human_readable_date: string
-//   resolution: string
-//   createdAt: Date
-//   creditCost: number
-//   width: number
-//   height: number
-//   format: string
-//   bytes: number
-// }
 export const useUserStore = defineStore('user', () => {
   const { user } = useUser()
   const userDetails = ref<IUser | null>(null)
@@ -58,9 +13,8 @@ export const useUserStore = defineStore('user', () => {
   const userId = ref('')
   const credits = ref(0)
   const isPro = ref(false)
-
+  const hasJustSubscribed = ref(false)
   function setCredits(value: number) {
-    console.log(value)
     credits.value = value
   }
   async function getUserDetails() {
@@ -98,5 +52,5 @@ export const useUserStore = defineStore('user', () => {
       getUserDetails()
     }
   })
-  return { userId, credits, setCredits, userDetails, history, isPro, payments }
+  return { userId, credits, setCredits, userDetails, history, isPro, payments, hasJustSubscribed }
 })

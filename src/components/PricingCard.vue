@@ -63,7 +63,7 @@ async function handleUpgrade() {
       <div class="my-2">
         <v-btn
           @click="handleUpgrade"
-          :disabled="plan.isFree"
+          :disabled="plan.isFree || isPro"
           :color="plan.isFree ? 'grey' : 'purple'"
           :variant="plan.isFree ? 'outlined' : 'elevated'"
           size="large"

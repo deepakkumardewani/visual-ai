@@ -5,12 +5,29 @@
  */
 // Composables
 import { setupLayouts } from 'virtual:generated-layouts'
+import { useUser } from 'vue-clerk'
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import { routes } from 'vue-router/auto-routes'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: setupLayouts(routes)
+})
+
+router.beforeEach((to) => {
+  const { isSignedIn } = useUser()
+
+  // List of routes that require authentication
+  const authRequiredRoutes = ['profile']
+
+  if (
+    authRequiredRoutes.includes(to.name as string) &&
+    isSignedIn.value === undefined &&
+    isSignedIn.value === false
+  ) {
+    // Redirect to home page if trying to access protected route while not authenticated
+    return { name: '/' }
+  }
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804

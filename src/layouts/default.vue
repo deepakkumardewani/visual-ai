@@ -24,7 +24,6 @@ const isFooterVisible = computed(() => {
 <template>
   <v-app :class="isDark ? 'dark-bg' : 'light-bg'">
     <AppHeader v-if="isHeaderVisible" />
-
     <v-main>
       <router-view />
     </v-main>

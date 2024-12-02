@@ -16,15 +16,18 @@ const footerLinks = [
   { text: 'Privacy Policy', path: '/privacy', icon: 'fas fa-shield-alt' },
   { text: 'Terms of Service', path: '/terms', icon: 'fas fa-file-contract' },
   { text: 'Refund Policy', path: '/refund', icon: 'fas fa-hand-holding-usd' },
-  { text: 'FAQ', path: '/faq', icon: 'fas fa-question-circle' }
+  { text: 'Pricing', path: '/pricing', icon: 'fas fa-tag' },
+  { text: 'FAQ', path: '/faqs', icon: 'fas fa-question-circle' }
 ]
 </script>
 
 <template>
-  <v-footer :color="route.path === '/' ? 'transparent' : isDark ? '#170220' : '#efebf3'">
-    <v-container>
-      <!-- Main Footer Content -->
-      <div class="tw-flex tw-flex-col md:tw-flex-row tw-items-center tw-justify-between">
+  <v-footer
+    :color="route.path === '/' ? 'transparent' : isDark ? '#170220' : '#efebf3'"
+    class="tw-w-full"
+  >
+    <div class="tw-w-full tw-max-w-7xl tw-mx-auto tw-px-4">
+      <div class="tw-flex tw-flex-col md:tw-flex-row tw-items-center tw-justify-between tw-w-full">
         <!-- Copyright Section -->
         <div class="tw-text-gray-400 tw-text-sm tw-mb-4 md:tw-mb-0">
           <span>&copy; {{ currentYear }} Visual AI</span>
@@ -47,6 +50,6 @@ const footerLinks = [
           </v-btn>
         </div>
       </div>
-    </v-container>
+    </div>
   </v-footer>
 </template>

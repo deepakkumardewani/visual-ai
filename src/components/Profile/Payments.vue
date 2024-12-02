@@ -25,8 +25,10 @@ const headers = [
 ]
 
 const loading = ref(true)
-loading.value = false
-console.log(payments.value)
+
+watch(payments, () => {
+  loading.value = false
+})
 </script>
 
 <template>
@@ -45,7 +47,7 @@ console.log(payments.value)
       >
         <template v-slot:[`item.amount`]="{ item }"> ${{ item.amount.toFixed(2) }} </template>
         <template v-slot:[`item.status`]="{ item }">
-          <v-chip :color="item.status === 'active' ? 'success' : 'warning'">
+          <v-chip color="success">
             {{ item.status }}
           </v-chip>
         </template>

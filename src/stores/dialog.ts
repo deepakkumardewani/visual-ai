@@ -60,7 +60,6 @@ export const useDialogStore = defineStore('dialog', () => {
   }
   function hidePricing() {
     showPricingDialog.value = false
-    console.log('hidePricing')
   }
 
   return {

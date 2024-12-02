@@ -1,12 +1,9 @@
-<template>
-  <span class="tw-text-lg">{{ displayNumber }}</span>
-</template>
-
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 
 const props = defineProps<{
   number: number
+  animate?: boolean
 }>()
 
 const displayNumber = ref(props.number)
@@ -15,6 +12,11 @@ let interval: number | undefined
 watch(
   () => props.number,
   (newValue) => {
+    if (!props.animate) {
+      displayNumber.value = newValue
+      return
+    }
+
     if (interval) {
       clearInterval(interval)
     }
@@ -45,3 +47,7 @@ watch(
   }
 )
 </script>
+
+<template>
+  <span class="tw-text-lg">{{ displayNumber }}</span>
+</template>

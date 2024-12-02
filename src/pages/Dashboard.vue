@@ -12,18 +12,17 @@ import History from '@/components/History.vue'
 import ResultColumn from '@/components/ResultColumn.vue'
 
 definePage({
-  alias: ['/dashboard'],
-  name: 'dashboard'
+  alias: ['/dashboard']
 })
 
 const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
 const { tab } = storeToRefs(appStore)
 const route = useRoute()
-const { mobile } = useDisplay()
+const { xs } = useDisplay()
 </script>
 <template>
-  <div class="bg-asideBg tw-mt-1" v-if="route.path === '/dashboard' && mobile">
+  <div class="bg-asideBg tw-mt-1" v-if="route.path === '/dashboard' && xs">
     <Tabs />
     <v-divider />
   </div>

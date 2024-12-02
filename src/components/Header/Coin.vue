@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
 
 import { useDialogStore } from '@/stores/dialog'
@@ -9,15 +10,9 @@ import AnimatedCounter from '@/components/Header/AnimatedCounter.vue'
 
 const { smAndUp } = useDisplay()
 const userStore = useUserStore()
-
-const { credits, isPro } = storeToRefs(userStore)
+const router = useRouter()
+const { credits, isPro, hasJustSubscribed } = storeToRefs(userStore)
 const dialogStore = useDialogStore()
-
-watch(isPro, (newVal) => {
-  if (newVal) {
-    console.log('isPro', newVal)
-  }
-})
 </script>
 <template>
   <v-menu :open-on-hover="smAndUp" location="bottom end" offset="5">
@@ -30,7 +25,7 @@ watch(isPro, (newVal) => {
           <v-icon size="x-small" icon="$coin" />
         </div>
         <div class="tw-font-bold">
-          <AnimatedCounter :number="credits" />
+          <AnimatedCounter :number="credits" :animate="hasJustSubscribed" />
         </div>
       </div>
     </template>
@@ -41,7 +36,7 @@ watch(isPro, (newVal) => {
       <div>
         <template v-if="!isPro">
           <span
-            @click="dialogStore.showPricing"
+            @click="router.push('/pricing')"
             class="tw-text-yellow-600 dark:tw-text-yellow-500 tw-underline hover:tw-text-decoration-none tw-cursor-pointer"
             >Subscribe to Pro</span
           >

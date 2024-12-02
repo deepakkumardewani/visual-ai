@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useClerk } from 'vue-clerk'
 import { useRouter } from 'vue-router'
 
@@ -21,12 +21,16 @@ const dialogStore = useDialogStore()
 
 const userStore = useUserStore()
 const { signOut } = useClerk()
-const { userDetails } = storeToRefs(userStore)
+const { userDetails, isPro } = storeToRefs(userStore)
 const fullName = ref<string | undefined>('')
 const email = ref<string | undefined>('')
 const menu = ref(false)
 const snackbar = ref(false)
 const snackbarTimeout = ref(2000)
+
+const subscriptionStatus = computed(() => {
+  return isPro.value ? 'Pro' : 'Free'
+})
 
 function showReferralDialog() {
   menu.value = false
@@ -57,6 +61,14 @@ watch(
   },
   { immediate: true, deep: true }
 )
+
+function goToSubscription() {
+  menu.value = false
+  router.push({
+    name: 'profile',
+    query: { tab: 'subscription' } // This will be used to activate the subscription tab
+  })
+}
 </script>
 <template>
   <div
@@ -105,6 +117,21 @@ watch(
                 <v-icon size="small" icon="fas fa-user"></v-icon>
                 <v-list-item-title>View Profile</v-list-item-title>
               </div>
+            </v-list-item>
+            <v-list-item class="tw-cursor-pointer" @click="goToSubscription">
+              <div class="tw-flex tw-items-center tw-gap-2">
+                <v-icon size="small" icon="fas fa-crown"></v-icon>
+                <v-list-item-title>My Subscription</v-list-item-title>
+              </div>
+              <template v-slot:append>
+                <v-chip
+                  :color="subscriptionStatus === 'Pro' ? 'purple-accent-4' : 'grey'"
+                  size="small"
+                  class="tw-ml-2"
+                >
+                  {{ subscriptionStatus }}
+                </v-chip>
+              </template>
             </v-list-item>
             <v-divider class="my-1"></v-divider>
             <v-list-item class="tw-cursor-pointer">

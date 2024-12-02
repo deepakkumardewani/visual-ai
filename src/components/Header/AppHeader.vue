@@ -10,7 +10,7 @@ import { useUserStore } from '@/stores/user'
 
 import CustomButton from '@/components/CustomButton.vue'
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue'
-import PricingDialog from '@/components/Dialogs/PricingDialog.vue'
+// import PricingDialog from '@/components/Dialogs/PricingDialog.vue'
 import Coin from '@/components/Header/Coin.vue'
 import FeatureSelect from '@/components/Header/FeatureSelect.vue'
 import Logo from '@/components/Header/Logo.vue'
@@ -53,7 +53,7 @@ watch(credits, (newCredits) => {
         </SignedIn>
       </v-col>
       <v-col :cols="smAndUp ? 3 : route.path === '/dashboard' ? 5 : 6">
-        <div class="tw-flex tw-shrink-0 tw-gap-4">
+        <div class="tw-flex tw-shrink-0 tw-gap-4 tw-mr-2">
           <div id="export-area" class="ml-auto tw-flex tw-items-center tw-gap-4 tw-lg:tw-gap-4">
             <!-- SignedOut -->
             <SignedOut>
@@ -122,6 +122,6 @@ watch(credits, (newCredits) => {
     -->
     </v-row>
   </v-app-bar>
-  <PricingDialog />
+  <!-- <PricingDialog /> -->
   <BuyMoreCreditsDialog />
 </template>

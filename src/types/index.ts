@@ -20,6 +20,36 @@ export interface Mode {
   isPro: boolean
 }
 
+export interface IUser {
+  userId: string
+  userName: string
+  firstName: string
+  lastName: string
+  fullName: string
+  email: string
+  referralCode: string
+  referredBy: string
+  credits: number
+  plan: string
+  subscriptionId: string
+  monthlyCredits: number
+  isPro: boolean
+  subscriptionEnd: Date
+  payments: any[]
+  history: IImageObject[]
+  activities: any[]
+  createdAt: Date
+  updatedAt: Date
+}
+export interface IPayment {
+  transactionId: string
+  amount: number
+  description: string
+  status: string
+  paymentMethod: string
+  createdAt: Date
+  humanReadableDate: string
+}
 export interface IImage {
   aiImageUrl?: string
   originalImageUrl?: string

@@ -24,6 +24,7 @@ if (!PUBLISHABLE_KEY) {
 export function registerPlugins(app: App) {
   app.use(clerkPlugin, {
     publishableKey: PUBLISHABLE_KEY,
+    forceRedirectUrl: AFTER_SIGN_IN_URL,
     afterSignInUrl: AFTER_SIGN_IN_URL,
     afterSignUpUrl: AFTER_SIGN_UP_URL
   })

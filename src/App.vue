@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
@@ -13,10 +13,10 @@ import { PADDLE_PRODUCTS } from '@/utils/constants'
 const userStore = useUserStore()
 const appStore = useAppStore()
 const dialogStore = useDialogStore()
-const { credits, isPro } = storeToRefs(userStore)
+const { credits, isPro, hasJustSubscribed } = storeToRefs(userStore)
 const { tab } = storeToRefs(appStore)
 const route = useRoute()
-
+const router = useRouter()
 // watch(user, (value) => {
 // const referralCode = value?.publicMetadata?.referralCode
 // if (referralCode) {
@@ -30,6 +30,7 @@ function initializePaddle() {
     window.Paddle.Initialize({
       token: import.meta.env.VITE_PADDLE_TOKEN,
       eventCallback: function (data) {
+        console.log(data)
         if (data.name == 'checkout.completed' && data?.data?.items && data?.data?.items[0]) {
           const price_id = data?.data?.items[0].price_id
           const { custom_data } = data?.data as any
@@ -39,9 +40,9 @@ function initializePaddle() {
           const product = PADDLE_PRODUCTS.find((product) => product.priceId === price_id)
           if (product) {
             dialogStore.hideBuyCredits()
-            dialogStore.hidePricing()
             window.Paddle?.Checkout.close()
-
+            hasJustSubscribed.value = true
+            router.push('/dashboard')
             setTimeout(() => {
               const newCredits = (credits?.value ?? 0) + product.credits
               userStore.setCredits(newCredits)
@@ -61,7 +62,6 @@ onMounted(() => {
 </script>
 <template>
   <v-app>
-    <!-- make the app full screen and scrollable -->
     <v-main
       :class="{
         'tw-h-screen tw-overflow-y-hidden': route.path === '/dashboard' && tab === 1

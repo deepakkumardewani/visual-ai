@@ -45,7 +45,6 @@ export const favoriteImage = async (event: Event, imageId: string) => {
   const url = `/image/favorite`
   const { error, data } = await useFetch(url, {
     method: 'PUT',
-
     body: JSON.stringify({
       imageId,
       userId: userId.value
@@ -154,6 +153,37 @@ export const openPaddleCheckout = async (priceId: string, subscribe: boolean = f
     })
   } catch (error) {
     console.error('Error opening Paddle checkout:', error)
+    throw error
+  }
+}
+
+export async function cancelSubscription(): Promise<void> {
+  try {
+    const userStore = useUserStore()
+    const { userDetails } = storeToRefs(userStore)
+
+    const url = '/payments/cancel-subscription'
+    const { error, data } = await useFetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        mode: 'cors'
+      },
+      body: JSON.stringify({
+        effectiveFrom: 'immediately',
+        subscriptionId: userDetails.value?.subscriptionId
+      })
+    }).json()
+
+    if (error.value) {
+      console.error('error', error.value)
+      return
+    }
+    if (data.value) {
+      console.log('data', data.value)
+    }
+  } catch (error) {
+    console.error('Error canceling subscription:', error)
     throw error
   }
 }

@@ -4,9 +4,10 @@ import { storeToRefs } from 'pinia'
 import { useDialogStore } from '@/stores/dialog'
 
 import FAQ from '@/components/FAQ.vue'
-import Pricing from '@/components/Pricing.vue'
 
 import { PRICING_FAQS } from '@/utils/constants'
+
+import Pricing from '@/pages/Pricing.vue'
 
 const dialogStore = useDialogStore()
 const { showPricingDialog } = storeToRefs(dialogStore)
