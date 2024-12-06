@@ -88,6 +88,7 @@ declare module 'vue' {
     LoginDialog: typeof import('./components/Dialogs/LoginDialog.vue')['default']
     LoginModal: typeof import('./components/Dialogs/LoginDialog.vue')['default']
     Logo: typeof import('./components/Header/Logo.vue')['default']
+    LowCreditsDialog: typeof import('./components/Dialogs/LowCreditsDialog.vue')['default']
     MiniGallery: typeof import('./components/Home/MiniGallery.vue')['default']
     Payments: typeof import('./components/Profile/Payments.vue')['default']
     PremiumDialog: typeof import('./components/Dialogs/PremiumDialog.vue')['default']

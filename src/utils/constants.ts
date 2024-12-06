@@ -29,7 +29,7 @@ export const STARTER_PLAN: Plan = {
   isFree: true,
   features: [
     {
-      title: '20 credits/day Resets Daily',
+      title: '5 credits/day Resets Daily',
       available: true
     },
     {
@@ -73,7 +73,7 @@ export const PRO_PLAN: Plan = {
   isFree: false,
   features: [
     {
-      title: '300 credits/month Resets Monthly',
+      title: '500 credits/month Resets Monthly',
       available: true
     },
     {

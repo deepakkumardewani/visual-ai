@@ -17,6 +17,7 @@ import { useUserStore } from '@/stores/user'
 import CreateButton from '@/components/Aside/CreateButton.vue'
 import Heading from '@/components/Aside/Heading.vue'
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue'
+import LowCreditsDialog from '@/components/Dialogs/LowCreditsDialog.vue'
 import PremiumDialog from '@/components/Dialogs/PremiumDialog.vue'
 
 import { FLUX_MODES, MODEL_IDS } from '@/utils/constants'
@@ -34,9 +35,6 @@ const { smAndUp } = useDisplay()
 const { isSignedIn } = useUser()
 const { userDetails, isPro } = storeToRefs(userStore)
 const { isDark } = storeToRefs(appStore)
-
-const snackbar = ref(false)
-const snackbarMessage = ref('')
 
 const prompt = ref<string>('')
 const typingPrompt = ref<string>('')
@@ -56,6 +54,7 @@ const disableModifyVariations = computed(() => {
 function handleSelected(item: Mode) {
   if (!isPro.value && item.isPro) {
     mode.value = FLUX_MODES[1]
+    router.push('/profile?tab=subscription')
     dialogStore.showPricing()
   } else {
     mode.value = item
@@ -81,9 +80,7 @@ async function generateImage() {
   }
 
   if (userDetails.value?.credits === 0) {
-    snackbar.value = true
-    snackbarMessage.value =
-      'You have run out of credits. Purchase more credits to continue generating images.'
+    dialogStore.showLowCredits()
     return
   }
 
@@ -155,11 +152,6 @@ function handleImageVariations(type: string) {
 function focusTextArea(event: any) {
   textareaRef.value.focus()
   event ? (textAreaFocused.value = true) : (textAreaFocused.value = false)
-}
-
-function showBuyCredits() {
-  snackbar.value = false
-  dialogStore.showBuyCredits()
 }
 
 watch(outputQuality, (newVal) => {
@@ -520,14 +512,7 @@ onMounted(() => {
 
   <PremiumDialog />
   <BuyMoreCreditsDialog />
-
-  <v-snackbar v-model="snackbar" timeout="-1" location="bottom right" color="purple-accent-4">
-    {{ snackbarMessage }}
-    <template v-slot:actions>
-      <v-btn color="yellow" variant="text" @click="showBuyCredits"> Buy Credits </v-btn>
-      <v-btn color="yellow" variant="text" @click="snackbar = false"> Close </v-btn>
-    </template>
-  </v-snackbar>
+  <LowCreditsDialog />
 </template>
 
 <style lang="scss" scoped>

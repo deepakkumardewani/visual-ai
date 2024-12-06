@@ -5,7 +5,9 @@ export default {
     extend: {
       colors: {
         darkBorder: '#3b0764',
-        lightBorder: '#d8b4fe '
+        lightBorder: '#d8b4fe ',
+        vSelectLight: '#6b21a8',
+        vSelectDark: '#9333ea'
       },
       animation: {
         'infinite-scroll': 'infinite-scroll 25s linear infinite'

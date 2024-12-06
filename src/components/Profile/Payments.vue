@@ -26,9 +26,13 @@ const headers = [
 
 const loading = ref(true)
 
-watch(payments, () => {
-  loading.value = false
-})
+watch(
+  payments,
+  () => {
+    loading.value = false
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
