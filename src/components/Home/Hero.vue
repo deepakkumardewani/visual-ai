@@ -105,7 +105,7 @@ const scrollToAbout = () => {
           elevation="2"
         >
           <v-icon left class="mr-2">fa-solid fa-rocket</v-icon>
-          Get Started - it's Free
+          Get Started - It's Free
         </v-btn>
       </div>
     </SignedOut>
