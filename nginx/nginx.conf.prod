@@ -1,0 +1,48 @@
+server {
+    listen 80;
+
+    server_name 159.89.45.226;
+
+    root /usr/share/nginx/html;
+
+    index index.html;
+
+    location / {
+        try_files $uri /index.html;
+    }
+
+    # Optional: Add caching for static assets
+    location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg|otf|ttc|webp|map|json)$ {
+        expires 6M;
+        access_log off;
+        add_header Cache-Control "public";
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/visual-ai.app/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/visual-ai.app/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+    # Optional: Add gzip compression
+    # gzip on;
+    # gzip_types text/plain application/xml text/css application/javascript;
+    # gzip_min_length 256;
+}
+
+server {
+    if ($host = www.visual-ai.app) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = visual-ai.app) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+
+    server_name visual-ai.app www.visual-ai.app;
+    return 404; # managed by Certbot
+
+}

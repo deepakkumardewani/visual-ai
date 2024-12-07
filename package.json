@@ -1,6 +1,8 @@
 {
   "name": "visual-ai",
   "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -21,7 +23,6 @@
     "@vueuse/core": "^10.11.1",
     "@vueuse/motion": "^2.2.6",
     "core-js": "^3.37.1",
-    "husky": "^9.1.6",
     "lodash": "^4.17.21",
     "roboto-fontface": "*",
     "vue": "^3.4.31",
