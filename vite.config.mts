@@ -13,6 +13,11 @@ import Vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    minify: 'esbuild', // Use esbuild (faster) instead of terser for minification
+    cssCodeSplit: false, // Prevent splitting CSS to reduce overhead
+    sourcemap: false // Disable source maps
+  },
   plugins: [
     VueRouter({
       dts: 'src/typed-router.d.ts'

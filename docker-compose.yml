@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   vue-app:
     build:
@@ -11,14 +9,6 @@ services:
       - '443:443'
     restart: always
 
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 2073600; done'"
-    restart: always
-
   nginx:
     image: nginx:alpine
     volumes:
@@ -28,4 +18,12 @@ services:
     ports:
       - '80:80'
       - '443:443'
+    restart: always
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 2073600; done'"
     restart: always
