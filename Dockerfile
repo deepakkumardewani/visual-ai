@@ -1,5 +1,4 @@
 # Use Node.js to build the app
-
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package.json yarn.lock ./
