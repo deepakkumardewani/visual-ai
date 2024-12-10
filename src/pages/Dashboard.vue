@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import { definePage } from 'unplugin-vue-router/runtime'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import { useDisplay } from 'vuetify'
@@ -10,10 +9,6 @@ import Aside from '@/components/Aside/Aside.vue'
 import Tabs from '@/components/Header/Tabs.vue'
 import History from '@/components/History.vue'
 import ResultColumn from '@/components/ResultColumn.vue'
-
-// definePage({
-//   alias: ['/dashboard']
-// })
 
 const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)

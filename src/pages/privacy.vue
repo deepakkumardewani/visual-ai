@@ -1,10 +1,3 @@
-<script setup lang="ts">
-definePage({
-  alias: ['/privacy'],
-  name: 'privacy'
-})
-</script>
-
 <template>
   <div class="page">
     <!-- <div class="header">

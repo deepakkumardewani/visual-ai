@@ -1,17 +1,80 @@
-/**
- * router/index.ts
- *
- * Automatic routes for `./src/pages/*.vue`
- */
-// Composables
-import { setupLayouts } from 'virtual:generated-layouts'
+// src/router/index.js
 import { useUser } from 'vue-clerk'
-import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from 'vue-router/auto-routes'
+import { createRouter, createWebHistory } from 'vue-router'
+
+import Contact from '@/pages/contact.vue'
+import Dashboard from '@/pages/dashboard.vue'
+import Faqs from '@/pages/faqs.vue'
+import Home from '@/pages/home.vue'
+import Pricing from '@/pages/pricing.vue'
+import Privacy from '@/pages/privacy.vue'
+import Profile from '@/pages/profile.vue'
+import Refund from '@/pages/refund.vue'
+import Signin from '@/pages/signin.vue'
+import Signup from '@/pages/signup.vue'
+import Terms from '@/pages/terms.vue'
+
+const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile
+  },
+  {
+    path: '/faqs',
+    name: 'Faqs',
+    component: Faqs
+  },
+  {
+    path: '/pricing',
+    name: 'Pricing',
+    component: Pricing
+  },
+  {
+    path: '/signin',
+    name: 'Signin',
+    component: Signin
+  },
+  {
+    path: '/signup',
+    name: 'Signup',
+    component: Signup
+  },
+  {
+    path: '/terms',
+    name: 'Terms',
+    component: Terms
+  },
+  {
+    path: '/privacy',
+    name: 'Privacy',
+    component: Privacy
+  },
+  {
+    path: '/refund',
+    name: 'Refund',
+    component: Refund
+  },
+  {
+    path: '/contact',
+    name: 'Contact',
+    component: Contact
+  }
+]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routes)
+  history: createWebHistory(),
+  routes
 })
 
 router.beforeEach((to) => {

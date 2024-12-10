@@ -6,7 +6,9 @@ import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
 
+import AppFooter from '@/components/AppFooter.vue'
 import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue'
+import AppHeader from '@/components/Header/AppHeader.vue'
 
 import { PADDLE_PRODUCTS } from '@/utils/constants'
 
@@ -17,12 +19,19 @@ const { credits, isPro, hasJustSubscribed } = storeToRefs(userStore)
 const { tab } = storeToRefs(appStore)
 const route = useRoute()
 const router = useRouter()
-// watch(user, (value) => {
-// const referralCode = value?.publicMetadata?.referralCode
-// if (referralCode) {
-//   setLocal('referralCode', referralCode)
-// }
-// })
+
+const { isDark } = storeToRefs(useAppStore())
+const isHeaderVisible = computed(() => {
+  return route.path !== '/signin' && route.path !== '/login' && route.path !== '/signup'
+})
+const isFooterVisible = computed(() => {
+  return (
+    route.path !== '/signin' &&
+    route.path !== '/login' &&
+    route.path !== '/signup' &&
+    route.path !== '/dashboard'
+  )
+})
 
 function initializePaddle() {
   if (window.Paddle) {
@@ -61,7 +70,7 @@ onMounted(() => {
 })
 </script>
 <template>
-  <v-app>
+  <!-- <v-app>
     <v-main
       :class="{
         'tw-h-screen tw-overflow-y-hidden': route.path === '/dashboard' && tab === 1
@@ -70,7 +79,30 @@ onMounted(() => {
       <router-view />
       <ReferralDialog />
     </v-main>
+  </v-app> -->
+
+  <v-app :class="isDark ? 'dark-bg' : 'light-bg'">
+    <AppHeader v-if="isHeaderVisible" />
+    <v-main
+      :class="{
+        'tw-h-screen tw-overflow-y-hidden': route.path === '/dashboard' && tab === 1
+      }"
+    >
+      <router-view />
+      <ReferralDialog />
+    </v-main>
+    <div class="tw-relative tw-flex tw-py-1 tw-items-center">
+      <div class="tw-flex-grow tw-border-t tw-border-neutral-600"></div>
+    </div>
+    <AppFooter v-if="isFooterVisible" />
   </v-app>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.dark-bg {
+  background: linear-gradient(to bottom, #20112d, #19063a);
+}
+.light-bg {
+  background: linear-gradient(to bottom, #fafafa, #f4e9fb);
+}
+</style>

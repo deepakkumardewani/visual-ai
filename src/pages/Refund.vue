@@ -1,9 +1,4 @@
-<script setup lang="ts">
-definePage({
-  alias: ['/refund'],
-  name: 'refund'
-})
-</script>
+<script setup lang="ts"></script>
 <template>
   <div class="tw-max-w-4xl tw-mx-auto tw-p-8 tw-shadow-lg tw-rounded-lg">
     <h1 class="tw-text-4xl tw-font-bold tw-text-center tw-mb-8">Refund Policy</h1>

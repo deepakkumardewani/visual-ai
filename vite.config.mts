@@ -3,7 +3,6 @@ import { URL, fileURLToPath } from 'node:url'
 import AutoImport from 'unplugin-auto-import/vite'
 import Fonts from 'unplugin-fonts/vite'
 import Components from 'unplugin-vue-components/vite'
-import VueRouter from 'unplugin-vue-router/vite'
 // Utilities
 import { defineConfig } from 'vite'
 import Layouts from 'vite-plugin-vue-layouts'
@@ -19,9 +18,6 @@ export default defineConfig({
     sourcemap: false // Disable source maps
   },
   plugins: [
-    VueRouter({
-      dts: 'src/typed-router.d.ts'
-    }),
     Layouts(),
     AutoImport({
       imports: [

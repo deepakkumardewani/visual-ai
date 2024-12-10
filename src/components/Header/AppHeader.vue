@@ -10,7 +10,6 @@ import { useUserStore } from '@/stores/user'
 
 import CustomButton from '@/components/CustomButton.vue'
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue'
-// import PricingDialog from '@/components/Dialogs/PricingDialog.vue'
 import Coin from '@/components/Header/Coin.vue'
 import FeatureSelect from '@/components/Header/FeatureSelect.vue'
 import Logo from '@/components/Header/Logo.vue'
@@ -35,6 +34,7 @@ watch(credits, (newCredits) => {
 <template>
   <v-app-bar
     :elevation="0"
+    absolute
     :color="route.path === '/' ? 'transparent' : isDark ? '#3b0764' : '#a855f7'"
   >
     <v-row class="align-center">

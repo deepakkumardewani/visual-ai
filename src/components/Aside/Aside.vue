@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
 
 import { useAppStore } from '@/stores/app'
 
@@ -10,6 +11,12 @@ import UpscaleImageAside from './UpscaleImageAside.vue'
 
 const appStore = useAppStore()
 const { feature } = storeToRefs(appStore)
+
+const route = useRoute()
+
+onMounted(() => {
+  console.log(route)
+})
 </script>
 <template>
   <div

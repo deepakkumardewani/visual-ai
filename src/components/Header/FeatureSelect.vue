@@ -30,9 +30,9 @@ onMounted(() => {
       }
     } else {
       appStore.setFeature(feature.value.id)
-      // router.replace({
-      //   query: { feature: feature.value.name }
-      // })
+      router.replace({
+        query: { ...route.query, feature: feature.value.name }
+      })
     }
   }
 })

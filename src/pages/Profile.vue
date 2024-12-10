@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { definePage } from 'unplugin-vue-router/runtime'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -10,11 +9,6 @@ import Favorites from '@/components/Profile/Favorites.vue'
 import Payments from '@/components/Profile/Payments.vue'
 import Subscription from '@/components/Profile/Subscription.vue'
 import UserDetails from '@/components/Profile/UserDetails.vue'
-
-definePage({
-  alias: ['/profile'],
-  name: 'profile'
-})
 
 const route = useRoute()
 const router = useRouter()

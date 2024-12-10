@@ -201,7 +201,7 @@
     js-tokens "^4.0.0"
     picocolors "^1.0.0"
 
-"@babel/parser@^7.20.5", "@babel/parser@^7.23.0", "@babel/parser@^7.24.0", "@babel/parser@^7.24.6", "@babel/parser@^7.24.7", "@babel/parser@^7.24.8", "@babel/parser@^7.25.0", "@babel/parser@^7.25.3", "@babel/parser@^7.7.0":
+"@babel/parser@^7.20.5", "@babel/parser@^7.23.0", "@babel/parser@^7.24.7", "@babel/parser@^7.25.0", "@babel/parser@^7.25.3", "@babel/parser@^7.7.0":
   version "7.25.3"
   resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.25.3.tgz"
   integrity sha512-iLTJKDbJ4hMvFPgQwwsVoxtHyWpKKPBrxkANrSYewDPaPpT5py5yeVkgPIJ7XYXhndxJpaA3PyALSXQ7u8e/Dw==
@@ -1060,18 +1060,6 @@
     path-browserify "^1.0.1"
     vscode-uri "^3.0.8"
 
-"@vue-macros/common@^1.11.0":
-  version "1.12.2"
-  resolved "https://registry.npmjs.org/@vue-macros/common/-/common-1.12.2.tgz"
-  integrity sha512-+NGfhrPvPNOb3Wg9PNPEXPe0HTXmVe6XJawL1gi3cIjOSGIhpOdvmMT2cRuWb265IpA/PeL5Sqo0+DQnEDxLvw==
-  dependencies:
-    "@babel/types" "^7.25.0"
-    "@rollup/pluginutils" "^5.1.0"
-    "@vue/compiler-sfc" "^3.4.34"
-    ast-kit "^1.0.1"
-    local-pkg "^0.5.0"
-    magic-string-ast "^0.6.2"
-
 "@vue/compiler-core@3.4.37":
   version "3.4.37"
   resolved "https://registry.npmjs.org/@vue/compiler-core/-/compiler-core-3.4.37.tgz"
@@ -1091,7 +1079,7 @@
     "@vue/compiler-core" "3.4.37"
     "@vue/shared" "3.4.37"
 
-"@vue/compiler-sfc@3.4.37", "@vue/compiler-sfc@^3.4.34":
+"@vue/compiler-sfc@3.4.37":
   version "3.4.37"
   resolved "https://registry.npmjs.org/@vue/compiler-sfc/-/compiler-sfc-3.4.37.tgz"
   integrity sha512-vCfetdas40Wk9aK/WWf8XcVESffsbNkBQwS5t13Y/PcfqKfIwJX2gF+82th6dOpnpbptNMlMjAny80li7TaCIg==
@@ -1390,30 +1378,6 @@ arraybuffer.prototype.slice@^1.0.3:
     get-intrinsic "^1.2.3"
     is-array-buffer "^3.0.4"
     is-shared-array-buffer "^1.0.2"
-
-ast-kit@^0.12.1:
-  version "0.12.2"
-  resolved "https://registry.npmjs.org/ast-kit/-/ast-kit-0.12.2.tgz"
-  integrity sha512-es1zHFsnZ4Y4efz412nnrU3KvVAhgqy90a7Yt9Wpi5vQ3l4aYMOX0Qx4FD0elKr5ITEhiUGCSFcgGYf4YTuACg==
-  dependencies:
-    "@babel/parser" "^7.24.6"
-    pathe "^1.1.2"
-
-ast-kit@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/ast-kit/-/ast-kit-1.0.1.tgz"
-  integrity sha512-XdXKlmX3YIrGKJS7d324CAbswH+C1klMCIRQ4VRy0+iPxGeP2scVOoYd09/V6uGjGAi/ZuEwBLzT7xBerSKNQg==
-  dependencies:
-    "@babel/parser" "^7.24.8"
-    pathe "^1.1.2"
-
-ast-walker-scope@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.npmjs.org/ast-walker-scope/-/ast-walker-scope-0.6.1.tgz"
-  integrity sha512-0ZdQEsSfH3mX4BFbRCc3xOBjx5bDbm73+aAdQOHerPQNf8K0XFMAv79ucd2BpnSc4UMyvBDixiroT8yjm2Y6bw==
-  dependencies:
-    "@babel/parser" "^7.24.0"
-    ast-kit "^0.12.1"
 
 autoprefixer@^10.4.20:
   version "10.4.20"
@@ -2720,10 +2684,10 @@ human-signals@^5.0.0:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-5.0.0.tgz#42665a284f9ae0dade3ba41ebc37eb4b852f3a28"
   integrity sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==
 
-husky@^9.1.6:
-  version "9.1.6"
-  resolved "https://registry.yarnpkg.com/husky/-/husky-9.1.6.tgz#e23aa996b6203ab33534bdc82306b0cf2cb07d6c"
-  integrity sha512-sqbjZKK7kf44hfdE94EoX8MZNk0n7HeW37O4YrVGCF4wzgQjp+akPAkfUK5LZ6KuR/6sqeAVuXHji+RzQgOn5A==
+husky@^8.0.0:
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/husky/-/husky-8.0.3.tgz#4936d7212e46d1dea28fef29bb3a108872cd9184"
+  integrity sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==
 
 ignore@^5.1.1, ignore@^5.2.0, ignore@^5.2.4, ignore@^5.3.1:
   version "5.3.1"
@@ -3109,13 +3073,6 @@ lru-cache@^5.1.1:
   integrity sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
   dependencies:
     yallist "^3.0.2"
-
-magic-string-ast@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.npmjs.org/magic-string-ast/-/magic-string-ast-0.6.2.tgz"
-  integrity sha512-oN3Bcd7ZVt+0VGEs7402qR/tjgjbM7kPlH/z7ufJnzTLVBzXJITRHOJiwMmmYMgZfdoWQsfQcY+iKlxiBppnMA==
-  dependencies:
-    magic-string "^0.30.10"
 
 magic-string@^0.30.0:
   version "0.30.12"
@@ -4306,25 +4263,6 @@ unplugin-vue-components@^0.27.2:
     mlly "^1.7.1"
     unplugin "^1.11.0"
 
-unplugin-vue-router@^0.10.0:
-  version "0.10.2"
-  resolved "https://registry.npmjs.org/unplugin-vue-router/-/unplugin-vue-router-0.10.2.tgz"
-  integrity sha512-aG1UzB96cu4Lu+EdQxl22NIKFrde5b+k568JdsaJ2gzPqnQufPk2j1gCA5DxFfGz9zg4tYTqy2A2JHForVbyXg==
-  dependencies:
-    "@babel/types" "^7.25.2"
-    "@rollup/pluginutils" "^5.1.0"
-    "@vue-macros/common" "^1.11.0"
-    ast-walker-scope "^0.6.1"
-    chokidar "^3.6.0"
-    fast-glob "^3.3.2"
-    json5 "^2.2.3"
-    local-pkg "^0.5.0"
-    mlly "^1.7.1"
-    pathe "^1.1.2"
-    scule "^1.3.0"
-    unplugin "^1.12.0"
-    yaml "^2.5.0"
-
 unplugin@^1.11.0, unplugin@^1.12.0, unplugin@^1.3.1:
   version "1.12.1"
   resolved "https://registry.npmjs.org/unplugin/-/unplugin-1.12.1.tgz"
@@ -4572,7 +4510,7 @@ yaml@^1.10.0:
   resolved "https://registry.npmjs.org/yaml/-/yaml-1.10.2.tgz"
   integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
 
-yaml@^2.3.4, yaml@^2.5.0:
+yaml@^2.3.4:
   version "2.5.0"
   resolved "https://registry.npmjs.org/yaml/-/yaml-2.5.0.tgz"
   integrity sha512-2wWLbGbYDiSqqIKoPjar3MPgB94ErzCtrNE1FdqGuaO0pi2JGjmE8aW8TDZwzU7vuxcGRdL/4gPQwQ7hD5AMSw==
