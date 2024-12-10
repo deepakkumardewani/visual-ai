@@ -11,9 +11,9 @@ import Tabs from '@/components/Header/Tabs.vue'
 import History from '@/components/History.vue'
 import ResultColumn from '@/components/ResultColumn.vue'
 
-definePage({
-  alias: ['/dashboard']
-})
+// definePage({
+//   alias: ['/dashboard']
+// })
 
 const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
