@@ -7,7 +7,7 @@ import FAQ from '@/components/FAQ.vue'
 
 import { PRICING_FAQS } from '@/utils/constants'
 
-import Pricing from '@/pages/pricing.vue'
+import Pricing from '@/pages/Pricing.vue'
 
 const dialogStore = useDialogStore()
 const { showPricingDialog } = storeToRefs(dialogStore)

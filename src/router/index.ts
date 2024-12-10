@@ -2,17 +2,17 @@
 import { useUser } from 'vue-clerk'
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Contact from '@/pages/contact.vue'
-import Dashboard from '@/pages/dashboard.vue'
-import Faqs from '@/pages/faqs.vue'
-import Home from '@/pages/home.vue'
-import Pricing from '@/pages/pricing.vue'
-import Privacy from '@/pages/privacy.vue'
-import Profile from '@/pages/profile.vue'
-import Refund from '@/pages/refund.vue'
-import Signin from '@/pages/signin.vue'
-import Signup from '@/pages/signup.vue'
-import Terms from '@/pages/terms.vue'
+import Contact from '@/pages/Contact.vue'
+import Dashboard from '@/pages/Dashboard.vue'
+import Faqs from '@/pages/FAQS.vue'
+import Home from '@/pages/Home.vue'
+import Pricing from '@/pages/Pricing.vue'
+import Privacy from '@/pages/Privacy.vue'
+import Profile from '@/pages/Profile.vue'
+import Refund from '@/pages/Refund.vue'
+import Signin from '@/pages/Signin.vue'
+import Signup from '@/pages/Signup.vue'
+import Terms from '@/pages/Terms.vue'
 
 const routes = [
   {
