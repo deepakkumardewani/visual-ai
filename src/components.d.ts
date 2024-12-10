@@ -7,10 +7,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    2: typeof import('./components/icons/sizes/IconSquare copy 2.vue')['default']
-    3: typeof import('./components/icons/sizes/IconSquare copy 3.vue')['default']
-    4: typeof import('./components/icons/sizes/IconSquare copy 4.vue')['default']
-    5: typeof import('./components/icons/sizes/IconSquare copy 5.vue')['default']
     About: typeof import('./components/Home/About.vue')['default']
     Accordion: typeof import('./components/Accordion.vue')['default']
     AIImageAside: typeof import('./components/Aside/AIImageAside.vue')['default']
@@ -92,7 +88,7 @@ declare module 'vue' {
     MiniGallery: typeof import('./components/Home/MiniGallery.vue')['default']
     Payments: typeof import('./components/Profile/Payments.vue')['default']
     PremiumDialog: typeof import('./components/Dialogs/PremiumDialog.vue')['default']
-    Pricing: typeof import('./pages/Pricing.vue')['default']
+    Pricing: typeof import('./pages/pricing.vue')['default']
     PricingCard: typeof import('./components/PricingCard.vue')['default']
     PricingDialog: typeof import('./components/Dialogs/PricingDialog.vue')['default']
     ReferralCopyDialog: typeof import('./components/Dialogs/ReferralCopyDialog.vue')['default']

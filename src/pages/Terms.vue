@@ -1,8 +1,7 @@
 <script setup lang="ts">
-definePage({
-  alias: ['/terms'],
-  name: 'terms'
-})
+// definePage({
+//   alias: ['/terms']
+// })
 </script>
 <template>
   <div class="tw-max-w-5xl tw-mx-auto tw-p-8 tw-shadow-lg tw-rounded-lg">
