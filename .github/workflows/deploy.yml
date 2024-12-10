@@ -12,15 +12,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Install SSH Key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/github_actions
+          chmod 600 ~/.ssh/github_actions
+          ssh-keyscan -H ${{ secrets.DROPLET_IP }} >> ~/.ssh/known_hosts
+      # - name: Install SSH Key
+      #   uses: webfactory/ssh-agent@v0.5.3
+      #   with:
+      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Build and Deploy Docker Image
         run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} root@159.89.45.226 << 'EOF'
+          ssh root@159.89.45.226 << EOF
           # Ensure Docker is installed
           if ! [ -x "$(command -v docker)" ]; then
             apt-get update
