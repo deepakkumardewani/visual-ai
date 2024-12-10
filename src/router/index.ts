@@ -4,8 +4,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Contact from '@/pages/Contact.vue'
 import Dashboard from '@/pages/Dashboard.vue'
-import Faqs from '@/pages/FAQS.vue'
-import Home from '@/pages/Home.vue'
+import Faqs from '@/pages/Frequent.vue'
+import Landing from '@/pages/Landing.vue'
 import Pricing from '@/pages/Pricing.vue'
 import Privacy from '@/pages/Privacy.vue'
 import Profile from '@/pages/Profile.vue'
@@ -17,8 +17,8 @@ import Terms from '@/pages/Terms.vue'
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Landing',
+    component: Landing
   },
   {
     path: '/dashboard',

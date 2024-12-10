@@ -5,7 +5,7 @@
  */
 // Styles
 import '@fortawesome/fontawesome-free/css/all.css'
-import '@mdi/font/css/materialdesignicons.css'
+// import '@mdi/font/css/materialdesignicons.css'
 // Composables
 import { IconAliases, createVuetify } from 'vuetify'
 // Ensure your project is capable of handling css files
