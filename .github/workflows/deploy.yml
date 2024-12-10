@@ -20,7 +20,7 @@ jobs:
 
       - name: Build and Deploy Docker Image
         run: |
-          ssh root@159.89.45.226 << 'EOF'
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} root@159.89.45.226 << 'EOF'
           # Ensure Docker is installed
           if ! [ -x "$(command -v docker)" ]; then
             apt-get update
