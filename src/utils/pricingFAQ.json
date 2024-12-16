@@ -18,9 +18,5 @@
   {
     "question": "How do I pay for the service?",
     "answer": "You can pay for the service using a credit card."
-  },
-  {
-    "question": "How do models work?",
-    "answer": "At Visual AI, we believe in versatility. Our platform isn't restricted to a single generalised model; instead, we have an assortment of both general and finely-tuned models, each crafted to excel in various types of content generation. This variety lets users go beyond a one-size-fits-all approach and select the model that best suits their specific image type or use case<br>To provide even greater customisation, we offer the option for users to train/fine-tune their own models. Users can upload a small collection of images (typically 10-20) to train a unique model that recreates a specific style, theme, or subject. This fine-tuning process can pick up nuanced aspects, like colour patterns, composition, and even aesthetic concepts, resulting in style-consistent image generation<br>Remember, these models aren't restricted to any specific field. From art and design to gaming and beyond, our models can cater to just about any creative pursuit."
   }
 ]

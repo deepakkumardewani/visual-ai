@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Ref, ref } from 'vue'
+import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 
 const textToImageVideo = ref<HTMLVideoElement | undefined>(undefined)
@@ -13,8 +13,15 @@ interface Feature {
   description: string
   url: string
   ref: string
-  videoRef: Ref<HTMLVideoElement | undefined>
   icon: string
+}
+
+const playVideo = (video: HTMLVideoElement | undefined) => {
+  if (Array.isArray(video)) {
+    video[0]?.play()
+  } else {
+    video?.play()
+  }
 }
 
 const features = ref<Feature[]>([
@@ -23,7 +30,6 @@ const features = ref<Feature[]>([
     description: 'Transform your ideas into stunning images with our advanced AI',
     url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/owrcv8j8uo1p9nhlxeh2.mp4',
     ref: 'textToImageVideo',
-    videoRef: textToImageVideo,
     icon: 'fa-solid fa-wand-magic-sparkles'
   },
   {
@@ -31,7 +37,6 @@ const features = ref<Feature[]>([
     description: 'Enhance image quality and resolution without losing details',
     url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/x9zn6em8ylbyqhdn8mki.mp4',
     ref: 'upscaleVideo',
-    videoRef: upscaleVideo,
     icon: 'fa-solid fa-expand'
   },
   {
@@ -39,7 +44,6 @@ const features = ref<Feature[]>([
     description: 'Bring black and white images to life with vibrant colors',
     url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915531/videos/yh5jyyyc0zsm5pnuq4k3.mp4',
     ref: 'colorizeVideo',
-    videoRef: colorizeVideo,
     icon: 'fa-solid fa-palette'
   },
   {
@@ -47,7 +51,6 @@ const features = ref<Feature[]>([
     description: 'Repair and enhance old or damaged photos',
     url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/fvxprtyuurm49silhq1i.mp4',
     ref: 'restoreVideo',
-    videoRef: restoreVideo,
     icon: 'fa-solid fa-clock-rotate-left'
   }
 ])
@@ -56,8 +59,13 @@ const features = ref<Feature[]>([
 <template>
   <div id="features" class="tw-relative">
     <div class="tw-text-center tw-mt-8 tw-py-2 tw-top-0 tw-z-10 tw-bg-background">
-      <v-chip class="tw-mb-3 md:tw-mb-4" color="purple-lighten-2" label>Features</v-chip>
-      <div class="tw-text-3xl md:tw-text-4xl lg:tw-text-5xl font-weight-bold tw-mb-4">
+      <v-chip v-motion-pop-visible-once class="tw-mb-3 md:tw-mb-4" color="purple-lighten-2" label
+        >Features</v-chip
+      >
+      <div
+        v-motion-pop-visible-once
+        class="tw-text-3xl md:tw-text-4xl lg:tw-text-5xl font-weight-bold tw-mb-4"
+      >
         What We Offer
       </div>
     </div>
@@ -83,6 +91,7 @@ const features = ref<Feature[]>([
           </v-chip>
 
           <p
+            v-motion-slide-visible-left
             class="text-subtitle-1 text-medium-emphasis tw-mb-4 md:tw-mb-6 tw-text-sm md:tw-text-base"
           >
             {{ feature.description }}
@@ -101,12 +110,15 @@ const features = ref<Feature[]>([
               rotateX: 0,
               transition: {
                 onComplete: () => {
-                  console.log('feature.videoRef', Array.isArray(feature.videoRef), feature.videoRef)
-                  if (Array.isArray(feature.videoRef)) {
-                    feature.videoRef[0]?.play()
-                  } else {
-                    feature.videoRef?.play()
-                  }
+                  playVideo(
+                    feature.ref === 'textToImageVideo'
+                      ? textToImageVideo
+                      : feature.ref === 'upscaleVideo'
+                        ? upscaleVideo
+                        : feature.ref === 'colorizeVideo'
+                          ? colorizeVideo
+                          : restoreVideo
+                  )
                 }
               }
             }"

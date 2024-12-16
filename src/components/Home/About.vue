@@ -13,13 +13,18 @@ const aboutImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/about.jpg`
     <v-row class="tw-justify-center">
       <v-col cols="12" md="8" class="tw-px-4 md:tw-px-8">
         <div class="tw-flex tw-flex-col tw-justify-center tw-items-center">
-          <v-chip class="my-2" color="purple-lighten-2" label> About </v-chip>
-          <div class="text-h4 font-weight-bold my-4 tw-text-center">
+          <v-chip v-motion-pop-visible-once class="my-2" color="purple-lighten-2" label>
+            About
+          </v-chip>
+          <div v-motion-slide-visible-left class="text-h4 font-weight-bold my-4 tw-text-center">
             <span class="tw-text-2xl md:tw-text-4xl">
               Unleash the Power of AI Image Generation
             </span>
           </div>
-          <div class="my-4 tw-text-lg md:tw-text-xl tw-px-2 md:tw-px-0">
+          <div
+            v-motion-slide-visible-right
+            class="my-4 tw-text-lg md:tw-text-xl tw-px-2 md:tw-px-0"
+          >
             <p class="tw-text-center">
               Our AI-powered image generator uses advanced deep learning models to transform your
               text into stunning, high-quality visuals. By leveraging the latest advancements in

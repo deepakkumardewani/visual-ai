@@ -5,6 +5,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Contact from '@/pages/Contact.vue'
 import Dashboard from '@/pages/Dashboard.vue'
 import Faqs from '@/pages/Frequent.vue'
+import Gallery from '@/pages/Gallery.vue'
 import Landing from '@/pages/Landing.vue'
 import Pricing from '@/pages/Pricing.vue'
 import Privacy from '@/pages/PrivacyPolicy.vue'
@@ -69,6 +70,11 @@ const routes = [
     path: '/contact',
     name: 'Contact',
     component: Contact
+  },
+  {
+    path: '/gallery',
+    name: 'Gallery',
+    component: Gallery
   }
 ]
 

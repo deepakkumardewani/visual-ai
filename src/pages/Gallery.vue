@@ -1,21 +1,27 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 
 import type { GalleryImage } from '@/types'
 
+import { useAppStore } from '@/stores/app'
+
 import gallery from '@/utils/gallery.json'
 
+const appStore = useAppStore()
+const { isDark } = storeToRefs(appStore)
 const images = ref<GalleryImage[]>([])
 const dialog = ref(false)
 const selectedImage = ref<GalleryImage | null>(null)
 // const hoverTimeout = ref<number | null>(null)
 const dialogOrigin = ref({ x: 0, y: 0, width: 0, height: 0 })
 // const isHovering = ref(false)
-const dialogWidth = ref('auto')
-const dialogHeight = ref('auto')
+// const dialogWidth = ref('90vw')
+// const dialogHeight = ref('90vh')
 
 onMounted(async () => {
   images.value = gallery
+  // console.log('images', images.value)
 })
 
 const openDialog = (image: GalleryImage, event?: MouseEvent) => {
@@ -30,10 +36,6 @@ const openDialog = (image: GalleryImage, event?: MouseEvent) => {
       height: rect.height
     }
   }
-  const screenHeight = window.innerHeight * 0.8
-  const aspectRatio = Number(image.aspectRatio) || 1
-  dialogHeight.value = `${screenHeight}px`
-  dialogWidth.value = `${screenHeight * aspectRatio}px`
   dialog.value = true
 }
 
@@ -62,9 +64,9 @@ const handleClickOutside = (e: MouseEvent) => {
 </script>
 
 <template>
-  <v-container fluid class="tw-bg-black">
-    <div class="tw-columns-1 md:tw-columns-2 lg:tw-columns-3 xl:tw-columns-4 tw-gap-4">
-      <div v-for="(image, index) in images" :key="index" class="tw-mb-4">
+  <v-container fluid :class="isDark ? 'tw-bg-black' : 'tw-bg-white'">
+    <div class="tw-columns-2 lg:tw-columns-3 xl:tw-columns-4 tw-gap-2 sm:tw-gap-4">
+      <div v-for="(image, index) in images" :key="index" class="tw-mb-2 sm:tw-mb-4">
         <v-card
           @click="(e) => openDialog(image, e)"
           class="tw-cursor-pointer hover:tw-shadow-lg tw-transition-shadow tw-relative"
@@ -90,8 +92,7 @@ const handleClickOutside = (e: MouseEvent) => {
 
     <v-dialog
       v-model="dialog"
-      :width="dialogWidth"
-      :height="dialogHeight"
+      fullscreen
       transition="dialog-transition"
       :retain-focus="false"
       class="gallery-dialog"
@@ -101,21 +102,41 @@ const handleClickOutside = (e: MouseEvent) => {
     >
       <v-card
         v-if="selectedImage"
-        class="tw-relative tw-bg-transparent tw-shadow-none tw-p-4"
+        class="tw-relative tw-bg-transparent tw-shadow-none tw-h-full"
         elevation="0"
       >
-        <div class="tw-h-full tw-relative tw-group tw-p-4">
-          <v-img
-            :src="selectedImage.url"
-            :alt="selectedImage.prompt"
-            class="tw-h-full tw-w-full tw-object-contain"
-            :aspect-ratio="selectedImage.aspectRatio"
-          />
+        <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-h-full tw-p-6">
+          <div class="tw-relative tw-w-full tw-max-w-7xl tw-mx-auto">
+            <!-- Close button -->
+            <v-btn
+              icon
+              variant="text"
+              class="tw-absolute tw-right-4 tw-top-4 tw-z-10"
+              size="small"
+              @click="dialog = false"
+            >
+              <v-icon icon="fas fa-close" />
+            </v-btn>
 
-          <div class="prompt-overlay tw-opacity-0 group-hover:tw-opacity-100 tw-transition-opacity">
-            <p class="tw-text-white tw-text-center tw-p-4 tw-text-lg">
-              {{ selectedImage.prompt }}
-            </p>
+            <!-- Image container -->
+            <div class="tw-bg-black/20 tw-backdrop-blur-sm tw-rounded-lg tw-p-4">
+              <v-img
+                :src="selectedImage.url"
+                :alt="selectedImage.prompt"
+                class="tw-max-h-[80vh] tw-w-auto tw-mx-auto tw-rounded-lg"
+                :aspect-ratio="selectedImage.aspectRatio"
+                contain
+              />
+
+              <!-- Prompt text -->
+              <div class="tw-mt-4">
+                <p
+                  class="tw-text-white tw-text-center tw-p-4 tw-text-lg tw-bg-black/50 tw-rounded-lg"
+                >
+                  {{ selectedImage.prompt }}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </v-card>
@@ -146,12 +167,7 @@ const handleClickOutside = (e: MouseEvent) => {
 }
 
 .prompt-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-  padding: 2rem 1rem 1rem;
+  display: none;
 }
 
 @keyframes fadeIn {
@@ -189,8 +205,8 @@ const handleClickOutside = (e: MouseEvent) => {
 }
 
 .gallery-dialog :deep(.v-overlay__content) {
-  border-radius: 8px;
-  overflow: hidden;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
 }
 
 .gallery-dialog :deep(.v-card) {
@@ -198,8 +214,20 @@ const handleClickOutside = (e: MouseEvent) => {
   background: transparent !important;
 }
 
-.gallery-dialog :deep(.v-overlay__scrim) {
-  background: rgba(0, 0, 0, 0.9) !important;
-  backdrop-filter: blur(5px);
+:deep(.dialog-transition-enter-active),
+:deep(.dialog-transition-leave-active) {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:deep(.dialog-transition-enter-from),
+:deep(.dialog-transition-leave-to) {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+:deep(.dialog-transition-enter-to),
+:deep(.dialog-transition-leave-from) {
+  opacity: 1;
+  transform: scale(1);
 }
 </style>

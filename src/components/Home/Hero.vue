@@ -53,7 +53,7 @@ const scrollToAbout = () => {
               :duration="600"
               class="tw-text-6xl md:tw-text-8xl lg:tw-text-7xl tw-font-bold tw-text-slate-900 dark:tw-text-neutral-100 text-center"
             >
-              Bring Images to Lifeeeee
+              Bring Images to Life
             </div>
             <div
               v-motion

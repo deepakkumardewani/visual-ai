@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { useAppStore } from '@/stores/app'
 
 const route = useRoute()
 const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
+const router = useRouter()
 
 const currentYear = computed(() => new Date().getFullYear())
 
@@ -30,9 +31,16 @@ const footerLinks = [
       <div class="tw-flex tw-flex-col md:tw-flex-row tw-items-center tw-justify-between tw-w-full">
         <!-- Copyright Section -->
         <div class="tw-text-gray-400 tw-text-sm tw-mb-4 md:tw-mb-0">
-          <span>&copy; {{ currentYear }} Visual AI</span>
-          <span class="tw-hidden md:tw-inline-block tw-mx-2">|</span>
-          <span class="tw-hidden md:tw-inline-block">All rights reserved</span>
+          <div>
+            &copy; {{ currentYear }}
+            <span
+              @click="router.push('/')"
+              class="tw-cursor-pointer tw-bg-gradient-to-r dark:tw-from-purple-400 dark:tw-to-purple-600 tw-from-purple-900 tw-to-purple-800 tw-bg-clip-text tw-text-transparent"
+              >Visual AI</span
+            >
+            <span class="tw-hidden md:tw-inline-block tw-mx-2">|</span>
+            <span class="tw-hidden md:tw-inline-block">All rights reserved</span>
+          </div>
         </div>
 
         <!-- Navigation Links -->

@@ -26,10 +26,13 @@ const handleBuyCredits = () => {
 <template>
   <v-dialog v-model="dialogStore.showLowCreditsDialog" max-width="500">
     <v-card class="tw-p-6">
-      <v-card-title class="tw-text-center tw-mb-4">
-        <v-icon icon="$coin" color="warning" size="large" class="tw-mr-2" />
-        <span class="tw-text-xl tw-font-semibold">Low Credits Alert</span>
-      </v-card-title>
+      <div class="tw-flex tw-justify-between tw-items-center tw-mb-4">
+        <v-card-title class="tw-flex tw-items-center !tw-p-0">
+          <v-icon icon="$coin" color="warning" size="large" class="tw-mr-2" />
+          <span class="tw-text-xl tw-font-semibold">Low Credits Alert</span>
+        </v-card-title>
+        <v-btn icon="fas fa-xmark" variant="text" size="small" @click="closeDialog" />
+      </div>
 
       <v-card-text class="tw-text-center">
         <p class="tw-mb-4">
@@ -41,7 +44,7 @@ const handleBuyCredits = () => {
         </div>
       </v-card-text>
 
-      <v-card-actions class="tw-flex tw-justify-center tw-gap-4">
+      <v-card-actions>
         <v-btn color="primary" @click="handleNavigateToPricing" prepend-icon="fas fa-crown">
           Upgrade Plan
         </v-btn>

@@ -85,7 +85,7 @@ onMounted(() => {
     <AppHeader v-if="isHeaderVisible" />
     <v-main
       :class="{
-        'tw-h-screen tw-overflow-y-hidden': route.path === '/dashboard' && tab === 1
+        'tw-h-[98vh] tw-overflow-y-hidden': route.path === '/dashboard' && tab === 1
       }"
     >
       <router-view />

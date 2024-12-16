@@ -9,10 +9,10 @@ defineProps({
 })
 </script>
 <template>
-  <div class="text-h3 tw-text-center ma-8">Frequently Asked Questions</div>
+  <div class="tw-text-center tw-text-2xl sm:tw-text-4xl tw-my-8">Frequently Asked Questions</div>
 
   <v-row justify="center">
-    <v-col cols="12" sm="8">
+    <v-col cols="10" sm="8">
       <Accordion
         v-for="(faq, index) in faqs"
         :key="index"

@@ -31,10 +31,16 @@ const showImageDetails = (img: any) => {
           >
             Gallery
           </v-chip>
-          <h2 class="text-h3 font-weight-bold tw-mb-4 text-center">
+          <h2
+            v-motion-slide-visible-once-left
+            class="tw-text-3xl sm:tw-text-4xl font-weight-bold tw-mb-4 text-center"
+          >
             Explore Our Creative Collection
           </h2>
-          <p class="text-body-1 text-medium-emphasis text-center tw-max-w-2xl tw-mb-6">
+          <p
+            v-motion-slide-visible-once-right
+            class="text-body-1 text-medium-emphasis text-center tw-max-w-2xl tw-mb-6"
+          >
             Discover a world of AI-generated masterpieces created by our community. Get inspired and
             see what's possible with our technology.
           </p>
@@ -126,7 +132,7 @@ const showImageDetails = (img: any) => {
                     </v-row>
                   </template>
                 </v-img>
-                <v-card-text>
+                <v-card-text class="tw-bg-purple-900/50">
                   <p class="text-body-2">{{ img.prompt }}</p>
                 </v-card-text>
               </v-card>

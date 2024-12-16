@@ -5,9 +5,9 @@ import { useRoute } from 'vue-router'
 import { useDisplay } from 'vuetify'
 
 import { useAppStore } from '@/stores/app'
-import { useDialogStore } from '@/stores/dialog'
-import { useUserStore } from '@/stores/user'
 
+// import { useDialogStore } from '@/stores/dialog'
+// import { useUserStore } from '@/stores/user'
 import CustomButton from '@/components/CustomButton.vue'
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue'
 import Coin from '@/components/Header/Coin.vue'
@@ -18,18 +18,18 @@ import ThemeButton from '@/components/Header/ThemeButton.vue'
 import UserMenu from '@/components/Header/UserMenu.vue'
 
 const { smAndUp } = useDisplay()
-const userStore = useUserStore()
-const { credits } = storeToRefs(userStore)
-const dialogStore = useDialogStore()
+// const userStore = useUserStore()
+// const { credits } = storeToRefs(userStore)
+// const dialogStore = useDialogStore()
 const route = useRoute()
 const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
 
-watch(credits, (newCredits) => {
-  if (newCredits < 5) {
-    dialogStore.showLowCredits()
-  }
-})
+// watch(credits, (newCredits) => {
+//   if (newCredits < 30) {
+//     dialogStore.showLowCredits()
+//   }
+// })
 </script>
 <template>
   <v-app-bar

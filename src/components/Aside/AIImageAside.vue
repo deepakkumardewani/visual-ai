@@ -42,7 +42,7 @@ const isTyping = ref(false)
 const noOfOutputs = ref<number>(1)
 const outputQuality = ref<number>(0)
 const aspectRatio = ref<any>(ASPECT_RATIOS[0])
-const outputFormat = ref<string>('JPG')
+const outputFormat = ref<any>(IMAGE_FORMATS[0])
 const menu = ref(false)
 const textAreaFocused = ref(false)
 const mode = ref<Mode>(FLUX_MODES[0])
@@ -54,8 +54,8 @@ const disableModifyVariations = computed(() => {
 function handleSelected(item: Mode) {
   if (!isPro.value && item.isPro) {
     mode.value = FLUX_MODES[1]
-    router.push('/profile?tab=subscription')
-    dialogStore.showPricing()
+    router.push('/pricing')
+    // dialogStore.showPricing()
   } else {
     mode.value = item
     if (item.id === MODEL_IDS.FLUX_PRO || item.id === MODEL_IDS.FLUX_1_1_PRO) {
@@ -67,9 +67,18 @@ function handleSelected(item: Mode) {
 function handleSizeSelected(item: any) {
   if (!isPro.value && item.isPro) {
     aspectRatio.value = ASPECT_RATIOS[0]
-    dialogStore.showPricing()
+    router.push('/pricing')
   } else {
     aspectRatio.value = item
+  }
+}
+
+function handleFormatSelected(item: any) {
+  if (!isPro.value && item.isPro) {
+    outputFormat.value = IMAGE_FORMATS[0].title
+    router.push('/pricing')
+  } else {
+    outputFormat.value = item
   }
 }
 
@@ -139,7 +148,7 @@ function handleImageVariations(type: string) {
   } else {
     if (noOfOutputs.value === 2) {
       if (!isPro.value) {
-        dialogStore.showPricing()
+        router.push('/pricing')
       } else {
         noOfOutputs.value = 4
       }
@@ -157,7 +166,7 @@ function focusTextArea(event: any) {
 watch(outputQuality, (newVal) => {
   if (!isPro.value && newVal === 1) {
     outputQuality.value = 0
-    dialogStore.showPricing()
+    router.push('/pricing')
   }
 })
 
@@ -222,14 +231,20 @@ onMounted(() => {
                   <Heading title="Size" />
                   <v-select
                     :items="ASPECT_RATIOS"
-                    item-title="title"
+                    v-model="aspectRatio"
+                    :color="isDark ? '#9333ea' : '#6b21a8'"
                     density="compact"
                     variant="outlined"
                     hide-details
-                    v-model="aspectRatio"
+                    item-title="title"
+                    return-object
+                    @update:model-value="handleSizeSelected"
                   >
                     <template v-slot:item="{ props, item }">
-                      <v-list-item v-bind="props">
+                      <v-list-item v-bind="props" width="250">
+                        <template v-slot:append>
+                          <v-icon v-if="!isPro && item.raw.isPro" size="x-small" icon="$star" />
+                        </template>
                         <template v-slot:title>
                           <div class="tw-flex tw-gap-3 tw-items-start tw-justify-start">
                             <div>
@@ -261,16 +276,19 @@ onMounted(() => {
                   <Heading title="Format" />
                   <v-select
                     :items="IMAGE_FORMATS"
-                    item-title="title"
+                    v-model="outputFormat"
                     density="compact"
                     variant="outlined"
+                    item-title="title"
                     hide-details
-                    v-model="outputFormat"
+                    :color="isDark ? '#9333ea' : '#6b21a8'"
+                    return-object
+                    @update:model-value="handleFormatSelected"
                   >
                     <template v-slot:item="{ props, item }">
-                      <v-list-item :disabled="item.raw.isPro" v-bind="props">
+                      <v-list-item v-bind="props">
                         <template v-slot:append>
-                          <v-icon v-if="item.raw.isPro" size="x-small" icon="$star" />
+                          <v-icon v-if="!isPro && item.raw.isPro" size="x-small" icon="$star" />
                         </template>
                       </v-list-item>
                     </template>
@@ -284,14 +302,16 @@ onMounted(() => {
                   <Heading title="Image Quality" />
                   <v-btn-toggle
                     v-model="outputQuality"
-                    density="compact"
                     mandatory
                     variant="outlined"
+                    density="compact"
+                    block
+                    divided
                   >
                     <v-btn :color="isDark ? '#9333ea' : '#6b21a8'"> SD </v-btn>
                     <v-btn :color="isDark ? '#9333ea' : '#6b21a8'"
                       >HD
-                      <template v-slot:append>
+                      <template v-if="!isPro" v-slot:append>
                         <v-icon size="x-small" icon="$star" />
                       </template>
                     </v-btn>
@@ -301,18 +321,31 @@ onMounted(() => {
                   <Heading title="Variations" />
 
                   <div
-                    class="tw-flex tw-justify-between tw-items-center border-thin tw-rounded tw-h-[36px]"
+                    class="tw-flex tw-justify-between tw-items-center tw-border tw-border-neutral-500 tw-rounded tw-h-[36px]"
                   >
+                    <div class="tw-flex-1 tw-mb-1 tw-justify-center tw-text-center">
+                      <v-icon size="small" :icon="isDark ? '$layersDark' : '$layers'" />
+                    </div>
                     <div class="tw-flex-1 tw-text-center">
-                      <v-btn variant="text" @click="handleImageVariations('subtract')">
+                      <v-btn
+                        size="small"
+                        :disabled="disableModifyVariations"
+                        variant="text"
+                        @click="handleImageVariations('subtract')"
+                      >
                         <v-icon icon="fa:fas fa-minus" />
                       </v-btn>
                     </div>
                     <div class="tw-flex-1 tw-text-center">
-                      <span class="tw-text-lg tw-font-semibold">{{ noOfOutputs }}</span>
+                      <span class="tw-text-lg">{{ noOfOutputs }}</span>
                     </div>
                     <div class="tw-flex-1 tw-text-center">
-                      <v-btn variant="text" @click="handleImageVariations('add')">
+                      <v-btn
+                        size="small"
+                        :disabled="disableModifyVariations"
+                        variant="text"
+                        @click="handleImageVariations('add')"
+                      >
                         <v-icon icon="fa:fas fa-plus" />
                       </v-btn>
                     </div>
@@ -485,12 +518,14 @@ onMounted(() => {
           <Heading title="Format" />
           <v-select
             :items="IMAGE_FORMATS"
-            item-title="title"
+            v-model="outputFormat"
             density="compact"
             variant="outlined"
+            item-title="title"
             hide-details
             :color="isDark ? '#9333ea' : '#6b21a8'"
-            v-model="outputFormat"
+            return-object
+            @update:model-value="handleFormatSelected"
           >
             <template v-slot:item="{ props, item }">
               <v-list-item v-bind="props">
