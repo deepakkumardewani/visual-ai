@@ -18,7 +18,7 @@ export const useUserStore = defineStore('user', () => {
     credits.value = value
   }
   async function getUserDetails() {
-    const url = `users/${userId.value}`
+    const url = `/users/${userId.value}`
     const { error, data: userData } = await useFetch(url, {
       method: 'GET',
       headers: {

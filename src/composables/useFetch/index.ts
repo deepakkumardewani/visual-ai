@@ -14,7 +14,6 @@ export const useFetch = createFetch({
       options.headers = {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
-        'X-Requested-With': 'XMLHttpRequest',
         ...options.headers
       }
       return {

@@ -2,10 +2,13 @@
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 
-const textToImageVideo = ref<HTMLVideoElement | undefined>(undefined)
-const upscaleVideo = ref<HTMLVideoElement | undefined>(undefined)
-const colorizeVideo = ref<HTMLVideoElement | undefined>(undefined)
-const restoreVideo = ref<HTMLVideoElement | undefined>(undefined)
+const videoRefs = ref<{ [key: string]: HTMLVideoElement | null }>({})
+
+const setVideoRef = (el: HTMLVideoElement | null, ref: string) => {
+  if (el) {
+    videoRefs.value[ref] = el
+  }
+}
 
 const { mobile } = useDisplay()
 interface Feature {
@@ -16,11 +19,15 @@ interface Feature {
   icon: string
 }
 
-const playVideo = (video: HTMLVideoElement | undefined) => {
-  if (Array.isArray(video)) {
-    video[0]?.play()
-  } else {
-    video?.play()
+const playVideo = (ref: string) => {
+  const video = videoRefs.value[ref]
+  if (video) {
+    // Add a small delay to ensure video is ready
+    setTimeout(() => {
+      video.play().catch((err) => {
+        console.warn('Video playback failed:', err)
+      })
+    }, 100)
   }
 }
 
@@ -54,6 +61,13 @@ const features = ref<Feature[]>([
     icon: 'fa-solid fa-clock-rotate-left'
   }
 ])
+
+// Try to play videos when component is mounted
+// onMounted(() => {
+//   Object.keys(videoRefs.value).forEach((ref) => {
+//     playVideo(ref)
+//   })
+// })
 </script>
 
 <template>
@@ -91,7 +105,7 @@ const features = ref<Feature[]>([
           </v-chip>
 
           <p
-            v-motion-slide-visible-left
+            v-motion-slide-visible-once-left
             class="text-subtitle-1 text-medium-emphasis tw-mb-4 md:tw-mb-6 tw-text-sm md:tw-text-base"
           >
             {{ feature.description }}
@@ -110,15 +124,7 @@ const features = ref<Feature[]>([
               rotateX: 0,
               transition: {
                 onComplete: () => {
-                  playVideo(
-                    feature.ref === 'textToImageVideo'
-                      ? textToImageVideo
-                      : feature.ref === 'upscaleVideo'
-                        ? upscaleVideo
-                        : feature.ref === 'colorizeVideo'
-                          ? colorizeVideo
-                          : restoreVideo
-                  )
+                  playVideo(feature.ref)
                 }
               }
             }"
@@ -127,7 +133,7 @@ const features = ref<Feature[]>([
           >
             <video
               class="tw-w-full tw-rounded-lg"
-              :ref="feature.ref"
+              :ref="(el) => setVideoRef(el as HTMLVideoElement, feature.ref)"
               :src="feature.url"
               loop
               muted
