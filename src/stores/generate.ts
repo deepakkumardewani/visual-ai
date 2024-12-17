@@ -12,6 +12,7 @@ import { MODEL_IDS } from '@/utils/constants'
 export const useGenerateStore = defineStore('generate', () => {
   const isLoading = ref(false)
   const isDeleting = ref(false)
+  const isFavoriting = ref(false)
   const images = ref<IImage[]>([])
   const imageData = ref<any>({})
   const errMsg = ref<string>('')
@@ -165,6 +166,7 @@ export const useGenerateStore = defineStore('generate', () => {
     isLoading,
     deletingImageIds,
     isDeleting,
+    isFavoriting,
     images,
     imageData,
     upscaleInProgress,

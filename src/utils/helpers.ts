@@ -40,8 +40,11 @@ export const deleteImage = async (event: Event, imageId: string) => {
 }
 export const favoriteImage = async (event: Event, imageId: string) => {
   event.stopPropagation()
+  const generateStore = useGenerateStore()
+  const { isFavoriting } = storeToRefs(generateStore)
   const userStore = useUserStore()
   const { userId, history } = storeToRefs(userStore)
+  isFavoriting.value = true
   const url = `/image/favorite`
   const { error, data } = await useFetch(url, {
     method: 'PUT',
@@ -63,6 +66,7 @@ export const favoriteImage = async (event: Event, imageId: string) => {
       return item
     })
   }
+  isFavoriting.value = false
 }
 export const downloadImage = async (event: Event, image?: string) => {
   event.stopPropagation()

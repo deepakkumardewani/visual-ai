@@ -48,7 +48,6 @@ watch(data, (newVal) => {
     reviveInProgress.value = true
   }
   if (data.status === 'completed') {
-    console.log('completed')
     close()
     localStorage.setItem('reviveInProgress', 'false')
     reviveInProgress.value = false

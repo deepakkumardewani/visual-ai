@@ -39,7 +39,6 @@ function initializePaddle() {
     window.Paddle.Initialize({
       token: import.meta.env.VITE_PADDLE_TOKEN,
       eventCallback: function (data) {
-        console.log(data)
         if (data.name == 'checkout.completed' && data?.data?.items && data?.data?.items[0]) {
           const price_id = data?.data?.items[0].price_id
           const { custom_data } = data?.data as any

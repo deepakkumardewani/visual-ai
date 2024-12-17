@@ -54,7 +54,6 @@ const mode = ref<Mode>(modes.value[0])
 
 function handleSelected(item: Mode) {
   if (!userDetails.value?.isPro && item.isPro) {
-    console.log('show premium')
     mode.value = modes.value[0]
     dialogStore.showPremium()
   } else {
@@ -86,7 +85,6 @@ watch(data, (newVal) => {
     colorizeInProgress.value = true
   }
   if (data.status === 'completed') {
-    console.log('completed')
     close()
     localStorage.setItem('colorizeInProgress', 'false')
     colorizeInProgress.value = false

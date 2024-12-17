@@ -21,7 +21,6 @@ const dialogOrigin = ref({ x: 0, y: 0, width: 0, height: 0 })
 
 onMounted(async () => {
   images.value = gallery
-  // console.log('images', images.value)
 })
 
 const openDialog = (image: GalleryImage, event?: MouseEvent) => {

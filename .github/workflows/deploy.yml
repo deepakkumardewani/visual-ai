@@ -1,4 +1,4 @@
-name: Deploy to DigitalOcean Droplet
+name: Deploy Frontend
 
 on:
   push:
@@ -36,8 +36,9 @@ jobs:
           git pull
 
           # Build and run the updated Docker container
-          docker build -t vue-app .
-          docker stop vue-app || true
-          docker rm vue-app || true
-          docker run -d -p 8080:80 --name vue-app vue-app
+          # docker build -t vue-app .
+          # docker stop vue-app || true
+          # docker rm vue-app || true
+          # docker run -d -p 8080:80 --name vue-app vue-app
+          docker compose up -d --build
           EOF

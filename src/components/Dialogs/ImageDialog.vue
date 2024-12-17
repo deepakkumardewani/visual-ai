@@ -17,7 +17,7 @@ const { mobile } = useDisplay()
 const dialogStore = useDialogStore()
 const { showImageDialog } = storeToRefs(dialogStore)
 const generateStore = useGenerateStore()
-const { isDeleting } = storeToRefs(generateStore)
+const { isDeleting, isFavoriting } = storeToRefs(generateStore)
 const currentImageIndex = ref(0)
 
 const props = defineProps<{
@@ -65,11 +65,12 @@ const getCurrentImageUrl = () => {
         </div>
 
         <div class="tw-flex tw-flex-1 tw-gap-3 tw-justify-end">
-          <v-tooltip location="bottom" text="Download">
+          <v-tooltip location="bottom" text="Favorite">
             <template v-slot:activator="{ props }">
               <v-btn
                 v-bind="props"
                 icon
+                :loading="isFavoriting"
                 size="x-small"
                 variant="text"
                 @click="favoriteImage($event, item?._id ?? '')"
