@@ -1,25 +1,16 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 import { useAppStore } from '@/stores/app'
+
+import Copyright from '@/components/Copyright.vue'
+
+import { FOOTER_LINKS } from '@/utils/constants'
 
 const route = useRoute()
 const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
-const router = useRouter()
-
-const currentYear = computed(() => new Date().getFullYear())
-
-const footerLinks = [
-  { text: 'Contact Us', path: '/contact', icon: 'fas fa-envelope' },
-  { text: 'Privacy Policy', path: '/privacy', icon: 'fas fa-shield-alt' },
-  { text: 'Terms of Service', path: '/terms', icon: 'fas fa-file-contract' },
-  { text: 'Refund Policy', path: '/refund', icon: 'fas fa-hand-holding-usd' },
-  { text: 'Pricing', path: '/pricing', icon: 'fas fa-tag' },
-  { text: 'FAQ', path: '/faqs', icon: 'fas fa-question-circle' }
-]
 </script>
 
 <template>
@@ -29,28 +20,15 @@ const footerLinks = [
   >
     <div class="tw-w-full tw-max-w-7xl tw-mx-auto tw-px-4">
       <div class="tw-flex tw-flex-col md:tw-flex-row tw-items-center tw-justify-between tw-w-full">
-        <!-- Copyright Section -->
-        <div class="tw-text-gray-400 tw-text-sm tw-mb-4 md:tw-mb-0">
-          <div>
-            &copy; {{ currentYear }}
-            <span
-              @click="router.push('/')"
-              class="tw-cursor-pointer tw-bg-gradient-to-r dark:tw-from-purple-400 dark:tw-to-purple-600 tw-from-purple-900 tw-to-purple-800 tw-bg-clip-text tw-text-transparent"
-              >Visual AI</span
-            >
-            <span class="tw-hidden md:tw-inline-block tw-mx-2">|</span>
-            <span class="tw-hidden md:tw-inline-block">All rights reserved</span>
-          </div>
-        </div>
+        <Copyright />
 
-        <!-- Navigation Links -->
         <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-2 md:tw-gap-4">
           <v-btn
-            v-for="(link, index) in footerLinks"
+            v-for="(link, index) in FOOTER_LINKS"
             :key="index"
             :to="link.path"
             variant="text"
-            class="tw-text-gray-400 tw-text-sm tw-px-3"
+            class="tw-text-black dark:tw-text-gray-400 tw-text-sm tw-px-3"
             size="small"
           >
             <v-icon :icon="link.icon" size="small" class="tw-mr-2" />

@@ -16,9 +16,6 @@ import { useUserStore } from '@/stores/user'
 
 import CreateButton from '@/components/Aside/CreateButton.vue'
 import Heading from '@/components/Aside/Heading.vue'
-import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue'
-import LowCreditsDialog from '@/components/Dialogs/LowCreditsDialog.vue'
-import PremiumDialog from '@/components/Dialogs/PremiumDialog.vue'
 
 import { FLUX_MODES, MODEL_IDS } from '@/utils/constants'
 import { ASPECT_RATIOS, IMAGE_FORMATS } from '@/utils/constants'
@@ -33,7 +30,7 @@ const dialogStore = useDialogStore()
 const userStore = useUserStore()
 const { smAndUp } = useDisplay()
 const { isSignedIn } = useUser()
-const { userDetails, isPro } = storeToRefs(userStore)
+const { isPro, credits } = storeToRefs(userStore)
 const { isDark } = storeToRefs(appStore)
 
 const prompt = ref<string>('')
@@ -88,7 +85,8 @@ async function generateImage() {
     return
   }
 
-  if (userDetails.value?.credits === 0) {
+  console.log('generateImage', credits.value === 0)
+  if (credits.value === 0) {
     dialogStore.showLowCredits()
     return
   }
@@ -103,6 +101,7 @@ async function generateImage() {
     aspectRatio: aspectRatio.value.title,
     outputFormat: outputFormat.value.toLowerCase()
   }
+
   generateStore.generateImage(input)
 }
 
@@ -224,7 +223,7 @@ onMounted(() => {
             </v-btn>
           </template>
 
-          <v-card min-width="360" class="pa-4">
+          <v-card min-width="400" class="pa-4">
             <div class="mb-6">
               <div class="tw-flex tw-shrink-0 tw-gap-4 tw-justify-between">
                 <div class="tw-flex-1">
@@ -386,7 +385,7 @@ onMounted(() => {
         @update:model-value="handleSelected"
       >
         <template v-slot:item="{ item, props }">
-          <v-list-item v-bind="props" :max-width="smAndUp ? '330' : '350'">
+          <v-list-item v-bind="props" :max-width="smAndUp ? '330' : '400'">
             <template v-slot:prepend>
               <div
                 class="tw-flex tw-justify-start tw-align-top mr-2"
@@ -398,12 +397,17 @@ onMounted(() => {
 
             <template v-slot:title>
               <div class="tw-flex tw-gap-2 tw-items-center">
-                <VListItemTitle class="tw-text-white">{{ item.raw.title }}</VListItemTitle>
+                <VListItemTitle class="tw-text-black dark:tw-text-white">{{
+                  item.raw.title
+                }}</VListItemTitle>
                 <v-icon icon="$star" v-if="!isPro && item.raw.isPro" size="x-small"></v-icon>
               </div>
             </template>
 
-            <v-list-item-subtitle v-html="item.raw.description" class="wrap-text tw-text-white">
+            <v-list-item-subtitle
+              v-html="item.raw.description"
+              class="wrap-text tw-text-black dark:tw-text-white"
+            >
             </v-list-item-subtitle>
           </v-list-item>
           <v-divider v-if="item.raw.id === MODEL_IDS.FLUX_PRO" />
@@ -545,9 +549,9 @@ onMounted(() => {
     <CreateButton @click="generateImage" :disabled="typingPrompt === ''" />
   </div>
 
-  <PremiumDialog />
-  <BuyMoreCreditsDialog />
-  <LowCreditsDialog />
+  <!-- <PremiumDialog /> -->
+  <!-- <BuyMoreCreditsDialog />
+  <LowCreditsDialog /> -->
 </template>
 
 <style lang="scss" scoped>
@@ -557,7 +561,6 @@ onMounted(() => {
 }
 .custom-menu {
   margin-left: 100px !important;
-  background-color: red;
 }
 .v-select__menu {
   margin-left: 10px !important;

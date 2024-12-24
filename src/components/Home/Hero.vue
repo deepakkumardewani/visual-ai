@@ -1,11 +1,15 @@
 <script setup lang="ts">
-// Add ref for controlling scroll indicator visibility
+import { storeToRefs } from 'pinia'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { SignedOut } from 'vue-clerk'
+
+import { useAppStore } from '@/stores/app'
 
 import FeatureScroll from '@/components/Home/FeatureScroll.vue'
 
 const showScrollIndicator = ref(true)
+const appStore = useAppStore()
+const { isDark } = storeToRefs(appStore)
 
 // Handle scroll event to hide indicator when user starts scrolling
 function handleScroll() {
@@ -34,11 +38,10 @@ const scrollToAbout = () => {
 
 <template>
   <div id="hero" class="tw-min-h-[85vh] tw-flex tw-flex-col tw-items-center tw-justify-center">
-    <v-container>
+    <v-container class="tw-pt-0">
       <v-row class="align-center justify-center">
-        <v-col cols="12" md="10" lg="8">
-          <!-- Improved heading container -->
-          <div class="tw-flex tw-flex-col tw-gap-2 md:tw-gap-4 tw-mb-12">
+        <v-col cols="12" md="10" lg="8" class="tw-pt-0">
+          <div class="tw-flex tw-flex-col tw-gap-2 md:tw-gap-4 tw-mb-4">
             <div
               v-motion
               :initial="{
@@ -51,9 +54,9 @@ const scrollToAbout = () => {
               }"
               :delay="100"
               :duration="600"
-              class="tw-text-6xl md:tw-text-8xl lg:tw-text-7xl tw-font-bold tw-text-slate-900 dark:tw-text-neutral-100 text-center"
+              class="tw-text-5xl md:tw-text-4xl lg:tw-text-5xl tw-font-bold tw-text-slate-900 dark:tw-text-neutral-100 text-center"
             >
-              Bring Images to Life
+              Bring Images to Life with
             </div>
             <div
               v-motion
@@ -67,9 +70,9 @@ const scrollToAbout = () => {
               }"
               :delay="200"
               :duration="600"
-              class="text-h3 text-sm-h1 font-weight-bold tw-bg-gradient-to-r tw-from-purple-500 tw-to-pink-500 dark:tw-from-purple-400 dark:tw-to-pink-400 tw-bg-clip-text tw-text-transparent text-center"
+              class="tw-text-6xl md:tw-text-7xl lg:tw-text-8xl tw-font-bold tw-bg-gradient-to-r tw-from-purple-500 tw-to-pink-500 dark:tw-from-purple-400 dark:tw-to-pink-400 tw-bg-clip-text tw-text-transparent text-center"
             >
-              with Visual AI
+              Visual AI
             </div>
             <div
               v-motion
@@ -91,11 +94,8 @@ const scrollToAbout = () => {
         </v-col>
       </v-row>
     </v-container>
-
-    <FeatureScroll />
-
     <SignedOut>
-      <div class="tw-flex tw-justify-center tw-mt-12 tw-mb-24">
+      <div class="tw-flex tw-justify-center tw-my-12">
         <v-btn
           to="/signup"
           class="text-none tw-px-8"
@@ -109,6 +109,26 @@ const scrollToAbout = () => {
         </v-btn>
       </div>
     </SignedOut>
+
+    <v-container class="tw-m-0">
+      <v-row class="align-center justify-center">
+        <v-col cols="12">
+          <div
+            class="tw-border tw-rounded-lg tw-border-slate-900 dark:tw-border-slate-500 tw-overflow-hidden"
+            v-motion
+            :initial="{
+              perspective: 800,
+              rotateX: 10,
+              opacity: isDark ? 0.7 : 1
+            }"
+          >
+            <v-img src="/src/assets/hero.png" class="tw-rounded-lg" />
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <FeatureScroll />
 
     <!-- Improved scroll indicator -->
     <Transition name="fade">

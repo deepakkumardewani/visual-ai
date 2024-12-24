@@ -5,7 +5,8 @@ import { type Plan } from '@/stores/app'
 import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
 
-import { openPaddleCheckout } from '@/utils/helpers'
+import { RAZORPAY_PRODUCTS } from '@/utils/constants'
+import { initiatePayment } from '@/utils/payment'
 
 const props = defineProps<{
   plan: Plan
@@ -29,8 +30,7 @@ const priceColor = computed(() => {
 async function handleUpgrade() {
   if (!props.plan.isFree) {
     try {
-      const PRICE_ID = 'pri_01jbx76xqnmyy9v3tmkf62c3cp'
-      await openPaddleCheckout(PRICE_ID, true)
+      await initiatePayment(RAZORPAY_PRODUCTS[4], true)
     } catch (error) {
       console.error('Purchase failed:', error)
     }
@@ -52,7 +52,7 @@ async function handleUpgrade() {
 
       <v-card-subtitle>
         <div class="d-flex my-2 align-center justify-center">
-          <span :class="['text-h3 font-weight-bold', priceColor]">${{ plan.price }}</span>
+          <span :class="['text-h3 font-weight-bold', priceColor]">₹{{ plan.price }}</span>
           <span class="text-subtitle-1 ml-1 mt-4">/month</span>
         </div>
         <p class="text-body-1">{{ plan.description }}</p>

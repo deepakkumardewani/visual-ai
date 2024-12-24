@@ -58,7 +58,7 @@ watch(route, (newRoute) => {
     v-model="tab"
     align-tabs="center"
     color="deep-purple-accent-4"
-    class="tw-bg-black"
+    :class="isDark ? 'tw-bg-black' : 'tw-bg-white'"
     @update:modelValue="(v: unknown) => handleTabChange(v as number)"
   >
     <v-tab :value="1">User</v-tab>

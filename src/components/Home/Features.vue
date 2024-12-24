@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 
+import Chip from '@/components/Home/Chip.vue'
+
 const videoRefs = ref<{ [key: string]: HTMLVideoElement | null }>({})
 
 const setVideoRef = (el: HTMLVideoElement | null, ref: string) => {
@@ -78,7 +80,7 @@ const features = ref<Feature[]>([
       >
       <div
         v-motion-pop-visible-once
-        class="tw-text-3xl md:tw-text-4xl lg:tw-text-5xl font-weight-bold tw-mb-4"
+        class="tw-text-3xl md:tw-text-4xl lg:tw-text-5xl font-weight-bold"
       >
         What We Offer
       </div>
@@ -88,26 +90,13 @@ const features = ref<Feature[]>([
       <div
         v-for="(feature, index) in features"
         :key="index"
-        class="feature-section"
+        class="feature-section tw-mb-12 sm:tw-mb-0"
         :class="{ 'tw-min-h-screen': !mobile }"
       >
-        <div
-          class="tw-w-[95%] md:tw-w-[90%] tw-max-w-4xl tw-mx-auto tw-text-center tw-px-4 md:tw-px-0 tw-min-w-[85%]"
-        >
-          <v-chip
-            v-motion-pop-visible-once
-            class="tw-mb-4 md:tw-mb-6"
-            color="purple-lighten-2"
-            label
-          >
-            <v-icon :icon="feature.icon" start class="tw-mr-2" />
-            {{ feature.title }}
-          </v-chip>
+        <div class="tw-w-[98%] md:tw-w-[90%] tw-max-w-4xl tw-text-center tw-min-w-[85%]">
+          <Chip :text="feature.title" :icon="feature.icon" />
 
-          <p
-            v-motion-slide-visible-once-left
-            class="text-subtitle-1 text-medium-emphasis tw-mb-4 md:tw-mb-6 tw-text-sm md:tw-text-base"
-          >
+          <p v-motion-slide-visible-once-left class="tw-mb-4 md:tw-mb-6 tw-text-sm md:tw-text-2xl">
             {{ feature.description }}
           </p>
 
@@ -148,13 +137,11 @@ const features = ref<Feature[]>([
 
 <style scoped>
 .feature-container {
-  min-height: 100vh;
   overflow-x: hidden;
 }
 
 .feature-section {
   width: 100%;
-  padding: 0.5rem 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -163,7 +150,6 @@ const features = ref<Feature[]>([
 
 @media (min-width: 768px) {
   .feature-section {
-    padding: 2rem 0;
   }
 }
 

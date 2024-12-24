@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 import type { JobStatus } from '@/types'
 
 import { useAuthStore } from '@/stores/auth'
+import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
 
@@ -14,9 +15,10 @@ import ImageUpload from '@/components/Aside/ImageUpload.vue'
 
 const router = useRouter()
 const { isSignedIn } = useUser()
+const dialogStore = useDialogStore()
 const userStore = useUserStore()
 const generateStore = useGenerateStore()
-const { userId, history } = storeToRefs(userStore)
+const { userId, history, isPro, credits } = storeToRefs(userStore)
 const { reviveInProgress, images } = storeToRefs(generateStore)
 const { getToken } = useAuthStore()
 const token = await getToken()
@@ -27,6 +29,20 @@ const { data, close, open } = useEventSource(progressUrl, [], {
 const imageUpload = ref()
 
 async function generateImage() {
+  if (!isSignedIn.value) {
+    router.push('/signin')
+    return
+  }
+
+  if (!isPro.value && credits.value < 3) {
+    dialogStore.showLowCredits()
+    return
+  }
+
+  if (isPro.value && credits.value === 0) {
+    dialogStore.showLowCredits()
+    return
+  }
   if (isSignedIn.value) {
     const body = {
       image: imageUpload?.value?.image

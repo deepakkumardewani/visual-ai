@@ -155,7 +155,10 @@ const getImageUrl = (image: IImage) => {
 </script>
 
 <template>
-  <div v-if="groupedHistory.length > 0" class="tw-flex tw-justify-end tw-mt-4 tw-px-4 tw-gap-4">
+  <div
+    v-if="isFavorites ? groupedHistory.length > 0 : history.length > 0"
+    class="tw-flex tw-justify-end tw-mt-4 tw-px-4 tw-gap-4"
+  >
     <v-select
       v-model="selectedSize"
       :items="imageSizes"
@@ -201,9 +204,8 @@ const getImageUrl = (image: IImage) => {
       </template>
     </v-text-field>
   </div>
-
   <div
-    v-if="groupedHistory.length === 0"
+    v-if="history.length === 0"
     class="tw-flex tw-justify-center tw-items-center tw-h-[calc(100vh-200px)] tw-text-xl tw-mx-auto"
   >
     <div class="tw-text-center tw-text-neutral-400">
@@ -219,6 +221,16 @@ const getImageUrl = (image: IImage) => {
       </div>
     </div>
   </div>
+
+  <div
+    v-if="isFavorites && groupedHistory.length === 0"
+    class="tw-flex tw-justify-center tw-items-center tw-h-[calc(100vh-200px)] tw-text-xl tw-mx-auto"
+  >
+    <div class="tw-text-center tw-text-neutral-400">
+      <div>You have not added any favorites yet.</div>
+    </div>
+  </div>
+
   <div v-for="item in groupedHistory" :key="item.title" class="tw-mb-6 tw-p-4">
     <div class="tw-text-xl tw-font-bold tw-mb-2 tw-text-neutral-500 dark:tw-text-neutral-400">
       {{ item.title }}

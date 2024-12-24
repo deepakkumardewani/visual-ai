@@ -1,4 +1,4 @@
-import type { FeatureSelect, Mode, PaddleProduct, Plan } from '@/types'
+import type { FeatureSelect, Mode, Plan, RazorpayProduct } from '@/types'
 
 import generalFAQ from './generalFAQ.json'
 import pricingFAQ from './pricingFAQ.json'
@@ -49,7 +49,7 @@ export const STARTER_PLAN: Plan = {
       available: false
     },
     {
-      title: 'Colorize Images',
+      title: 'Basic Colorize Images',
       available: true,
       tooltip: 'Uses 3 credits per image'
     },
@@ -68,7 +68,7 @@ export const STARTER_PLAN: Plan = {
 
 export const PRO_PLAN: Plan = {
   title: 'Pro',
-  price: '5',
+  price: '300',
   description: 'Billed monthly',
   isFree: false,
   features: [
@@ -94,7 +94,7 @@ export const PRO_PLAN: Plan = {
       available: true
     },
     {
-      title: 'Colorize Images',
+      title: 'Advanced Colorize Images',
       available: true,
       tooltip: 'Uses 1 credit per image'
     },
@@ -292,31 +292,42 @@ export const FEATURES: FeatureSelect[] = [
   }
 ]
 
-export const PADDLE_PRODUCTS: PaddleProduct[] = [
-  { id: 1, type: 'single', credits: 200, price: 4.99, priceId: 'pri_01jbx7ay8gdya88d5q5a80kdmb' },
+export const FOOTER_LINKS = [
+  { text: 'Contact Us', path: '/contact', icon: 'fas fa-envelope' },
+  { text: 'Privacy Policy', path: '/privacy', icon: 'fas fa-shield-alt' },
+  { text: 'Terms of Service', path: '/terms', icon: 'fas fa-file-contract' },
+  { text: 'Refund Policy', path: '/refund', icon: 'fas fa-hand-holding-usd' },
+  { text: 'Pricing', path: '/pricing', icon: 'fas fa-tag' },
+  { text: 'FAQ', path: '/faqs', icon: 'fas fa-question-circle' }
+]
+export const RAZORPAY_PRODUCTS: RazorpayProduct[] = [
+  { id: 1, type: 'single', credits: 200, price: 130, description: '200 credits', currency: 'INR' },
   {
     id: 2,
     type: 'single',
     credits: 450,
-    price: 9.99,
-    priceId: 'pri_01jcdfc7tppg16ephxjs9z7j6w',
-    savings: '10%'
+    price: 290,
+    savings: '11%',
+    description: '450 credits',
+    currency: 'INR'
   },
   {
     id: 3,
     type: 'single',
     credits: 960,
-    price: 14.99,
-    priceId: 'pri_01jcdfd9vxecgyehhvafreavnj',
-    savings: '20%'
+    price: 500,
+    savings: '22%',
+    description: '960 credits',
+    currency: 'INR'
   },
   {
     id: 4,
     type: 'single',
     credits: 2000,
-    price: 19.99,
-    priceId: 'pri_01jcdfe1451rnbhdgtja6wrtzy',
-    savings: '30%'
+    price: 900,
+    savings: '31%',
+    description: '2000 credits',
+    currency: 'INR'
   },
-  { id: 5, type: 'monthly', credits: 300, price: 4.99, priceId: 'pri_01jbx76xqnmyy9v3tmkf62c3cp' }
+  { id: 5, type: 'monthly', credits: 500, price: 250, description: '500 credits', currency: 'INR' }
 ]

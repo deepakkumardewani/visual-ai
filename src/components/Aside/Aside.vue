@@ -3,10 +3,12 @@ import { storeToRefs } from 'pinia'
 
 import { useAppStore } from '@/stores/app'
 
-import AIImageAside from './AIImageAside.vue'
-import ColorizeImageAside from './ColorizeImageAside.vue'
-import ReviveOldAside from './ReviveOldAside.vue'
-import UpscaleImageAside from './UpscaleImageAside.vue'
+import AIImageAside from '@/components/Aside/AIImageAside.vue'
+import ColorizeImageAside from '@/components/Aside/ColorizeImageAside.vue'
+import ReviveOldAside from '@/components/Aside/ReviveOldAside.vue'
+import UpscaleImageAside from '@/components/Aside/UpscaleImageAside.vue'
+import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue'
+import LowCreditsDialog from '@/components/Dialogs/LowCreditsDialog.vue'
 
 const appStore = useAppStore()
 const { feature } = storeToRefs(appStore)
@@ -19,6 +21,9 @@ const { feature } = storeToRefs(appStore)
     <UpscaleImageAside v-if="feature === 'image_upscaler'" />
     <ReviveOldAside v-if="feature === 'revive_old_photos'" />
     <ColorizeImageAside v-if="feature === 'colorize_image'" />
+
+    <BuyMoreCreditsDialog />
+    <LowCreditsDialog />
   </div>
 </template>
 

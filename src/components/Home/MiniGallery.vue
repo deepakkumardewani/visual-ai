@@ -1,13 +1,19 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { ref as vueRef } from 'vue'
 import { useDisplay } from 'vuetify'
+
+import { useAppStore } from '@/stores/app'
+
+import Chip from '@/components/Home/Chip.vue'
 
 import gallery from '@/utils/gallery.json'
 
 // Get 5 random images from gallery data
 const randomImages = vueRef([...gallery].sort(() => 0.5 - Math.random()).slice(0, 6))
-
+const appStore = useAppStore()
+const { isDark } = storeToRefs(appStore)
 const { xs, smAndUp } = useDisplay()
 const selectedImage = ref(null)
 
@@ -22,15 +28,8 @@ const showImageDetails = (img: any) => {
     <v-row>
       <v-col cols="12">
         <div class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-mb-12">
-          <v-chip
-            v-motion-pop-visible-once
-            class="tw-mb-6"
-            color="purple-lighten-2"
-            size="large"
-            label
-          >
-            Gallery
-          </v-chip>
+          <Chip text="Gallery" />
+
           <h2
             v-motion-slide-visible-once-left
             class="tw-text-3xl sm:tw-text-4xl font-weight-bold tw-mb-4 text-center"
@@ -47,7 +46,7 @@ const showImageDetails = (img: any) => {
           <v-btn
             to="/gallery"
             v-motion-pop-visible-once
-            color="purple-lighten-2"
+            :color="isDark ? 'purple-lighten-2' : 'purple-darken-2'"
             size="large"
             class="text-center"
             variant="outlined"

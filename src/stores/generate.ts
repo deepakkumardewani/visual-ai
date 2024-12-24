@@ -21,15 +21,10 @@ export const useGenerateStore = defineStore('generate', () => {
   const colorizeInProgress = ref<boolean>(false)
   const reviveInProgress = ref<boolean>(false)
   const userStore = useUserStore()
-  const { userId, credits, history } = storeToRefs(userStore)
+  const { userId, history } = storeToRefs(userStore)
   // const { setLocal } = useLocal()
 
   async function generateImage(imgData?: ImageBody) {
-    if (credits.value === undefined || credits.value <= 0) {
-      console.log('no credits')
-      //TODO: redirect to subscription page
-      return
-    }
     isLoading.value = true
     images.value = []
 

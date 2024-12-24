@@ -107,13 +107,14 @@ export interface GalleryImage {
   aspectRatio: string
 }
 
-export interface PaddleProduct {
+export interface RazorpayProduct {
   id: number
   type: string
   credits: number
-  priceId: string
   price: number
   savings?: string
+  description: string
+  currency: string
 }
 
 export interface FeatureSelect {

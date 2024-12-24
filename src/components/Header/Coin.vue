@@ -19,7 +19,7 @@ const dialogStore = useDialogStore()
     <template v-slot:activator="{ props }">
       <div
         v-bind="props"
-        class="tw-flex tw-items-center tw-p-4 tw-gap-3 tw-h-8 tw-justify-center tw-border-2 tw-border-[#3b0764] dark:tw-border-white tw-rounded-full"
+        class="tw-flex tw-items-center tw-p-4 tw-gap-3 tw-h-8 tw-justify-center tw-border tw-border-white tw-rounded-full"
       >
         <div v-if="smAndUp">
           <v-icon size="x-small" icon="$coin" />

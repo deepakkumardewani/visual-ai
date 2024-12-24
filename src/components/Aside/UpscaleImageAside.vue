@@ -8,6 +8,7 @@ import { useRouter } from 'vue-router'
 import type { JobStatus } from '@/types'
 
 import { useAuthStore } from '@/stores/auth'
+import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
 
@@ -19,10 +20,11 @@ import { IMAGE_SIZES } from '@/utils/constants'
 const { getToken } = useAuthStore()
 
 const userStore = useUserStore()
+const dialogStore = useDialogStore()
 const router = useRouter()
 const { isSignedIn } = useUser()
 const generateStore = useGenerateStore()
-const { userId, history } = storeToRefs(userStore)
+const { userId, history, isPro, credits } = storeToRefs(userStore)
 const { upscaleInProgress, images } = storeToRefs(generateStore)
 
 const SCALE = {
@@ -44,6 +46,22 @@ const prompt = ref<string>('')
 const negativePrompt = ref<string>('')
 
 async function generateImage() {
+  if (!isSignedIn.value) {
+    router.push('/signin')
+    return
+  }
+
+  if (!isPro.value && credits.value < 3) {
+    dialogStore.showLowCredits()
+    return
+  }
+
+  if (isPro.value && credits.value === 0) {
+    dialogStore.showLowCredits()
+    return
+  }
+
+  console.log('generateImage')
   progressUrl.value = ''
   if (isSignedIn.value) {
     const token = await getToken()

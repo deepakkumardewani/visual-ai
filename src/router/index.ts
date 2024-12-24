@@ -18,62 +18,62 @@ import Terms from '@/pages/Terms.vue'
 const routes = [
   {
     path: '/',
-    name: 'Landing',
+    name: 'landing',
     component: Landing
   },
   {
     path: '/dashboard',
-    name: 'Dashboard',
+    name: 'dashboard',
     component: Dashboard
   },
   {
     path: '/profile',
-    name: 'Profile',
+    name: 'profile',
     component: Profile
   },
   {
     path: '/faqs',
-    name: 'Faqs',
+    name: 'faqs',
     component: Faqs
   },
   {
     path: '/pricing',
-    name: 'Pricing',
+    name: 'pricing',
     component: Pricing
   },
   {
     path: '/signin',
-    name: 'Signin',
+    name: 'signin',
     component: Signin
   },
   {
     path: '/signup',
-    name: 'Signup',
+    name: 'signup',
     component: Signup
   },
   {
     path: '/terms',
-    name: 'Terms',
+    name: 'terms',
     component: Terms
   },
   {
     path: '/privacy',
-    name: 'Privacy',
+    name: 'privacy',
     component: Privacy
   },
   {
     path: '/refund',
-    name: 'Refund',
+    name: 'refund',
     component: Refund
   },
   {
     path: '/contact',
-    name: 'Contact',
+    name: 'contact',
     component: Contact
   },
   {
     path: '/gallery',
-    name: 'Gallery',
+    name: 'gallery',
     component: Gallery
   }
 ]

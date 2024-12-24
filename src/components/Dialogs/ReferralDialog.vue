@@ -57,14 +57,21 @@ const apply = async () => {
     loading.value = false
   }
 }
+
+const closeDialog = () => {
+  showReferralDialog.value = false
+  referralCode.value = ''
+  errorMessage.value = ''
+}
 </script>
 
 <template>
   <v-dialog v-model="showReferralDialog" width="400" opacity="0.4" scrim="black">
     <v-card class="pa-4">
-      <v-card-title class="text-center text-h5 font-weight-bold mb-4">
-        Enter Referral Code
-      </v-card-title>
+      <div class="tw-flex tw-justify-between tw-items-center tw-mb-2">
+        <v-card-title class="tw-text-h5 tw-font-bold"> Enter Referral Code </v-card-title>
+        <v-btn icon="fas fa-times" variant="text" size="small" @click="closeDialog" />
+      </div>
 
       <v-card-text>
         <v-text-field

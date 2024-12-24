@@ -1,6 +1,5 @@
-<script setup lang="ts"></script>
 <template>
-  <div class="tw-max-w-5xl tw-mx-auto tw-p-8 tw-shadow-lg tw-rounded-lg">
+  <div class="tw-max-w-5xl tw-mx-auto tw-p-8 tw-shadow-lg tw-rounded-lg tw-m-4">
     <h1 class="tw-text-4xl tw-font-bold tw-text-center tw-mb-8">Terms of Service</h1>
 
     <section class="tw-mb-6">

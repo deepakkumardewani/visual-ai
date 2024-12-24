@@ -8,6 +8,7 @@ import { IImageObject } from '@/types'
 
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
+import { useUserStore } from '@/stores/user'
 
 import SideBySide from '@/components/SideBySide.vue'
 
@@ -15,9 +16,12 @@ import { deleteImage, downloadImage, favoriteImage, formatFileSize } from '@/uti
 
 const { mobile } = useDisplay()
 const dialogStore = useDialogStore()
+const userStore = useUserStore()
+const { history } = storeToRefs(userStore)
 const { showImageDialog } = storeToRefs(dialogStore)
 const generateStore = useGenerateStore()
 const { isDeleting, isFavoriting } = storeToRefs(generateStore)
+const isFavorite = ref(false)
 const currentImageIndex = ref(0)
 
 const props = defineProps<{
@@ -42,6 +46,24 @@ const getCurrentImageUrl = () => {
   if (!props.item?.images) return ''
   return props.item.images[currentImageIndex.value].aiImageUrl
 }
+
+watch(
+  () => props.item,
+  (newItem) => {
+    const item = history.value.find((item) => item._id === newItem?._id)
+    if (item) {
+      isFavorite.value = item.isFavorite
+    }
+  },
+  { immediate: true, deep: true }
+)
+
+watch(history, (newHistory) => {
+  const newItem = newHistory.find((item) => item._id === props.item?._id)
+  if (newItem) {
+    isFavorite.value = newItem.isFavorite
+  }
+})
 </script>
 
 <template>
@@ -75,7 +97,7 @@ const getCurrentImageUrl = () => {
                 variant="text"
                 @click="favoriteImage($event, item?._id ?? '')"
               >
-                <v-icon>{{ item?.isFavorite ? 'fas fa-heart' : 'far fa-heart' }}</v-icon>
+                <v-icon>{{ isFavorite ? 'fas fa-heart' : 'far fa-heart' }}</v-icon>
               </v-btn>
             </template>
           </v-tooltip>

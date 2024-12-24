@@ -5,8 +5,8 @@ import { computed, ref } from 'vue'
 import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 
-import { PADDLE_PRODUCTS } from '@/utils/constants'
-import { openPaddleCheckout } from '@/utils/helpers'
+import { RAZORPAY_PRODUCTS } from '@/utils/constants'
+import { initiatePayment } from '@/utils/payment'
 
 const dialogStore = useDialogStore()
 const { showBuyCreditsDialog } = storeToRefs(dialogStore)
@@ -15,8 +15,13 @@ const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
 const loading = ref(false)
 const price = ref(0)
-const packages = ref(PADDLE_PRODUCTS.filter((product) => product.type === 'single'))
-
+const packages = ref(RAZORPAY_PRODUCTS.filter((product) => product.type === 'single'))
+const ticks = {
+  1: '200',
+  2: '450',
+  3: '960',
+  4: '2000'
+}
 const currentPackageIndex = ref(0)
 const currentPackage = computed(() => packages.value[currentPackageIndex.value])
 
@@ -24,14 +29,14 @@ watch(price, (newVal) => {
   currentPackageIndex.value = newVal - 1
 })
 
-const getTrackColor = (index: number): string => {
-  return index <= currentPackageIndex.value ? '#6b21a8' : 'grey'
-}
+// const getTrackColor = (index: number): string => {
+//   return index <= currentPackageIndex.value ? '#6b21a8' : 'grey'
+// }
 
 const handlePurchase = async () => {
   loading.value = true
   try {
-    await openPaddleCheckout(currentPackage.value.priceId)
+    await initiatePayment(currentPackage.value)
   } catch (error) {
     console.error('Purchase failed:', error)
   } finally {
@@ -61,7 +66,7 @@ const handlePurchase = async () => {
             </div>
           </div>
           <div class="tw-flex tw-flex-col tw-items-end">
-            <div class="tw-text-3xl tw-font-bold">${{ currentPackage.price }}</div>
+            <div class="tw-text-3xl tw-font-bold">INR {{ currentPackage.price }}</div>
             <div v-if="currentPackage.savings" class="tw-text-green-500 tw-text-sm">
               Save {{ currentPackage.savings }}
             </div>
@@ -74,9 +79,10 @@ const handlePurchase = async () => {
           max="4"
           step="1"
           :color="isDark ? '#6b21a8' : '#9333ea'"
-          :track-color="getTrackColor"
+          track-color="#6b21a8"
           show-ticks="always"
-          :ticks="{ 1: '200', 2: '450', 3: '960', 4: '2000' }"
+          tick-size="5"
+          :ticks="ticks"
         ></v-slider>
 
         <v-btn

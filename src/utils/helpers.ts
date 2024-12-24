@@ -2,7 +2,6 @@ import { storeToRefs } from 'pinia'
 
 import type { IImageObject } from '@/types'
 
-import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
@@ -129,65 +128,4 @@ export const formatFileSize = (bytes: number | undefined): string => {
 
   const mb = kb / 1024
   return `${mb.toFixed(1)} MB`
-}
-
-export const openPaddleCheckout = async (priceId: string, subscribe: boolean = false) => {
-  try {
-    if (!window.Paddle) {
-      console.error('Paddle is not initialized')
-      return
-    }
-    const userStore = useUserStore()
-    const appStore = useAppStore()
-    const { isDark } = storeToRefs(appStore)
-    const { userDetails } = storeToRefs(userStore)
-    window.Paddle.Checkout.open({
-      settings: {
-        theme: `${isDark.value ? 'dark' : 'light'}`,
-        locale: 'en'
-      },
-      customer: {
-        email: userDetails.value?.email ?? ''
-      },
-      items: [{ priceId, quantity: 1 }],
-      customData: {
-        userId: userDetails.value?.userId,
-        subscribe
-      }
-    })
-  } catch (error) {
-    console.error('Error opening Paddle checkout:', error)
-    throw error
-  }
-}
-
-export async function cancelSubscription(): Promise<void> {
-  try {
-    const userStore = useUserStore()
-    const { userDetails } = storeToRefs(userStore)
-
-    const url = '/payments/cancel-subscription'
-    const { error, data } = await useFetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        mode: 'cors'
-      },
-      body: JSON.stringify({
-        effectiveFrom: 'immediately',
-        subscriptionId: userDetails.value?.subscriptionId
-      })
-    }).json()
-
-    if (error.value) {
-      console.error('error', error.value)
-      return
-    }
-    if (data.value) {
-      console.log('data', data.value)
-    }
-  } catch (error) {
-    console.error('Error canceling subscription:', error)
-    throw error
-  }
 }

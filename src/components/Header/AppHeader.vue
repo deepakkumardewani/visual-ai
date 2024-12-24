@@ -76,7 +76,7 @@ const { isDark } = storeToRefs(appStore)
                 v-if="route.path === '/dashboard'"
                 class="mx-4"
                 variant="tonal"
-                color="purple-lighten-2"
+                :color="isDark ? 'purple-lighten-2' : 'purple-darken-5'"
                 size="small"
                 to="/signin"
               >

@@ -25,7 +25,6 @@ const headers = [
 ]
 
 const loading = ref(true)
-
 watch(
   payments,
   () => {
@@ -49,7 +48,7 @@ watch(
         class="tw-elevation-1"
         :hide-default-footer="payments.length < 10"
       >
-        <template v-slot:[`item.amount`]="{ item }"> ${{ item.amount.toFixed(2) }} </template>
+        <template v-slot:[`item.amount`]="{ item }"> ₹{{ item.amount.toFixed(2) }} </template>
         <template v-slot:[`item.status`]="{ item }">
           <v-chip color="success">
             {{ item.status }}

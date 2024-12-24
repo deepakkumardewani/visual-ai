@@ -20,7 +20,7 @@ import { MODEL_IDS } from '@/utils/constants'
 
 const userStore = useUserStore()
 const dialogStore = useDialogStore()
-const { userId, userDetails, history } = storeToRefs(userStore)
+const { userId, userDetails, history, isPro, credits } = storeToRefs(userStore)
 const router = useRouter()
 const { isSignedIn } = useUser()
 const { smAndUp } = useDisplay()
@@ -62,6 +62,21 @@ function handleSelected(item: Mode) {
 }
 
 async function generateImage() {
+  if (!isSignedIn.value) {
+    router.push('/signin')
+    return
+  }
+
+  if (!isPro.value && credits.value < 3) {
+    dialogStore.showLowCredits()
+    return
+  }
+
+  if (isPro.value && credits.value === 0) {
+    dialogStore.showLowCredits()
+    return
+  }
+
   if (isSignedIn.value) {
     const body = {
       image: imageUpload?.value?.image,
