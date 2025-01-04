@@ -63,8 +63,6 @@ export const useGenerateStore = defineStore('generate', () => {
   }
 
   async function upscaleImage(imgData: any) {
-    // isLoading.value = true
-    upscaleInProgress.value = true
     const { prompt, image, format, creativity, scale, negativePrompt } = imgData
     const formData = new FormData()
     formData.append('feature', 'upscale')
@@ -82,8 +80,6 @@ export const useGenerateStore = defineStore('generate', () => {
       body: formData
     }).json()
 
-    // isLoading.value = false
-    upscaleInProgress.value = false
     if (error.value) {
       console.log('error', error.value)
       // if (typeof error.value === 'object' && !isEmpty(error.value)) {
@@ -97,8 +93,6 @@ export const useGenerateStore = defineStore('generate', () => {
   }
 
   async function colorizeImage(data: any) {
-    // isLoading.value = true
-    colorizeInProgress.value = true
     const url = `/generate/colorize/image`
     const { image, modelId } = data
     const formData = new FormData()
@@ -111,21 +105,13 @@ export const useGenerateStore = defineStore('generate', () => {
       body: formData
     }).json()
 
-    // isLoading.value = false
-    colorizeInProgress.value = false
     if (error.value) {
       console.error('error', error.value)
-      // isLoading.value = false
       return
     }
-    // if (colorizedImageData.value) {
-    //   userStore.setCredits(colorizedImageData.value.userCreditsRemaining)
-    // }
   }
 
   async function reviveOldImage(data: any) {
-    // isLoading.value = true
-    reviveInProgress.value = true
     const { image } = data
     const formData = new FormData()
     formData.append('userId', userId.value)
@@ -136,16 +122,11 @@ export const useGenerateStore = defineStore('generate', () => {
       method: 'POST',
       body: formData
     }).json()
-    // isLoading.value = false
-    reviveInProgress.value = false
     if (error.value) {
       console.error('error', error.value)
       isLoading.value = false
       return
     }
-    // if (revivedImageData.value) {
-    //   userStore.setCredits(revivedImageData.value.userCreditsRemaining)
-    // }
   }
 
   watch(isLoading, (newVal) => {

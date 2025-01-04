@@ -23,7 +23,7 @@ const { smAndUp } = useDisplay()
 // const dialogStore = useDialogStore()
 const route = useRoute()
 const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
+const { isDark, tab } = storeToRefs(appStore)
 
 // watch(credits, (newCredits) => {
 //   if (newCredits < 30) {
@@ -42,7 +42,7 @@ const { isDark } = storeToRefs(appStore)
         <div class="tw-relative tw-flex tw-min-w-0 tw-shrink-0 tw-items-center tw-gap-3">
           <Logo />
           <div class="tw-relative tw-min-w-0 tw-flex-1 tw-lg:tw-flex-none">
-            <FeatureSelect v-if="route.path === '/dashboard'" />
+            <FeatureSelect v-if="route.path === '/dashboard' && tab === 1" />
           </div>
         </div>
       </v-col>
