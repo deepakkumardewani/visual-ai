@@ -23,7 +23,7 @@ const { reviveInProgress, images } = storeToRefs(generateStore)
 const { getToken } = useAuthStore()
 const token = await getToken()
 const progressUrl = ref('')
-const { data, close, open } = useEventSource(progressUrl, [], {
+const { data, close, open, error } = useEventSource(progressUrl, [], {
   immediate: false
 })
 const imageUpload = ref()
@@ -43,6 +43,8 @@ async function generateImage() {
     dialogStore.showLowCredits()
     return
   }
+  progressUrl.value = ''
+  images.value = []
   if (isSignedIn.value) {
     const body = {
       image: imageUpload?.value?.image
@@ -71,6 +73,12 @@ watch(data, (newVal) => {
     history.value.push(data.image)
     userStore.setCredits(data.userCreditsRemaining)
   }
+})
+
+watch(error, (newVal) => {
+  console.log('error', newVal)
+  localStorage.setItem('reviveInProgress', 'false')
+  reviveInProgress.value = false
 })
 
 onMounted(async () => {

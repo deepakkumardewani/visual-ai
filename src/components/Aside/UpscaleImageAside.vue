@@ -35,7 +35,7 @@ const SCALE = {
 }
 
 const progressUrl = ref('')
-const { data, close, open } = useEventSource(progressUrl, [], {
+const { data, close, open, error } = useEventSource(progressUrl, [], {
   immediate: false
 })
 const imageUpload = ref()
@@ -61,8 +61,8 @@ async function generateImage() {
     return
   }
 
-  console.log('generateImage')
   progressUrl.value = ''
+  images.value = []
   if (isSignedIn.value) {
     const token = await getToken()
     const data = {
@@ -88,6 +88,7 @@ async function generateImage() {
 
 watch(data, (newVal) => {
   const data: JobStatus = JSON.parse(newVal as string)
+  console.log('data', data)
   if (data.status === 'processing') {
     showAlert.value = true
     localStorage.setItem('upscaleInProgress', 'true')
@@ -102,6 +103,12 @@ watch(data, (newVal) => {
     history.value.push(data.image)
     userStore.setCredits(data.userCreditsRemaining)
   }
+})
+
+watch(error, (newVal) => {
+  console.log('error', newVal)
+  localStorage.setItem('upscaleInProgress', 'false')
+  upscaleInProgress.value = false
 })
 
 onMounted(async () => {

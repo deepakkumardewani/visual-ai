@@ -10,6 +10,7 @@ import { useFetch } from '@/composables/useFetch'
 import { MODEL_IDS } from '@/utils/constants'
 
 export const useGenerateStore = defineStore('generate', () => {
+  const promptText = ref<string>('')
   const isLoading = ref(false)
   const isDeleting = ref(false)
   const isFavoriting = ref(false)
@@ -158,6 +159,7 @@ export const useGenerateStore = defineStore('generate', () => {
     upscaleImage,
     colorizeImage,
     reviveOldImage,
+    promptText,
     isLoading,
     deletingImageIds,
     isDeleting,

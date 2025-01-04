@@ -12,7 +12,6 @@ export async function initiatePayment(product: RazorpayProduct, subscribe: boole
   try {
     const userStore = useUserStore()
     const { userDetails } = storeToRefs(userStore)
-    console.log('subscribe', subscribe)
 
     if (subscribe) {
       const options = {
@@ -31,8 +30,6 @@ export async function initiatePayment(product: RazorpayProduct, subscribe: boole
         }
       }
 
-      console.log('options', options)
-
       // @ts-ignore
       const rzp = new Razorpay(options)
       rzp.on('payment.failed', function (response: any) {
@@ -42,8 +39,6 @@ export async function initiatePayment(product: RazorpayProduct, subscribe: boole
     } else {
       const order = await createOrder(product)
       if (order) {
-        console.log('order', order)
-
         const { amount, currency, id } = order
         const options = {
           key: import.meta.env.VITE_RAZORPAY_KEY_ID,

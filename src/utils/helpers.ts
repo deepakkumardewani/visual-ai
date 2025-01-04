@@ -21,6 +21,10 @@ export const deleteImage = async (event: Event, imageId: string) => {
   const url = `/image/delete`
   const { error, data } = await useFetch(url, {
     method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      mode: 'cors'
+    },
     body: JSON.stringify({
       imageId,
       userId: userId.value
@@ -28,6 +32,7 @@ export const deleteImage = async (event: Event, imageId: string) => {
   }).json()
   if (error.value) {
     console.error('error', error.value)
+    isDeleting.value = false
     return
   }
   if (data.value) {
@@ -47,6 +52,10 @@ export const favoriteImage = async (event: Event, imageId: string) => {
   const url = `/image/favorite`
   const { error, data } = await useFetch(url, {
     method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      mode: 'cors'
+    },
     body: JSON.stringify({
       imageId,
       userId: userId.value
@@ -54,6 +63,7 @@ export const favoriteImage = async (event: Event, imageId: string) => {
   }).json()
   if (error.value) {
     console.error('error', error.value)
+    isFavoriting.value = false
     return
   }
   if (data.value) {
@@ -78,7 +88,7 @@ export const downloadImage = async (event: Event, image?: string) => {
     const url = window.URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `image-${Date.now()}.png`
+    a.download = `image-${Date.now()}.${image.split('.').pop()}`
     document.body.appendChild(a)
     a.click()
     window.URL.revokeObjectURL(url)

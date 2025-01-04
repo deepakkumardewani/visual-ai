@@ -59,16 +59,6 @@ function createImageReader() {
 
     if (file) {
       handleFileUpload(file)
-    } else {
-      imagePreview.value!.innerHTML = `<div class="tw-bg-gray-200 tw-h-48 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-text-gray-500">No image preview</div>`
-      imagePreview.value!.classList.add('tw-border-dashed', 'tw-border-2', 'tw-border-gray-400')
-
-      // Remove the event listener when there's no image
-      imagePreview.value?.removeEventListener('click', () => {
-        uploadInput.value?.click()
-      })
-
-      isEventListenerAdded = false
     }
   })
 

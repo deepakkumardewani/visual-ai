@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 import { useUser } from 'vue-clerk'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
 import { VListItemTitle } from 'vuetify/components'
 
@@ -22,7 +22,7 @@ import { ASPECT_RATIOS, IMAGE_FORMATS } from '@/utils/constants'
 import PROMPTS from '@/utils/prompts.json'
 import REALISTIC_PROMPTS from '@/utils/realisticPrompts.json'
 
-const route = useRoute()
+// const route = useRoute()
 const router = useRouter()
 const generateStore = useGenerateStore()
 const appStore = useAppStore()
@@ -32,6 +32,7 @@ const { smAndUp } = useDisplay()
 const { isSignedIn } = useUser()
 const { isPro, credits } = storeToRefs(userStore)
 const { isDark } = storeToRefs(appStore)
+const { promptText } = storeToRefs(generateStore)
 
 const prompt = ref<string>('')
 const typingPrompt = ref<string>('')
@@ -85,7 +86,6 @@ async function generateImage() {
     return
   }
 
-  console.log('generateImage', credits.value === 0)
   if (credits.value === 0) {
     dialogStore.showLowCredits()
     return
@@ -106,17 +106,17 @@ async function generateImage() {
 }
 
 function randomPrompt() {
+  let newPrompt = ''
   if (mode.value.id === MODEL_IDS.FLUX_REALISM) {
     const randomIndex = Math.floor(Math.random() * REALISTIC_PROMPTS.length)
-    const newPrompt = REALISTIC_PROMPTS[randomIndex]
-    typingPrompt.value = ''
-    typePrompt(newPrompt)
+    newPrompt = REALISTIC_PROMPTS[randomIndex]
   } else {
     const randomIndex = Math.floor(Math.random() * PROMPTS.length)
-    const newPrompt = PROMPTS[randomIndex]
-    typingPrompt.value = ''
-    typePrompt(newPrompt)
+    newPrompt = PROMPTS[randomIndex]
   }
+  typingPrompt.value = ''
+  typePrompt(newPrompt)
+  promptText.value = newPrompt
 }
 
 function typePrompt(text: string) {
@@ -169,9 +169,13 @@ watch(outputQuality, (newVal) => {
   }
 })
 
+watch(typingPrompt, (newVal) => {
+  promptText.value = newVal
+})
+
 onMounted(() => {
   focusTextArea(true)
-  prompt.value = (route.query.prompt as string) ?? ''
+  typingPrompt.value = promptText.value ?? ''
 })
 </script>
 <template>

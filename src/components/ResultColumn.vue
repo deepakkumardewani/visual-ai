@@ -27,26 +27,28 @@ const snackbar = ref(false)
 const snackbarTimeout = ref(2000)
 
 const alertTitle = computed(() => {
-  const action = upscaleInProgress.value
-    ? 'Upscaling'
-    : colorizeInProgress.value
-      ? 'Colorizing'
-      : reviveInProgress.value
-        ? 'Reviving'
-        : ''
+  const action =
+    upscaleInProgress.value && feature.value === 'image_upscaler'
+      ? 'Upscaling'
+      : colorizeInProgress.value && feature.value === 'colorize_image'
+        ? 'Colorizing'
+        : reviveInProgress.value && feature.value === 'revive_old_photos'
+          ? 'Reviving'
+          : ''
   if (action) {
     return `${action} your image`
   }
   return ''
 })
 const alertText = computed(() => {
-  const action = upscaleInProgress.value
-    ? 'upscaling'
-    : colorizeInProgress.value
-      ? 'colorizing'
-      : reviveInProgress.value
-        ? 'reviving'
-        : ''
+  const action =
+    upscaleInProgress.value && feature.value === 'image_upscaler'
+      ? 'upscaling'
+      : colorizeInProgress.value && feature.value === 'colorize_image'
+        ? 'colorizing'
+        : reviveInProgress.value && feature.value === 'revive_old_photos'
+          ? 'reviving'
+          : ''
 
   if (action) {
     return `You can keep working -- ${action} runs in the background. Close this dialog and check later on the history tab`
@@ -117,8 +119,12 @@ watch(errMsg, (newVal) => {
   ></v-alert>
 
   <div
-    class="image rounded-lg"
-    :class="{ 'tw-h-full': !mobile, 'tw-h-[59%] tw-overflow-scroll': mobile }"
+    class="rounded-lg"
+    :class="{
+      'tw-h-full': !mobile,
+      'tw-h-[59%] tw-overflow-scroll': mobile,
+      image: images.length === 0
+    }"
   >
     <v-skeleton-loader v-if="showSkeleton" type="image"></v-skeleton-loader>
     <div v-else class="tw-justify-center tw-flex" :class="{ 'tw-h-full': feature === 'ai_image' }">
@@ -128,7 +134,7 @@ watch(errMsg, (newVal) => {
         :class="{ 'tw-items-center': !mobile }"
       >
         <!-- Handle array of images -->
-        <div v-if="images.length > 1" :class="gridClass">
+        <div v-if="images.length > 1" :class="gridClass" class="tw-relative tw-h-full tw-w-full">
           <div
             v-for="img in images"
             :key="img.name"
