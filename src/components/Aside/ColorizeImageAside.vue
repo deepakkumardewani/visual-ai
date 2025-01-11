@@ -60,7 +60,7 @@ function handleSelected(item: Mode) {
 
 async function generateImage() {
   if (!isSignedIn.value) {
-    router.push('/signin')
+    dialogStore.showSignup()
     return
   }
 

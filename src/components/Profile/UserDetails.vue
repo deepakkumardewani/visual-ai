@@ -84,7 +84,7 @@ watch(
 <template>
   <div class="tw-flex tw-w-full tw-flex-col tw-items-center tw-justify-center tw-gap-5 tw-mt-4">
     <Avatar :size="'x-large'" />
-    <div class="tw-flex tw-w-[50%] tw-flex-col tw-gap-5">
+    <div class="tw-flex tw-w-full sm:tw-w-[50%] tw-flex-col tw-gap-5">
       <div class="tw-flex tw-gap-3">
         <v-text-field
           :readonly="!isEditingName"

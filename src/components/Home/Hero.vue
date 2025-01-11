@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { onMounted, onUnmounted, ref } from 'vue'
-import { SignedOut } from 'vue-clerk'
+import { useAuth } from 'vue-clerk'
 
 import { useAppStore } from '@/stores/app'
 
 import FeatureScroll from '@/components/Home/FeatureScroll.vue'
 
+const { isSignedIn } = useAuth()
 const showScrollIndicator = ref(true)
 const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
@@ -96,21 +97,35 @@ const scrollToAbout = () => {
         </v-col>
       </v-row>
     </v-container>
-    <SignedOut>
-      <div class="tw-flex tw-justify-center tw-my-12">
-        <v-btn
-          to="/signup"
-          class="text-none tw-px-8"
-          color="purple-lighten-1"
-          size="x-large"
-          variant="flat"
-          elevation="2"
-        >
-          <v-icon left class="mr-2">fa-solid fa-rocket</v-icon>
-          Get Started - It's Free
-        </v-btn>
-      </div>
-    </SignedOut>
+    <!-- <SignedOut> -->
+    <div
+      v-if="!isSignedIn"
+      v-motion
+      :initial="{
+        opacity: 0,
+        y: 40
+      }"
+      :visibleOnce="{
+        opacity: 1,
+        y: 0
+      }"
+      :delay="250"
+      :duration="600"
+      class="tw-flex tw-justify-center tw-my-12"
+    >
+      <v-btn
+        to="/signup"
+        class="text-none tw-px-8"
+        color="purple-lighten-1"
+        size="x-large"
+        variant="flat"
+        elevation="2"
+      >
+        <v-icon left class="mr-2">fa-solid fa-rocket</v-icon>
+        Get Started - It's Free
+      </v-btn>
+    </div>
+    <!-- </SignedOut> -->
 
     <v-container class="tw-m-0">
       <v-row class="align-center justify-center">
@@ -119,10 +134,16 @@ const scrollToAbout = () => {
             class="tw-border tw-rounded-lg tw-border-slate-900 dark:tw-border-slate-500 tw-overflow-hidden"
             v-motion
             :initial="{
+              y: 60,
               perspective: 800,
               rotateX: 10,
               opacity: isDark ? 0.7 : 1
             }"
+            :visibleOnce="{
+              y: 0
+            }"
+            :delay="250"
+            :duration="700"
           >
             <v-img :src="heroImage" class="tw-rounded-lg" />
           </div>

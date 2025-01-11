@@ -160,11 +160,6 @@ function handleImageVariations(type: string) {
   }
 }
 
-function focusTextArea(event: any) {
-  textareaRef.value.focus()
-  event ? (textAreaFocused.value = true) : (textAreaFocused.value = false)
-}
-
 watch(outputQuality, (newVal) => {
   if (!isPro.value && newVal === 1) {
     outputQuality.value = 0
@@ -177,7 +172,6 @@ watch(typingPrompt, (newVal) => {
 })
 
 onMounted(() => {
-  focusTextArea(true)
   typingPrompt.value = promptText.value ?? ''
 })
 </script>
@@ -198,7 +192,7 @@ onMounted(() => {
         :readonly="isTyping"
       ></v-textarea>
     </div>
-    <div v-else class="d-flex">
+    <div v-else class="tw-flex">
       <div class="tw-w-[85%]">
         <v-textarea
           ref="textareaRef"
@@ -211,8 +205,8 @@ onMounted(() => {
           clearable
           hide-details
           density="compact"
-          @update:focused="focusTextArea"
           :readonly="isTyping"
+          @update:focused="textAreaFocused = !textAreaFocused"
         ></v-textarea>
       </div>
 

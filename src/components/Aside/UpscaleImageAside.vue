@@ -44,7 +44,7 @@ const negativePrompt = ref<string>('')
 
 async function generateImage() {
   if (!isSignedIn.value) {
-    router.push('/signin')
+    dialogStore.showSignup()
     return
   }
 

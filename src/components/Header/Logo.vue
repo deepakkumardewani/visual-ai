@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
+import { useDisplay } from 'vuetify'
 
 const route = useRoute()
 const router = useRouter()
-
+const { mobile } = useDisplay()
 const logoImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/logo.png`
 </script>
 <template>
   <div class="tw-cursor-pointer tw-flex tw-gap-3" @click="router.push('/')">
     <div class="ml-4">
-      <img :src="logoImage" width="35" height="35" />
+      <img :src="logoImage" :width="mobile ? 30 : 35" :height="mobile ? 30 : 35" />
     </div>
-    <div class="tw-text-3xl" v-if="route.path !== '/dashboard'">
+    <div class="tw-text-2xl sm:tw-text-3xl" v-if="route.path !== '/dashboard'">
       <span
         class="tw-bg-gradient-to-r dark:tw-from-purple-400 dark:tw-to-purple-600 tw-from-purple-900 tw-to-purple-800 tw-bg-clip-text tw-text-transparent"
         >Visual AI</span

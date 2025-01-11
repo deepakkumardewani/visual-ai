@@ -81,7 +81,10 @@ watch(history, (newHistory) => {
             <v-icon>fas fa-times</v-icon>
           </v-btn>
 
-          <div v-if="item?.prompt" class="tw-flex tw-items-center tw-font-normal tw-ml-3 tw-mr-10">
+          <div
+            v-if="item?.prompt && !mobile"
+            class="tw-flex tw-items-center tw-font-normal tw-ml-3 tw-mr-10"
+          >
             {{ item.prompt }}
           </div>
         </div>
@@ -132,6 +135,12 @@ watch(history, (newHistory) => {
         </div>
       </div>
 
+      <div
+        v-if="item?.prompt && mobile"
+        class="tw-flex tw-items-center tw-font-normal tw-ml-3 tw-mr-10"
+      >
+        {{ item.prompt }}
+      </div>
       <div class="image tw-flex-grow tw-flex tw-items-center tw-justify-center tw-p-0">
         <div v-if="item?.featureType === FeatureType.IMAGE" class="tw-relative tw-w-full tw-h-full">
           <div

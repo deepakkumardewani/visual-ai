@@ -25,6 +25,9 @@ const route = useRoute()
 const appStore = useAppStore()
 const { isDark, tab } = storeToRefs(appStore)
 
+const isThemeButtonVisible = computed(() => {
+  return route.path !== '/privacy' && route.path !== '/terms' && route.path !== '/refund'
+})
 // watch(credits, (newCredits) => {
 //   if (newCredits < 30) {
 //     dialogStore.showLowCredits()
@@ -55,13 +58,8 @@ const { isDark, tab } = storeToRefs(appStore)
       <v-col :cols="smAndUp ? 3 : route.path === '/dashboard' ? 5 : 6">
         <div class="tw-flex tw-shrink-0 tw-gap-4 tw-mr-2">
           <div id="export-area" class="ml-auto tw-flex tw-items-center tw-gap-4 tw-lg:tw-gap-4">
-            <!-- SignedOut -->
             <SignedOut>
-              <ThemeButton
-                v-if="
-                  route.path !== '/privacy' && route.path !== '/terms' && route.path !== '/refund'
-                "
-              />
+              <ThemeButton v-if="isThemeButtonVisible" />
               <v-btn
                 v-if="route.path === '/'"
                 class="mx-4"
@@ -84,22 +82,9 @@ const { isDark, tab } = storeToRefs(appStore)
               </v-btn>
             </SignedOut>
 
-            <!-- SignedIn -->
             <SignedIn>
               <Coin v-if="route.path === '/dashboard'" />
-              <!-- <ThemeButton v-if="route.path === '/dashboard'" /> -->
-              <!-- <v-btn
-                v-if="route.path !== '/dashboard'"
-                class="mx-4"
-                size="small"
-                variant="tonal"
-                color="purple-lighten-2"
-                to="/dashboard"
-              >
-                Launch App
-              </v-btn> -->
-
-              <CustomButton v-if="route.path !== '/dashboard'" title="Launch App" />
+              <CustomButton v-if="route.path !== '/dashboard'" title="Dashboard" />
               <UserMenu />
             </SignedIn>
           </div>

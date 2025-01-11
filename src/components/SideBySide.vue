@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useDisplay } from 'vuetify'
 
 import { ImgComparisonSlider } from '@img-comparison-slider/vue'
 
@@ -9,6 +10,7 @@ defineProps<{
   inDialog?: boolean
 }>()
 
+const { mobile } = useDisplay()
 const originalImageLoaded = ref(false)
 const enhancedImageLoaded = ref(false)
 const ready = ref(false)
@@ -26,7 +28,9 @@ watch([originalImageLoaded, enhancedImageLoaded], ([original, enhanced]) => {
       <img
         v-show="ready"
         class="tw-rounded-md"
-        :class="inDialog ? 'tw-h-[80vh] tw-w-auto' : 'tw-h-[85vh] tw-w-full'"
+        :class="[
+          mobile ? 'tw-h-auto' : inDialog ? 'tw-h-[80vh] tw-w-auto' : 'tw-h-[85vh] tw-w-full'
+        ]"
         :src="originalImage"
         @load="originalImageLoaded = true"
       />
@@ -36,7 +40,9 @@ watch([originalImageLoaded, enhancedImageLoaded], ([original, enhanced]) => {
       <img
         v-show="ready"
         class="tw-rounded-md"
-        :class="inDialog ? 'tw-h-[80vh] tw-w-auto' : 'tw-h-[85vh] tw-w-full'"
+        :class="[
+          mobile ? 'tw-h-auto' : inDialog ? 'tw-h-[80vh] tw-w-auto' : 'tw-h-[85vh] tw-w-full'
+        ]"
         :src="enhancedImage"
         @load="enhancedImageLoaded = true"
       />

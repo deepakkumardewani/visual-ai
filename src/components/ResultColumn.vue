@@ -51,7 +51,7 @@ const alertText = computed(() => {
           : ''
 
   if (action) {
-    return `You can keep working -- ${action} runs in the background and might take longer than expected. Close this dialog and check later on the history tab`
+    return `You can keep working -- ${action} runs in the background and might take longer than expected. You can close this dialog and check later on the history tab.`
   }
   return ''
 })

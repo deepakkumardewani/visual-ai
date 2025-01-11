@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useDisplay } from 'vuetify'
 
 import { useUserStore } from '@/stores/user'
 
@@ -10,7 +12,8 @@ import { cancelSubscription, initiatePayment } from '@/utils/payment'
 const userStore = useUserStore()
 const { userDetails, isPro } = storeToRefs(userStore)
 const isLoading = ref(false)
-
+const router = useRouter()
+const { mobile } = useDisplay()
 async function handlePlan() {
   if (!isPro.value) {
     try {
@@ -43,12 +46,12 @@ async function handlePlan() {
           <h2 class="tw-text-white tw-mb-4">Plan</h2>
           <v-card variant="outlined" class="tw-p-4 tw-transition-all" elevation="0">
             <div class="tw-flex tw-justify-between tw-items-center">
-              <v-chip :color="isPro ? 'purple-accent-4' : 'grey'" size="small" class="tw-ml-2">
+              <v-chip :color="isPro ? 'purple-accent-4' : 'grey'" size="large" class="tw-ml-2">
                 {{ isPro ? 'Pro' : 'Free' }}
               </v-chip>
               <v-btn
                 @click="handlePlan"
-                :color="isPro ? 'red' : 'purple'"
+                :color="isPro ? 'red-lighten-1' : 'purple-lighten-1'"
                 variant="text"
                 class="tw-font-medium"
                 :loading="isLoading"
@@ -58,8 +61,8 @@ async function handlePlan() {
               </v-btn>
             </div>
           </v-card>
-          <div class="tw-text-sm text-grey-darken-1 tw-mt-2">
-            See limits on the
+          <div class="tw-flex tw-items-center tw-text-sm text-grey-darken-1 tw-mt-2">
+            <div>See limits on the</div>
             <v-btn
               to="/pricing"
               variant="text"
@@ -101,7 +104,8 @@ async function handlePlan() {
             <div class="tw-flex tw-justify-between tw-items-center">
               <span class="text-grey-darken-1">{{ userDetails?.email }}</span>
               <v-btn
-                to="/profile?tab=payments"
+                v-if="!mobile"
+                @click="router.push('/profile?tab=payments')"
                 color="purple-lighten-1"
                 variant="text"
                 class="tw-font-medium"
@@ -110,6 +114,17 @@ async function handlePlan() {
               </v-btn>
             </div>
           </v-card>
+          <div class="tw-mt-2">
+            <v-btn
+              v-if="mobile"
+              @click="router.push('/profile?tab=payments')"
+              color="purple-lighten-1"
+              variant="text"
+              class="tw-font-medium tw-p-0"
+            >
+              Billing history
+            </v-btn>
+          </div>
         </div>
       </v-col>
     </v-row>

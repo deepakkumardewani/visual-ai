@@ -49,7 +49,14 @@ const featureTypes = ref<any[]>([
     title: 'Revive'
   }
 ])
-const imageSizes = ref(IMAGE_SIZE_OPTIONS)
+const imageSizes = computed(() => {
+  return IMAGE_SIZE_OPTIONS.filter((size) => {
+    if (mobile.value && size.value === 'mini') {
+      return false
+    }
+    return true
+  })
+})
 const selectedSize = ref('medium')
 const selectedFeatureType = ref<string[]>([])
 const searchQuery = ref('')
@@ -159,41 +166,43 @@ const getImageUrl = (image: IImage) => {
     <div class="tw-flex-none">
       <div
         v-if="history.length > 0"
-        class="tw-flex tw-justify-end tw-mt-4 tw-px-4 tw-pb-4 tw-gap-4 tw-border-b dark:tw-border-neutral-800"
+        class="tw-flex tw-flex-wrap tw-justify-end tw-mt-4 tw-pb-4 tw-gap-4 tw-border-b dark:tw-border-neutral-800"
       >
-        <v-select
-          v-model="selectedSize"
-          :items="imageSizes"
-          label="Image size"
-          density="compact"
-          variant="outlined"
-          class="tw-max-w-[150px]"
-          hide-details
-          item-title="title"
-          item-value="value"
-        ></v-select>
+        <div class="tw-flex tw-gap-4 tw-w-full sm:tw-w-[30vw]">
+          <v-select
+            class="tw-flex-1"
+            v-model="selectedSize"
+            :items="imageSizes"
+            label="Image size"
+            density="compact"
+            variant="outlined"
+            hide-details
+            item-title="title"
+            item-value="value"
+          ></v-select>
 
-        <v-select
-          v-model="selectedFeatureType"
-          :items="featureTypes"
-          label="Filter by feature"
-          density="compact"
-          variant="outlined"
-          class="tw-max-w-[200px]"
-          hide-details
-          item-title="title"
-          item-value="id"
-          multiple
-          chips
-          closable-chips
-        ></v-select>
+          <v-select
+            class="tw-flex-1"
+            v-model="selectedFeatureType"
+            :items="featureTypes"
+            label="Filter by feature"
+            density="compact"
+            variant="outlined"
+            hide-details
+            item-title="title"
+            item-value="id"
+            multiple
+            chips
+            closable-chips
+          ></v-select>
+        </div>
 
         <v-text-field
           v-model="searchQuery"
           label="Search by prompt"
           density="compact"
           variant="outlined"
-          class="tw-max-w-[200px]"
+          class="tw-w-full md:tw-w-auto md:tw-max-w-[200px]"
           hide-details
         >
           <template v-slot:prepend-inner>
@@ -245,8 +254,8 @@ const getImageUrl = (image: IImage) => {
         </div>
       </div>
 
-      <div v-for="item in groupedHistory" :key="item.title" class="tw-mb-6 tw-p-4">
-        <div class="tw-text-xl tw-font-bold tw-mb-2 tw-text-neutral-500 dark:tw-text-neutral-400">
+      <div v-for="item in groupedHistory" :key="item.title" class="tw-mb-6">
+        <div class="tw-text-2xl tw-font-bold tw-mb-2 tw-text-neutral-500 dark:tw-text-neutral-400">
           {{ item.title }}
         </div>
 
@@ -345,7 +354,7 @@ const getImageUrl = (image: IImage) => {
                       </v-chip>
                     </div>
                     <div
-                      v-if="isHovering && subItem.images.length === 1"
+                      v-if="(isHovering || mobile) && subItem.images.length === 1"
                       class="tw-absolute tw-inset-0 tw-flex tw-flex-col tw-gap-2 tw-items-end tw-pr-2 tw-mr-2 tw-mt-4"
                     >
                       <v-btn

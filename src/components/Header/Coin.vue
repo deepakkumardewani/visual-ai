@@ -8,11 +8,11 @@ import { useUserStore } from '@/stores/user'
 
 import AnimatedCounter from '@/components/Header/AnimatedCounter.vue'
 
-const { smAndUp } = useDisplay()
 const userStore = useUserStore()
-const router = useRouter()
-const { credits, isPro, hasJustSubscribed } = storeToRefs(userStore)
 const dialogStore = useDialogStore()
+const router = useRouter()
+const { smAndUp } = useDisplay()
+const { credits, isPro, hasJustSubscribed } = storeToRefs(userStore)
 </script>
 <template>
   <v-menu :open-on-hover="smAndUp" location="bottom end" offset="5">
