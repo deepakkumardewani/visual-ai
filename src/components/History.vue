@@ -155,144 +155,121 @@ const getImageUrl = (image: IImage) => {
 </script>
 
 <template>
-  <div
-    v-if="isFavorites ? groupedHistory.length > 0 : history.length > 0"
-    class="tw-flex tw-justify-end tw-mt-4 tw-px-4 tw-gap-4"
-  >
-    <v-select
-      v-model="selectedSize"
-      :items="imageSizes"
-      label="Image size"
-      density="compact"
-      variant="outlined"
-      class="tw-max-w-[150px]"
-      hide-details
-      item-title="title"
-      item-value="value"
-    ></v-select>
+  <div class="history-container tw-h-[calc(100vh-64px)] tw-flex tw-flex-col">
+    <div class="tw-flex-none">
+      <div
+        v-if="history.length > 0"
+        class="tw-flex tw-justify-end tw-mt-4 tw-px-4 tw-pb-4 tw-gap-4 tw-border-b dark:tw-border-neutral-800"
+      >
+        <v-select
+          v-model="selectedSize"
+          :items="imageSizes"
+          label="Image size"
+          density="compact"
+          variant="outlined"
+          class="tw-max-w-[150px]"
+          hide-details
+          item-title="title"
+          item-value="value"
+        ></v-select>
 
-    <v-select
-      v-model="selectedFeatureType"
-      :items="featureTypes"
-      label="Filter by feature"
-      density="compact"
-      variant="outlined"
-      class="tw-max-w-[200px]"
-      hide-details
-      item-title="title"
-      item-value="id"
-      multiple
-      chips
-      closable-chips
-    ></v-select>
+        <v-select
+          v-model="selectedFeatureType"
+          :items="featureTypes"
+          label="Filter by feature"
+          density="compact"
+          variant="outlined"
+          class="tw-max-w-[200px]"
+          hide-details
+          item-title="title"
+          item-value="id"
+          multiple
+          chips
+          closable-chips
+        ></v-select>
 
-    <v-text-field
-      v-model="searchQuery"
-      label="Search by prompt"
-      density="compact"
-      variant="outlined"
-      class="tw-max-w-[200px]"
-      hide-details
-    >
-      <template v-slot:prepend-inner>
-        <v-icon class="tw-mr-1" size="x-small" icon="fas fa-search" />
-      </template>
-      <template v-slot:append-inner>
-        <v-btn icon size="x-small" variant="text" v-if="searchQuery" @click="searchQuery = ''">
-          <v-icon icon="fas fa-xmark" />
-        </v-btn>
-      </template>
-    </v-text-field>
-  </div>
-  <div
-    v-if="history.length === 0"
-    class="tw-flex tw-justify-center tw-items-center tw-h-[calc(100vh-200px)] tw-text-xl tw-mx-auto"
-  >
-    <div class="tw-text-center tw-text-neutral-400">
-      <div>You have not created any thing yet.</div>
-      <div>
-        Go ahead and
-        <span
-          @click="create"
-          class="tw-text-[#ba68c8] tw-cursor-pointer tw-font-bold hover:tw-underline"
-          >create</span
+        <v-text-field
+          v-model="searchQuery"
+          label="Search by prompt"
+          density="compact"
+          variant="outlined"
+          class="tw-max-w-[200px]"
+          hide-details
         >
-        something.
+          <template v-slot:prepend-inner>
+            <v-icon class="tw-mr-1" size="x-small" icon="fas fa-search" />
+          </template>
+          <template v-slot:append-inner>
+            <v-btn icon size="x-small" variant="text" v-if="searchQuery" @click="searchQuery = ''">
+              <v-icon icon="fas fa-xmark" />
+            </v-btn>
+          </template>
+        </v-text-field>
       </div>
     </div>
-  </div>
 
-  <div
-    v-if="isFavorites && groupedHistory.length === 0"
-    class="tw-flex tw-justify-center tw-items-center tw-h-[calc(100vh-200px)] tw-text-xl tw-mx-auto"
-  >
-    <div class="tw-text-center tw-text-neutral-400">
-      <div>You have not added any favorites yet.</div>
-    </div>
-  </div>
-
-  <div v-for="item in groupedHistory" :key="item.title" class="tw-mb-6 tw-p-4">
-    <div class="tw-text-xl tw-font-bold tw-mb-2 tw-text-neutral-500 dark:tw-text-neutral-400">
-      {{ item.title }}
-    </div>
-
-    <div :class="['tw-grid tw-gap-4', sizeClasses[selectedSize as keyof typeof sizeClasses]]">
-      <template v-for="subItem in item.data" :key="subItem._id">
-        <v-hover v-slot="{ isHovering, props }">
-          <TransitionGroup name="image-list" tag="div">
-            <div
-              :key="subItem._id"
-              v-bind="props"
-              class="tw-aspect-square tw-overflow-hidden tw-rounded-lg tw-relative"
+    <div class="tw-flex-1 tw-overflow-y-auto tw-pt-4">
+      <div
+        v-if="history.length === 0"
+        class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl tw-mx-auto"
+      >
+        <div class="tw-text-center tw-text-neutral-400">
+          <div>You have not created any thing yet.</div>
+          <div>
+            Go ahead and
+            <span
+              @click="create"
+              class="tw-text-[#ba68c8] tw-cursor-pointer tw-font-bold hover:tw-underline"
+              >create</span
             >
-              <div
-                @click="showImage(subItem)"
-                class="tw-cursor-pointer dark:tw-bg-darkBorder tw-bg-lightBorder tw-p-1 tw-aspect-square"
-              >
-                <template v-if="subItem.images.length === 1">
-                  <v-img
-                    :aspect-ratio="1"
-                    cover
-                    :src="getImageUrl(subItem.images[0])"
-                    :alt="subItem.featureType"
-                    class="tw-rounded-lg"
-                  >
-                    <template v-slot:placeholder>
-                      <div class="d-flex align-center justify-center fill-height">
-                        <v-progress-circular
-                          color="grey-lighten-4"
-                          indeterminate
-                        ></v-progress-circular>
-                      </div>
-                    </template>
-                  </v-img>
-                </template>
+            something.
+          </div>
+        </div>
+      </div>
 
-                <template v-else>
+      <div
+        v-if="isFavorites && history.length !== 0 && groupedHistory.length === 0"
+        class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl tw-mx-auto"
+      >
+        <div class="tw-text-center tw-text-neutral-400">
+          <div>No results found.</div>
+        </div>
+      </div>
+
+      <div
+        v-if="isFavorites && history.length === 0 && groupedHistory.length === 0"
+        class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl tw-mx-auto"
+      >
+        <div class="tw-text-center tw-text-neutral-400">
+          <div>You have not added any favorites yet.</div>
+        </div>
+      </div>
+
+      <div v-for="item in groupedHistory" :key="item.title" class="tw-mb-6 tw-p-4">
+        <div class="tw-text-xl tw-font-bold tw-mb-2 tw-text-neutral-500 dark:tw-text-neutral-400">
+          {{ item.title }}
+        </div>
+
+        <div :class="['tw-grid tw-gap-4', sizeClasses[selectedSize as keyof typeof sizeClasses]]">
+          <template v-for="subItem in item.data" :key="subItem._id">
+            <v-hover v-slot="{ isHovering, props }">
+              <TransitionGroup name="image-list" tag="div">
+                <div
+                  :key="subItem._id"
+                  v-bind="props"
+                  class="tw-aspect-square tw-overflow-hidden tw-rounded-lg tw-relative"
+                >
                   <div
-                    class="tw-relative tw-flex tw-h-full"
-                    @mouseenter="startCarousel(subItem._id, subItem.images)"
-                    @mouseleave="stopCarousel(subItem._id)"
+                    @click="showImage(subItem)"
+                    class="tw-cursor-pointer dark:tw-bg-darkBorder tw-bg-lightBorder tw-p-1 tw-aspect-square"
                   >
-                    <template v-for="(img, index) in subItem.images" :key="index">
+                    <template v-if="subItem.images.length === 1">
                       <v-img
+                        :aspect-ratio="1"
                         cover
-                        :src="img.aiImageUrl"
+                        :src="getImageUrl(subItem.images[0])"
                         :alt="subItem.featureType"
-                        class="tw-rounded-sm"
-                        :class="{
-                          'tw-border-black tw-border-2': !isCarouselActive[subItem._id]
-                        }"
-                        :style="{
-                          transition: 'all 0.5s ease-in-out',
-                          width: isHovering
-                            ? carouselIndexes[subItem._id] === index
-                              ? '100%'
-                              : '0%'
-                            : '25%',
-                          transform: !isHovering ? `translateX(${index * 1}px)` : `translateX(0)`,
-                          zIndex: 100
-                        }"
+                        class="tw-rounded-lg"
                       >
                         <template v-slot:placeholder>
                           <div class="d-flex align-center justify-center fill-height">
@@ -304,67 +281,108 @@ const getImageUrl = (image: IImage) => {
                         </template>
                       </v-img>
                     </template>
-                  </div>
-                </template>
 
-                <div
-                  v-if="isHovering || mobile"
-                  class="tw-absolute tw-inset-0 tw-flex tw-flex-row tw-items-start lg:tw-mx-3 lg:tw-my-3 tw-mx-2 tw-my-2 tw-opacity-90"
-                >
-                  <v-chip size="small" :color="isDark ? 'black' : 'white'" label variant="flat">
-                    <div>
-                      <v-icon
-                        :icon="
-                          isDark
-                            ? `${FeatureIcon[subItem.featureType as keyof typeof FeatureIcon]}Dark`
-                            : FeatureIcon[subItem.featureType as keyof typeof FeatureIcon]
-                        "
-                        size="medium"
-                        start
-                      ></v-icon>
+                    <template v-else>
+                      <div
+                        class="tw-relative tw-flex tw-h-full"
+                        @mouseenter="startCarousel(subItem._id, subItem.images)"
+                        @mouseleave="stopCarousel(subItem._id)"
+                      >
+                        <template v-for="(img, index) in subItem.images" :key="index">
+                          <v-img
+                            cover
+                            :src="img.aiImageUrl"
+                            :alt="subItem.featureType"
+                            class="tw-rounded-sm"
+                            :class="{
+                              'tw-border-black tw-border-2': !isCarouselActive[subItem._id]
+                            }"
+                            :style="{
+                              transition: 'all 0.5s ease-in-out',
+                              width: isHovering
+                                ? carouselIndexes[subItem._id] === index
+                                  ? '100%'
+                                  : '0%'
+                                : '25%',
+                              transform: !isHovering
+                                ? `translateX(${index * 1}px)`
+                                : `translateX(0)`,
+                              zIndex: 100
+                            }"
+                          >
+                            <template v-slot:placeholder>
+                              <div class="d-flex align-center justify-center fill-height">
+                                <v-progress-circular
+                                  color="grey-lighten-4"
+                                  indeterminate
+                                ></v-progress-circular>
+                              </div>
+                            </template>
+                          </v-img>
+                        </template>
+                      </div>
+                    </template>
+
+                    <div
+                      v-if="isHovering || mobile"
+                      class="tw-absolute tw-inset-0 tw-flex tw-flex-row tw-items-start lg:tw-mx-3 lg:tw-my-3 tw-mx-2 tw-my-2 tw-opacity-90"
+                    >
+                      <v-chip size="small" :color="isDark ? 'black' : 'white'" label variant="flat">
+                        <div>
+                          <v-icon
+                            :icon="
+                              isDark
+                                ? `${FeatureIcon[subItem.featureType as keyof typeof FeatureIcon]}Dark`
+                                : FeatureIcon[subItem.featureType as keyof typeof FeatureIcon]
+                            "
+                            size="medium"
+                            start
+                          ></v-icon>
+                        </div>
+                        <div class="tw-text-xs tw-text-black dark:tw-text-white">
+                          {{ subItem.featureType }}
+                        </div>
+                      </v-chip>
                     </div>
-                    <div class="tw-text-xs tw-text-black dark:tw-text-white">
-                      {{ subItem.featureType }}
+                    <div
+                      v-if="isHovering && subItem.images.length === 1"
+                      class="tw-absolute tw-inset-0 tw-flex tw-flex-col tw-gap-2 tw-items-end tw-pr-2 tw-mr-2 tw-mt-4"
+                    >
+                      <v-btn
+                        icon
+                        size="x-small"
+                        :color="isDark ? 'black' : 'white'"
+                        @click="downloadImage($event, subItem.images[0].aiImageUrl)"
+                      >
+                        <v-icon :color="isDark ? 'white' : 'black'">fas fa-download</v-icon>
+                      </v-btn>
+                      <v-btn
+                        icon
+                        size="x-small"
+                        :color="isDark ? 'black' : 'white'"
+                        @click="favoriteImage($event, subItem._id)"
+                      >
+                        <v-icon :color="isDark ? 'white' : 'black'">{{
+                          subItem.isFavorite ? 'fas fa-heart' : 'far fa-heart'
+                        }}</v-icon>
+                      </v-btn>
+                      <v-btn
+                        icon
+                        :loading="deletingImageIds.includes(subItem._id)"
+                        size="x-small"
+                        :color="isDark ? 'black' : 'white'"
+                        @click="deleteImage($event, subItem._id)"
+                      >
+                        <v-icon :color="isDark ? 'white' : 'black'">fas fa-trash-alt</v-icon>
+                      </v-btn>
                     </div>
-                  </v-chip>
+                  </div>
                 </div>
-                <div
-                  v-if="isHovering && subItem.images.length === 1"
-                  class="tw-absolute tw-inset-0 tw-flex tw-flex-col tw-gap-2 tw-items-end tw-pr-2 tw-mr-2 tw-mt-4"
-                >
-                  <v-btn
-                    icon
-                    size="x-small"
-                    :color="isDark ? 'black' : 'white'"
-                    @click="downloadImage($event, subItem.images[0].aiImageUrl)"
-                  >
-                    <v-icon :color="isDark ? 'white' : 'black'">fas fa-download</v-icon>
-                  </v-btn>
-                  <v-btn
-                    icon
-                    size="x-small"
-                    :color="isDark ? 'black' : 'white'"
-                    @click="favoriteImage($event, subItem._id)"
-                  >
-                    <v-icon :color="isDark ? 'white' : 'black'">{{
-                      subItem.isFavorite ? 'fas fa-heart' : 'far fa-heart'
-                    }}</v-icon>
-                  </v-btn>
-                  <v-btn
-                    icon
-                    :loading="deletingImageIds.includes(subItem._id)"
-                    size="x-small"
-                    :color="isDark ? 'black' : 'white'"
-                    @click="deleteImage($event, subItem._id)"
-                  >
-                    <v-icon :color="isDark ? 'white' : 'black'">fas fa-trash-alt</v-icon>
-                  </v-btn>
-                </div>
-              </div>
-            </div>
-          </TransitionGroup>
-        </v-hover>
-      </template>
+              </TransitionGroup>
+            </v-hover>
+          </template>
+        </div>
+      </div>
     </div>
   </div>
   <ImageDialog :item="imageDialogItem" />
@@ -397,5 +415,10 @@ const getImageUrl = (image: IImage) => {
 
 .v-img {
   transition: clip-path 0.3s ease;
+}
+
+.history-container {
+  height: calc(100vh - 64px);
+  overflow: hidden;
 }
 </style>

@@ -6,7 +6,6 @@ import { useRouter } from 'vue-router'
 
 import type { JobStatus } from '@/types'
 
-import { useAuthStore } from '@/stores/auth'
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
@@ -20,8 +19,7 @@ const userStore = useUserStore()
 const generateStore = useGenerateStore()
 const { userId, history, isPro, credits } = storeToRefs(userStore)
 const { reviveInProgress, images } = storeToRefs(generateStore)
-const { getToken } = useAuthStore()
-const token = await getToken()
+
 const progressUrl = ref('')
 const { data, close, open, error } = useEventSource(progressUrl, [], {
   immediate: false
@@ -50,7 +48,7 @@ async function generateImage() {
       image: imageUpload?.value?.image
     }
     generateStore.reviveOldImage(body)
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}&token=${token}`
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`
     open()
     localStorage.setItem('reviveInProgress', 'true')
     reviveInProgress.value = true
@@ -86,7 +84,7 @@ onMounted(async () => {
   if (inProgress === true) {
     const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
     reviveInProgress.value = true
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}&token=${token}`
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}`
     open()
   }
 })

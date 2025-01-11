@@ -9,12 +9,15 @@ import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue'
 import AppHeader from '@/components/Header/AppHeader.vue'
 
 const appStore = useAppStore()
-const { tab } = storeToRefs(appStore)
+const { tab, snackbar, snackbarTimeout, snackbarText } = storeToRefs(appStore)
 const route = useRoute()
 
 const { isDark } = storeToRefs(useAppStore())
 const isHeaderVisible = computed(() => {
   return route.path !== '/signin' && route.path !== '/login' && route.path !== '/signup'
+})
+const overflowHidden = computed(() => {
+  return route.path === '/dashboard' && tab.value === 1
 })
 const isFooterVisible = computed(() => {
   return (
@@ -24,58 +27,17 @@ const isFooterVisible = computed(() => {
     route.path !== '/dashboard'
   )
 })
-
-// function initializePaddle() {
-//   if (window.Paddle) {
-//     window.Paddle.Environment.set('sandbox')
-//     window.Paddle.Initialize({
-//       token: import.meta.env.VITE_PADDLE_TOKEN,
-//       eventCallback: function (data) {
-//         if (data.name == 'checkout.completed' && data?.data?.items && data?.data?.items[0]) {
-//           const price_id = data?.data?.items[0].price_id
-//           const { custom_data } = data?.data as any
-//           if (custom_data?.subscribe) {
-//             isPro.value = true
-//           }
-//           const product = PADDLE_PRODUCTS.find((product) => product.priceId === price_id)
-//           if (product) {
-//             dialogStore.hideBuyCredits()
-//             window.Paddle?.Checkout.close()
-//             hasJustSubscribed.value = true
-//             router.push('/dashboard')
-//             setTimeout(() => {
-//               const newCredits = (credits?.value ?? 0) + product.credits
-//               userStore.setCredits(newCredits)
-//             }, 700)
-//           }
-//         }
-//       }
-//     })
-//   }
-// }
-
 onMounted(() => {
   // add dark mode for tailwind css on load
   document.documentElement.classList.add('tw-dark')
 })
 </script>
 <template>
-  <!-- <v-app>
-    <v-main
-      :class="{
-        'tw-h-screen tw-overflow-y-hidden': route.path === '/dashboard' && tab === 1
-      }"
-    >
-      <router-view />
-      <ReferralDialog />
-    </v-main>
-  </v-app> -->
-
   <v-app :class="isDark ? 'dark-bg' : 'light-bg'">
     <AppHeader v-if="isHeaderVisible" />
     <v-main
       :class="{
-        'tw-h-[98vh] tw-overflow-y-hidden': route.path === '/dashboard' && tab === 1
+        'tw-h-[98vh] tw-overflow-y-hidden': overflowHidden
       }"
     >
       <router-view />
@@ -85,6 +47,15 @@ onMounted(() => {
       <div class="tw-flex-grow tw-border-t tw-border-neutral-600"></div>
     </div>
     <AppFooter v-if="isFooterVisible" />
+
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="snackbarTimeout"
+      location="bottom right"
+      color="purple-accent-4"
+    >
+      {{ snackbarText }}
+    </v-snackbar>
   </v-app>
 </template>
 

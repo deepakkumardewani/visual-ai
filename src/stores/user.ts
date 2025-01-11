@@ -14,6 +14,8 @@ export const useUserStore = defineStore('user', () => {
   const credits = ref(0)
   const isPro = ref(false)
   const hasJustSubscribed = ref(false)
+  const isUpdatingName = ref(false)
+  const isUpdatingUsername = ref(false)
   function setCredits(value: number) {
     credits.value = value
   }
@@ -45,6 +47,43 @@ export const useUserStore = defineStore('user', () => {
       return
     }
   }
+
+  async function updateName(firstName: string, lastName: string) {
+    const url = `/users/fullname`
+    isUpdatingName.value = true
+    const { error } = await useFetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        mode: 'cors'
+      },
+      body: JSON.stringify({ firstName, lastName, userId: userId.value })
+    }).json()
+    isUpdatingName.value = false
+
+    if (error.value) {
+      console.error('Error updating name:', error.value)
+      return
+    }
+  }
+
+  async function updateUsername(username: string) {
+    const url = `/users/username`
+    isUpdatingUsername.value = true
+    const { error } = await useFetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        mode: 'cors'
+      },
+      body: JSON.stringify({ userName: username, userId: userId.value })
+    }).json()
+    isUpdatingUsername.value = false
+    if (error.value) {
+      console.error('Error updating username:', error.value)
+      return
+    }
+  }
   watch(user, () => {
     if (user.value) {
       const { id } = user.value
@@ -52,5 +91,18 @@ export const useUserStore = defineStore('user', () => {
       getUserDetails()
     }
   })
-  return { userId, credits, setCredits, userDetails, history, isPro, payments, hasJustSubscribed }
+  return {
+    userId,
+    credits,
+    userDetails,
+    history,
+    isPro,
+    payments,
+    hasJustSubscribed,
+    isUpdatingName,
+    isUpdatingUsername,
+    setCredits,
+    updateName,
+    updateUsername
+  }
 })

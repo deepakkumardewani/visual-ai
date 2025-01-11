@@ -7,7 +7,6 @@ import { useDisplay } from 'vuetify'
 
 import type { JobStatus, Mode } from '@/types'
 
-import { useAuthStore } from '@/stores/auth'
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
@@ -27,8 +26,6 @@ const { smAndUp } = useDisplay()
 const generateStore = useGenerateStore()
 const { colorizeInProgress, images } = storeToRefs(generateStore)
 
-const { getToken } = useAuthStore()
-const token = await getToken()
 const progressUrl = ref('')
 const { data, close, open, error } = useEventSource(progressUrl, [], {
   immediate: false
@@ -84,7 +81,7 @@ async function generateImage() {
       modelId: mode.value.id
     }
     generateStore.colorizeImage(body)
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}&token=${token}`
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`
     open()
     localStorage.setItem('colorizeInProgress', 'true')
     colorizeInProgress.value = true
@@ -121,7 +118,7 @@ onMounted(async () => {
   if (inProgress === true) {
     const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
     colorizeInProgress.value = true
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}&token=${token}`
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}`
     open()
   }
 })

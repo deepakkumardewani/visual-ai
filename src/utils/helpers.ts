@@ -105,11 +105,46 @@ export const applyReferralCode = async (code: string) => {
   const url = `/users/apply-referral`
   const { error, data, response } = await useFetch(url, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      mode: 'cors'
+    },
     body: JSON.stringify({
       userId: userId.value,
       userEmail: userDetails.value?.email,
       userName: userDetails.value?.userName,
       referralCode: code
+    })
+  }).json()
+  if (data.value) {
+    userStore.setCredits(data.value.credits)
+    dialogStore.hideReferral()
+  }
+
+  if (error.value) {
+    // Check response status and parse error message from response
+    if (response.value?.status === 400) {
+      const errorData = await response.value.json()
+      throw new Error(errorData.message)
+    }
+    // Handle other types of errors
+    console.error('Error:', error.value)
+    throw new Error('Something went wrong')
+  }
+}
+export const contactForm = async (formData: any) => {
+  const url = `/users/contact`
+  const { error, data, response } = await useFetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      mode: 'cors'
+    },
+    body: JSON.stringify({
+      name: formData.name,
+      email: formData.email,
+      subject: formData.subject,
+      message: formData.message
     })
   }).json()
 
@@ -124,8 +159,7 @@ export const applyReferralCode = async (code: string) => {
     throw new Error('Something went wrong')
   }
   if (data.value) {
-    userStore.setCredits(data.value.credits)
-    dialogStore.hideReferral()
+    console.log('data', data.value)
   }
 }
 export const formatFileSize = (bytes: number | undefined): string => {

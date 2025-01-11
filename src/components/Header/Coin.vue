@@ -31,7 +31,7 @@ const dialogStore = useDialogStore()
     </template>
     <v-card class="pa-3 text-center tw-text-sm">
       <div>
-        <span class="tw-font-bold">{{ credits }}</span> credits left for today
+        <span class="tw-font-bold">{{ credits }}</span> credits left for today. Reset tomorrow.
       </div>
       <div>
         <template v-if="!isPro">

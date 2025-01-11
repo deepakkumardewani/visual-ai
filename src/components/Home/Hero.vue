@@ -11,6 +11,8 @@ const showScrollIndicator = ref(true)
 const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
 
+const heroImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/hero.png`
+
 // Handle scroll event to hide indicator when user starts scrolling
 function handleScroll() {
   if (window.scrollY > 100) {
@@ -122,7 +124,7 @@ const scrollToAbout = () => {
               opacity: isDark ? 0.7 : 1
             }"
           >
-            <v-img src="/src/assets/hero.png" class="tw-rounded-lg" />
+            <v-img :src="heroImage" class="tw-rounded-lg" />
           </div>
         </v-col>
       </v-row>

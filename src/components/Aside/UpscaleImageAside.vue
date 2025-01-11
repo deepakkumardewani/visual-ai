@@ -7,7 +7,6 @@ import { useRouter } from 'vue-router'
 
 import type { JobStatus } from '@/types'
 
-import { useAuthStore } from '@/stores/auth'
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
@@ -16,8 +15,6 @@ import Heading from '@/components/Aside/Heading.vue'
 import ImageUpload from '@/components/Aside/ImageUpload.vue'
 
 import { IMAGE_SIZES } from '@/utils/constants'
-
-const { getToken } = useAuthStore()
 
 const userStore = useUserStore()
 const dialogStore = useDialogStore()
@@ -64,7 +61,6 @@ async function generateImage() {
   progressUrl.value = ''
   images.value = []
   if (isSignedIn.value) {
-    const token = await getToken()
     const data = {
       prompt: prompt.value,
       negativePrompt: negativePrompt.value,
@@ -75,7 +71,7 @@ async function generateImage() {
     }
 
     generateStore.upscaleImage(data)
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}&token=${token}`
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`
     showAlert.value = true
     open()
     localStorage.setItem('upscaleInProgress', 'true')
@@ -115,10 +111,9 @@ onMounted(async () => {
   const inProgress = JSON.parse(localStorage.getItem('upscaleInProgress') as string)
   console.log('inProgress', inProgress)
   if (inProgress === true) {
-    const token = await getToken()
     const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
     upscaleInProgress.value = true
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}&token=${token}`
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}`
     open()
   }
 })

@@ -3,8 +3,9 @@ import { storeToRefs } from 'pinia'
 import { reactive, ref } from 'vue'
 
 import { useAppStore } from '@/stores/app'
+import { useUserStore } from '@/stores/user'
 
-import { useFetch } from '@/composables/useFetch'
+import { contactForm } from '@/utils/helpers'
 
 interface FormData {
   firstName: string
@@ -13,15 +14,18 @@ interface FormData {
   subject: string
   message: string
 }
+const appStore = useAppStore()
+const { isDark } = storeToRefs(appStore)
+const userStore = useUserStore()
+const { userDetails } = storeToRefs(userStore)
 
 const isFormValid = ref(false)
 const isLoading = ref(false)
 const showSnackbar = ref(false)
 const snackbarText = ref('')
 const snackbarColor = ref('success')
+const form = ref()
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
 const formData = reactive<FormData>({
   firstName: '',
   lastName: '',
@@ -54,14 +58,13 @@ const handleSubmit = async () => {
   try {
     isLoading.value = true
 
-    const { error } = await useFetch('/api/contact', {
-      method: 'POST',
-      body: JSON.stringify(formData)
-    }).json()
-
-    if (error.value) {
-      throw new Error(error.value)
+    const data = {
+      name: `${formData.firstName} ${formData.lastName}`,
+      email: formData.email,
+      subject: formData.subject,
+      message: formData.message
     }
+    await contactForm(data)
 
     // Show success message
     snackbarColor.value = 'success'
@@ -69,9 +72,7 @@ const handleSubmit = async () => {
     showSnackbar.value = true
 
     // Reset form
-    Object.keys(formData).forEach((key) => {
-      formData[key as keyof FormData] = ''
-    })
+    form.value.reset()
   } catch (error) {
     // Show error message
     snackbarColor.value = 'error'
@@ -81,6 +82,12 @@ const handleSubmit = async () => {
     isLoading.value = false
   }
 }
+
+watch(userDetails, () => {
+  formData.firstName = userDetails.value?.firstName || ''
+  formData.lastName = userDetails.value?.lastName || ''
+  formData.email = userDetails.value?.email || ''
+})
 </script>
 
 <template>
@@ -89,7 +96,7 @@ const handleSubmit = async () => {
       <!-- Contact Form Section -->
       <v-col cols="12" md="8">
         <h1 class="tw-text-3xl tw-font-bold tw-mb-8">Get in Touch</h1>
-        <v-form @submit.prevent="handleSubmit" v-model="isFormValid">
+        <v-form ref="form" @submit.prevent="handleSubmit" v-model="isFormValid">
           <v-row>
             <v-col cols="12" sm="6">
               <v-text-field
@@ -97,6 +104,7 @@ const handleSubmit = async () => {
                 :rules="nameRules"
                 label="First Name"
                 variant="outlined"
+                name="firstName"
                 required
               />
             </v-col>
@@ -106,6 +114,7 @@ const handleSubmit = async () => {
                 :rules="nameRules"
                 label="Last Name"
                 variant="outlined"
+                name="lastName"
                 required
               />
             </v-col>
@@ -115,6 +124,7 @@ const handleSubmit = async () => {
                 :rules="emailRules"
                 label="Email"
                 variant="outlined"
+                name="email"
                 required
               />
             </v-col>
@@ -124,6 +134,7 @@ const handleSubmit = async () => {
                 :rules="subjectRules"
                 label="Subject"
                 variant="outlined"
+                name="subject"
                 required
               />
             </v-col>
@@ -133,6 +144,7 @@ const handleSubmit = async () => {
                 :rules="messageRules"
                 label="Message"
                 variant="outlined"
+                name="message"
                 required
                 rows="4"
               />

@@ -2,12 +2,13 @@ import { storeToRefs } from 'pinia'
 
 import { RazorpayProduct } from '@/types'
 
+import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
 
 import { useFetch } from '@/composables/useFetch'
 
-const SUBSCRIPTION_ID = 'sub_PaJqYGkwVUCNKv'
+const SUBSCRIPTION_ID = import.meta.env.VITE_RAZORPAY_SUBSCRIPTION_ID
 export async function initiatePayment(product: RazorpayProduct, subscribe: boolean = false) {
   try {
     const userStore = useUserStore()
@@ -60,9 +61,7 @@ export async function initiatePayment(product: RazorpayProduct, subscribe: boole
             color: '#3b0764'
           },
           handler: async function (response: any) {
-            console.log('response', response)
             const success = await verifyPayment(response)
-            console.log('success', success)
             if (success) {
               successHandler(product.credits)
             } else {
@@ -87,12 +86,17 @@ function successHandler(amount: number) {
   const dialogStore = useDialogStore()
   const userStore = useUserStore()
   const { hasJustSubscribed, credits } = storeToRefs(userStore)
+  const appStore = useAppStore()
+  const { snackbar, snackbarTimeout, snackbarText } = storeToRefs(appStore)
   dialogStore.hideBuyCredits()
   hasJustSubscribed.value = true
 
   setTimeout(() => {
     const newCredits = (credits?.value ?? 0) + amount
     userStore.setCredits(newCredits)
+    snackbar.value = true
+    snackbarTimeout.value = 2000
+    snackbarText.value = 'Payment successful'
   }, 700)
 }
 
@@ -101,7 +105,7 @@ function failureHandler(response: any) {
 }
 
 async function verifyPayment(response: any) {
-  const url = '/verify-payment'
+  const url = '/payments/verify-payment'
   const { error, data } = await useFetch(url, {
     method: 'POST',
     headers: {
@@ -121,7 +125,8 @@ async function verifyPayment(response: any) {
 }
 
 async function createOrder(product: RazorpayProduct) {
-  const url = '/create-order'
+  const url = '/payments/order/create'
+  const receiptId = `order_rcptid_${Math.random().toString(36).substring(2, 15)}`
   const { error, data: order } = await useFetch(url, {
     method: 'POST',
     headers: {
@@ -131,7 +136,7 @@ async function createOrder(product: RazorpayProduct) {
     body: JSON.stringify({
       amount: product.price, // Amount in INR (without decimal, e.g., 500 = ₹5.00)
       currency: product.currency,
-      receipt: `order_rcptid_${Math.random().toString(36).substring(2, 15)}`
+      receipt: receiptId
     })
   }).json<any>()
 
@@ -147,7 +152,7 @@ export async function cancelSubscription(): Promise<void> {
     const userStore = useUserStore()
     const { userDetails } = storeToRefs(userStore)
 
-    const url = '/payments/cancel-subscription'
+    const url = '/payments/subscription/cancel'
     const { error, data } = await useFetch(url, {
       method: 'POST',
       headers: {
@@ -155,8 +160,7 @@ export async function cancelSubscription(): Promise<void> {
         mode: 'cors'
       },
       body: JSON.stringify({
-        effectiveFrom: 'immediately',
-        subscriptionId: userDetails.value?.subscriptionId
+        userId: userDetails.value?.userId
       })
     }).json()
 

@@ -3,11 +3,13 @@ import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
+
+const logoImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/logo.png`
 </script>
 <template>
   <div class="tw-cursor-pointer tw-flex tw-gap-3" @click="router.push('/')">
     <div class="ml-4">
-      <img src="/src/assets/logo.png" width="35" height="35" />
+      <img :src="logoImage" width="35" height="35" />
     </div>
     <div class="tw-text-3xl" v-if="route.path !== '/dashboard'">
       <span

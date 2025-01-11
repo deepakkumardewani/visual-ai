@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
+import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
 
@@ -9,6 +11,8 @@ const router = useRouter()
 const dialogStore = useDialogStore()
 const userStore = useUserStore()
 
+const appStore = useAppStore()
+const { feature } = storeToRefs(appStore)
 const closeDialog = () => {
   dialogStore.showLowCreditsDialog = false
 }
@@ -25,6 +29,29 @@ const handleBuyCredits = () => {
 
 const creditTextColor = computed(() => {
   return userStore.credits <= 5 ? 'error' : 'warning'
+})
+
+const creditRequirement = computed(() => {
+  const isPaidPlan = userStore.isPro
+  if (feature.value === 'generate') {
+    return 1
+  }
+  return isPaidPlan ? 1 : 3
+})
+
+const featureText = computed(() => {
+  switch (feature.value) {
+    case 'image_upscaler':
+      return 'upscale an image'
+    case 'colorize_image':
+      return 'colorize an image'
+    case 'revive_old_photos':
+      return 'revive an old photo'
+    case 'generate':
+      return 'generate an AI image'
+    default:
+      return 'generate an AI image'
+  }
 })
 </script>
 
@@ -47,8 +74,12 @@ const creditTextColor = computed(() => {
 
       <v-card-text class="tw-text-center tw-py-4">
         <p class="tw-text-lg tw-mb-6 tw-text-gray-400">
-          You are running low on credits. To continue generating AI images, add more credits or
-          subscribe to pro.
+          You are running low on credits. To {{ featureText }}, {{ creditRequirement }}
+          {{ creditRequirement === 1 ? 'credit is' : 'credits are' }} required. To continue, add
+          more credits or subscribe to pro
+          <template v-if="!userStore.isPro && feature !== 'generate'">
+            to reduce credit usage to 1 credit per operation</template
+          >.
         </p>
         <v-chip :color="creditTextColor" variant="outlined" size="large" class="tw-px-6 tw-py-3">
           <v-icon start icon="fas fa-coins" class="tw-mr-2" />

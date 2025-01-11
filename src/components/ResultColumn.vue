@@ -51,7 +51,7 @@ const alertText = computed(() => {
           : ''
 
   if (action) {
-    return `You can keep working -- ${action} runs in the background. Close this dialog and check later on the history tab`
+    return `You can keep working -- ${action} runs in the background and might take longer than expected. Close this dialog and check later on the history tab`
   }
   return ''
 })
@@ -189,7 +189,9 @@ watch(errMsg, (newVal) => {
           </v-hover>
         </div>
       </div>
+
       <div
+        class="tw-w-full tw-flex"
         v-if="
           feature === 'image_upscaler' ||
           feature === 'colorize_image' ||
@@ -199,8 +201,8 @@ watch(errMsg, (newVal) => {
         <v-hover>
           <template v-slot:default="{ isHovering, props }">
             <div
-              v-bind="props"
               class="tw-w-full tw-h-[90vh] tw-flex tw-items-center tw-justify-center"
+              v-bind="props"
             >
               <SideBySide
                 :original-image="images?.[0]?.originalImageUrl ?? ''"

@@ -16,6 +16,7 @@ import { useUserStore } from '@/stores/user'
 
 import CreateButton from '@/components/Aside/CreateButton.vue'
 import Heading from '@/components/Aside/Heading.vue'
+import SignupDialog from '@/components/Dialogs/SignupDialog.vue'
 
 import { FLUX_MODES, MODEL_IDS } from '@/utils/constants'
 import { ASPECT_RATIOS, IMAGE_FORMATS } from '@/utils/constants'
@@ -46,6 +47,8 @@ const textAreaFocused = ref(false)
 const mode = ref<Mode>(FLUX_MODES[0])
 const textareaRef = ref()
 
+const vSelectLightColor = ref('#9333ea')
+const vSelectDarkColor = ref('#6b21a8')
 const disableModifyVariations = computed(() => {
   return mode.value.id === MODEL_IDS.FLUX_PRO || mode.value.id === MODEL_IDS.FLUX_1_1_PRO
 })
@@ -82,7 +85,7 @@ function handleFormatSelected(item: any) {
 
 async function generateImage() {
   if (!isSignedIn.value) {
-    router.push('/signin')
+    dialogStore.showSignup()
     return
   }
 
@@ -235,7 +238,7 @@ onMounted(() => {
                   <v-select
                     :items="ASPECT_RATIOS"
                     v-model="aspectRatio"
-                    :color="isDark ? '#9333ea' : '#6b21a8'"
+                    :color="isDark ? vSelectLightColor : vSelectDarkColor"
                     density="compact"
                     variant="outlined"
                     hide-details
@@ -284,7 +287,7 @@ onMounted(() => {
                     variant="outlined"
                     item-title="title"
                     hide-details
-                    :color="isDark ? '#9333ea' : '#6b21a8'"
+                    :color="isDark ? vSelectLightColor : vSelectDarkColor"
                     return-object
                     @update:model-value="handleFormatSelected"
                   >
@@ -311,8 +314,8 @@ onMounted(() => {
                     block
                     divided
                   >
-                    <v-btn :color="isDark ? '#9333ea' : '#6b21a8'"> SD </v-btn>
-                    <v-btn :color="isDark ? '#9333ea' : '#6b21a8'"
+                    <v-btn :color="isDark ? vSelectLightColor : vSelectDarkColor"> SD </v-btn>
+                    <v-btn :color="isDark ? vSelectLightColor : vSelectDarkColor"
                       >HD
                       <template v-if="!isPro" v-slot:append>
                         <v-icon size="x-small" icon="$star" />
@@ -380,7 +383,7 @@ onMounted(() => {
         v-model="mode"
         bg-color="transparent"
         variant="outlined"
-        :color="isDark ? '#9333ea' : '#6b21a8'"
+        :color="isDark ? vSelectLightColor : vSelectDarkColor"
         :prepend-inner-icon="isDark ? `${mode.icon}Dark` : mode.icon"
         density="compact"
         item-title="title"
@@ -430,8 +433,8 @@ onMounted(() => {
             block
             divided
           >
-            <v-btn :color="isDark ? '#9333ea' : '#6b21a8'"> SD </v-btn>
-            <v-btn :color="isDark ? '#9333ea' : '#6b21a8'"
+            <v-btn :color="isDark ? vSelectLightColor : vSelectDarkColor"> SD </v-btn>
+            <v-btn :color="isDark ? vSelectLightColor : vSelectDarkColor"
               >HD
               <template v-if="!isPro" v-slot:append>
                 <v-icon size="x-small" icon="$star" />
@@ -482,7 +485,7 @@ onMounted(() => {
           <v-select
             :items="ASPECT_RATIOS"
             v-model="aspectRatio"
-            :color="isDark ? '#9333ea' : '#6b21a8'"
+            :color="isDark ? vSelectLightColor : vSelectDarkColor"
             density="compact"
             variant="outlined"
             hide-details
@@ -531,7 +534,7 @@ onMounted(() => {
             variant="outlined"
             item-title="title"
             hide-details
-            :color="isDark ? '#9333ea' : '#6b21a8'"
+            :color="isDark ? vSelectLightColor : vSelectDarkColor"
             return-object
             @update:model-value="handleFormatSelected"
           >
@@ -556,6 +559,7 @@ onMounted(() => {
   <!-- <PremiumDialog /> -->
   <!-- <BuyMoreCreditsDialog />
   <LowCreditsDialog /> -->
+  <SignupDialog />
 </template>
 
 <style lang="scss" scoped>

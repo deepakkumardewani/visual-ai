@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { useAppStore } from '@/stores/app'
 
-import Favorites from '@/components/Profile/Favorites.vue'
+import History from '@/components/History.vue'
 import Payments from '@/components/Profile/Payments.vue'
 import Subscription from '@/components/Profile/Subscription.vue'
 import UserDetails from '@/components/Profile/UserDetails.vue'
@@ -80,7 +80,7 @@ watch(route, (newRoute) => {
 
     <v-tabs-window-item :value="2">
       <v-container fluid>
-        <Favorites />
+        <History :is-favorites="true" />
       </v-container>
     </v-tabs-window-item>
 

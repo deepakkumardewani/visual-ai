@@ -84,6 +84,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideBySide: typeof import('./components/SideBySide.vue')['default']
+    SignupDialog: typeof import('./components/Dialogs/SignupDialog.vue')['default']
     Subscription: typeof import('./components/Profile/Subscription.vue')['default']
     Tabs: typeof import('./components/Header/Tabs.vue')['default']
     ThemeButton: typeof import('./components/Header/ThemeButton.vue')['default']
