@@ -45,10 +45,13 @@ const copyReferralCode = async () => {
             <span class="tw-text-3xl tw-font-bold">{{ credits ?? 0 }} credits</span>
           </div>
           <p class="tw-text-gray-600 dark:tw-text-gray-400 tw-mb-3">
-            Credits are used to generate AI images and access premium features.
+            Credits are used to generate AI images and access other features.
           </p>
           <p class="tw-text-gray-600 dark:tw-text-gray-400">
-            Each image generation costs 1 credit.
+            AI image generation costs 1 credits on both free and pro plans.
+            <br />
+            Other features like upscaling, colorization, etc. costs 1 credit on a pro plan and 3
+            credits on a free plan.
           </p>
         </div>
 
@@ -58,7 +61,7 @@ const copyReferralCode = async () => {
           <div class="tw-bg-[#9333ea] dark:tw-bg-[#6b21a8] tw-p-6 tw-rounded-lg">
             <p class="tw-mb-4 tw-text-white">
               Give 50 credits and earn 50 credits for each new referral who sign up for the
-              Application
+              application
             </p>
             <div class="tw-flex tw-items-center tw-gap-3">
               <span

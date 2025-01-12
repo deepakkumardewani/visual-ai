@@ -17,7 +17,6 @@ const { showDeleteDialog } = storeToRefs(dialogStore)
 
 const agree = ref(false)
 async function deleteAccount() {
-  console.log('deleteAccount')
   const { error, data } = await useFetch(`/api/users/${userId.value}`, {
     method: 'DELETE',
     headers: {
@@ -25,7 +24,6 @@ async function deleteAccount() {
     }
   })
   if (data) {
-    console.log(data)
     router.push('/')
   }
   if (error) {

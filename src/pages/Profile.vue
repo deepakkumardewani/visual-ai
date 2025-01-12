@@ -79,9 +79,7 @@ watch(route, (newRoute) => {
     </v-tabs-window-item>
 
     <v-tabs-window-item :value="2">
-      <v-container fluid>
-        <History :is-favorites="true" />
-      </v-container>
+      <History :is-favorites="true" />
     </v-tabs-window-item>
 
     <v-tabs-window-item :value="3">

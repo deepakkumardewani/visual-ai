@@ -108,7 +108,7 @@ watch(data, (newVal) => {
 })
 
 watch(error, (newVal) => {
-  console.log('error', newVal)
+  console.error('error', newVal)
   localStorage.setItem('colorizeInProgress', 'false')
   colorizeInProgress.value = false
 })

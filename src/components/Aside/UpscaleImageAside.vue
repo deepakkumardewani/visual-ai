@@ -76,7 +76,7 @@ async function generateImage() {
     open()
     localStorage.setItem('upscaleInProgress', 'true')
     upscaleInProgress.value = true
-    console.log('upscaleInProgress', upscaleInProgress.value)
+    // console.log('upscaleInProgress', upscaleInProgress.value)
   } else {
     router.push('/signin')
   }
@@ -84,7 +84,7 @@ async function generateImage() {
 
 watch(data, (newVal) => {
   const data: JobStatus = JSON.parse(newVal as string)
-  console.log('data', data)
+  // console.log('data', data)
   if (data.status === 'processing') {
     showAlert.value = true
     localStorage.setItem('upscaleInProgress', 'true')
@@ -102,14 +102,14 @@ watch(data, (newVal) => {
 })
 
 watch(error, (newVal) => {
-  console.log('error', newVal)
+  console.error('error', newVal)
   localStorage.setItem('upscaleInProgress', 'false')
   upscaleInProgress.value = false
 })
 
 onMounted(async () => {
   const inProgress = JSON.parse(localStorage.getItem('upscaleInProgress') as string)
-  console.log('inProgress', inProgress)
+  // console.log('inProgress', inProgress)
   if (inProgress === true) {
     const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
     upscaleInProgress.value = true

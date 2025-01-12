@@ -201,7 +201,7 @@ watch(errMsg, (newVal) => {
         <v-hover>
           <template v-slot:default="{ isHovering, props }">
             <div
-              class="tw-w-full tw-h-[90vh] tw-flex tw-items-center tw-justify-center"
+              class="tw-w-full tw-h-full sm:tw-h-[90vh] tw-flex tw-items-center tw-justify-center tw-relative"
               v-bind="props"
             >
               <SideBySide
@@ -210,7 +210,9 @@ watch(errMsg, (newVal) => {
               />
               <div
                 v-if="
-                  (images?.[0]?.originalImageUrl !== '' &&
+                  (images?.[0] &&
+                    images?.[0]?.originalImageUrl !== '' &&
+                    images?.[0] &&
                     images?.[0]?.enhancedImageUrl !== '' &&
                     isHovering) ||
                   mobile

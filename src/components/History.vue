@@ -111,9 +111,9 @@ watch(
   { immediate: true, deep: true }
 )
 
-watch(deletingImageIds, (newVal) => {
-  console.log('deletingImageIds', newVal)
-})
+// watch(deletingImageIds, (newVal) => {
+//   // console.log('deletingImageIds', newVal)
+// })
 
 const carouselIndexes = ref<{ [key: string]: number }>({})
 const carouselIntervals = ref<{ [key: string]: number }>({})
@@ -162,7 +162,7 @@ const getImageUrl = (image: IImage) => {
 </script>
 
 <template>
-  <div class="history-container tw-h-[calc(100vh-64px)] tw-flex tw-flex-col">
+  <div class="history-container tw-p-3 tw-h-[calc(100vh-64px)] tw-flex tw-flex-col">
     <div class="tw-flex-none">
       <div
         v-if="history.length > 0"
