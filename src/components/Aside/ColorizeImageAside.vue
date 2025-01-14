@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import { useEventSource } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { useUser } from 'vue-clerk'
 import { useRouter } from 'vue-router'
-import { useDisplay } from 'vuetify'
 
-import type { JobStatus, Mode } from '@/types'
-
+import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
 
-import Heading from '@/components/Aside/Heading.vue'
+// import Heading from '@/components/Aside/Heading.vue'
 import ImageUpload from '@/components/Aside/ImageUpload.vue'
 import PremiumDialog from '@/components/Dialogs/PremiumDialog.vue'
 
@@ -19,44 +16,41 @@ import { MODEL_IDS } from '@/utils/constants'
 
 const userStore = useUserStore()
 const dialogStore = useDialogStore()
-const { userId, userDetails, history, isPro, credits } = storeToRefs(userStore)
+const appStore = useAppStore()
+const { isPro, credits } = storeToRefs(userStore)
 const router = useRouter()
 const { isSignedIn } = useUser()
-const { smAndUp } = useDisplay()
+// const { smAndUp } = useDisplay()
 const generateStore = useGenerateStore()
-const { colorizeInProgress, images } = storeToRefs(generateStore)
+const { colorizeInProgress } = storeToRefs(generateStore)
 
-const progressUrl = ref('')
-const { data, close, open, error } = useEventSource(progressUrl, [], {
-  immediate: false
-})
 const imageUpload = ref()
-const modes = ref([
-  {
-    title: 'Basic',
-    id: MODEL_IDS.COLORIZE_BASIC,
-    description: 'Applies Basic coloring',
-    icon: 'fas fa-palette',
-    isPro: false
-  },
-  {
-    title: 'Advanced',
-    id: MODEL_IDS.COLORIZE_ADVANCED,
-    description: 'Applies Advanced photo-realistic coloring',
-    icon: 'fas fa-eraser',
-    isPro: true
-  }
-])
-const mode = ref<Mode>(modes.value[0])
+// const modes = ref([
+//   {
+//     title: 'Basic',
+//     id: MODEL_IDS.COLORIZE_BASIC,
+//     description: 'Applies Basic coloring',
+//     icon: 'fas fa-palette',
+//     isPro: false
+//   },
+//   {
+//     title: 'Advanced',
+//     id: MODEL_IDS.COLORIZE_ADVANCED,
+//     description: 'Applies Advanced photo-realistic coloring',
+//     icon: 'fas fa-eraser',
+//     isPro: true
+//   }
+// ])
+// const mode = ref<Mode>(modes.value[0])
 
-function handleSelected(item: Mode) {
-  if (!userDetails.value?.isPro && item.isPro) {
-    mode.value = modes.value[0]
-    dialogStore.showPremium()
-  } else {
-    mode.value = item
-  }
-}
+// function handleSelected(item: Mode) {
+//   if (!userDetails.value?.isPro && item.isPro) {
+//     mode.value = modes.value[0]
+//     dialogStore.showPremium()
+//   } else {
+//     mode.value = item
+//   }
+// }
 
 async function generateImage() {
   if (!isSignedIn.value) {
@@ -73,16 +67,14 @@ async function generateImage() {
     dialogStore.showLowCredits()
     return
   }
-  progressUrl.value = ''
-  images.value = []
+
   if (isSignedIn.value) {
     const body = {
       image: imageUpload?.value?.image,
-      modelId: mode.value.id
+      modelId: MODEL_IDS.COLORIZE_ADVANCED
     }
     generateStore.colorizeImage(body)
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`
-    open()
+    appStore.colorizeSource.open()
     localStorage.setItem('colorizeInProgress', 'true')
     colorizeInProgress.value = true
   } else {
@@ -91,42 +83,18 @@ async function generateImage() {
   }
 }
 
-watch(data, (newVal) => {
-  const data: JobStatus = JSON.parse(newVal as string)
-  if (data.status === 'processing') {
-    localStorage.setItem('colorizeInProgress', 'true')
-    colorizeInProgress.value = true
-  }
-  if (data.status === 'completed') {
-    close()
-    localStorage.setItem('colorizeInProgress', 'false')
-    colorizeInProgress.value = false
-    images.value = data.image.images
-    history.value.push(data.image)
-    userStore.setCredits(data.userCreditsRemaining)
-  }
-})
-
-watch(error, (newVal) => {
-  console.error('error', newVal)
-  localStorage.setItem('colorizeInProgress', 'false')
-  colorizeInProgress.value = false
-})
-
 onMounted(async () => {
   const inProgress = JSON.parse(localStorage.getItem('colorizeInProgress') as string)
   if (inProgress === true) {
-    const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
     colorizeInProgress.value = true
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}`
-    open()
+    appStore.colorizeSource.open()
   }
 })
 </script>
 <template>
   <div class="mb-6">
     <ImageUpload ref="imageUpload" />
-    <Heading title="Mode" />
+    <!-- <Heading title="Mode" />
     <v-select
       :items="modes"
       v-model="mode"
@@ -156,7 +124,7 @@ onMounted(async () => {
           </v-list-item-subtitle>
         </v-list-item>
       </template>
-    </v-select>
+    </v-select> -->
   </div>
   <div>
     <v-btn

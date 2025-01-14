@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useEventSource } from '@vueuse/core'
+// import { useEventSource } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useUser } from 'vue-clerk'
 import { useRouter } from 'vue-router'
 
-import type { JobStatus } from '@/types'
-
+// import type { JobStatus } from '@/types'
+import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
@@ -18,12 +18,13 @@ import { IMAGE_SIZES } from '@/utils/constants'
 
 const userStore = useUserStore()
 const dialogStore = useDialogStore()
+const appStore = useAppStore()
 const router = useRouter()
 const { isSignedIn } = useUser()
 const generateStore = useGenerateStore()
-const { userId, history, isPro, credits } = storeToRefs(userStore)
-const { upscaleInProgress, images } = storeToRefs(generateStore)
-
+const { isPro, credits } = storeToRefs(userStore)
+const { upscaleInProgress } = storeToRefs(generateStore)
+// const { progressUrl } = storeToRefs(appStore)
 const SCALE = {
   '2X': 2,
   '4X': 4,
@@ -31,14 +32,19 @@ const SCALE = {
   '8X': 8
 }
 
-const progressUrl = ref('')
-const { data, close, open, error } = useEventSource(progressUrl, [], {
-  immediate: false
-})
+// const progressUrl = ref('')
+// const { data, close, open, error } = useEventSource(progressUrl, [], {
+//   immediate: false,
+//   autoReconnect: {
+//     retries: 3,
+//     onFailed() {
+//       console.error('Failed to connect EventSource after 3 retries')
+//     }
+//   }
+// })
 const imageUpload = ref()
 const scale = ref<string>('2X')
 const creativity = ref<number>(0.1)
-const showAlert = ref<boolean>(false)
 const prompt = ref<string>('')
 const negativePrompt = ref<string>('')
 
@@ -58,8 +64,8 @@ async function generateImage() {
     return
   }
 
-  progressUrl.value = ''
-  images.value = []
+  // progressUrl.value = ''
+
   if (isSignedIn.value) {
     const data = {
       prompt: prompt.value,
@@ -71,9 +77,9 @@ async function generateImage() {
     }
 
     generateStore.upscaleImage(data)
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`
-    showAlert.value = true
-    open()
+    // progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`
+
+    appStore.upscaleSource.open()
     localStorage.setItem('upscaleInProgress', 'true')
     upscaleInProgress.value = true
     // console.log('upscaleInProgress', upscaleInProgress.value)
@@ -82,45 +88,48 @@ async function generateImage() {
   }
 }
 
-watch(data, (newVal) => {
-  const data: JobStatus = JSON.parse(newVal as string)
-  // console.log('data', data)
-  if (data.status === 'processing') {
-    showAlert.value = true
-    localStorage.setItem('upscaleInProgress', 'true')
-    upscaleInProgress.value = true
-  }
-  if (data.status === 'completed') {
-    close()
-    showAlert.value = false
-    localStorage.setItem('upscaleInProgress', 'false')
-    upscaleInProgress.value = false
-    images.value = data.image.images
-    history.value.push(data.image)
-    userStore.setCredits(data.userCreditsRemaining)
-  }
-})
+// watch(data, (newVal) => {
+//   const data: JobStatus = JSON.parse(newVal as string)
+//   // console.log('data', data)
+//   if (data.status === 'processing') {
+//     localStorage.setItem('upscaleInProgress', 'true')
+//     upscaleInProgress.value = true
+//   }
+//   if (data.status === 'completed') {
+//     console.log('data completed', data)
+//     appStore.close()
 
-watch(error, (newVal) => {
-  console.error('error', newVal)
-  localStorage.setItem('upscaleInProgress', 'false')
-  upscaleInProgress.value = false
-})
+//     localStorage.setItem('upscaleInProgress', 'false')
+//     console.log(localStorage.getItem('upscaleInProgress'))
+
+//     upscaleInProgress.value = false
+//     images.value = data.image.images
+//     imageData.value = data.image
+//     history.value.push(data.image)
+//     userStore.setCredits(data.userCreditsRemaining)
+//   }
+// })
+
+// watch(error, (newVal) => {
+//   console.error('error', newVal)
+//   localStorage.setItem('upscaleInProgress', 'false')
+//   upscaleInProgress.value = false
+// })
 
 onMounted(async () => {
   const inProgress = JSON.parse(localStorage.getItem('upscaleInProgress') as string)
-  // console.log('inProgress', inProgress)
+  console.log('inProgress', inProgress)
   if (inProgress === true) {
-    const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
+    // const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
     upscaleInProgress.value = true
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}`
-    open()
+    // progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}`
+    appStore.upscaleSource.open()
   }
 })
 
 onUnmounted(() => {
   // close()
-  // showAlert.value = false
+  //
   // // localStorage.setItem('upscaleInProgress', 'false')
   // upscaleInProgress.value = false
 })

@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { useEventSource } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { useUser } from 'vue-clerk'
 import { useRouter } from 'vue-router'
 
-import type { JobStatus } from '@/types'
-
+import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
@@ -17,13 +15,10 @@ const { isSignedIn } = useUser()
 const dialogStore = useDialogStore()
 const userStore = useUserStore()
 const generateStore = useGenerateStore()
-const { userId, history, isPro, credits } = storeToRefs(userStore)
-const { reviveInProgress, images } = storeToRefs(generateStore)
+const appStore = useAppStore()
+const { isPro, credits } = storeToRefs(userStore)
+const { reviveInProgress } = storeToRefs(generateStore)
 
-const progressUrl = ref('')
-const { data, close, open, error } = useEventSource(progressUrl, [], {
-  immediate: false
-})
 const imageUpload = ref()
 
 async function generateImage() {
@@ -41,15 +36,13 @@ async function generateImage() {
     dialogStore.showLowCredits()
     return
   }
-  progressUrl.value = ''
-  images.value = []
+
   if (isSignedIn.value) {
     const body = {
       image: imageUpload?.value?.image
     }
     generateStore.reviveOldImage(body)
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`
-    open()
+    appStore.reviveSource.open()
     localStorage.setItem('reviveInProgress', 'true')
     reviveInProgress.value = true
   } else {
@@ -57,35 +50,11 @@ async function generateImage() {
   }
 }
 
-watch(data, (newVal) => {
-  const data: JobStatus = JSON.parse(newVal as string)
-  if (data.status === 'processing') {
-    localStorage.setItem('reviveInProgress', 'true')
-    reviveInProgress.value = true
-  }
-  if (data.status === 'completed') {
-    close()
-    localStorage.setItem('reviveInProgress', 'false')
-    reviveInProgress.value = false
-    images.value = data.image.images
-    history.value.push(data.image)
-    userStore.setCredits(data.userCreditsRemaining)
-  }
-})
-
-watch(error, (newVal) => {
-  console.log('error', newVal)
-  localStorage.setItem('reviveInProgress', 'false')
-  reviveInProgress.value = false
-})
-
 onMounted(async () => {
   const inProgress = JSON.parse(localStorage.getItem('reviveInProgress') as string)
   if (inProgress === true) {
-    const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
     reviveInProgress.value = true
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}`
-    open()
+    appStore.reviveSource.open()
   }
 })
 </script>

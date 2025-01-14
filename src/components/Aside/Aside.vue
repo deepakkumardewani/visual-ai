@@ -18,9 +18,9 @@ const { feature } = storeToRefs(appStore)
     class="pa-3 dark:tw-bg-[#170220] tw-bg-[#efebf3] tw-rounded tw-h-full tw-overflow-y-auto no-scrollbar"
   >
     <AIImageAside v-if="feature === 'ai_image'" />
-    <UpscaleImageAside v-if="feature === 'image_upscaler'" />
-    <ReviveOldAside v-if="feature === 'revive_old_photos'" />
-    <ColorizeImageAside v-if="feature === 'colorize_image'" />
+    <UpscaleImageAside v-if="feature === 'upscale'" />
+    <ReviveOldAside v-if="feature === 'revive'" />
+    <ColorizeImageAside v-if="feature === 'colorize'" />
 
     <BuyMoreCreditsDialog />
     <LowCreditsDialog />

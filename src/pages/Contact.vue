@@ -56,6 +56,9 @@ const messageRules = [
 
 const handleSubmit = async () => {
   try {
+    if (!isFormValid.value) {
+      return
+    }
     isLoading.value = true
 
     const data = {
@@ -156,7 +159,6 @@ watch(userDetails, () => {
                 size="large"
                 block
                 :loading="isLoading"
-                :disabled="!isFormValid"
               >
                 <v-icon start icon="fas fa-paper-plane" />
                 Send Message

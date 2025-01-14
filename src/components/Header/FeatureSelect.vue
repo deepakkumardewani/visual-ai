@@ -23,7 +23,7 @@ onMounted(() => {
   if (route.path === '/dashboard') {
     const featureId = route.query.feature as string
     if (featureId) {
-      const selectedFeature = features.value.find((f) => f.name === featureId)
+      const selectedFeature = features.value.find((f) => f.id === featureId)
       if (selectedFeature) {
         feature.value = selectedFeature
         appStore.setFeature(selectedFeature.id)
@@ -31,7 +31,7 @@ onMounted(() => {
     } else {
       appStore.setFeature(feature.value.id)
       router.replace({
-        query: { ...route.query, feature: feature.value.name }
+        query: { ...route.query, feature: feature.value.id }
       })
     }
   }
@@ -41,7 +41,7 @@ function handleSelected(item: FeatureSelect) {
   appStore.setFeature(item.id)
   // Update query parameter when feature changes
   router.replace({
-    query: { ...route.query, feature: item.name }
+    query: { ...route.query, feature: item.id }
   })
 }
 </script>

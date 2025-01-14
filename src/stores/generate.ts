@@ -1,10 +1,11 @@
+import { isEmpty } from 'lodash'
 import { defineStore, storeToRefs } from 'pinia'
 
-import type { IGenerateResponse, IImage, ImageBody } from '@/types'
+import type { IGenerateResponse, IImage, IImageObject, ImageBody } from '@/types'
 
 import { useUserStore } from '@/stores/user'
 
-// import { useLocal } from '@/composables/local'
+import { useLocal } from '@/composables/local'
 import { useFetch } from '@/composables/useFetch'
 
 import { MODEL_IDS } from '@/utils/constants'
@@ -15,15 +16,19 @@ export const useGenerateStore = defineStore('generate', () => {
   const isDeleting = ref(false)
   const isFavoriting = ref(false)
   const images = ref<IImage[]>([])
-  const imageData = ref<any>({})
+  const imageData = ref<IImageObject | null>(null)
   const errMsg = ref<string>('')
   const deletingImageIds = ref<string[]>([])
   const upscaleInProgress = ref<boolean>(false)
   const colorizeInProgress = ref<boolean>(false)
   const reviveInProgress = ref<boolean>(false)
+  // const aiImageUrls = ref<IImage[]>([])
+  // const upscaleImageUrl = ref<string>('')
+  // const colorizeImageUrl = ref<string>('')
+  // const reviveImageUrl = ref<string>('')
   const userStore = useUserStore()
   const { userId, history } = storeToRefs(userStore)
-  // const { setLocal } = useLocal()
+  const { setLocal } = useLocal()
 
   async function generateImage(imgData?: ImageBody) {
     isLoading.value = true
@@ -59,10 +64,14 @@ export const useGenerateStore = defineStore('generate', () => {
       imageData.value = data.value.image
       history.value.push(data.value.image)
       images.value = data.value.image.images
+      // aiImageUrls.value = data.value.image.images
     }
   }
 
   async function upscaleImage(imgData: any) {
+    images.value = []
+
+    const url = `/generate/upscale/image`
     const { prompt, image, format, creativity, scale, negativePrompt } = imgData
     const formData = new FormData()
     formData.append('feature', 'upscale')
@@ -74,25 +83,26 @@ export const useGenerateStore = defineStore('generate', () => {
     formData.append('format', format)
     formData.append('image', image)
 
-    const url = `/generate/upscale/image`
     const { error } = await useFetch(url, {
       method: 'POST',
       body: formData
     }).json()
 
     if (error.value) {
-      console.log('error', error.value)
-      // if (typeof error.value === 'object' && !isEmpty(error.value)) {
-      //   setLocal('upscaleInProgress', false)
-      //   upscaleInProgress.value = false
-      //   isLoading.value = false
-      //   errMsg.value = 'Sorry, there was an error processing your request. Please try again.'
-      // }
+      console.error('error', error.value)
+      if (typeof error.value === 'object' && !isEmpty(error.value)) {
+        setLocal('upscaleInProgress', false)
+        upscaleInProgress.value = false
+        isLoading.value = false
+        errMsg.value = 'Sorry, there was an error processing your request. Please try again.'
+      }
       return
     }
   }
 
   async function colorizeImage(data: any) {
+    images.value = []
+
     const url = `/generate/colorize/image`
     const { image, modelId } = data
     const formData = new FormData()
@@ -107,11 +117,19 @@ export const useGenerateStore = defineStore('generate', () => {
 
     if (error.value) {
       console.error('error', error.value)
+      if (typeof error.value === 'object' && !isEmpty(error.value)) {
+        setLocal('colorizeInProgress', false)
+        colorizeInProgress.value = false
+        isLoading.value = false
+        errMsg.value = 'Sorry, there was an error processing your request. Please try again.'
+      }
       return
     }
   }
 
   async function reviveOldImage(data: any) {
+    images.value = []
+
     const { image } = data
     const formData = new FormData()
     formData.append('userId', userId.value)
@@ -124,7 +142,12 @@ export const useGenerateStore = defineStore('generate', () => {
     }).json()
     if (error.value) {
       console.error('error', error.value)
-      isLoading.value = false
+      if (typeof error.value === 'object' && !isEmpty(error.value)) {
+        setLocal('reviveInProgress', false)
+        reviveInProgress.value = false
+        isLoading.value = false
+        errMsg.value = 'Sorry, there was an error processing your request. Please try again.'
+      }
       return
     }
   }
@@ -140,6 +163,10 @@ export const useGenerateStore = defineStore('generate', () => {
     upscaleImage,
     colorizeImage,
     reviveOldImage,
+    // aiImageUrls,
+    // upscaleImageUrl,
+    // colorizeImageUrl,
+    // reviveImageUrl,
     promptText,
     isLoading,
     deletingImageIds,

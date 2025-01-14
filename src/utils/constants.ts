@@ -273,19 +273,19 @@ export const FEATURES: FeatureSelect[] = [
     icon: '$imageFrame'
   },
   {
-    id: 'image_upscaler',
+    id: 'upscale',
     name: 'upscaler',
     title: 'Image Upscaler',
     icon: '$expand'
   },
   {
-    id: 'colorize_image',
+    id: 'colorize',
     name: 'colorizer',
     title: 'Colorize Image',
     icon: '$dropper'
   },
   {
-    id: 'revive_old_photos',
+    id: 'revive',
     name: 'reviver',
     title: 'Revive Old Photos',
     icon: '$camera'

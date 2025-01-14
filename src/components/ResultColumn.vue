@@ -26,13 +26,41 @@ const { feature } = storeToRefs(appStore)
 const snackbar = ref(false)
 const snackbarTimeout = ref(2000)
 
+const originalImageUrl = computed((): string => {
+  if (feature.value === 'upscale' && imageData.value?.featureType === 'upscale') {
+    return images.value[0]?.originalImageUrl ?? ''
+  }
+  if (feature.value === 'colorize' && imageData.value?.featureType === 'colorize') {
+    return images.value[0]?.originalImageUrl ?? ''
+  }
+  if (feature.value === 'revive' && imageData.value?.featureType === 'revive') {
+    return images.value[0]?.originalImageUrl ?? ''
+  }
+  return ''
+})
+const enhancedImageUrl = computed((): string => {
+  if (feature.value === 'upscale' && imageData.value?.featureType === 'upscale') {
+    return images.value[0]?.enhancedImageUrl ?? ''
+  }
+  if (feature.value === 'colorize' && imageData.value?.featureType === 'colorize') {
+    return images.value[0]?.enhancedImageUrl ?? ''
+  }
+  if (feature.value === 'revive' && imageData.value?.featureType === 'revive') {
+    return images.value[0]?.enhancedImageUrl ?? ''
+  }
+  return ''
+})
+
+const showDefaultAnimation = computed(() => {
+  return originalImageUrl.value === '' && enhancedImageUrl.value === ''
+})
 const alertTitle = computed(() => {
   const action =
-    upscaleInProgress.value && feature.value === 'image_upscaler'
+    upscaleInProgress.value && feature.value === 'upscale'
       ? 'Upscaling'
-      : colorizeInProgress.value && feature.value === 'colorize_image'
+      : colorizeInProgress.value && feature.value === 'colorize'
         ? 'Colorizing'
-        : reviveInProgress.value && feature.value === 'revive_old_photos'
+        : reviveInProgress.value && feature.value === 'revive'
           ? 'Reviving'
           : ''
   if (action) {
@@ -42,11 +70,11 @@ const alertTitle = computed(() => {
 })
 const alertText = computed(() => {
   const action =
-    upscaleInProgress.value && feature.value === 'image_upscaler'
+    upscaleInProgress.value && feature.value === 'upscale'
       ? 'upscaling'
-      : colorizeInProgress.value && feature.value === 'colorize_image'
+      : colorizeInProgress.value && feature.value === 'colorize'
         ? 'colorizing'
-        : reviveInProgress.value && feature.value === 'revive_old_photos'
+        : reviveInProgress.value && feature.value === 'revive'
           ? 'reviving'
           : ''
 
@@ -60,13 +88,13 @@ const showSkeleton = computed(() => {
   if (feature.value === 'ai_image') {
     return isLoading.value
   }
-  if (feature.value === 'image_upscaler') {
+  if (feature.value === 'upscale') {
     return upscaleInProgress.value
   }
-  if (feature.value === 'colorize_image') {
+  if (feature.value === 'colorize') {
     return colorizeInProgress.value
   }
-  if (feature.value === 'revive_old_photos') {
+  if (feature.value === 'revive') {
     return reviveInProgress.value
   }
   return false
@@ -75,13 +103,13 @@ const showAlert = computed(() => {
   if (feature.value === 'ai_image') {
     return false
   }
-  if (feature.value === 'image_upscaler') {
+  if (feature.value === 'upscale') {
     return upscaleInProgress.value
   }
-  if (feature.value === 'colorize_image') {
+  if (feature.value === 'colorize') {
     return colorizeInProgress.value
   }
-  if (feature.value === 'revive_old_photos') {
+  if (feature.value === 'revive') {
     return reviveInProgress.value
   }
   return false
@@ -92,7 +120,7 @@ const gridClass = computed(() => {
   const imageCount = images.value.length
 
   if (imageCount === 4) {
-    if (imageData.value.imageType === 'vertical') {
+    if (imageData.value?.imageType === 'vertical') {
       return 'grid-vertical'
     }
     return 'grid-horizontal' // for horizontal and square
@@ -123,7 +151,7 @@ watch(errMsg, (newVal) => {
     :class="{
       'tw-h-full': !mobile,
       'tw-h-[59%] tw-overflow-scroll': mobile,
-      image: images.length === 0
+      image: showDefaultAnimation
     }"
   >
     <v-skeleton-loader v-if="showSkeleton" type="image"></v-skeleton-loader>
@@ -159,6 +187,7 @@ watch(errMsg, (newVal) => {
             </v-hover>
           </div>
         </div>
+
         <!-- Single image handling -->
         <div v-else class="tw-relative tw-h-full tw-w-full">
           <v-hover>
@@ -189,31 +218,24 @@ watch(errMsg, (newVal) => {
           </v-hover>
         </div>
       </div>
-
       <div
         class="tw-w-full tw-flex"
-        v-if="
-          feature === 'image_upscaler' ||
-          feature === 'colorize_image' ||
-          feature === 'revive_old_photos'
-        "
+        v-if="feature === 'upscale' || feature === 'colorize' || feature === 'revive'"
       >
         <v-hover>
           <template v-slot:default="{ isHovering, props }">
             <div
+              v-if="originalImageUrl !== '' && enhancedImageUrl !== ''"
               class="tw-w-full tw-h-full sm:tw-h-[90vh] tw-flex tw-items-center tw-justify-center tw-relative"
               v-bind="props"
             >
-              <SideBySide
-                :original-image="images?.[0]?.originalImageUrl ?? ''"
-                :enhanced-image="images?.[0]?.enhancedImageUrl ?? ''"
-              />
+              <SideBySide :original-image="originalImageUrl" :enhanced-image="enhancedImageUrl" />
               <div
                 v-if="
                   (images?.[0] &&
-                    images?.[0]?.originalImageUrl !== '' &&
+                    originalImageUrl !== '' &&
                     images?.[0] &&
-                    images?.[0]?.enhancedImageUrl !== '' &&
+                    enhancedImageUrl !== '' &&
                     isHovering) ||
                   mobile
                 "
