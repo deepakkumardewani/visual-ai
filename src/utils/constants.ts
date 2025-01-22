@@ -29,7 +29,7 @@ export const STARTER_PLAN: Plan = {
   isFree: true,
   features: [
     {
-      title: '5 credits/day Resets Daily',
+      title: '20 credits/day | Resets Daily',
       available: true
     },
     {
@@ -73,7 +73,7 @@ export const PRO_PLAN: Plan = {
   isFree: false,
   features: [
     {
-      title: '500 credits/month Resets Monthly',
+      title: '500 credits/month | Resets Monthly',
       available: true
     },
     {
@@ -150,7 +150,7 @@ export const IMAGE_FORMATS = [
 //   }
 // ]
 
-export const IMAGE_SIZES = ['2X', '4X', '6X', '8X']
+export const IMAGE_SIZES = ['2X', '4X']
 
 export const IMAGE_SIZE_OPTIONS = [
   { value: 'mini', title: 'Mini' },
@@ -287,12 +287,13 @@ export const FEATURES: FeatureSelect[] = [
   {
     id: 'revive',
     name: 'reviver',
-    title: 'Revive Old Photos',
+    title: 'Revive Photos',
     icon: '$camera'
   }
 ]
 
 export const FOOTER_LINKS = [
+  { text: 'Examples', path: '/examples', icon: 'fas fa-images' },
   { text: 'Contact Us', path: '/contact', icon: 'fas fa-envelope' },
   { text: 'Privacy Policy', path: '/privacy', icon: 'fas fa-shield-alt' },
   { text: 'Terms of Service', path: '/terms', icon: 'fas fa-file-contract' },

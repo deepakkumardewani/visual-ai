@@ -17,7 +17,8 @@ import { MODEL_IDS } from '@/utils/constants'
 const userStore = useUserStore()
 const dialogStore = useDialogStore()
 const appStore = useAppStore()
-const { isPro, credits } = storeToRefs(userStore)
+const { isPro, credits, userId } = storeToRefs(userStore)
+const { progressUrl } = storeToRefs(appStore)
 const router = useRouter()
 const { isSignedIn } = useUser()
 // const { smAndUp } = useDisplay()
@@ -74,7 +75,8 @@ async function generateImage() {
       modelId: MODEL_IDS.COLORIZE_ADVANCED
     }
     generateStore.colorizeImage(body)
-    appStore.colorizeSource.open()
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`
+    appStore.colorizeOpen()
     localStorage.setItem('colorizeInProgress', 'true')
     colorizeInProgress.value = true
   } else {
@@ -87,7 +89,7 @@ onMounted(async () => {
   const inProgress = JSON.parse(localStorage.getItem('colorizeInProgress') as string)
   if (inProgress === true) {
     colorizeInProgress.value = true
-    appStore.colorizeSource.open()
+    appStore.colorizeOpen()
   }
 })
 </script>

@@ -16,7 +16,8 @@ const dialogStore = useDialogStore()
 const userStore = useUserStore()
 const generateStore = useGenerateStore()
 const appStore = useAppStore()
-const { isPro, credits } = storeToRefs(userStore)
+const { progressUrl } = storeToRefs(appStore)
+const { isPro, credits, userId } = storeToRefs(userStore)
 const { reviveInProgress } = storeToRefs(generateStore)
 
 const imageUpload = ref()
@@ -42,7 +43,8 @@ async function generateImage() {
       image: imageUpload?.value?.image
     }
     generateStore.reviveOldImage(body)
-    appStore.reviveSource.open()
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`
+    appStore.reviveOpen()
     localStorage.setItem('reviveInProgress', 'true')
     reviveInProgress.value = true
   } else {
@@ -54,7 +56,7 @@ onMounted(async () => {
   const inProgress = JSON.parse(localStorage.getItem('reviveInProgress') as string)
   if (inProgress === true) {
     reviveInProgress.value = true
-    appStore.reviveSource.open()
+    appStore.reviveOpen()
   }
 })
 </script>

@@ -33,7 +33,7 @@ const creditTextColor = computed(() => {
 
 const creditRequirement = computed(() => {
   const isPaidPlan = userStore.isPro
-  if (feature.value === 'generate') {
+  if (feature.value === 'ai_image') {
     return 1
   }
   return isPaidPlan ? 1 : 3

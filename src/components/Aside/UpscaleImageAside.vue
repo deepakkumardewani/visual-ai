@@ -1,52 +1,52 @@
 <script setup lang="ts">
-// import { useEventSource } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { v4 as uuidv4 } from 'uuid'
+import { computed, onMounted, ref } from 'vue'
 import { useUser } from 'vue-clerk'
 import { useRouter } from 'vue-router'
 
-// import type { JobStatus } from '@/types'
 import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
 
+import { useLocal } from '@/composables/local'
+
 import Heading from '@/components/Aside/Heading.vue'
+import ImageFormat from '@/components/Aside/ImageFormat.vue'
 import ImageUpload from '@/components/Aside/ImageUpload.vue'
 
 import { IMAGE_SIZES } from '@/utils/constants'
 
 const userStore = useUserStore()
 const dialogStore = useDialogStore()
+const localStore = useLocal()
 const appStore = useAppStore()
 const router = useRouter()
 const { isSignedIn } = useUser()
+const { progressUrl } = storeToRefs(appStore)
 const generateStore = useGenerateStore()
 const { isPro, credits } = storeToRefs(userStore)
 const { upscaleInProgress } = storeToRefs(generateStore)
-// const { progressUrl } = storeToRefs(appStore)
 const SCALE = {
   '2X': 2,
-  '4X': 4,
-  '6X': 6,
-  '8X': 8
+  '4X': 4
 }
 
-// const progressUrl = ref('')
-// const { data, close, open, error } = useEventSource(progressUrl, [], {
-//   immediate: false,
-//   autoReconnect: {
-//     retries: 3,
-//     onFailed() {
-//       console.error('Failed to connect EventSource after 3 retries')
-//     }
-//   }
-// })
 const imageUpload = ref()
 const scale = ref<string>('2X')
 const creativity = ref<number>(0.1)
 const prompt = ref<string>('')
 const negativePrompt = ref<string>('')
+const imageFormat = ref()
+// Add computed property for output dimensions
+const outputDimensions = computed(() => {
+  if (imageUpload.value?.width && imageUpload.value?.height) {
+    const multiplier = SCALE[scale.value as keyof typeof SCALE]
+    return `${imageUpload.value?.width * multiplier}x${imageUpload.value?.height * multiplier}px`
+  }
+  return ''
+})
 
 async function generateImage() {
   if (!isSignedIn.value) {
@@ -64,79 +64,47 @@ async function generateImage() {
     return
   }
 
-  // progressUrl.value = ''
-
   if (isSignedIn.value) {
+    const jobId = uuidv4()
+    localStore.setLocal('upscaleJobId', jobId)
     const data = {
+      jobId,
       prompt: prompt.value,
       negativePrompt: negativePrompt.value,
       image: imageUpload?.value?.image,
       format: imageUpload?.value?.image.name.split('.').pop(),
       creativity: creativity.value,
-      scale: SCALE[scale.value as keyof typeof SCALE]
+      scale: SCALE[scale.value as keyof typeof SCALE],
+      outputFormat: imageFormat.value.outputFormat.toLowerCase()
     }
 
     generateStore.upscaleImage(data)
-    // progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`
 
-    appStore.upscaleSource.open()
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?jobId=${jobId}`
+    appStore.upscaleOpen()
     localStorage.setItem('upscaleInProgress', 'true')
     upscaleInProgress.value = true
-    // console.log('upscaleInProgress', upscaleInProgress.value)
   } else {
     router.push('/signin')
   }
 }
 
-// watch(data, (newVal) => {
-//   const data: JobStatus = JSON.parse(newVal as string)
-//   // console.log('data', data)
-//   if (data.status === 'processing') {
-//     localStorage.setItem('upscaleInProgress', 'true')
-//     upscaleInProgress.value = true
-//   }
-//   if (data.status === 'completed') {
-//     console.log('data completed', data)
-//     appStore.close()
-
-//     localStorage.setItem('upscaleInProgress', 'false')
-//     console.log(localStorage.getItem('upscaleInProgress'))
-
-//     upscaleInProgress.value = false
-//     images.value = data.image.images
-//     imageData.value = data.image
-//     history.value.push(data.image)
-//     userStore.setCredits(data.userCreditsRemaining)
-//   }
-// })
-
-// watch(error, (newVal) => {
-//   console.error('error', newVal)
-//   localStorage.setItem('upscaleInProgress', 'false')
-//   upscaleInProgress.value = false
-// })
-
 onMounted(async () => {
   const inProgress = JSON.parse(localStorage.getItem('upscaleInProgress') as string)
-  console.log('inProgress', inProgress)
+  // console.log('inProgress', inProgress)
   if (inProgress === true) {
-    // const userDetails = JSON.parse(localStorage.getItem('userDetails') as string)
     upscaleInProgress.value = true
-    // progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userDetails.userId}`
-    appStore.upscaleSource.open()
+    const jobId = localStore.getLocal('upscaleJobId')
+    if (jobId) {
+      progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?jobId=${jobId}`
+      appStore.upscaleOpen()
+    }
   }
-})
-
-onUnmounted(() => {
-  // close()
-  //
-  // // localStorage.setItem('upscaleInProgress', 'false')
-  // upscaleInProgress.value = false
 })
 </script>
 <template>
   <ImageUpload ref="imageUpload" />
-  <div class="mb-2">
+  <div class="tw-mb-4">
     <div class="tw-flex tw-shrink-0 tw-gap-4 tw-justify-between">
       <div class="tw-flex-1">
         <Heading title="Scale" />
@@ -152,16 +120,13 @@ onUnmounted(() => {
             <v-list-item v-bind="props"> </v-list-item>
           </template>
         </v-select>
+        <div v-if="outputDimensions" class="tw-text-xs tw-text-gray-500 tw-mt-1">
+          Output size: {{ outputDimensions }}
+        </div>
       </div>
+
       <div class="tw-flex-1">
-        <Heading title="Creativity" />
-        <v-slider v-model="creativity" :max="1" :min="0.1">
-          <template v-slot:append>
-            <div class="tw-text-sm tw-text-gray-500 tw-w-4">
-              {{ creativity.toFixed(1) }}
-            </div>
-          </template>
-        </v-slider>
+        <ImageFormat ref="imageFormat" />
       </div>
     </div>
     <!-- <Heading title="Scale" />
@@ -181,7 +146,28 @@ onUnmounted(() => {
       </span>
     </div> -->
   </div>
-  <div class="mb-6">
+  <div class="tw-mb-4">
+    <div class="tw-flex tw-items-center tw-gap-1">
+      <Heading title="Creativity" />
+      <v-tooltip location="top">
+        <template v-slot:activator="{ props }">
+          <v-icon v-bind="props" icon="fas fa-circle-info" size="small" class="tw-text-gray-400" />
+        </template>
+        <span
+          >Higher creativity values will generate more artistic variations, while lower values stay
+          closer to the original image</span
+        >
+      </v-tooltip>
+    </div>
+    <v-slider v-model="creativity" :max="1" :min="0.1" hide-details>
+      <template v-slot:append>
+        <div class="tw-text-sm tw-text-gray-500 tw-w-4">
+          {{ creativity.toFixed(1) }}
+        </div>
+      </template>
+    </v-slider>
+  </div>
+  <div class="tw-mb-4">
     <Heading title="Prompt" />
     <v-text-field
       v-model.trim="prompt"

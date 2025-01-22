@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { computed, onMounted, ref } from 'vue'
 
+import { useAppStore } from '@/stores/app'
+
+const appStore = useAppStore()
 const image = ref()
+const width = ref(0)
+const height = ref(0)
 
 const uploadInput = ref<HTMLInputElement | null>(null)
 const imagePreview = ref<HTMLElement | null>(null)
@@ -10,13 +16,12 @@ let isEventListenerAdded = false
 const UPLOAD_TEXT = 'Click, or Drag image, here to upload'
 const IMAGE_FORMAT_TEXT = 'JPG, PNG, or WEBP upto 5MB'
 const isDragging = ref(false)
-
+const { feature } = storeToRefs(appStore)
 function handleDragLeave() {
   isDragging.value = false
 }
 
 function handleDragOver(e: DragEvent) {
-  e.preventDefault()
   e.preventDefault()
   isDragging.value = true
 }
@@ -34,8 +39,15 @@ function handleFileUpload(file: File) {
   const reader = new FileReader()
   reader.onload = (e) => {
     image.value = file
-    imagePreview!.value!.innerHTML = `<img src="${e.target?.result}" class="tw-max-h-48 tw-rounded-lg tw-mx-auto" alt="Image preview" />`
-    // imagePreview!.value!.classList.remove('tw-border-dashed', 'tw-border-2', 'tw-border-gray-400')
+    const img = new Image()
+    img.onload = () => {
+      width.value = img.width
+      height.value = img.height
+    }
+    img.src = e.target?.result as string
+    if (imagePreview.value) {
+      imagePreview.value.innerHTML = `<img src="${e.target?.result}" class="tw-max-h-48 tw-rounded-lg tw-mx-auto" alt="Image preview" />`
+    }
 
     // Add event listener for image preview only once
     if (!isEventListenerAdded) {
@@ -46,7 +58,11 @@ function handleFileUpload(file: File) {
       isEventListenerAdded = true
     }
   }
-  reader.readAsDataURL(file)
+  try {
+    reader.readAsDataURL(file)
+  } catch (error) {
+    console.error('Error starting file read:', error)
+  }
 }
 
 function createImageReader() {
@@ -71,8 +87,22 @@ onMounted(() => {
   createImageReader()
 })
 
+const formatFileSize = (bytes: number) => {
+  if (!bytes) return '0 KB'
+  const k = 1024
+  const sizes = ['Bytes', 'KB', 'MB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`
+}
+
+const fileSize = computed(() => {
+  return image.value ? formatFileSize(image.value.size) : ''
+})
+
 defineExpose({
-  image
+  image,
+  width,
+  height
 })
 </script>
 <template>
@@ -80,7 +110,7 @@ defineExpose({
     <div class="tw-py-1">
       <div
         id="image-preview"
-        class="tw-max-w-sm tw-p-4 tw-mb-4 tw-rounded-lg tw-items-center tw-mx-auto tw-text-center tw-border-dashed tw-border-2 tw-border-gray-400"
+        class="tw-max-w-sm tw-p-4 tw-mb-2 tw-rounded-lg tw-items-center tw-mx-auto tw-text-center tw-border-dashed tw-border-2 tw-border-gray-400"
         :class="{ 'tw-border-purple-500 tw-rounded-lg animate-border': isDragging }"
         @dragleave="handleDragLeave"
         @dragover="handleDragOver"
@@ -111,6 +141,20 @@ defineExpose({
             {{ IMAGE_FORMAT_TEXT }}
           </p>
         </label>
+      </div>
+      <!-- Add image information row -->
+      <div
+        v-if="image && feature === 'upscale'"
+        class="tw-flex tw-justify-between tw-mt-2 tw-text-sm tw-text-neutral-600 dark:tw-text-neutral-300 tw-px-2"
+      >
+        <div>
+          <v-icon icon="fas fa-file-image" size="x-small" class="tw-mr-1" />
+          {{ fileSize }}
+        </div>
+        <div>
+          <v-icon icon="fas fa-expand" size="x-small" class="tw-mr-1" />
+          {{ width }} x {{ height }}px
+        </div>
       </div>
     </div>
   </div>

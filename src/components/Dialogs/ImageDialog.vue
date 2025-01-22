@@ -42,11 +42,35 @@ const previousImage = () => {
   }
 }
 
+const downloadImageUrl = computed(() => {
+  if (!props.item?.images) return ''
+  const publicId = props.item.images[currentImageIndex.value]?.aiImagePublicId
+    ? props.item.images[currentImageIndex.value]?.aiImagePublicId
+    : props.item.images[currentImageIndex.value]?.enhancedPublicId
+  const format = props.item.images[currentImageIndex.value]?.format
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`
+  return optimizedUrl
+})
 const getCurrentImageUrl = () => {
   if (!props.item?.images) return ''
-  return props.item.images[currentImageIndex.value].aiImageUrl
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${props.item.images[currentImageIndex.value]?.aiImagePublicId}`
+  return optimizedUrl
 }
 
+const originalImageUrl = computed(() => {
+  if (!props.item?.images) return ''
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${props.item.images[currentImageIndex.value]?.originalPublicId}`
+  return optimizedUrl
+})
+const enhancedImageUrl = computed(() => {
+  if (!props.item?.images) return ''
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${props.item.images[currentImageIndex.value]?.enhancedPublicId}`
+  return optimizedUrl
+})
 watch(
   () => props.item,
   (newItem) => {
@@ -111,7 +135,7 @@ watch(history, (newHistory) => {
                 icon
                 size="x-small"
                 variant="text"
-                @click="downloadImage($event, getCurrentImageUrl())"
+                @click="downloadImage($event, downloadImageUrl)"
               >
                 <v-icon>fas fa-download</v-icon>
               </v-btn>
@@ -126,7 +150,7 @@ watch(history, (newHistory) => {
                 :loading="isDeleting"
                 size="x-small"
                 variant="text"
-                @click="deleteImage($event, item?._id ?? '')"
+                @click="deleteImage($event, item as IImageObject)"
               >
                 <v-icon>fas fa-trash-alt</v-icon>
               </v-btn>
@@ -180,8 +204,8 @@ watch(history, (newHistory) => {
 
         <div v-if="item?.featureType !== FeatureType.IMAGE">
           <SideBySide
-            :original-image="item?.images?.[0]?.originalImageUrl ?? ''"
-            :enhanced-image="item?.images?.[0]?.enhancedImageUrl ?? ''"
+            :original-image="originalImageUrl"
+            :enhanced-image="enhancedImageUrl"
             :in-dialog="true"
           />
         </div>

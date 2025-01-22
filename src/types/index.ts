@@ -51,11 +51,14 @@ export interface IPayment {
   humanReadableDate: string
 }
 export interface IImage {
+  _id: string
+  name: string
   aiImageUrl?: string
   originalImageUrl?: string
   enhancedImageUrl?: string
-  name: string
-  publicId: string
+  aiImagePublicId?: string
+  originalPublicId?: string
+  enhancedPublicId?: string
   resolution: string
   width: number
   height: number

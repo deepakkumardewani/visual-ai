@@ -69,6 +69,7 @@ declare module 'vue' {
     IconWidescreen: typeof import('./components/icons/sizes/IconWidescreen.vue')['default']
     IconWidescreenDark: typeof import('./components/icons/sizes/IconWidescreenDark.vue')['default']
     ImageDialog: typeof import('./components/Dialogs/ImageDialog.vue')['default']
+    ImageFormat: typeof import('./components/Aside/ImageFormat.vue')['default']
     ImageUpload: typeof import('./components/Aside/ImageUpload.vue')['default']
     Logo: typeof import('./components/Header/Logo.vue')['default']
     LowCreditsDialog: typeof import('./components/Dialogs/LowCreditsDialog.vue')['default']

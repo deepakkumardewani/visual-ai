@@ -1,4 +1,4 @@
-import { Paddle } from '@paddle/paddle-js'
+import TelemetryDeck from '@telemetrydeck/sdk'
 import { useEventSource } from '@vueuse/core'
 import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref, watch } from 'vue'
@@ -28,7 +28,6 @@ export const useAppStore = defineStore('app', () => {
   const { history, userId } = storeToRefs(userStore)
   const { upscaleInProgress, colorizeInProgress, reviveInProgress, images, imageData } =
     storeToRefs(generateStore)
-  const paddle = ref<Paddle | undefined>(undefined)
   const feature = ref<string>('')
   const theme = useTheme()
   const tab = ref(1)
@@ -38,58 +37,36 @@ export const useAppStore = defineStore('app', () => {
   const snackbarText = ref('')
   const progressUrl = ref('')
 
+  const td = new TelemetryDeck({
+    appID: import.meta.env.VITE_TELEMETRYDECK_APP_ID,
+    clientUser: ''
+  })
+
   const eventSourceOptions = computed(() => ({
     immediate: false,
-    autoReconnect: {
-      retries: 3,
-      onFailed() {
-        console.error('Failed to connect EventSource after 3 retries')
-      }
-    }
+    autoReconnect: false
   }))
 
-  let upscaleSource = useEventSource(progressUrl, [], eventSourceOptions.value)
-  let colorizeSource = useEventSource(progressUrl, [], eventSourceOptions.value)
-  let reviveSource = useEventSource(progressUrl, [], eventSourceOptions.value)
+  const {
+    open: upscaleOpen,
+    close: upscaleClose,
+    data: upscaleData,
+    error: upscaleError
+  } = useEventSource(progressUrl, [], eventSourceOptions.value)
 
-  watch(
-    userId,
-    (newVal) => {
-      if (newVal) {
-        progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${newVal}`
+  const {
+    open: colorizeOpen,
+    close: colorizeClose,
+    data: colorizeData,
+    error: colorizeError
+  } = useEventSource(progressUrl, [], eventSourceOptions.value)
 
-        upscaleSource.close()
-        colorizeSource.close()
-        reviveSource.close()
-
-        upscaleSource = useEventSource(progressUrl, [], eventSourceOptions.value)
-        colorizeSource = useEventSource(progressUrl, [], eventSourceOptions.value)
-        reviveSource = useEventSource(progressUrl, [], eventSourceOptions.value)
-      }
-    },
-    { immediate: true }
-  )
-
-  watch(isDark, (newVal) => {
-    newVal
-      ? document.documentElement.classList.add('tw-dark')
-      : document.documentElement.classList.remove('tw-dark')
-  })
-
-  watch(upscaleSource.data, (newVal) => {
-    if (!newVal) return
-    handleEventSourceData('upscale', JSON.parse(newVal as string))
-  })
-
-  watch(colorizeSource.data, (newVal) => {
-    if (!newVal) return
-    handleEventSourceData('colorize', JSON.parse(newVal as string))
-  })
-
-  watch(reviveSource.data, (newVal) => {
-    if (!newVal) return
-    handleEventSourceData('revive', JSON.parse(newVal as string))
-  })
+  const {
+    open: reviveOpen,
+    close: reviveClose,
+    data: reviveData,
+    error: reviveError
+  } = useEventSource(progressUrl, [], eventSourceOptions.value)
 
   function handleEventSourceData(feature: string, data: JobStatus) {
     if (data.status === 'processing') {
@@ -97,60 +74,76 @@ export const useAppStore = defineStore('app', () => {
       if (feature === 'upscale') upscaleInProgress.value = true
       if (feature === 'colorize') colorizeInProgress.value = true
       if (feature === 'revive') reviveInProgress.value = true
+
+      if (data.image) {
+        console.log('before upload: data.image', data.image)
+        localStorage.setItem(`${feature}InProgress`, 'false')
+        if (feature === 'upscale') upscaleInProgress.value = false
+        if (feature === 'colorize') colorizeInProgress.value = false
+        if (feature === 'revive') reviveInProgress.value = false
+
+        images.value = data.image.images
+        imageData.value = data.image
+        history.value.push(data.image)
+        userStore.setCredits(data.userCreditsRemaining)
+      }
     }
 
     if (data.status === 'completed') {
-      console.log(`${feature} completed`, data)
       closeEventSource(feature)
 
-      localStorage.setItem(`${feature}InProgress`, 'false')
-      if (feature === 'upscale') {
-        upscaleInProgress.value = false
-        // images.value = data.image.images
-        // imageData.value = data.image
-        // history.value.push(data.image)
-        // userStore.setCredits(data.userCreditsRemaining)
+      if (data.image) {
+        // Find the image in history and update its fields
+        const historyIndex = history.value.findIndex((img) => img._id === data.image._id)
+        if (historyIndex !== -1) {
+          const imageIndex = data.image.images.findIndex(
+            (img) => img._id === data.image.images[0]._id
+          )
+          if (imageIndex !== -1) {
+            history.value[historyIndex].images[imageIndex].originalImageUrl =
+              data.image.images[0].originalImageUrl
+            history.value[historyIndex].images[imageIndex].enhancedImageUrl =
+              data.image.images[0].enhancedImageUrl
+            history.value[historyIndex].images[imageIndex].originalPublicId =
+              data.image.images[0].originalPublicId
+            history.value[historyIndex].images[imageIndex].enhancedPublicId =
+              data.image.images[0].enhancedPublicId
+          }
+        }
+        console.log('after upload: data.image', data.image)
       }
-      if (feature === 'colorize') {
-        colorizeInProgress.value = false
-      }
-      if (feature === 'revive') {
-        reviveInProgress.value = false
-      }
-      images.value = data.image.images
-      imageData.value = data.image
-      history.value.push(data.image)
-      userStore.setCredits(data.userCreditsRemaining)
     }
   }
 
   function closeEventSource(feature: string) {
     switch (feature) {
       case 'upscale':
-        upscaleSource.close()
+        upscaleClose()
         break
       case 'colorize':
-        colorizeSource.close()
+        colorizeClose()
         break
       case 'revive':
-        reviveSource.close()
+        reviveClose()
         break
     }
   }
 
-  watch(
-    [upscaleSource.error, colorizeSource.error, reviveSource.error],
-    ([upErr, colErr, revErr]) => {
-      if (upErr) handleEventSourceError('upscale', upErr)
-      if (colErr) handleEventSourceError('colorize', colErr)
-      if (revErr) handleEventSourceError('revive', revErr)
-    }
-  )
-
   function handleEventSourceError(feature: string, error: any) {
     console.error(`${feature} error:`, error)
     localStorage.setItem(`${feature}InProgress`, 'false')
-    if (feature === 'upscale') upscaleInProgress.value = false
+    if (feature === 'upscale') {
+      upscaleInProgress.value = false
+      upscaleClose()
+    }
+    if (feature === 'colorize') {
+      colorizeInProgress.value = false
+      colorizeClose()
+    }
+    if (feature === 'revive') {
+      reviveInProgress.value = false
+      reviveClose()
+    }
   }
 
   function setFeature(id: string) {
@@ -160,19 +153,61 @@ export const useAppStore = defineStore('app', () => {
     theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
   }
 
+  function sendSignal(signal: string) {
+    if (import.meta.env.VITE_TELEMETRYDECK_DEBUG) {
+      td.signal(`test_${signal}`, { testMode: true })
+      return
+    }
+
+    td.signal(signal)
+  }
+
+  watch(userId, async (newUserId) => {
+    td.clientUser = newUserId
+    sendSignal('page_view')
+  })
+  watch(upscaleData, (newVal) => {
+    console.log('upscaleData', newVal)
+
+    handleEventSourceData('upscale', JSON.parse(newVal as string))
+  })
+
+  watch(colorizeData, (newVal) => {
+    handleEventSourceData('colorize', JSON.parse(newVal as string))
+  })
+
+  watch(reviveData, (newVal) => {
+    handleEventSourceData('revive', JSON.parse(newVal as string))
+  })
+
+  watch([upscaleError, colorizeError, reviveError], ([upErr, colErr, revErr]) => {
+    if (upErr) handleEventSourceError('upscale', upErr)
+    if (colErr) handleEventSourceError('colorize', colErr)
+    if (revErr) handleEventSourceError('revive', revErr)
+  })
+
+  watch(isDark, (newVal) => {
+    newVal
+      ? document.documentElement.classList.add('tw-dark')
+      : document.documentElement.classList.remove('tw-dark')
+  })
   return {
     setFeature,
     toggleTheme,
     closeEventSource,
+    upscaleOpen,
+    upscaleClose,
+    colorizeOpen,
+    colorizeClose,
+    reviveOpen,
+    reviveClose,
+    sendSignal,
+    progressUrl,
     isDark,
     tab,
-    paddle,
     snackbar,
     snackbarTimeout,
     snackbarText,
-    feature,
-    upscaleSource,
-    colorizeSource,
-    reviveSource
+    feature
   }
 })

@@ -20,20 +20,24 @@ const { isDark } = storeToRefs(appStore)
   >
     <div class="tw-w-full tw-max-w-7xl tw-mx-auto tw-px-4">
       <div class="tw-flex tw-flex-col md:tw-flex-row tw-items-center tw-justify-between tw-w-full">
-        <Copyright />
+        <div class="tw-w-full md:tw-w-[30%] tw-flex tw-justify-center md:tw-justify-start">
+          <Copyright />
+        </div>
 
-        <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-2 md:tw-gap-4">
-          <v-btn
-            v-for="(link, index) in FOOTER_LINKS"
-            :key="index"
-            :to="link.path"
-            variant="text"
-            class="tw-text-black dark:tw-text-gray-400 tw-text-sm tw-px-3"
-            size="small"
-          >
-            <v-icon :icon="link.icon" size="small" class="tw-mr-2" />
-            {{ link.text }}
-          </v-btn>
+        <div class="tw-w-full md:tw-w-[70%]">
+          <div class="tw-flex tw-flex-wrap tw-justify-center md:tw-justify-end tw-gap-2">
+            <v-btn
+              v-for="(link, index) in FOOTER_LINKS"
+              :key="index"
+              :to="link.path"
+              variant="text"
+              class="tw-text-black dark:tw-text-gray-400 tw-text-sm tw-px-3"
+              size="small"
+            >
+              <v-icon :icon="link.icon" size="small" class="tw-mr-2" />
+              {{ link.text }}
+            </v-btn>
+          </div>
         </div>
       </div>
     </div>

@@ -27,26 +27,42 @@ const snackbar = ref(false)
 const snackbarTimeout = ref(2000)
 
 const originalImageUrl = computed((): string => {
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images.value[0]?.originalPublicId}`
   if (feature.value === 'upscale' && imageData.value?.featureType === 'upscale') {
-    return images.value[0]?.originalImageUrl ?? ''
+    return images.value[0]?.originalPublicId
+      ? optimizedUrl
+      : (images.value[0]?.originalImageUrl as string)
   }
   if (feature.value === 'colorize' && imageData.value?.featureType === 'colorize') {
-    return images.value[0]?.originalImageUrl ?? ''
+    return images.value[0]?.originalPublicId
+      ? optimizedUrl
+      : (images.value[0]?.originalImageUrl as string)
   }
   if (feature.value === 'revive' && imageData.value?.featureType === 'revive') {
-    return images.value[0]?.originalImageUrl ?? ''
+    return images.value[0]?.originalPublicId
+      ? optimizedUrl
+      : (images.value[0]?.originalImageUrl as string)
   }
   return ''
 })
 const enhancedImageUrl = computed((): string => {
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images.value[0]?.enhancedPublicId}`
   if (feature.value === 'upscale' && imageData.value?.featureType === 'upscale') {
-    return images.value[0]?.enhancedImageUrl ?? ''
+    return images.value[0]?.enhancedPublicId
+      ? optimizedUrl
+      : (images.value[0]?.enhancedImageUrl as string)
   }
   if (feature.value === 'colorize' && imageData.value?.featureType === 'colorize') {
-    return images.value[0]?.enhancedImageUrl ?? ''
+    return images.value[0]?.enhancedPublicId
+      ? optimizedUrl
+      : (images.value[0]?.enhancedImageUrl as string)
   }
   if (feature.value === 'revive' && imageData.value?.featureType === 'revive') {
-    return images.value[0]?.enhancedImageUrl ?? ''
+    return images.value[0]?.enhancedPublicId
+      ? optimizedUrl
+      : (images.value[0]?.enhancedImageUrl as string)
   }
   return ''
 })

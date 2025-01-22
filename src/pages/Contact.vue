@@ -34,9 +34,14 @@ const formData = reactive<FormData>({
   message: ''
 })
 
-const nameRules = [
-  (v: string) => !!v || 'Name is required',
-  (v: string) => v.length >= 2 || 'Name must be at least 2 characters'
+const firstNameRules = [
+  (v: string) => !!v || 'First Name is required',
+  (v: string) => v.length >= 2 || 'First Name must be at least 2 characters'
+]
+
+const lastNameRules = [
+  (v: string) => !!v || 'Last Name is required',
+  (v: string) => v.length >= 2 || 'Last Name must be at least 2 characters'
 ]
 
 const emailRules = [
@@ -104,7 +109,7 @@ watch(userDetails, () => {
             <v-col cols="12" sm="6">
               <v-text-field
                 v-model="formData.firstName"
-                :rules="nameRules"
+                :rules="firstNameRules"
                 label="First Name"
                 variant="outlined"
                 name="firstName"
@@ -114,7 +119,7 @@ watch(userDetails, () => {
             <v-col cols="12" sm="6">
               <v-text-field
                 v-model="formData.lastName"
-                :rules="nameRules"
+                :rules="lastNameRules"
                 label="Last Name"
                 variant="outlined"
                 name="lastName"

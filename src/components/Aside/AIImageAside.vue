@@ -16,14 +16,14 @@ import { useUserStore } from '@/stores/user'
 
 import CreateButton from '@/components/Aside/CreateButton.vue'
 import Heading from '@/components/Aside/Heading.vue'
+import ImageFormat from '@/components/Aside/ImageFormat.vue'
 import SignupDialog from '@/components/Dialogs/SignupDialog.vue'
 
 import { FLUX_MODES, MODEL_IDS } from '@/utils/constants'
-import { ASPECT_RATIOS, IMAGE_FORMATS } from '@/utils/constants'
+import { ASPECT_RATIOS } from '@/utils/constants'
 import PROMPTS from '@/utils/prompts.json'
 import REALISTIC_PROMPTS from '@/utils/realisticPrompts.json'
 
-// const route = useRoute()
 const router = useRouter()
 const generateStore = useGenerateStore()
 const appStore = useAppStore()
@@ -41,12 +41,11 @@ const isTyping = ref(false)
 const noOfOutputs = ref<number>(1)
 const outputQuality = ref<number>(0)
 const aspectRatio = ref<any>(ASPECT_RATIOS[0])
-const outputFormat = ref<any>(IMAGE_FORMATS[0].title)
 const menu = ref(false)
 const textAreaFocused = ref(false)
 const mode = ref<Mode>(FLUX_MODES[0])
 const textareaRef = ref()
-
+const imageFormat = ref()
 const vSelectLightColor = ref('#9333ea')
 const vSelectDarkColor = ref('#6b21a8')
 const disableModifyVariations = computed(() => {
@@ -74,14 +73,14 @@ function handleSizeSelected(item: any) {
   }
 }
 
-function handleFormatSelected(item: any) {
-  if (!isPro.value && item.isPro) {
-    outputFormat.value = IMAGE_FORMATS[0].title
-    router.push('/pricing')
-  } else {
-    outputFormat.value = item
-  }
-}
+// function handleFormatSelected(item: any) {
+//   if (!isPro.value && item.isPro) {
+//     outputFormat.value = IMAGE_FORMATS[0].title
+//     router.push('/pricing')
+//   } else {
+//     outputFormat.value = item
+//   }
+// }
 
 async function generateImage() {
   if (!isSignedIn.value) {
@@ -102,7 +101,7 @@ async function generateImage() {
     noOfOutputs: noOfOutputs.value,
     outputQuality: outputQuality.value === 0 ? 70 : 100,
     aspectRatio: aspectRatio.value.title,
-    outputFormat: outputFormat.value.toLowerCase()
+    outputFormat: imageFormat.value.outputFormat.toLowerCase()
   }
 
   generateStore.generateImage(input)
@@ -273,26 +272,7 @@ onMounted(() => {
                   </v-select>
                 </div>
                 <div class="tw-flex-1">
-                  <Heading title="Format" />
-                  <v-select
-                    :items="IMAGE_FORMATS"
-                    v-model="outputFormat"
-                    density="compact"
-                    variant="outlined"
-                    item-title="title"
-                    hide-details
-                    :color="isDark ? vSelectLightColor : vSelectDarkColor"
-                    return-object
-                    @update:model-value="handleFormatSelected"
-                  >
-                    <template v-slot:item="{ props, item }">
-                      <v-list-item v-bind="props">
-                        <template v-slot:append>
-                          <v-icon v-if="!isPro && item.raw.isPro" size="x-small" icon="$star" />
-                        </template>
-                      </v-list-item>
-                    </template>
-                  </v-select>
+                  <ImageFormat ref="imageFormat" />
                 </div>
               </div>
             </div>
@@ -520,7 +500,8 @@ onMounted(() => {
           </v-select>
         </div>
         <div class="tw-flex-1">
-          <Heading title="Format" />
+          <ImageFormat ref="imageFormat" />
+          <!-- <Heading title="Format" />
           <v-select
             :items="IMAGE_FORMATS"
             v-model="outputFormat"
@@ -539,7 +520,7 @@ onMounted(() => {
                 </template>
               </v-list-item>
             </template>
-          </v-select>
+          </v-select> -->
         </div>
       </div>
     </div>

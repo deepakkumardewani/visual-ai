@@ -13,8 +13,8 @@ const currentYear = new Date().getFullYear()
         class="tw-cursor-pointer tw-bg-gradient-to-r dark:tw-from-purple-400 dark:tw-to-purple-600 tw-from-purple-900 tw-to-purple-800 tw-bg-clip-text tw-text-transparent"
         >Visual AI</span
       >
-      <span class="tw-hidden md:tw-inline-block tw-mx-2">|</span>
-      <span class="tw-hidden md:tw-inline-block">All rights reserved</span>
+      <span class="tw-inline-block tw-mx-2">|</span>
+      <span class="tw-inline-block">All rights reserved</span>
     </div>
   </div>
 </template>

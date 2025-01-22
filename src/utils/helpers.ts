@@ -8,7 +8,7 @@ import { useUserStore } from '@/stores/user'
 
 import { useFetch } from '@/composables/useFetch'
 
-export const deleteImage = async (event: Event, imageId: string) => {
+export const deleteImage = async (event: Event, image: IImageObject) => {
   event.stopPropagation()
   const generateStore = useGenerateStore()
   const { isDeleting, deletingImageIds } = storeToRefs(generateStore)
@@ -16,7 +16,8 @@ export const deleteImage = async (event: Event, imageId: string) => {
   const userStore = useUserStore()
 
   isDeleting.value = true
-  deletingImageIds.value.push(imageId)
+  deletingImageIds.value.push(image._id)
+
   const { userId, history } = storeToRefs(userStore)
   const url = `/image/delete`
   const { error, data } = await useFetch(url, {
@@ -26,20 +27,21 @@ export const deleteImage = async (event: Event, imageId: string) => {
       mode: 'cors'
     },
     body: JSON.stringify({
-      imageId,
+      image,
       userId: userId.value
     })
   }).json()
   if (error.value) {
     console.error('error', error.value)
     isDeleting.value = false
+    deletingImageIds.value = deletingImageIds.value.filter((id) => id !== image._id)
     return
   }
   if (data.value) {
     isDeleting.value = false
     deletingImageIds.value = deletingImageIds.value.filter((id) => id === data.value.imageId)
     dialogStore.hideImage()
-    history.value = history.value.filter((item: IImageObject) => item._id !== imageId)
+    history.value = history.value.filter((item: IImageObject) => item._id !== image._id)
   }
 }
 export const favoriteImage = async (event: Event, imageId: string) => {

@@ -51,7 +51,7 @@ const featureTypes = ref<any[]>([
 ])
 const imageSizes = computed(() => {
   return IMAGE_SIZE_OPTIONS.filter((size) => {
-    if (mobile.value && size.value === 'mini') {
+    if (mobile.value && (size.value === 'mini' || size.value === 'small')) {
       return false
     }
     return true
@@ -78,38 +78,6 @@ function create() {
   }
   tab.value = 1
 }
-
-watch(
-  [history, selectedFeatureType, searchQuery],
-  ([newHistory, newFeatureTypes, query]) => {
-    if (newHistory) {
-      let filteredHistory = newHistory
-
-      // Feature type filter
-      if (newFeatureTypes.length > 0) {
-        filteredHistory = filteredHistory.filter((item: IImageObject) =>
-          newFeatureTypes.includes(item.featureType)
-        )
-      }
-
-      // Search query filter
-      if (query.trim()) {
-        const searchTerm = query.toLowerCase().trim()
-        filteredHistory = filteredHistory.filter((item: IImageObject) =>
-          item.prompt?.toLowerCase().includes(searchTerm)
-        )
-      }
-
-      // Favorites filter
-      if (props.isFavorites) {
-        filteredHistory = filteredHistory.filter((item: IImageObject) => item.isFavorite)
-      }
-
-      groupedHistory.value = groupByDate(filteredHistory)
-    }
-  },
-  { immediate: true, deep: true }
-)
 
 // watch(deletingImageIds, (newVal) => {
 //   // console.log('deletingImageIds', newVal)
@@ -157,8 +125,49 @@ const stopCarousel = (itemId: string) => {
   }
 }
 const getImageUrl = (image: IImage) => {
-  return image.aiImageUrl ?? image.enhancedImageUrl
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${image.aiImagePublicId ? image.aiImagePublicId : image.enhancedPublicId}`
+  return optimizedUrl
 }
+
+const downloadImageUrl = (image: IImage) => {
+  const publicId = image.aiImagePublicId ? image.aiImagePublicId : image.enhancedPublicId
+  const format = image.format
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`
+  return optimizedUrl
+}
+watch(
+  [history, selectedFeatureType, searchQuery],
+  ([newHistory, newFeatureTypes, query]) => {
+    if (newHistory) {
+      let filteredHistory = newHistory
+
+      // Feature type filter
+      if (newFeatureTypes.length > 0) {
+        filteredHistory = filteredHistory.filter((item: IImageObject) =>
+          newFeatureTypes.includes(item.featureType)
+        )
+      }
+
+      // Search query filter
+      if (query.trim()) {
+        const searchTerm = query.toLowerCase().trim()
+        filteredHistory = filteredHistory.filter((item: IImageObject) =>
+          item.prompt?.toLowerCase().includes(searchTerm)
+        )
+      }
+
+      // Favorites filter
+      if (props.isFavorites) {
+        filteredHistory = filteredHistory.filter((item: IImageObject) => item.isFavorite)
+      }
+
+      groupedHistory.value = groupByDate(filteredHistory)
+    }
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <template>
@@ -237,7 +246,7 @@ const getImageUrl = (image: IImage) => {
       </div>
 
       <div
-        v-if="isFavorites && history.length !== 0 && groupedHistory.length === 0"
+        v-if="!isFavorites && history.length !== 0 && groupedHistory.length === 0"
         class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl tw-mx-auto"
       >
         <div class="tw-text-center tw-text-neutral-400">
@@ -246,7 +255,7 @@ const getImageUrl = (image: IImage) => {
       </div>
 
       <div
-        v-if="isFavorites && history.length === 0 && groupedHistory.length === 0"
+        v-if="isFavorites && history.length !== 0 && groupedHistory.length === 0"
         class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl tw-mx-auto"
       >
         <div class="tw-text-center tw-text-neutral-400">
@@ -361,7 +370,7 @@ const getImageUrl = (image: IImage) => {
                         icon
                         size="x-small"
                         :color="isDark ? 'black' : 'white'"
-                        @click="downloadImage($event, subItem.images[0].aiImageUrl)"
+                        @click="downloadImage($event, downloadImageUrl(subItem.images[0]))"
                       >
                         <v-icon :color="isDark ? 'white' : 'black'">fas fa-download</v-icon>
                       </v-btn>
@@ -380,7 +389,7 @@ const getImageUrl = (image: IImage) => {
                         :loading="deletingImageIds.includes(subItem._id)"
                         size="x-small"
                         :color="isDark ? 'black' : 'white'"
-                        @click="deleteImage($event, subItem._id)"
+                        @click="deleteImage($event, subItem)"
                       >
                         <v-icon :color="isDark ? 'white' : 'black'">fas fa-trash-alt</v-icon>
                       </v-btn>

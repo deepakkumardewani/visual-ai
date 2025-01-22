@@ -10,6 +10,8 @@ import { useFetch } from '@/composables/useFetch'
 
 import { MODEL_IDS } from '@/utils/constants'
 
+import { useAppStore } from './app'
+
 export const useGenerateStore = defineStore('generate', () => {
   const promptText = ref<string>('')
   const isLoading = ref(false)
@@ -22,15 +24,13 @@ export const useGenerateStore = defineStore('generate', () => {
   const upscaleInProgress = ref<boolean>(false)
   const colorizeInProgress = ref<boolean>(false)
   const reviveInProgress = ref<boolean>(false)
-  // const aiImageUrls = ref<IImage[]>([])
-  // const upscaleImageUrl = ref<string>('')
-  // const colorizeImageUrl = ref<string>('')
-  // const reviveImageUrl = ref<string>('')
   const userStore = useUserStore()
+  const appStore = useAppStore()
   const { userId, history } = storeToRefs(userStore)
   const { setLocal } = useLocal()
 
   async function generateImage(imgData?: ImageBody) {
+    appStore.sendSignal('generate_image')
     isLoading.value = true
     images.value = []
 
@@ -43,10 +43,10 @@ export const useGenerateStore = defineStore('generate', () => {
         mode: 'cors'
       },
       body: JSON.stringify({
+        userId: userId.value,
         modelId: imgData?.modelId ?? MODEL_IDS.FLUX_BASIC,
         imageType: imgData?.imageType ?? 'horizontal',
         modelName: imgData?.modelName ?? 'Flux Lightening',
-        userId: userId.value,
         prompt: imgData?.prompt ?? '',
         numOfOutputs: imgData?.noOfOutputs ?? 1,
         outputQuality: imgData?.outputQuality ?? 70,
@@ -69,10 +69,12 @@ export const useGenerateStore = defineStore('generate', () => {
   }
 
   async function upscaleImage(imgData: any) {
+    appStore.sendSignal('upscale_image')
     images.value = []
 
     const url = `/generate/upscale/image`
-    const { prompt, image, format, creativity, scale, negativePrompt } = imgData
+    const { prompt, image, format, creativity, scale, negativePrompt, jobId, outputFormat } =
+      imgData
     const formData = new FormData()
     formData.append('feature', 'upscale')
     formData.append('prompt', prompt)
@@ -82,7 +84,8 @@ export const useGenerateStore = defineStore('generate', () => {
     formData.append('scale', scale)
     formData.append('format', format)
     formData.append('image', image)
-
+    formData.append('jobId', jobId)
+    formData.append('outputFormat', outputFormat)
     const { error } = await useFetch(url, {
       method: 'POST',
       body: formData
@@ -101,6 +104,7 @@ export const useGenerateStore = defineStore('generate', () => {
   }
 
   async function colorizeImage(data: any) {
+    appStore.sendSignal('colorize_image')
     images.value = []
 
     const url = `/generate/colorize/image`
@@ -128,6 +132,7 @@ export const useGenerateStore = defineStore('generate', () => {
   }
 
   async function reviveOldImage(data: any) {
+    appStore.sendSignal('revive_image')
     images.value = []
 
     const { image } = data
@@ -163,10 +168,6 @@ export const useGenerateStore = defineStore('generate', () => {
     upscaleImage,
     colorizeImage,
     reviveOldImage,
-    // aiImageUrls,
-    // upscaleImageUrl,
-    // colorizeImageUrl,
-    // reviveImageUrl,
     promptText,
     isLoading,
     deletingImageIds,
