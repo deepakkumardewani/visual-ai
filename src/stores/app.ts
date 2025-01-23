@@ -5,6 +5,7 @@ import { computed, ref, watch } from 'vue'
 import { useTheme } from 'vuetify'
 
 import type { JobStatus } from '@/types'
+import { FeatureType } from '@/types'
 
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
@@ -26,7 +27,7 @@ export const useAppStore = defineStore('app', () => {
   const generateStore = useGenerateStore()
   const userStore = useUserStore()
   const { history, userId } = storeToRefs(userStore)
-  const { upscaleInProgress, colorizeInProgress, reviveInProgress, images, imageData } =
+  const { isLoading, upscaleInProgress, colorizeInProgress, reviveInProgress, images, imageData } =
     storeToRefs(generateStore)
   const feature = ref<string>('')
   const theme = useTheme()
@@ -46,6 +47,13 @@ export const useAppStore = defineStore('app', () => {
     immediate: false,
     autoReconnect: false
   }))
+
+  const {
+    open: imageOpen,
+    close: imageClose,
+    data: imgData,
+    error: imgError
+  } = useEventSource(progressUrl, [], eventSourceOptions.value)
 
   const {
     open: upscaleOpen,
@@ -76,11 +84,12 @@ export const useAppStore = defineStore('app', () => {
       if (feature === 'revive') reviveInProgress.value = true
 
       if (data.image) {
-        console.log('before upload: data.image', data.image)
+        // console.log('before upload: data.image', data.image)
         localStorage.setItem(`${feature}InProgress`, 'false')
-        if (feature === 'upscale') upscaleInProgress.value = false
-        if (feature === 'colorize') colorizeInProgress.value = false
-        if (feature === 'revive') reviveInProgress.value = false
+        if (feature === FeatureType.IMAGE) isLoading.value = false
+        if (feature === FeatureType.UPSCALE) upscaleInProgress.value = false
+        if (feature === FeatureType.COLORIZE) colorizeInProgress.value = false
+        if (feature === FeatureType.REVIVE) reviveInProgress.value = false
 
         images.value = data.image.images
         imageData.value = data.image
@@ -101,29 +110,36 @@ export const useAppStore = defineStore('app', () => {
           )
           if (imageIndex !== -1) {
             history.value[historyIndex].images[imageIndex].originalImageUrl =
+              data.image.images[0].aiImageUrl
+            history.value[historyIndex].images[imageIndex].originalImageUrl =
               data.image.images[0].originalImageUrl
             history.value[historyIndex].images[imageIndex].enhancedImageUrl =
               data.image.images[0].enhancedImageUrl
+            history.value[historyIndex].images[imageIndex].aiImagePublicId =
+              data.image.images[0].aiImagePublicId
             history.value[historyIndex].images[imageIndex].originalPublicId =
               data.image.images[0].originalPublicId
             history.value[historyIndex].images[imageIndex].enhancedPublicId =
               data.image.images[0].enhancedPublicId
           }
         }
-        console.log('after upload: data.image', data.image)
+        // console.log('after upload: data.image', data.image)
       }
     }
   }
 
   function closeEventSource(feature: string) {
     switch (feature) {
-      case 'upscale':
+      case FeatureType.IMAGE:
+        imageClose()
+        break
+      case FeatureType.UPSCALE:
         upscaleClose()
         break
-      case 'colorize':
+      case FeatureType.COLORIZE:
         colorizeClose()
         break
-      case 'revive':
+      case FeatureType.REVIVE:
         reviveClose()
         break
     }
@@ -132,15 +148,18 @@ export const useAppStore = defineStore('app', () => {
   function handleEventSourceError(feature: string, error: any) {
     console.error(`${feature} error:`, error)
     localStorage.setItem(`${feature}InProgress`, 'false')
-    if (feature === 'upscale') {
+    if (feature === FeatureType.IMAGE) {
+      imageClose()
+    }
+    if (feature === FeatureType.UPSCALE) {
       upscaleInProgress.value = false
       upscaleClose()
     }
-    if (feature === 'colorize') {
+    if (feature === FeatureType.COLORIZE) {
       colorizeInProgress.value = false
       colorizeClose()
     }
-    if (feature === 'revive') {
+    if (feature === FeatureType.REVIVE) {
       reviveInProgress.value = false
       reviveClose()
     }
@@ -154,7 +173,7 @@ export const useAppStore = defineStore('app', () => {
   }
 
   function sendSignal(signal: string) {
-    if (import.meta.env.VITE_TELEMETRYDECK_DEBUG) {
+    if (import.meta.env.VITE_TELEMETRYDECK_DEBUG === 'true') {
       td.signal(`test_${signal}`, { testMode: true })
       return
     }
@@ -166,9 +185,12 @@ export const useAppStore = defineStore('app', () => {
     td.clientUser = newUserId
     sendSignal('page_view')
   })
-  watch(upscaleData, (newVal) => {
-    console.log('upscaleData', newVal)
 
+  watch(imgData, (newVal) => {
+    handleEventSourceData('image', JSON.parse(newVal as string))
+  })
+
+  watch(upscaleData, (newVal) => {
     handleEventSourceData('upscale', JSON.parse(newVal as string))
   })
 
@@ -180,10 +202,11 @@ export const useAppStore = defineStore('app', () => {
     handleEventSourceData('revive', JSON.parse(newVal as string))
   })
 
-  watch([upscaleError, colorizeError, reviveError], ([upErr, colErr, revErr]) => {
-    if (upErr) handleEventSourceError('upscale', upErr)
-    if (colErr) handleEventSourceError('colorize', colErr)
-    if (revErr) handleEventSourceError('revive', revErr)
+  watch([imgError, upscaleError, colorizeError, reviveError], ([imgErr, upErr, colErr, revErr]) => {
+    if (imgErr) handleEventSourceError(FeatureType.IMAGE, imgErr)
+    if (upErr) handleEventSourceError(FeatureType.UPSCALE, upErr)
+    if (colErr) handleEventSourceError(FeatureType.COLORIZE, colErr)
+    if (revErr) handleEventSourceError(FeatureType.REVIVE, revErr)
   })
 
   watch(isDark, (newVal) => {
@@ -202,6 +225,8 @@ export const useAppStore = defineStore('app', () => {
     reviveOpen,
     reviveClose,
     sendSignal,
+    imageOpen,
+    imageClose,
     progressUrl,
     isDark,
     tab,

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { v4 as uuidv4 } from 'uuid'
 import { onMounted, ref } from 'vue'
 import { useUser } from 'vue-clerk'
 import { useRouter } from 'vue-router'
@@ -32,7 +33,7 @@ const userStore = useUserStore()
 const { smAndUp } = useDisplay()
 const { isSignedIn } = useUser()
 const { isPro, credits } = storeToRefs(userStore)
-const { isDark } = storeToRefs(appStore)
+const { isDark, progressUrl } = storeToRefs(appStore)
 const { promptText } = storeToRefs(generateStore)
 
 const prompt = ref<string>('')
@@ -93,7 +94,10 @@ async function generateImage() {
     return
   }
 
+  const jobId = uuidv4()
+
   const input: ImageBody = {
+    jobId,
     modelId: mode.value.id,
     imageType: aspectRatio.value.type,
     modelName: mode.value.title,
@@ -105,6 +109,9 @@ async function generateImage() {
   }
 
   generateStore.generateImage(input)
+
+  progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?jobId=${jobId}`
+  appStore.imageOpen()
 }
 
 function randomPrompt() {

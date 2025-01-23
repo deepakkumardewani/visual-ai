@@ -3,6 +3,8 @@ import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import { useDisplay } from 'vuetify'
 
+import { FeatureType } from '@/types'
+
 import { useAppStore } from '@/stores/app'
 import { useGenerateStore } from '@/stores/generate'
 
@@ -101,31 +103,31 @@ const alertText = computed(() => {
 })
 
 const showSkeleton = computed(() => {
-  if (feature.value === 'ai_image') {
+  if (feature.value === FeatureType.IMAGE) {
     return isLoading.value
   }
-  if (feature.value === 'upscale') {
+  if (feature.value === FeatureType.UPSCALE) {
     return upscaleInProgress.value
   }
-  if (feature.value === 'colorize') {
+  if (feature.value === FeatureType.COLORIZE) {
     return colorizeInProgress.value
   }
-  if (feature.value === 'revive') {
+  if (feature.value === FeatureType.REVIVE) {
     return reviveInProgress.value
   }
   return false
 })
 const showAlert = computed(() => {
-  if (feature.value === 'ai_image') {
+  if (feature.value === FeatureType.IMAGE) {
     return false
   }
-  if (feature.value === 'upscale') {
+  if (feature.value === FeatureType.UPSCALE) {
     return upscaleInProgress.value
   }
-  if (feature.value === 'colorize') {
+  if (feature.value === FeatureType.COLORIZE) {
     return colorizeInProgress.value
   }
-  if (feature.value === 'revive') {
+  if (feature.value === FeatureType.REVIVE) {
     return reviveInProgress.value
   }
   return false
@@ -161,7 +163,6 @@ watch(errMsg, (newVal) => {
     :text="alertText"
     closable
   ></v-alert>
-
   <div
     class="rounded-lg"
     :class="{
@@ -171,9 +172,13 @@ watch(errMsg, (newVal) => {
     }"
   >
     <v-skeleton-loader v-if="showSkeleton" type="image"></v-skeleton-loader>
-    <div v-else class="tw-justify-center tw-flex" :class="{ 'tw-h-full': feature === 'ai_image' }">
+    <div
+      v-else
+      class="tw-justify-center tw-flex"
+      :class="{ 'tw-h-full': feature === FeatureType.IMAGE }"
+    >
       <div
-        v-if="feature === 'ai_image'"
+        v-if="feature === FeatureType.IMAGE"
         class="tw-w-full tw-flex"
         :class="{ 'tw-items-center': !mobile }"
       >

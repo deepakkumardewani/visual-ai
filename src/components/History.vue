@@ -134,8 +134,8 @@ const downloadImageUrl = (image: IImage) => {
   const publicId = image.aiImagePublicId ? image.aiImagePublicId : image.enhancedPublicId
   const format = image.format
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`
-  return optimizedUrl
+  // const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`
+  return `${cloudinaryBaseUrl}/${publicId}.${format}`
 }
 watch(
   [history, selectedFeatureType, searchQuery],

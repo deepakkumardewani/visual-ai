@@ -1,4 +1,10 @@
-import type { FeatureSelect, Mode, Plan, RazorpayProduct } from '@/types'
+import {
+  type FeatureSelect,
+  FeatureType,
+  type Mode,
+  type Plan,
+  type RazorpayProduct
+} from '@/types'
 
 import generalFAQ from './generalFAQ.json'
 import pricingFAQ from './pricingFAQ.json'
@@ -259,33 +265,27 @@ export const FLUX_MODES: Mode[] = [
   }
 ]
 
-export const FeatureType = {
-  AI_IMAGE: 'AI Image',
-  UPSCALE: 'Upscale',
-  REVIVE: 'Revive'
-} as const
-
 export const FEATURES: FeatureSelect[] = [
   {
-    id: 'ai_image',
+    id: FeatureType.IMAGE,
     name: 'image',
     title: 'AI Image Generator',
     icon: '$imageFrame'
   },
   {
-    id: 'upscale',
+    id: FeatureType.UPSCALE,
     name: 'upscaler',
     title: 'Image Upscaler',
     icon: '$expand'
   },
   {
-    id: 'colorize',
+    id: FeatureType.COLORIZE,
     name: 'colorizer',
     title: 'Colorize Image',
     icon: '$dropper'
   },
   {
-    id: 'revive',
+    id: FeatureType.REVIVE,
     name: 'reviver',
     title: 'Revive Photos',
     icon: '$camera'

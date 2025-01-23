@@ -3,6 +3,8 @@ import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
+import { FeatureType } from '@/types'
+
 import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
@@ -33,7 +35,7 @@ const creditTextColor = computed(() => {
 
 const creditRequirement = computed(() => {
   const isPaidPlan = userStore.isPro
-  if (feature.value === 'ai_image') {
+  if (feature.value === FeatureType.IMAGE) {
     return 1
   }
   return isPaidPlan ? 1 : 3

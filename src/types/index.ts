@@ -50,6 +50,13 @@ export interface IPayment {
   createdAt: Date
   humanReadableDate: string
 }
+
+export enum FeatureType {
+  IMAGE = 'image',
+  COLORIZE = 'colorize',
+  REVIVE = 'revive',
+  UPSCALE = 'upscale'
+}
 export interface IImage {
   _id: string
   name: string
@@ -70,7 +77,7 @@ export interface IImageObject {
   _id: string
   userId: string
   prompt: string
-  featureType: string
+  featureType: FeatureType
   modelName: string
   imageType: string
   isFavorite: boolean
@@ -80,6 +87,7 @@ export interface IImageObject {
 }
 
 export type ImageBody = {
+  jobId: string
   modelId: string
   modelName: string
   prompt: string

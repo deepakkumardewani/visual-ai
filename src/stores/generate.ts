@@ -26,7 +26,7 @@ export const useGenerateStore = defineStore('generate', () => {
   const reviveInProgress = ref<boolean>(false)
   const userStore = useUserStore()
   const appStore = useAppStore()
-  const { userId, history } = storeToRefs(userStore)
+  const { userId } = storeToRefs(userStore)
   const { setLocal } = useLocal()
 
   async function generateImage(imgData?: ImageBody) {
@@ -36,13 +36,14 @@ export const useGenerateStore = defineStore('generate', () => {
 
     const url = `/generate/image`
 
-    const { error, data } = await useFetch(url, {
+    const { error } = await useFetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         mode: 'cors'
       },
       body: JSON.stringify({
+        jobId: imgData?.jobId,
         userId: userId.value,
         modelId: imgData?.modelId ?? MODEL_IDS.FLUX_BASIC,
         imageType: imgData?.imageType ?? 'horizontal',
@@ -54,18 +55,16 @@ export const useGenerateStore = defineStore('generate', () => {
         outputFormat: imgData?.outputFormat ?? 'jpg'
       })
     }).json<IGenerateResponse>()
-    isLoading.value = false
     if (error.value) {
       console.error('error', error.value)
       return
     }
-    if (data.value) {
-      userStore.setCredits(data.value.userCreditsRemaining)
-      imageData.value = data.value.image
-      history.value.push(data.value.image)
-      images.value = data.value.image.images
-      // aiImageUrls.value = data.value.image.images
-    }
+    // if (data.value) {
+    //   userStore.setCredits(data.value.userCreditsRemaining)
+    //   imageData.value = data.value.image
+    //   history.value.push(data.value.image)
+    //   images.value = data.value.image.images
+    // }
   }
 
   async function upscaleImage(imgData: any) {

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 
+import { FeatureType } from '@/types'
+
 import { useAppStore } from '@/stores/app'
 
 import AIImageAside from '@/components/Aside/AIImageAside.vue'
@@ -17,7 +19,7 @@ const { feature } = storeToRefs(appStore)
   <div
     class="pa-3 dark:tw-bg-[#170220] tw-bg-[#efebf3] tw-rounded tw-h-full tw-overflow-y-auto no-scrollbar"
   >
-    <AIImageAside v-if="feature === 'ai_image'" />
+    <AIImageAside v-if="feature === FeatureType.IMAGE" />
     <UpscaleImageAside v-if="feature === 'upscale'" />
     <ReviveOldAside v-if="feature === 'revive'" />
     <ColorizeImageAside v-if="feature === 'colorize'" />
