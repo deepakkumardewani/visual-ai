@@ -29,7 +29,11 @@ watch([originalImageLoaded, enhancedImageLoaded], ([original, enhanced]) => {
         v-show="ready"
         class="tw-rounded-md"
         :class="[
-          mobile ? 'tw-h-auto' : inDialog ? 'tw-h-[80vh] tw-w-auto' : 'tw-h-[85vh] tw-w-full'
+          mobile
+            ? 'tw-h-full  tw-w-full'
+            : inDialog
+              ? 'tw-h-[80vh] tw-w-auto'
+              : 'tw-h-[85vh] tw-w-full'
         ]"
         :src="originalImage"
         @load="originalImageLoaded = true"
@@ -41,7 +45,11 @@ watch([originalImageLoaded, enhancedImageLoaded], ([original, enhanced]) => {
         v-show="ready"
         class="tw-rounded-md"
         :class="[
-          mobile ? 'tw-h-auto' : inDialog ? 'tw-h-[80vh] tw-w-auto' : 'tw-h-[85vh] tw-w-full'
+          mobile
+            ? 'tw-h-full  tw-w-full'
+            : inDialog
+              ? 'tw-h-[80vh] tw-w-auto'
+              : 'tw-h-[85vh] tw-w-full'
         ]"
         :src="enhancedImage"
         @load="enhancedImageLoaded = true"

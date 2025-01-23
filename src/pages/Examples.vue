@@ -72,10 +72,6 @@ const reviveExamples = [
   {
     original: `${baseUrl}/examples/revive/revive-4.png`,
     revived: `${baseUrl}/examples/revive/revive-4.4.png`
-  },
-  {
-    original: `${baseUrl}/examples/revive/revive-5.jpg`,
-    revived: `${baseUrl}/examples/revive/revive-5.5.png`
   }
 ]
 </script>
