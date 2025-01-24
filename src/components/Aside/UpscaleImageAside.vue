@@ -6,6 +6,7 @@ import { useUser } from 'vue-clerk'
 import { useRouter } from 'vue-router'
 
 import { useAppStore } from '@/stores/app'
+import { useAsideStore } from '@/stores/aside'
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
@@ -22,12 +23,14 @@ const userStore = useUserStore()
 const dialogStore = useDialogStore()
 const localStore = useLocal()
 const appStore = useAppStore()
+const asideStore = useAsideStore()
 const router = useRouter()
 const { isSignedIn } = useUser()
 const { progressUrl } = storeToRefs(appStore)
 const generateStore = useGenerateStore()
 const { isPro, credits } = storeToRefs(userStore)
 const { upscaleInProgress } = storeToRefs(generateStore)
+const { imageFormat } = storeToRefs(asideStore)
 const SCALE = {
   '2X': 2,
   '4X': 4
@@ -38,7 +41,6 @@ const scale = ref<string>('2X')
 const creativity = ref<number>(0.1)
 const prompt = ref<string>('')
 const negativePrompt = ref<string>('')
-const imageFormat = ref()
 // Add computed property for output dimensions
 const outputDimensions = computed(() => {
   if (imageUpload.value?.width && imageUpload.value?.height) {
@@ -75,7 +77,7 @@ async function generateImage() {
       format: imageUpload?.value?.image.name.split('.').pop(),
       creativity: creativity.value,
       scale: SCALE[scale.value as keyof typeof SCALE],
-      outputFormat: imageFormat.value.outputFormat.toLowerCase()
+      outputFormat: imageFormat.value.title.toLowerCase()
     }
 
     generateStore.upscaleImage(data)
@@ -126,7 +128,7 @@ onMounted(async () => {
       </div>
 
       <div class="tw-flex-1">
-        <ImageFormat ref="imageFormat" />
+        <ImageFormat />
       </div>
     </div>
     <!-- <Heading title="Scale" />

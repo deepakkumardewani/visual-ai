@@ -4,6 +4,7 @@ import { computed } from 'vue'
 import { useDisplay } from 'vuetify'
 
 import { FeatureType } from '@/types'
+import type { IImage } from '@/types'
 
 import { useAppStore } from '@/stores/app'
 import { useGenerateStore } from '@/stores/generate'
@@ -28,6 +29,11 @@ const { feature } = storeToRefs(appStore)
 const snackbar = ref(false)
 const snackbarTimeout = ref(2000)
 
+const getAIImageUrl = (image: IImage): string => {
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${image?.aiImagePublicId}`
+  return image?.aiImagePublicId ? optimizedUrl : (image?.aiImageUrl as string)
+}
 const originalImageUrl = computed((): string => {
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
   const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images.value[0]?.originalPublicId}`
@@ -70,6 +76,14 @@ const enhancedImageUrl = computed((): string => {
 })
 
 const showDefaultAnimation = computed(() => {
+  if (feature.value === FeatureType.IMAGE) {
+    console.log(images.value[0])
+
+    if (!images.value[0] || images.value[0]?.aiImageUrl === '') {
+      return true
+    }
+    return false
+  }
   return originalImageUrl.value === '' && enhancedImageUrl.value === ''
 })
 const alertTitle = computed(() => {
@@ -192,7 +206,7 @@ watch(errMsg, (newVal) => {
           >
             <v-hover v-slot:default="{ isHovering, props }">
               <div class="tw-relative tw-w-full tw-h-full tw-rounded-md" v-bind="props">
-                <v-img :src="img.aiImageUrl" contain class="generated-image tw-rounded-lg">
+                <v-img :src="getAIImageUrl(img)" contain class="generated-image tw-rounded-lg">
                   <template v-slot:placeholder>
                     <div class="tw-flex tw-items-center tw-justify-center tw-h-full">
                       <v-skeleton-loader type="image"></v-skeleton-loader>
@@ -214,7 +228,7 @@ watch(errMsg, (newVal) => {
           <v-hover>
             <template v-slot:default="{ isHovering, props }">
               <div class="tw-w-full tw-flex tw-items-center tw-h-full tw-rounded-md" v-bind="props">
-                <v-img :src="images?.[0]?.aiImageUrl" contain class="tw-rounded-md">
+                <v-img :src="getAIImageUrl(images?.[0])" contain class="tw-rounded-md">
                   <template v-slot:placeholder>
                     <div class="tw-flex tw-items-center tw-justify-center tw-h-full">
                       <v-skeleton-loader type="image"></v-skeleton-loader>

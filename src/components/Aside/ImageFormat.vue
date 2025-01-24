@@ -4,43 +4,47 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useAppStore } from '@/stores/app'
+import { useAsideStore } from '@/stores/aside'
 import { useUserStore } from '@/stores/user'
 
 import Heading from '@/components/Aside/Heading.vue'
 
 import { IMAGE_FORMATS } from '@/utils/constants'
 
+const router = useRouter()
 const appStore = useAppStore()
 const userStore = useUserStore()
-const vSelectLightColor = ref('#9333ea')
-const vSelectDarkColor = ref('#6b21a8')
-const router = useRouter()
+const asideStore = useAsideStore()
+
 const { isDark } = storeToRefs(appStore)
 const { isPro } = storeToRefs(userStore)
-const outputFormat = ref<any>(IMAGE_FORMATS[0].title)
+const { imageFormat } = storeToRefs(asideStore)
+
+const vSelectLightColor = ref('#9333ea')
+const vSelectDarkColor = ref('#6b21a8')
 
 function handleFormatSelected(item: any) {
   if (!isPro.value && item.isPro) {
-    outputFormat.value = IMAGE_FORMATS[0].title
+    imageFormat.value = IMAGE_FORMATS[0]
     router.push('/pricing')
   } else {
-    outputFormat.value = item
+    imageFormat.value = item
   }
 }
 
-defineExpose({
-  outputFormat
+onMounted(() => {
+  imageFormat.value = IMAGE_FORMATS[0]
 })
 </script>
 <template>
   <Heading title="Format" />
   <v-select
     :items="IMAGE_FORMATS"
-    v-model="outputFormat"
+    v-model="imageFormat"
     density="compact"
     variant="outlined"
-    item-title="title"
     hide-details
+    item-title="title"
     :color="isDark ? vSelectLightColor : vSelectDarkColor"
     return-object
     @update:model-value="handleFormatSelected"
@@ -54,4 +58,3 @@ defineExpose({
     </template>
   </v-select>
 </template>
-<style scoped lang="scss"></style>

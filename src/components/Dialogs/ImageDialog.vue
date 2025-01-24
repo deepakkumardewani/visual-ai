@@ -53,23 +53,32 @@ const downloadImageUrl = computed(() => {
   return optimizedUrl
 })
 const getCurrentImageUrl = () => {
-  if (!props.item?.images) return ''
+  const images = props.item?.images
+  if (!images) return ''
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${props.item.images[currentImageIndex.value]?.aiImagePublicId}`
-  return optimizedUrl
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.aiImagePublicId}`
+  return images[currentImageIndex.value]?.aiImagePublicId
+    ? optimizedUrl
+    : (images[currentImageIndex.value]?.aiImageUrl as string)
 }
 
 const originalImageUrl = computed(() => {
-  if (!props.item?.images) return ''
+  const images = props.item?.images
+  if (!images) return ''
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${props.item.images[currentImageIndex.value]?.originalPublicId}`
-  return optimizedUrl
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.originalPublicId}`
+  return images[currentImageIndex.value]?.originalPublicId
+    ? optimizedUrl
+    : (images[currentImageIndex.value]?.originalImageUrl as string)
 })
 const enhancedImageUrl = computed(() => {
-  if (!props.item?.images) return ''
+  const images = props.item?.images
+  if (!images) return ''
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${props.item.images[currentImageIndex.value]?.enhancedPublicId}`
-  return optimizedUrl
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.enhancedPublicId}`
+  return images[currentImageIndex.value]?.enhancedPublicId
+    ? optimizedUrl
+    : (images[currentImageIndex.value]?.enhancedImageUrl as string)
 })
 watch(
   () => props.item,

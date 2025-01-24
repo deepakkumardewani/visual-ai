@@ -56,7 +56,7 @@ const isThemeButtonVisible = computed(() => {
         </SignedIn>
       </v-col>
       <v-col :cols="smAndUp ? 3 : route.path === '/dashboard' ? 5 : 6">
-        <div class="tw-flex tw-shrink-0 tw-gap-4 tw-mr-2">
+        <div class="tw-flex tw-shrink-0 tw-gap-4 tw-mr-3">
           <div id="export-area" class="ml-auto tw-flex tw-items-center tw-gap-4 tw-lg:tw-gap-4">
             <SignedOut>
               <ThemeButton v-if="isThemeButtonVisible" />
