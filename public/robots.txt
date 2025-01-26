@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and api routes
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://visual-ai.app/sitemap.xml 

@@ -102,11 +102,10 @@ router.beforeEach((to) => {
 
   if (
     authRequiredRoutes.includes(to.name as string) &&
-    isSignedIn.value === undefined &&
-    isSignedIn.value === false
+    (isSignedIn.value === undefined || isSignedIn.value === false)
   ) {
-    // Redirect to home page if trying to access protected route while not authenticated
-    return { name: '/' }
+    // Redirect to signin page if trying to access protected route while not authenticated
+    return { name: 'signin' }
   }
 })
 
