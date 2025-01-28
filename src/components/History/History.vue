@@ -1,63 +1,31 @@
 <script setup lang="ts">
-import { FeatureIcon } from '@/pages/utils'
-import { GroupedObject, groupByDate } from '@/pages/utils'
+import { groupByDate } from '@/pages/utils'
 import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
 
-import type { IImage, IImageObject } from '@/types'
+import type { GroupedObject, IImage, IImageObject } from '@/types'
 
-import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
-import { useGenerateStore } from '@/stores/generate'
+import { useHistoryStore } from '@/stores/history'
 import { useUserStore } from '@/stores/user'
 
 import ImageDialog from '@/components/Dialogs/ImageDialog.vue'
+import FeatureIcon from '@/components/History/FeatureIcon.vue'
+import Filter from '@/components/History/Filter.vue'
+import ImageActionButtons from '@/components/History/ImageActionButtons.vue'
+import NoResults from '@/components/History/NoResults.vue'
+import SelectActionButtons from '@/components/History/SelectActionButtons.vue'
 
-import { IMAGE_SIZE_OPTIONS, SIZE_CLASSES } from '@/utils/constants'
-import { deleteImage, downloadImage, favoriteImage } from '@/utils/helpers'
+import { SIZE_CLASSES } from '@/utils/constants'
 
-const router = useRouter()
 const userStore = useUserStore()
 const dialogStore = useDialogStore()
-const appStore = useAppStore()
-const generateStore = useGenerateStore()
-
-const { isDark } = storeToRefs(appStore)
 const { mobile } = useDisplay()
 const { history } = storeToRefs(userStore)
-const { tab } = storeToRefs(appStore)
-const { deletingImageIds } = storeToRefs(generateStore)
-
+const { selectedSize } = storeToRefs(useHistoryStore())
 const groupedHistory = ref<GroupedObject[]>([])
 const imageDialogItem = ref<IImageObject | undefined>()
-const featureTypes = ref<any[]>([
-  {
-    id: 'image',
-    title: 'Text-to-Image'
-  },
-  {
-    id: 'upscale',
-    title: 'Upscale'
-  },
-  {
-    id: 'colorize',
-    title: 'Colorize'
-  },
-  {
-    id: 'revive',
-    title: 'Revive'
-  }
-])
-const imageSizes = computed(() => {
-  return IMAGE_SIZE_OPTIONS.filter((size) => {
-    if (mobile.value && (size.value === 'mini' || size.value === 'small')) {
-      return false
-    }
-    return true
-  })
-})
-const selectedSize = ref('medium')
+
 const selectedFeatureType = ref<string[]>([])
 const searchQuery = ref('')
 
@@ -70,13 +38,6 @@ const props = withDefaults(defineProps<{ isFavorites?: boolean }>(), {
 const showImage = (item: IImageObject) => {
   imageDialogItem.value = item
   dialogStore.showImage()
-}
-
-function create() {
-  if (props.isFavorites) {
-    router.push('/dashboard')
-  }
-  tab.value = 1
 }
 
 // watch(deletingImageIds, (newVal) => {
@@ -130,13 +91,6 @@ const getImageUrl = (image: IImage) => {
   return optimizedUrl
 }
 
-const downloadImageUrl = (image: IImage) => {
-  const publicId = image.aiImagePublicId ? image.aiImagePublicId : image.enhancedPublicId
-  const format = image.format
-  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  // const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`
-  return `${cloudinaryBaseUrl}/${publicId}.${format}`
-}
 watch(
   [history, selectedFeatureType, searchQuery],
   ([newHistory, newFeatureTypes, query]) => {
@@ -168,6 +122,49 @@ watch(
   },
   { immediate: true, deep: true }
 )
+
+const selectedImages = ref<Set<IImageObject>>(new Set())
+
+const toggleImageSelection = async (event: Event, image: IImageObject) => {
+  event.stopPropagation()
+  if (Array.from(selectedImages.value).some((item) => item._id === image._id)) {
+    selectedImages.value = new Set(
+      Array.from(selectedImages.value).filter((item) => item._id !== image._id)
+    )
+  } else {
+    selectedImages.value.add(image)
+  }
+}
+
+const isImageSelected = (imageId: string) => {
+  return Array.from(selectedImages.value).some((item) => item._id === imageId)
+}
+
+const selectAllInGroup = (groupData: IImageObject[]) => {
+  groupData.forEach((item) => {
+    selectedImages.value.add(item)
+  })
+}
+
+const areAllSelectedInGroup = (groupData: IImageObject[]): boolean => {
+  return groupData.every((item) =>
+    Array.from(selectedImages.value).some((selected) => selected._id === item._id)
+  )
+}
+
+const toggleGroupSelection = (groupData: IImageObject[]) => {
+  if (areAllSelectedInGroup(groupData)) {
+    // Deselect all if all are selected
+    groupData.forEach((item) => {
+      selectedImages.value = new Set(
+        Array.from(selectedImages.value).filter((selected) => selected._id !== item._id)
+      )
+    })
+  } else {
+    // Select all if some or none are selected
+    selectAllInGroup(groupData)
+  }
+}
 </script>
 
 <template>
@@ -175,119 +172,68 @@ watch(
     <div class="tw-flex-none">
       <div
         v-if="history.length > 0"
-        class="tw-flex tw-flex-wrap tw-justify-end tw-mt-4 tw-pb-4 tw-gap-4 tw-border-b dark:tw-border-neutral-800"
+        class="tw-flex tw-justify-between tw-mt-4 tw-pb-4 tw-gap-4 tw-border-b dark:tw-border-neutral-800"
       >
-        <div class="tw-flex tw-gap-4 tw-w-full sm:tw-w-[30vw]">
-          <v-select
-            class="tw-flex-1"
-            v-model="selectedSize"
-            :items="imageSizes"
-            label="Image size"
-            density="compact"
-            variant="outlined"
-            hide-details
-            item-title="title"
-            item-value="value"
-          ></v-select>
-
-          <v-select
-            class="tw-flex-1"
-            v-model="selectedFeatureType"
-            :items="featureTypes"
-            label="Filter by feature"
-            density="compact"
-            variant="outlined"
-            hide-details
-            item-title="title"
-            item-value="id"
-            multiple
-            chips
-            closable-chips
-          ></v-select>
+        <div
+          v-if="selectedImages.size > 0"
+          class="tw-flex tw-flex-1 tw-items-center tw-justify-start tw-gap-2"
+        >
+          <div class="tw-text-lg tw-text-neutral-500 dark:tw-text-neutral-400">
+            {{ selectedImages.size }} selected
+          </div>
         </div>
 
-        <v-text-field
-          v-model="searchQuery"
-          label="Search by prompt"
-          density="compact"
-          variant="outlined"
-          class="tw-w-full md:tw-w-auto md:tw-max-w-[200px]"
-          hide-details
+        <div
+          v-if="selectedImages.size === 0"
+          class="tw-flex tw-flex-1 tw-items-center tw-justify-end tw-flex-wrap"
         >
-          <template v-slot:prepend-inner>
-            <v-icon class="tw-mr-1" size="x-small" icon="fas fa-search" />
-          </template>
-          <template v-slot:append-inner>
-            <v-btn icon size="x-small" variant="text" v-if="searchQuery" @click="searchQuery = ''">
-              <v-icon icon="fas fa-xmark" />
-            </v-btn>
-          </template>
-        </v-text-field>
+          <Filter ref="filterRef" />
+        </div>
+        <div v-else class="tw-flex tw-items-center tw-justify-end tw-gap-0 sm:tw-gap-4">
+          <SelectActionButtons :selectedImages="selectedImages" />
+        </div>
       </div>
     </div>
 
     <div class="tw-flex-1 tw-overflow-y-auto tw-pt-4">
-      <div
-        v-if="history.length === 0"
-        class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl tw-mx-auto"
-      >
-        <div class="tw-text-center tw-text-neutral-400">
-          <div>You have not created any thing yet.</div>
-          <div>
-            Go ahead and
-            <span
-              @click="create"
-              class="tw-text-[#ba68c8] tw-cursor-pointer tw-font-bold hover:tw-underline"
-              >create</span
-            >
-            something.
-          </div>
-        </div>
-      </div>
-
-      <div
-        v-if="!isFavorites && history.length !== 0 && groupedHistory.length === 0"
-        class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl tw-mx-auto"
-      >
-        <div class="tw-text-center tw-text-neutral-400">
-          <div>No results found.</div>
-        </div>
-      </div>
-
-      <div
-        v-if="isFavorites && history.length !== 0 && groupedHistory.length === 0"
-        class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl tw-mx-auto"
-      >
-        <div class="tw-text-center tw-text-neutral-400">
-          <div>You have not added any favorites yet.</div>
-        </div>
-      </div>
+      <NoResults :isFavorites="props.isFavorites" :groupedHistory="groupedHistory" />
 
       <div v-for="item in groupedHistory" :key="item.title" class="tw-mb-6">
-        <div class="tw-text-2xl tw-font-bold tw-mb-2 tw-text-neutral-500 dark:tw-text-neutral-400">
-          {{ item.title }}
-        </div>
+        <v-hover v-slot="{ isHovering, props }">
+          <div v-bind="props" class="tw-flex tw-items-center tw-gap-2">
+            <div
+              class="tw-text-2xl tw-font-bold tw-mb-2 tw-text-neutral-500 dark:tw-text-neutral-400"
+            >
+              {{ item.title }}
+            </div>
+            <v-icon
+              v-if="isHovering || selectedImages.size > 0"
+              icon="fas fa-circle-check"
+              class="tw-cursor-pointer"
+              :class="areAllSelectedInGroup(item.data) ? 'tw-text-blue-500' : 'tw-text-neutral-500'"
+              size="small"
+              @click="toggleGroupSelection(item.data)"
+            ></v-icon>
+          </div>
+        </v-hover>
 
         <div :class="['tw-grid tw-gap-4', sizeClasses[selectedSize as keyof typeof sizeClasses]]">
           <template v-for="subItem in item.data" :key="subItem._id">
             <v-hover v-slot="{ isHovering, props }">
-              <TransitionGroup name="image-list" tag="div">
-                <div
-                  :key="subItem._id"
-                  v-bind="props"
-                  class="tw-aspect-square tw-overflow-hidden tw-rounded-lg tw-relative"
-                >
-                  <div
-                    @click="showImage(subItem)"
-                    class="tw-cursor-pointer dark:tw-bg-darkBorder tw-bg-lightBorder tw-p-1 tw-aspect-square"
-                  >
+              <div
+                v-bind="props"
+                class="tw-cursor-pointer dark:tw-bg-darkBorder tw-bg-lightBorder tw-p-1 tw-aspect-square"
+              >
+                <div class="tw-h-full tw-relative">
+                  <!-- Image content -->
+                  <div class="tw-h-full tw-z-[1]" @click="showImage(subItem)">
                     <template v-if="subItem.images.length === 1">
                       <v-img
                         :aspect-ratio="1"
                         cover
                         :src="getImageUrl(subItem.images[0])"
                         :alt="subItem.featureType"
-                        class="tw-rounded-lg"
+                        class="tw-rounded-lg tw-h-full"
                       >
                         <template v-slot:placeholder>
                           <div class="d-flex align-center justify-center fill-height">
@@ -324,8 +270,7 @@ watch(
                                 : '25%',
                               transform: !isHovering
                                 ? `translateX(${index * 1}px)`
-                                : `translateX(0)`,
-                              zIndex: 100
+                                : `translateX(0)`
                             }"
                           >
                             <template v-slot:placeholder>
@@ -340,63 +285,54 @@ watch(
                         </template>
                       </div>
                     </template>
+                  </div>
 
+                  <!-- Overlay content -->
+                  <div class="tw-absolute tw-inset-0 tw-p-2 tw-pointer-events-none">
+                    <!-- Add vignette gradient -->
                     <div
                       v-if="isHovering || mobile"
-                      class="tw-absolute tw-inset-0 tw-flex tw-flex-row tw-items-start lg:tw-mx-3 lg:tw-my-3 tw-mx-2 tw-my-2 tw-opacity-90"
-                    >
-                      <v-chip size="small" :color="isDark ? 'black' : 'white'" label variant="flat">
-                        <div>
+                      class="tw-absolute tw-inset-0 tw-bg-gradient-to-b tw-from-black/50 tw-to-transparent tw-h-20 tw-pointer-events-none"
+                    ></div>
+
+                    <div class="tw-flex tw-justify-between tw-items-start tw-relative tw-z-10">
+                      <!-- Left side icons -->
+                      <div class="tw-flex tw-items-center tw-gap-1 tw-pointer-events-auto">
+                        <div
+                          class="tw-w-6 tw-h-6 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+                        >
                           <v-icon
-                            :icon="
-                              isDark
-                                ? `${FeatureIcon[subItem.featureType as keyof typeof FeatureIcon]}Dark`
-                                : FeatureIcon[subItem.featureType as keyof typeof FeatureIcon]
-                            "
-                            size="medium"
-                            start
+                            v-if="isHovering || mobile || selectedImages.size > 0"
+                            @click.stop="toggleImageSelection($event, subItem)"
+                            icon="fas fa-circle-check"
+                            class="tw-z-[2] !tw-h-5 !tw-w-5 check-icon-with-gradient"
+                            :class="[
+                              'tw-cursor-pointer',
+                              isImageSelected(subItem._id)
+                                ? 'tw-text-blue-500'
+                                : 'tw-text-neutral-200'
+                            ]"
+                            size="small"
                           ></v-icon>
                         </div>
-                        <div class="tw-text-xs tw-text-black dark:tw-text-white">
-                          {{ subItem.featureType }}
+                        <div
+                          class="tw-h-6 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+                        >
+                          <FeatureIcon v-if="isHovering || mobile" :item="subItem" />
                         </div>
-                      </v-chip>
-                    </div>
-                    <div
-                      v-if="(isHovering || mobile) && subItem.images.length === 1"
-                      class="tw-absolute tw-inset-0 tw-flex tw-flex-col tw-gap-2 tw-items-end tw-pr-2 tw-mr-2 tw-mt-4"
-                    >
-                      <v-btn
-                        icon
-                        size="x-small"
-                        :color="isDark ? 'black' : 'white'"
-                        @click="downloadImage($event, downloadImageUrl(subItem.images[0]))"
+                      </div>
+
+                      <!-- Right side action buttons -->
+                      <div
+                        v-if="isHovering || mobile"
+                        class="tw-flex tw-flex-col tw-gap-2 tw-pointer-events-auto"
                       >
-                        <v-icon :color="isDark ? 'white' : 'black'">fas fa-download</v-icon>
-                      </v-btn>
-                      <v-btn
-                        icon
-                        size="x-small"
-                        :color="isDark ? 'black' : 'white'"
-                        @click="favoriteImage($event, subItem._id)"
-                      >
-                        <v-icon :color="isDark ? 'white' : 'black'">{{
-                          subItem.isFavorite ? 'fas fa-heart' : 'far fa-heart'
-                        }}</v-icon>
-                      </v-btn>
-                      <v-btn
-                        icon
-                        :loading="deletingImageIds.includes(subItem._id)"
-                        size="x-small"
-                        :color="isDark ? 'black' : 'white'"
-                        @click="deleteImage($event, subItem)"
-                      >
-                        <v-icon :color="isDark ? 'white' : 'black'">fas fa-trash-alt</v-icon>
-                      </v-btn>
+                        <ImageActionButtons :item="subItem" />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </TransitionGroup>
+              </div>
             </v-hover>
           </template>
         </div>

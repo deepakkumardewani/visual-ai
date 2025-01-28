@@ -44,6 +44,33 @@ export const deleteImage = async (event: Event, image: IImageObject) => {
     history.value = history.value.filter((item: IImageObject) => item._id !== image._id)
   }
 }
+export const bulkDelete = async (publicIds: string[]) => {
+  const userStore = useUserStore()
+  const { userId } = storeToRefs(userStore)
+  const generateStore = useGenerateStore()
+  const { isDeleting } = storeToRefs(generateStore)
+  isDeleting.value = true
+  const url = `/image/delete/bulk`
+  const { error, data } = await useFetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      mode: 'cors'
+    },
+    body: JSON.stringify({
+      publicIds,
+      userId: userId.value
+    })
+  }).json()
+  if (error.value) {
+    console.error('error', error.value)
+    isDeleting.value = false
+    return
+  }
+  if (data.value) {
+    isDeleting.value = false
+  }
+}
 export const favoriteImage = async (event: Event, imageId: string) => {
   event.stopPropagation()
   const generateStore = useGenerateStore()

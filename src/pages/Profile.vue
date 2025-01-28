@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { useAppStore } from '@/stores/app'
 
-import History from '@/components/History.vue'
+import History from '@/components/History/History.vue'
 import Payments from '@/components/Profile/Payments.vue'
 import Subscription from '@/components/Profile/Subscription.vue'
 import UserDetails from '@/components/Profile/UserDetails.vue'

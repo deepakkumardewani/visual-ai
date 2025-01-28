@@ -140,3 +140,8 @@ export interface JobStatus {
   image: IImageObject
   userCreditsRemaining: number
 }
+
+export interface GroupedObject {
+  title: string
+  data: IImageObject[]
+}

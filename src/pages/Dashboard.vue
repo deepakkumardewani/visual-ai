@@ -7,7 +7,7 @@ import { useAppStore } from '@/stores/app'
 
 import Aside from '@/components/Aside/Aside.vue'
 import Tabs from '@/components/Header/Tabs.vue'
-import History from '@/components/History.vue'
+import History from '@/components/History/History.vue'
 import ResultColumn from '@/components/ResultColumn.vue'
 
 const appStore = useAppStore()

@@ -1,4 +1,4 @@
-import { IImageObject } from '@/types'
+import type { GroupedObject, IImageObject } from '@/types'
 
 export enum FeatureType {
   IMAGE = 'image',
@@ -7,16 +7,11 @@ export enum FeatureType {
   REVIVE = 'revive'
 }
 
-export const FeatureIcon = {
+export const FeatureIconMap = {
   image: '$imageFrame',
   upscale: '$expand',
   colorize: '$dropper',
   revive: '$camera'
-}
-
-export interface GroupedObject {
-  title: string
-  data: IImageObject[]
 }
 
 export function groupByDate(data: IImageObject[]): GroupedObject[] {

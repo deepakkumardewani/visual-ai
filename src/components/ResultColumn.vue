@@ -77,8 +77,6 @@ const enhancedImageUrl = computed((): string => {
 
 const showDefaultAnimation = computed(() => {
   if (feature.value === FeatureType.IMAGE) {
-    console.log(images.value[0])
-
     if (!images.value[0] || images.value[0]?.aiImageUrl === '') {
       return true
     }
@@ -181,7 +179,7 @@ watch(errMsg, (newVal) => {
     class="rounded-lg"
     :class="{
       'tw-h-full': !mobile,
-      'tw-h-[59%] tw-overflow-scroll': mobile,
+      'tw-h-[80%] tw-overflow-scroll': mobile,
       image: showDefaultAnimation
     }"
   >

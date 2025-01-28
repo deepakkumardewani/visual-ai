@@ -96,37 +96,6 @@ onMounted(async () => {
 <template>
   <div class="mb-6">
     <ImageUpload ref="imageUpload" />
-    <!-- <Heading title="Mode" />
-    <v-select
-      :items="modes"
-      v-model="mode"
-      bg-color="transparent"
-      variant="outlined"
-      :prepend-inner-icon="mode.icon"
-      density="compact"
-      hide-details
-      item-title="title"
-      return-object
-      @update:model-value="handleSelected"
-    >
-      <template v-slot:item="{ item, props }">
-        <v-list-item v-bind="props" :max-width="smAndUp ? '330' : '350'">
-          <template v-slot:prepend>
-            <div
-              class="tw-flex tw-justify-start tw-align-top mr-2"
-              :class="smAndUp ? 'mt-n3' : 'mt-n5'"
-            >
-              <v-icon ize="small" :icon="item.raw.icon" />
-            </div>
-          </template>
-          <template v-slot:append>
-            <v-icon v-if="!userDetails?.isPro && item.raw.isPro" size="x-small" icon="$star" />
-          </template>
-          <v-list-item-subtitle v-html="item.raw.description" class="wrap-text">
-          </v-list-item-subtitle>
-        </v-list-item>
-      </template>
-    </v-select> -->
   </div>
   <div>
     <v-btn

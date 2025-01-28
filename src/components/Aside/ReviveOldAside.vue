@@ -61,7 +61,9 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <ImageUpload ref="imageUpload" />
+  <div class="mb-6">
+    <ImageUpload ref="imageUpload" />
+  </div>
   <!-- <div class="mb-4">
     <div class="tw-flex tw-shrink-0 tw-gap-4 tw-justify-between">
       <div class="tw-flex-1">
