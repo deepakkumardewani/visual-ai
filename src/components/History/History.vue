@@ -5,7 +5,9 @@ import { useDisplay } from 'vuetify'
 
 import type { GroupedObject, IImage, IImageObject } from '@/types'
 
+import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
+import { useGenerateStore } from '@/stores/generate'
 import { useHistoryStore } from '@/stores/history'
 import { useUserStore } from '@/stores/user'
 
@@ -18,24 +20,33 @@ import SelectActionButtons from '@/components/History/SelectActionButtons.vue'
 
 import { SIZE_CLASSES } from '@/utils/constants'
 
-const userStore = useUserStore()
-const dialogStore = useDialogStore()
-const { mobile } = useDisplay()
-const { history } = storeToRefs(userStore)
-const { selectedSize } = storeToRefs(useHistoryStore())
-const groupedHistory = ref<GroupedObject[]>([])
-const imageDialogItem = ref<IImageObject | undefined>()
-
-const selectedFeatureType = ref<string[]>([])
-const searchQuery = ref('')
-
-const sizeClasses = SIZE_CLASSES
-
 const props = withDefaults(defineProps<{ isFavorites?: boolean }>(), {
   isFavorites: false
 })
+const userStore = useUserStore()
+const dialogStore = useDialogStore()
+const generateStore = useGenerateStore()
+
+const { mobile } = useDisplay()
+const { isDark } = storeToRefs(useAppStore())
+const { isDeleting } = storeToRefs(generateStore)
+const { history } = storeToRefs(userStore)
+const { selectedSize } = storeToRefs(useHistoryStore())
+
+const groupedHistory = ref<GroupedObject[]>([])
+const imageDialogItem = ref<IImageObject | undefined>()
+const selectedFeatureType = ref<string[]>([])
+const searchQuery = ref('')
+const sizeClasses = SIZE_CLASSES
+
+const carouselIndexes = ref<{ [key: string]: number }>({})
+const carouselIntervals = ref<{ [key: string]: number }>({})
+const isCarouselActive = ref<{ [key: string]: boolean }>({})
+const carouselTimeouts = ref<{ [key: string]: number }>({})
+const selectedImages = ref<IImageObject[]>([])
 
 const showImage = (item: IImageObject) => {
+  if (isDeleting.value) return
   imageDialogItem.value = item
   dialogStore.showImage()
 }
@@ -43,11 +54,6 @@ const showImage = (item: IImageObject) => {
 // watch(deletingImageIds, (newVal) => {
 //   // console.log('deletingImageIds', newVal)
 // })
-
-const carouselIndexes = ref<{ [key: string]: number }>({})
-const carouselIntervals = ref<{ [key: string]: number }>({})
-const isCarouselActive = ref<{ [key: string]: boolean }>({})
-const carouselTimeouts = ref<{ [key: string]: number }>({})
 
 const startCarousel = (itemId: string, images: IImage[]) => {
   if (carouselIntervals.value[itemId]) return
@@ -62,7 +68,7 @@ const startCarousel = (itemId: string, images: IImage[]) => {
       carouselIndexes.value[itemId] = 0
       carouselIntervals.value[itemId] = window.setInterval(() => {
         carouselIndexes.value[itemId] = (carouselIndexes.value[itemId] + 1) % images.length
-      }, 1000)
+      }, 2000)
 
       // Clear the timeout reference
       delete carouselTimeouts.value[itemId]
@@ -89,6 +95,43 @@ const getImageUrl = (image: IImage) => {
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
   const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${image.aiImagePublicId ? image.aiImagePublicId : image.enhancedPublicId}`
   return optimizedUrl
+}
+
+const toggleImageSelection = async (event: Event, image: IImageObject) => {
+  if (isDeleting.value) return
+  event.stopPropagation()
+  if (selectedImages.value.some((item) => item._id === image._id)) {
+    selectedImages.value = selectedImages.value.filter((item) => item._id !== image._id)
+  } else {
+    selectedImages.value.push(image)
+  }
+}
+
+const isImageSelected = (imageId: string) => {
+  return Array.from(selectedImages.value).some((item) => item._id === imageId)
+}
+
+const selectAllInGroup = (groupData: IImageObject[]) => {
+  groupData.forEach((item) => {
+    selectedImages.value.push(item)
+  })
+}
+
+const areAllSelectedInGroup = (groupData: IImageObject[]): boolean => {
+  return groupData.every((item) =>
+    Array.from(selectedImages.value).some((selected) => selected._id === item._id)
+  )
+}
+
+const toggleGroupSelection = (groupData: IImageObject[]) => {
+  if (isDeleting.value) return
+  if (areAllSelectedInGroup(groupData)) {
+    groupData.forEach((item) => {
+      selectedImages.value = selectedImages.value.filter((selected) => selected._id !== item._id)
+    })
+  } else {
+    selectAllInGroup(groupData)
+  }
 }
 
 watch(
@@ -122,49 +165,6 @@ watch(
   },
   { immediate: true, deep: true }
 )
-
-const selectedImages = ref<Set<IImageObject>>(new Set())
-
-const toggleImageSelection = async (event: Event, image: IImageObject) => {
-  event.stopPropagation()
-  if (Array.from(selectedImages.value).some((item) => item._id === image._id)) {
-    selectedImages.value = new Set(
-      Array.from(selectedImages.value).filter((item) => item._id !== image._id)
-    )
-  } else {
-    selectedImages.value.add(image)
-  }
-}
-
-const isImageSelected = (imageId: string) => {
-  return Array.from(selectedImages.value).some((item) => item._id === imageId)
-}
-
-const selectAllInGroup = (groupData: IImageObject[]) => {
-  groupData.forEach((item) => {
-    selectedImages.value.add(item)
-  })
-}
-
-const areAllSelectedInGroup = (groupData: IImageObject[]): boolean => {
-  return groupData.every((item) =>
-    Array.from(selectedImages.value).some((selected) => selected._id === item._id)
-  )
-}
-
-const toggleGroupSelection = (groupData: IImageObject[]) => {
-  if (areAllSelectedInGroup(groupData)) {
-    // Deselect all if all are selected
-    groupData.forEach((item) => {
-      selectedImages.value = new Set(
-        Array.from(selectedImages.value).filter((selected) => selected._id !== item._id)
-      )
-    })
-  } else {
-    // Select all if some or none are selected
-    selectAllInGroup(groupData)
-  }
-}
 </script>
 
 <template>
@@ -175,16 +175,21 @@ const toggleGroupSelection = (groupData: IImageObject[]) => {
         class="tw-flex tw-justify-between tw-mt-4 tw-pb-4 tw-gap-4 tw-border-b dark:tw-border-neutral-800"
       >
         <div
-          v-if="selectedImages.size > 0"
+          v-if="selectedImages.length > 0"
           class="tw-flex tw-flex-1 tw-items-center tw-justify-start tw-gap-2"
         >
-          <div class="tw-text-lg tw-text-neutral-500 dark:tw-text-neutral-400">
-            {{ selectedImages.size }} selected
+          <div>
+            <v-btn icon size="large" variant="text" @click="selectedImages = []">
+              <v-icon icon="fas fa-xmark" :color="isDark ? 'white' : 'black'"></v-icon>
+            </v-btn>
+          </div>
+          <div class="tw-text-2xl tw-text-black dark:tw-text-white">
+            {{ selectedImages.length }}
           </div>
         </div>
 
         <div
-          v-if="selectedImages.size === 0"
+          v-if="selectedImages.length === 0"
           class="tw-flex tw-flex-1 tw-items-center tw-justify-end tw-flex-wrap"
         >
           <Filter ref="filterRef" />
@@ -207,10 +212,12 @@ const toggleGroupSelection = (groupData: IImageObject[]) => {
               {{ item.title }}
             </div>
             <v-icon
-              v-if="isHovering || selectedImages.size > 0"
+              v-if="isHovering || selectedImages.length > 0"
               icon="fas fa-circle-check"
-              class="tw-cursor-pointer"
-              :class="areAllSelectedInGroup(item.data) ? 'tw-text-blue-500' : 'tw-text-neutral-500'"
+              :class="[
+                isDeleting ? 'tw-cursor-not-allowed' : 'tw-cursor-pointer',
+                areAllSelectedInGroup(item.data) ? 'tw-text-blue-500' : 'tw-text-neutral-500'
+              ]"
               size="small"
               @click="toggleGroupSelection(item.data)"
             ></v-icon>
@@ -223,6 +230,7 @@ const toggleGroupSelection = (groupData: IImageObject[]) => {
               <div
                 v-bind="props"
                 class="tw-cursor-pointer dark:tw-bg-darkBorder tw-bg-lightBorder tw-p-1 tw-aspect-square"
+                :class="{ 'tw-opacity-50': isDeleting && selectedImages.length > 0 }"
               >
                 <div class="tw-h-full tw-relative">
                   <!-- Image content -->
@@ -302,12 +310,12 @@ const toggleGroupSelection = (groupData: IImageObject[]) => {
                           class="tw-w-6 tw-h-6 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
                         >
                           <v-icon
-                            v-if="isHovering || mobile || selectedImages.size > 0"
+                            v-if="isHovering || mobile || selectedImages.length > 0"
                             @click.stop="toggleImageSelection($event, subItem)"
                             icon="fas fa-circle-check"
                             class="tw-z-[2] !tw-h-5 !tw-w-5 check-icon-with-gradient"
                             :class="[
-                              'tw-cursor-pointer',
+                              isDeleting ? 'tw-cursor-not-allowed' : 'tw-cursor-pointer',
                               isImageSelected(subItem._id)
                                 ? 'tw-text-blue-500'
                                 : 'tw-text-neutral-200'

@@ -22,7 +22,7 @@ const { reviveInProgress } = storeToRefs(generateStore)
 
 const imageUpload = ref()
 
-async function generateImage() {
+async function reviveImage() {
   if (!isSignedIn.value) {
     dialogStore.showSignup()
     return
@@ -101,13 +101,14 @@ onMounted(async () => {
   </div> -->
   <div>
     <v-btn
-      @click="generateImage"
-      :disabled="!imageUpload?.image"
+      @click="reviveImage"
+      text="Revive"
+      :disabled="!imageUpload?.image || reviveInProgress"
       color="purple-lighten-2"
       block
       dark
-      >Revive</v-btn
     >
+    </v-btn>
   </div>
 </template>
 <style scoped></style>

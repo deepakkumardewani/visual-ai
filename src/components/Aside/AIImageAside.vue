@@ -35,6 +35,7 @@ const { smAndUp } = useDisplay()
 const { isSignedIn } = useUser()
 const { isPro, credits } = storeToRefs(userStore)
 const { progressUrl } = storeToRefs(appStore)
+const { isLoading } = storeToRefs(generateStore)
 
 const { aspectRatio, noOfOutputs, outputQuality, imageFormat, mode, typingPrompt } =
   storeToRefs(asideStore)
@@ -119,7 +120,7 @@ watch(outputQuality, (newVal) => {
   </div>
 
   <div>
-    <CreateButton @click="generateImage" :disabled="typingPrompt === ''" />
+    <CreateButton @click="generateImage" :disabled="typingPrompt === '' || isLoading" />
   </div>
   <SignupDialog />
 </template>

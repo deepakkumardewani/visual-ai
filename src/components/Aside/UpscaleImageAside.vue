@@ -50,7 +50,7 @@ const outputDimensions = computed(() => {
   return ''
 })
 
-async function generateImage() {
+async function upscaleImage() {
   if (!isSignedIn.value) {
     dialogStore.showSignup()
     return
@@ -182,9 +182,9 @@ onMounted(async () => {
   </div>
   <div>
     <v-btn
-      @click="generateImage"
+      @click="upscaleImage"
       text="Upscale"
-      :disabled="!imageUpload?.image"
+      :disabled="!imageUpload?.image || upscaleInProgress"
       color="purple-lighten-2"
       block
       dark

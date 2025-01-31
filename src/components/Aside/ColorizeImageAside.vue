@@ -53,7 +53,7 @@ const imageUpload = ref()
 //   }
 // }
 
-async function generateImage() {
+async function colorizeImage() {
   if (!isSignedIn.value) {
     dialogStore.showSignup()
     return
@@ -99,13 +99,14 @@ onMounted(async () => {
   </div>
   <div>
     <v-btn
-      @click="generateImage"
-      :disabled="!imageUpload?.image"
+      @click="colorizeImage"
+      text="Colorize"
+      :disabled="!imageUpload?.image || colorizeInProgress"
       color="purple-lighten-2"
       block
       dark
-      >Colorize</v-btn
     >
+    </v-btn>
   </div>
   <PremiumDialog />
 </template>

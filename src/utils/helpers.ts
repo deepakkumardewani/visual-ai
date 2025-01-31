@@ -1,6 +1,6 @@
 import { storeToRefs } from 'pinia'
 
-import type { IImageObject } from '@/types'
+import type { IImage, IImageObject } from '@/types'
 
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
@@ -44,11 +44,41 @@ export const deleteImage = async (event: Event, image: IImageObject) => {
     history.value = history.value.filter((item: IImageObject) => item._id !== image._id)
   }
 }
-export const bulkDelete = async (publicIds: string[]) => {
+export const bulkFavorite = async (images: IImageObject[]) => {
   const userStore = useUserStore()
-  const { userId } = storeToRefs(userStore)
+  const { userId, history } = storeToRefs(userStore)
+  const generateStore = useGenerateStore()
+  const { isFavoriting } = storeToRefs(generateStore)
+  isFavoriting.value = true
+  const url = `/image/favorite/bulk`
+  const { error, data } = await useFetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      mode: 'cors'
+    },
+    body: JSON.stringify({ imageIds: images.map((img) => img._id), userId: userId.value })
+  }).json()
+  if (error.value) {
+    console.error('error', error.value)
+    isFavoriting.value = false
+    return
+  }
+  if (data.value) {
+    history.value = history.value.map((item: IImageObject) => {
+      if (images.some((img) => img._id === item._id)) {
+        return { ...item, isFavorite: true }
+      }
+      return item
+    })
+  }
+}
+export const bulkDelete = async (images: IImageObject[]) => {
+  const userStore = useUserStore()
+  const { userId, history } = storeToRefs(userStore)
   const generateStore = useGenerateStore()
   const { isDeleting } = storeToRefs(generateStore)
+  const publicIds = getPublicIds(images)
   isDeleting.value = true
   const url = `/image/delete/bulk`
   const { error, data } = await useFetch(url, {
@@ -59,6 +89,7 @@ export const bulkDelete = async (publicIds: string[]) => {
     },
     body: JSON.stringify({
       publicIds,
+      imageIds: images.map((img) => img._id),
       userId: userId.value
     })
   }).json()
@@ -68,6 +99,9 @@ export const bulkDelete = async (publicIds: string[]) => {
     return
   }
   if (data.value) {
+    history.value = history.value.filter(
+      (item: IImageObject) => !images.some((img) => img._id === item._id)
+    )
     isDeleting.value = false
   }
 }
@@ -96,7 +130,6 @@ export const favoriteImage = async (event: Event, imageId: string) => {
     return
   }
   if (data.value) {
-    console.log('data', data.value)
     history.value = history.value.map((item: IImageObject) => {
       if (item._id === imageId) {
         return { ...item, isFavorite: data.value.isFavorite }
@@ -106,8 +139,34 @@ export const favoriteImage = async (event: Event, imageId: string) => {
   }
   isFavoriting.value = false
 }
-export const downloadImage = async (event: Event, image?: string) => {
-  event.stopPropagation()
+export const bulkDownload = async (images: IImageObject[]) => {
+  images.forEach(async (image) => {
+    if (!image) return
+
+    try {
+      if (image.featureType === 'image') {
+        for (const img of image.images) {
+          if (img.aiImagePublicId) {
+            const imageUrl = getDownloadImageUrl(img)
+            await downloadImage(undefined, imageUrl)
+          }
+        }
+      } else {
+        for (const img of image.images) {
+          if (img.enhancedPublicId) {
+            const imageUrl = getDownloadImageUrl(img)
+            await downloadImage(undefined, imageUrl)
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error downloading images:', error)
+    }
+  })
+}
+
+export const downloadImage = async (event?: Event, image?: string) => {
+  event?.stopPropagation()
 
   if (!image) return
 
@@ -201,4 +260,38 @@ export const formatFileSize = (bytes: number | undefined): string => {
 
   const mb = kb / 1024
   return `${mb.toFixed(1)} MB`
+}
+
+export function getPublicIds(images: IImageObject[]): string[] {
+  const publicIdsToDelete: string[] = []
+
+  images.forEach((image) => {
+    if (image.featureType === 'image') {
+      // For image type, only collect aiImagePublicId
+      image.images.forEach((img: IImage) => {
+        if (img.aiImagePublicId) {
+          publicIdsToDelete.push(img.aiImagePublicId)
+        }
+      })
+    } else {
+      // For other types (enhance), collect both original and enhanced public IDs
+      image.images.forEach((img: IImage) => {
+        if (img.originalPublicId) {
+          publicIdsToDelete.push(img.originalPublicId)
+        }
+        if (img.enhancedPublicId) {
+          publicIdsToDelete.push(img.enhancedPublicId)
+        }
+      })
+    }
+  })
+  return publicIdsToDelete
+}
+
+export const getDownloadImageUrl = (image: IImage) => {
+  const publicId = image.aiImagePublicId ? image.aiImagePublicId : image.enhancedPublicId
+  const format = image.format
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
+  // const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`
+  return `${cloudinaryBaseUrl}/${publicId}.${format}`
 }

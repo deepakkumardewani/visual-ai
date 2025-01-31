@@ -2,12 +2,11 @@
 import { storeToRefs } from 'pinia'
 
 import { IImageObject } from '@/types'
-import { IImage } from '@/types'
 
 import { useAppStore } from '@/stores/app'
 import { useGenerateStore } from '@/stores/generate'
 
-import { deleteImage, downloadImage, favoriteImage } from '@/utils/helpers'
+import { deleteImage, downloadImage, favoriteImage, getDownloadImageUrl } from '@/utils/helpers'
 
 const props = defineProps<{
   item: IImageObject
@@ -16,21 +15,13 @@ const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
 const generateStore = useGenerateStore()
 const { deletingImageIds } = storeToRefs(generateStore)
-
-const downloadImageUrl = (image: IImage) => {
-  const publicId = image.aiImagePublicId ? image.aiImagePublicId : image.enhancedPublicId
-  const format = image.format
-  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  // const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`
-  return `${cloudinaryBaseUrl}/${publicId}.${format}`
-}
 </script>
 <template>
   <v-btn
     icon
     size="x-small"
     :color="isDark ? 'black' : 'white'"
-    @click="downloadImage($event, downloadImageUrl(props.item.images[0]))"
+    @click="downloadImage($event, getDownloadImageUrl(props.item.images[0]))"
   >
     <v-icon :color="isDark ? 'white' : 'black'">fas fa-download</v-icon>
   </v-btn>
