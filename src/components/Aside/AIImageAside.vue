@@ -15,7 +15,6 @@ import { useUserStore } from '@/stores/user'
 
 import AspectRatio from '@/components/Aside/AspectRatio.vue'
 import CreateButton from '@/components/Aside/CreateButton.vue'
-import Heading from '@/components/Aside/Heading.vue'
 import ImageFormat from '@/components/Aside/ImageFormat.vue'
 import ImageVariation from '@/components/Aside/ImageVariation.vue'
 import Menu from '@/components/Aside/Menu.vue'
@@ -79,7 +78,6 @@ watch(outputQuality, (newVal) => {
 </script>
 <template>
   <div class="mb-6">
-    <Heading title="Prompt" />
     <div v-if="smAndUp" class="tw-relative">
       <Prompt />
     </div>
@@ -126,10 +124,6 @@ watch(outputQuality, (newVal) => {
 </template>
 
 <style lang="scss" scoped>
-.wrap-text {
-  line-clamp: unset !important;
-  -webkit-line-clamp: unset !important;
-}
 .custom-menu {
   margin-left: 100px !important;
 }

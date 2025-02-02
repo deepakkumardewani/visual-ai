@@ -4,6 +4,7 @@ import type { IImage, IImageObject } from '@/types'
 
 import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
+import { useHistoryStore } from '@/stores/history'
 import { useUserStore } from '@/stores/user'
 
 import { useFetch } from '@/composables/useFetch'
@@ -44,67 +45,6 @@ export const deleteImage = async (event: Event, image: IImageObject) => {
     history.value = history.value.filter((item: IImageObject) => item._id !== image._id)
   }
 }
-export const bulkFavorite = async (images: IImageObject[]) => {
-  const userStore = useUserStore()
-  const { userId, history } = storeToRefs(userStore)
-  const generateStore = useGenerateStore()
-  const { isFavoriting } = storeToRefs(generateStore)
-  isFavoriting.value = true
-  const url = `/image/favorite/bulk`
-  const { error, data } = await useFetch(url, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      mode: 'cors'
-    },
-    body: JSON.stringify({ imageIds: images.map((img) => img._id), userId: userId.value })
-  }).json()
-  if (error.value) {
-    console.error('error', error.value)
-    isFavoriting.value = false
-    return
-  }
-  if (data.value) {
-    history.value = history.value.map((item: IImageObject) => {
-      if (images.some((img) => img._id === item._id)) {
-        return { ...item, isFavorite: true }
-      }
-      return item
-    })
-  }
-}
-export const bulkDelete = async (images: IImageObject[]) => {
-  const userStore = useUserStore()
-  const { userId, history } = storeToRefs(userStore)
-  const generateStore = useGenerateStore()
-  const { isDeleting } = storeToRefs(generateStore)
-  const publicIds = getPublicIds(images)
-  isDeleting.value = true
-  const url = `/image/delete/bulk`
-  const { error, data } = await useFetch(url, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      mode: 'cors'
-    },
-    body: JSON.stringify({
-      publicIds,
-      imageIds: images.map((img) => img._id),
-      userId: userId.value
-    })
-  }).json()
-  if (error.value) {
-    console.error('error', error.value)
-    isDeleting.value = false
-    return
-  }
-  if (data.value) {
-    history.value = history.value.filter(
-      (item: IImageObject) => !images.some((img) => img._id === item._id)
-    )
-    isDeleting.value = false
-  }
-}
 export const favoriteImage = async (event: Event, imageId: string) => {
   event.stopPropagation()
   const generateStore = useGenerateStore()
@@ -139,6 +79,88 @@ export const favoriteImage = async (event: Event, imageId: string) => {
   }
   isFavoriting.value = false
 }
+export const downloadImage = async (event?: Event, image?: string) => {
+  event?.stopPropagation()
+
+  if (!image) return
+
+  try {
+    const response = await fetch(image)
+    const blob = await response.blob()
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `image-${Date.now()}.${image.split('.').pop()}`
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(url)
+    a.remove()
+  } catch (error) {
+    console.error('Error downloading image:', error)
+  }
+}
+
+export const bulkFavorite = async (images: IImageObject[]) => {
+  const userStore = useUserStore()
+  const { userId, history } = storeToRefs(userStore)
+  const historyStore = useHistoryStore()
+  const { isBulkFavoriting } = storeToRefs(historyStore)
+  isBulkFavoriting.value = true
+  const url = `/image/favorite/bulk`
+  const { error, data } = await useFetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      mode: 'cors'
+    },
+    body: JSON.stringify({ imageIds: images.map((img) => img._id), userId: userId.value })
+  }).json()
+  if (error.value) {
+    console.error('error', error.value)
+    isBulkFavoriting.value = false
+    return
+  }
+  if (data.value) {
+    history.value = history.value.map((item: IImageObject) => {
+      if (images.some((img) => img._id === item._id)) {
+        return { ...item, isFavorite: true }
+      }
+      return item
+    })
+  }
+}
+export const bulkDelete = async (images: IImageObject[]) => {
+  const userStore = useUserStore()
+  const { userId, history } = storeToRefs(userStore)
+  const historyStore = useHistoryStore()
+  const { isBulkDeleting } = storeToRefs(historyStore)
+  const publicIds = getPublicIds(images)
+  isBulkDeleting.value = true
+  const url = `/image/delete/bulk`
+  const { error, data } = await useFetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      mode: 'cors'
+    },
+    body: JSON.stringify({
+      publicIds,
+      imageIds: images.map((img) => img._id),
+      userId: userId.value
+    })
+  }).json()
+  if (error.value) {
+    console.error('error', error.value)
+    isBulkDeleting.value = false
+    return
+  }
+  if (data.value) {
+    history.value = history.value.filter(
+      (item: IImageObject) => !images.some((img) => img._id === item._id)
+    )
+    isBulkDeleting.value = false
+  }
+}
 export const bulkDownload = async (images: IImageObject[]) => {
   images.forEach(async (image) => {
     if (!image) return
@@ -163,27 +185,6 @@ export const bulkDownload = async (images: IImageObject[]) => {
       console.error('Error downloading images:', error)
     }
   })
-}
-
-export const downloadImage = async (event?: Event, image?: string) => {
-  event?.stopPropagation()
-
-  if (!image) return
-
-  try {
-    const response = await fetch(image)
-    const blob = await response.blob()
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `image-${Date.now()}.${image.split('.').pop()}`
-    document.body.appendChild(a)
-    a.click()
-    window.URL.revokeObjectURL(url)
-    a.remove()
-  } catch (error) {
-    console.error('Error downloading image:', error)
-  }
 }
 
 export const applyReferralCode = async (code: string) => {

@@ -46,9 +46,6 @@ function removeImage() {
   if (mobile.value) {
     imgSource.value = ''
   }
-  // if (imagePreview.value) {
-  //   imagePreview.value.innerHTML = ''
-  // }
 }
 
 function handleFileUpload(file: File) {
@@ -63,7 +60,7 @@ function handleFileUpload(file: File) {
     img.src = e.target?.result as string
     imgSource.value = e.target?.result as string
     if (!mobile.value && imagePreview.value) {
-      imagePreview.value.innerHTML = `<img src="${e.target?.result}" alt="Image preview" />`
+      // imagePreview.value.innerHTML = `<img src="${imgSource.value}" class="tw-rounded-sm" alt="Image preview" />`
 
       // Only add click event listener if there's no image and it hasn't been added before
       if (!isEventListenerAdded && !image.value) {
@@ -86,7 +83,6 @@ function createImageReader() {
   imagePreview.value = document.getElementById('image-preview') as HTMLElement
 
   uploadInput?.value?.addEventListener('change', (event: Event) => {
-    console.log('change')
     const target = event.target as HTMLInputElement
     const file = target.files?.[0]
 
@@ -100,10 +96,6 @@ function createImageReader() {
   })
 }
 
-onMounted(() => {
-  createImageReader()
-})
-
 const formatFileSize = (bytes: number) => {
   if (!bytes) return '0 KB'
   const k = 1024
@@ -115,7 +107,9 @@ const formatFileSize = (bytes: number) => {
 const fileSize = computed(() => {
   return image.value ? formatFileSize(image.value.size) : ''
 })
-
+onMounted(() => {
+  createImageReader()
+})
 defineExpose({
   image,
   width,
@@ -128,7 +122,7 @@ defineExpose({
       <div class="tw-relative tw-flex tw-items-center tw-justify-center">
         <div
           id="image-preview"
-          class="tw-flex tw-flex-1 tw-max-w-sm tw-p-2 sm:tw-p-4 tw-mb-2 tw-rounded-lg tw-items-center tw-mx-auto tw-text-center tw-border-dashed tw-border-2 tw-border-gray-400"
+          class="tw-flex tw-flex-1 tw-max-w-sm tw-p-2 tw-mb-2 tw-rounded-lg tw-items-center tw-mx-auto tw-text-center tw-border-dashed tw-border-2 tw-border-gray-400"
           :class="{
             'tw-border-purple-500 tw-rounded-lg animate-border': isDragging,
             'tw-h-16 tw-p-0': image && mobile
@@ -144,7 +138,11 @@ defineExpose({
             accept="image/jpeg, image/png, image/webp"
           />
           <template v-if="!mobile">
+            <div v-if="image">
+              <img :src="imgSource" alt="Preview" class="tw-object-cover tw-rounded" />
+            </div>
             <label
+              v-else
               for="upload"
               class="tw-cursor-pointer tw-p-2 sm:tw-p-4 tw-rounded-lg tw-block tw-transition-all tw-duration-300"
             >
@@ -202,13 +200,25 @@ defineExpose({
         v-if="image && feature === 'upscale'"
         class="tw-flex tw-justify-between tw-mt-1 sm:tw-mt-2 tw-text-xs sm:tw-text-sm tw-text-neutral-600 dark:tw-text-neutral-300 tw-px-2"
       >
-        <div>
-          <v-icon icon="fas fa-file-image" size="x-small" class="tw-mr-1" />
-          {{ fileSize }}
+        <div class="tw-flex tw-items-center">
+          <div class="tw-flex tw-items-center">
+            <v-icon icon="fas fa-file-image" size="x-small" class="tw-mr-1" />
+            {{ fileSize }}
+          </div>
+          <div class="tw-mx-2 tw-h-4 tw-w-px tw-bg-neutral-300 dark:tw-bg-neutral-600"></div>
+          <div class="tw-flex tw-items-center">
+            <v-icon icon="fas fa-expand" size="x-small" class="tw-mr-1" />
+            {{ width }} x {{ height }}px
+          </div>
         </div>
-        <div>
-          <v-icon icon="fas fa-expand" size="x-small" class="tw-mr-1" />
-          {{ width }} x {{ height }}px
+        <div v-if="!mobile" class="tw-flex tw-items-center">
+          <v-icon
+            class="tw-cursor-pointer tw-text-neutral-600 dark:tw-text-neutral-300 hover:tw-text-red-500 dark:hover:tw-text-red-400"
+            size="x-small"
+            @click="removeImage"
+          >
+            fas fa-trash
+          </v-icon>
         </div>
       </div>
     </div>

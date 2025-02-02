@@ -7,7 +7,6 @@ import type { GroupedObject, IImage, IImageObject } from '@/types'
 
 import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
-import { useGenerateStore } from '@/stores/generate'
 import { useHistoryStore } from '@/stores/history'
 import { useUserStore } from '@/stores/user'
 
@@ -25,11 +24,10 @@ const props = withDefaults(defineProps<{ isFavorites?: boolean }>(), {
 })
 const userStore = useUserStore()
 const dialogStore = useDialogStore()
-const generateStore = useGenerateStore()
 
 const { mobile } = useDisplay()
 const { isDark } = storeToRefs(useAppStore())
-const { isDeleting } = storeToRefs(generateStore)
+const { isBulkDeleting, isBulkFavoriting, isBulkDownloading } = storeToRefs(useHistoryStore())
 const { history } = storeToRefs(userStore)
 const { selectedSize } = storeToRefs(useHistoryStore())
 
@@ -46,7 +44,7 @@ const carouselTimeouts = ref<{ [key: string]: number }>({})
 const selectedImages = ref<IImageObject[]>([])
 
 const showImage = (item: IImageObject) => {
-  if (isDeleting.value) return
+  if (isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value) return
   imageDialogItem.value = item
   dialogStore.showImage()
 }
@@ -98,7 +96,7 @@ const getImageUrl = (image: IImage) => {
 }
 
 const toggleImageSelection = async (event: Event, image: IImageObject) => {
-  if (isDeleting.value) return
+  if (isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value) return
   event.stopPropagation()
   if (selectedImages.value.some((item) => item._id === image._id)) {
     selectedImages.value = selectedImages.value.filter((item) => item._id !== image._id)
@@ -124,7 +122,7 @@ const areAllSelectedInGroup = (groupData: IImageObject[]): boolean => {
 }
 
 const toggleGroupSelection = (groupData: IImageObject[]) => {
-  if (isDeleting.value) return
+  if (isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value) return
   if (areAllSelectedInGroup(groupData)) {
     groupData.forEach((item) => {
       selectedImages.value = selectedImages.value.filter((selected) => selected._id !== item._id)
@@ -164,6 +162,15 @@ watch(
     }
   },
   { immediate: true, deep: true }
+)
+
+watch(
+  [isBulkDeleting, isBulkFavoriting, isBulkDownloading],
+  ([isDeleting, isFavoriting, isDownloading]) => {
+    if (isDeleting || isFavoriting || isDownloading) {
+      selectedImages.value = []
+    }
+  }
 )
 </script>
 
@@ -215,7 +222,9 @@ watch(
               v-if="isHovering || selectedImages.length > 0"
               icon="fas fa-circle-check"
               :class="[
-                isDeleting ? 'tw-cursor-not-allowed' : 'tw-cursor-pointer',
+                isBulkDeleting || isBulkFavoriting || isBulkDownloading
+                  ? 'tw-cursor-not-allowed'
+                  : 'tw-cursor-pointer',
                 areAllSelectedInGroup(item.data) ? 'tw-text-blue-500' : 'tw-text-neutral-500'
               ]"
               size="small"
@@ -230,7 +239,12 @@ watch(
               <div
                 v-bind="props"
                 class="tw-cursor-pointer dark:tw-bg-darkBorder tw-bg-lightBorder tw-p-1 tw-aspect-square"
-                :class="{ 'tw-opacity-50': isDeleting && selectedImages.length > 0 }"
+                :class="{
+                  'tw-opacity-50':
+                    isBulkDeleting ||
+                    isBulkFavoriting ||
+                    (isBulkDownloading && selectedImages.length > 0)
+                }"
               >
                 <div class="tw-h-full tw-relative">
                   <!-- Image content -->
@@ -315,7 +329,9 @@ watch(
                             icon="fas fa-circle-check"
                             class="tw-z-[2] !tw-h-5 !tw-w-5 check-icon-with-gradient"
                             :class="[
-                              isDeleting ? 'tw-cursor-not-allowed' : 'tw-cursor-pointer',
+                              isBulkDeleting || isBulkFavoriting || isBulkDownloading
+                                ? 'tw-cursor-not-allowed'
+                                : 'tw-cursor-pointer',
                               isImageSelected(subItem._id)
                                 ? 'tw-text-blue-500'
                                 : 'tw-text-neutral-200'

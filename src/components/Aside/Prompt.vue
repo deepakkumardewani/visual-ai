@@ -6,6 +6,8 @@ import { useDisplay } from 'vuetify'
 import { useAsideStore } from '@/stores/aside'
 import { useGenerateStore } from '@/stores/generate'
 
+import Heading from '@/components/Aside/Heading.vue'
+
 import { MODEL_IDS } from '@/utils/constants'
 import PROMPTS from '@/utils/prompts.json'
 import REALISTIC_PROMPTS from '@/utils/realisticPrompts.json'
@@ -63,6 +65,15 @@ onMounted(() => {
 })
 </script>
 <template>
+  <div class="tw-flex tw-items-center tw-gap-1">
+    <Heading title="Prompt" />
+    <v-tooltip location="top">
+      <template v-slot:activator="{ props }">
+        <v-icon v-bind="props" icon="fas fa-circle-info" size="small" class="tw-text-gray-400" />
+      </template>
+      <span>Describe style, subject, colors, mood, and composition of your desired image</span>
+    </v-tooltip>
+  </div>
   <v-textarea
     ref="textareaRef"
     v-model.trim="typingPrompt"

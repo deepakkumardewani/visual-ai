@@ -83,3 +83,11 @@ function handleSelected(item: Mode) {
     </template>
   </v-select>
 </template>
+
+<style lang="scss" scoped>
+// this is to prevent the text from being cut off in the v-select
+.wrap-text {
+  line-clamp: unset !important;
+  -webkit-line-clamp: unset !important;
+}
+</style>
