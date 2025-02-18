@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faCopy, faTimes } from '@/plugins/icons'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
@@ -34,8 +35,8 @@ const copyReferralCode = async () => {
           <div class="tw-text-2xl tw-font-medium tw-w-full tw-text-center">
             Your account balance
           </div>
-          <v-btn icon variant="text" @click="dialogStore.hideCopyReferral()" size="small">
-            <v-icon icon="fas fa-times"></v-icon>
+          <v-btn icon variant="text" @click="dialogStore.hideCopyReferral()" size="lg">
+            <font-awesome-icon :icon="faTimes" />
           </v-btn>
         </div>
 
@@ -69,8 +70,13 @@ const copyReferralCode = async () => {
               >
                 {{ userDetails?.referralCode }}
               </span>
-              <v-btn :color="isDark ? '#6b21a8' : '#9333ea'" icon @click="copyReferralCode">
-                <v-icon icon="fas fa-copy"></v-icon>
+              <v-btn
+                :color="isDark ? '#6b21a8' : '#9333ea'"
+                size="lg"
+                icon
+                @click="copyReferralCode"
+              >
+                <font-awesome-icon :icon="faCopy" />
               </v-btn>
             </div>
           </div>

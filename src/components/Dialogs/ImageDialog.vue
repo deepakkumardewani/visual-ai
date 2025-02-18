@@ -1,7 +1,17 @@
 <script setup lang="ts">
 import { FeatureType } from '@/pages/utils'
+import {
+  faChevronLeft,
+  faChevronRight,
+  faDownload,
+  faFile,
+  faTimes,
+  faTrashAlt,
+  farHeart,
+  fasHeart
+} from '@/plugins/icons'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 
 import { IImageObject } from '@/types'
@@ -111,7 +121,7 @@ watch(history, (newHistory) => {
       <div class="action-buttons tw-flex tw-p-4">
         <div class="tw-flex tw-flex-2 tw-items-center tw-justify-start">
           <v-btn icon size="small" variant="text" @click="dialogStore.hideImage()">
-            <v-icon>fas fa-times</v-icon>
+            <font-awesome-icon :icon="faTimes" />
           </v-btn>
 
           <div
@@ -133,7 +143,7 @@ watch(history, (newHistory) => {
                 variant="text"
                 @click="favoriteImage($event, item?._id ?? '')"
               >
-                <v-icon>{{ isFavorite ? 'fas fa-heart' : 'far fa-heart' }}</v-icon>
+                <font-awesome-icon :icon="isFavorite ? fasHeart : farHeart" />
               </v-btn>
             </template>
           </v-tooltip>
@@ -146,7 +156,7 @@ watch(history, (newHistory) => {
                 variant="text"
                 @click="downloadImage($event, downloadImageUrl)"
               >
-                <v-icon>fas fa-download</v-icon>
+                <font-awesome-icon :icon="faDownload" />
               </v-btn>
             </template>
           </v-tooltip>
@@ -161,7 +171,7 @@ watch(history, (newHistory) => {
                 variant="text"
                 @click="deleteImage($event, item as IImageObject)"
               >
-                <v-icon>fas fa-trash-alt</v-icon>
+                <font-awesome-icon :icon="faTrashAlt" />
               </v-btn>
             </template>
           </v-tooltip>
@@ -187,7 +197,7 @@ watch(history, (newHistory) => {
               @click="previousImage"
               :disabled="currentImageIndex === 0"
             >
-              <v-icon>fas fa-chevron-left</v-icon>
+              <font-awesome-icon :icon="faChevronLeft" />
             </v-btn>
 
             <v-btn
@@ -197,7 +207,7 @@ watch(history, (newHistory) => {
               @click="nextImage"
               :disabled="currentImageIndex === item.images.length - 1"
             >
-              <v-icon>fas fa-chevron-right</v-icon>
+              <font-awesome-icon :icon="faChevronRight" />
             </v-btn>
           </div>
 
@@ -241,7 +251,7 @@ watch(history, (newHistory) => {
           </div>
           <div class="tw-flex tw-items-center">
             <v-chip size="small">
-              <v-icon size="small">far fa-file</v-icon>
+              <font-awesome-icon :icon="faFile" class="tw-text-sm" />
               <div class="tw-ml-1">
                 {{ item?.images?.[0]?.width }} x {{ item?.images?.[0]?.height }}
               </div>

@@ -1,20 +1,7 @@
-// src/router/index.js
 import { useUser } from 'vue-clerk'
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Contact from '@/pages/Contact.vue'
-import Dashboard from '@/pages/Dashboard.vue'
-import Examples from '@/pages/Examples.vue'
-import Faqs from '@/pages/Frequent.vue'
-import Gallery from '@/pages/Gallery.vue'
 import Landing from '@/pages/Landing.vue'
-import Pricing from '@/pages/Pricing.vue'
-import Privacy from '@/pages/PrivacyPolicy.vue'
-import Profile from '@/pages/Profile.vue'
-import Refund from '@/pages/RefundPolicy.vue'
-import Signin from '@/pages/Signin.vue'
-import Signup from '@/pages/Signup.vue'
-import Terms from '@/pages/Terms.vue'
 
 const routes = [
   {
@@ -25,62 +12,62 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: Dashboard
+    component: () => import('@/pages/Dashboard.vue')
   },
   {
     path: '/profile',
     name: 'profile',
-    component: Profile
+    component: () => import('@/pages/Profile.vue')
   },
   {
     path: '/faqs',
     name: 'faqs',
-    component: Faqs
+    component: () => import('@/pages/Frequent.vue')
   },
   {
     path: '/pricing',
     name: 'pricing',
-    component: Pricing
+    component: () => import('@/pages/Pricing.vue')
   },
   {
     path: '/signin',
     name: 'signin',
-    component: Signin
+    component: () => import('@/pages/Signin.vue')
   },
   {
     path: '/signup',
     name: 'signup',
-    component: Signup
+    component: () => import('@/pages/Signup.vue')
   },
   {
     path: '/terms',
     name: 'terms',
-    component: Terms
+    component: () => import('@/pages/Terms.vue')
   },
   {
     path: '/privacy',
     name: 'privacy',
-    component: Privacy
+    component: () => import('@/pages/PrivacyPolicy.vue')
   },
   {
     path: '/refund',
     name: 'refund',
-    component: Refund
+    component: () => import('@/pages/RefundPolicy.vue')
   },
   {
     path: '/contact',
     name: 'contact',
-    component: Contact
+    component: () => import('@/pages/Contact.vue')
   },
   {
     path: '/gallery',
     name: 'gallery',
-    component: Gallery
+    component: () => import('@/pages/Gallery.vue')
   },
   {
     path: '/examples',
     name: 'examples',
-    component: Examples
+    component: () => import('@/pages/Examples.vue')
   }
 ]
 

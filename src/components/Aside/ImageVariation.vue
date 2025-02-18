@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faMinus, faPlus } from '@/plugins/icons'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -66,7 +67,7 @@ onMounted(() => {
         variant="text"
         @click="handleImageVariations('subtract')"
       >
-        <v-icon icon="fa:fas fa-minus" />
+        <font-awesome-icon :icon="faMinus" />
       </v-btn>
     </div>
     <div class="tw-flex-1 tw-text-center">
@@ -79,7 +80,7 @@ onMounted(() => {
         variant="text"
         @click="handleImageVariations('add')"
       >
-        <v-icon icon="fa:fas fa-plus" />
+        <font-awesome-icon :icon="faPlus" />
       </v-btn>
     </div>
   </div>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faGear } from '@/plugins/icons'
 import { ref } from 'vue'
 
 import AspectRatio from '@/components/Aside/AspectRatio.vue'
@@ -18,7 +19,7 @@ const menu = ref(false)
   >
     <template v-slot:activator="{ props }">
       <v-btn icon v-bind="props" class="pa-2 ml-4" variant="tonal" size="sm">
-        <v-icon icon="fa:fas fa-gear" />
+        <font-awesome-icon :icon="faGear" />
       </v-btn>
     </template>
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import { storeToRefs } from 'pinia'
 
 import { useAppStore } from '@/stores/app'
@@ -8,7 +9,7 @@ const { isDark } = storeToRefs(appStore)
 
 defineProps<{
   text: string
-  icon?: string
+  icon?: IconDefinition
 }>()
 </script>
 <template>
@@ -18,7 +19,7 @@ defineProps<{
     :color="isDark ? 'purple-lighten-2' : 'purple-darken-2'"
     label
   >
-    <v-icon v-if="icon" :icon="icon" start class="tw-mr-2" />
+    <font-awesome-icon v-if="icon" :icon="icon" class="tw-mr-2" />
     {{ text }}
   </v-chip>
 </template>

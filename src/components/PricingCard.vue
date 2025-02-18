@@ -16,6 +16,7 @@ const appStore = useAppStore()
 const { isDark } = storeToRefs(appStore)
 const userStore = useUserStore()
 const { isPro } = storeToRefs(userStore)
+const isLoading = ref(false)
 const cardBackground = computed(() => {
   if (!props.plan.isFree) {
     return isDark.value ? 'bg-purple-darken-4' : 'bg-purple-lighten-5'
@@ -30,9 +31,13 @@ const priceColor = computed(() => {
 async function handleUpgrade() {
   if (!props.plan.isFree) {
     try {
-      await initiatePayment(RAZORPAY_PRODUCTS[4], true)
+      isLoading.value = true
+      const product = RAZORPAY_PRODUCTS[4]
+      await initiatePayment(product, true)
     } catch (error) {
       console.error('Purchase failed:', error)
+    } finally {
+      isLoading.value = false
     }
   }
 }
@@ -63,7 +68,8 @@ async function handleUpgrade() {
       <div class="my-2">
         <v-btn
           @click="handleUpgrade"
-          :disabled="plan.isFree || isPro"
+          :loading="isLoading"
+          :disabled="plan.isFree || isPro || isLoading"
           :color="plan.isFree ? 'grey' : 'purple'"
           :variant="plan.isFree ? 'outlined' : 'elevated'"
           size="large"

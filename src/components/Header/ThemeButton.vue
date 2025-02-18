@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faMoon, faSun } from '@/plugins/icons'
 import { storeToRefs } from 'pinia'
 
 import { useAppStore } from '@/stores/app'
@@ -15,7 +16,7 @@ const { isDark } = storeToRefs(appStore)
   >
     <template v-slot:activator="{ props }">
       <div @click="appStore.toggleTheme" v-bind="props" class="tw-cursor-pointer">
-        <v-icon size="small" :icon="isDark ? 'fas fa-sun' : 'fas fa-moon'"></v-icon>
+        <font-awesome-icon :icon="isDark ? faSun : faMoon" class="tw-text-sm" />
       </div>
     </template>
   </v-tooltip>

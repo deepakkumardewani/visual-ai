@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faCheckSquare, faSearch, faSquare, faXmarkCircle } from '@/plugins/icons'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useDisplay } from 'vuetify'
@@ -38,6 +39,10 @@ const featureTypes = ref<any[]>([
     title: 'Revive'
   }
 ])
+
+const isSelected = (item: any) => {
+  return selectedFeatureType.value.includes(item.id)
+}
 </script>
 <template>
   <div class="tw-flex tw-gap-4 tw-w-full sm:tw-w-[30vw] tw-mb-2 sm:tw-mb-0 sm:tw-mr-4">
@@ -66,7 +71,23 @@ const featureTypes = ref<any[]>([
       multiple
       chips
       closable-chips
-    ></v-select>
+    >
+      <template v-slot:item="{ item, props }">
+        <v-list-item v-bind="props">
+          <template v-slot:title>
+            <div class="tw-flex tw-gap-2 tw-items-center">
+              <font-awesome-icon
+                :icon="isSelected(item.raw) ? faCheckSquare : faSquare"
+                :class="isSelected(item.raw) ? 'tw-text-blue-500' : ''"
+              />
+              <VListItemTitle class="tw-text-black dark:tw-text-white">{{
+                item.raw.title
+              }}</VListItemTitle>
+            </div>
+          </template>
+        </v-list-item>
+      </template>
+    </v-select>
   </div>
 
   <v-text-field
@@ -78,11 +99,11 @@ const featureTypes = ref<any[]>([
     hide-details
   >
     <template v-slot:prepend-inner>
-      <v-icon class="tw-mr-1" size="x-small" icon="fas fa-search" />
+      <font-awesome-icon class="tw-mr-1" size="x-small" :icon="faSearch" />
     </template>
     <template v-slot:append-inner>
-      <v-btn icon size="x-small" variant="text" v-if="searchQuery" @click="searchQuery = ''">
-        <v-icon icon="fas fa-xmark" />
+      <v-btn icon size="lg" variant="text" v-if="searchQuery" @click="searchQuery = ''">
+        <font-awesome-icon :icon="faXmarkCircle" />
       </v-btn>
     </template>
   </v-text-field>

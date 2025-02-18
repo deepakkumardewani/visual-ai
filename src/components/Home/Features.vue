@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faClockRotateLeft, faExpand, faPalette, faWandMagicSparkles } from '@/plugins/icons'
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 
@@ -18,7 +19,7 @@ interface Feature {
   description: string
   url: string
   ref: string
-  icon: string
+  icon: any // Changed to any to support FontAwesome IconDefinition
 }
 
 const playVideo = (ref: string) => {
@@ -39,28 +40,28 @@ const features = ref<Feature[]>([
     description: 'Transform your ideas into stunning images with our advanced AI',
     url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/owrcv8j8uo1p9nhlxeh2.mp4',
     ref: 'textToImageVideo',
-    icon: 'fa-solid fa-wand-magic-sparkles'
+    icon: faWandMagicSparkles
   },
   {
     title: 'Upscale',
     description: 'Enhance image quality and resolution without losing details',
     url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/x9zn6em8ylbyqhdn8mki.mp4',
     ref: 'upscaleVideo',
-    icon: 'fa-solid fa-expand'
+    icon: faExpand
   },
   {
     title: 'Colorize',
     description: 'Bring black and white images to life with vibrant colors',
     url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915531/videos/yh5jyyyc0zsm5pnuq4k3.mp4',
     ref: 'colorizeVideo',
-    icon: 'fa-solid fa-palette'
+    icon: faPalette
   },
   {
     title: 'Restore',
     description: 'Repair and enhance old or damaged photos',
     url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/fvxprtyuurm49silhq1i.mp4',
     ref: 'restoreVideo',
-    icon: 'fa-solid fa-clock-rotate-left'
+    icon: faClockRotateLeft
   }
 ])
 

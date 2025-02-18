@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
@@ -16,12 +16,17 @@ const { isDark } = storeToRefs(appStore)
 const loading = ref(false)
 const price = ref(0)
 const packages = ref(RAZORPAY_PRODUCTS.filter((product) => product.type === 'single'))
-const ticks = {
-  1: '200',
-  2: '450',
-  3: '960',
-  4: '2000'
-}
+
+const ticks = computed(() => {
+  return packages.value.reduce(
+    (acc, product, index) => {
+      acc[index + 1] = product.credits.toString()
+      return acc
+    },
+    {} as Record<number, string>
+  )
+})
+
 const currentPackageIndex = ref(0)
 const currentPackage = computed(() => packages.value[currentPackageIndex.value])
 
@@ -94,7 +99,7 @@ const handlePurchase = async () => {
           :loading="loading"
           @click="handlePurchase"
         >
-          Purchase Now
+          Buy Now
         </v-btn>
       </div>
     </v-card>

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { faXmark } from '@/plugins/icons'
 import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 
@@ -67,7 +68,7 @@ const handleClickOutside = (e: MouseEvent) => {
     <div class="tw-columns-2 lg:tw-columns-3 xl:tw-columns-4 tw-gap-2 sm:tw-gap-4">
       <div v-for="(image, index) in images" :key="index" class="tw-mb-2 sm:tw-mb-4">
         <v-card
-          @click="(e) => openDialog(image, e)"
+          @click="(e: MouseEvent) => openDialog(image, e)"
           class="tw-cursor-pointer hover:tw-shadow-lg tw-transition-shadow tw-relative"
         >
           <v-img
@@ -82,9 +83,6 @@ const handleClickOutside = (e: MouseEvent) => {
               </div>
             </template>
           </v-img>
-          <!-- <div v-if="isHovering" class="overlay-fade">
-            <font-awesome-icon icon="fa-solid fa-expand" class="tw-text-white tw-text-xl" />
-          </div> -->
         </v-card>
       </div>
     </div>
@@ -114,7 +112,7 @@ const handleClickOutside = (e: MouseEvent) => {
               size="small"
               @click="dialog = false"
             >
-              <v-icon icon="fas fa-close" />
+              <font-awesome-icon :icon="faXmark" />
             </v-btn>
 
             <!-- Image container -->

@@ -1,4 +1,14 @@
 import {
+  faEnvelope,
+  faFileContract,
+  faHandHolding,
+  faImages,
+  faQuestionCircle,
+  faShieldAlt,
+  faTag
+} from '@/plugins/icons'
+
+import {
   type FeatureSelect,
   FeatureType,
   type Mode,
@@ -55,7 +65,7 @@ export const STARTER_PLAN: Plan = {
       available: false
     },
     {
-      title: 'Basic Colorize Images',
+      title: 'Colorize Images',
       available: true,
       tooltip: 'Uses 3 credits per image'
     },
@@ -74,12 +84,12 @@ export const STARTER_PLAN: Plan = {
 
 export const PRO_PLAN: Plan = {
   title: 'Pro',
-  price: '300',
+  price: '299',
   description: 'Billed monthly',
   isFree: false,
   features: [
     {
-      title: '500 credits/month | Resets Monthly',
+      title: '1000 credits/month | Resets Monthly',
       available: true
     },
     {
@@ -100,7 +110,7 @@ export const PRO_PLAN: Plan = {
       available: true
     },
     {
-      title: 'Advanced Colorize Images',
+      title: 'Colorize Images',
       available: true,
       tooltip: 'Uses 1 credit per image'
     },
@@ -293,42 +303,49 @@ export const FEATURES: FeatureSelect[] = [
 ]
 
 export const FOOTER_LINKS = [
-  { text: 'Examples', path: '/examples', icon: 'fas fa-images' },
-  { text: 'Contact Us', path: '/contact', icon: 'fas fa-envelope' },
-  { text: 'Privacy Policy', path: '/privacy', icon: 'fas fa-shield-alt' },
-  { text: 'Terms of Service', path: '/terms', icon: 'fas fa-file-contract' },
-  { text: 'Refund Policy', path: '/refund', icon: 'fas fa-hand-holding-usd' },
-  { text: 'Pricing', path: '/pricing', icon: 'fas fa-tag' },
-  { text: 'FAQ', path: '/faqs', icon: 'fas fa-question-circle' }
+  { text: 'Examples', path: '/examples', icon: faImages },
+  { text: 'Contact Us', path: '/contact', icon: faEnvelope },
+  { text: 'Privacy Policy', path: '/privacy', icon: faShieldAlt },
+  { text: 'Terms of Service', path: '/terms', icon: faFileContract },
+  { text: 'Refund Policy', path: '/refund', icon: faHandHolding },
+  { text: 'Pricing', path: '/pricing', icon: faTag },
+  { text: 'FAQ', path: '/faqs', icon: faQuestionCircle }
 ]
 export const RAZORPAY_PRODUCTS: RazorpayProduct[] = [
-  { id: 1, type: 'single', credits: 200, price: 130, description: '200 credits', currency: 'INR' },
+  { id: 1, type: 'single', credits: 120, price: 99, description: '120 credits', currency: 'INR' },
   {
     id: 2,
     type: 'single',
-    credits: 450,
-    price: 290,
+    credits: 250,
+    price: 199,
     savings: '11%',
-    description: '450 credits',
+    description: '250 credits',
     currency: 'INR'
   },
   {
     id: 3,
     type: 'single',
-    credits: 960,
-    price: 500,
+    credits: 380,
+    price: 299,
     savings: '22%',
-    description: '960 credits',
+    description: '380 credits',
     currency: 'INR'
   },
   {
     id: 4,
     type: 'single',
-    credits: 2000,
-    price: 900,
+    credits: 500,
+    price: 399,
     savings: '31%',
-    description: '2000 credits',
+    description: '500 credits',
     currency: 'INR'
   },
-  { id: 5, type: 'monthly', credits: 500, price: 250, description: '500 credits', currency: 'INR' }
+  {
+    id: 5,
+    type: 'monthly',
+    credits: 1000,
+    price: 299,
+    description: '1000 credits',
+    currency: 'INR'
+  }
 ]

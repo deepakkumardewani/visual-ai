@@ -34,7 +34,7 @@ const { isDark } = storeToRefs(appStore)
               class="tw-text-black dark:tw-text-gray-400 tw-text-sm tw-px-3"
               size="small"
             >
-              <v-icon :icon="link.icon" size="small" class="tw-mr-2" />
+              <font-awesome-icon :icon="link.icon" size="small" class="tw-mr-2" />
               {{ link.text }}
             </v-btn>
           </div>

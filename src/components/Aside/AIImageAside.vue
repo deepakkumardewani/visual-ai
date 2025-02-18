@@ -82,12 +82,11 @@ watch(outputQuality, (newVal) => {
       <Prompt />
     </div>
     <div v-else class="tw-flex">
-      <div class="tw-w-[85%]">
+      <div class="tw-w-[90%]">
         <Prompt />
       </div>
-
-      <div class="tw-w-[15%]">
-        <Menu />
+      <div class="tw-w-[10%] tw-flex tw-items-center tw-mb-2">
+        <Menu class="tw-mt-2" />
       </div>
     </div>
 

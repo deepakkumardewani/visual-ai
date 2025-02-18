@@ -1,10 +1,4 @@
-/**
- * plugins/index.ts
- *
- * Automatically included in `./src/main.ts`
- */
-// Plugins
-// Types
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { MotionPlugin } from '@vueuse/motion'
 import type { App } from 'vue'
 import { clerkPlugin } from 'vue-clerk'
@@ -22,6 +16,7 @@ if (!PUBLISHABLE_KEY) {
 }
 
 export function registerPlugins(app: App) {
+  app.component('font-awesome-icon', FontAwesomeIcon) // Register component globally
   app.use(clerkPlugin, {
     publishableKey: PUBLISHABLE_KEY,
     forceRedirectUrl: AFTER_SIGN_IN_URL,

@@ -1,22 +1,11 @@
-/**
- * plugins/vuetify.ts
- *
- * Framework documentation: https://vuetifyjs.com`
- */
-// Styles
-import '@fortawesome/fontawesome-free/css/all.css'
-// import '@mdi/font/css/materialdesignicons.css'
-// Composables
 import { IconAliases, createVuetify } from 'vuetify'
-// Ensure your project is capable of handling css files
-import { aliases as defaultAliases, fa } from 'vuetify/iconsets/fa'
-import { mdi } from 'vuetify/iconsets/mdi-svg'
+import { fa, aliases as faAliases } from 'vuetify/iconsets/fa-svg'
 import 'vuetify/styles'
 
 import customAliases from '@/components/icons'
 
 const aliases: IconAliases = {
-  ...defaultAliases,
+  ...faAliases,
   ...customAliases
 }
 
@@ -59,7 +48,6 @@ export default createVuetify({
     defaultSet: 'fa',
     aliases,
     sets: {
-      mdi,
       fa
     }
   }

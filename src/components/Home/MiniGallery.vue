@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faImages } from '@/plugins/icons'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { ref as vueRef } from 'vue'
@@ -50,8 +51,8 @@ const showImageDetails = (img: any) => {
             size="large"
             class="text-center"
             variant="outlined"
-            prepend-icon="fas fa-images"
           >
+            <font-awesome-icon :icon="faImages" class="tw-mr-2" />
             View All Artworks
           </v-btn>
         </div>

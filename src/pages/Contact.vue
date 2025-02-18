@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { faPaperPlane } from '@/plugins/icons'
 import { storeToRefs } from 'pinia'
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 
 import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
@@ -165,7 +166,7 @@ watch(userDetails, () => {
                 block
                 :loading="isLoading"
               >
-                <v-icon start icon="fas fa-paper-plane" />
+                <font-awesome-icon :icon="faPaperPlane" class="tw-mr-2" />
                 Send Message
               </v-btn>
             </v-col>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { groupByDate } from '@/pages/utils'
+import { faCircleCheck, faXmark } from '@/plugins/icons'
 import { storeToRefs } from 'pinia'
 import { useDisplay } from 'vuetify'
 
@@ -187,7 +188,7 @@ watch(
         >
           <div>
             <v-btn icon size="large" variant="text" @click="selectedImages = []">
-              <v-icon icon="fas fa-xmark" :color="isDark ? 'white' : 'black'"></v-icon>
+              <font-awesome-icon :icon="faXmark" :color="isDark ? 'white' : 'black'" />
             </v-btn>
           </div>
           <div class="tw-text-2xl tw-text-black dark:tw-text-white">
@@ -218,18 +219,18 @@ watch(
             >
               {{ item.title }}
             </div>
-            <v-icon
+            <font-awesome-icon
               v-if="isHovering || selectedImages.length > 0"
-              icon="fas fa-circle-check"
+              :icon="faCircleCheck"
               :class="[
                 isBulkDeleting || isBulkFavoriting || isBulkDownloading
                   ? 'tw-cursor-not-allowed'
                   : 'tw-cursor-pointer',
                 areAllSelectedInGroup(item.data) ? 'tw-text-blue-500' : 'tw-text-neutral-500'
               ]"
-              size="small"
+              size="lg"
               @click="toggleGroupSelection(item.data)"
-            ></v-icon>
+            ></font-awesome-icon>
           </div>
         </v-hover>
 

@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { faCaretDown, faCrown, faLink, faSignOutAlt, faUser, faUsers } from '@/plugins/icons'
 import { storeToRefs } from 'pinia'
 import { computed, ref, watch } from 'vue'
 import { useClerk } from 'vue-clerk'
 import { useRouter } from 'vue-router'
 
-import { useAppStore } from '@/stores/app'
 import { useDialogStore } from '@/stores/dialog'
 import { useUserStore } from '@/stores/user'
 
@@ -15,8 +15,6 @@ import ThemeButton from '@/components/Header/ThemeButton.vue'
 
 const router = useRouter()
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
 const dialogStore = useDialogStore()
 
 const userStore = useUserStore()
@@ -79,7 +77,7 @@ function goToSubscription() {
       <template v-slot:activator="{ props }">
         <div v-if="userDetails" v-bind="props" class="mr-4">
           <Avatar />
-          <v-icon size="x-small" class="tw-cursor-pointer" icon="fas fa-caret-down"></v-icon>
+          <font-awesome-icon :icon="faCaretDown" class="tw-cursor-pointer tw-text-xs" />
         </div>
       </template>
       <v-card>
@@ -114,13 +112,13 @@ function goToSubscription() {
               @click="router.push({ name: 'profile' }), (menu = false)"
             >
               <div class="tw-flex tw-items-center tw-gap-2">
-                <v-icon size="small" icon="fas fa-user"></v-icon>
+                <font-awesome-icon :icon="faUser" class="tw-text-sm" />
                 <v-list-item-title>View Profile</v-list-item-title>
               </div>
             </v-list-item>
             <v-list-item class="tw-cursor-pointer" @click="goToSubscription">
               <div class="tw-flex tw-items-center tw-gap-2">
-                <v-icon size="small" icon="fas fa-crown"></v-icon>
+                <font-awesome-icon :icon="faCrown" class="tw-text-sm" />
                 <v-list-item-title>My Subscription</v-list-item-title>
               </div>
               <template v-slot:append>
@@ -136,13 +134,13 @@ function goToSubscription() {
             <v-divider class="my-1"></v-divider>
             <v-list-item class="tw-cursor-pointer">
               <div @click="showReferralDialog" class="tw-flex tw-items-center tw-gap-2">
-                <v-icon size="small" :icon="isDark ? '$usersDark' : '$users'"></v-icon>
+                <font-awesome-icon :icon="faUsers" class="tw-text-sm" />
                 <v-list-item-title>Use Referral Code</v-list-item-title>
               </div>
             </v-list-item>
             <v-list-item class="tw-cursor-pointer">
               <div @click="copyReferralCode" class="tw-flex tw-items-center tw-gap-2">
-                <v-icon size="small" :icon="isDark ? '$connectionDark' : '$connection'"></v-icon>
+                <font-awesome-icon :icon="faLink" class="tw-text-sm" />
                 <v-list-item-title>Refer and Earn Credits</v-list-item-title>
               </div>
             </v-list-item>
@@ -152,7 +150,7 @@ function goToSubscription() {
                 class="tw-flex tw-items-center tw-gap-2"
                 @click="signOut({ redirectUrl: '/' }), (menu = false)"
               >
-                <v-icon size="small" icon="fas fa-sign-out-alt"></v-icon>
+                <font-awesome-icon :icon="faSignOutAlt" class="tw-text-sm" />
                 <v-list-item-title>Logout</v-list-item-title>
               </div>
             </v-list-item>

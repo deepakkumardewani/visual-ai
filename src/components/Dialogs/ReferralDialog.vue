@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faGift, faTicket } from '@/plugins/icons'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 
@@ -66,14 +67,32 @@ const closeDialog = () => {
 </script>
 
 <template>
-  <v-dialog v-model="showReferralDialog" width="400" opacity="0.4" scrim="black">
-    <v-card class="pa-4">
-      <div class="tw-flex tw-justify-between tw-items-center tw-mb-2">
-        <v-card-title class="tw-text-h5 tw-font-bold"> Enter Referral Code </v-card-title>
-        <v-btn icon="fas fa-times" variant="text" size="small" @click="closeDialog" />
+  <v-dialog
+    v-model="showReferralDialog"
+    width="400"
+    transition="dialog-bottom-transition"
+    :scrim="true"
+    class="rounded-lg"
+  >
+    <v-card class="pa-4 rounded-lg" elevation="8">
+      <div class="tw-flex tw-justify-between tw-items-center tw-mb-4">
+        <v-card-title class="tw-text-h5 tw-font-bold pa-0">
+          <font-awesome-icon :icon="faGift" color="purple-accent-4" class="mr-2" />
+          Enter Referral Code
+        </v-card-title>
+        <v-btn
+          icon="fas fa-times"
+          variant="text"
+          size="small"
+          @click="closeDialog"
+          class="tw-transition-all hover:tw-rotate-90"
+        />
       </div>
 
-      <v-card-text>
+      <v-card-text class="pa-0 mt-2">
+        <p class="text-body-2 text-grey-darken-1 mb-4">
+          Enter a valid referral code to receive your bonus credits!
+        </p>
         <v-text-field
           v-model="referralCode"
           label="Referral Code"
@@ -81,20 +100,28 @@ const closeDialog = () => {
           :maxlength="6"
           placeholder="Enter 6 character code"
           variant="outlined"
+          class="rounded-lg"
+          :loading="loading"
           @input="validateCode"
-        ></v-text-field>
+        >
+          <template #prepend-inner>
+            <font-awesome-icon :icon="faTicket" color="grey-darken-1" />
+          </template>
+        </v-text-field>
       </v-card-text>
 
-      <v-card-actions class="justify-center">
+      <v-card-actions class="pa-0 mt-4">
         <v-btn
+          block
           color="purple-accent-4"
           :loading="loading"
           :disabled="!isValidCode"
           variant="elevated"
+          height="48"
           @click="apply"
-          class="px-8"
+          class="text-body-1 font-weight-bold"
         >
-          Apply Now
+          Apply Code
         </v-btn>
       </v-card-actions>
     </v-card>

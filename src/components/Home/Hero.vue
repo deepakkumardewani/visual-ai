@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faChevronDown, faRocket } from '@/plugins/icons'
 import { storeToRefs } from 'pinia'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from 'vue-clerk'
@@ -121,7 +122,7 @@ const scrollToAbout = () => {
         variant="flat"
         elevation="2"
       >
-        <v-icon left class="mr-2">fa-solid fa-rocket</v-icon>
+        <font-awesome-icon :icon="faRocket" class="tw-mr-2" />
         Get Started - It's Free
       </v-btn>
     </div>
@@ -160,10 +161,9 @@ const scrollToAbout = () => {
         class="scroll-indicator tw-bg-white/80 dark:tw-bg-slate-800/80 tw-backdrop-blur-sm tw-rounded-full tw-p-3 tw-cursor-pointer"
         @click="scrollToAbout"
       >
-        <v-icon
-          icon="fa-solid fa-chevron-down"
-          size="large"
-          class="bounce tw-text-purple-500 dark:tw-text-purple-400"
+        <font-awesome-icon
+          :icon="faChevronDown"
+          class="bounce tw-text-2xl tw-text-purple-500 dark:tw-text-purple-400"
         />
       </div>
     </Transition>
