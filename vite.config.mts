@@ -1,24 +1,41 @@
 // Plugins
+import autoprefixer from 'autoprefixer'
 import { URL, fileURLToPath } from 'node:url'
 import AutoImport from 'unplugin-auto-import/vite'
 import Fonts from 'unplugin-fonts/vite'
 import Components from 'unplugin-vue-components/vite'
 // Utilities
 import { defineConfig } from 'vite'
-import Layouts from 'vite-plugin-vue-layouts'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 import Vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   build: {
-    minify: 'esbuild', // Use esbuild (faster) instead of terser for minification
+    minify: 'terser', // Use terser for better minification
     cssCodeSplit: false, // Prevent splitting CSS to reduce overhead
-    sourcemap: false // Disable source maps
+    sourcemap: false, // Disable source maps
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    },
+    cssMinify: true, // Enable CSS minification
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vue-vendor': ['vue', 'vue-router', 'pinia'],
+          vuetify: ['vuetify']
+        },
+        // Optimize chunk names
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
+      }
+    }
   },
   plugins: [
-    Layouts(),
     AutoImport({
       imports: [
         'vue',

@@ -296,3 +296,11 @@ export const getDownloadImageUrl = (image: IImage) => {
   // const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`
   return `${cloudinaryBaseUrl}/${publicId}.${format}`
 }
+
+export const cancelSubscription = (subscriptionId: string) => ({
+  url: `/api/subscriptions/${subscriptionId}`,
+  method: 'DELETE',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})

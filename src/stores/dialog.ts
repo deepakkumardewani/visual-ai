@@ -9,6 +9,7 @@ export const useDialogStore = defineStore('dialog', () => {
   const showCopyReferralDialog = ref(false)
   const showDeleteDialog = ref(false)
   const showBuyCreditsDialog = ref(false)
+  const showCancelSubscriptionDialog = ref(false)
   const imageUrl = ref('')
   const prompt = ref('')
   const originalImage = ref('')
@@ -69,6 +70,12 @@ export const useDialogStore = defineStore('dialog', () => {
   function hideSignup() {
     signupDialog.value = false
   }
+  function showCancelSubscription() {
+    showCancelSubscriptionDialog.value = true
+  }
+  function hideCancelSubscription() {
+    showCancelSubscriptionDialog.value = false
+  }
 
   return {
     showPricingDialog,
@@ -85,6 +92,7 @@ export const useDialogStore = defineStore('dialog', () => {
     prompt,
     signupDialog,
     lowCreditsDialog,
+    showCancelSubscriptionDialog,
     showPremium,
     hidePremium,
     showPricing,
@@ -101,7 +109,8 @@ export const useDialogStore = defineStore('dialog', () => {
     hideBuyCredits,
     showCopyReferral,
     hideCopyReferral,
-
+    showCancelSubscription,
+    hideCancelSubscription,
     showSignup,
     hideSignup
   }

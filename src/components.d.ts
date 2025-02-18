@@ -9,7 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     About: typeof import('./components/Home/About.vue')['default']
     Accordion: typeof import('./components/Accordion.vue')['default']
-    ActionButtons: typeof import('./components/History/ImageActionButtons.vue')['default']
     AIImageAside: typeof import('./components/Aside/AIImageAside.vue')['default']
     AnimatedCounter: typeof import('./components/Header/AnimatedCounter.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
@@ -21,6 +20,7 @@ declare module 'vue' {
     Chip: typeof import('./components/Home/Chip.vue')['default']
     Coin: typeof import('./components/Header/Coin.vue')['default']
     ColorizeImageAside: typeof import('./components/Aside/ColorizeImageAside.vue')['default']
+    ConfirmCancelSubDialog: typeof import('./components/Dialogs/ConfirmCancelSubDialog.vue')['default']
     Copyright: typeof import('./components/Copyright.vue')['default']
     CreateButton: typeof import('./components/Aside/CreateButton.vue')['default']
     Credits: typeof import('./components/Credits.vue')['default']
