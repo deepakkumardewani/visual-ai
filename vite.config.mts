@@ -1,8 +1,7 @@
 // Plugins
-import autoprefixer from 'autoprefixer'
 import { URL, fileURLToPath } from 'node:url'
 import AutoImport from 'unplugin-auto-import/vite'
-import Fonts from 'unplugin-fonts/vite'
+// import Fonts from 'unplugin-fonts/vite'
 import Components from 'unplugin-vue-components/vite'
 // Utilities
 import { defineConfig } from 'vite'
@@ -61,17 +60,17 @@ export default defineConfig({
       styles: {
         configFile: 'src/styles/settings.scss'
       }
-    }),
-    Fonts({
-      google: {
-        families: [
-          {
-            name: 'Roboto',
-            styles: 'wght@100;300;400;500;700;900'
-          }
-        ]
-      }
     })
+    // Fonts({
+    //   google: {
+    //     families: [
+    //       {
+    //         name: 'Roboto',
+    //         styles: 'wght@100;300;400;500;700;900'
+    //       }
+    //     ]
+    //   }
+    // })
   ],
   define: { 'process.env': {} },
   resolve: {

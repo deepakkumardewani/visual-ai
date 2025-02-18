@@ -5,7 +5,7 @@ import Hero from '@/components/Home/Hero.vue'
 import Gallery from '@/components/Home/MiniGallery.vue'
 </script>
 <template>
-  <v-container>
+  <v-container class="tw-overflow-x-hidden">
     <Hero />
     <About />
     <Features />

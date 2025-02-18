@@ -1,7 +1,20 @@
+// src/router/index.js
 import { useUser } from 'vue-clerk'
 import { createRouter, createWebHistory } from 'vue-router'
 
+import Contact from '@/pages/Contact.vue'
+import Dashboard from '@/pages/Dashboard.vue'
+import Examples from '@/pages/Examples.vue'
+import Faqs from '@/pages/Frequent.vue'
+import Gallery from '@/pages/Gallery.vue'
 import Landing from '@/pages/Landing.vue'
+import Pricing from '@/pages/Pricing.vue'
+import Privacy from '@/pages/PrivacyPolicy.vue'
+import Profile from '@/pages/Profile.vue'
+import Refund from '@/pages/RefundPolicy.vue'
+import Signin from '@/pages/Signin.vue'
+import Signup from '@/pages/Signup.vue'
+import Terms from '@/pages/Terms.vue'
 
 const routes = [
   {
@@ -12,62 +25,62 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('@/pages/Dashboard.vue')
+    component: Dashboard
   },
   {
     path: '/profile',
     name: 'profile',
-    component: () => import('@/pages/Profile.vue')
+    component: Profile
   },
   {
     path: '/faqs',
     name: 'faqs',
-    component: () => import('@/pages/Frequent.vue')
+    component: Faqs
   },
   {
     path: '/pricing',
     name: 'pricing',
-    component: () => import('@/pages/Pricing.vue')
+    component: Pricing
   },
   {
     path: '/signin',
     name: 'signin',
-    component: () => import('@/pages/Signin.vue')
+    component: Signin
   },
   {
     path: '/signup',
     name: 'signup',
-    component: () => import('@/pages/Signup.vue')
+    component: Signup
   },
   {
     path: '/terms',
     name: 'terms',
-    component: () => import('@/pages/Terms.vue')
+    component: Terms
   },
   {
     path: '/privacy',
     name: 'privacy',
-    component: () => import('@/pages/PrivacyPolicy.vue')
+    component: Privacy
   },
   {
     path: '/refund',
     name: 'refund',
-    component: () => import('@/pages/RefundPolicy.vue')
+    component: Refund
   },
   {
     path: '/contact',
     name: 'contact',
-    component: () => import('@/pages/Contact.vue')
+    component: Contact
   },
   {
     path: '/gallery',
     name: 'gallery',
-    component: () => import('@/pages/Gallery.vue')
+    component: Gallery
   },
   {
     path: '/examples',
     name: 'examples',
-    component: () => import('@/pages/Examples.vue')
+    component: Examples
   }
 ]
 
