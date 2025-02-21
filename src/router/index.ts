@@ -2,19 +2,20 @@
 import { useUser } from 'vue-clerk'
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Contact from '@/pages/Contact.vue'
-import Dashboard from '@/pages/Dashboard.vue'
-import Examples from '@/pages/Examples.vue'
-import Faqs from '@/pages/Frequent.vue'
-import Gallery from '@/pages/Gallery.vue'
 import Landing from '@/pages/Landing.vue'
-import Pricing from '@/pages/Pricing.vue'
-import Privacy from '@/pages/PrivacyPolicy.vue'
-import Profile from '@/pages/Profile.vue'
-import Refund from '@/pages/RefundPolicy.vue'
-import Signin from '@/pages/Signin.vue'
-import Signup from '@/pages/Signup.vue'
-import Terms from '@/pages/Terms.vue'
+
+const Contact = () => import('@/pages/Contact.vue')
+const Dashboard = () => import('@/pages/Dashboard.vue')
+const Examples = () => import('@/pages/Examples.vue')
+const Faqs = () => import('@/pages/Frequent.vue')
+const Gallery = () => import('@/pages/Gallery.vue')
+const Pricing = () => import('@/pages/Pricing.vue')
+const Privacy = () => import('@/pages/PrivacyPolicy.vue')
+const Profile = () => import('@/pages/Profile.vue')
+const Refund = () => import('@/pages/RefundPolicy.vue')
+const Signin = () => import('@/pages/Signin.vue')
+const Signup = () => import('@/pages/Signup.vue')
+const Terms = () => import('@/pages/Terms.vue')
 
 const routes = [
   {

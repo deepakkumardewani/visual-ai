@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash'
+import { isEmpty } from 'lodash-es'
 import { defineStore, storeToRefs } from 'pinia'
 
 import type { IGenerateResponse, IImage, IImageObject, ImageBody } from '@/types'
