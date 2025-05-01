@@ -10,12 +10,14 @@ export const useDialogStore = defineStore('dialog', () => {
   const showDeleteDialog = ref(false)
   const showBuyCreditsDialog = ref(false)
   const showCancelSubscriptionDialog = ref(false)
+  const showProUpgradeDialog = ref(false)
   const imageUrl = ref('')
   const prompt = ref('')
   const originalImage = ref('')
   const enhancedImage = ref('')
   const lowCreditsDialog = ref(false)
   const signupDialog = ref(false)
+  const referralOfferDialog = ref(false)
   function showPremium() {
     showPremiumDialog.value = true
   }
@@ -76,6 +78,18 @@ export const useDialogStore = defineStore('dialog', () => {
   function hideCancelSubscription() {
     showCancelSubscriptionDialog.value = false
   }
+  function showReferralOffer() {
+    referralOfferDialog.value = true
+  }
+  function hideReferralOffer() {
+    referralOfferDialog.value = false
+  }
+  function showProUpgrade() {
+    showProUpgradeDialog.value = true
+  }
+  function hideProUpgrade() {
+    showProUpgradeDialog.value = false
+  }
 
   return {
     showPricingDialog,
@@ -86,12 +100,14 @@ export const useDialogStore = defineStore('dialog', () => {
     showLowCreditsDialog,
     showBuyCreditsDialog,
     showDeleteDialog,
+    showProUpgradeDialog,
     imageUrl,
     originalImage,
     enhancedImage,
     prompt,
     signupDialog,
     lowCreditsDialog,
+    referralOfferDialog,
     showCancelSubscriptionDialog,
     showPremium,
     hidePremium,
@@ -112,6 +128,10 @@ export const useDialogStore = defineStore('dialog', () => {
     showCancelSubscription,
     hideCancelSubscription,
     showSignup,
-    hideSignup
+    hideSignup,
+    showReferralOffer,
+    hideReferralOffer,
+    showProUpgrade,
+    hideProUpgrade
   }
 })

@@ -15,6 +15,7 @@ const handleConfirm = async () => {
     loading.value = true
     await cancelSubscription()
   } catch (error) {
+    console.error(error)
   } finally {
     loading.value = false
     showCancelSubscriptionDialog.value = false
