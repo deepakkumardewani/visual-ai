@@ -1,26 +1,30 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { computed, watch } from 'vue'
 import { SignedIn, SignedOut } from 'vue-clerk'
 import { useRoute } from 'vue-router'
 import { useDisplay } from 'vuetify'
 
 import { useAppStore } from '@/stores/app'
+import { useDialogStore } from '@/stores/dialog'
+import { useUserStore } from '@/stores/user'
 
-// import { useDialogStore } from '@/stores/dialog'
-// import { useUserStore } from '@/stores/user'
 import CustomButton from '@/components/CustomButton.vue'
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue'
+import ProUpgradeDialog from '@/components/Dialogs/ProUpgradeDialog.vue'
+import ReferralOfferDialog from '@/components/Dialogs/ReferralOfferDialog.vue'
 import Coin from '@/components/Header/Coin.vue'
 import FeatureSelect from '@/components/Header/FeatureSelect.vue'
 import Logo from '@/components/Header/Logo.vue'
+import ReferralOffer from '@/components/Header/ReferralOffer.vue'
 import Tabs from '@/components/Header/Tabs.vue'
 import ThemeButton from '@/components/Header/ThemeButton.vue'
 import UserMenu from '@/components/Header/UserMenu.vue'
 
 const { smAndUp } = useDisplay()
-// const userStore = useUserStore()
-// const { credits } = storeToRefs(userStore)
-// const dialogStore = useDialogStore()
+const userStore = useUserStore()
+const dialogStore = useDialogStore()
+const { isPro } = storeToRefs(userStore)
 const route = useRoute()
 const appStore = useAppStore()
 const { isDark, tab } = storeToRefs(appStore)
@@ -28,11 +32,13 @@ const { isDark, tab } = storeToRefs(appStore)
 const isThemeButtonVisible = computed(() => {
   return route.path !== '/privacy' && route.path !== '/terms' && route.path !== '/refund'
 })
-// watch(credits, (newCredits) => {
-//   if (newCredits < 30) {
-//     dialogStore.showLowCredits()
-//   }
-// })
+
+watch(isPro, (newValue, oldValue) => {
+  console.log('isPro', newValue, oldValue)
+  if (newValue && !oldValue) {
+    dialogStore.showProUpgrade()
+  }
+})
 </script>
 <template>
   <v-app-bar
@@ -83,6 +89,7 @@ const isThemeButtonVisible = computed(() => {
             </SignedOut>
 
             <SignedIn>
+              <ReferralOffer v-if="!isPro" />
               <Coin v-if="route.path === '/dashboard'" />
               <CustomButton v-if="route.path !== '/dashboard'" title="Dashboard" />
               <UserMenu />
@@ -109,4 +116,6 @@ const isThemeButtonVisible = computed(() => {
   </v-app-bar>
   <!-- <PricingDialog /> -->
   <BuyMoreCreditsDialog />
+  <ReferralOfferDialog />
+  <ProUpgradeDialog />
 </template>
