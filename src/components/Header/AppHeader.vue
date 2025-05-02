@@ -43,7 +43,7 @@ const markProDialogAsShown = () => {
   localStorage.setItem('proUpgradeShown', 'true')
 }
 
-watch(isPro, (newValue, oldValue) => {
+watch(isPro, (newValue) => {
   if (newValue && !hasProDialogBeenShown()) {
     dialogStore.showProUpgrade()
     markProDialogAsShown()
