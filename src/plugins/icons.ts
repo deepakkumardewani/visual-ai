@@ -1,6 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSquare, faHeart as farHeart } from '@fortawesome/free-regular-svg-icons'
 import {
+  faBolt,
   faCaretDown,
   faCheck,
   faCheckSquare,
@@ -11,6 +12,7 @@ import {
   faClockRotateLeft,
   faCoins,
   faCopy,
+  faCreditCard,
   faCrown,
   faDownload,
   faEnvelope,
@@ -21,6 +23,7 @@ import {
   faGift,
   faHandHolding,
   faImages,
+  faInfoCircle,
   faLink,
   faMinus,
   faMoon,
@@ -37,6 +40,7 @@ import {
   faTicket,
   faTimes,
   faTrashAlt,
+  faUpload,
   faUser,
   faUsers,
   faWandMagicSparkles,
@@ -67,6 +71,8 @@ library.add(
   faPalette,
   faPaperPlane,
   faRocket,
+  faBolt,
+  faCreditCard,
   faSignOutAlt,
   faSun,
   faTimes,
@@ -92,7 +98,9 @@ library.add(
   faTimes,
   faGift,
   faTicket,
-  faCheck
+  faCheck,
+  faInfoCircle,
+  faUpload
 )
 
 export {
@@ -141,5 +149,9 @@ export {
   faCopy,
   faGift,
   faTicket,
-  faCheck
+  faCheck,
+  faInfoCircle,
+  faUpload,
+  faBolt,
+  faCreditCard
 }
