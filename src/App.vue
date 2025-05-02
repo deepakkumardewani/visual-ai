@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
+import { useDisplay } from 'vuetify'
 
 import { useAppStore } from '@/stores/app'
 
@@ -11,7 +12,7 @@ import AppHeader from '@/components/Header/AppHeader.vue'
 const appStore = useAppStore()
 const { tab, snackbar, snackbarTimeout, snackbarText } = storeToRefs(appStore)
 const route = useRoute()
-
+const { smAndUp } = useDisplay()
 const { isDark } = storeToRefs(useAppStore())
 const isHeaderVisible = computed(() => {
   return route.path !== '/signin' && route.path !== '/login' && route.path !== '/signup'
@@ -37,7 +38,8 @@ onMounted(() => {
     <AppHeader v-if="isHeaderVisible" />
     <v-main
       :class="{
-        'tw-h-[98vh] tw-overflow-y-hidden': overflowHidden
+        'tw-h-[98vh] tw-overflow-y-hidden': overflowHidden,
+        'tw-pt-0': !smAndUp
       }"
     >
       <router-view />
