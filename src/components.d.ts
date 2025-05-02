@@ -21,7 +21,6 @@ declare module 'vue' {
     Coin: typeof import('./components/Header/Coin.vue')['default']
     ColorizeImageAside: typeof import('./components/Aside/ColorizeImageAside.vue')['default']
     ConfirmCancelSubDialog: typeof import('./components/Dialogs/ConfirmCancelSubDialog.vue')['default']
-    CopyableInput: typeof import('./components/CopyableInput.vue')['default']
     Copyright: typeof import('./components/Copyright.vue')['default']
     CreateButton: typeof import('./components/Aside/CreateButton.vue')['default']
     Credits: typeof import('./components/Credits.vue')['default']
