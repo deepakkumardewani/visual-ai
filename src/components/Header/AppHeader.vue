@@ -33,89 +33,96 @@ const isThemeButtonVisible = computed(() => {
   return route.path !== '/privacy' && route.path !== '/terms' && route.path !== '/refund'
 })
 
+// Function to check if pro upgrade dialog has been shown
+const hasProDialogBeenShown = () => {
+  return localStorage.getItem('proUpgradeShown') === 'true'
+}
+
+// Function to mark pro dialog as shown
+const markProDialogAsShown = () => {
+  localStorage.setItem('proUpgradeShown', 'true')
+}
+
 watch(isPro, (newValue, oldValue) => {
-  console.log('isPro', newValue, oldValue)
-  if (newValue && !oldValue) {
+  if (newValue && !hasProDialogBeenShown()) {
     dialogStore.showProUpgrade()
+    markProDialogAsShown()
   }
 })
 </script>
 <template>
-  <v-app-bar
-    :elevation="0"
-    absolute
-    :color="route.path === '/' ? 'transparent' : isDark ? '#3b0764' : '#a855f7'"
-  >
-    <v-row class="align-center">
-      <v-col :cols="smAndUp ? 4 : route.path === '/dashboard' ? 7 : 6">
-        <div class="tw-relative tw-flex tw-min-w-0 tw-shrink-0 tw-items-center tw-gap-3">
-          <Logo />
-          <div class="tw-relative tw-min-w-0 tw-flex-1 tw-lg:tw-flex-none">
-            <FeatureSelect v-if="route.path === '/dashboard' && tab === 1" />
+  <div>
+    <SignedIn>
+      <ReferralOffer v-if="!smAndUp && route.path === '/dashboard'" />
+    </SignedIn>
+    <v-app-bar
+      :elevation="0"
+      :class="{ header: !smAndUp && route.path === '/dashboard' }"
+      :color="route.path === '/' ? 'transparent' : isDark ? '#3b0764' : '#a855f7'"
+    >
+      <v-row class="align-center">
+        <v-col :cols="smAndUp ? 4 : route.path === '/dashboard' ? 7 : 6">
+          <div class="tw-relative tw-flex tw-min-w-0 tw-shrink-0 tw-items-center tw-gap-3">
+            <Logo />
+            <div class="tw-relative tw-min-w-0 tw-flex-1 tw-lg:tw-flex-none">
+              <FeatureSelect v-if="route.path === '/dashboard' && tab === 1" />
+            </div>
           </div>
-        </div>
-      </v-col>
+        </v-col>
 
-      <v-col v-if="smAndUp" cols="5">
-        <SignedIn>
-          <Tabs v-if="route.path === '/dashboard'" />
-        </SignedIn>
-      </v-col>
-      <v-col :cols="smAndUp ? 3 : route.path === '/dashboard' ? 5 : 6">
-        <div class="tw-flex tw-shrink-0 tw-gap-4 tw-mr-3">
-          <div id="export-area" class="ml-auto tw-flex tw-items-center tw-gap-4 tw-lg:tw-gap-4">
-            <SignedOut>
-              <ThemeButton v-if="isThemeButtonVisible" />
-              <v-btn
-                v-if="route.path === '/'"
-                class="mx-4"
-                variant="tonal"
-                size="small"
-                color="purple-lighten-2"
-                to="/dashboard"
-                >Try it now</v-btn
-              >
+        <v-col v-if="smAndUp" cols="5">
+          <SignedIn>
+            <Tabs v-if="route.path === '/dashboard'" />
+          </SignedIn>
+        </v-col>
+        <v-col :cols="smAndUp ? 3 : route.path === '/dashboard' ? 5 : 6">
+          <div class="tw-flex tw-shrink-0 tw-gap-4 tw-mr-3">
+            <div id="export-area" class="ml-auto tw-flex tw-items-center tw-gap-4 tw-lg:tw-gap-4">
+              <SignedOut>
+                <ThemeButton v-if="isThemeButtonVisible" />
+                <v-btn
+                  v-if="route.path === '/'"
+                  class="mx-4"
+                  variant="tonal"
+                  size="small"
+                  color="purple-lighten-2"
+                  to="/dashboard"
+                  >Try it now</v-btn
+                >
 
-              <v-btn
-                v-if="route.path === '/dashboard'"
-                class="mx-4"
-                variant="tonal"
-                :color="isDark ? 'purple-lighten-2' : 'purple-darken-5'"
-                size="small"
-                to="/signin"
-              >
-                Sign In
-              </v-btn>
-            </SignedOut>
+                <v-btn
+                  v-if="route.path === '/dashboard'"
+                  class="mx-4"
+                  variant="tonal"
+                  :color="isDark ? 'purple-lighten-2' : 'purple-darken-5'"
+                  size="small"
+                  to="/signin"
+                >
+                  Sign In
+                </v-btn>
+              </SignedOut>
 
-            <SignedIn>
-              <ReferralOffer v-if="!isPro" />
-              <Coin v-if="route.path === '/dashboard'" />
-              <CustomButton v-if="route.path !== '/dashboard'" title="Dashboard" />
-              <UserMenu />
-            </SignedIn>
+              <SignedIn>
+                <!-- Only show ReferralOffer on desktop -->
+                <ReferralOffer v-if="smAndUp && route.path === '/dashboard'" />
+                <Coin v-if="route.path === '/dashboard'" />
+                <CustomButton v-if="route.path !== '/dashboard'" title="Dashboard" />
+                <UserMenu />
+              </SignedIn>
+            </div>
           </div>
-        </div>
-      </v-col>
-
-      <!-- <v-col :cols="!mobile && route.path !== '/dashboard' ? 4 : 2">
-        <v-app-bar-title class="mx-4 text-h5"> </v-app-bar-title>
-      </v-col>
-      <v-col cols="2"> </v-col>
-      <v-col
-        v-if="!mobile && route.path !== '/dashboard'"
-        cols="4"
-        class="d-flex justify-center align-center"
-      >
-        <v-btn variant="text">About</v-btn>
-        <v-btn variant="text">Gallery</v-btn>
-        <v-btn variant="text">Features</v-btn>
-      </v-col>
-    -->
-    </v-row>
-  </v-app-bar>
-  <!-- <PricingDialog /> -->
-  <BuyMoreCreditsDialog />
-  <ReferralOfferDialog />
-  <ProUpgradeDialog />
+        </v-col>
+      </v-row>
+    </v-app-bar>
+    <!-- <PricingDialog /> -->
+    <BuyMoreCreditsDialog />
+    <ReferralOfferDialog />
+    <ProUpgradeDialog />
+  </div>
 </template>
+
+<style scoped lang="scss">
+.header {
+  position: relative !important;
+}
+</style>
