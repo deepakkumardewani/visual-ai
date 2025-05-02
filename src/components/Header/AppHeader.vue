@@ -58,7 +58,7 @@ watch(isPro, (newValue) => {
     <v-app-bar
       :elevation="0"
       :class="{ header: !smAndUp && route.path === '/dashboard' }"
-      :color="route.path === '/' ? 'transparent' : isDark ? '#3b0764' : '#a855f7'"
+      :color="isDark ? '#3b0764' : '#a855f7'"
     >
       <v-row class="align-center">
         <v-col :cols="smAndUp ? 4 : route.path === '/dashboard' ? 7 : 6">
