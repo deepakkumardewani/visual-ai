@@ -16,6 +16,7 @@ import { useLocal } from '@/composables/local'
 import Heading from '@/components/Aside/Heading.vue'
 import ImageFormat from '@/components/Aside/ImageFormat.vue'
 import ImageUpload from '@/components/Aside/ImageUpload.vue'
+import SignupDialog from '@/components/Dialogs/SignupDialog.vue'
 
 import { IMAGE_SIZES } from '@/utils/constants'
 
@@ -191,6 +192,5 @@ onMounted(async () => {
     >
     </v-btn>
   </div>
+  <SignupDialog />
 </template>
-
-<style scoped></style>

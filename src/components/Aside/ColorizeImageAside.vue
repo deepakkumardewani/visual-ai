@@ -8,9 +8,9 @@ import { useDialogStore } from '@/stores/dialog'
 import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
 
-// import Heading from '@/components/Aside/Heading.vue'
 import ImageUpload from '@/components/Aside/ImageUpload.vue'
 import PremiumDialog from '@/components/Dialogs/PremiumDialog.vue'
+import SignupDialog from '@/components/Dialogs/SignupDialog.vue'
 
 import { MODEL_IDS } from '@/utils/constants'
 
@@ -21,37 +21,10 @@ const { isPro, credits, userId } = storeToRefs(userStore)
 const { progressUrl } = storeToRefs(appStore)
 const router = useRouter()
 const { isSignedIn } = useUser()
-// const { smAndUp } = useDisplay()
 const generateStore = useGenerateStore()
 const { colorizeInProgress } = storeToRefs(generateStore)
 
 const imageUpload = ref()
-// const modes = ref([
-//   {
-//     title: 'Basic',
-//     id: MODEL_IDS.COLORIZE_BASIC,
-//     description: 'Applies Basic coloring',
-//     icon: 'fas fa-palette',
-//     isPro: false
-//   },
-//   {
-//     title: 'Advanced',
-//     id: MODEL_IDS.COLORIZE_ADVANCED,
-//     description: 'Applies Advanced photo-realistic coloring',
-//     icon: 'fas fa-eraser',
-//     isPro: true
-//   }
-// ])
-// const mode = ref<Mode>(modes.value[0])
-
-// function handleSelected(item: Mode) {
-//   if (!userDetails.value?.isPro && item.isPro) {
-//     mode.value = modes.value[0]
-//     dialogStore.showPremium()
-//   } else {
-//     mode.value = item
-//   }
-// }
 
 async function colorizeImage() {
   if (!isSignedIn.value) {
@@ -109,6 +82,7 @@ onMounted(async () => {
     </v-btn>
   </div>
   <PremiumDialog />
+  <SignupDialog />
 </template>
 <style scoped>
 .wrap-text {

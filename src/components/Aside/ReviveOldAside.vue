@@ -9,6 +9,7 @@ import { useGenerateStore } from '@/stores/generate'
 import { useUserStore } from '@/stores/user'
 
 import ImageUpload from '@/components/Aside/ImageUpload.vue'
+import SignupDialog from '@/components/Dialogs/SignupDialog.vue'
 
 const router = useRouter()
 const { isSignedIn } = useUser()
@@ -110,5 +111,5 @@ onMounted(async () => {
     >
     </v-btn>
   </div>
+  <SignupDialog />
 </template>
-<style scoped></style>
