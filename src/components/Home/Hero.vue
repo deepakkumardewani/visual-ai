@@ -1,43 +1,43 @@
 <script setup lang="ts">
-import { faChevronDown, faRocket } from '@/plugins/icons'
-import { storeToRefs } from 'pinia'
-import { onMounted, onUnmounted, ref } from 'vue'
-import { useAuth } from 'vue-clerk'
+import { faChevronDown, faRocket } from "@/plugins/icons";
+import { storeToRefs } from "pinia";
+import { onMounted, onUnmounted, ref } from "vue";
+import { useAuth } from "vue-clerk";
 
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from "@/stores/app";
 
-import FeatureScroll from '@/components/Home/FeatureScroll.vue'
+import FeatureScroll from "@/components/Home/FeatureScroll.vue";
 
-const { isSignedIn } = useAuth()
-const showScrollIndicator = ref(true)
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
+const { isSignedIn } = useAuth();
+const showScrollIndicator = ref(true);
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
 
-const heroImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/hero.png`
+const heroImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/hero.png`;
 
 // Handle scroll event to hide indicator when user starts scrolling
 function handleScroll() {
   if (window.scrollY > 100) {
-    showScrollIndicator.value = false
+    showScrollIndicator.value = false;
   } else {
-    showScrollIndicator.value = true
+    showScrollIndicator.value = true;
   }
 }
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
+  window.addEventListener("scroll", handleScroll);
+});
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
+  window.removeEventListener("scroll", handleScroll);
+});
 
 const scrollToAbout = () => {
-  const aboutSection = document.querySelector('#about')
+  const aboutSection = document.querySelector("#about");
   if (aboutSection) {
-    aboutSection.scrollIntoView({ behavior: 'smooth' })
+    aboutSection.scrollIntoView({ behavior: "smooth" });
   }
-}
+};
 </script>
 
 <template>
@@ -50,11 +50,11 @@ const scrollToAbout = () => {
               v-motion
               :initial="{
                 opacity: 0,
-                y: 40
+                y: 40,
               }"
               :visibleOnce="{
                 opacity: 1,
-                y: 0
+                y: 0,
               }"
               :delay="100"
               :duration="600"
@@ -66,11 +66,11 @@ const scrollToAbout = () => {
               v-motion
               :initial="{
                 opacity: 0,
-                y: 40
+                y: 40,
               }"
               :visibleOnce="{
                 opacity: 1,
-                y: 0
+                y: 0,
               }"
               :delay="200"
               :duration="600"
@@ -82,11 +82,11 @@ const scrollToAbout = () => {
               v-motion
               :initial="{
                 opacity: 0,
-                y: 40
+                y: 40,
               }"
               :visibleOnce="{
                 opacity: 1,
-                y: 0
+                y: 0,
               }"
               :delay="300"
               :duration="600"
@@ -104,11 +104,11 @@ const scrollToAbout = () => {
       v-motion
       :initial="{
         opacity: 0,
-        y: 40
+        y: 40,
       }"
       :visibleOnce="{
         opacity: 1,
-        y: 0
+        y: 0,
       }"
       :delay="250"
       :duration="600"
@@ -138,10 +138,10 @@ const scrollToAbout = () => {
               y: 60,
               perspective: 800,
               rotateX: 10,
-              opacity: isDark ? 0.7 : 1
+              opacity: isDark ? 0.7 : 1,
             }"
             :visibleOnce="{
-              y: 0
+              y: 0,
             }"
             :delay="250"
             :duration="700"

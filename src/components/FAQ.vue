@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import Accordion from '@/components/Accordion.vue'
+import Accordion from "@/components/Accordion.vue";
 
 defineProps({
   faqs: {
     type: Array as PropType<{ question: string; answer: string; active?: boolean }[]>,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 </script>
 <template>
   <div class="tw-text-center tw-text-2xl sm:tw-text-4xl tw-my-8">Frequently Asked Questions</div>

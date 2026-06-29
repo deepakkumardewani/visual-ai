@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { ref, watch } from 'vue'
-import { useDisplay } from 'vuetify'
+import { storeToRefs } from "pinia";
+import { ref, watch } from "vue";
+import { useDisplay } from "vuetify";
 
-import { useDialogStore } from '@/stores/dialog'
-import { useUserStore } from '@/stores/user'
+import { useDialogStore } from "@/stores/dialog";
+import { useUserStore } from "@/stores/user";
 
-const dialogStore = useDialogStore()
-const { smAndUp } = useDisplay()
-const userStore = useUserStore()
-const { isPro } = storeToRefs(userStore)
+const dialogStore = useDialogStore();
+const { smAndUp } = useDisplay();
+const userStore = useUserStore();
+const { isPro } = storeToRefs(userStore);
 
 // Computed property to determine if user data has loaded
-const isUserDataLoaded = ref(false)
+const isUserDataLoaded = ref(false);
 
 // Set isUserDataLoaded to true after the first API response has been received
 watch(
   () => userStore.userDetails,
   (newValue) => {
     if (newValue) {
-      isUserDataLoaded.value = true
+      isUserDataLoaded.value = true;
     }
   },
-  { immediate: true }
-)
+  { immediate: true },
+);
 </script>
 
 <template>

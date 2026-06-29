@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FeatureType } from '@/pages/utils'
+import { FeatureType } from "@/pages/utils";
 import {
   faChevronLeft,
   faChevronRight,
@@ -8,105 +8,105 @@ import {
   faTimes,
   faTrashAlt,
   farHeart,
-  fasHeart
-} from '@/plugins/icons'
-import { storeToRefs } from 'pinia'
-import { computed, ref, watch } from 'vue'
-import { useDisplay } from 'vuetify'
+  fasHeart,
+} from "@/plugins/icons";
+import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
+import { useDisplay } from "vuetify";
 
-import { IImageObject } from '@/types'
+import { IImageObject } from "@/types";
 
-import { useDialogStore } from '@/stores/dialog'
-import { useGenerateStore } from '@/stores/generate'
-import { useUserStore } from '@/stores/user'
+import { useDialogStore } from "@/stores/dialog";
+import { useGenerateStore } from "@/stores/generate";
+import { useUserStore } from "@/stores/user";
 
-import SideBySide from '@/components/SideBySide.vue'
+import SideBySide from "@/components/SideBySide.vue";
 
-import { deleteImage, downloadImage, favoriteImage, formatFileSize } from '@/utils/helpers'
+import { deleteImage, downloadImage, favoriteImage, formatFileSize } from "@/utils/helpers";
 
-const { mobile } = useDisplay()
-const dialogStore = useDialogStore()
-const userStore = useUserStore()
-const { history } = storeToRefs(userStore)
-const { showImageDialog } = storeToRefs(dialogStore)
-const generateStore = useGenerateStore()
-const { isDeleting, isFavoriting } = storeToRefs(generateStore)
-const isFavorite = ref(false)
-const currentImageIndex = ref(0)
+const { mobile } = useDisplay();
+const dialogStore = useDialogStore();
+const userStore = useUserStore();
+const { history } = storeToRefs(userStore);
+const { showImageDialog } = storeToRefs(dialogStore);
+const generateStore = useGenerateStore();
+const { isDeleting, isFavoriting } = storeToRefs(generateStore);
+const isFavorite = ref(false);
+const currentImageIndex = ref(0);
 
 const props = defineProps<{
-  item: IImageObject | undefined
-}>()
+  item: IImageObject | undefined;
+}>();
 
 const nextImage = () => {
-  if (!props.item?.images) return
-  const urls = Array.isArray(props.item.images) ? props.item.images : []
+  if (!props.item?.images) return;
+  const urls = Array.isArray(props.item.images) ? props.item.images : [];
   if (currentImageIndex.value < urls.length - 1) {
-    currentImageIndex.value++
+    currentImageIndex.value++;
   }
-}
+};
 
 const previousImage = () => {
   if (currentImageIndex.value > 0) {
-    currentImageIndex.value--
+    currentImageIndex.value--;
   }
-}
+};
 
 const downloadImageUrl = computed(() => {
-  if (!props.item?.images) return ''
+  if (!props.item?.images) return "";
   const publicId = props.item.images[currentImageIndex.value]?.aiImagePublicId
     ? props.item.images[currentImageIndex.value]?.aiImagePublicId
-    : props.item.images[currentImageIndex.value]?.enhancedPublicId
-  const format = props.item.images[currentImageIndex.value]?.format
-  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`
-  return optimizedUrl
-})
+    : props.item.images[currentImageIndex.value]?.enhancedPublicId;
+  const format = props.item.images[currentImageIndex.value]?.format;
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`;
+  return optimizedUrl;
+});
 const getCurrentImageUrl = () => {
-  const images = props.item?.images
-  if (!images) return ''
-  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.aiImagePublicId}`
+  const images = props.item?.images;
+  if (!images) return "";
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.aiImagePublicId}`;
   return images[currentImageIndex.value]?.aiImagePublicId
     ? optimizedUrl
-    : (images[currentImageIndex.value]?.aiImageUrl as string)
-}
+    : (images[currentImageIndex.value]?.aiImageUrl as string);
+};
 
 const originalImageUrl = computed(() => {
-  const images = props.item?.images
-  if (!images) return ''
-  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.originalPublicId}`
+  const images = props.item?.images;
+  if (!images) return "";
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.originalPublicId}`;
   return images[currentImageIndex.value]?.originalPublicId
     ? optimizedUrl
-    : (images[currentImageIndex.value]?.originalImageUrl as string)
-})
+    : (images[currentImageIndex.value]?.originalImageUrl as string);
+});
 const enhancedImageUrl = computed(() => {
-  const images = props.item?.images
-  if (!images) return ''
-  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.enhancedPublicId}`
+  const images = props.item?.images;
+  if (!images) return "";
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.enhancedPublicId}`;
   return images[currentImageIndex.value]?.enhancedPublicId
     ? optimizedUrl
-    : (images[currentImageIndex.value]?.enhancedImageUrl as string)
-})
+    : (images[currentImageIndex.value]?.enhancedImageUrl as string);
+});
 watch(
   () => props.item,
   (newItem) => {
-    const item = history.value.find((item) => item._id === newItem?._id)
+    const item = history.value.find((item) => item._id === newItem?._id);
     if (item) {
-      isFavorite.value = item.isFavorite
+      isFavorite.value = item.isFavorite;
     }
   },
-  { immediate: true, deep: true }
-)
+  { immediate: true, deep: true },
+);
 
 watch(history, (newHistory) => {
-  const newItem = newHistory.find((item) => item._id === props.item?._id)
+  const newItem = newHistory.find((item) => item._id === props.item?._id);
   if (newItem) {
-    isFavorite.value = newItem.isFavorite
+    isFavorite.value = newItem.isFavorite;
   }
-})
+});
 </script>
 
 <template>

@@ -1,48 +1,48 @@
 <script setup lang="ts">
-import { faCheckSquare, faSearch, faSquare, faXmarkCircle } from '@/plugins/icons'
-import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
-import { useDisplay } from 'vuetify'
+import { faCheckSquare, faSearch, faSquare, faXmarkCircle } from "@/plugins/icons";
+import { storeToRefs } from "pinia";
+import { computed, ref } from "vue";
+import { useDisplay } from "vuetify";
 
-import { useHistoryStore } from '@/stores/history'
+import { useHistoryStore } from "@/stores/history";
 
-import { IMAGE_SIZE_OPTIONS } from '@/utils/constants'
+import { IMAGE_SIZE_OPTIONS } from "@/utils/constants";
 
-const { mobile } = useDisplay()
-const { selectedSize } = storeToRefs(useHistoryStore())
-const searchQuery = ref('')
+const { mobile } = useDisplay();
+const { selectedSize } = storeToRefs(useHistoryStore());
+const searchQuery = ref("");
 
 const imageSizes = computed(() => {
   return IMAGE_SIZE_OPTIONS.filter((size) => {
-    if (mobile.value && (size.value === 'mini' || size.value === 'small')) {
-      return false
+    if (mobile.value && (size.value === "mini" || size.value === "small")) {
+      return false;
     }
-    return true
-  })
-})
-const selectedFeatureType = ref<string[]>([])
+    return true;
+  });
+});
+const selectedFeatureType = ref<string[]>([]);
 const featureTypes = ref<any[]>([
   {
-    id: 'image',
-    title: 'Text-to-Image'
+    id: "image",
+    title: "Text-to-Image",
   },
   {
-    id: 'upscale',
-    title: 'Upscale'
+    id: "upscale",
+    title: "Upscale",
   },
   {
-    id: 'colorize',
-    title: 'Colorize'
+    id: "colorize",
+    title: "Colorize",
   },
   {
-    id: 'revive',
-    title: 'Revive'
-  }
-])
+    id: "revive",
+    title: "Revive",
+  },
+]);
 
 const isSelected = (item: any) => {
-  return selectedFeatureType.value.includes(item.id)
-}
+  return selectedFeatureType.value.includes(item.id);
+};
 </script>
 <template>
   <div class="tw-flex tw-gap-4 tw-w-full sm:tw-w-[30vw] tw-mb-2 sm:tw-mb-0 sm:tw-mr-4">

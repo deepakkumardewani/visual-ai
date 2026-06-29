@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { faTimes } from '@/plugins/icons'
-import { storeToRefs } from 'pinia'
+import { faTimes } from "@/plugins/icons";
+import { storeToRefs } from "pinia";
 
 // import { ref } from 'vue'
-import { useDialogStore } from '@/stores/dialog'
-import { useUserStore } from '@/stores/user'
+import { useDialogStore } from "@/stores/dialog";
+import { useUserStore } from "@/stores/user";
 
-import ReferralCode from '@/components/ReferralCode.vue'
+import ReferralCode from "@/components/ReferralCode.vue";
 
-const dialogStore = useDialogStore()
-const userStore = useUserStore()
-const { showCopyReferralDialog } = storeToRefs(dialogStore)
-const { credits } = storeToRefs(userStore)
+const dialogStore = useDialogStore();
+const userStore = useUserStore();
+const { showCopyReferralDialog } = storeToRefs(dialogStore);
+const { credits } = storeToRefs(userStore);
 </script>
 
 <template>

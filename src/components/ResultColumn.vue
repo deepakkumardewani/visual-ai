@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
-import { useDisplay } from 'vuetify'
+import { storeToRefs } from "pinia";
+import { computed } from "vue";
+import { useDisplay } from "vuetify";
 
-import { FeatureType } from '@/types'
-import type { IImage } from '@/types'
+import { FeatureType } from "@/types";
+import type { IImage } from "@/types";
 
-import { useAppStore } from '@/stores/app'
-import { useGenerateStore } from '@/stores/generate'
+import { useAppStore } from "@/stores/app";
+import { useGenerateStore } from "@/stores/generate";
 
-import SideBySide from '@/components/SideBySide.vue'
+import SideBySide from "@/components/SideBySide.vue";
 
-import { downloadImage } from '@/utils/helpers'
+import { downloadImage } from "@/utils/helpers";
 
-const { mobile } = useDisplay()
-const generateStore = useGenerateStore()
-const appStore = useAppStore()
+const { mobile } = useDisplay();
+const generateStore = useGenerateStore();
+const appStore = useAppStore();
 const {
   isLoading,
   images,
@@ -23,147 +23,147 @@ const {
   colorizeInProgress,
   reviveInProgress,
   imageData,
-  errMsg
-} = storeToRefs(generateStore)
-const { feature } = storeToRefs(appStore)
-const snackbar = ref(false)
-const snackbarTimeout = ref(2000)
+  errMsg,
+} = storeToRefs(generateStore);
+const { feature } = storeToRefs(appStore);
+const snackbar = ref(false);
+const snackbarTimeout = ref(2000);
 
 const getAIImageUrl = (image: IImage): string => {
-  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${image?.aiImagePublicId}`
-  return image?.aiImagePublicId ? optimizedUrl : (image?.aiImageUrl as string)
-}
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${image?.aiImagePublicId}`;
+  return image?.aiImagePublicId ? optimizedUrl : (image?.aiImageUrl as string);
+};
 const originalImageUrl = computed((): string => {
-  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images.value[0]?.originalPublicId}`
-  if (feature.value === 'upscale' && imageData.value?.featureType === 'upscale') {
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images.value[0]?.originalPublicId}`;
+  if (feature.value === "upscale" && imageData.value?.featureType === "upscale") {
     return images.value[0]?.originalPublicId
       ? optimizedUrl
-      : (images.value[0]?.originalImageUrl as string)
+      : (images.value[0]?.originalImageUrl as string);
   }
-  if (feature.value === 'colorize' && imageData.value?.featureType === 'colorize') {
+  if (feature.value === "colorize" && imageData.value?.featureType === "colorize") {
     return images.value[0]?.originalPublicId
       ? optimizedUrl
-      : (images.value[0]?.originalImageUrl as string)
+      : (images.value[0]?.originalImageUrl as string);
   }
-  if (feature.value === 'revive' && imageData.value?.featureType === 'revive') {
+  if (feature.value === "revive" && imageData.value?.featureType === "revive") {
     return images.value[0]?.originalPublicId
       ? optimizedUrl
-      : (images.value[0]?.originalImageUrl as string)
+      : (images.value[0]?.originalImageUrl as string);
   }
-  return ''
-})
+  return "";
+});
 const enhancedImageUrl = computed((): string => {
-  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images.value[0]?.enhancedPublicId}`
-  if (feature.value === 'upscale' && imageData.value?.featureType === 'upscale') {
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images.value[0]?.enhancedPublicId}`;
+  if (feature.value === "upscale" && imageData.value?.featureType === "upscale") {
     return images.value[0]?.enhancedPublicId
       ? optimizedUrl
-      : (images.value[0]?.enhancedImageUrl as string)
+      : (images.value[0]?.enhancedImageUrl as string);
   }
-  if (feature.value === 'colorize' && imageData.value?.featureType === 'colorize') {
+  if (feature.value === "colorize" && imageData.value?.featureType === "colorize") {
     return images.value[0]?.enhancedPublicId
       ? optimizedUrl
-      : (images.value[0]?.enhancedImageUrl as string)
+      : (images.value[0]?.enhancedImageUrl as string);
   }
-  if (feature.value === 'revive' && imageData.value?.featureType === 'revive') {
+  if (feature.value === "revive" && imageData.value?.featureType === "revive") {
     return images.value[0]?.enhancedPublicId
       ? optimizedUrl
-      : (images.value[0]?.enhancedImageUrl as string)
+      : (images.value[0]?.enhancedImageUrl as string);
   }
-  return ''
-})
+  return "";
+});
 
 const showDefaultAnimation = computed(() => {
   if (feature.value === FeatureType.IMAGE) {
-    if (!images.value[0] || images.value[0]?.aiImageUrl === '') {
-      return true
+    if (!images.value[0] || images.value[0]?.aiImageUrl === "") {
+      return true;
     }
-    return false
+    return false;
   }
-  return originalImageUrl.value === '' && enhancedImageUrl.value === ''
-})
+  return originalImageUrl.value === "" && enhancedImageUrl.value === "";
+});
 const alertTitle = computed(() => {
   const action =
-    upscaleInProgress.value && feature.value === 'upscale'
-      ? 'Upscaling'
-      : colorizeInProgress.value && feature.value === 'colorize'
-        ? 'Colorizing'
-        : reviveInProgress.value && feature.value === 'revive'
-          ? 'Reviving'
-          : ''
+    upscaleInProgress.value && feature.value === "upscale"
+      ? "Upscaling"
+      : colorizeInProgress.value && feature.value === "colorize"
+        ? "Colorizing"
+        : reviveInProgress.value && feature.value === "revive"
+          ? "Reviving"
+          : "";
   if (action) {
-    return `${action} your image`
+    return `${action} your image`;
   }
-  return ''
-})
+  return "";
+});
 const alertText = computed(() => {
   const action =
-    upscaleInProgress.value && feature.value === 'upscale'
-      ? 'upscaling'
-      : colorizeInProgress.value && feature.value === 'colorize'
-        ? 'colorizing'
-        : reviveInProgress.value && feature.value === 'revive'
-          ? 'reviving'
-          : ''
+    upscaleInProgress.value && feature.value === "upscale"
+      ? "upscaling"
+      : colorizeInProgress.value && feature.value === "colorize"
+        ? "colorizing"
+        : reviveInProgress.value && feature.value === "revive"
+          ? "reviving"
+          : "";
 
   if (action) {
-    return `You can keep working -- ${action} runs in the background and might take longer than expected. You can close this dialog and check later on the history tab.`
+    return `You can keep working -- ${action} runs in the background and might take longer than expected. You can close this dialog and check later on the history tab.`;
   }
-  return ''
-})
+  return "";
+});
 
 const showSkeleton = computed(() => {
   if (feature.value === FeatureType.IMAGE) {
-    return isLoading.value
+    return isLoading.value;
   }
   if (feature.value === FeatureType.UPSCALE) {
-    return upscaleInProgress.value
+    return upscaleInProgress.value;
   }
   if (feature.value === FeatureType.COLORIZE) {
-    return colorizeInProgress.value
+    return colorizeInProgress.value;
   }
   if (feature.value === FeatureType.REVIVE) {
-    return reviveInProgress.value
+    return reviveInProgress.value;
   }
-  return false
-})
+  return false;
+});
 const showAlert = computed(() => {
   if (feature.value === FeatureType.IMAGE) {
-    return false
+    return false;
   }
   if (feature.value === FeatureType.UPSCALE) {
-    return upscaleInProgress.value
+    return upscaleInProgress.value;
   }
   if (feature.value === FeatureType.COLORIZE) {
-    return colorizeInProgress.value
+    return colorizeInProgress.value;
   }
   if (feature.value === FeatureType.REVIVE) {
-    return reviveInProgress.value
+    return reviveInProgress.value;
   }
-  return false
-})
+  return false;
+});
 const gridClass = computed(() => {
-  if (!images.value) return ''
+  if (!images.value) return "";
 
-  const imageCount = images.value.length
+  const imageCount = images.value.length;
 
   if (imageCount === 4) {
-    if (imageData.value?.imageType === 'vertical') {
-      return 'grid-vertical'
+    if (imageData.value?.imageType === "vertical") {
+      return "grid-vertical";
     }
-    return 'grid-horizontal' // for horizontal and square
+    return "grid-horizontal"; // for horizontal and square
   }
 
-  return 'tw-flex tw-flex-wrap tw-gap-4 tw-justify-center' // default flex layout
-})
+  return "tw-flex tw-flex-wrap tw-gap-4 tw-justify-center"; // default flex layout
+});
 
 watch(errMsg, (newVal) => {
-  if (newVal !== '') {
-    snackbar.value = true
+  if (newVal !== "") {
+    snackbar.value = true;
   }
-})
+});
 </script>
 <template>
   <v-alert
@@ -180,7 +180,7 @@ watch(errMsg, (newVal) => {
     :class="{
       'tw-h-full': !mobile,
       'tw-h-[80%] tw-overflow-scroll': mobile,
-      image: showDefaultAnimation
+      image: showDefaultAnimation,
     }"
   >
     <v-skeleton-loader v-if="showSkeleton" type="image"></v-skeleton-loader>

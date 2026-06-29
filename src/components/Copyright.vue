@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 
-const router = useRouter()
-const currentYear = new Date().getFullYear()
+const router = useRouter();
+const currentYear = new Date().getFullYear();
 </script>
 <template>
   <div class="tw-text-black dark:tw-text-gray-400 tw-text-sm tw-mb-4 md:tw-mb-0">

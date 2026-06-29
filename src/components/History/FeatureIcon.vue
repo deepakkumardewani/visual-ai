@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { FeatureIconMap } from '@/pages/utils'
-import { storeToRefs } from 'pinia'
+import { FeatureIconMap } from "@/pages/utils";
+import { storeToRefs } from "pinia";
 
-import { IImageObject } from '@/types'
+import { IImageObject } from "@/types";
 
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from "@/stores/app";
 
 const props = defineProps<{
-  item: IImageObject
-}>()
+  item: IImageObject;
+}>();
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
 </script>
 <template>
   <v-chip size="small" :color="isDark ? 'black' : 'white'" label variant="flat">

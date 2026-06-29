@@ -1,69 +1,69 @@
 <script setup lang="ts">
-import { faClockRotateLeft, faExpand, faPalette, faWandMagicSparkles } from '@/plugins/icons'
-import { ref } from 'vue'
-import { useDisplay } from 'vuetify'
+import { faClockRotateLeft, faExpand, faPalette, faWandMagicSparkles } from "@/plugins/icons";
+import { ref } from "vue";
+import { useDisplay } from "vuetify";
 
-import Chip from '@/components/Home/Chip.vue'
+import Chip from "@/components/Home/Chip.vue";
 
-const videoRefs = ref<{ [key: string]: HTMLVideoElement | null }>({})
+const videoRefs = ref<{ [key: string]: HTMLVideoElement | null }>({});
 
 const setVideoRef = (el: HTMLVideoElement | null, ref: string) => {
   if (el) {
-    videoRefs.value[ref] = el
+    videoRefs.value[ref] = el;
   }
-}
+};
 
-const { mobile } = useDisplay()
+const { mobile } = useDisplay();
 interface Feature {
-  title: string
-  description: string
-  url: string
-  ref: string
-  icon: any // Changed to any to support FontAwesome IconDefinition
+  title: string;
+  description: string;
+  url: string;
+  ref: string;
+  icon: any; // Changed to any to support FontAwesome IconDefinition
 }
 
 const playVideo = (ref: string) => {
-  const video = videoRefs.value[ref]
+  const video = videoRefs.value[ref];
   if (video) {
     // Add a small delay to ensure video is ready
     setTimeout(() => {
       video.play().catch((err) => {
-        console.warn('Video playback failed:', err)
-      })
-    }, 100)
+        console.warn("Video playback failed:", err);
+      });
+    }, 100);
   }
-}
+};
 
 const features = ref<Feature[]>([
   {
-    title: 'Text-to-Image',
-    description: 'Transform your ideas into stunning images with our advanced AI',
-    url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/owrcv8j8uo1p9nhlxeh2.mp4',
-    ref: 'textToImageVideo',
-    icon: faWandMagicSparkles
+    title: "Text-to-Image",
+    description: "Transform your ideas into stunning images with our advanced AI",
+    url: "https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/owrcv8j8uo1p9nhlxeh2.mp4",
+    ref: "textToImageVideo",
+    icon: faWandMagicSparkles,
   },
   {
-    title: 'Upscale',
-    description: 'Enhance image quality and resolution without losing details',
-    url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/x9zn6em8ylbyqhdn8mki.mp4',
-    ref: 'upscaleVideo',
-    icon: faExpand
+    title: "Upscale",
+    description: "Enhance image quality and resolution without losing details",
+    url: "https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/x9zn6em8ylbyqhdn8mki.mp4",
+    ref: "upscaleVideo",
+    icon: faExpand,
   },
   {
-    title: 'Colorize',
-    description: 'Bring black and white images to life with vibrant colors',
-    url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915531/videos/yh5jyyyc0zsm5pnuq4k3.mp4',
-    ref: 'colorizeVideo',
-    icon: faPalette
+    title: "Colorize",
+    description: "Bring black and white images to life with vibrant colors",
+    url: "https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915531/videos/yh5jyyyc0zsm5pnuq4k3.mp4",
+    ref: "colorizeVideo",
+    icon: faPalette,
   },
   {
-    title: 'Restore',
-    description: 'Repair and enhance old or damaged photos',
-    url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/fvxprtyuurm49silhq1i.mp4',
-    ref: 'restoreVideo',
-    icon: faClockRotateLeft
-  }
-])
+    title: "Restore",
+    description: "Repair and enhance old or damaged photos",
+    url: "https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/fvxprtyuurm49silhq1i.mp4",
+    ref: "restoreVideo",
+    icon: faClockRotateLeft,
+  },
+]);
 
 // Try to play videos when component is mounted
 // onMounted(() => {
@@ -107,16 +107,16 @@ const features = ref<Feature[]>([
             :initial="{
               perspective: 800,
               rotateX: 14,
-              opacity: 0.5
+              opacity: 0.5,
             }"
             :visibleOnce="{
               opacity: 1,
               rotateX: 0,
               transition: {
                 onComplete: () => {
-                  playVideo(feature.ref)
-                }
-              }
+                  playVideo(feature.ref);
+                },
+              },
             }"
             :delay="300"
             :duration="800"

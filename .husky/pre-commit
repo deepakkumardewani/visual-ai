@@ -1,6 +1,1 @@
-# #!/usr/bin/env sh
-# . "$(dirname -- "$0")/_/husky.sh"
-
-npm run format:ci
-npm run lint:ci
-npm run type-check
+vp staged

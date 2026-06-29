@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import FAQ from '@/components/FAQ.vue'
-import PricingCard from '@/components/PricingCard.vue'
+import FAQ from "@/components/FAQ.vue";
+import PricingCard from "@/components/PricingCard.vue";
 
-import { PRICING_FAQS, PRO_PLAN, STARTER_PLAN } from '@/utils/constants'
+import { PRICING_FAQS, PRO_PLAN, STARTER_PLAN } from "@/utils/constants";
 </script>
 <template>
   <div id="pricing" class="mt-5">

@@ -1,42 +1,42 @@
 <script setup lang="ts">
-import { faCaretDown, faCrown, faLink, faSignOutAlt, faUser, faUsers } from '@/plugins/icons'
-import { storeToRefs } from 'pinia'
-import { computed, ref, watch } from 'vue'
-import { useClerk } from 'vue-clerk'
-import { useRouter } from 'vue-router'
+import { faCaretDown, faCrown, faLink, faSignOutAlt, faUser, faUsers } from "@/plugins/icons";
+import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
+import { useClerk } from "vue-clerk";
+import { useRouter } from "vue-router";
 
-import { useDialogStore } from '@/stores/dialog'
-import { useUserStore } from '@/stores/user'
+import { useDialogStore } from "@/stores/dialog";
+import { useUserStore } from "@/stores/user";
 
-import Avatar from '@/components/Avatar.vue'
-import ReferralCopyDialog from '@/components/Dialogs/ReferralCopyDialog.vue'
-import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue'
-import ThemeButton from '@/components/Header/ThemeButton.vue'
+import Avatar from "@/components/Avatar.vue";
+import ReferralCopyDialog from "@/components/Dialogs/ReferralCopyDialog.vue";
+import ReferralDialog from "@/components/Dialogs/ReferralDialog.vue";
+import ThemeButton from "@/components/Header/ThemeButton.vue";
 
-const router = useRouter()
+const router = useRouter();
 
-const dialogStore = useDialogStore()
+const dialogStore = useDialogStore();
 
-const userStore = useUserStore()
-const { signOut } = useClerk()
-const { userDetails, isPro } = storeToRefs(userStore)
-const fullName = ref<string | undefined>('')
-const email = ref<string | undefined>('')
-const menu = ref(false)
-const snackbar = ref(false)
-const snackbarTimeout = ref(2000)
+const userStore = useUserStore();
+const { signOut } = useClerk();
+const { userDetails, isPro } = storeToRefs(userStore);
+const fullName = ref<string | undefined>("");
+const email = ref<string | undefined>("");
+const menu = ref(false);
+const snackbar = ref(false);
+const snackbarTimeout = ref(2000);
 
 const subscriptionStatus = computed(() => {
-  return isPro.value ? 'Pro' : 'Free'
-})
+  return isPro.value ? "Pro" : "Free";
+});
 
 function showReferralDialog() {
-  menu.value = false
-  dialogStore.showReferral()
+  menu.value = false;
+  dialogStore.showReferral();
 }
 
 async function copyReferralCode() {
-  dialogStore.showCopyReferral()
+  dialogStore.showCopyReferral();
   // try {
   //   await navigator.clipboard.writeText(userDetails.value?.referralCode ?? '')
   //   snackbar.value = true
@@ -47,25 +47,25 @@ async function copyReferralCode() {
 
 function updateUserInfo() {
   if (userDetails.value) {
-    fullName.value = userDetails.value.fullName ?? ''
-    email.value = userDetails.value.email ?? ''
+    fullName.value = userDetails.value.fullName ?? "";
+    email.value = userDetails.value.email ?? "";
   }
 }
 
 watch(
   () => userDetails.value,
   () => {
-    updateUserInfo()
+    updateUserInfo();
   },
-  { immediate: true, deep: true }
-)
+  { immediate: true, deep: true },
+);
 
 function goToSubscription() {
-  menu.value = false
+  menu.value = false;
   router.push({
-    name: 'profile',
-    query: { tab: 'subscription' } // This will be used to activate the subscription tab
-  })
+    name: "profile",
+    query: { tab: "subscription" }, // This will be used to activate the subscription tab
+  });
 }
 </script>
 <template>
@@ -109,7 +109,7 @@ function goToSubscription() {
             <v-divider class="my-1"></v-divider>
             <v-list-item
               class="tw-cursor-pointer"
-              @click="router.push({ name: 'profile' }), (menu = false)"
+              @click="(router.push({ name: 'profile' }), (menu = false))"
             >
               <div class="tw-flex tw-items-center tw-gap-2">
                 <font-awesome-icon :icon="faUser" class="tw-text-sm" />
@@ -148,7 +148,7 @@ function goToSubscription() {
             <v-list-item class="tw-cursor-pointer">
               <div
                 class="tw-flex tw-items-center tw-gap-2"
-                @click="signOut({ redirectUrl: '/' }), (menu = false)"
+                @click="(signOut({ redirectUrl: '/' }), (menu = false))"
               >
                 <font-awesome-icon :icon="faSignOutAlt" class="tw-text-sm" />
                 <v-list-item-title>Logout</v-list-item-title>

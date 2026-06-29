@@ -1,69 +1,69 @@
 <script setup lang="ts">
-import { faGift, faTicket } from '@/plugins/icons'
-import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { faGift, faTicket } from "@/plugins/icons";
+import { storeToRefs } from "pinia";
+import { computed, ref } from "vue";
 
-import { useDialogStore } from '@/stores/dialog'
-import { useUserStore } from '@/stores/user'
+import { useDialogStore } from "@/stores/dialog";
+import { useUserStore } from "@/stores/user";
 
-import { applyReferralCode } from '@/utils/helpers'
+import { applyReferralCode } from "@/utils/helpers";
 
-const userStore = useUserStore()
-const dialogStore = useDialogStore()
-const { showReferralDialog } = storeToRefs(dialogStore)
-const { userDetails } = storeToRefs(userStore)
-const referralCode = ref('')
-const loading = ref(false)
-const errorMessage = ref('')
+const userStore = useUserStore();
+const dialogStore = useDialogStore();
+const { showReferralDialog } = storeToRefs(dialogStore);
+const { userDetails } = storeToRefs(userStore);
+const referralCode = ref("");
+const loading = ref(false);
+const errorMessage = ref("");
 
 const isValidCode = computed(() => {
   if (!referralCode.value) {
-    return false
+    return false;
   }
   if (referralCode.value.length !== 6) {
-    return false
+    return false;
   }
   if (referralCode.value === userDetails.value?.referralCode) {
-    return false
+    return false;
   }
-  return true
-})
+  return true;
+});
 
 const validateCode = () => {
   if (!referralCode.value) {
-    errorMessage.value = ''
-    return false
+    errorMessage.value = "";
+    return false;
   }
   if (referralCode.value.length !== 6) {
-    errorMessage.value = 'Referral code must be 6 characters long'
-    return false
+    errorMessage.value = "Referral code must be 6 characters long";
+    return false;
   }
   if (referralCode.value === userDetails.value?.referralCode) {
-    errorMessage.value = 'You cannot use your own referral code'
-    return false
+    errorMessage.value = "You cannot use your own referral code";
+    return false;
   }
-  errorMessage.value = ''
-  return true
-}
+  errorMessage.value = "";
+  return true;
+};
 
 const apply = async () => {
-  if (!validateCode()) return
-  loading.value = true
+  if (!validateCode()) return;
+  loading.value = true;
   try {
-    await applyReferralCode(referralCode.value)
+    await applyReferralCode(referralCode.value);
   } catch (error: any) {
-    console.error('error', error)
-    errorMessage.value = error.message || 'Something went wrong'
+    console.error("error", error);
+    errorMessage.value = error.message || "Something went wrong";
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const closeDialog = () => {
-  showReferralDialog.value = false
-  referralCode.value = ''
-  errorMessage.value = ''
-}
+  showReferralDialog.value = false;
+  referralCode.value = "";
+  errorMessage.value = "";
+};
 </script>
 
 <template>

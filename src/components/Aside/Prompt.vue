@@ -1,68 +1,68 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
-import { useDisplay } from 'vuetify'
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
+import { useDisplay } from "vuetify";
 
-import { useAsideStore } from '@/stores/aside'
-import { useGenerateStore } from '@/stores/generate'
+import { useAsideStore } from "@/stores/aside";
+import { useGenerateStore } from "@/stores/generate";
 
-import Heading from '@/components/Aside/Heading.vue'
+import Heading from "@/components/Aside/Heading.vue";
 
-import { MODEL_IDS } from '@/utils/constants'
-import PROMPTS from '@/utils/prompts.json'
-import REALISTIC_PROMPTS from '@/utils/realisticPrompts.json'
+import { MODEL_IDS } from "@/utils/constants";
+import PROMPTS from "@/utils/prompts.json";
+import REALISTIC_PROMPTS from "@/utils/realisticPrompts.json";
 
-const asideStore = useAsideStore()
-const generateStore = useGenerateStore()
-const { mobile } = useDisplay()
-const { mode, typingPrompt } = storeToRefs(asideStore)
-const { promptText } = storeToRefs(generateStore)
+const asideStore = useAsideStore();
+const generateStore = useGenerateStore();
+const { mobile } = useDisplay();
+const { mode, typingPrompt } = storeToRefs(asideStore);
+const { promptText } = storeToRefs(generateStore);
 
-const prompt = ref<string>('')
-const isTyping = ref(false)
-const textAreaFocused = ref(false)
-const textareaRef = ref()
+const prompt = ref<string>("");
+const isTyping = ref(false);
+const textAreaFocused = ref(false);
+const textareaRef = ref();
 
 function randomPrompt() {
-  let newPrompt = ''
+  let newPrompt = "";
   if (mode.value.id === MODEL_IDS.FLUX_REALISM) {
-    const randomIndex = Math.floor(Math.random() * REALISTIC_PROMPTS.length)
-    newPrompt = REALISTIC_PROMPTS[randomIndex]
+    const randomIndex = Math.floor(Math.random() * REALISTIC_PROMPTS.length);
+    newPrompt = REALISTIC_PROMPTS[randomIndex];
   } else {
-    const randomIndex = Math.floor(Math.random() * PROMPTS.length)
-    newPrompt = PROMPTS[randomIndex]
+    const randomIndex = Math.floor(Math.random() * PROMPTS.length);
+    newPrompt = PROMPTS[randomIndex];
   }
-  typingPrompt.value = ''
-  typePrompt(newPrompt)
-  promptText.value = newPrompt
-  textareaRef.value.focus()
+  typingPrompt.value = "";
+  typePrompt(newPrompt);
+  promptText.value = newPrompt;
+  textareaRef.value.focus();
 }
 
 function typePrompt(text: string) {
-  isTyping.value = true
-  typingPrompt.value = ''
-  prompt.value = ''
+  isTyping.value = true;
+  typingPrompt.value = "";
+  prompt.value = "";
 
-  let i = 0
+  let i = 0;
   const typingInterval = setInterval(() => {
     if (i < text.length) {
-      typingPrompt.value += text.charAt(i)
-      i++
+      typingPrompt.value += text.charAt(i);
+      i++;
     } else {
-      clearInterval(typingInterval)
-      prompt.value = typingPrompt.value
-      isTyping.value = false
+      clearInterval(typingInterval);
+      prompt.value = typingPrompt.value;
+      isTyping.value = false;
     }
-  }, 5)
+  }, 5);
 }
 
 watch(typingPrompt, (newVal) => {
-  promptText.value = newVal
-})
+  promptText.value = newVal;
+});
 
 onMounted(() => {
-  typingPrompt.value = promptText.value ?? ''
-})
+  typingPrompt.value = promptText.value ?? "";
+});
 </script>
 <template>
   <div class="tw-flex tw-items-center tw-gap-1">

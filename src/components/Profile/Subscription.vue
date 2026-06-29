@@ -1,44 +1,44 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useDisplay } from 'vuetify'
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useDisplay } from "vuetify";
 
-import { useDialogStore } from '@/stores/dialog'
-import { useUserStore } from '@/stores/user'
+import { useDialogStore } from "@/stores/dialog";
+import { useUserStore } from "@/stores/user";
 
-import ConfirmCancelSubDialog from '@/components/Dialogs/ConfirmCancelSubDialog.vue'
+import ConfirmCancelSubDialog from "@/components/Dialogs/ConfirmCancelSubDialog.vue";
 
-import { RAZORPAY_PRODUCTS } from '@/utils/constants'
-import { cancelSubscription, initiatePayment } from '@/utils/payment'
+import { RAZORPAY_PRODUCTS } from "@/utils/constants";
+import { cancelSubscription, initiatePayment } from "@/utils/payment";
 
-const userStore = useUserStore()
-const dialogStore = useDialogStore()
-const { userDetails, isPro } = storeToRefs(userStore)
-const isLoading = ref(false)
-const router = useRouter()
-const { mobile } = useDisplay()
+const userStore = useUserStore();
+const dialogStore = useDialogStore();
+const { userDetails, isPro } = storeToRefs(userStore);
+const isLoading = ref(false);
+const router = useRouter();
+const { mobile } = useDisplay();
 async function handlePlan() {
   if (!isPro.value) {
     try {
-      isLoading.value = true
-      const product = RAZORPAY_PRODUCTS[4]
-      await initiatePayment(product, true)
+      isLoading.value = true;
+      const product = RAZORPAY_PRODUCTS[4];
+      await initiatePayment(product, true);
     } catch (error) {
-      console.error('Purchase failed:', error)
+      console.error("Purchase failed:", error);
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
   } else {
     try {
       //TODO: show a confirm dialog
-      dialogStore.showCancelSubscription()
-      isLoading.value = true
-      await cancelSubscription()
+      dialogStore.showCancelSubscription();
+      isLoading.value = true;
+      await cancelSubscription();
     } catch (error) {
-      console.error('Cancellation failed:', error)
+      console.error("Cancellation failed:", error);
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
 }
@@ -56,7 +56,7 @@ async function handlePlan() {
           <v-card variant="outlined" class="tw-p-4 tw-transition-all" elevation="0">
             <div class="tw-flex tw-justify-between tw-items-center">
               <v-chip :color="isPro ? 'purple-accent-4' : 'grey'" size="large" class="tw-ml-2">
-                {{ isPro ? 'Pro' : 'Free' }}
+                {{ isPro ? "Pro" : "Free" }}
               </v-chip>
               <v-btn
                 @click="handlePlan"
@@ -66,7 +66,7 @@ async function handlePlan() {
                 :loading="isLoading"
                 :disabled="isLoading"
               >
-                {{ isPro ? 'Cancel subscription' : 'Upgrade plan' }}
+                {{ isPro ? "Cancel subscription" : "Upgrade plan" }}
               </v-btn>
             </div>
           </v-card>

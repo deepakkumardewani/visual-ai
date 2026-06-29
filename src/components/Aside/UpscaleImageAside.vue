@@ -1,109 +1,109 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { v4 as uuidv4 } from 'uuid'
-import { computed, onMounted, ref } from 'vue'
-import { useUser } from 'vue-clerk'
-import { useRouter } from 'vue-router'
+import { storeToRefs } from "pinia";
+import { v4 as uuidv4 } from "uuid";
+import { computed, onMounted, ref } from "vue";
+import { useUser } from "vue-clerk";
+import { useRouter } from "vue-router";
 
-import { useAppStore } from '@/stores/app'
-import { useAsideStore } from '@/stores/aside'
-import { useDialogStore } from '@/stores/dialog'
-import { useGenerateStore } from '@/stores/generate'
-import { useUserStore } from '@/stores/user'
+import { useAppStore } from "@/stores/app";
+import { useAsideStore } from "@/stores/aside";
+import { useDialogStore } from "@/stores/dialog";
+import { useGenerateStore } from "@/stores/generate";
+import { useUserStore } from "@/stores/user";
 
-import { useLocal } from '@/composables/local'
+import { useLocal } from "@/composables/local";
 
-import Heading from '@/components/Aside/Heading.vue'
-import ImageFormat from '@/components/Aside/ImageFormat.vue'
-import ImageUpload from '@/components/Aside/ImageUpload.vue'
-import SignupDialog from '@/components/Dialogs/SignupDialog.vue'
+import Heading from "@/components/Aside/Heading.vue";
+import ImageFormat from "@/components/Aside/ImageFormat.vue";
+import ImageUpload from "@/components/Aside/ImageUpload.vue";
+import SignupDialog from "@/components/Dialogs/SignupDialog.vue";
 
-import { IMAGE_SIZES } from '@/utils/constants'
+import { IMAGE_SIZES } from "@/utils/constants";
 
-const userStore = useUserStore()
-const dialogStore = useDialogStore()
-const localStore = useLocal()
-const appStore = useAppStore()
-const asideStore = useAsideStore()
-const router = useRouter()
-const { isSignedIn } = useUser()
-const { progressUrl } = storeToRefs(appStore)
-const generateStore = useGenerateStore()
-const { isPro, credits } = storeToRefs(userStore)
-const { upscaleInProgress } = storeToRefs(generateStore)
-const { imageFormat } = storeToRefs(asideStore)
+const userStore = useUserStore();
+const dialogStore = useDialogStore();
+const localStore = useLocal();
+const appStore = useAppStore();
+const asideStore = useAsideStore();
+const router = useRouter();
+const { isSignedIn } = useUser();
+const { progressUrl } = storeToRefs(appStore);
+const generateStore = useGenerateStore();
+const { isPro, credits } = storeToRefs(userStore);
+const { upscaleInProgress } = storeToRefs(generateStore);
+const { imageFormat } = storeToRefs(asideStore);
 const SCALE = {
-  '2X': 2,
-  '4X': 4
-}
+  "2X": 2,
+  "4X": 4,
+};
 
-const imageUpload = ref()
-const scale = ref<string>('2X')
-const creativity = ref<number>(0.1)
-const prompt = ref<string>('')
-const negativePrompt = ref<string>('')
+const imageUpload = ref();
+const scale = ref<string>("2X");
+const creativity = ref<number>(0.1);
+const prompt = ref<string>("");
+const negativePrompt = ref<string>("");
 // Add computed property for output dimensions
 const outputDimensions = computed(() => {
   if (imageUpload.value?.width && imageUpload.value?.height) {
-    const multiplier = SCALE[scale.value as keyof typeof SCALE]
-    return `${imageUpload.value?.width * multiplier}x${imageUpload.value?.height * multiplier}px`
+    const multiplier = SCALE[scale.value as keyof typeof SCALE];
+    return `${imageUpload.value?.width * multiplier}x${imageUpload.value?.height * multiplier}px`;
   }
-  return ''
-})
+  return "";
+});
 
 async function upscaleImage() {
   if (!isSignedIn.value) {
-    dialogStore.showSignup()
-    return
+    dialogStore.showSignup();
+    return;
   }
 
   if (!isPro.value && credits.value < 3) {
-    dialogStore.showLowCredits()
-    return
+    dialogStore.showLowCredits();
+    return;
   }
 
   if (isPro.value && credits.value === 0) {
-    dialogStore.showLowCredits()
-    return
+    dialogStore.showLowCredits();
+    return;
   }
 
   if (isSignedIn.value) {
-    const jobId = uuidv4()
-    localStore.setLocal('upscaleJobId', jobId)
+    const jobId = uuidv4();
+    localStore.setLocal("upscaleJobId", jobId);
     const data = {
       jobId,
       prompt: prompt.value,
       negativePrompt: negativePrompt.value,
       image: imageUpload?.value?.image,
-      format: imageUpload?.value?.image.name.split('.').pop(),
+      format: imageUpload?.value?.image.name.split(".").pop(),
       creativity: creativity.value,
       scale: SCALE[scale.value as keyof typeof SCALE],
-      outputFormat: imageFormat.value.title.toLowerCase()
-    }
+      outputFormat: imageFormat.value.title.toLowerCase(),
+    };
 
-    generateStore.upscaleImage(data)
+    generateStore.upscaleImage(data);
 
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?jobId=${jobId}`
-    appStore.upscaleOpen()
-    localStorage.setItem('upscaleInProgress', 'true')
-    upscaleInProgress.value = true
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?jobId=${jobId}`;
+    appStore.upscaleOpen();
+    localStorage.setItem("upscaleInProgress", "true");
+    upscaleInProgress.value = true;
   } else {
-    router.push('/signin')
+    router.push("/signin");
   }
 }
 
 onMounted(async () => {
-  const inProgress = JSON.parse(localStorage.getItem('upscaleInProgress') as string)
+  const inProgress = JSON.parse(localStorage.getItem("upscaleInProgress") as string);
   // console.log('inProgress', inProgress)
   if (inProgress === true) {
-    upscaleInProgress.value = true
-    const jobId = localStore.getLocal('upscaleJobId')
+    upscaleInProgress.value = true;
+    const jobId = localStore.getLocal("upscaleJobId");
     if (jobId) {
-      progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?jobId=${jobId}`
-      appStore.upscaleOpen()
+      progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?jobId=${jobId}`;
+      appStore.upscaleOpen();
     }
   }
-})
+});
 </script>
 <template>
   <ImageUpload ref="imageUpload" />

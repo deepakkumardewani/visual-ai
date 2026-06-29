@@ -1,43 +1,43 @@
 <script lang="ts" setup>
-import { faXmark } from '@/plugins/icons'
-import { storeToRefs } from 'pinia'
-import { onMounted, ref } from 'vue'
+import { faXmark } from "@/plugins/icons";
+import { storeToRefs } from "pinia";
+import { onMounted, ref } from "vue";
 
-import type { GalleryImage } from '@/types'
+import type { GalleryImage } from "@/types";
 
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from "@/stores/app";
 
-import gallery from '@/utils/gallery.json'
+import gallery from "@/utils/gallery.json";
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
-const images = ref<GalleryImage[]>([])
-const dialog = ref(false)
-const selectedImage = ref<GalleryImage | null>(null)
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
+const images = ref<GalleryImage[]>([]);
+const dialog = ref(false);
+const selectedImage = ref<GalleryImage | null>(null);
 // const hoverTimeout = ref<number | null>(null)
-const dialogOrigin = ref({ x: 0, y: 0, width: 0, height: 0 })
+const dialogOrigin = ref({ x: 0, y: 0, width: 0, height: 0 });
 // const isHovering = ref(false)
 // const dialogWidth = ref('90vw')
 // const dialogHeight = ref('90vh')
 
 onMounted(async () => {
-  images.value = gallery
-})
+  images.value = gallery;
+});
 
 const openDialog = (image: GalleryImage, event?: MouseEvent) => {
-  selectedImage.value = image
+  selectedImage.value = image;
   if (event) {
-    const target = event.target as HTMLElement
-    const rect = target.getBoundingClientRect()
+    const target = event.target as HTMLElement;
+    const rect = target.getBoundingClientRect();
     dialogOrigin.value = {
       x: rect.left,
       y: rect.top,
       width: rect.width,
-      height: rect.height
-    }
+      height: rect.height,
+    };
   }
-  dialog.value = true
-}
+  dialog.value = true;
+};
 
 // const handleMouseEnter = (image: GalleryImage, event: MouseEvent) => {
 //   isHovering.value = true
@@ -56,11 +56,11 @@ const openDialog = (image: GalleryImage, event?: MouseEvent) => {
 // }
 
 const handleClickOutside = (e: MouseEvent) => {
-  const target = e.target as HTMLElement
-  if (target.classList.contains('v-overlay__scrim')) {
-    dialog.value = false
+  const target = e.target as HTMLElement;
+  if (target.classList.contains("v-overlay__scrim")) {
+    dialog.value = false;
   }
-}
+};
 </script>
 
 <template>
@@ -185,7 +185,7 @@ const handleClickOutside = (e: MouseEvent) => {
   opacity: 0;
   transform: scale(0.5);
   transform-origin: v-bind(
-    '`${dialogOrigin.x + dialogOrigin.width/2}px ${dialogOrigin.y + dialogOrigin.height/2}px`'
+    "`${dialogOrigin.x + dialogOrigin.width/2}px ${dialogOrigin.y + dialogOrigin.height/2}px`"
   );
 }
 

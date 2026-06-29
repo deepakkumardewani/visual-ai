@@ -1,56 +1,56 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { storeToRefs } from "pinia";
+import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from "@/stores/app";
 
-import History from '@/components/History/History.vue'
-import Payments from '@/components/Profile/Payments.vue'
-import Subscription from '@/components/Profile/Subscription.vue'
-import UserDetails from '@/components/Profile/UserDetails.vue'
+import History from "@/components/History/History.vue";
+import Payments from "@/components/Profile/Payments.vue";
+import Subscription from "@/components/Profile/Subscription.vue";
+import UserDetails from "@/components/Profile/UserDetails.vue";
 
-const route = useRoute()
-const router = useRouter()
-const tab = ref(1)
+const route = useRoute();
+const router = useRouter();
+const tab = ref(1);
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
 
 const TabMap = {
   user: 1,
   favorites: 2,
   payments: 3,
-  subscription: 4
-}
+  subscription: 4,
+};
 
 const handleTabChange = (newTab: number) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const tabQuery = Object.entries(TabMap).find(([_, value]) => value === newTab)?.[0]
+  const tabQuery = Object.entries(TabMap).find(([_, value]) => value === newTab)?.[0];
 
   if (tabQuery) {
     router.replace({
       query: {
         ...route.query,
-        tab: tabQuery
-      }
-    })
+        tab: tabQuery,
+      },
+    });
   }
-}
+};
 
 onMounted(() => {
-  const tabQuery = route.query.tab
+  const tabQuery = route.query.tab;
   if (tabQuery) {
-    tab.value = TabMap[tabQuery as keyof typeof TabMap]
+    tab.value = TabMap[tabQuery as keyof typeof TabMap];
   }
-})
+});
 
 watch(route, (newRoute) => {
-  const tabQuery = newRoute.query.tab
+  const tabQuery = newRoute.query.tab;
   if (tabQuery) {
-    tab.value = TabMap[tabQuery as keyof typeof TabMap]
+    tab.value = TabMap[tabQuery as keyof typeof TabMap];
   }
-})
+});
 </script>
 
 <template>

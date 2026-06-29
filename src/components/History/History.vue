@@ -1,178 +1,178 @@
 <script setup lang="ts">
-import { groupByDate } from '@/pages/utils'
-import { faCircleCheck, faXmark } from '@/plugins/icons'
-import { storeToRefs } from 'pinia'
-import { useDisplay } from 'vuetify'
+import { groupByDate } from "@/pages/utils";
+import { faCircleCheck, faXmark } from "@/plugins/icons";
+import { storeToRefs } from "pinia";
+import { useDisplay } from "vuetify";
 
-import type { GroupedObject, IImage, IImageObject } from '@/types'
+import type { GroupedObject, IImage, IImageObject } from "@/types";
 
-import { useAppStore } from '@/stores/app'
-import { useDialogStore } from '@/stores/dialog'
-import { useHistoryStore } from '@/stores/history'
-import { useUserStore } from '@/stores/user'
+import { useAppStore } from "@/stores/app";
+import { useDialogStore } from "@/stores/dialog";
+import { useHistoryStore } from "@/stores/history";
+import { useUserStore } from "@/stores/user";
 
-import ImageDialog from '@/components/Dialogs/ImageDialog.vue'
-import FeatureIcon from '@/components/History/FeatureIcon.vue'
-import Filter from '@/components/History/Filter.vue'
-import ImageActionButtons from '@/components/History/ImageActionButtons.vue'
-import NoResults from '@/components/History/NoResults.vue'
-import SelectActionButtons from '@/components/History/SelectActionButtons.vue'
+import ImageDialog from "@/components/Dialogs/ImageDialog.vue";
+import FeatureIcon from "@/components/History/FeatureIcon.vue";
+import Filter from "@/components/History/Filter.vue";
+import ImageActionButtons from "@/components/History/ImageActionButtons.vue";
+import NoResults from "@/components/History/NoResults.vue";
+import SelectActionButtons from "@/components/History/SelectActionButtons.vue";
 
-import { SIZE_CLASSES } from '@/utils/constants'
+import { SIZE_CLASSES } from "@/utils/constants";
 
 const props = withDefaults(defineProps<{ isFavorites?: boolean }>(), {
-  isFavorites: false
-})
-const userStore = useUserStore()
-const dialogStore = useDialogStore()
+  isFavorites: false,
+});
+const userStore = useUserStore();
+const dialogStore = useDialogStore();
 
-const { mobile } = useDisplay()
-const { isDark } = storeToRefs(useAppStore())
-const { isBulkDeleting, isBulkFavoriting, isBulkDownloading } = storeToRefs(useHistoryStore())
-const { history } = storeToRefs(userStore)
-const { selectedSize } = storeToRefs(useHistoryStore())
+const { mobile } = useDisplay();
+const { isDark } = storeToRefs(useAppStore());
+const { isBulkDeleting, isBulkFavoriting, isBulkDownloading } = storeToRefs(useHistoryStore());
+const { history } = storeToRefs(userStore);
+const { selectedSize } = storeToRefs(useHistoryStore());
 
-const groupedHistory = ref<GroupedObject[]>([])
-const imageDialogItem = ref<IImageObject | undefined>()
-const selectedFeatureType = ref<string[]>([])
-const searchQuery = ref('')
-const sizeClasses = SIZE_CLASSES
+const groupedHistory = ref<GroupedObject[]>([]);
+const imageDialogItem = ref<IImageObject | undefined>();
+const selectedFeatureType = ref<string[]>([]);
+const searchQuery = ref("");
+const sizeClasses = SIZE_CLASSES;
 
-const carouselIndexes = ref<{ [key: string]: number }>({})
-const carouselIntervals = ref<{ [key: string]: number }>({})
-const isCarouselActive = ref<{ [key: string]: boolean }>({})
-const carouselTimeouts = ref<{ [key: string]: number }>({})
-const selectedImages = ref<IImageObject[]>([])
+const carouselIndexes = ref<{ [key: string]: number }>({});
+const carouselIntervals = ref<{ [key: string]: number }>({});
+const isCarouselActive = ref<{ [key: string]: boolean }>({});
+const carouselTimeouts = ref<{ [key: string]: number }>({});
+const selectedImages = ref<IImageObject[]>([]);
 
 const showImage = (item: IImageObject) => {
-  if (isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value) return
-  imageDialogItem.value = item
-  dialogStore.showImage()
-}
+  if (isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value) return;
+  imageDialogItem.value = item;
+  dialogStore.showImage();
+};
 
 // watch(deletingImageIds, (newVal) => {
 //   // console.log('deletingImageIds', newVal)
 // })
 
 const startCarousel = (itemId: string, images: IImage[]) => {
-  if (carouselIntervals.value[itemId]) return
+  if (carouselIntervals.value[itemId]) return;
 
   // Create a timeout before starting the carousel
   carouselTimeouts.value[itemId] = window.setTimeout(() => {
     // Only start if the timeout wasn't cleared
     if (carouselTimeouts.value[itemId]) {
       // Set active state for smooth transition
-      isCarouselActive.value[itemId] = true
+      isCarouselActive.value[itemId] = true;
 
-      carouselIndexes.value[itemId] = 0
+      carouselIndexes.value[itemId] = 0;
       carouselIntervals.value[itemId] = window.setInterval(() => {
-        carouselIndexes.value[itemId] = (carouselIndexes.value[itemId] + 1) % images.length
-      }, 2000)
+        carouselIndexes.value[itemId] = (carouselIndexes.value[itemId] + 1) % images.length;
+      }, 2000);
 
       // Clear the timeout reference
-      delete carouselTimeouts.value[itemId]
+      delete carouselTimeouts.value[itemId];
     }
-  }, 500)
-}
+  }, 500);
+};
 
 const stopCarousel = (itemId: string) => {
   // Clear the timeout if it exists
   if (carouselTimeouts.value[itemId]) {
-    clearTimeout(carouselTimeouts.value[itemId])
-    delete carouselTimeouts.value[itemId]
+    clearTimeout(carouselTimeouts.value[itemId]);
+    delete carouselTimeouts.value[itemId];
   }
 
   // Clear the interval if it exists
   if (carouselIntervals.value[itemId]) {
-    clearInterval(carouselIntervals.value[itemId])
-    delete carouselIntervals.value[itemId]
-    delete carouselIndexes.value[itemId]
-    isCarouselActive.value[itemId] = false
+    clearInterval(carouselIntervals.value[itemId]);
+    delete carouselIntervals.value[itemId];
+    delete carouselIndexes.value[itemId];
+    isCarouselActive.value[itemId] = false;
   }
-}
+};
 const getImageUrl = (image: IImage) => {
-  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${image.aiImagePublicId ? image.aiImagePublicId : image.enhancedPublicId}`
-  return optimizedUrl
-}
+  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
+  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${image.aiImagePublicId ? image.aiImagePublicId : image.enhancedPublicId}`;
+  return optimizedUrl;
+};
 
 const toggleImageSelection = async (event: Event, image: IImageObject) => {
-  if (isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value) return
-  event.stopPropagation()
+  if (isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value) return;
+  event.stopPropagation();
   if (selectedImages.value.some((item) => item._id === image._id)) {
-    selectedImages.value = selectedImages.value.filter((item) => item._id !== image._id)
+    selectedImages.value = selectedImages.value.filter((item) => item._id !== image._id);
   } else {
-    selectedImages.value.push(image)
+    selectedImages.value.push(image);
   }
-}
+};
 
 const isImageSelected = (imageId: string) => {
-  return Array.from(selectedImages.value).some((item) => item._id === imageId)
-}
+  return Array.from(selectedImages.value).some((item) => item._id === imageId);
+};
 
 const selectAllInGroup = (groupData: IImageObject[]) => {
   groupData.forEach((item) => {
-    selectedImages.value.push(item)
-  })
-}
+    selectedImages.value.push(item);
+  });
+};
 
 const areAllSelectedInGroup = (groupData: IImageObject[]): boolean => {
   return groupData.every((item) =>
-    Array.from(selectedImages.value).some((selected) => selected._id === item._id)
-  )
-}
+    Array.from(selectedImages.value).some((selected) => selected._id === item._id),
+  );
+};
 
 const toggleGroupSelection = (groupData: IImageObject[]) => {
-  if (isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value) return
+  if (isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value) return;
   if (areAllSelectedInGroup(groupData)) {
     groupData.forEach((item) => {
-      selectedImages.value = selectedImages.value.filter((selected) => selected._id !== item._id)
-    })
+      selectedImages.value = selectedImages.value.filter((selected) => selected._id !== item._id);
+    });
   } else {
-    selectAllInGroup(groupData)
+    selectAllInGroup(groupData);
   }
-}
+};
 
 watch(
   [history, selectedFeatureType, searchQuery],
   ([newHistory, newFeatureTypes, query]) => {
     if (newHistory) {
-      let filteredHistory = newHistory
+      let filteredHistory = newHistory;
 
       // Feature type filter
       if (newFeatureTypes.length > 0) {
         filteredHistory = filteredHistory.filter((item: IImageObject) =>
-          newFeatureTypes.includes(item.featureType)
-        )
+          newFeatureTypes.includes(item.featureType),
+        );
       }
 
       // Search query filter
       if (query.trim()) {
-        const searchTerm = query.toLowerCase().trim()
+        const searchTerm = query.toLowerCase().trim();
         filteredHistory = filteredHistory.filter((item: IImageObject) =>
-          item.prompt?.toLowerCase().includes(searchTerm)
-        )
+          item.prompt?.toLowerCase().includes(searchTerm),
+        );
       }
 
       // Favorites filter
       if (props.isFavorites) {
-        filteredHistory = filteredHistory.filter((item: IImageObject) => item.isFavorite)
+        filteredHistory = filteredHistory.filter((item: IImageObject) => item.isFavorite);
       }
 
-      groupedHistory.value = groupByDate(filteredHistory)
+      groupedHistory.value = groupByDate(filteredHistory);
     }
   },
-  { immediate: true, deep: true }
-)
+  { immediate: true, deep: true },
+);
 
 watch(
   [isBulkDeleting, isBulkFavoriting, isBulkDownloading],
   ([isDeleting, isFavoriting, isDownloading]) => {
     if (isDeleting || isFavoriting || isDownloading) {
-      selectedImages.value = []
+      selectedImages.value = [];
     }
-  }
-)
+  },
+);
 </script>
 
 <template>
@@ -226,7 +226,7 @@ watch(
                 isBulkDeleting || isBulkFavoriting || isBulkDownloading
                   ? 'tw-cursor-not-allowed'
                   : 'tw-cursor-pointer',
-                areAllSelectedInGroup(item.data) ? 'tw-text-blue-500' : 'tw-text-neutral-500'
+                areAllSelectedInGroup(item.data) ? 'tw-text-blue-500' : 'tw-text-neutral-500',
               ]"
               size="lg"
               @click="toggleGroupSelection(item.data)"
@@ -244,7 +244,7 @@ watch(
                   'tw-opacity-50':
                     isBulkDeleting ||
                     isBulkFavoriting ||
-                    (isBulkDownloading && selectedImages.length > 0)
+                    (isBulkDownloading && selectedImages.length > 0),
                 }"
               >
                 <div class="tw-h-full tw-relative">
@@ -282,7 +282,7 @@ watch(
                             :alt="subItem.featureType"
                             class="tw-rounded-sm"
                             :class="{
-                              'tw-border-black tw-border-2': !isCarouselActive[subItem._id]
+                              'tw-border-black tw-border-2': !isCarouselActive[subItem._id],
                             }"
                             :style="{
                               transition: 'all 0.5s ease-in-out',
@@ -293,7 +293,7 @@ watch(
                                 : '25%',
                               transform: !isHovering
                                 ? `translateX(${index * 1}px)`
-                                : `translateX(0)`
+                                : `translateX(0)`,
                             }"
                           >
                             <template v-slot:placeholder>
@@ -335,7 +335,7 @@ watch(
                                 : 'tw-cursor-pointer',
                               isImageSelected(subItem._id)
                                 ? 'tw-text-blue-500'
-                                : 'tw-text-neutral-200'
+                                : 'tw-text-neutral-200',
                             ]"
                             size="small"
                           ></v-icon>

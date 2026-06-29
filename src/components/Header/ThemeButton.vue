@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { faMoon, faSun } from '@/plugins/icons'
-import { storeToRefs } from 'pinia'
+import { faMoon, faSun } from "@/plugins/icons";
+import { storeToRefs } from "pinia";
 
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from "@/stores/app";
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
 </script>
 
 <template>

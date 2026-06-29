@@ -1,9 +1,9 @@
 <script setup>
-import { SignUp } from 'vue-clerk'
+import { SignUp } from "vue-clerk";
 
-import gallery from '@/utils/gallery.json'
+import gallery from "@/utils/gallery.json";
 
-const randomImage = gallery[Math.floor(Math.random() * gallery.length)]
+const randomImage = gallery[Math.floor(Math.random() * gallery.length)];
 </script>
 
 <template>
@@ -40,7 +40,7 @@ const randomImage = gallery[Math.floor(Math.random() * gallery.length)]
   animation: moveGradient 20s ease infinite;
 
   &::before {
-    content: '';
+    content: "";
     background: radial-gradient(circle at 50% 50%, #261f2a, #251531, #2f032f, #2e0854);
     background-size: 200% 200%;
     animation: moveGradient 20s ease infinite;

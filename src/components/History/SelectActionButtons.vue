@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useDisplay } from 'vuetify'
+import { storeToRefs } from "pinia";
+import { useDisplay } from "vuetify";
 
-import { IImageObject } from '@/types'
+import { IImageObject } from "@/types";
 
-import { useAppStore } from '@/stores/app'
-import { useGenerateStore } from '@/stores/generate'
+import { useAppStore } from "@/stores/app";
+import { useGenerateStore } from "@/stores/generate";
 
-import { bulkDelete, bulkDownload, bulkFavorite } from '@/utils/helpers'
+import { bulkDelete, bulkDownload, bulkFavorite } from "@/utils/helpers";
 
-const { mobile } = useDisplay()
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
-const generateStore = useGenerateStore()
-const { isDeleting, isFavoriting } = storeToRefs(generateStore)
+const { mobile } = useDisplay();
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
+const generateStore = useGenerateStore();
+const { isDeleting, isFavoriting } = storeToRefs(generateStore);
 
 const props = defineProps<{
-  selectedImages: IImageObject[]
-}>()
+  selectedImages: IImageObject[];
+}>();
 
 const handleBulkDelete = async () => {
-  await bulkDelete(props.selectedImages)
-}
+  await bulkDelete(props.selectedImages);
+};
 const handleBulkFavorite = async () => {
-  await bulkFavorite(props.selectedImages)
-}
+  await bulkFavorite(props.selectedImages);
+};
 const handleBulkDownload = async () => {
-  await bulkDownload(props.selectedImages)
-}
+  await bulkDownload(props.selectedImages);
+};
 </script>
 <template>
   <div class="tw-flex tw-gap-2 tw-items-center">

@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useParallax } from '@vueuse/core'
-import { useDisplay } from 'vuetify'
+import { useParallax } from "@vueuse/core";
+import { useDisplay } from "vuetify";
 
-import Chip from '@/components/Home/Chip.vue'
+import Chip from "@/components/Home/Chip.vue";
 
-const { mobile } = useDisplay()
-const container = ref(null)
-const { tilt, roll } = useParallax(container)
-const SCALE_FACTOR = mobile.value ? 0 : 25
-const aboutImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/about.jpg`
+const { mobile } = useDisplay();
+const container = ref(null);
+const { tilt, roll } = useParallax(container);
+const SCALE_FACTOR = mobile.value ? 0 : 25;
+const aboutImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/about.jpg`;
 </script>
 <template>
   <div id="about" class="tw-mt-14">
@@ -39,11 +39,11 @@ const aboutImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/about.jpg`
           :initial="{
             perspective: 800,
             opacity: 0,
-            rotateX: 14
+            rotateX: 14,
           }"
           :visibleOnce="{
             opacity: 1,
-            rotateX: 0
+            rotateX: 0,
           }"
           :duration="1000"
           :delay="200"
@@ -56,7 +56,7 @@ const aboutImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/about.jpg`
               transform: `
             rotateX(${roll * SCALE_FACTOR}deg)
             rotateY(${tilt * SCALE_FACTOR}deg)
-            `
+            `,
             }"
             :src="aboutImage"
           ></v-parallax>

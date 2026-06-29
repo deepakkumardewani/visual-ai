@@ -1,35 +1,35 @@
 <script setup lang="ts">
-import { useUser } from 'vue-clerk'
+import { useUser } from "vue-clerk";
 
-const { user } = useUser()
+const { user } = useUser();
 
-const userInitials = ref('')
-const userImage = ref('')
+const userInitials = ref("");
+const userImage = ref("");
 
 withDefaults(defineProps<{ size?: string }>(), {
-  size: 'small'
-})
+  size: "small",
+});
 
 function getUserInitials() {
-  if (!user.value) return ''
-  if (!user.value.firstName || !user.value.lastName) return ''
-  return user.value?.firstName?.charAt(0) + user.value?.lastName?.charAt(0)
+  if (!user.value) return "";
+  if (!user.value.firstName || !user.value.lastName) return "";
+  return user.value?.firstName?.charAt(0) + user.value?.lastName?.charAt(0);
 }
 
 function updateUserInfo() {
   if (user.value) {
-    userInitials.value = getUserInitials()
-    userImage.value = user.value.imageUrl
+    userInitials.value = getUserInitials();
+    userImage.value = user.value.imageUrl;
   }
 }
 
 watch(
   () => user.value,
   () => {
-    updateUserInfo()
+    updateUserInfo();
   },
-  { immediate: true, deep: true }
-)
+  { immediate: true, deep: true },
+);
 </script>
 <template>
   <v-avatar class="mr-2" :size="size">

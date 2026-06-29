@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref } from "vue";
 
-const accordionOpen = ref<boolean>(false)
+const accordionOpen = ref<boolean>(false);
 
 const props = defineProps<{
-  title: string
-  id: string
-  active?: boolean
-}>()
+  title: string;
+  id: string;
+  active?: boolean;
+}>();
 
 onMounted(() => {
-  accordionOpen.value = props.active
-})
+  accordionOpen.value = props.active;
+});
 </script>
 
 <template>

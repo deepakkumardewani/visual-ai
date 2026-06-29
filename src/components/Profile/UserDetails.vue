@@ -1,85 +1,85 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
+import { storeToRefs } from "pinia";
+import { computed } from "vue";
 
-import { useDialogStore } from '@/stores/dialog'
-import { useUserStore } from '@/stores/user'
+import { useDialogStore } from "@/stores/dialog";
+import { useUserStore } from "@/stores/user";
 
-import Avatar from '@/components/Avatar.vue'
-import DeleteDialog from '@/components/Dialogs/DeleteDialog.vue'
+import Avatar from "@/components/Avatar.vue";
+import DeleteDialog from "@/components/Dialogs/DeleteDialog.vue";
 
-const dialogStore = useDialogStore()
-const userStore = useUserStore()
-const { userDetails, isUpdatingName, isUpdatingUsername } = storeToRefs(userStore)
+const dialogStore = useDialogStore();
+const userStore = useUserStore();
+const { userDetails, isUpdatingName, isUpdatingUsername } = storeToRefs(userStore);
 
-const fullName = ref('')
-const firstName = ref('')
-const lastName = ref('')
-const email = ref('')
-const username = ref('')
-const isEditingName = ref(false)
-const isEditingUsername = ref(false)
-const showNameCheckmark = ref(false)
-const showUsernameCheckmark = ref(false)
+const fullName = ref("");
+const firstName = ref("");
+const lastName = ref("");
+const email = ref("");
+const username = ref("");
+const isEditingName = ref(false);
+const isEditingUsername = ref(false);
+const showNameCheckmark = ref(false);
+const showUsernameCheckmark = ref(false);
 
 const hasNameChanged = computed(() => {
   return (
     firstName.value !== userDetails.value?.firstName ||
     lastName.value !== userDetails.value?.lastName
-  )
-})
+  );
+});
 
 const hasUsernameChanged = computed(() => {
-  return username.value !== userDetails.value?.userName
-})
+  return username.value !== userDetails.value?.userName;
+});
 
 async function updateName() {
   try {
-    await userStore.updateName(firstName.value, lastName.value)
-    isEditingName.value = false
-    showNameCheckmark.value = true
+    await userStore.updateName(firstName.value, lastName.value);
+    isEditingName.value = false;
+    showNameCheckmark.value = true;
     setTimeout(() => {
-      showNameCheckmark.value = false
-    }, 2000)
+      showNameCheckmark.value = false;
+    }, 2000);
   } catch (error) {
-    console.error('Failed to update name:', error)
+    console.error("Failed to update name:", error);
   }
 }
 
 async function updateUsername() {
   try {
-    await userStore.updateUsername(username.value)
-    isEditingUsername.value = false
-    showUsernameCheckmark.value = true
+    await userStore.updateUsername(username.value);
+    isEditingUsername.value = false;
+    showUsernameCheckmark.value = true;
     setTimeout(() => {
-      showUsernameCheckmark.value = false
-    }, 2000)
+      showUsernameCheckmark.value = false;
+    }, 2000);
   } catch (error) {
-    console.error('Failed to update username:', error)
+    console.error("Failed to update username:", error);
   }
 }
 function cancelNameUpdate() {
-  isEditingName.value = false
-  firstName.value = userDetails.value?.firstName ?? ''
-  lastName.value = userDetails.value?.lastName ?? ''
+  isEditingName.value = false;
+  firstName.value = userDetails.value?.firstName ?? "";
+  lastName.value = userDetails.value?.lastName ?? "";
 }
 
 function cancelUsernameUpdate() {
-  isEditingUsername.value = false
-  username.value = userDetails.value?.userName ?? ''
+  isEditingUsername.value = false;
+  username.value = userDetails.value?.userName ?? "";
 }
 
 watch(
   () => userDetails.value,
   () => {
-    fullName.value = userDetails.value?.fullName ?? ''
-    firstName.value = userDetails.value?.firstName ?? ''
-    lastName.value = userDetails.value?.lastName ?? ''
-    email.value = userDetails.value?.email ?? ''
-    username.value = userDetails.value?.userName ?? ''
+    fullName.value = userDetails.value?.fullName ?? "";
+    firstName.value = userDetails.value?.firstName ?? "";
+    lastName.value = userDetails.value?.lastName ?? "";
+    email.value = userDetails.value?.email ?? "";
+    username.value = userDetails.value?.userName ?? "";
   },
-  { immediate: true, deep: true }
-)
+  { immediate: true, deep: true },
+);
 </script>
 <template>
   <div class="tw-flex tw-w-full tw-flex-col tw-items-center tw-justify-center tw-gap-5 tw-mt-4">

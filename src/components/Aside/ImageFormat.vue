@@ -1,40 +1,40 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-import { useAppStore } from '@/stores/app'
-import { useAsideStore } from '@/stores/aside'
-import { useUserStore } from '@/stores/user'
+import { useAppStore } from "@/stores/app";
+import { useAsideStore } from "@/stores/aside";
+import { useUserStore } from "@/stores/user";
 
-import Heading from '@/components/Aside/Heading.vue'
+import Heading from "@/components/Aside/Heading.vue";
 
-import { IMAGE_FORMATS } from '@/utils/constants'
+import { IMAGE_FORMATS } from "@/utils/constants";
 
-const router = useRouter()
-const appStore = useAppStore()
-const userStore = useUserStore()
-const asideStore = useAsideStore()
+const router = useRouter();
+const appStore = useAppStore();
+const userStore = useUserStore();
+const asideStore = useAsideStore();
 
-const { isDark } = storeToRefs(appStore)
-const { isPro } = storeToRefs(userStore)
-const { imageFormat } = storeToRefs(asideStore)
+const { isDark } = storeToRefs(appStore);
+const { isPro } = storeToRefs(userStore);
+const { imageFormat } = storeToRefs(asideStore);
 
-const vSelectLightColor = ref('#9333ea')
-const vSelectDarkColor = ref('#6b21a8')
+const vSelectLightColor = ref("#9333ea");
+const vSelectDarkColor = ref("#6b21a8");
 
 function handleFormatSelected(item: any) {
   if (!isPro.value && item.isPro) {
-    imageFormat.value = IMAGE_FORMATS[0]
-    router.push('/pricing')
+    imageFormat.value = IMAGE_FORMATS[0];
+    router.push("/pricing");
   } else {
-    imageFormat.value = item
+    imageFormat.value = item;
   }
 }
 
 onMounted(() => {
-  imageFormat.value = IMAGE_FORMATS[0]
-})
+  imageFormat.value = IMAGE_FORMATS[0];
+});
 </script>
 <template>
   <Heading title="Format" />

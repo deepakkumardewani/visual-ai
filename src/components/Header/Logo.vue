@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router'
-import { useDisplay } from 'vuetify'
+import { useRoute, useRouter } from "vue-router";
+import { useDisplay } from "vuetify";
 
-const route = useRoute()
-const router = useRouter()
-const { mobile } = useDisplay()
-const logoImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/logo.png`
+const route = useRoute();
+const router = useRouter();
+const { mobile } = useDisplay();
+const logoImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/logo.png`;
 </script>
 <template>
   <div class="tw-cursor-pointer tw-flex tw-gap-3" @click="router.push('/')">

@@ -5,16 +5,16 @@
  */
 // Composables
 // Plugins
-import { registerPlugins } from '@/plugins'
-import { createApp } from 'vue'
+import { registerPlugins } from "@/plugins";
+import { createApp } from "vue";
 
 // Components
-import App from './App.vue'
+import App from "./App.vue";
 
-import '@/style.scss'
+import "@/style.scss";
 
-const app = createApp(App)
+const app = createApp(App);
 
-registerPlugins(app)
+registerPlugins(app);
 
-app.mount('#app')
+app.mount("#app");

@@ -1,65 +1,65 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useUser } from 'vue-clerk'
-import { useRouter } from 'vue-router'
+import { storeToRefs } from "pinia";
+import { useUser } from "vue-clerk";
+import { useRouter } from "vue-router";
 
-import { useAppStore } from '@/stores/app'
-import { useDialogStore } from '@/stores/dialog'
-import { useGenerateStore } from '@/stores/generate'
-import { useUserStore } from '@/stores/user'
+import { useAppStore } from "@/stores/app";
+import { useDialogStore } from "@/stores/dialog";
+import { useGenerateStore } from "@/stores/generate";
+import { useUserStore } from "@/stores/user";
 
-import ImageUpload from '@/components/Aside/ImageUpload.vue'
-import SignupDialog from '@/components/Dialogs/SignupDialog.vue'
+import ImageUpload from "@/components/Aside/ImageUpload.vue";
+import SignupDialog from "@/components/Dialogs/SignupDialog.vue";
 
-const router = useRouter()
-const { isSignedIn } = useUser()
-const dialogStore = useDialogStore()
-const userStore = useUserStore()
-const generateStore = useGenerateStore()
-const appStore = useAppStore()
-const { progressUrl } = storeToRefs(appStore)
-const { isPro, credits, userId } = storeToRefs(userStore)
-const { reviveInProgress } = storeToRefs(generateStore)
+const router = useRouter();
+const { isSignedIn } = useUser();
+const dialogStore = useDialogStore();
+const userStore = useUserStore();
+const generateStore = useGenerateStore();
+const appStore = useAppStore();
+const { progressUrl } = storeToRefs(appStore);
+const { isPro, credits, userId } = storeToRefs(userStore);
+const { reviveInProgress } = storeToRefs(generateStore);
 
-const imageUpload = ref()
+const imageUpload = ref();
 
 async function reviveImage() {
   if (!isSignedIn.value) {
-    dialogStore.showSignup()
-    return
+    dialogStore.showSignup();
+    return;
   }
 
   if (!isPro.value && credits.value < 3) {
-    dialogStore.showLowCredits()
-    return
+    dialogStore.showLowCredits();
+    return;
   }
 
   if (isPro.value && credits.value === 0) {
-    dialogStore.showLowCredits()
-    return
+    dialogStore.showLowCredits();
+    return;
   }
 
   if (isSignedIn.value) {
     const body = {
-      image: imageUpload?.value?.image
-    }
-    generateStore.reviveOldImage(body)
-    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`
-    appStore.reviveOpen()
-    localStorage.setItem('reviveInProgress', 'true')
-    reviveInProgress.value = true
+      image: imageUpload?.value?.image,
+    };
+    generateStore.reviveOldImage(body);
+    progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`;
+    appStore.reviveOpen();
+    localStorage.setItem("reviveInProgress", "true");
+    reviveInProgress.value = true;
   } else {
-    router.push('/signin')
+    router.push("/signin");
   }
 }
 
 onMounted(async () => {
-  const inProgress = JSON.parse(localStorage.getItem('reviveInProgress') as string)
+  const inProgress = JSON.parse(localStorage.getItem("reviveInProgress") as string);
   if (inProgress === true) {
-    reviveInProgress.value = true
-    appStore.reviveOpen()
+    reviveInProgress.value = true;
+    appStore.reviveOpen();
   }
-})
+});
 </script>
 <template>
   <div class="mb-6">

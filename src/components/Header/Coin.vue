@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
-import { useDisplay } from 'vuetify'
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import { useDisplay } from "vuetify";
 
-import { useDialogStore } from '@/stores/dialog'
-import { useUserStore } from '@/stores/user'
+import { useDialogStore } from "@/stores/dialog";
+import { useUserStore } from "@/stores/user";
 
-import AnimatedCounter from '@/components/Header/AnimatedCounter.vue'
+import AnimatedCounter from "@/components/Header/AnimatedCounter.vue";
 
-const userStore = useUserStore()
-const dialogStore = useDialogStore()
-const router = useRouter()
-const { smAndUp } = useDisplay()
-const { credits, isPro, hasJustSubscribed } = storeToRefs(userStore)
+const userStore = useUserStore();
+const dialogStore = useDialogStore();
+const router = useRouter();
+const { smAndUp } = useDisplay();
+const { credits, isPro, hasJustSubscribed } = storeToRefs(userStore);
 </script>
 <template>
   <v-menu :open-on-hover="smAndUp" location="bottom end" offset="5">

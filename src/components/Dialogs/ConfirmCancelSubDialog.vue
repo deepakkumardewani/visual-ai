@@ -1,26 +1,26 @@
 <script setup lang="ts">
 // import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
+import { storeToRefs } from "pinia";
 
-import { useDialogStore } from '@/stores/dialog'
+import { useDialogStore } from "@/stores/dialog";
 
-import { cancelSubscription } from '@/utils/payment'
+import { cancelSubscription } from "@/utils/payment";
 
-const dialogStore = useDialogStore()
-const { showCancelSubscriptionDialog } = storeToRefs(dialogStore)
+const dialogStore = useDialogStore();
+const { showCancelSubscriptionDialog } = storeToRefs(dialogStore);
 
-const loading = ref(false)
+const loading = ref(false);
 const handleConfirm = async () => {
   try {
-    loading.value = true
-    await cancelSubscription()
+    loading.value = true;
+    await cancelSubscription();
   } catch (error) {
-    console.error(error)
+    console.error(error);
   } finally {
-    loading.value = false
-    showCancelSubscriptionDialog.value = false
+    loading.value = false;
+    showCancelSubscriptionDialog.value = false;
   }
-}
+};
 </script>
 
 <template>

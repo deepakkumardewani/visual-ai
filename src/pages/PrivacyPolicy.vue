@@ -292,13 +292,13 @@ a {
   color: #000;
 }
 a:hover,
-a[rel~='nofollow'] {
+a[rel~="nofollow"] {
   text-decoration: underline;
 }
-a[rel~='nofollow'] {
+a[rel~="nofollow"] {
   color: #553df4;
 }
-a[rel~='nofollow']:hover {
+a[rel~="nofollow"]:hover {
   text-decoration: none;
 }
 .visible {

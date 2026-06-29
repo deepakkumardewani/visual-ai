@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
+import { storeToRefs } from "pinia";
 
-import { useAppStore } from '@/stores/app'
-import { useDialogStore } from '@/stores/dialog'
+import { useAppStore } from "@/stores/app";
+import { useDialogStore } from "@/stores/dialog";
 
-import ReferralCode from '@/components/ReferralCode.vue'
+import ReferralCode from "@/components/ReferralCode.vue";
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
 
-const dialogStore = useDialogStore()
-const { referralOfferDialog } = storeToRefs(dialogStore)
+const dialogStore = useDialogStore();
+const { referralOfferDialog } = storeToRefs(dialogStore);
 </script>
 
 <template>

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { storeToRefs } from 'pinia'
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { storeToRefs } from "pinia";
 
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from "@/stores/app";
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
 
 defineProps<{
-  text: string
-  icon?: IconDefinition
-}>()
+  text: string;
+  icon?: IconDefinition;
+}>();
 </script>
 <template>
   <v-chip

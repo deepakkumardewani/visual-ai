@@ -1,38 +1,38 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useDisplay } from 'vuetify'
+import { storeToRefs } from "pinia";
+import { useDisplay } from "vuetify";
 
-import { useAppStore } from '@/stores/app'
-import { useDialogStore } from '@/stores/dialog'
+import { useAppStore } from "@/stores/app";
+import { useDialogStore } from "@/stores/dialog";
 
-const dialogStore = useDialogStore()
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
-const { showProUpgradeDialog } = storeToRefs(dialogStore)
-const { smAndUp } = useDisplay()
+const dialogStore = useDialogStore();
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
+const { showProUpgradeDialog } = storeToRefs(dialogStore);
+const { smAndUp } = useDisplay();
 
 const features = [
   {
-    icon: 'fa-solid fa-bolt',
-    title: 'Priority Processing',
-    description: 'Get faster image generation and processing'
+    icon: "fa-solid fa-bolt",
+    title: "Priority Processing",
+    description: "Get faster image generation and processing",
   },
   {
-    icon: 'fa-solid fa-images',
-    title: 'Higher Quality',
-    description: 'Access to premium image quality settings'
+    icon: "fa-solid fa-images",
+    title: "Higher Quality",
+    description: "Access to premium image quality settings",
   },
   {
-    icon: 'fa-solid fa-download',
-    title: 'Unlimited Downloads',
-    description: 'Download as many images as you need'
+    icon: "fa-solid fa-download",
+    title: "Unlimited Downloads",
+    description: "Download as many images as you need",
   },
   {
-    icon: 'fa-solid fa-credit-card',
-    title: 'Reduced Credit Usage',
-    description: 'Use fewer credits for special operations'
-  }
-]
+    icon: "fa-solid fa-credit-card",
+    title: "Reduced Credit Usage",
+    description: "Use fewer credits for special operations",
+  },
+];
 </script>
 
 <template>
@@ -62,7 +62,7 @@ const features = [
             :key="feature.title"
             :class="[
               'tw-p-4 tw-rounded-lg tw-flex tw-items-center tw-gap-3',
-              isDark ? 'tw-bg-purple-900/50' : 'tw-bg-purple-100'
+              isDark ? 'tw-bg-purple-900/50' : 'tw-bg-purple-100',
             ]"
           >
             <v-avatar

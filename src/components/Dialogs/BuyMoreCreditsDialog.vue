@@ -1,53 +1,53 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { computed, ref, watch } from 'vue'
+import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
 
-import { useAppStore } from '@/stores/app'
-import { useDialogStore } from '@/stores/dialog'
+import { useAppStore } from "@/stores/app";
+import { useDialogStore } from "@/stores/dialog";
 
-import { RAZORPAY_PRODUCTS } from '@/utils/constants'
-import { initiatePayment } from '@/utils/payment'
+import { RAZORPAY_PRODUCTS } from "@/utils/constants";
+import { initiatePayment } from "@/utils/payment";
 
-const dialogStore = useDialogStore()
-const { showBuyCreditsDialog } = storeToRefs(dialogStore)
+const dialogStore = useDialogStore();
+const { showBuyCreditsDialog } = storeToRefs(dialogStore);
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
-const loading = ref(false)
-const price = ref(0)
-const packages = ref(RAZORPAY_PRODUCTS.filter((product) => product.type === 'single'))
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
+const loading = ref(false);
+const price = ref(0);
+const packages = ref(RAZORPAY_PRODUCTS.filter((product) => product.type === "single"));
 
 const ticks = computed(() => {
   return packages.value.reduce(
     (acc, product, index) => {
-      acc[index + 1] = product.credits.toString()
-      return acc
+      acc[index + 1] = product.credits.toString();
+      return acc;
     },
-    {} as Record<number, string>
-  )
-})
+    {} as Record<number, string>,
+  );
+});
 
-const currentPackageIndex = ref(0)
-const currentPackage = computed(() => packages.value[currentPackageIndex.value])
+const currentPackageIndex = ref(0);
+const currentPackage = computed(() => packages.value[currentPackageIndex.value]);
 
 watch(price, (newVal) => {
-  currentPackageIndex.value = newVal - 1
-})
+  currentPackageIndex.value = newVal - 1;
+});
 
 // const getTrackColor = (index: number): string => {
 //   return index <= currentPackageIndex.value ? '#6b21a8' : 'grey'
 // }
 
 const handlePurchase = async () => {
-  loading.value = true
+  loading.value = true;
   try {
-    await initiatePayment(currentPackage.value)
+    await initiatePayment(currentPackage.value);
   } catch (error) {
-    console.error('Purchase failed:', error)
+    console.error("Purchase failed:", error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 </script>
 
 <template>

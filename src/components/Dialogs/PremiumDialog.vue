@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useDisplay } from 'vuetify'
+import { storeToRefs } from "pinia";
+import { useDisplay } from "vuetify";
 
-import { useDialogStore } from '@/stores/dialog'
+import { useDialogStore } from "@/stores/dialog";
 
-const { mobile } = useDisplay()
+const { mobile } = useDisplay();
 
-const dialogStore = useDialogStore()
-const { showPremiumDialog } = storeToRefs(dialogStore)
+const dialogStore = useDialogStore();
+const { showPremiumDialog } = storeToRefs(dialogStore);
 
-const aboutImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/about.jpg`
+const aboutImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/about.jpg`;
 const features = [
   {
-    title: 'AI Image Generator',
-    description: 'Create High Quality Images using Text'
+    title: "AI Image Generator",
+    description: "Create High Quality Images using Text",
   },
   {
-    title: 'Upscale Images',
-    description: 'Upscale Images in High Resolution'
+    title: "Upscale Images",
+    description: "Upscale Images in High Resolution",
   },
   {
-    title: 'Colorize Images',
-    description: 'Put Color back into your Images'
+    title: "Colorize Images",
+    description: "Put Color back into your Images",
   },
   {
-    title: 'Deoldify Images',
-    description: 'Bring your Old photos back to Life'
-  }
-]
+    title: "Deoldify Images",
+    description: "Bring your Old photos back to Life",
+  },
+];
 </script>
 <template>
   <div class="text-center">

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
 
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from "@/stores/user";
 
-const userStore = useUserStore()
-const { payments } = storeToRefs(userStore)
+const userStore = useUserStore();
+const { payments } = storeToRefs(userStore);
 
 // interface IPayment {
 //   transactionId: string
@@ -17,21 +17,21 @@ const { payments } = storeToRefs(userStore)
 //   humanReadableDate: string
 // }
 const headers = [
-  { title: 'Date', value: 'humanReadableDate' },
-  { title: 'Amount', value: 'amount' },
-  { title: 'Status', value: 'status' },
-  { title: 'Payment Method', value: 'paymentMethod' },
-  { title: 'Description', value: 'description' }
-]
+  { title: "Date", value: "humanReadableDate" },
+  { title: "Amount", value: "amount" },
+  { title: "Status", value: "status" },
+  { title: "Payment Method", value: "paymentMethod" },
+  { title: "Description", value: "description" },
+];
 
-const loading = ref(true)
+const loading = ref(true);
 watch(
   payments,
   () => {
-    loading.value = false
+    loading.value = false;
   },
-  { immediate: true }
-)
+  { immediate: true },
+);
 </script>
 
 <template>

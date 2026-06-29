@@ -1,39 +1,39 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useDisplay } from 'vuetify'
-import { VListItem, VListItemSubtitle, VListItemTitle, VSelect } from 'vuetify/components'
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useDisplay } from "vuetify";
+import { VListItem, VListItemSubtitle, VListItemTitle, VSelect } from "vuetify/components";
 
-import { type Mode } from '@/types'
+import { type Mode } from "@/types";
 
-import { useAppStore } from '@/stores/app'
-import { useAsideStore } from '@/stores/aside'
-import { useUserStore } from '@/stores/user'
+import { useAppStore } from "@/stores/app";
+import { useAsideStore } from "@/stores/aside";
+import { useUserStore } from "@/stores/user";
 
-import Heading from '@/components/Aside/Heading.vue'
+import Heading from "@/components/Aside/Heading.vue";
 
-import { FLUX_MODES, MODEL_IDS } from '@/utils/constants'
+import { FLUX_MODES, MODEL_IDS } from "@/utils/constants";
 
-const userStore = useUserStore()
-const router = useRouter()
-const appStore = useAppStore()
+const userStore = useUserStore();
+const router = useRouter();
+const appStore = useAppStore();
 
-const vSelectLightColor = ref('#9333ea')
-const vSelectDarkColor = ref('#6b21a8')
-const { isPro } = storeToRefs(userStore)
-const { isDark } = storeToRefs(appStore)
-const { smAndUp } = useDisplay()
-const asideStore = useAsideStore()
-const { noOfOutputs, mode } = storeToRefs(asideStore)
+const vSelectLightColor = ref("#9333ea");
+const vSelectDarkColor = ref("#6b21a8");
+const { isPro } = storeToRefs(userStore);
+const { isDark } = storeToRefs(appStore);
+const { smAndUp } = useDisplay();
+const asideStore = useAsideStore();
+const { noOfOutputs, mode } = storeToRefs(asideStore);
 function handleSelected(item: Mode) {
   if (!isPro.value && item.isPro) {
-    mode.value = FLUX_MODES[1]
-    router.push('/pricing')
+    mode.value = FLUX_MODES[1];
+    router.push("/pricing");
   } else {
-    mode.value = item
+    mode.value = item;
     if (item.id === MODEL_IDS.FLUX_PRO || item.id === MODEL_IDS.FLUX_1_1_PRO) {
-      noOfOutputs.value = 1
+      noOfOutputs.value = 1;
     }
   }
 }

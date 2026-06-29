@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 
-import { useDialogStore } from '@/stores/dialog'
+import { useDialogStore } from "@/stores/dialog";
 
-import { ImgComparisonSlider } from '@img-comparison-slider/vue'
+import { ImgComparisonSlider } from "@img-comparison-slider/vue";
 
-const router = useRouter()
-const dialogStore = useDialogStore()
-const { signupDialog } = storeToRefs(dialogStore)
+const router = useRouter();
+const dialogStore = useDialogStore();
+const { signupDialog } = storeToRefs(dialogStore);
 
-const aiImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/ai-image.jpg`
-const upscaleImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/upscale.jpg`
-const upscaleImage1 = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/upscale-1.png`
-const colorizeImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/bw.webp`
-const colorizeImage1 = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/bw-1.png`
-const reviveImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/revive.png`
-const reviveImage1 = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/revive-1.png`
+const aiImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/ai-image.jpg`;
+const upscaleImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/upscale.jpg`;
+const upscaleImage1 = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/upscale-1.png`;
+const colorizeImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/bw.webp`;
+const colorizeImage1 = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/bw-1.png`;
+const reviveImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/revive.png`;
+const reviveImage1 = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/revive-1.png`;
 
 const handleSignup = () => {
-  signupDialog.value = false
-  router.push('/signup')
-}
+  signupDialog.value = false;
+  router.push("/signup");
+};
 
 const handleLogin = () => {
-  signupDialog.value = false
-  router.push('/signin')
-}
+  signupDialog.value = false;
+  router.push("/signin");
+};
 </script>
 
 <template>
@@ -180,7 +180,7 @@ const handleLogin = () => {
 }
 
 .v-img::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(

@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useDisplay } from 'vuetify'
+import { ref, watch } from "vue";
+import { useDisplay } from "vuetify";
 
-import { ImgComparisonSlider } from '@img-comparison-slider/vue'
+import { ImgComparisonSlider } from "@img-comparison-slider/vue";
 
 defineProps<{
-  originalImage: string
-  enhancedImage: string
-  inDialog?: boolean
-}>()
+  originalImage: string;
+  enhancedImage: string;
+  inDialog?: boolean;
+}>();
 
-const { mobile } = useDisplay()
-const originalImageLoaded = ref(false)
-const enhancedImageLoaded = ref(false)
-const ready = ref(false)
+const { mobile } = useDisplay();
+const originalImageLoaded = ref(false);
+const enhancedImageLoaded = ref(false);
+const ready = ref(false);
 
 watch([originalImageLoaded, enhancedImageLoaded], ([original, enhanced]) => {
   if (original && enhanced) {
-    ready.value = true
+    ready.value = true;
   }
-})
+});
 </script>
 
 <template>
@@ -33,7 +33,7 @@ watch([originalImageLoaded, enhancedImageLoaded], ([original, enhanced]) => {
             ? 'tw-h-full  tw-w-full'
             : inDialog
               ? 'tw-h-[80vh] tw-w-auto'
-              : 'tw-h-[85vh] tw-w-full'
+              : 'tw-h-[85vh] tw-w-full',
         ]"
         :src="originalImage"
         @load="originalImageLoaded = true"
@@ -49,7 +49,7 @@ watch([originalImageLoaded, enhancedImageLoaded], ([original, enhanced]) => {
             ? 'tw-h-full  tw-w-full'
             : inDialog
               ? 'tw-h-[80vh] tw-w-auto'
-              : 'tw-h-[85vh] tw-w-full'
+              : 'tw-h-[85vh] tw-w-full',
         ]"
         :src="enhancedImage"
         @load="enhancedImageLoaded = true"

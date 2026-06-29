@@ -3,5 +3,5 @@ services:
     build:
       context: .
     ports:
-      - '8080:80' # Internal port mapping
+      - "8080:80" # Internal port mapping
     container_name: vue-app

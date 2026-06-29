@@ -1,48 +1,48 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
-import type { FeatureSelect } from '@/types'
+import type { FeatureSelect } from "@/types";
 
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from "@/stores/app";
 
-import { FEATURES } from '@/utils/constants'
+import { FEATURES } from "@/utils/constants";
 
-const route = useRoute()
-const router = useRouter()
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
+const route = useRoute();
+const router = useRouter();
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
 
-const features = ref<FeatureSelect[]>(FEATURES)
+const features = ref<FeatureSelect[]>(FEATURES);
 
-const feature = ref<FeatureSelect>(features.value[0])
+const feature = ref<FeatureSelect>(features.value[0]);
 
 // Initialize feature based on query param if it exists
 onMounted(() => {
-  if (route.path === '/dashboard') {
-    const featureId = route.query.feature as string
+  if (route.path === "/dashboard") {
+    const featureId = route.query.feature as string;
     if (featureId) {
-      const selectedFeature = features.value.find((f) => f.id === featureId)
+      const selectedFeature = features.value.find((f) => f.id === featureId);
       if (selectedFeature) {
-        feature.value = selectedFeature
-        appStore.setFeature(selectedFeature.id)
+        feature.value = selectedFeature;
+        appStore.setFeature(selectedFeature.id);
       }
     } else {
-      appStore.setFeature(feature.value.id)
+      appStore.setFeature(feature.value.id);
       router.replace({
-        query: { ...route.query, feature: feature.value.id }
-      })
+        query: { ...route.query, feature: feature.value.id },
+      });
     }
   }
-})
+});
 
 function handleSelected(item: FeatureSelect) {
-  appStore.setFeature(item.id)
+  appStore.setFeature(item.id);
   // Update query parameter when feature changes
   router.replace({
-    query: { ...route.query, feature: item.id }
-  })
+    query: { ...route.query, feature: item.id },
+  });
 }
 </script>
 <template>

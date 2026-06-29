@@ -1,94 +1,94 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useDialogStore = defineStore('dialog', () => {
-  const showPricingDialog = ref(false)
-  const showPremiumDialog = ref(false)
-  const showLowCreditsDialog = ref(false)
-  const showImageDialog = ref(false)
-  const showReferralDialog = ref(false)
-  const showCopyReferralDialog = ref(false)
-  const showDeleteDialog = ref(false)
-  const showBuyCreditsDialog = ref(false)
-  const showCancelSubscriptionDialog = ref(false)
-  const showProUpgradeDialog = ref(false)
-  const imageUrl = ref('')
-  const prompt = ref('')
-  const originalImage = ref('')
-  const enhancedImage = ref('')
-  const lowCreditsDialog = ref(false)
-  const signupDialog = ref(false)
-  const referralOfferDialog = ref(false)
+export const useDialogStore = defineStore("dialog", () => {
+  const showPricingDialog = ref(false);
+  const showPremiumDialog = ref(false);
+  const showLowCreditsDialog = ref(false);
+  const showImageDialog = ref(false);
+  const showReferralDialog = ref(false);
+  const showCopyReferralDialog = ref(false);
+  const showDeleteDialog = ref(false);
+  const showBuyCreditsDialog = ref(false);
+  const showCancelSubscriptionDialog = ref(false);
+  const showProUpgradeDialog = ref(false);
+  const imageUrl = ref("");
+  const prompt = ref("");
+  const originalImage = ref("");
+  const enhancedImage = ref("");
+  const lowCreditsDialog = ref(false);
+  const signupDialog = ref(false);
+  const referralOfferDialog = ref(false);
   function showPremium() {
-    showPremiumDialog.value = true
+    showPremiumDialog.value = true;
   }
   function hidePremium() {
-    showPremiumDialog.value = false
+    showPremiumDialog.value = false;
   }
   function showLowCredits() {
-    showLowCreditsDialog.value = true
+    showLowCreditsDialog.value = true;
   }
   function hideLowCredits() {
-    showLowCreditsDialog.value = false
+    showLowCreditsDialog.value = false;
   }
   function showImage() {
-    showImageDialog.value = true
+    showImageDialog.value = true;
   }
   function hideImage() {
-    showImageDialog.value = false
+    showImageDialog.value = false;
   }
   function showReferral() {
-    showReferralDialog.value = true
+    showReferralDialog.value = true;
   }
   function showCopyReferral() {
-    showCopyReferralDialog.value = true
+    showCopyReferralDialog.value = true;
   }
   function showBuyCredits() {
-    showBuyCreditsDialog.value = true
+    showBuyCreditsDialog.value = true;
   }
   function hideBuyCredits() {
-    showBuyCreditsDialog.value = false
+    showBuyCreditsDialog.value = false;
   }
   function hideReferral() {
-    showReferralDialog.value = false
+    showReferralDialog.value = false;
   }
   function hideCopyReferral() {
-    showCopyReferralDialog.value = false
+    showCopyReferralDialog.value = false;
   }
   function showDelete() {
-    showDeleteDialog.value = true
+    showDeleteDialog.value = true;
   }
   function hideDelete() {
-    showDeleteDialog.value = false
+    showDeleteDialog.value = false;
   }
   function showPricing() {
-    showPricingDialog.value = true
+    showPricingDialog.value = true;
   }
   function hidePricing() {
-    showPricingDialog.value = false
+    showPricingDialog.value = false;
   }
   function showSignup() {
-    signupDialog.value = true
+    signupDialog.value = true;
   }
   function hideSignup() {
-    signupDialog.value = false
+    signupDialog.value = false;
   }
   function showCancelSubscription() {
-    showCancelSubscriptionDialog.value = true
+    showCancelSubscriptionDialog.value = true;
   }
   function hideCancelSubscription() {
-    showCancelSubscriptionDialog.value = false
+    showCancelSubscriptionDialog.value = false;
   }
   function showReferralOffer() {
-    referralOfferDialog.value = true
+    referralOfferDialog.value = true;
   }
   function hideReferralOffer() {
-    referralOfferDialog.value = false
+    referralOfferDialog.value = false;
   }
   function showProUpgrade() {
-    showProUpgradeDialog.value = true
+    showProUpgradeDialog.value = true;
   }
   function hideProUpgrade() {
-    showProUpgradeDialog.value = false
+    showProUpgradeDialog.value = false;
   }
 
   return {
@@ -132,6 +132,6 @@ export const useDialogStore = defineStore('dialog', () => {
     showReferralOffer,
     hideReferralOffer,
     showProUpgrade,
-    hideProUpgrade
-  }
-})
+    hideProUpgrade,
+  };
+});

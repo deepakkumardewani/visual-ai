@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
+import { storeToRefs } from "pinia";
+import { useRoute } from "vue-router";
 
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from "@/stores/app";
 
-import Copyright from '@/components/Copyright.vue'
+import Copyright from "@/components/Copyright.vue";
 
-import { FOOTER_LINKS } from '@/utils/constants'
+import { FOOTER_LINKS } from "@/utils/constants";
 
-const route = useRoute()
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
+const route = useRoute();
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
 </script>
 
 <template>

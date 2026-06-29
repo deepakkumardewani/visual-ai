@@ -1,54 +1,54 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { computed, watch } from 'vue'
-import { SignedIn, SignedOut } from 'vue-clerk'
-import { useRoute } from 'vue-router'
-import { useDisplay } from 'vuetify'
+import { storeToRefs } from "pinia";
+import { computed, watch } from "vue";
+import { SignedIn, SignedOut } from "vue-clerk";
+import { useRoute } from "vue-router";
+import { useDisplay } from "vuetify";
 
-import { useAppStore } from '@/stores/app'
-import { useDialogStore } from '@/stores/dialog'
-import { useUserStore } from '@/stores/user'
+import { useAppStore } from "@/stores/app";
+import { useDialogStore } from "@/stores/dialog";
+import { useUserStore } from "@/stores/user";
 
-import CustomButton from '@/components/CustomButton.vue'
-import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue'
-import ProUpgradeDialog from '@/components/Dialogs/ProUpgradeDialog.vue'
-import ReferralOfferDialog from '@/components/Dialogs/ReferralOfferDialog.vue'
-import Coin from '@/components/Header/Coin.vue'
-import FeatureSelect from '@/components/Header/FeatureSelect.vue'
-import Logo from '@/components/Header/Logo.vue'
-import ReferralOffer from '@/components/Header/ReferralOffer.vue'
-import Tabs from '@/components/Header/Tabs.vue'
-import ThemeButton from '@/components/Header/ThemeButton.vue'
-import UserMenu from '@/components/Header/UserMenu.vue'
+import CustomButton from "@/components/CustomButton.vue";
+import BuyMoreCreditsDialog from "@/components/Dialogs/BuyMoreCreditsDialog.vue";
+import ProUpgradeDialog from "@/components/Dialogs/ProUpgradeDialog.vue";
+import ReferralOfferDialog from "@/components/Dialogs/ReferralOfferDialog.vue";
+import Coin from "@/components/Header/Coin.vue";
+import FeatureSelect from "@/components/Header/FeatureSelect.vue";
+import Logo from "@/components/Header/Logo.vue";
+import ReferralOffer from "@/components/Header/ReferralOffer.vue";
+import Tabs from "@/components/Header/Tabs.vue";
+import ThemeButton from "@/components/Header/ThemeButton.vue";
+import UserMenu from "@/components/Header/UserMenu.vue";
 
-const { smAndUp } = useDisplay()
-const userStore = useUserStore()
-const dialogStore = useDialogStore()
-const { isPro } = storeToRefs(userStore)
-const route = useRoute()
-const appStore = useAppStore()
-const { isDark, tab } = storeToRefs(appStore)
+const { smAndUp } = useDisplay();
+const userStore = useUserStore();
+const dialogStore = useDialogStore();
+const { isPro } = storeToRefs(userStore);
+const route = useRoute();
+const appStore = useAppStore();
+const { isDark, tab } = storeToRefs(appStore);
 
 const isThemeButtonVisible = computed(() => {
-  return route.path !== '/privacy' && route.path !== '/terms' && route.path !== '/refund'
-})
+  return route.path !== "/privacy" && route.path !== "/terms" && route.path !== "/refund";
+});
 
 // Function to check if pro upgrade dialog has been shown
 const hasProDialogBeenShown = () => {
-  return localStorage.getItem('proUpgradeShown') === 'true'
-}
+  return localStorage.getItem("proUpgradeShown") === "true";
+};
 
 // Function to mark pro dialog as shown
 const markProDialogAsShown = () => {
-  localStorage.setItem('proUpgradeShown', 'true')
-}
+  localStorage.setItem("proUpgradeShown", "true");
+};
 
 watch(isPro, (newValue) => {
   if (newValue && !hasProDialogBeenShown()) {
-    dialogStore.showProUpgrade()
-    markProDialogAsShown()
+    dialogStore.showProUpgrade();
+    markProDialogAsShown();
   }
-})
+});
 </script>
 <template>
   <div>

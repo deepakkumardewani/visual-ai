@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { faCopy } from '@/plugins/icons'
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { faCopy } from "@/plugins/icons";
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
 
-import { useAppStore } from '@/stores/app'
-import { useUserStore } from '@/stores/user'
+import { useAppStore } from "@/stores/app";
+import { useUserStore } from "@/stores/user";
 
-const userStore = useUserStore()
-const { userDetails } = storeToRefs(userStore)
+const userStore = useUserStore();
+const { userDetails } = storeToRefs(userStore);
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
-const snackbar = ref(false)
-const snackbarTimeout = ref(2000)
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
+const snackbar = ref(false);
+const snackbarTimeout = ref(2000);
 const copyReferralCode = async () => {
   try {
-    await navigator.clipboard.writeText(userDetails.value?.referralCode ?? '')
-    snackbar.value = true
+    await navigator.clipboard.writeText(userDetails.value?.referralCode ?? "");
+    snackbar.value = true;
   } catch (err) {
-    console.error('Failed to copy referral code:', err)
+    console.error("Failed to copy referral code:", err);
   }
-}
+};
 </script>
 
 <template>

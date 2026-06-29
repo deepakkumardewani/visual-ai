@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
+import { storeToRefs } from "pinia";
+import { computed } from "vue";
 
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from "@/stores/app";
 
-const appStore = useAppStore()
-const { tab } = storeToRefs(appStore)
+const appStore = useAppStore();
+const { tab } = storeToRefs(appStore);
 
 const tabs = [
-  { id: 1, name: 'Create' },
-  { id: 2, name: 'History' }
-]
+  { id: 1, name: "Create" },
+  { id: 2, name: "History" },
+];
 
-const activeTabIndex = computed(() => tabs.findIndex((t) => t.id === tab.value))
+const activeTabIndex = computed(() => tabs.findIndex((t) => t.id === tab.value));
 </script>
 
 <template>

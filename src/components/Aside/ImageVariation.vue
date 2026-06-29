@@ -1,56 +1,56 @@
 <script setup lang="ts">
-import { faMinus, faPlus } from '@/plugins/icons'
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { faMinus, faPlus } from "@/plugins/icons";
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-import { type Mode } from '@/types'
+import { type Mode } from "@/types";
 
-import { useAppStore } from '@/stores/app'
-import { useAsideStore } from '@/stores/aside'
-import { useUserStore } from '@/stores/user'
+import { useAppStore } from "@/stores/app";
+import { useAsideStore } from "@/stores/aside";
+import { useUserStore } from "@/stores/user";
 
-import Heading from '@/components/Aside/Heading.vue'
+import Heading from "@/components/Aside/Heading.vue";
 
-import { FLUX_MODES, MODEL_IDS } from '@/utils/constants'
+import { FLUX_MODES, MODEL_IDS } from "@/utils/constants";
 
-const userStore = useUserStore()
-const router = useRouter()
-const asideStore = useAsideStore()
-const appStore = useAppStore()
+const userStore = useUserStore();
+const router = useRouter();
+const asideStore = useAsideStore();
+const appStore = useAppStore();
 
-const { isDark } = storeToRefs(appStore)
-const { isPro } = storeToRefs(userStore)
-const { noOfOutputs } = storeToRefs(asideStore)
-const mode = ref<Mode>(FLUX_MODES[0])
+const { isDark } = storeToRefs(appStore);
+const { isPro } = storeToRefs(userStore);
+const { noOfOutputs } = storeToRefs(asideStore);
+const mode = ref<Mode>(FLUX_MODES[0]);
 
 const disableModifyVariations = computed(() => {
-  return mode.value.id === MODEL_IDS.FLUX_PRO || mode.value.id === MODEL_IDS.FLUX_1_1_PRO
-})
+  return mode.value.id === MODEL_IDS.FLUX_PRO || mode.value.id === MODEL_IDS.FLUX_1_1_PRO;
+});
 
 function handleImageVariations(type: string) {
-  if (type === 'subtract') {
+  if (type === "subtract") {
     if (noOfOutputs.value === 4) {
-      noOfOutputs.value = 2
+      noOfOutputs.value = 2;
     } else if (noOfOutputs.value > 1) {
-      noOfOutputs.value = 1
+      noOfOutputs.value = 1;
     }
   } else {
     if (noOfOutputs.value === 2) {
       if (!isPro.value) {
-        router.push('/pricing')
+        router.push("/pricing");
       } else {
-        noOfOutputs.value = 4
+        noOfOutputs.value = 4;
       }
     } else if (noOfOutputs.value === 1) {
-      noOfOutputs.value = 2
+      noOfOutputs.value = 2;
     }
   }
 }
 
 onMounted(() => {
-  noOfOutputs.value = 1
-})
+  noOfOutputs.value = 1;
+});
 </script>
 <template>
   <Heading title="Images" />

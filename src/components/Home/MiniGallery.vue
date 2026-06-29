@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { faImages } from '@/plugins/icons'
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
-import { ref as vueRef } from 'vue'
-import { useDisplay } from 'vuetify'
+import { faImages } from "@/plugins/icons";
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
+import { ref as vueRef } from "vue";
+import { useDisplay } from "vuetify";
 
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from "@/stores/app";
 
-import Chip from '@/components/Home/Chip.vue'
+import Chip from "@/components/Home/Chip.vue";
 
-import gallery from '@/utils/gallery.json'
+import gallery from "@/utils/gallery.json";
 
 // Get 5 random images from gallery data
-const randomImages = vueRef([...gallery].sort(() => 0.5 - Math.random()).slice(0, 6))
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
-const { xs, smAndUp } = useDisplay()
-const selectedImage = ref(null)
+const randomImages = vueRef([...gallery].sort(() => 0.5 - Math.random()).slice(0, 6));
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
+const { xs, smAndUp } = useDisplay();
+const selectedImage = ref(null);
 
 // Add function to handle image click
 const showImageDetails = (img: any) => {
-  selectedImage.value = img
-}
+  selectedImage.value = img;
+};
 </script>
 
 <template>

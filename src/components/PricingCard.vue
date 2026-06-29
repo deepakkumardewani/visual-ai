@@ -1,43 +1,43 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
+import { storeToRefs } from "pinia";
 
-import { type Plan } from '@/stores/app'
-import { useAppStore } from '@/stores/app'
-import { useUserStore } from '@/stores/user'
+import { type Plan } from "@/stores/app";
+import { useAppStore } from "@/stores/app";
+import { useUserStore } from "@/stores/user";
 
-import { RAZORPAY_PRODUCTS } from '@/utils/constants'
-import { initiatePayment } from '@/utils/payment'
+import { RAZORPAY_PRODUCTS } from "@/utils/constants";
+import { initiatePayment } from "@/utils/payment";
 
 const props = defineProps<{
-  plan: Plan
-}>()
+  plan: Plan;
+}>();
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
-const userStore = useUserStore()
-const { isPro } = storeToRefs(userStore)
-const isLoading = ref(false)
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
+const userStore = useUserStore();
+const { isPro } = storeToRefs(userStore);
+const isLoading = ref(false);
 const cardBackground = computed(() => {
   if (!props.plan.isFree) {
-    return isDark.value ? 'bg-purple-darken-4' : 'bg-purple-lighten-5'
+    return isDark.value ? "bg-purple-darken-4" : "bg-purple-lighten-5";
   }
-  return ''
-})
+  return "";
+});
 
 const priceColor = computed(() => {
-  return isDark.value ? 'text-purple-lighten-2' : 'text-purple-darken-2'
-})
+  return isDark.value ? "text-purple-lighten-2" : "text-purple-darken-2";
+});
 
 async function handleUpgrade() {
   if (!props.plan.isFree) {
     try {
-      isLoading.value = true
-      const product = RAZORPAY_PRODUCTS[4]
-      await initiatePayment(product, true)
+      isLoading.value = true;
+      const product = RAZORPAY_PRODUCTS[4];
+      await initiatePayment(product, true);
     } catch (error) {
-      console.error('Purchase failed:', error)
+      console.error("Purchase failed:", error);
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
 }
@@ -76,7 +76,7 @@ async function handleUpgrade() {
           block
           class="transition-transform hover:scale-102"
         >
-          {{ plan.isFree ? 'Current Plan' : isPro ? 'Subscribed' : 'Upgrade Now' }}
+          {{ plan.isFree ? "Current Plan" : isPro ? "Subscribed" : "Upgrade Now" }}
         </v-btn>
       </div>
 

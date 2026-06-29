@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
-import { useDisplay } from 'vuetify'
+import { storeToRefs } from "pinia";
+import { useRoute } from "vue-router";
+import { useDisplay } from "vuetify";
 
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from "@/stores/app";
 
-import Aside from '@/components/Aside/Aside.vue'
-import Tabs from '@/components/Header/Tabs.vue'
-import History from '@/components/History/History.vue'
-import ResultColumn from '@/components/ResultColumn.vue'
+import Aside from "@/components/Aside/Aside.vue";
+import Tabs from "@/components/Header/Tabs.vue";
+import History from "@/components/History/History.vue";
+import ResultColumn from "@/components/ResultColumn.vue";
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
-const { tab } = storeToRefs(appStore)
-const route = useRoute()
-const { xs } = useDisplay()
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
+const { tab } = storeToRefs(appStore);
+const route = useRoute();
+const { xs } = useDisplay();
 </script>
 <template>
   <div class="bg-asideBg tw-mt-1" v-if="route.path === '/dashboard' && xs">

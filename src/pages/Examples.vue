@@ -1,79 +1,79 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
 
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from "@/stores/app";
 
-import SideBySide from '@/components/SideBySide.vue'
+import SideBySide from "@/components/SideBySide.vue";
 
-const appStore = useAppStore()
-const { isDark } = storeToRefs(appStore)
-const baseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL
-const tab = ref(1)
+const appStore = useAppStore();
+const { isDark } = storeToRefs(appStore);
+const baseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
+const tab = ref(1);
 
 const upscaleExamples = [
   {
     original: `${baseUrl}/examples/upscale/upscale-1.jpg`,
-    upscaled: `${baseUrl}/examples/upscale/upscale-1.1.png`
+    upscaled: `${baseUrl}/examples/upscale/upscale-1.1.png`,
   },
   {
     original: `${baseUrl}/examples/upscale/upscale-2.webp`,
-    upscaled: `${baseUrl}/examples/upscale/upscale-2.2.png`
+    upscaled: `${baseUrl}/examples/upscale/upscale-2.2.png`,
   },
   {
     original: `${baseUrl}/examples/upscale/upscale-3.jpg`,
-    upscaled: `${baseUrl}/examples/upscale/upscale-3.3.png`
+    upscaled: `${baseUrl}/examples/upscale/upscale-3.3.png`,
   },
   {
     original: `${baseUrl}/examples/upscale/upscale-4.jpg`,
-    upscaled: `${baseUrl}/examples/upscale/upscale-4.4.png`
+    upscaled: `${baseUrl}/examples/upscale/upscale-4.4.png`,
   },
   {
     original: `${baseUrl}/examples/upscale/upscale-5.jpg`,
-    upscaled: `${baseUrl}/examples/upscale/upscale-5.5.png`
-  }
-]
+    upscaled: `${baseUrl}/examples/upscale/upscale-5.5.png`,
+  },
+];
 const colorizeExamples = [
   {
     original: `${baseUrl}/examples/colorize/colorize-1.webp`,
-    colorized: `${baseUrl}/examples/colorize/colorize-1.1.png`
+    colorized: `${baseUrl}/examples/colorize/colorize-1.1.png`,
   },
   {
     original: `${baseUrl}/examples/colorize/colorize-2.webp`,
-    colorized: `${baseUrl}/examples/colorize/colorize-2.2.png`
+    colorized: `${baseUrl}/examples/colorize/colorize-2.2.png`,
   },
   {
     original: `${baseUrl}/examples/colorize/colorize-3.webp`,
-    colorized: `${baseUrl}/examples/colorize/colorize-3.3.png`
+    colorized: `${baseUrl}/examples/colorize/colorize-3.3.png`,
   },
   {
     original: `${baseUrl}/examples/colorize/colorize-4.webp`,
-    colorized: `${baseUrl}/examples/colorize/colorize-4.4.png`
+    colorized: `${baseUrl}/examples/colorize/colorize-4.4.png`,
   },
   {
     original: `${baseUrl}/examples/colorize/colorize-5.jpg`,
-    colorized: `${baseUrl}/examples/colorize/colorize-5.5.png`
-  }
-]
+    colorized: `${baseUrl}/examples/colorize/colorize-5.5.png`,
+  },
+];
 
 const reviveExamples = [
   {
     original: `${baseUrl}/examples/revive/revive-1.png`,
-    revived: `${baseUrl}/examples/revive/revive-1.1.png`
+    revived: `${baseUrl}/examples/revive/revive-1.1.png`,
   },
   {
     original: `${baseUrl}/examples/revive/revive-2.jpg`,
-    revived: `${baseUrl}/examples/revive/revive-2.2.png`
+    revived: `${baseUrl}/examples/revive/revive-2.2.png`,
   },
   {
     original: `${baseUrl}/examples/revive/revive-3.png`,
-    revived: `${baseUrl}/examples/revive/revive-3.3.png`
+    revived: `${baseUrl}/examples/revive/revive-3.3.png`,
   },
   {
     original: `${baseUrl}/examples/revive/revive-4.png`,
-    revived: `${baseUrl}/examples/revive/revive-4.4.png`
-  }
-]
+    revived: `${baseUrl}/examples/revive/revive-4.4.png`,
+  },
+];
 </script>
 <template>
   <v-tabs

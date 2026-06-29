@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const features = ref(['Text-To-Image', 'Upscale', 'Colorize', 'Revive'])
+const features = ref(["Text-To-Image", "Upscale", "Colorize", "Revive"]);
 </script>
 <template>
   <div
