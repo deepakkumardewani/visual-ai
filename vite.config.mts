@@ -10,7 +10,6 @@ import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import Vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
-  staged: { "*": "vp check --fix" },
   build: {
     minify: "terser", // Use terser for better minification
     cssCodeSplit: false, // Prevent splitting CSS to reduce overhead

@@ -8,8 +8,7 @@
     "build": "NODE_ENV=production vp build",
     "preview": "vp preview",
     "lint": "vp lint --fix",
-    "check": "vp check",
-    "prepare": "husky"
+    "check": "vp check"
   },
   "dependencies": {
     "@clerk/clerk-js": "^5.14.0",
@@ -41,7 +40,6 @@
     "@vue/test-utils": "^2.4.11",
     "autoprefixer": "^10.4.20",
     "happy-dom": "^20.10.6",
-    "husky": "^9.0.0",
     "pinia": "^2.1.7",
     "postcss": "^8.4.41",
     "sass": "1.77.6",
