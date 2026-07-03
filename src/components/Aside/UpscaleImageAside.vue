@@ -5,6 +5,8 @@ import { computed, onMounted, ref } from "vue";
 import { useUser } from "vue-clerk";
 import { useRouter } from "vue-router";
 
+import type { SegmentedOption } from "@/types/primitives";
+
 import { useAppStore } from "@/stores/app";
 import { useAsideStore } from "@/stores/aside";
 import { useDialogStore } from "@/stores/dialog";
@@ -14,11 +16,11 @@ import { useUserStore } from "@/stores/user";
 import { useLocal } from "@/composables/local";
 
 import Heading from "@/components/Aside/Heading.vue";
-import ImageFormat from "@/components/Aside/ImageFormat.vue";
 import ImageUpload from "@/components/Aside/ImageUpload.vue";
+import SegmentedControl from "@/components/primitives/SegmentedControl.vue";
 import SignupDialog from "@/components/Dialogs/SignupDialog.vue";
 
-import { IMAGE_SIZES } from "@/utils/constants";
+import { IMAGE_FORMATS, IMAGE_SIZES } from "@/utils/constants";
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
@@ -32,6 +34,27 @@ const generateStore = useGenerateStore();
 const { isPro, credits } = storeToRefs(userStore);
 const { upscaleInProgress } = storeToRefs(generateStore);
 const { imageFormat } = storeToRefs(asideStore);
+
+const formatOptions: SegmentedOption<string>[] = IMAGE_FORMATS.map((format) => ({
+  label: format.title,
+  value: format.title,
+}));
+
+const formatValue = computed({
+  get: () => imageFormat.value.title,
+  set: (title: string) => {
+    const item = IMAGE_FORMATS.find((format) => format.title === title);
+    if (!item) return;
+
+    if (!isPro.value && item.isPro) {
+      imageFormat.value = IMAGE_FORMATS[0];
+      router.push("/pricing");
+    } else {
+      imageFormat.value = item;
+    }
+  },
+});
+
 const SCALE = {
   "2X": 2,
   "4X": 4,
@@ -129,7 +152,7 @@ onMounted(async () => {
       </div>
 
       <div class="tw-flex-1">
-        <ImageFormat />
+        <SegmentedControl v-model="formatValue" :options="formatOptions" label="Format" />
       </div>
     </div>
     <!-- <Heading title="Scale" />

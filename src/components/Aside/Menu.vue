@@ -2,10 +2,7 @@
 import { faGear } from "@/plugins/icons";
 import { ref } from "vue";
 
-import AspectRatio from "@/components/Aside/AspectRatio.vue";
-import ImageFormat from "@/components/Aside/ImageFormat.vue";
-import ImageVariation from "@/components/Aside/ImageVariation.vue";
-import OutputQuality from "@/components/Aside/OutputQuality.vue";
+import SettingsCluster from "@/components/Dashboard/ControlRail/SettingsCluster.vue";
 
 const menu = ref(false);
 </script>
@@ -24,26 +21,7 @@ const menu = ref(false);
     </template>
 
     <v-card min-width="400" class="pa-4">
-      <div class="mb-6">
-        <div class="tw-flex tw-shrink-0 tw-gap-4 tw-justify-between">
-          <div class="tw-flex-1">
-            <AspectRatio />
-          </div>
-          <div class="tw-flex-1">
-            <ImageFormat />
-          </div>
-        </div>
-      </div>
-      <div class="mb-6">
-        <div class="tw-flex tw-shrink-0 tw-gap-4 tw-justify-between">
-          <div class="tw-w-1/2">
-            <OutputQuality />
-          </div>
-          <div class="tw-w-1/2">
-            <ImageVariation />
-          </div>
-        </div>
-      </div>
+      <SettingsCluster />
     </v-card>
   </v-menu>
 </template>

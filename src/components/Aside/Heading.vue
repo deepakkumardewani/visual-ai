@@ -7,7 +7,7 @@ defineProps({
 });
 </script>
 <template>
-  <p class="tw-my-2 tw-text-sm tw-font-semibold tw-text-neutral-900 text-heading">
+  <p class="tw-my-2 tw-text-sm tw-font-semibold tw-text-ink text-heading">
     {{ title }}
   </p>
 </template>
