@@ -83,6 +83,15 @@ const routes = [
     name: "examples",
     component: Examples,
   },
+  ...(import.meta.env.DEV
+    ? [
+        {
+          path: "/dev/primitives",
+          name: "dev-primitives",
+          component: () => import("@/pages/PrimitivesPlayground.vue"),
+        },
+      ]
+    : []),
 ];
 
 const router = createRouter({

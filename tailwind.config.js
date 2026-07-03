@@ -17,12 +17,16 @@ export default {
         },
         ink: {
           DEFAULT: "#F0E8DC",
+          primary: "#F0E8DC",
           muted: "#A89888",
           faint: "#6B5E51",
+          "primary-light": "#1C140E",
+          "muted-light": "#7A6B5E",
         },
         accent: {
           DEFAULT: "#C98A5A",
           hover: "#D9996A",
+          subtle: "rgba(201, 138, 90, 0.1)",
         },
         // Gold — two-tier accent system: rare/precious highlight (DESIGN.md §2)
         gold: {
@@ -30,6 +34,14 @@ export default {
           muted: "#9E7D35",
         },
         hairline: "#3A2E22",
+        border: {
+          DEFAULT: "#3A2E22",
+          light: "#D9CFC6",
+        },
+        "canvas-light": "#FAF6F1",
+        "surface-light": {
+          1: "#F2EBE3",
+        },
       },
       fontFamily: {
         display: ['"Young Serif"', "Georgia", "serif"],
@@ -58,6 +70,15 @@ export default {
         chip: "6px",
         card: "12px",
         "card-lg": "20px",
+        sm: "6px",
+        md: "12px",
+        lg: "20px",
+      },
+      transitionDuration: {
+        fast: "150ms",
+        base: "300ms",
+        slow: "600ms",
+        crawl: "1200ms",
       },
       backgroundImage: {
         // Gold-as-material: champagne → deep-gold gradient for text-clip & borders
