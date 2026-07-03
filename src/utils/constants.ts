@@ -8,29 +8,13 @@ import {
   faTag,
 } from "@/plugins/icons";
 
-import {
-  type FeatureSelect,
-  FeatureType,
-  type Mode,
-  type Plan,
-  type RazorpayProduct,
-} from "@/types";
+import { type FeatureSelect, FeatureType, type Plan, type RazorpayProduct } from "@/types";
 
 import generalFAQ from "./generalFAQ.json";
 import pricingFAQ from "./pricingFAQ.json";
 
-export const MODEL_IDS = {
-  FLUX_QUICK: "FLUX_QUICK",
-  FLUX_BASIC: "FLUX_BASIC",
-  FLUX_PRO: "FLUX_PRO",
-  FLUX_1_1_PRO: "FLUX_1_1_PRO",
-  FLUX_REALISM: "FLUX_REALISM",
-  UPSCALE_IMAGE: "UPSCALE_IMAGE",
-  COLORIZE_BASIC: "COLORIZE_BASIC",
-  COLORIZE_ADVANCED: "COLORIZE_ADVANCED",
-  REVIVE: "REVIVE",
-  REMOVE_BACKGROUND: "REMOVE_BACKGROUND",
-};
+export { MODEL_IDS } from "./modelIds";
+export { FLUX_MODES, MODELS } from "./models";
 
 // Pricing FAQs
 export const PRICING_FAQS = pricingFAQ;
@@ -232,46 +216,6 @@ export const ASPECT_RATIOS = [
     name: "Cinematic",
     icon: "$cinematic",
     type: "horizontal",
-  },
-];
-
-// Flux Modes
-export const FLUX_MODES: Mode[] = [
-  {
-    title: "Flux Lightening",
-    id: MODEL_IDS.FLUX_BASIC,
-    description: "Prefers speed over quality. Good prompt adherence.",
-    icon: "$fluxFast",
-    isPro: false,
-  },
-  {
-    title: "Flux Fast",
-    id: MODEL_IDS.FLUX_BASIC,
-    description: "Combines speed with high quality. Great prompt adherence.",
-    icon: "$fluxFast",
-    isPro: false,
-  },
-
-  {
-    title: "Flux Pro",
-    id: MODEL_IDS.FLUX_PRO,
-    description: "State-of-the-art image generation. Top of the line prompt following.",
-    icon: "$fluxPro",
-    isPro: true,
-  },
-  {
-    title: "Flux 1.1 Pro",
-    id: MODEL_IDS.FLUX_1_1_PRO,
-    description: "Faster, better FLUX Pro. Excellent image quality & prompt adherence.",
-    icon: "$fluxPro",
-    isPro: true,
-  },
-  {
-    title: "Flux Realism",
-    id: MODEL_IDS.FLUX_REALISM,
-    description: "Best at ultra realistic photos. Prioritizes details and textures.",
-    icon: "$fluxRealism",
-    isPro: true,
   },
 ];
 

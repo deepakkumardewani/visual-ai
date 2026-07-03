@@ -12,6 +12,7 @@ export interface Plan {
   isFree: boolean;
 }
 
+export type { Model } from "./model";
 export interface Mode {
   title: string;
   id: string;
