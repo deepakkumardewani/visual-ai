@@ -8,7 +8,8 @@
     "build": "NODE_ENV=production vp build",
     "preview": "vp preview",
     "lint": "vp lint --fix",
-    "check": "vp check"
+    "check": "vp check",
+    "test": "vp test run"
   },
   "dependencies": {
     "@clerk/clerk-js": "^5.14.0",

@@ -24,17 +24,18 @@
 
 ## 2. Current state (baseline)
 
-| Area | Today | File |
-| --- | --- | --- |
-| Layout | Vuetify `v-tabs-window`, 1/4 + 3/4 flex split | [`src/pages/Dashboard.vue`](../src/pages/Dashboard.vue) |
-| Sidebar | `Aside` → `AIImageAside` stacks Vuetify controls | [`src/components/Aside/`](../src/components/Aside/) |
-| Model picker | `v-select` labelled **"Mode"**, 5 Flux models | [`src/components/Aside/Mode.vue`](../src/components/Aside/Mode.vue) |
-| Prompt | `v-textarea` + "Ask Visual AI" → random from JSON | [`src/components/Aside/Prompt.vue`](../src/components/Aside/Prompt.vue) |
-| Result canvas | `ResultColumn` — empty when idle | [`src/components/ResultColumn.vue`](../src/components/ResultColumn.vue) |
-| State | Pinia `aside` store holds `mode`, `typingPrompt`, etc. | [`src/stores/aside.ts`](../src/stores/aside.ts) |
-| Catalog | `FLUX_MODES: Mode[]` (`title,id,description,icon,isPro`) | [`src/utils/constants.ts`](../src/utils/constants.ts) |
+| Area          | Today                                                    | File                                                                    |
+| ------------- | -------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Layout        | Vuetify `v-tabs-window`, 1/4 + 3/4 flex split            | [`src/pages/Dashboard.vue`](../src/pages/Dashboard.vue)                 |
+| Sidebar       | `Aside` → `AIImageAside` stacks Vuetify controls         | [`src/components/Aside/`](../src/components/Aside/)                     |
+| Model picker  | `v-select` labelled **"Mode"**, 5 Flux models            | [`src/components/Aside/Mode.vue`](../src/components/Aside/Mode.vue)     |
+| Prompt        | `v-textarea` + "Ask Visual AI" → random from JSON        | [`src/components/Aside/Prompt.vue`](../src/components/Aside/Prompt.vue) |
+| Result canvas | `ResultColumn` — empty when idle                         | [`src/components/ResultColumn.vue`](../src/components/ResultColumn.vue) |
+| State         | Pinia `aside` store holds `mode`, `typingPrompt`, etc.   | [`src/stores/aside.ts`](../src/stores/aside.ts)                         |
+| Catalog       | `FLUX_MODES: Mode[]` (`title,id,description,icon,isPro`) | [`src/utils/constants.ts`](../src/utils/constants.ts)                   |
 
 **Behavior that MUST be preserved** (redesign is presentational, not functional):
+
 - Generate flow in `AIImageAside.generateImage()` — job UUID, `ImageBody` shape, credit/signup gating, progress URL.
 - Premium gating: selecting an `isPro` model as a non-pro user redirects to `/pricing`.
 - `FLUX_PRO` / `FLUX_1_1_PRO` force `noOfOutputs = 1`.
@@ -59,17 +60,20 @@ Reuse the **existing** [`DESIGN.md`](../DESIGN.md) tokens — do not invent a ne
 ## 4. Functional requirements
 
 ### FR-1 — Layout & shell
+
 - Custom two-column generator: left **control rail**, right **canvas/result**. No `v-tabs-window`, `v-divider`, `v-select`, `v-textarea`, `v-btn` in the Dashboard tree.
 - Dark canvas background; control rail as an elevated `surface-1` panel with hairline borders.
 - Responsive: rail collapses above canvas on mobile (`< sm`); preserves the existing mobile tab bar behavior.
 - Clear visual hierarchy: prompt is the hero of the rail, then model, then secondary settings grouped.
 
 ### FR-2 — Sidebar / control rail
+
 - Rebuild `AIImageAside` sections as custom components: prompt, model picker, and a grouped "settings" cluster (aspect ratio, format, quality, variations).
 - Group secondary settings into a compact, scannable block (chips/segmented controls) instead of stacked full-width Vuetify fields — closer to Leonardo's settings panel.
 - Generate button: primary CTA with gold glow (single per-viewport gold moment), disabled when prompt empty or loading, loading state with progress feedback.
 
 ### FR-3 — Model picker (renamed "Mode" → "Model")
+
 - Custom dropdown/popover, **not** `v-select`. Label reads **"Model"** everywhere user-facing.
 - Each row shows: **provider icon**, **model name**, **one-line description specific to that model**, **tier badge** (Budget / Standard / Premium), and optionally price/best-at.
 - Grouped by provider or tier (like Krea's "Featured / All models" and Creen's provider list).
@@ -78,17 +82,20 @@ Reuse the **existing** [`DESIGN.md`](../DESIGN.md) tokens — do not invent a ne
 - Preserve premium gating + `noOfOutputs` side effects on select.
 
 ### FR-4 — AI-assisted prompt box
+
 - Custom textarea (no `v-textarea`) with an **AI actions** affordance (sparkle button/menu) modeled on Leonardo: **Improve Prompt**, **New Random Prompt**, **Describe with image** (upload → describe).
 - Keep the existing local "random prompt from JSON" working as the offline fallback behind **New Random Prompt**.
 - AI actions (Improve / Describe) call **placeholder async handlers** with realistic loading/streaming affordance; leave a clean, typed integration seam for the real API later. No real API calls.
 - Retain the typewriter reveal feel; keep two-way bind to `typingPrompt`.
 
 ### FR-5 — Premium-model treatment (subtle)
+
 - When the selected model is `tier: premium`, apply a **subtle, restrained** shift: e.g. a thin gold gradient hairline on the model chip, a small gem/gold accent, or the CTA accent warming to gold. **One** cue, not many.
 - Must never read as loud/tacky (no glowing borders everywhere, no "PREMIUM!!" badges). Non-premium selection returns to the ambient amber baseline.
 - Respect reduced-motion (cue may be static).
 
 ### FR-6 — Community generations (idle-canvas inspiration)
+
 - Show a **community feed** in the result canvas **empty state** (before the user has generated anything), replaced by the user's results once they generate.
 - Masonry/grid of community images with author + like count (Leonardo-style), each with a **Remix** action that loads that item's prompt back into the prompt box.
 - Data via a **placeholder/mock source** (typed) — not a real API, not a new route.
@@ -103,15 +110,15 @@ Extend the FE model catalog to carry the richer `MODELS_COMPARISON.md` content. 
 ```ts
 interface Model {
   title: string;
-  id: string;              // MODEL_IDS key (keep existing ids working)
+  id: string; // MODEL_IDS key (keep existing ids working)
   provider: "openai" | "google" | "bfl" | "bytedance" | "xai" | "pruna" | "zimage";
-  description: string;     // model-specific, from MODELS_COMPARISON §5
-  bestAt?: string;         // short strength line
+  description: string; // model-specific, from MODELS_COMPARISON §5
+  bestAt?: string; // short strength line
   tier: "budget" | "standard" | "premium";
-  pricePerImage?: number;  // typical $/img
-  iconUrl?: string;        // real logo if sourced
-  icon?: string;           // existing glyph token / lettermark fallback
-  isPro: boolean;          // derive from tier === "premium"
+  pricePerImage?: number; // typical $/img
+  iconUrl?: string; // real logo if sourced
+  icon?: string; // existing glyph token / lettermark fallback
+  isPro: boolean; // derive from tier === "premium"
 }
 ```
 

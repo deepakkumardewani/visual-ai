@@ -210,9 +210,11 @@ export const useAppStore = defineStore("app", () => {
   });
 
   watch(isDark, (newVal) => {
-    newVal
-      ? document.documentElement.classList.add("tw-dark")
-      : document.documentElement.classList.remove("tw-dark");
+    if (newVal) {
+      document.documentElement.classList.add("tw-dark");
+    } else {
+      document.documentElement.classList.remove("tw-dark");
+    }
   });
   return {
     setFeature,
