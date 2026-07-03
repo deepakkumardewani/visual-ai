@@ -5,54 +5,47 @@ import { useDisplay } from "vuetify";
 
 import { useAppStore } from "@/stores/app";
 
-import Aside from "@/components/Aside/Aside.vue";
+import BuyMoreCreditsDialog from "@/components/Dialogs/BuyMoreCreditsDialog.vue";
+import LowCreditsDialog from "@/components/Dialogs/LowCreditsDialog.vue";
+import ControlRail from "@/components/Dashboard/ControlRail/ControlRail.vue";
+import DashboardShell from "@/components/Dashboard/DashboardShell.vue";
+import ResultCanvas from "@/components/Dashboard/Canvas/ResultCanvas.vue";
 import Tabs from "@/components/Header/Tabs.vue";
 import History from "@/components/History/History.vue";
-import ResultColumn from "@/components/ResultColumn.vue";
 
 const appStore = useAppStore();
-const { isDark } = storeToRefs(appStore);
 const { tab } = storeToRefs(appStore);
 const route = useRoute();
 const { xs } = useDisplay();
 </script>
+
 <template>
-  <div class="bg-asideBg tw-mt-1" v-if="route.path === '/dashboard' && xs">
+  <div
+    v-if="route.path === '/dashboard' && xs"
+    data-testid="dashboard-mobile-tabs"
+    class="bg-asideBg tw-mt-1"
+  >
     <Tabs />
-    <v-divider />
   </div>
-  <v-tabs-window v-model="tab" :class="isDark ? 'tw-bg-black' : 'tw-bg-white'">
-    <v-tabs-window-item :value="1" :transition="false" :reverse-transition="false">
-      <div class="sm:tw-flex tw-h-screen dashboard">
-        <div class="tw-w-full sm:tw-w-1/4 tw-p-1 tw-pb-2">
-          <Aside />
-        </div>
 
-        <div class="tw-w-full sm:tw-w-3/4 tw-h-full tw-overflow-y-auto tw-p-1 tw-pb-2 no-scrollbar">
-          <ResultColumn />
-        </div>
-      </div>
-    </v-tabs-window-item>
-    <v-tabs-window-item
-      :value="2"
-      :transition="false"
-      :reverse-transition="false"
-      class="tw-h-[calc(100vh-60px)] tw-overflow-y-auto no-scrollbar"
-    >
-      <History />
-    </v-tabs-window-item>
-  </v-tabs-window>
+  <div v-show="tab === 1" data-testid="dashboard-generate-panel">
+    <DashboardShell>
+      <template #rail>
+        <ControlRail />
+        <BuyMoreCreditsDialog />
+        <LowCreditsDialog />
+      </template>
+      <template #canvas>
+        <ResultCanvas />
+      </template>
+    </DashboardShell>
+  </div>
+
+  <div
+    v-show="tab === 2"
+    data-testid="dashboard-history-panel"
+    class="tw-h-[calc(100vh-60px)] tw-overflow-y-auto no-scrollbar"
+  >
+    <History />
+  </div>
 </template>
-
-<style scoped lang="scss">
-.dashboard {
-  max-height: calc(100vh - 60px) !important;
-}
-:deep(.v-skeleton-loader) {
-  height: 100%;
-  width: 100%;
-  .v-skeleton-loader__image {
-    height: 100%;
-  }
-}
-</style>

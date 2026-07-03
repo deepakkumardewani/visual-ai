@@ -10,6 +10,12 @@ import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import Vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
+  test: {
+    environment: "happy-dom",
+    globals: true,
+    include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    setupFiles: ["src/test/setup.ts"],
+  },
   build: {
     minify: "terser", // Use terser for better minification
     cssCodeSplit: false, // Prevent splitting CSS to reduce overhead
@@ -23,9 +29,17 @@ export default defineConfig({
     cssMinify: true, // Enable CSS minification
     rollupOptions: {
       output: {
-        manualChunks: {
-          "vue-vendor": ["vue", "vue-router", "pinia"],
-          vuetify: ["vuetify"],
+        manualChunks(id) {
+          if (
+            id.includes("node_modules/vue/") ||
+            id.includes("node_modules/vue-router") ||
+            id.includes("node_modules/pinia")
+          ) {
+            return "vue-vendor";
+          }
+          if (id.includes("node_modules/vuetify")) {
+            return "vuetify";
+          }
         },
         // Optimize chunk names
         chunkFileNames: "assets/js/[name]-[hash].js",
