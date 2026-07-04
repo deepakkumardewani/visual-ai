@@ -16,18 +16,15 @@ creditsRoute.post("/credits", async (req: Request, res: Response) => {
     }
 })
 
-creditsRoute.get(
-    "/credits/daily/update",
-    async (req: Request, res: Response) => {
-        try {
-            const { userId } = req.body
-            await updateFreeUserCredits(userId)
-            return res.status(200).send("success")
-        } catch (error) {
-            return res.status(500).send(error)
-        }
-    },
-)
+creditsRoute.get("/credits/daily/update", async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.body
+        await updateFreeUserCredits(userId)
+        return res.status(200).send("success")
+    } catch (error) {
+        return res.status(500).send(error)
+    }
+})
 
 const updateFreeUserCredits = async (userId: string) => {
     const filter = { userId }

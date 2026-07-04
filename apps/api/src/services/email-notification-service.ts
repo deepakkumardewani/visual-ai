@@ -41,20 +41,16 @@ export class EmailNotificationService {
             <ul>
         `
 
-        Object.entries(healthStatus.services).forEach(
-            ([serviceName, status]) => {
-                const icon = status.status === "healthy" ? "✅" : "❌"
-                const responseTime = status.responseTime
-                    ? ` (${status.responseTime}ms)`
-                    : ""
-                html += `<li>${icon} <strong>${serviceName.toUpperCase()}:</strong> ${status.status}${responseTime}`
+        Object.entries(healthStatus.services).forEach(([serviceName, status]) => {
+            const icon = status.status === "healthy" ? "✅" : "❌"
+            const responseTime = status.responseTime ? ` (${status.responseTime}ms)` : ""
+            html += `<li>${icon} <strong>${serviceName.toUpperCase()}:</strong> ${status.status}${responseTime}`
 
-                if (status.error) {
-                    html += `<br/>&nbsp;&nbsp;&nbsp;&nbsp;Error: ${status.error}`
-                }
-                html += `</li>`
-            },
-        )
+            if (status.error) {
+                html += `<br/>&nbsp;&nbsp;&nbsp;&nbsp;Error: ${status.error}`
+            }
+            html += `</li>`
+        })
 
         html += `
             </ul>
@@ -76,9 +72,7 @@ export class EmailNotificationService {
         return html
     }
 
-    public async sendHealthCheckFailureNotification(
-        healthStatus: HealthStatus,
-    ): Promise<void> {
+    public async sendHealthCheckFailureNotification(healthStatus: HealthStatus): Promise<void> {
         try {
             const mailOptions = {
                 from: process.env.EMAIL_USER,

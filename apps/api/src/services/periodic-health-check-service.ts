@@ -16,8 +16,7 @@ export class PeriodicHealthCheckService {
         // Run health check every 5 minutes
         cron.schedule("*/5 * * * *", async () => {
             try {
-                const currentHealthStatus =
-                    await healthCheckService.performHealthCheck()
+                const currentHealthStatus = await healthCheckService.performHealthCheck()
 
                 console.log(
                     `Health check completed: ${currentHealthStatus.status} at ${currentHealthStatus.timestamp.toISOString()}`,

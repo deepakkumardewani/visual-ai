@@ -7,9 +7,7 @@ import { ClerkUserEvent } from "../types"
 export const deleteCloudinaryUserData = async (userId: string) => {
     console.log("deleteCloudinaryUserData", userId)
     try {
-        const result = await cloudinary.v2.api.delete_resources_by_prefix(
-            `${userId}/`,
-        )
+        const result = await cloudinary.v2.api.delete_resources_by_prefix(`${userId}/`)
         console.log("cloudinary result======", result)
     } catch (error) {
         console.log(error)
@@ -77,11 +75,7 @@ export const signUpHandler = async (evt: ClerkUserEvent): Promise<void> => {
 /**
  * Generates a username based on available user data
  */
-export const generateUsername = (
-    id: string,
-    firstName?: string,
-    lastName?: string,
-): string => {
+export const generateUsername = (id: string, firstName?: string, lastName?: string): string => {
     if (firstName && lastName) {
         return `${firstName.toLowerCase()}_${lastName.toLowerCase()}_${id.toLowerCase().slice(-6)}`
     }

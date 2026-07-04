@@ -86,9 +86,7 @@ export class HealthCheckService {
             nodejs: nodeStatus,
         }
 
-        const isHealthy = Object.values(services).every(
-            (service) => service.status === "healthy",
-        )
+        const isHealthy = Object.values(services).every((service) => service.status === "healthy")
 
         const errors = Object.values(services)
             .filter((service) => service.error)

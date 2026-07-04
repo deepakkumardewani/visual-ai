@@ -9,12 +9,7 @@ export class RedisService {
     }
 
     async setStatus(jobId: string, status: JobStatus): Promise<void> {
-        await redisClient.set(
-            this.getKey(jobId),
-            JSON.stringify(status),
-            "EX",
-            this.JOB_EXPIRY,
-        )
+        await redisClient.set(this.getKey(jobId), JSON.stringify(status), "EX", this.JOB_EXPIRY)
     }
 
     async getStatus(jobId: string): Promise<JobStatus | null> {

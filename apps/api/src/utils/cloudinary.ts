@@ -85,8 +85,7 @@ export async function uploadToCloudinary(data: any) {
             if (imageId) {
                 const updateOperations = image.images.map((img, index) => ({
                     [`history.$.images.${index}.aiImageUrl`]: img.aiImageUrl,
-                    [`history.$.images.${index}.aiImagePublicId`]:
-                        img.aiImagePublicId,
+                    [`history.$.images.${index}.aiImagePublicId`]: img.aiImagePublicId,
                 }))
 
                 const mergedUpdates = updateOperations.reduce(
@@ -115,15 +114,8 @@ export async function uploadToCloudinary(data: any) {
                 folder: `${basePath}/${type}`,
             })
 
-            const {
-                secure_url,
-                public_id,
-                width,
-                height,
-                format,
-                bytes,
-                original_filename,
-            } = result
+            const { secure_url, public_id, width, height, format, bytes, original_filename } =
+                result
             image = {
                 userId,
                 prompt,
@@ -158,18 +150,13 @@ export async function uploadToCloudinary(data: any) {
                     {
                         $set: {
                             "history.$.images.0.aiImageUrl": secure_url,
-                            "history.$.images.0.aiImagePublicId":
-                                result.public_id,
+                            "history.$.images.0.aiImagePublicId": result.public_id,
                             "history.$.images.0.aspectRatio": aspectRatio,
                         },
                     },
                 )
             }
-            if (
-                data.type === "upscale" ||
-                data.type === "colorize" ||
-                data.type === "revive"
-            ) {
+            if (data.type === "upscale" || data.type === "colorize" || data.type === "revive") {
                 if (image.images[0]) {
                     image.images[0].originalImageUrl = data.original
                     image.images[0].enhancedImageUrl = secure_url
@@ -183,14 +170,10 @@ export async function uploadToCloudinary(data: any) {
                     },
                     {
                         $set: {
-                            "history.$.images.0.originalImageUrl":
-                                data.original,
-                            "history.$.images.0.enhancedImageUrl":
-                                result.secure_url,
-                            "history.$.images.0.originalPublicId":
-                                originalPublicId,
-                            "history.$.images.0.enhancedPublicId":
-                                result.public_id,
+                            "history.$.images.0.originalImageUrl": data.original,
+                            "history.$.images.0.enhancedImageUrl": result.secure_url,
+                            "history.$.images.0.originalPublicId": originalPublicId,
+                            "history.$.images.0.enhancedPublicId": result.public_id,
                             "history.$.images.0.aspectRatio": aspectRatio,
                         },
                     },

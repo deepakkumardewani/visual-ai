@@ -56,13 +56,9 @@ export async function processImage(body: Body): Promise<void> {
     }
 
     try {
-        const output = (await replicate.run(
-            model,
-            { input },
-            (prediction: Prediction) => {
-                console.log("Image Progress:", prediction.status)
-            },
-        )) as string[] | string
+        const output = (await replicate.run(model, { input }, (prediction: Prediction) => {
+            console.log("Image Progress:", prediction.status)
+        })) as string[] | string
 
         if (output) {
             const obj = {
@@ -76,10 +72,7 @@ export async function processImage(body: Body): Promise<void> {
             const image = await getImageObject(obj)
             const newImage = await storeImageInDB(image, userId)
             const creditsToDeduct = 1
-            const credits = await updateAndGetUserCredits(
-                userId,
-                creditsToDeduct,
-            )
+            const credits = await updateAndGetUserCredits(userId, creditsToDeduct)
 
             await jobStatusService.setStatus(jobId, {
                 status: "processing",
@@ -87,11 +80,7 @@ export async function processImage(body: Body): Promise<void> {
                 userCreditsRemaining: credits,
             })
 
-            const imgUrl = Array.isArray(output)
-                ? output.length > 1
-                    ? output
-                    : output[0]
-                : output
+            const imgUrl = Array.isArray(output) ? (output.length > 1 ? output : output[0]) : output
             const data = {
                 type: FeatureType.IMAGE,
                 imageUrl: imgUrl,
@@ -119,15 +108,7 @@ export async function processImage(body: Body): Promise<void> {
 
 export async function processUpscale(props: Props): Promise<void> {
     const { body, filePath, fileName } = props
-    const {
-        userId,
-        jobId,
-        prompt,
-        creativity,
-        scale,
-        negativePrompt,
-        outputFormat,
-    } = body
+    const { userId, jobId, prompt, creativity, scale, negativePrompt, outputFormat } = body
     try {
         const defaultPrompt =
             "masterpiece, best quality, highres, <lora:more_details:0.5> <lora:SDXLrender_v2.0:1>"
@@ -139,21 +120,14 @@ export async function processUpscale(props: Props): Promise<void> {
             prompt: prompt !== "" ? prompt || "" : defaultPrompt,
             creativity: Number(creativity),
             scale_factor: Number(scale),
-            negative_prompt:
-                negativePrompt !== ""
-                    ? negativePrompt || ""
-                    : defaultNegativePrompt,
+            negative_prompt: negativePrompt !== "" ? negativePrompt || "" : defaultNegativePrompt,
             output_format: outputFormat || "",
         }
 
         const model = MODEL_IDS.UPSCALE_IMAGE as ModelType
-        const output = (await replicate.run(
-            model,
-            { input },
-            (prediction: Prediction) => {
-                console.log("Upscale Progress:", prediction.status)
-            },
-        )) as string[]
+        const output = (await replicate.run(model, { input }, (prediction: Prediction) => {
+            console.log("Upscale Progress:", prediction.status)
+        })) as string[]
 
         if (output) {
             const obj = {
@@ -167,10 +141,7 @@ export async function processUpscale(props: Props): Promise<void> {
             const image = await getImageObject(obj)
             const newImage = await storeImageInDB(image, userId)
             const creditsToDeduct = user?.isPro ? 1 : 3
-            const credits = await updateAndGetUserCredits(
-                userId,
-                creditsToDeduct,
-            )
+            const credits = await updateAndGetUserCredits(userId, creditsToDeduct)
             await jobStatusService.setStatus(jobId, {
                 status: "processing",
                 image: newImage,
@@ -208,13 +179,9 @@ export async function processRevive(props: Props): Promise<void> {
         }
 
         const model = MODEL_IDS.REVIVE as ModelType
-        const output = (await replicate.run(
-            model,
-            { input },
-            (prediction: Prediction) => {
-                console.log("Revive Progress:", prediction.status)
-            },
-        )) as string[]
+        const output = (await replicate.run(model, { input }, (prediction: Prediction) => {
+            console.log("Revive Progress:", prediction.status)
+        })) as string[]
 
         if (output) {
             const obj = {
@@ -227,10 +194,7 @@ export async function processRevive(props: Props): Promise<void> {
             const image = await getImageObject(obj)
             const newImage = await storeImageInDB(image, userId)
             const creditsToDeduct = user?.isPro ? 1 : 3
-            const credits = await updateAndGetUserCredits(
-                userId,
-                creditsToDeduct,
-            )
+            const credits = await updateAndGetUserCredits(userId, creditsToDeduct)
 
             await jobStatusService.setStatus(jobId, {
                 status: "processing",
@@ -269,13 +233,9 @@ export async function processColorization(props: Props): Promise<void> {
         }
         const model = MODEL_IDS[modelId as keyof typeof MODEL_IDS] as ModelType
 
-        const output = (await replicate.run(
-            model,
-            { input },
-            (prediction: Prediction) => {
-                console.log("Colorize Progress:", prediction.status)
-            },
-        )) as string[]
+        const output = (await replicate.run(model, { input }, (prediction: Prediction) => {
+            console.log("Colorize Progress:", prediction.status)
+        })) as string[]
 
         if (output) {
             const obj = {
@@ -288,10 +248,7 @@ export async function processColorization(props: Props): Promise<void> {
             const image = await getImageObject(obj)
             const newImage = await storeImageInDB(image, userId)
             const creditsToDeduct = user?.isPro ? 1 : 3
-            const credits = await updateAndGetUserCredits(
-                userId,
-                creditsToDeduct,
-            )
+            const credits = await updateAndGetUserCredits(userId, creditsToDeduct)
 
             await jobStatusService.setStatus(jobId, {
                 status: "processing",
@@ -321,9 +278,7 @@ export async function processColorization(props: Props): Promise<void> {
 }
 async function completeJob(jobId: string, userId: string, imageId?: string) {
     const user = await User.findOne({ userId })
-    const image = user?.history.find(
-        (img) => img._id?.toString() === imageId,
-    ) as IImageObject
+    const image = user?.history.find((img) => img._id?.toString() === imageId) as IImageObject
     await jobStatusService.setStatus(jobId, {
         status: "completed",
         image,
@@ -398,10 +353,7 @@ async function getImageObject(object: any) {
     return image
 }
 
-async function storeImageInDB(
-    image: IImageObject,
-    userId: string,
-): Promise<IImageObject> {
+async function storeImageInDB(image: IImageObject, userId: string): Promise<IImageObject> {
     const newImage = new Image(image)
     const user = await User.findOneAndUpdate(
         { userId },

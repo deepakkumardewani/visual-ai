@@ -12,13 +12,13 @@ import { periodicHealthCheckService } from "./services/periodic-health-check-ser
 import "./utils/cronJobs.js"
 import { webhookRouter } from "./webhook/index.js"
 
-const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
-    process.env
+const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env
 
 const app: Application = express()
 
 const allowedOrigins = [
     "http://localhost:3000",
+    "http://localhost:3005",
     "http://localhost:8080",
     "http://127.0.0.1:8080",
     "https://visual-ai.app",
@@ -34,13 +34,7 @@ const corsOptions = {
         }
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-        "Accept",
-        "Content-Type",
-        "Authorization",
-        "Mode",
-        "X-Requested-With",
-    ],
+    allowedHeaders: ["Accept", "Content-Type", "Authorization", "Mode", "X-Requested-With"],
     credentials: true,
 }
 

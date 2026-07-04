@@ -1,12 +1,12 @@
 {
     "name": "@visual-ai/api",
     "version": "1.0.0",
-    "description": "Visual AI API",
-    "type": "module",
     "private": true,
-    "main": "src/index.ts",
-    "author": "",
+    "description": "Visual AI API",
     "license": "ISC",
+    "author": "",
+    "type": "module",
+    "main": "src/index.ts",
     "scripts": {
         "dev": "tsx watch src/index.ts",
         "build": "tsc",
@@ -53,5 +53,6 @@
     "devDependencies": {
         "@types/cors": "^2.8.12",
         "@types/node-cron": "^3.0.11",
-        "@types/uuid": "^10.0.0"    }
+        "@types/uuid": "^10.0.0"
+    }
 }

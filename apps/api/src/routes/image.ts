@@ -15,9 +15,7 @@ imageRoutes.put("/image/favorite", async (req: Request, res: Response) => {
         if (!user) {
             return res.status(404).json({ message: "User not found" })
         }
-        const imageIndex = user.history.findIndex(
-            (img) => img._id?.toString() === imageId,
-        )
+        const imageIndex = user.history.findIndex((img) => img._id?.toString() === imageId)
 
         if (imageIndex === -1) {
             return res.status(404).json({ message: "Image not found" })
@@ -27,8 +25,7 @@ imageRoutes.put("/image/favorite", async (req: Request, res: Response) => {
             filter,
             {
                 $set: {
-                    [`history.${imageIndex}.isFavorite`]:
-                        !user.history?.[imageIndex]?.isFavorite,
+                    [`history.${imageIndex}.isFavorite`]: !user.history?.[imageIndex]?.isFavorite,
                 },
             },
             { new: true },
@@ -80,38 +77,35 @@ imageRoutes.delete("/image/delete", async (req: Request, res: Response) => {
     }
 })
 
-imageRoutes.delete(
-    "/image/delete/bulk",
-    async (req: Request, res: Response) => {
-        const { publicIds, userId, imageIds } = req.body
-        const filter = { userId }
+imageRoutes.delete("/image/delete/bulk", async (req: Request, res: Response) => {
+    const { publicIds, userId, imageIds } = req.body
+    const filter = { userId }
 
-        try {
-            const user = await User.findOne(filter)
-            if (!user) {
-                return res.status(404).json({ message: "User not found" })
-            }
-
-            await deleteImagesFromCloudinary(publicIds)
-
-            // console.log("imageIds", imageIds)
-            // Remove image from user's history
-            await User.findOneAndUpdate(
-                filter,
-                { $pull: { history: { _id: { $in: imageIds } } } },
-                { new: true },
-            )
-
-            return res.status(200).json({
-                success: true,
-                message: "Images deleted successfully",
-            })
-        } catch (error) {
-            console.error("Error deleting image:", error)
-            return res.status(500).json({ message: "Server error" })
+    try {
+        const user = await User.findOne(filter)
+        if (!user) {
+            return res.status(404).json({ message: "User not found" })
         }
-    },
-)
+
+        await deleteImagesFromCloudinary(publicIds)
+
+        // console.log("imageIds", imageIds)
+        // Remove image from user's history
+        await User.findOneAndUpdate(
+            filter,
+            { $pull: { history: { _id: { $in: imageIds } } } },
+            { new: true },
+        )
+
+        return res.status(200).json({
+            success: true,
+            message: "Images deleted successfully",
+        })
+    } catch (error) {
+        console.error("Error deleting image:", error)
+        return res.status(500).json({ message: "Server error" })
+    }
+})
 
 async function deleteImagesFromCloudinary(publicIds: string[]) {
     try {

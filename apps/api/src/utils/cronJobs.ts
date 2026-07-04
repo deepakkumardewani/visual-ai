@@ -38,10 +38,7 @@ cron.schedule("0 0 1 * *", async () => {
                 {
                     $set: {
                         credits: {
-                            $min: [
-                                MAX_PRO_CREDITS,
-                                { $add: ["$credits", PRO_MONTHLY_CREDITS] },
-                            ],
+                            $min: [MAX_PRO_CREDITS, { $add: ["$credits", PRO_MONTHLY_CREDITS] }],
                         },
                     },
                 },

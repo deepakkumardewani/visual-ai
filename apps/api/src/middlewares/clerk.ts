@@ -23,11 +23,7 @@ export const ClerkExpressRequireAuth = createClerkExpressRequireAuth({
     clerkClient,
 })
 
-export const authenticateProgress = async (
-    req: Request,
-    res: Response,
-    next: Function,
-) => {
+export const authenticateProgress = async (req: Request, res: Response, next: Function) => {
     const token = req.query.token as string
     try {
         await clerkClient.verifyToken(token, {
