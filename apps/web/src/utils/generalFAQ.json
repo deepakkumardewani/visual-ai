@@ -1,0 +1,10 @@
+[
+  {
+    "question": "Can I use Visual AI for free? What benefits do I get from a paid subscription?",
+    "answer": "Absolutely! Visual AI offers a free tier that includes a daily quota of tokens. These can be used for your creative projects within our platform. This free offering doesn't come with an expiry date, so you can use it for as long as you like.<br><br>Our paid subscriptions come with extra benefits: an increased token allowance, faster image generation, and access to premium features. To find out more about our subscription plans, check the pricing page."
+  },
+  {
+    "question": "How quickly can I generate assets using Visual AI?",
+    "answer": "Visual AI is designed for high-speed asset generation. The duration may vary depending on several factors such as:<br><br><b>Image generation parameters:</b> The settings and parameters chosen for an image, including resolution, can impact generation times. For instance, higher resolution images may take slightly longer.<br><br><b>Number of images:</b> Generating multiple images simultaneously might affect the speed of individual asset generation.<br><br><b>User tier:</b> Our tiered structure means priority is given to paid users, which can lead to faster asset generation times for these users.<br><br><b>Despite these variables, we consistently strive to optimise our processes and infrastructure to ensure efficient and rapid asset production for all our users."
+  }
+]
