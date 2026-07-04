@@ -1,0 +1,138 @@
+import { createPinia, setActivePinia } from "pinia";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { ref } from "vue";
+
+const routePathRef = ref("/dashboard");
+const smAndUpRef = ref(true);
+const isProRef = ref(false);
+
+vi.mock("vue-router", () => ({
+  useRoute: () => ({ path: routePathRef.value }),
+  useRouter: () => ({ push: vi.fn() }),
+}));
+
+vi.mock("vuetify", () => ({
+  useDisplay: () => ({ smAndUp: smAndUpRef }),
+  useTheme: () => ({
+    global: { name: { value: "dark" } },
+  }),
+}));
+
+vi.mock("vue-clerk", () => ({
+  SignedIn: { template: "<div data-testid='signed-in'><slot /></div>" },
+  SignedOut: { template: "<div data-testid='signed-out'><slot /></div>" },
+  useUser: () => ({ user: ref(null) }),
+}));
+
+vi.mock("@/components/Header/Logo.vue", () => ({
+  default: { template: '<div data-testid="logo-stub">Logo</div>' },
+}));
+
+vi.mock("@/components/Header/NavTabs.vue", () => ({
+  default: { template: '<nav data-testid="nav-tabs-stub">NavTabs</nav>' },
+}));
+
+vi.mock("@/components/Header/CreditsChip.vue", () => ({
+  default: { template: '<div data-testid="credits-chip-stub">Credits</div>' },
+}));
+
+vi.mock("@/components/Header/UserMenu.vue", () => ({
+  default: { template: '<div data-testid="user-menu-stub">User</div>' },
+}));
+
+vi.mock("@/components/Header/FeatureSelect.vue", () => ({
+  default: { template: '<div data-testid="feature-select-stub">Feature</div>' },
+}));
+
+vi.mock("@/components/Header/ReferralOffer.vue", () => ({
+  default: { template: "<div />" },
+}));
+
+vi.mock("@/components/Header/ThemeButton.vue", () => ({
+  default: { template: "<div />" },
+}));
+
+vi.mock("@/components/CustomButton.vue", () => ({
+  default: { template: "<button>Dashboard</button>" },
+}));
+
+vi.mock("@/components/Dialogs/BuyMoreCreditsDialog.vue", () => ({
+  default: { template: "<div />" },
+}));
+
+vi.mock("@/components/Dialogs/ReferralOfferDialog.vue", () => ({
+  default: { template: "<div />" },
+}));
+
+vi.mock("@/components/Dialogs/ProUpgradeDialog.vue", () => ({
+  default: { template: "<div />" },
+}));
+
+import AppHeaderV2 from "@/components/Header/AppHeaderV2.vue";
+import { useAppStore } from "@/stores/app";
+import { useUserStore } from "@/stores/user";
+
+describe("AppHeaderV2", () => {
+  beforeEach(() => {
+    setActivePinia(createPinia());
+    routePathRef.value = "/dashboard";
+    smAndUpRef.value = true;
+    isProRef.value = false;
+    localStorage.clear();
+  });
+
+  const mountHeader = () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const userStore = useUserStore();
+    userStore.isPro = isProRef.value;
+
+    return mount(AppHeaderV2, {
+      global: {
+        plugins: [pinia],
+      },
+    });
+  };
+
+  it("renders translucent header shell without solid purple bar", () => {
+    const wrapper = mountHeader();
+    const shell = wrapper.get('[data-testid="app-header-v2"]').find("header");
+
+    expect(shell.exists()).toBe(true);
+    expect(shell.classes().join(" ")).toContain("header-v2");
+    expect(shell.classes().join(" ")).not.toContain("tw-bg-purple");
+  });
+
+  it("shows dashboard nav tabs and credits for signed-in dashboard users", () => {
+    const wrapper = mountHeader();
+    const store = useAppStore();
+    store.tab = 1;
+
+    expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="credits-chip-stub"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="header-upgrade-btn"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="feature-select-stub"]').exists()).toBe(true);
+  });
+
+  it("hides upgrade button for pro users", () => {
+    isProRef.value = true;
+    const wrapper = mountHeader();
+
+    expect(wrapper.find('[data-testid="header-upgrade-btn"]').exists()).toBe(false);
+  });
+
+  it("shows sign-in affordance for signed-out dashboard users", () => {
+    const wrapper = mountHeader();
+
+    expect(wrapper.find('[data-testid="signed-out"]').exists()).toBe(true);
+  });
+
+  it("renders logo on non-dashboard pages without nav tabs", () => {
+    routePathRef.value = "/pricing";
+    const wrapper = mountHeader();
+
+    expect(wrapper.find('[data-testid="logo-stub"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(false);
+  });
+});
