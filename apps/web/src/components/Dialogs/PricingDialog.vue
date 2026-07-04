@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 
-import { useDialogStore } from "@/stores/dialog";
+import { useDialogStore } from '@/stores/dialog';
 
-import FAQ from "@/components/FAQ.vue";
+import FAQ from '@/components/FAQ.vue';
 
-import { PRICING_FAQS } from "@/utils/constants";
+import { PRICING_FAQS } from '@/utils/constants';
 
-import Pricing from "@/pages/Pricing.vue";
+import Pricing from '@/pages/Pricing.vue';
 
 const dialogStore = useDialogStore();
 const { showPricingDialog } = storeToRefs(dialogStore);

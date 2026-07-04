@@ -3,26 +3,26 @@ const year = new Date().getFullYear();
 
 const columns = [
   {
-    heading: "Product",
+    heading: 'Product',
     links: [
-      { label: "Gallery", to: "/gallery" },
-      { label: "Examples", to: "/examples" },
-      { label: "Pricing", to: "/pricing" },
+      { label: 'Gallery', to: '/gallery' },
+      { label: 'Examples', to: '/examples' },
+      { label: 'Pricing', to: '/pricing' },
     ],
   },
   {
-    heading: "Resources",
+    heading: 'Resources',
     links: [
-      { label: "FAQ", to: "/faqs" },
-      { label: "Contact", to: "/contact" },
+      { label: 'FAQ', to: '/faqs' },
+      { label: 'Contact', to: '/contact' },
     ],
   },
   {
-    heading: "Legal",
+    heading: 'Legal',
     links: [
-      { label: "Privacy", to: "/privacy" },
-      { label: "Terms", to: "/terms" },
-      { label: "Refund", to: "/refund" },
+      { label: 'Privacy', to: '/privacy' },
+      { label: 'Terms', to: '/terms' },
+      { label: 'Refund', to: '/refund' },
     ],
   },
 ] as const;
@@ -77,9 +77,9 @@ const columns = [
 }
 
 .footer__wordmark {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-size: 1.5rem;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   text-decoration: none;
 
   span {
@@ -105,7 +105,7 @@ const columns = [
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #a89888;
+  color: rgb(var(--tw-ink-muted));
   margin: 0 0 1rem;
 }
 .footer__col ul {
@@ -118,7 +118,7 @@ const columns = [
 }
 .footer__link {
   font-size: 0.95rem;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   text-decoration: none;
   transition: color 0.2s ease;
 

@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { onClickOutside } from "@vueuse/core";
-import { nextTick, ref, watch } from "vue";
+import { onClickOutside } from '@vueuse/core';
+import { nextTick, ref, watch } from 'vue';
 
-import { useFocusTrap } from "@/composables/useFocusTrap";
+import { useFocusTrap } from '@/composables/useFocusTrap';
 
 const props = withDefaults(
   defineProps<{
     open?: boolean;
-    placement?: "bottom-start" | "bottom-end" | "top-start";
+    placement?: 'bottom-start' | 'bottom-end' | 'top-start';
   }>(),
   {
     open: undefined,
-    placement: "bottom-start",
+    placement: 'bottom-start',
   },
 );
 
 const emit = defineEmits<{
-  "update:open": [value: boolean];
+  'update:open': [value: boolean];
 }>();
 
 const internalOpen = ref(false);
@@ -41,20 +41,20 @@ const setOpen = (value: boolean) => {
   if (!isControlled) {
     internalOpen.value = value;
   }
-  emit("update:open", value);
+  emit('update:open', value);
 };
 
 const toggle = () => setOpen(!isOpen.value);
 const close = () => setOpen(false);
 
 const onTriggerKeydown = (event: KeyboardEvent) => {
-  if (event.key === "Enter" || event.key === " ") {
+  if (event.key === 'Enter' || event.key === ' ') {
     event.preventDefault();
     toggle();
-  } else if (event.key === "ArrowDown" && !isOpen.value) {
+  } else if (event.key === 'ArrowDown' && !isOpen.value) {
     event.preventDefault();
     setOpen(true);
-  } else if (event.key === "Escape" && isOpen.value) {
+  } else if (event.key === 'Escape' && isOpen.value) {
     event.preventDefault();
     close();
     triggerElement.value?.focus();
@@ -62,7 +62,7 @@ const onTriggerKeydown = (event: KeyboardEvent) => {
 };
 
 const onPanelKeydown = (event: KeyboardEvent) => {
-  if (event.key === "Escape") {
+  if (event.key === 'Escape') {
     event.preventDefault();
     close();
     triggerElement.value?.focus();
@@ -81,18 +81,18 @@ const onPanelKeydown = (event: KeyboardEvent) => {
 
   const activeIndex = items.indexOf(document.activeElement as HTMLElement);
 
-  if (event.key === "ArrowDown") {
+  if (event.key === 'ArrowDown') {
     event.preventDefault();
     const next = activeIndex === -1 ? 0 : (activeIndex + 1) % items.length;
     items[next]?.focus();
-  } else if (event.key === "ArrowUp") {
+  } else if (event.key === 'ArrowUp') {
     event.preventDefault();
     const next = activeIndex <= 0 ? items.length - 1 : activeIndex - 1;
     items[next]?.focus();
-  } else if (event.key === "Home") {
+  } else if (event.key === 'Home') {
     event.preventDefault();
     items[0]?.focus();
-  } else if (event.key === "End") {
+  } else if (event.key === 'End') {
     event.preventDefault();
     items[items.length - 1]?.focus();
   }
@@ -124,9 +124,9 @@ onClickOutside(
 useFocusTrap(panelRef, isOpen);
 
 const placementClass: Record<string, string> = {
-  "bottom-start": "tw-left-0 tw-top-full tw-mt-2",
-  "bottom-end": "tw-right-0 tw-top-full tw-mt-2",
-  "top-start": "tw-left-0 tw-bottom-full tw-mb-2",
+  'bottom-start': 'tw-left-0 tw-top-full tw-mt-2',
+  'bottom-end': 'tw-right-0 tw-top-full tw-mt-2',
+  'top-start': 'tw-left-0 tw-bottom-full tw-mb-2',
 };
 </script>
 

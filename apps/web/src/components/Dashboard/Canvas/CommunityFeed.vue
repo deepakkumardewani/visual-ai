@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 
-import { useAsideStore } from "@/stores/aside";
+import { useAsideStore } from '@/stores/aside';
 
-import CommunityCard from "@/components/Dashboard/Canvas/CommunityCard.vue";
+import CommunityCard from '@/components/Dashboard/Canvas/CommunityCard.vue';
 
-import { COMMUNITY_FEED } from "@/utils/communityMock";
+import { COMMUNITY_FEED } from '@/utils/communityMock';
 
 const asideStore = useAsideStore();
 const { typingPrompt } = storeToRefs(asideStore);

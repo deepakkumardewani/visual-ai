@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 
-import { useAppStore } from "@/stores/app";
+import { useAppStore } from '@/stores/app';
 
 const appStore = useAppStore();
 const { tab } = storeToRefs(appStore);
 
 const tabs = [
-  { id: 1, name: "Create" },
-  { id: 2, name: "History" },
+  { id: 1, name: 'Create' },
+  { id: 2, name: 'History' },
 ];
 
 const activeTabIndex = computed(() => tabs.findIndex((t) => t.id === tab.value));
@@ -28,7 +28,7 @@ const activeTabIndex = computed(() => tabs.findIndex((t) => t.id === tab.value))
         {{ tabItem.name }}
       </button>
       <div
-        class="slider tw-bg-[#9333ea] dark:tw-bg-[#6b21a8]"
+        class="slider tw-bg-[#C9A84C] dark:tw-bg-[#C98A5A]"
         :style="{ transform: `translateX(${activeTabIndex * 100}%)` }"
       ></div>
     </div>

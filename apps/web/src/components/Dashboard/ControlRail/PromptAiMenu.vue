@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
 
-import { useDashboardMotion } from "@/composables/useDashboardMotion";
-import { useAsideStore } from "@/stores/aside";
+import { useDashboardMotion } from '@/composables/useDashboardMotion';
+import { useAsideStore } from '@/stores/aside';
 
-import Popover from "@/components/primitives/Popover.vue";
+import Popover from '@/components/primitives/Popover.vue';
 
-import { describeImage, improvePrompt, pickRandomPrompt } from "@/utils/promptAi";
+import { describeImage, improvePrompt, pickRandomPrompt } from '@/utils/promptAi';
 
 const props = defineProps<{
   currentPrompt: string;
@@ -15,7 +15,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  "apply-prompt": [text: string];
+  'apply-prompt': [text: string];
   loading: [value: boolean];
 }>();
 
@@ -24,36 +24,36 @@ const { mode } = storeToRefs(asideStore);
 const { interactiveTransition, pressable } = useDashboardMotion();
 
 const isOpen = ref(false);
-const activeAction = ref<"improve" | "random" | "describe" | null>(null);
+const activeAction = ref<'improve' | 'random' | 'describe' | null>(null);
 const fileInputRef = ref<HTMLInputElement | null>(null);
 
 const isLoading = () => activeAction.value !== null;
 
-async function runAction(action: "improve" | "random" | "describe", runner: () => Promise<string>) {
+async function runAction(action: 'improve' | 'random' | 'describe', runner: () => Promise<string>) {
   if (props.disabled || isLoading()) return;
 
   activeAction.value = action;
-  emit("loading", true);
+  emit('loading', true);
 
   try {
     const text = await runner();
-    emit("apply-prompt", text);
+    emit('apply-prompt', text);
     isOpen.value = false;
   } finally {
     activeAction.value = null;
-    emit("loading", false);
+    emit('loading', false);
   }
 }
 
 async function handleImprove() {
-  await runAction("improve", async () => {
+  await runAction('improve', async () => {
     const result = await improvePrompt(props.currentPrompt);
     return result.text;
   });
 }
 
 async function handleRandom() {
-  await runAction("random", async () => {
+  await runAction('random', async () => {
     await new Promise((resolve) => setTimeout(resolve, 300));
     return pickRandomPrompt(mode.value.id);
   });
@@ -67,11 +67,11 @@ function handleDescribeClick() {
 async function handleFileChange(event: Event) {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
-  input.value = "";
+  input.value = '';
 
   if (!file) return;
 
-  await runAction("describe", async () => {
+  await runAction('describe', async () => {
     const result = await describeImage(file);
     return result.text;
   });

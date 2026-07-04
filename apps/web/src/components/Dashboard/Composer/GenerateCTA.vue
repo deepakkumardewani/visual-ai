@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed } from "vue";
-import { v4 as uuidv4 } from "uuid";
-import { useUser } from "vue-clerk";
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
+import { v4 as uuidv4 } from 'uuid';
+import { useUser } from 'vue-clerk';
 
-import { type ImageBody } from "@/types";
+import { type ImageBody } from '@/types';
 
-import { useAppStore } from "@/stores/app";
-import { useAsideStore } from "@/stores/aside";
-import { useDialogStore } from "@/stores/dialog";
-import { useGenerateStore } from "@/stores/generate";
-import { useUserStore } from "@/stores/user";
+import { useAppStore } from '@/stores/app';
+import { useAsideStore } from '@/stores/aside';
+import { useDialogStore } from '@/stores/dialog';
+import { useGenerateStore } from '@/stores/generate';
+import { useUserStore } from '@/stores/user';
 
-import { useDashboardMotion } from "@/composables/useDashboardMotion";
+import { useDashboardMotion } from '@/composables/useDashboardMotion';
 
-import { getGenerationCreditCost } from "@/utils/generationCredits";
+import { getGenerationCreditCost } from '@/utils/generationCredits';
 
 const generateStore = useGenerateStore();
 const appStore = useAppStore();
@@ -31,8 +31,8 @@ const { aspectRatio, noOfOutputs, outputQuality, imageFormat, mode, typingPrompt
 
 const { pressable } = useDashboardMotion();
 
-const isPremium = computed(() => mode.value.tier === "premium");
-const isDisabled = computed(() => typingPrompt.value === "" || isLoading.value);
+const isPremium = computed(() => mode.value.tier === 'premium');
+const isDisabled = computed(() => typingPrompt.value === '' || isLoading.value);
 const creditCost = computed(() => getGenerationCreditCost(noOfOutputs.value));
 
 async function generateImage() {

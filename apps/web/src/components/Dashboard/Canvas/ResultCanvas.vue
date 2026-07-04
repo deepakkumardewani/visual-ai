@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 
-import { FeatureType } from "@/types";
+import { FeatureType } from '@/types';
 
-import { useGenerateStore } from "@/stores/generate";
-import { useUserStore } from "@/stores/user";
+import { useGenerateStore } from '@/stores/generate';
+import { useUserStore } from '@/stores/user';
 
-import CommunityFeed from "@/components/Dashboard/Canvas/CommunityFeed.vue";
-import UserGenerationsGrid from "@/components/Dashboard/Feed/UserGenerationsGrid.vue";
-import ResultColumn from "@/components/ResultColumn.vue";
+import CommunityFeed from '@/components/Dashboard/Canvas/CommunityFeed.vue';
+import UserGenerationsGrid from '@/components/Dashboard/Feed/UserGenerationsGrid.vue';
+import ResultColumn from '@/components/ResultColumn.vue';
 
 const generateStore = useGenerateStore();
 const userStore = useUserStore();

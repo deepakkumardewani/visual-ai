@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { faClockRotateLeft, faExpand, faPalette, faWandMagicSparkles } from "@/plugins/icons";
-import { ref } from "vue";
-import { useDisplay } from "vuetify";
+import { faClockRotateLeft, faExpand, faPalette, faWandMagicSparkles } from '@/plugins/icons';
+import { ref } from 'vue';
+import { useDisplay } from 'vuetify';
 
-import Chip from "@/components/Home/Chip.vue";
+import Chip from '@/components/Home/Chip.vue';
 
 const videoRefs = ref<{ [key: string]: HTMLVideoElement | null }>({});
 
@@ -28,7 +28,7 @@ const playVideo = (ref: string) => {
     // Add a small delay to ensure video is ready
     setTimeout(() => {
       video.play().catch((err) => {
-        console.warn("Video playback failed:", err);
+        console.warn('Video playback failed:', err);
       });
     }, 100);
   }
@@ -36,31 +36,31 @@ const playVideo = (ref: string) => {
 
 const features = ref<Feature[]>([
   {
-    title: "Text-to-Image",
-    description: "Transform your ideas into stunning images with our advanced AI",
-    url: "https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/owrcv8j8uo1p9nhlxeh2.mp4",
-    ref: "textToImageVideo",
+    title: 'Text-to-Image',
+    description: 'Transform your ideas into stunning images with our advanced AI',
+    url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/owrcv8j8uo1p9nhlxeh2.mp4',
+    ref: 'textToImageVideo',
     icon: faWandMagicSparkles,
   },
   {
-    title: "Upscale",
-    description: "Enhance image quality and resolution without losing details",
-    url: "https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/x9zn6em8ylbyqhdn8mki.mp4",
-    ref: "upscaleVideo",
+    title: 'Upscale',
+    description: 'Enhance image quality and resolution without losing details',
+    url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/x9zn6em8ylbyqhdn8mki.mp4',
+    ref: 'upscaleVideo',
     icon: faExpand,
   },
   {
-    title: "Colorize",
-    description: "Bring black and white images to life with vibrant colors",
-    url: "https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915531/videos/yh5jyyyc0zsm5pnuq4k3.mp4",
-    ref: "colorizeVideo",
+    title: 'Colorize',
+    description: 'Bring black and white images to life with vibrant colors',
+    url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915531/videos/yh5jyyyc0zsm5pnuq4k3.mp4',
+    ref: 'colorizeVideo',
     icon: faPalette,
   },
   {
-    title: "Restore",
-    description: "Repair and enhance old or damaged photos",
-    url: "https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/fvxprtyuurm49silhq1i.mp4",
-    ref: "restoreVideo",
+    title: 'Restore',
+    description: 'Repair and enhance old or damaged photos',
+    url: 'https://res.cloudinary.com/ddzuitkzt/video/upload/v1730915532/videos/fvxprtyuurm49silhq1i.mp4',
+    ref: 'restoreVideo',
     icon: faClockRotateLeft,
   },
 ]);
@@ -76,7 +76,7 @@ const features = ref<Feature[]>([
 <template>
   <div id="features" class="tw-relative">
     <div class="tw-text-center tw-mt-8 tw-py-2 tw-top-0 tw-z-10 tw-bg-background">
-      <v-chip v-motion-pop-visible-once class="tw-mb-3 md:tw-mb-4" color="purple-lighten-2" label
+      <v-chip v-motion-pop-visible-once class="tw-mb-3 md:tw-mb-4" color="#C98A5A" label
         >Features</v-chip
       >
       <div

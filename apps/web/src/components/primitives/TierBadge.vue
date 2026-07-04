@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type { ModelTier } from "@/types/primitives";
+import type { ModelTier } from '@/types/primitives';
 
 defineProps<{
   tier: ModelTier;
 }>();
 
 const tierLabel: Record<ModelTier, string> = {
-  budget: "Budget",
-  standard: "Standard",
-  premium: "Premium",
+  budget: 'Budget',
+  standard: 'Standard',
+  premium: 'Premium',
 };
 </script>
 

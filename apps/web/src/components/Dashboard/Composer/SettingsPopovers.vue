@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed, onMounted, watch } from "vue";
-import { useRouter } from "vue-router";
+import { storeToRefs } from 'pinia';
+import { computed, onMounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
-import type { SegmentedOption } from "@/types/primitives";
+import type { SegmentedOption } from '@/types/primitives';
 
-import { useAsideStore } from "@/stores/aside";
-import { useUserStore } from "@/stores/user";
+import { useAsideStore } from '@/stores/aside';
+import { useUserStore } from '@/stores/user';
 
-import ComposerChip from "@/components/Dashboard/Composer/ComposerChip.vue";
-import Popover from "@/components/primitives/Popover.vue";
-import SegmentedControl from "@/components/primitives/SegmentedControl.vue";
-import Stepper from "@/components/primitives/Stepper.vue";
+import ComposerChip from '@/components/Dashboard/Composer/ComposerChip.vue';
+import Popover from '@/components/primitives/Popover.vue';
+import SegmentedControl from '@/components/primitives/SegmentedControl.vue';
+import Stepper from '@/components/primitives/Stepper.vue';
 
-import { ASPECT_RATIOS, IMAGE_FORMATS, MODEL_IDS } from "@/utils/constants";
+import { ASPECT_RATIOS, IMAGE_FORMATS, MODEL_IDS } from '@/utils/constants';
 
 const router = useRouter();
 const asideStore = useAsideStore();
@@ -33,8 +33,8 @@ const formatOptions: SegmentedOption<string>[] = IMAGE_FORMATS.map((format) => (
 }));
 
 const qualityOptions: SegmentedOption<number>[] = [
-  { label: "SD", value: 0 },
-  { label: "HD", value: 1 },
+  { label: 'SD', value: 0 },
+  { label: 'HD', value: 1 },
 ];
 
 const aspectValue = computed({
@@ -45,7 +45,7 @@ const aspectValue = computed({
 
     if (!isPro.value && item.isPro) {
       aspectRatio.value = ASPECT_RATIOS[0];
-      router.push("/pricing");
+      router.push('/pricing');
     } else {
       aspectRatio.value = item;
     }
@@ -60,14 +60,14 @@ const formatValue = computed({
 
     if (!isPro.value && item.isPro) {
       imageFormat.value = IMAGE_FORMATS[0];
-      router.push("/pricing");
+      router.push('/pricing');
     } else {
       imageFormat.value = item;
     }
   },
 });
 
-const qualityLabel = computed(() => (outputQuality.value === 0 ? "SD" : "HD"));
+const qualityLabel = computed(() => (outputQuality.value === 0 ? 'SD' : 'HD'));
 
 const disableCountStepper = computed(
   () => mode.value.id === MODEL_IDS.FLUX_PRO || mode.value.id === MODEL_IDS.FLUX_1_1_PRO,
@@ -83,7 +83,7 @@ function handleCountChange(value: number) {
   }
 
   if (value === 4 && !isPro.value) {
-    router.push("/pricing");
+    router.push('/pricing');
     return;
   }
 
@@ -93,7 +93,7 @@ function handleCountChange(value: number) {
 watch(outputQuality, (newVal) => {
   if (!isPro.value && newVal === 1) {
     outputQuality.value = 0;
-    router.push("/pricing");
+    router.push('/pricing');
   }
 });
 

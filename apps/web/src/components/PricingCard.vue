@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 
-import { type Plan } from "@/stores/app";
-import { useAppStore } from "@/stores/app";
-import { useUserStore } from "@/stores/user";
+import { type Plan } from '@/stores/app';
+import { useAppStore } from '@/stores/app';
+import { useUserStore } from '@/stores/user';
 
-import { RAZORPAY_PRODUCTS } from "@/utils/constants";
-import { initiatePayment } from "@/utils/payment";
+import { RAZORPAY_PRODUCTS } from '@/utils/constants';
+import { initiatePayment } from '@/utils/payment';
 
 const props = defineProps<{
   plan: Plan;
@@ -19,13 +19,13 @@ const { isPro } = storeToRefs(userStore);
 const isLoading = ref(false);
 const cardBackground = computed(() => {
   if (!props.plan.isFree) {
-    return isDark.value ? "bg-purple-darken-4" : "bg-purple-lighten-5";
+    return isDark.value ? 'tw-bg-[#2A2119]' : 'tw-bg-[#F5E6D3]';
   }
-  return "";
+  return '';
 });
 
 const priceColor = computed(() => {
-  return isDark.value ? "text-purple-lighten-2" : "text-purple-darken-2";
+  return isDark.value ? 'tw-text-[#D4B577]' : 'tw-text-[#9E7D35]';
 });
 
 async function handleUpgrade() {
@@ -35,7 +35,7 @@ async function handleUpgrade() {
       const product = RAZORPAY_PRODUCTS[4];
       await initiatePayment(product, true);
     } catch (error) {
-      console.error("Purchase failed:", error);
+      console.error('Purchase failed:', error);
     } finally {
       isLoading.value = false;
     }
@@ -70,13 +70,13 @@ async function handleUpgrade() {
           @click="handleUpgrade"
           :loading="isLoading"
           :disabled="plan.isFree || isPro || isLoading"
-          :color="plan.isFree ? 'grey' : 'purple'"
+          :color="plan.isFree ? 'grey' : '#C9A84C'"
           :variant="plan.isFree ? 'outlined' : 'elevated'"
           size="large"
           block
           class="transition-transform hover:scale-102"
         >
-          {{ plan.isFree ? "Current Plan" : isPro ? "Subscribed" : "Upgrade Now" }}
+          {{ plan.isFree ? 'Current Plan' : isPro ? 'Subscribed' : 'Upgrade Now' }}
         </v-btn>
       </div>
 

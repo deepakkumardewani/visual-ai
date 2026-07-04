@@ -32,15 +32,8 @@
       Motion base
     </div>
 
-    <div
-      class="tw-mt-4 tw-border tw-border-hairline tw-bg-canvas-light tw-p-3 tw-text-ink-primary-light"
-    >
-      Light canvas
-    </div>
-    <div
-      class="tw-mt-2 tw-border tw-border-light tw-bg-surface-light-1 tw-p-3 tw-text-ink-muted-light"
-    >
-      Light surface
+    <div class="tw-mt-4 tw-border tw-border-hairline tw-bg-surface-2 tw-p-3 tw-text-ink-muted">
+      Light surface preview
     </div>
   </div>
 </template>

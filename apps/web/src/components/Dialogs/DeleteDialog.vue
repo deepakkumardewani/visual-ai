@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
-import { useDialogStore } from "@/stores/dialog";
-import { useUserStore } from "@/stores/user";
+import { useDialogStore } from '@/stores/dialog';
+import { useUserStore } from '@/stores/user';
 
-import { useFetch } from "@/composables/useFetch";
+import { useFetch } from '@/composables/useFetch';
 
 const userStore = useUserStore();
 const { userId } = storeToRefs(userStore);
@@ -18,13 +18,13 @@ const { showDeleteDialog } = storeToRefs(dialogStore);
 const agree = ref(false);
 async function deleteAccount() {
   const { error, data } = await useFetch(`/api/users/${userId.value}`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
-      mode: "cors",
+      mode: 'cors',
     },
   });
   if (data) {
-    router.push("/");
+    router.push('/');
   }
   if (error) {
     console.error(error);

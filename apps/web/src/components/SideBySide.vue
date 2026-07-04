@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { useDisplay } from "vuetify";
+import { ref, watch } from 'vue';
+import { useDisplay } from 'vuetify';
 
-import { ImgComparisonSlider } from "@img-comparison-slider/vue";
+import { ImgComparisonSlider } from '@img-comparison-slider/vue';
 
 defineProps<{
   originalImage: string;

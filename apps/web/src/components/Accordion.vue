@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref } from 'vue';
 
 const accordionOpen = ref<boolean>(false);
 
@@ -26,7 +26,7 @@ onMounted(() => {
       >
         <span>{{ title }}</span>
         <svg
-          class="tw-fill-purple-500 tw-shrink-0 tw-ml-8"
+          class="tw-fill-[#C9A84C] tw-shrink-0 tw-ml-8"
           width="16"
           height="16"
           xmlns="http://www.w3.org/2000/svg"

@@ -1,38 +1,40 @@
 <script setup lang="ts">
-import { gsap } from "gsap";
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { gsap } from 'gsap';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 
-import { scrollToSection } from "@/composables/useLenis";
-import { useReducedMotion } from "@/composables/useReducedMotion";
+import { scrollToSection } from '@/composables/useLenis';
+import { useReducedMotion } from '@/composables/useReducedMotion';
 
-import LandingButton from "@/components/Landing/LandingButton.vue";
+import LandingButton from '@/components/Landing/LandingButton.vue';
 
-import { SHOWCASE, STATS } from "@/utils/landing";
+import { SHOWCASE, STATS } from '@/utils/landing';
 
-const HEADLINE_WORDS = ["Studio-grade", "images,", "from", "a", "sentence", "or", "a", "scan."];
+const HEADLINE_WORDS = ['Studio-grade', 'images,', 'from', 'a', 'sentence', 'or', 'a', 'scan.'];
 const feature = SHOWCASE[0];
 const reduced = useReducedMotion();
 const root = ref<HTMLElement | null>(null);
 const visual = ref<HTMLElement | null>(null);
+const auth = useAuthStore();
 let ctx: gsap.Context | null = null;
 
 onMounted(() => {
   if (reduced.value || !root.value) return;
 
   ctx = gsap.context(() => {
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-    tl.from(".hero__eyebrow", { opacity: 0, y: 16, duration: 0.6 })
-      .from(".hero__word", { yPercent: 115, opacity: 0, duration: 0.85, stagger: 0.07 }, "-=0.25")
-      .from(".hero__sub", { opacity: 0, y: 20, duration: 0.6 }, "-=0.45")
-      .from(".hero__cta", { opacity: 0, y: 18, duration: 0.55, stagger: 0.1 }, "-=0.35")
-      .from(".hero__stat", { opacity: 0, y: 18, duration: 0.5, stagger: 0.08 }, "-=0.3")
-      .from(".hero__visual", { opacity: 0, y: 48, scale: 0.96, duration: 1.1 }, "-=1");
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.from('.hero__eyebrow', { opacity: 0, y: 16, duration: 0.6 })
+      .from('.hero__word', { yPercent: 115, opacity: 0, duration: 0.85, stagger: 0.07 }, '-=0.25')
+      .from('.hero__sub', { opacity: 0, y: 20, duration: 0.6 }, '-=0.45')
+      .from('.hero__cta', { opacity: 0, y: 18, duration: 0.55, stagger: 0.1 }, '-=0.35')
+      .from('.hero__stat', { opacity: 0, y: 18, duration: 0.5, stagger: 0.08 }, '-=0.3')
+      .from('.hero__visual', { opacity: 0, y: 48, scale: 0.96, duration: 1.1 }, '-=1');
 
     if (visual.value) {
       gsap.to(visual.value, {
         yPercent: -8,
-        ease: "none",
-        scrollTrigger: { trigger: root.value, start: "top top", end: "bottom top", scrub: true },
+        ease: 'none',
+        scrollTrigger: { trigger: root.value, start: 'top top', end: 'bottom top', scrub: true },
       });
     }
   }, root.value);
@@ -57,9 +59,9 @@ onBeforeUnmount(() => ctx?.revert());
       </p>
 
       <div class="hero__ctas">
-        <LandingButton class="hero__cta" to="/signup" size="lg"
-          >Start free — 20 credits daily</LandingButton
-        >
+        <LandingButton class="hero__cta" :to="auth.isSignedIn ? '/dashboard' : '/signup'" size="lg">
+          {{ auth.isSignedIn ? 'Open Dashboard' : 'Start free — 20 credits daily' }}
+        </LandingButton>
         <LandingButton
           class="hero__cta"
           variant="ghost"
@@ -115,7 +117,7 @@ onBeforeUnmount(() => ctx?.revert());
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #a89888;
+  color: rgb(var(--tw-ink-muted));
   margin-bottom: 1.5rem;
 }
 .hero__dot {
@@ -127,7 +129,7 @@ onBeforeUnmount(() => ctx?.revert());
 }
 
 .hero__title {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-weight: 400;
   font-size: clamp(2.75rem, 6vw, 4.5rem);
   line-height: 1.05;
@@ -152,7 +154,7 @@ onBeforeUnmount(() => ctx?.revert());
   max-width: 34rem;
   font-size: clamp(1.05rem, 1.6vw, 1.25rem);
   line-height: 1.65;
-  color: #a89888;
+  color: rgb(var(--tw-ink-muted));
 }
 
 .hero__ctas {
@@ -175,9 +177,9 @@ onBeforeUnmount(() => ctx?.revert());
   }
 }
 .hero__stat-value {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-size: 1.6rem;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   line-height: 1.1;
 }
 .hero__stat-label {
@@ -214,7 +216,7 @@ onBeforeUnmount(() => ctx?.revert());
   padding: 0.85rem 1rem;
   font-size: 0.82rem;
   line-height: 1.5;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   background: rgba(24, 18, 14, 0.7);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(240, 232, 220, 0.12);

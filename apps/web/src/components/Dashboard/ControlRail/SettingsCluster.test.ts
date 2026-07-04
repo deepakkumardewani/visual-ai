@@ -1,30 +1,30 @@
-import { createPinia, setActivePinia } from "pinia";
-import { mount } from "@vue/test-utils";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { ref } from "vue";
+import { createPinia, setActivePinia } from 'pinia';
+import { mount } from '@vue/test-utils';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ref } from 'vue';
 
 const pushMock = vi.fn();
 
-vi.mock("vue-clerk", () => ({
+vi.mock('vue-clerk', () => ({
   useUser: () => ({ user: ref(null) }),
 }));
 
-vi.mock("vue-router", () => ({
+vi.mock('vue-router', () => ({
   useRouter: () => ({ push: pushMock }),
 }));
 
-import SettingsCluster from "@/components/Dashboard/ControlRail/SettingsCluster.vue";
-import { useAsideStore } from "@/stores/aside";
-import { useUserStore } from "@/stores/user";
-import { ASPECT_RATIOS, FLUX_MODES, IMAGE_FORMATS, MODEL_IDS } from "@/utils/constants";
+import SettingsCluster from '@/components/Dashboard/ControlRail/SettingsCluster.vue';
+import { useAsideStore } from '@/stores/aside';
+import { useUserStore } from '@/stores/user';
+import { ASPECT_RATIOS, FLUX_MODES, IMAGE_FORMATS, MODEL_IDS } from '@/utils/constants';
 
-describe("SettingsCluster", () => {
+describe('SettingsCluster', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
     pushMock.mockClear();
   });
 
-  it("mounts without v-* components and binds store defaults", () => {
+  it('mounts without v-* components and binds store defaults', () => {
     const wrapper = mount(SettingsCluster);
     const store = useAsideStore();
 
@@ -36,7 +36,7 @@ describe("SettingsCluster", () => {
     expect(store.noOfOutputs).toBe(1);
   });
 
-  it("redirects non-pro users selecting pro aspect ratio to pricing", async () => {
+  it('redirects non-pro users selecting pro aspect ratio to pricing', async () => {
     const pinia = createPinia();
     setActivePinia(pinia);
 
@@ -51,13 +51,13 @@ describe("SettingsCluster", () => {
     const proRatio = ASPECT_RATIOS.find((ratio) => ratio.isPro)!;
     const buttons = wrapper.findAll('[role="radio"]');
     const proButton = buttons.find((button) => button.text() === proRatio.title);
-    await proButton!.trigger("click");
+    await proButton!.trigger('click');
 
     expect(store.aspectRatio.title).toBe(ASPECT_RATIOS[0].title);
-    expect(pushMock).toHaveBeenCalledWith("/pricing");
+    expect(pushMock).toHaveBeenCalledWith('/pricing');
   });
 
-  it("allows pro users to select pro format", async () => {
+  it('allows pro users to select pro format', async () => {
     const pinia = createPinia();
     setActivePinia(pinia);
 
@@ -69,14 +69,14 @@ describe("SettingsCluster", () => {
     });
     const store = useAsideStore();
 
-    const pngButton = wrapper.findAll('[role="radio"]').find((button) => button.text() === "PNG");
-    await pngButton!.trigger("click");
+    const pngButton = wrapper.findAll('[role="radio"]').find((button) => button.text() === 'PNG');
+    await pngButton!.trigger('click');
 
-    expect(store.imageFormat.title).toBe("PNG");
+    expect(store.imageFormat.title).toBe('PNG');
     expect(pushMock).not.toHaveBeenCalled();
   });
 
-  it("steps variations 1 → 2 and blocks pro flux models", async () => {
+  it('steps variations 1 → 2 and blocks pro flux models', async () => {
     const pinia = createPinia();
     setActivePinia(pinia);
 
@@ -85,13 +85,13 @@ describe("SettingsCluster", () => {
     });
     const store = useAsideStore();
 
-    await wrapper.get('[aria-label="Increase variations"]').trigger("click");
+    await wrapper.get('[aria-label="Increase variations"]').trigger('click');
     expect(store.noOfOutputs).toBe(2);
 
     store.mode = FLUX_MODES.find((mode) => mode.id === MODEL_IDS.FLUX_PRO)!;
     await wrapper.vm.$nextTick();
 
     const increase = wrapper.get('[aria-label="Increase variations"]');
-    expect(increase.attributes("disabled")).toBeDefined();
+    expect(increase.attributes('disabled')).toBeDefined();
   });
 });

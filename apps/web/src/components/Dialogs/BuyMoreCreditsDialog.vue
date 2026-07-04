@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
+import { storeToRefs } from 'pinia';
+import { computed, ref, watch } from 'vue';
 
-import { useAppStore } from "@/stores/app";
-import { useDialogStore } from "@/stores/dialog";
+import { useAppStore } from '@/stores/app';
+import { useDialogStore } from '@/stores/dialog';
 
-import { RAZORPAY_PRODUCTS } from "@/utils/constants";
-import { initiatePayment } from "@/utils/payment";
+import { RAZORPAY_PRODUCTS } from '@/utils/constants';
+import { initiatePayment } from '@/utils/payment';
 
 const dialogStore = useDialogStore();
 const { showBuyCreditsDialog } = storeToRefs(dialogStore);
@@ -15,7 +15,7 @@ const appStore = useAppStore();
 const { isDark } = storeToRefs(appStore);
 const loading = ref(false);
 const price = ref(0);
-const packages = ref(RAZORPAY_PRODUCTS.filter((product) => product.type === "single"));
+const packages = ref(RAZORPAY_PRODUCTS.filter((product) => product.type === 'single'));
 
 const ticks = computed(() => {
   return packages.value.reduce(
@@ -43,7 +43,7 @@ const handlePurchase = async () => {
   try {
     await initiatePayment(currentPackage.value);
   } catch (error) {
-    console.error("Purchase failed:", error);
+    console.error('Purchase failed:', error);
   } finally {
     loading.value = false;
   }
@@ -62,9 +62,9 @@ const handlePurchase = async () => {
       <div class="tw-p-6">
         <div class="tw-flex tw-justify-between tw-items-center tw-mb-8">
           <div class="tw-flex tw-items-center tw-gap-3">
-            <v-icon size="40" icon="$coin" class="tw-text-purple-accent-4" />
+            <v-icon size="40" icon="$coin" class="tw-text-[#C9A84C]" />
             <div class="tw-flex tw-flex-col">
-              <div class="tw-text-4xl tw-font-bold tw-text-purple-accent-4">
+              <div class="tw-text-4xl tw-font-bold tw-text-[#C9A84C]">
                 {{ currentPackage.credits }}
               </div>
               <div class="tw-text-gray-500 tw-text-sm">Credits</div>
@@ -83,15 +83,15 @@ const handlePurchase = async () => {
           min="1"
           max="4"
           step="1"
-          :color="isDark ? '#6b21a8' : '#9333ea'"
-          track-color="#6b21a8"
+          :color="isDark ? '#C98A5A' : '#C9A84C'"
+          track-color="#C98A5A"
           show-ticks="always"
           tick-size="5"
           :ticks="ticks"
         ></v-slider>
 
         <v-btn
-          :color="isDark ? '#6b21a8' : '#9333ea'"
+          :color="isDark ? '#C98A5A' : '#C9A84C'"
           size="large"
           block
           class="tw-mt-6"

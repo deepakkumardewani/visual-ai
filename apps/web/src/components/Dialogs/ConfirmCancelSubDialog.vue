@@ -1,10 +1,10 @@
 <script setup lang="ts">
 // import { ref } from 'vue'
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 
-import { useDialogStore } from "@/stores/dialog";
+import { useDialogStore } from '@/stores/dialog';
 
-import { cancelSubscription } from "@/utils/payment";
+import { cancelSubscription } from '@/utils/payment';
 
 const dialogStore = useDialogStore();
 const { showCancelSubscriptionDialog } = storeToRefs(dialogStore);

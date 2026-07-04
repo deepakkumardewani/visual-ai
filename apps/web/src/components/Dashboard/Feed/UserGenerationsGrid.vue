@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
 
-import { FeatureType, type IImageObject } from "@/types";
+import { FeatureType, type IImageObject } from '@/types';
 
-import { useAsideStore } from "@/stores/aside";
-import { useDialogStore } from "@/stores/dialog";
-import { useUserStore } from "@/stores/user";
+import { useAsideStore } from '@/stores/aside';
+import { useDialogStore } from '@/stores/dialog';
+import { useUserStore } from '@/stores/user';
 
-import ImageDialog from "@/components/Dialogs/ImageDialog.vue";
+import ImageDialog from '@/components/Dialogs/ImageDialog.vue';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
@@ -26,11 +26,11 @@ const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
 
 function getImageUrl(item: IImageObject): string {
   const image = item.images[0];
-  if (!image) return "";
+  if (!image) return '';
   if (image.aiImagePublicId) {
     return `${cloudinaryBaseUrl}/q_auto,f_auto/${image.aiImagePublicId}`;
   }
-  return image.aiImageUrl ?? "";
+  return image.aiImageUrl ?? '';
 }
 
 function showImage(item: IImageObject) {

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue';
 
-import { faGear } from "@/plugins/icons";
+import { faGear } from '@/plugins/icons';
 
-import { useDashboardMotion } from "@/composables/useDashboardMotion";
+import { useDashboardMotion } from '@/composables/useDashboardMotion';
 
-import Popover from "@/components/primitives/Popover.vue";
-import SettingsCluster from "@/components/Dashboard/ControlRail/SettingsCluster.vue";
+import Popover from '@/components/primitives/Popover.vue';
+import SettingsCluster from '@/components/Dashboard/ControlRail/SettingsCluster.vue';
 
 const isOpen = ref(false);
 const { interactiveTransition } = useDashboardMotion();

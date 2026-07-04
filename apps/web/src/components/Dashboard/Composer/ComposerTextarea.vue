@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { nextTick, onMounted, ref, watch } from "vue";
+import { storeToRefs } from 'pinia';
+import { nextTick, onMounted, ref, watch } from 'vue';
 
-import { useReducedMotion } from "@/composables/useReducedMotion";
-import { useAsideStore } from "@/stores/aside";
-import { useGenerateStore } from "@/stores/generate";
+import { useReducedMotion } from '@/composables/useReducedMotion';
+import { useAsideStore } from '@/stores/aside';
+import { useGenerateStore } from '@/stores/generate';
 
-import PromptAiMenu from "@/components/Dashboard/ControlRail/PromptAiMenu.vue";
+import PromptAiMenu from '@/components/Dashboard/ControlRail/PromptAiMenu.vue';
 
 const props = withDefaults(
   defineProps<{
@@ -16,9 +16,9 @@ const props = withDefaults(
 );
 
 const PLACEHOLDER_EXAMPLES = [
-  "Describe your image",
-  "A serene mountain lake at golden hour…",
-  "Cyberpunk portrait with neon reflections…",
+  'Describe your image',
+  'A serene mountain lake at golden hour…',
+  'Cyberpunk portrait with neon reflections…',
 ];
 
 const asideStore = useAsideStore();
@@ -43,7 +43,7 @@ function focusTextarea() {
 function adjustHeight() {
   const el = textareaRef.value;
   if (!el) return;
-  el.style.height = "auto";
+  el.style.height = 'auto';
   el.style.height = `${Math.max(el.scrollHeight, 80)}px`;
 }
 
@@ -62,7 +62,7 @@ function applyPrompt(text: string) {
 
 function typePrompt(text: string) {
   isTyping.value = true;
-  typingPrompt.value = "";
+  typingPrompt.value = '';
 
   let index = 0;
   const interval = setInterval(() => {
@@ -80,7 +80,7 @@ function typePrompt(text: string) {
 
 function clearPrompt() {
   if (isReadonly.value) return;
-  typingPrompt.value = "";
+  typingPrompt.value = '';
   showPlaceholder.value = true;
   focusTextarea();
 }
@@ -155,7 +155,7 @@ watch(isTyping, (typing) => {
 });
 
 onMounted(() => {
-  typingPrompt.value = promptText.value ?? "";
+  typingPrompt.value = promptText.value ?? '';
   nextTick(() => {
     adjustHeight();
     if (!typingPrompt.value && !reducedMotion.value) {

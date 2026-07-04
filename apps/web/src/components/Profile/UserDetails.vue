@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 
-import { useDialogStore } from "@/stores/dialog";
-import { useUserStore } from "@/stores/user";
+import { useDialogStore } from '@/stores/dialog';
+import { useUserStore } from '@/stores/user';
 
-import Avatar from "@/components/Avatar.vue";
-import DeleteDialog from "@/components/Dialogs/DeleteDialog.vue";
+import Avatar from '@/components/Avatar.vue';
+import DeleteDialog from '@/components/Dialogs/DeleteDialog.vue';
 
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
 const { userDetails, isUpdatingName, isUpdatingUsername } = storeToRefs(userStore);
 
-const fullName = ref("");
-const firstName = ref("");
-const lastName = ref("");
-const email = ref("");
-const username = ref("");
+const fullName = ref('');
+const firstName = ref('');
+const lastName = ref('');
+const email = ref('');
+const username = ref('');
 const isEditingName = ref(false);
 const isEditingUsername = ref(false);
 const showNameCheckmark = ref(false);
@@ -42,7 +42,7 @@ async function updateName() {
       showNameCheckmark.value = false;
     }, 2000);
   } catch (error) {
-    console.error("Failed to update name:", error);
+    console.error('Failed to update name:', error);
   }
 }
 
@@ -55,28 +55,28 @@ async function updateUsername() {
       showUsernameCheckmark.value = false;
     }, 2000);
   } catch (error) {
-    console.error("Failed to update username:", error);
+    console.error('Failed to update username:', error);
   }
 }
 function cancelNameUpdate() {
   isEditingName.value = false;
-  firstName.value = userDetails.value?.firstName ?? "";
-  lastName.value = userDetails.value?.lastName ?? "";
+  firstName.value = userDetails.value?.firstName ?? '';
+  lastName.value = userDetails.value?.lastName ?? '';
 }
 
 function cancelUsernameUpdate() {
   isEditingUsername.value = false;
-  username.value = userDetails.value?.userName ?? "";
+  username.value = userDetails.value?.userName ?? '';
 }
 
 watch(
   () => userDetails.value,
   () => {
-    fullName.value = userDetails.value?.fullName ?? "";
-    firstName.value = userDetails.value?.firstName ?? "";
-    lastName.value = userDetails.value?.lastName ?? "";
-    email.value = userDetails.value?.email ?? "";
-    username.value = userDetails.value?.userName ?? "";
+    fullName.value = userDetails.value?.fullName ?? '';
+    firstName.value = userDetails.value?.firstName ?? '';
+    lastName.value = userDetails.value?.lastName ?? '';
+    email.value = userDetails.value?.email ?? '';
+    username.value = userDetails.value?.userName ?? '';
   },
   { immediate: true, deep: true },
 );

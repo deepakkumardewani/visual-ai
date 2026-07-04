@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { ref } from "vue";
-import { useDisplay } from "vuetify";
+import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
+import { useDisplay } from 'vuetify';
 
-import { useAsideStore } from "@/stores/aside";
-import { useGenerateStore } from "@/stores/generate";
+import { useAsideStore } from '@/stores/aside';
+import { useGenerateStore } from '@/stores/generate';
 
-import Heading from "@/components/Aside/Heading.vue";
+import Heading from '@/components/Aside/Heading.vue';
 
-import { MODEL_IDS } from "@/utils/constants";
-import PROMPTS from "@/utils/prompts.json";
-import REALISTIC_PROMPTS from "@/utils/realisticPrompts.json";
+import { MODEL_IDS } from '@/utils/constants';
+import PROMPTS from '@/utils/prompts.json';
+import REALISTIC_PROMPTS from '@/utils/realisticPrompts.json';
 
 const asideStore = useAsideStore();
 const generateStore = useGenerateStore();
@@ -18,13 +18,13 @@ const { mobile } = useDisplay();
 const { mode, typingPrompt } = storeToRefs(asideStore);
 const { promptText } = storeToRefs(generateStore);
 
-const prompt = ref<string>("");
+const prompt = ref<string>('');
 const isTyping = ref(false);
 const textAreaFocused = ref(false);
 const textareaRef = ref();
 
 function randomPrompt() {
-  let newPrompt = "";
+  let newPrompt = '';
   if (mode.value.id === MODEL_IDS.FLUX_REALISM) {
     const randomIndex = Math.floor(Math.random() * REALISTIC_PROMPTS.length);
     newPrompt = REALISTIC_PROMPTS[randomIndex];
@@ -32,7 +32,7 @@ function randomPrompt() {
     const randomIndex = Math.floor(Math.random() * PROMPTS.length);
     newPrompt = PROMPTS[randomIndex];
   }
-  typingPrompt.value = "";
+  typingPrompt.value = '';
   typePrompt(newPrompt);
   promptText.value = newPrompt;
   textareaRef.value.focus();
@@ -40,8 +40,8 @@ function randomPrompt() {
 
 function typePrompt(text: string) {
   isTyping.value = true;
-  typingPrompt.value = "";
-  prompt.value = "";
+  typingPrompt.value = '';
+  prompt.value = '';
 
   let i = 0;
   const typingInterval = setInterval(() => {
@@ -61,7 +61,7 @@ watch(typingPrompt, (newVal) => {
 });
 
 onMounted(() => {
-  typingPrompt.value = promptText.value ?? "";
+  typingPrompt.value = promptText.value ?? '';
 });
 </script>
 <template>

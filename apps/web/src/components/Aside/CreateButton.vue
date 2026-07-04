@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 
-import { useAppStore } from "@/stores/app";
+import { useAppStore } from '@/stores/app';
 
 const appStore = useAppStore();
 const { isDark } = storeToRefs(appStore);
@@ -11,5 +11,5 @@ defineProps<{
 }>();
 </script>
 <template>
-  <v-btn :disabled="disabled" :color="isDark ? '#6b21a8' : '#9333ea'" block dark>Create</v-btn>
+  <v-btn :disabled="disabled" :color="isDark ? '#C98A5A' : '#C9A84C'" block dark>Create</v-btn>
 </template>

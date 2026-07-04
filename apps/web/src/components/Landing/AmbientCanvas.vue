@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
-import { useReducedMotion } from "@/composables/useReducedMotion";
+import { useReducedMotion } from '@/composables/useReducedMotion';
 
 /**
  * Warm ambient mesh-gradient that drifts slowly behind the landing canvas.
@@ -33,7 +33,7 @@ const LIGHTS: Light[] = [
     cx: 0.28,
     cy: 0.22,
     radius: 0.5,
-    color: "201,138,90",
+    color: '201,138,90',
     ax: 0.05,
     ay: 0.04,
     sx: 0.06,
@@ -45,7 +45,7 @@ const LIGHTS: Light[] = [
     cx: 0.78,
     cy: 0.35,
     radius: 0.42,
-    color: "201,168,76",
+    color: '201,168,76',
     ax: 0.06,
     ay: 0.05,
     sx: 0.05,
@@ -57,7 +57,7 @@ const LIGHTS: Light[] = [
     cx: 0.5,
     cy: 0.82,
     radius: 0.55,
-    color: "120,64,30",
+    color: '120,64,30',
     ax: 0.07,
     ay: 0.04,
     sx: 0.04,
@@ -89,7 +89,7 @@ function render(timeMs: number) {
   const major = Math.max(width, height);
 
   ctx.clearRect(0, 0, width, height);
-  ctx.globalCompositeOperation = "lighter";
+  ctx.globalCompositeOperation = 'lighter';
 
   for (const light of LIGHTS) {
     const x = (light.cx + Math.sin(t * light.sx + light.phase) * light.ax) * width;
@@ -105,7 +105,7 @@ function render(timeMs: number) {
     ctx.fillRect(0, 0, width, height);
   }
 
-  ctx.globalCompositeOperation = "source-over";
+  ctx.globalCompositeOperation = 'source-over';
 }
 
 function loop(time: number) {
@@ -116,11 +116,11 @@ function loop(time: number) {
 onMounted(() => {
   const el = canvasEl.value;
   if (!el) return;
-  ctx = el.getContext("2d");
+  ctx = el.getContext('2d');
   if (!ctx) return;
 
   resize();
-  window.addEventListener("resize", resize, { passive: true });
+  window.addEventListener('resize', resize, { passive: true });
 
   if (reduced.value) {
     render(0);
@@ -131,7 +131,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   cancelAnimationFrame(raf);
-  window.removeEventListener("resize", resize);
+  window.removeEventListener('resize', resize);
 });
 </script>
 

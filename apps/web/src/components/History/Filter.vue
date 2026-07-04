@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { faCheckSquare, faSearch, faSquare, faXmarkCircle } from "@/plugins/icons";
-import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
-import { useDisplay } from "vuetify";
+import { faCheckSquare, faSearch, faSquare, faXmarkCircle } from '@/plugins/icons';
+import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
+import { useDisplay } from 'vuetify';
 
-import { useHistoryStore } from "@/stores/history";
+import { useHistoryStore } from '@/stores/history';
 
-import { IMAGE_SIZE_OPTIONS } from "@/utils/constants";
+import { IMAGE_SIZE_OPTIONS } from '@/utils/constants';
 
 const { mobile } = useDisplay();
 const { selectedSize } = storeToRefs(useHistoryStore());
-const searchQuery = ref("");
+const searchQuery = ref('');
 
 const imageSizes = computed(() => {
   return IMAGE_SIZE_OPTIONS.filter((size) => {
-    if (mobile.value && (size.value === "mini" || size.value === "small")) {
+    if (mobile.value && (size.value === 'mini' || size.value === 'small')) {
       return false;
     }
     return true;
@@ -23,20 +23,20 @@ const imageSizes = computed(() => {
 const selectedFeatureType = ref<string[]>([]);
 const featureTypes = ref<any[]>([
   {
-    id: "image",
-    title: "Text-to-Image",
+    id: 'image',
+    title: 'Text-to-Image',
   },
   {
-    id: "upscale",
-    title: "Upscale",
+    id: 'upscale',
+    title: 'Upscale',
   },
   {
-    id: "colorize",
-    title: "Colorize",
+    id: 'colorize',
+    title: 'Colorize',
   },
   {
-    id: "revive",
-    title: "Revive",
+    id: 'revive',
+    title: 'Revive',
   },
 ]);
 

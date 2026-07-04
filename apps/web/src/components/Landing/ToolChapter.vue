@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import LandingButton from "@/components/Landing/LandingButton.vue";
-import BeforeAfter from "@/components/Landing/BeforeAfter.vue";
+import LandingButton from '@/components/Landing/LandingButton.vue';
+import BeforeAfter from '@/components/Landing/BeforeAfter.vue';
 
-import type { ToolChapter } from "@/utils/landing";
+import type { ToolChapter } from '@/utils/landing';
 
 defineProps<{ tool: ToolChapter; index: number }>();
 </script>
@@ -11,7 +11,7 @@ defineProps<{ tool: ToolChapter; index: number }>();
   <article class="chapter" :class="{ 'chapter--flip': index % 2 === 1 }">
     <div class="chapter__text">
       <p v-reveal class="chapter__eyebrow">
-        <span class="chapter__num">{{ String(index + 1).padStart(2, "0") }}</span>
+        <span class="chapter__num">{{ String(index + 1).padStart(2, '0') }}</span>
         {{ tool.eyebrow }}
       </p>
       <h3 v-reveal="{ delay: 0.05 }" class="chapter__title">{{ tool.title }}</h3>
@@ -83,19 +83,19 @@ defineProps<{ tool: ToolChapter; index: number }>();
   margin-bottom: 1.25rem;
 }
 .chapter__num {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-size: 0.95rem;
   color: #6b5e51;
   letter-spacing: 0;
 }
 
 .chapter__title {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-weight: 400;
   font-size: clamp(1.75rem, 3.5vw, 2.5rem);
   line-height: 1.15;
   letter-spacing: -0.01em;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   margin: 0;
 }
 
@@ -104,7 +104,7 @@ defineProps<{ tool: ToolChapter; index: number }>();
   max-width: 34rem;
   font-size: 1.05rem;
   line-height: 1.7;
-  color: #a89888;
+  color: rgb(var(--tw-ink-muted));
 }
 
 .chapter__points {
@@ -119,10 +119,10 @@ defineProps<{ tool: ToolChapter; index: number }>();
   position: relative;
   padding-left: 1.5rem;
   font-size: 0.98rem;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     left: 0;
     top: 0.55em;

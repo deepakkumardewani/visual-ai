@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue';
 
-import { FAQS } from "@/utils/landing";
+import { FAQS } from '@/utils/landing';
 
 const open = ref<number | null>(0);
 
@@ -56,12 +56,12 @@ function toggle(i: number) {
   margin-bottom: clamp(2rem, 4vw, 3rem);
 }
 .faq__title {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-weight: 400;
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.1;
   letter-spacing: -0.015em;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   margin: 1rem 0 0;
 }
 
@@ -85,10 +85,10 @@ function toggle(i: number) {
   border: none;
   cursor: pointer;
   text-align: left;
-  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   transition: color 0.2s ease;
 
   &:hover {
@@ -108,7 +108,7 @@ function toggle(i: number) {
 
   &::before,
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 50%;
     left: 50%;
@@ -144,7 +144,7 @@ function toggle(i: number) {
   max-width: 46rem;
   font-size: 1rem;
   line-height: 1.7;
-  color: #a89888;
+  color: rgb(var(--tw-ink-muted));
 }
 
 @media (prefers-reduced-motion: reduce) {

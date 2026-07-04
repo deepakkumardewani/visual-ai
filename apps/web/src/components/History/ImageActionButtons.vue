@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 
-import { IImageObject } from "@/types";
+import { IImageObject } from '@/types';
 
-import { useAppStore } from "@/stores/app";
-import { useGenerateStore } from "@/stores/generate";
+import { useAppStore } from '@/stores/app';
+import { useGenerateStore } from '@/stores/generate';
 
-import { deleteImage, downloadImage, favoriteImage, getDownloadImageUrl } from "@/utils/helpers";
+import { deleteImage, downloadImage, favoriteImage, getDownloadImageUrl } from '@/utils/helpers';
 
 const props = defineProps<{
   item: IImageObject;
@@ -32,7 +32,7 @@ const { deletingImageIds } = storeToRefs(generateStore);
     @click="favoriteImage($event, props.item._id)"
   >
     <v-icon :color="isDark ? 'white' : 'black'">{{
-      props.item.isFavorite ? "fas fa-heart" : "far fa-heart"
+      props.item.isFavorite ? 'fas fa-heart' : 'far fa-heart'
     }}</v-icon>
   </v-btn>
   <v-btn

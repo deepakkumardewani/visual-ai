@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed, onMounted, ref } from "vue";
-import { useDisplay } from "vuetify";
+import { storeToRefs } from 'pinia';
+import { computed, onMounted, ref } from 'vue';
+import { useDisplay } from 'vuetify';
 
-import { useAppStore } from "@/stores/app";
+import { useAppStore } from '@/stores/app';
 
 const appStore = useAppStore();
 const { mobile } = useDisplay();
@@ -14,11 +14,11 @@ const height = ref(0);
 
 const uploadInput = ref<HTMLInputElement | null>(null);
 const imagePreview = ref<HTMLElement | null>(null);
-const imgSource = ref("");
+const imgSource = ref('');
 
 let isEventListenerAdded = false;
-const UPLOAD_TEXT = mobile.value ? "Upload Image" : "Click, or Drag image, here to upload";
-const IMAGE_FORMAT_TEXT = "JPG, PNG, or WEBP upto 5MB";
+const UPLOAD_TEXT = mobile.value ? 'Upload Image' : 'Click, or Drag image, here to upload';
+const IMAGE_FORMAT_TEXT = 'JPG, PNG, or WEBP upto 5MB';
 const isDragging = ref(false);
 const { feature } = storeToRefs(appStore);
 function handleDragLeave() {
@@ -34,7 +34,7 @@ function handleDrop(e: DragEvent) {
   e.preventDefault();
   isDragging.value = false;
   const file = e.dataTransfer?.files[0];
-  if (file && file.type.startsWith("image/")) {
+  if (file && file.type.startsWith('image/')) {
     handleFileUpload(file);
   }
 }
@@ -44,7 +44,7 @@ function removeImage() {
   width.value = 0;
   height.value = 0;
   if (mobile.value) {
-    imgSource.value = "";
+    imgSource.value = '';
   }
 }
 
@@ -64,7 +64,7 @@ function handleFileUpload(file: File) {
 
       // Only add click event listener if there's no image and it hasn't been added before
       if (!isEventListenerAdded && !image.value) {
-        imagePreview.value?.addEventListener("click", () => {
+        imagePreview.value?.addEventListener('click', () => {
           uploadInput.value?.click();
         });
         isEventListenerAdded = true;
@@ -74,15 +74,15 @@ function handleFileUpload(file: File) {
   try {
     reader.readAsDataURL(file);
   } catch (error) {
-    console.error("Error starting file read:", error);
+    console.error('Error starting file read:', error);
   }
 }
 
 function createImageReader() {
-  uploadInput.value = document.getElementById("upload") as HTMLInputElement;
-  imagePreview.value = document.getElementById("image-preview") as HTMLElement;
+  uploadInput.value = document.getElementById('upload') as HTMLInputElement;
+  imagePreview.value = document.getElementById('image-preview') as HTMLElement;
 
-  uploadInput?.value?.addEventListener("change", (event: Event) => {
+  uploadInput?.value?.addEventListener('change', (event: Event) => {
     const target = event.target as HTMLInputElement;
     const file = target.files?.[0];
 
@@ -91,21 +91,21 @@ function createImageReader() {
     }
   });
 
-  uploadInput.value?.addEventListener("click", (event) => {
+  uploadInput.value?.addEventListener('click', (event) => {
     event.stopPropagation();
   });
 }
 
 const formatFileSize = (bytes: number) => {
-  if (!bytes) return "0 KB";
+  if (!bytes) return '0 KB';
   const k = 1024;
-  const sizes = ["Bytes", "KB", "MB"];
+  const sizes = ['Bytes', 'KB', 'MB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 };
 
 const fileSize = computed(() => {
-  return image.value ? formatFileSize(image.value.size) : "";
+  return image.value ? formatFileSize(image.value.size) : '';
 });
 onMounted(() => {
   createImageReader();
@@ -124,7 +124,7 @@ defineExpose({
           id="image-preview"
           class="tw-flex tw-flex-1 tw-max-w-sm tw-p-2 tw-mb-2 tw-rounded-lg tw-items-center tw-mx-auto tw-text-center tw-border-dashed tw-border-2 tw-border-gray-400"
           :class="{
-            'tw-border-purple-500 tw-rounded-lg animate-border': isDragging,
+            'tw-border-[#C9A84C] tw-rounded-lg animate-border': isDragging,
             'tw-h-16 tw-p-0': image && mobile,
           }"
           @dragleave="handleDragLeave"
@@ -235,19 +235,19 @@ defineExpose({
 }
 @keyframes borderAnimation {
   0% {
-    border-image-source: linear-gradient(to right, #9333ea, #7e22ce, #6b21a8, #581c87);
+    border-image-source: linear-gradient(to right, #c9a84c, #d4b577, #c98a5a, #b39649);
   }
   25% {
-    border-image-source: linear-gradient(to bottom, #9333ea, #7e22ce, #6b21a8, #581c87);
+    border-image-source: linear-gradient(to bottom, #c9a84c, #d4b577, #c98a5a, #b39649);
   }
   50% {
-    border-image-source: linear-gradient(to left, #9333ea, #7e22ce, #6b21a8, #581c87);
+    border-image-source: linear-gradient(to left, #c9a84c, #d4b577, #c98a5a, #b39649);
   }
   75% {
-    border-image-source: linear-gradient(to top, #9333ea, #7e22ce, #6b21a8, #581c87);
+    border-image-source: linear-gradient(to top, #c9a84c, #d4b577, #c98a5a, #b39649);
   }
   100% {
-    border-image-source: linear-gradient(to right, #9333ea, #7e22ce, #6b21a8, #581c87);
+    border-image-source: linear-gradient(to right, #c9a84c, #d4b577, #c98a5a, #b39649);
   }
 }
 

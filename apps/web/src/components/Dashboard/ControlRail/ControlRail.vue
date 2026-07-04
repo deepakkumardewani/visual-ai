@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed } from "vue";
-import { v4 as uuidv4 } from "uuid";
-import { useUser } from "vue-clerk";
-import { useRouter } from "vue-router";
-import { useDisplay } from "vuetify";
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
+import { v4 as uuidv4 } from 'uuid';
+import { useUser } from 'vue-clerk';
+import { useRouter } from 'vue-router';
+import { useDisplay } from 'vuetify';
 
-import { type ImageBody } from "@/types";
+import { type ImageBody } from '@/types';
 
-import { useAppStore } from "@/stores/app";
-import { useAsideStore } from "@/stores/aside";
-import { useDialogStore } from "@/stores/dialog";
-import { useGenerateStore } from "@/stores/generate";
-import { useUserStore } from "@/stores/user";
+import { useAppStore } from '@/stores/app';
+import { useAsideStore } from '@/stores/aside';
+import { useDialogStore } from '@/stores/dialog';
+import { useGenerateStore } from '@/stores/generate';
+import { useUserStore } from '@/stores/user';
 
-import MobileSettingsMenu from "@/components/Dashboard/ControlRail/MobileSettingsMenu.vue";
-import ModelPicker from "@/components/Dashboard/ControlRail/ModelPicker.vue";
-import PromptBox from "@/components/Dashboard/ControlRail/PromptBox.vue";
-import SignupDialog from "@/components/Dialogs/SignupDialog.vue";
-import GenerateButton from "@/components/Dashboard/ControlRail/GenerateButton.vue";
-import SettingsCluster from "@/components/Dashboard/ControlRail/SettingsCluster.vue";
+import MobileSettingsMenu from '@/components/Dashboard/ControlRail/MobileSettingsMenu.vue';
+import ModelPicker from '@/components/Dashboard/ControlRail/ModelPicker.vue';
+import PromptBox from '@/components/Dashboard/ControlRail/PromptBox.vue';
+import SignupDialog from '@/components/Dialogs/SignupDialog.vue';
+import GenerateButton from '@/components/Dashboard/ControlRail/GenerateButton.vue';
+import SettingsCluster from '@/components/Dashboard/ControlRail/SettingsCluster.vue';
 
 const router = useRouter();
 const generateStore = useGenerateStore();
@@ -37,7 +37,7 @@ const { isLoading } = storeToRefs(generateStore);
 const { aspectRatio, noOfOutputs, outputQuality, imageFormat, mode, typingPrompt } =
   storeToRefs(asideStore);
 
-const isPremium = computed(() => mode.value.tier === "premium");
+const isPremium = computed(() => mode.value.tier === 'premium');
 
 async function generateImage() {
   if (!isSignedIn.value) {
@@ -72,7 +72,7 @@ async function generateImage() {
 watch(outputQuality, (newVal) => {
   if (!isPro.value && newVal === 1) {
     outputQuality.value = 0;
-    router.push("/pricing");
+    router.push('/pricing');
   }
 });
 </script>

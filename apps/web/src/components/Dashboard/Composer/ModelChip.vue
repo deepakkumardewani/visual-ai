@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { Model } from "@/types/model";
+import type { Model } from '@/types/model';
 
-import { useDashboardMotion } from "@/composables/useDashboardMotion";
+import { useDashboardMotion } from '@/composables/useDashboardMotion';
 
-import ProviderIcon from "@/components/primitives/ProviderIcon.vue";
+import ProviderIcon from '@/components/primitives/ProviderIcon.vue';
 
 defineProps<{
   model: Model;

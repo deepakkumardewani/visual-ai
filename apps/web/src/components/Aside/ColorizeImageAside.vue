@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useUser } from "vue-clerk";
-import { useRouter } from "vue-router";
+import { storeToRefs } from 'pinia';
+import { useUser } from 'vue-clerk';
+import { useRouter } from 'vue-router';
 
-import { useAppStore } from "@/stores/app";
-import { useDialogStore } from "@/stores/dialog";
-import { useGenerateStore } from "@/stores/generate";
-import { useUserStore } from "@/stores/user";
+import { useAppStore } from '@/stores/app';
+import { useDialogStore } from '@/stores/dialog';
+import { useGenerateStore } from '@/stores/generate';
+import { useUserStore } from '@/stores/user';
 
-import ImageUpload from "@/components/Aside/ImageUpload.vue";
-import PremiumDialog from "@/components/Dialogs/PremiumDialog.vue";
-import SignupDialog from "@/components/Dialogs/SignupDialog.vue";
+import ImageUpload from '@/components/Aside/ImageUpload.vue';
+import PremiumDialog from '@/components/Dialogs/PremiumDialog.vue';
+import SignupDialog from '@/components/Dialogs/SignupDialog.vue';
 
-import { MODEL_IDS } from "@/utils/constants";
+import { MODEL_IDS } from '@/utils/constants';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
@@ -50,16 +50,16 @@ async function colorizeImage() {
     generateStore.colorizeImage(body);
     progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`;
     appStore.colorizeOpen();
-    localStorage.setItem("colorizeInProgress", "true");
+    localStorage.setItem('colorizeInProgress', 'true');
     colorizeInProgress.value = true;
   } else {
     // Show sign in modal
-    router.push("/signin");
+    router.push('/signin');
   }
 }
 
 onMounted(async () => {
-  const inProgress = JSON.parse(localStorage.getItem("colorizeInProgress") as string);
+  const inProgress = JSON.parse(localStorage.getItem('colorizeInProgress') as string);
   if (inProgress === true) {
     colorizeInProgress.value = true;
     appStore.colorizeOpen();
@@ -75,7 +75,7 @@ onMounted(async () => {
       @click="colorizeImage"
       text="Colorize"
       :disabled="!imageUpload?.image || colorizeInProgress"
-      color="purple-lighten-2"
+      color="#C98A5A"
       block
       dark
     >

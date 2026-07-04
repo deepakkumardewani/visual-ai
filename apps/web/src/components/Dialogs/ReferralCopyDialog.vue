@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { faTimes } from "@/plugins/icons";
-import { storeToRefs } from "pinia";
+import { faTimes } from '@/plugins/icons';
+import { storeToRefs } from 'pinia';
 
 // import { ref } from 'vue'
-import { useDialogStore } from "@/stores/dialog";
-import { useUserStore } from "@/stores/user";
+import { useDialogStore } from '@/stores/dialog';
+import { useUserStore } from '@/stores/user';
 
-import ReferralCode from "@/components/ReferralCode.vue";
+import ReferralCode from '@/components/ReferralCode.vue';
 
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
@@ -46,7 +46,7 @@ const { credits } = storeToRefs(userStore);
         <div class="tw-mb-8">
           <h3 class="tw-text-lg tw-font-medium tw-mb-4">Earn more credits</h3>
 
-          <div class="tw-bg-[#9333ea] dark:tw-bg-[#6b21a8] tw-p-6 tw-rounded-lg">
+          <div class="tw-bg-[#C9A84C] dark:tw-bg-[#C98A5A] tw-p-6 tw-rounded-lg">
             <p class="tw-mb-4 tw-text-white">
               Give 50 credits and earn 50 credits for each new referral who sign up for the
               application

@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { faGift, faTicket } from "@/plugins/icons";
-import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { faGift, faTicket } from '@/plugins/icons';
+import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
 
-import { useDialogStore } from "@/stores/dialog";
-import { useUserStore } from "@/stores/user";
+import { useDialogStore } from '@/stores/dialog';
+import { useUserStore } from '@/stores/user';
 
-import { applyReferralCode } from "@/utils/helpers";
+import { applyReferralCode } from '@/utils/helpers';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
 const { showReferralDialog } = storeToRefs(dialogStore);
 const { userDetails } = storeToRefs(userStore);
-const referralCode = ref("");
+const referralCode = ref('');
 const loading = ref(false);
-const errorMessage = ref("");
+const errorMessage = ref('');
 
 const isValidCode = computed(() => {
   if (!referralCode.value) {
@@ -31,18 +31,18 @@ const isValidCode = computed(() => {
 
 const validateCode = () => {
   if (!referralCode.value) {
-    errorMessage.value = "";
+    errorMessage.value = '';
     return false;
   }
   if (referralCode.value.length !== 6) {
-    errorMessage.value = "Referral code must be 6 characters long";
+    errorMessage.value = 'Referral code must be 6 characters long';
     return false;
   }
   if (referralCode.value === userDetails.value?.referralCode) {
-    errorMessage.value = "You cannot use your own referral code";
+    errorMessage.value = 'You cannot use your own referral code';
     return false;
   }
-  errorMessage.value = "";
+  errorMessage.value = '';
   return true;
 };
 
@@ -52,8 +52,8 @@ const apply = async () => {
   try {
     await applyReferralCode(referralCode.value);
   } catch (error: any) {
-    console.error("error", error);
-    errorMessage.value = error.message || "Something went wrong";
+    console.error('error', error);
+    errorMessage.value = error.message || 'Something went wrong';
   } finally {
     loading.value = false;
   }
@@ -61,8 +61,8 @@ const apply = async () => {
 
 const closeDialog = () => {
   showReferralDialog.value = false;
-  referralCode.value = "";
-  errorMessage.value = "";
+  referralCode.value = '';
+  errorMessage.value = '';
 };
 </script>
 
@@ -77,7 +77,7 @@ const closeDialog = () => {
     <v-card class="pa-4 rounded-lg" elevation="8">
       <div class="tw-flex tw-justify-between tw-items-center tw-mb-4">
         <v-card-title class="tw-text-h5 tw-font-bold pa-0">
-          <font-awesome-icon :icon="faGift" color="purple-accent-4" class="mr-2" />
+          <font-awesome-icon :icon="faGift" color="#C9A84C" class="mr-2" />
           Enter Referral Code
         </v-card-title>
         <v-btn
@@ -113,7 +113,7 @@ const closeDialog = () => {
       <v-card-actions class="pa-0 mt-4">
         <v-btn
           block
-          color="purple-accent-4"
+          color="#C9A84C"
           :loading="loading"
           :disabled="!isValidCode"
           variant="elevated"

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { storeToRefs } from 'pinia';
+import { computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
-import type { SegmentedOption } from "@/types/primitives";
+import type { SegmentedOption } from '@/types/primitives';
 
-import { useAsideStore } from "@/stores/aside";
-import { useUserStore } from "@/stores/user";
+import { useAsideStore } from '@/stores/aside';
+import { useUserStore } from '@/stores/user';
 
-import SegmentedControl from "@/components/primitives/SegmentedControl.vue";
+import SegmentedControl from '@/components/primitives/SegmentedControl.vue';
 
-import { ASPECT_RATIOS, IMAGE_FORMATS, MODEL_IDS } from "@/utils/constants";
+import { ASPECT_RATIOS, IMAGE_FORMATS, MODEL_IDS } from '@/utils/constants';
 
 const router = useRouter();
 const asideStore = useAsideStore();
@@ -30,8 +30,8 @@ const formatOptions: SegmentedOption<string>[] = IMAGE_FORMATS.map((format) => (
 }));
 
 const qualityOptions: SegmentedOption<number>[] = [
-  { label: "SD", value: 0 },
-  { label: "HD", value: 1 },
+  { label: 'SD', value: 0 },
+  { label: 'HD', value: 1 },
 ];
 
 const aspectValue = computed({
@@ -42,7 +42,7 @@ const aspectValue = computed({
 
     if (!isPro.value && item.isPro) {
       aspectRatio.value = ASPECT_RATIOS[0];
-      router.push("/pricing");
+      router.push('/pricing');
     } else {
       aspectRatio.value = item;
     }
@@ -57,7 +57,7 @@ const formatValue = computed({
 
     if (!isPro.value && item.isPro) {
       imageFormat.value = IMAGE_FORMATS[0];
-      router.push("/pricing");
+      router.push('/pricing');
     } else {
       imageFormat.value = item;
     }
@@ -68,8 +68,8 @@ const disableModifyVariations = computed(
   () => mode.value.id === MODEL_IDS.FLUX_PRO || mode.value.id === MODEL_IDS.FLUX_1_1_PRO,
 );
 
-function handleImageVariations(type: "add" | "subtract") {
-  if (type === "subtract") {
+function handleImageVariations(type: 'add' | 'subtract') {
+  if (type === 'subtract') {
     if (noOfOutputs.value === 4) {
       noOfOutputs.value = 2;
     } else if (noOfOutputs.value > 1) {
@@ -80,7 +80,7 @@ function handleImageVariations(type: "add" | "subtract") {
 
   if (noOfOutputs.value === 2) {
     if (!isPro.value) {
-      router.push("/pricing");
+      router.push('/pricing');
     } else {
       noOfOutputs.value = 4;
     }

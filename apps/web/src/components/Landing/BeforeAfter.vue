@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ImgComparisonSlider } from "@img-comparison-slider/vue";
-import { onMounted, ref } from "vue";
+import { ImgComparisonSlider } from '@img-comparison-slider/vue';
+import { onMounted, ref } from 'vue';
 
 defineProps<{
   before: string;
@@ -53,8 +53,8 @@ onMounted(() => {
       <div v-if="!(firstLoaded && secondLoaded)" class="ba__skeleton"></div>
     </transition>
 
-    <figcaption class="ba__tag ba__tag--before">{{ beforeLabel ?? "Before" }}</figcaption>
-    <figcaption class="ba__tag ba__tag--after">{{ afterLabel ?? "After" }}</figcaption>
+    <figcaption class="ba__tag ba__tag--before">{{ beforeLabel ?? 'Before' }}</figcaption>
+    <figcaption class="ba__tag ba__tag--after">{{ afterLabel ?? 'After' }}</figcaption>
   </figure>
 </template>
 
@@ -98,12 +98,12 @@ onMounted(() => {
   position: absolute;
   top: 1rem;
   padding: 0.3rem 0.7rem;
-  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   background: rgba(24, 18, 14, 0.66);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(240, 232, 220, 0.14);

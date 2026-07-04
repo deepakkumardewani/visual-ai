@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed } from "vue";
-import { useDisplay } from "vuetify";
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
+import { useDisplay } from 'vuetify';
 
-import { FeatureType } from "@/types";
-import type { IImage } from "@/types";
+import { FeatureType } from '@/types';
+import type { IImage } from '@/types';
 
-import { useAppStore } from "@/stores/app";
-import { useGenerateStore } from "@/stores/generate";
+import { useAppStore } from '@/stores/app';
+import { useGenerateStore } from '@/stores/generate';
 
-import SideBySide from "@/components/SideBySide.vue";
+import SideBySide from '@/components/SideBySide.vue';
 
-import { downloadImage } from "@/utils/helpers";
+import { downloadImage } from '@/utils/helpers';
 
 const { mobile } = useDisplay();
 const generateStore = useGenerateStore();
@@ -37,81 +37,81 @@ const getAIImageUrl = (image: IImage): string => {
 const originalImageUrl = computed((): string => {
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
   const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images.value[0]?.originalPublicId}`;
-  if (feature.value === "upscale" && imageData.value?.featureType === "upscale") {
+  if (feature.value === 'upscale' && imageData.value?.featureType === 'upscale') {
     return images.value[0]?.originalPublicId
       ? optimizedUrl
       : (images.value[0]?.originalImageUrl as string);
   }
-  if (feature.value === "colorize" && imageData.value?.featureType === "colorize") {
+  if (feature.value === 'colorize' && imageData.value?.featureType === 'colorize') {
     return images.value[0]?.originalPublicId
       ? optimizedUrl
       : (images.value[0]?.originalImageUrl as string);
   }
-  if (feature.value === "revive" && imageData.value?.featureType === "revive") {
+  if (feature.value === 'revive' && imageData.value?.featureType === 'revive') {
     return images.value[0]?.originalPublicId
       ? optimizedUrl
       : (images.value[0]?.originalImageUrl as string);
   }
-  return "";
+  return '';
 });
 const enhancedImageUrl = computed((): string => {
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
   const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images.value[0]?.enhancedPublicId}`;
-  if (feature.value === "upscale" && imageData.value?.featureType === "upscale") {
+  if (feature.value === 'upscale' && imageData.value?.featureType === 'upscale') {
     return images.value[0]?.enhancedPublicId
       ? optimizedUrl
       : (images.value[0]?.enhancedImageUrl as string);
   }
-  if (feature.value === "colorize" && imageData.value?.featureType === "colorize") {
+  if (feature.value === 'colorize' && imageData.value?.featureType === 'colorize') {
     return images.value[0]?.enhancedPublicId
       ? optimizedUrl
       : (images.value[0]?.enhancedImageUrl as string);
   }
-  if (feature.value === "revive" && imageData.value?.featureType === "revive") {
+  if (feature.value === 'revive' && imageData.value?.featureType === 'revive') {
     return images.value[0]?.enhancedPublicId
       ? optimizedUrl
       : (images.value[0]?.enhancedImageUrl as string);
   }
-  return "";
+  return '';
 });
 
 const showDefaultAnimation = computed(() => {
   if (feature.value === FeatureType.IMAGE) {
-    if (!images.value[0] || images.value[0]?.aiImageUrl === "") {
+    if (!images.value[0] || images.value[0]?.aiImageUrl === '') {
       return true;
     }
     return false;
   }
-  return originalImageUrl.value === "" && enhancedImageUrl.value === "";
+  return originalImageUrl.value === '' && enhancedImageUrl.value === '';
 });
 const alertTitle = computed(() => {
   const action =
-    upscaleInProgress.value && feature.value === "upscale"
-      ? "Upscaling"
-      : colorizeInProgress.value && feature.value === "colorize"
-        ? "Colorizing"
-        : reviveInProgress.value && feature.value === "revive"
-          ? "Reviving"
-          : "";
+    upscaleInProgress.value && feature.value === 'upscale'
+      ? 'Upscaling'
+      : colorizeInProgress.value && feature.value === 'colorize'
+        ? 'Colorizing'
+        : reviveInProgress.value && feature.value === 'revive'
+          ? 'Reviving'
+          : '';
   if (action) {
     return `${action} your image`;
   }
-  return "";
+  return '';
 });
 const alertText = computed(() => {
   const action =
-    upscaleInProgress.value && feature.value === "upscale"
-      ? "upscaling"
-      : colorizeInProgress.value && feature.value === "colorize"
-        ? "colorizing"
-        : reviveInProgress.value && feature.value === "revive"
-          ? "reviving"
-          : "";
+    upscaleInProgress.value && feature.value === 'upscale'
+      ? 'upscaling'
+      : colorizeInProgress.value && feature.value === 'colorize'
+        ? 'colorizing'
+        : reviveInProgress.value && feature.value === 'revive'
+          ? 'reviving'
+          : '';
 
   if (action) {
     return `You can keep working -- ${action} runs in the background and might take longer than expected. You can close this dialog and check later on the history tab.`;
   }
-  return "";
+  return '';
 });
 
 const showSkeleton = computed(() => {
@@ -145,22 +145,22 @@ const showAlert = computed(() => {
   return false;
 });
 const gridClass = computed(() => {
-  if (!images.value) return "";
+  if (!images.value) return '';
 
   const imageCount = images.value.length;
 
   if (imageCount === 4) {
-    if (imageData.value?.imageType === "vertical") {
-      return "grid-vertical";
+    if (imageData.value?.imageType === 'vertical') {
+      return 'grid-vertical';
     }
-    return "grid-horizontal"; // for horizontal and square
+    return 'grid-horizontal'; // for horizontal and square
   }
 
-  return "tw-flex tw-flex-wrap tw-gap-4 tw-justify-center"; // default flex layout
+  return 'tw-flex tw-flex-wrap tw-gap-4 tw-justify-center'; // default flex layout
 });
 
 watch(errMsg, (newVal) => {
-  if (newVal !== "") {
+  if (newVal !== '') {
     snackbar.value = true;
   }
 });
@@ -284,12 +284,7 @@ watch(errMsg, (newVal) => {
       </div>
     </div>
   </div>
-  <v-snackbar
-    v-model="snackbar"
-    :timeout="snackbarTimeout"
-    location="bottom right"
-    color="purple-accent-4"
-  >
+  <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" location="bottom right" color="#C9A84C">
     {{ errMsg }}
   </v-snackbar>
 </template>

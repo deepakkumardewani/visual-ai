@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import LandingButton from "@/components/Landing/LandingButton.vue";
+import LandingButton from '@/components/Landing/LandingButton.vue';
 
 const plans = [
   {
-    name: "Free",
-    price: "₹0",
-    cadence: "forever",
+    name: 'Free',
+    price: '₹0',
+    cadence: 'forever',
     featured: false,
     points: [
-      "20 credits, every day",
-      "All four tools included",
-      "Standard quality, JPG export",
-      "Two variations per prompt",
+      '20 credits, every day',
+      'All four tools included',
+      'Standard quality, JPG export',
+      'Two variations per prompt',
     ],
-    cta: "Start free",
-    to: "/signup",
+    cta: 'Start free',
+    to: '/signup',
   },
   {
-    name: "Pro",
-    price: "₹299",
-    cadence: "per month",
+    name: 'Pro',
+    price: '₹299',
+    cadence: 'per month',
     featured: true,
     points: [
-      "1,000 credits a month, with rollover",
-      "High-quality output, lower credit cost",
-      "PNG & WebP, all seven ratios",
-      "Up to four variations per prompt",
+      '1,000 credits a month, with rollover',
+      'High-quality output, lower credit cost',
+      'PNG & WebP, all seven ratios',
+      'Up to four variations per prompt',
     ],
-    cta: "Go Pro",
-    to: "/pricing",
+    cta: 'Go Pro',
+    to: '/pricing',
   },
 ] as const;
 </script>
@@ -88,18 +88,18 @@ const plans = [
   text-align: center;
 }
 .pricing__title {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-weight: 400;
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.1;
   letter-spacing: -0.015em;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   margin: 1rem 0 0;
 }
 .pricing__sub {
   margin: 1rem 0 0;
   font-size: 1.1rem;
-  color: #a89888;
+  color: rgb(var(--tw-ink-muted));
 }
 
 .pricing__grid {
@@ -147,21 +147,21 @@ const plans = [
   border-radius: 9999px;
 }
 .plan__name {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-weight: 400;
   font-size: 1.4rem;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   margin: 0;
 }
 .plan__price {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-size: 2.75rem;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   margin: 0.75rem 0 0;
   line-height: 1;
 }
 .plan__cadence {
-  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 0.95rem;
   color: #6b5e51;
   margin-left: 0.4rem;
@@ -179,10 +179,10 @@ const plans = [
   position: relative;
   padding-left: 1.6rem;
   font-size: 0.95rem;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     left: 0;
     top: 0.45em;

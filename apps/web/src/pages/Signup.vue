@@ -1,7 +1,7 @@
 <script setup>
-import { SignUp } from "vue-clerk";
+import { SignUp } from 'vue-clerk';
 
-import gallery from "@/utils/gallery.json";
+import gallery from '@/utils/gallery.json';
 
 const randomImage = gallery[Math.floor(Math.random() * gallery.length)];
 </script>
@@ -26,7 +26,11 @@ const randomImage = gallery[Math.floor(Math.random() * gallery.length)];
       class="tw-absolute tw-inset-0 tw-bg-gradient-to-t tw-from-black/50 tw-to-transparent md:tw-opacity-0 md:hover:tw-opacity-100 tw-transition-opacity"
     ></div>
     <div
-      class="tw-absolute md:tw-relative tw-inset-0 md:tw-w-[30%] tw-flex tw-items-center tw-justify-center tw-bg-gradient-to-br tw-from-[#3b0764] tw-via-[#581c87] tw-to-[#6b21a8]"
+      class="tw-absolute md:tw-relative tw-inset-0 md:tw-w-[30%] tw-flex tw-items-center tw-justify-center"
+      style="
+        background:
+          radial-gradient(circle at 50% 0%, rgba(201, 168, 76, 0.12), transparent 60%), #0d0a07;
+      "
     >
       <SignUp />
     </div>
@@ -40,7 +44,7 @@ const randomImage = gallery[Math.floor(Math.random() * gallery.length)];
   animation: moveGradient 20s ease infinite;
 
   &::before {
-    content: "";
+    content: '';
     background: radial-gradient(circle at 50% 50%, #261f2a, #251531, #2f032f, #2e0854);
     background-size: 200% 200%;
     animation: moveGradient 20s ease infinite;

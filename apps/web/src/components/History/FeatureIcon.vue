@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { FeatureIconMap } from "@/pages/utils";
-import { storeToRefs } from "pinia";
+import { FeatureIconMap } from '@/pages/utils';
+import { storeToRefs } from 'pinia';
 
-import { IImageObject } from "@/types";
+import { IImageObject } from '@/types';
 
-import { useAppStore } from "@/stores/app";
+import { useAppStore } from '@/stores/app';
 
 const props = defineProps<{
   item: IImageObject;

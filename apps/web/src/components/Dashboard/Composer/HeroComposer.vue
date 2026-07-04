@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import ComposerTextarea from "@/components/Dashboard/Composer/ComposerTextarea.vue";
-import GenerateArrow from "@/components/Dashboard/Composer/GenerateArrow.vue";
-import ModelPicker from "@/components/Dashboard/ControlRail/ModelPicker.vue";
-import SettingsPopovers from "@/components/Dashboard/Composer/SettingsPopovers.vue";
-import SignupDialog from "@/components/Dialogs/SignupDialog.vue";
+import ComposerTextarea from '@/components/Dashboard/Composer/ComposerTextarea.vue';
+import GenerateArrow from '@/components/Dashboard/Composer/GenerateArrow.vue';
+import ModelPicker from '@/components/Dashboard/ControlRail/ModelPicker.vue';
+import SettingsPopovers from '@/components/Dashboard/Composer/SettingsPopovers.vue';
+import SignupDialog from '@/components/Dialogs/SignupDialog.vue';
 </script>
 
 <template>
@@ -31,12 +31,12 @@ import SignupDialog from "@/components/Dialogs/SignupDialog.vue";
 </template>
 
 <style scoped>
-:deep([data-testid="model-picker"] .tw-relative.tw-inline-block) {
+:deep([data-testid='model-picker'] .tw-relative.tw-inline-block) {
   display: inline-block;
   width: auto;
 }
 
-:deep([data-testid="model-picker"] .tw-relative.tw-inline-block > button) {
+:deep([data-testid='model-picker'] .tw-relative.tw-inline-block > button) {
   width: auto;
   min-height: 44px;
   padding: 0;

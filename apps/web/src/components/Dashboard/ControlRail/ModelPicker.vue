@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
+import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-import type { Model } from "@/types/model";
+import type { Model } from '@/types/model';
 
-import { useAsideStore } from "@/stores/aside";
-import { useUserStore } from "@/stores/user";
+import { useAsideStore } from '@/stores/aside';
+import { useUserStore } from '@/stores/user';
 
-import Heading from "@/components/Aside/Heading.vue";
-import ModelChip from "@/components/Dashboard/Composer/ModelChip.vue";
-import ModelOption from "@/components/Dashboard/ControlRail/ModelOption.vue";
-import ModelPickerTrigger from "@/components/Dashboard/ControlRail/ModelPickerTrigger.vue";
-import Popover from "@/components/primitives/Popover.vue";
+import Heading from '@/components/Aside/Heading.vue';
+import ModelChip from '@/components/Dashboard/Composer/ModelChip.vue';
+import ModelOption from '@/components/Dashboard/ControlRail/ModelOption.vue';
+import ModelPickerTrigger from '@/components/Dashboard/ControlRail/ModelPickerTrigger.vue';
+import Popover from '@/components/primitives/Popover.vue';
 
 const { chip = false } = defineProps<{
   chip?: boolean;
 }>();
 
-import { MODEL_IDS } from "@/utils/modelIds";
-import { FLUX_MODES, getProviderDisplayName, groupModelsByProvider, MODELS } from "@/utils/models";
+import { MODEL_IDS } from '@/utils/modelIds';
+import { FLUX_MODES, getProviderDisplayName, groupModelsByProvider, MODELS } from '@/utils/models';
 
 const router = useRouter();
 const asideStore = useAsideStore();
@@ -39,7 +39,7 @@ function handleSelect(model: Model) {
   if (!isPro.value && model.isPro) {
     mode.value = FLUX_MODES[1];
     isOpen.value = false;
-    router.push("/pricing");
+    router.push('/pricing');
     return;
   }
 

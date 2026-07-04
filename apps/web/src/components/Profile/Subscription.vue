@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useDisplay } from "vuetify";
+import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useDisplay } from 'vuetify';
 
-import { useDialogStore } from "@/stores/dialog";
-import { useUserStore } from "@/stores/user";
+import { useDialogStore } from '@/stores/dialog';
+import { useUserStore } from '@/stores/user';
 
-import ConfirmCancelSubDialog from "@/components/Dialogs/ConfirmCancelSubDialog.vue";
+import ConfirmCancelSubDialog from '@/components/Dialogs/ConfirmCancelSubDialog.vue';
 
-import { RAZORPAY_PRODUCTS } from "@/utils/constants";
-import { cancelSubscription, initiatePayment } from "@/utils/payment";
+import { RAZORPAY_PRODUCTS } from '@/utils/constants';
+import { cancelSubscription, initiatePayment } from '@/utils/payment';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
@@ -25,7 +25,7 @@ async function handlePlan() {
       const product = RAZORPAY_PRODUCTS[4];
       await initiatePayment(product, true);
     } catch (error) {
-      console.error("Purchase failed:", error);
+      console.error('Purchase failed:', error);
     } finally {
       isLoading.value = false;
     }
@@ -36,7 +36,7 @@ async function handlePlan() {
       isLoading.value = true;
       await cancelSubscription();
     } catch (error) {
-      console.error("Cancellation failed:", error);
+      console.error('Cancellation failed:', error);
     } finally {
       isLoading.value = false;
     }
@@ -55,18 +55,18 @@ async function handlePlan() {
           <h2 class="tw-text-white tw-mb-4">Plan</h2>
           <v-card variant="outlined" class="tw-p-4 tw-transition-all" elevation="0">
             <div class="tw-flex tw-justify-between tw-items-center">
-              <v-chip :color="isPro ? 'purple-accent-4' : 'grey'" size="large" class="tw-ml-2">
-                {{ isPro ? "Pro" : "Free" }}
+              <v-chip :color="isPro ? '#C9A84C' : 'grey'" size="large" class="tw-ml-2">
+                {{ isPro ? 'Pro' : 'Free' }}
               </v-chip>
               <v-btn
                 @click="handlePlan"
-                :color="isPro ? 'red-lighten-1' : 'purple-lighten-1'"
+                :color="isPro ? 'red-lighten-1' : '#C98A5A'"
                 variant="tonal"
                 class="tw-font-medium"
                 :loading="isLoading"
                 :disabled="isLoading"
               >
-                {{ isPro ? "Cancel subscription" : "Upgrade plan" }}
+                {{ isPro ? 'Cancel subscription' : 'Upgrade plan' }}
               </v-btn>
             </div>
           </v-card>
@@ -75,7 +75,7 @@ async function handlePlan() {
             <v-btn
               to="/pricing"
               variant="text"
-              color="purple-lighten-1"
+              color="#C98A5A"
               class="tw-font-medium tw-px-1 tw-min-w-0 !tw-lowercase"
               density="compact"
             >
@@ -96,7 +96,7 @@ async function handlePlan() {
               <v-btn
                 to="/pricing"
                 variant="text"
-                color="purple-lighten-1"
+                color="#9E7D35"
                 class="tw-font-medium tw-px-1 tw-min-w-0 !tw-lowercase"
                 density="compact"
               >
@@ -115,7 +115,7 @@ async function handlePlan() {
               <v-btn
                 v-if="!mobile"
                 @click="router.push('/profile?tab=payments')"
-                color="purple-lighten-1"
+                color="#C98A5A"
                 variant="tonal"
                 class="tw-font-medium"
               >
@@ -127,7 +127,7 @@ async function handlePlan() {
             <v-btn
               v-if="mobile"
               @click="router.push('/profile?tab=payments')"
-              color="purple-lighten-1"
+              color="#C98A5A"
               variant="text"
               class="tw-font-medium tw-p-0"
             >

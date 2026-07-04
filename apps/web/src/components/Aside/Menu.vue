@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { faGear } from "@/plugins/icons";
-import { ref } from "vue";
+import { faGear } from '@/plugins/icons';
+import { ref } from 'vue';
 
-import SettingsCluster from "@/components/Dashboard/ControlRail/SettingsCluster.vue";
+import SettingsCluster from '@/components/Dashboard/ControlRail/SettingsCluster.vue';
 
 const menu = ref(false);
 </script>

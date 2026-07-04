@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
-import { GroupedObject } from "@/types";
+import { GroupedObject } from '@/types';
 
-import { useAppStore } from "@/stores/app";
-import { useUserStore } from "@/stores/user";
+import { useAppStore } from '@/stores/app';
+import { useUserStore } from '@/stores/user';
 
 const props = defineProps<{
   isFavorites?: boolean;
@@ -17,7 +17,7 @@ const { tab } = storeToRefs(useAppStore());
 
 function create() {
   if (props.isFavorites) {
-    router.push("/dashboard");
+    router.push('/dashboard');
   }
   tab.value = 1;
 }

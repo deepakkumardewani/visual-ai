@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDashboardMotion } from "@/composables/useDashboardMotion";
+import { useDashboardMotion } from '@/composables/useDashboardMotion';
 
 defineProps<{
   label: string;

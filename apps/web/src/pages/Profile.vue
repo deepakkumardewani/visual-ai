@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { onMounted, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { storeToRefs } from 'pinia';
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { useAppStore } from "@/stores/app";
+import { useAppStore } from '@/stores/app';
 
-import History from "@/components/History/History.vue";
-import Payments from "@/components/Profile/Payments.vue";
-import Subscription from "@/components/Profile/Subscription.vue";
-import UserDetails from "@/components/Profile/UserDetails.vue";
+import History from '@/components/History/History.vue';
+import Payments from '@/components/Profile/Payments.vue';
+import Subscription from '@/components/Profile/Subscription.vue';
+import UserDetails from '@/components/Profile/UserDetails.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -57,8 +57,8 @@ watch(route, (newRoute) => {
   <v-tabs
     v-model="tab"
     align-tabs="center"
-    color="deep-purple-accent-4"
-    :class="isDark ? 'tw-bg-black' : 'tw-bg-white'"
+    color="#C9A84C"
+    :class="isDark ? 'tw-bg-canvas' : 'tw-bg-white'"
     @update:modelValue="(v: unknown) => handleTabChange(v as number)"
   >
     <v-tab :value="1">User</v-tab>
@@ -70,7 +70,7 @@ watch(route, (newRoute) => {
   <v-tabs-window
     v-model="tab"
     class="tw-h-[calc(100vh-60px)]"
-    :class="isDark ? 'tw-bg-black' : 'tw-bg-white'"
+    :class="isDark ? 'tw-bg-canvas' : 'tw-bg-white'"
   >
     <v-tabs-window-item :value="1">
       <v-container fluid>

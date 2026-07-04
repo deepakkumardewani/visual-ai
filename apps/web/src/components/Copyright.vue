@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const currentYear = new Date().getFullYear();
@@ -10,7 +10,7 @@ const currentYear = new Date().getFullYear();
       &copy; {{ currentYear }}
       <span
         @click="router.push('/')"
-        class="tw-cursor-pointer tw-bg-gradient-to-r dark:tw-from-purple-400 dark:tw-to-purple-600 tw-from-purple-900 tw-to-purple-800 tw-bg-clip-text tw-text-transparent"
+        class="tw-cursor-pointer tw-bg-gradient-to-r dark:tw-from-[#D4B577] dark:tw-to-[#C9A84C] tw-from-[#9E7D35] tw-to-[#7A6428] tw-bg-clip-text tw-text-transparent"
         >Visual AI</span
       >
       <span class="tw-inline-block tw-mx-2">|</span>

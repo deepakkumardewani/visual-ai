@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 
-import { useAppStore } from "@/stores/app";
-import { useDialogStore } from "@/stores/dialog";
+import { useAppStore } from '@/stores/app';
+import { useDialogStore } from '@/stores/dialog';
 
-import ReferralCode from "@/components/ReferralCode.vue";
+import ReferralCode from '@/components/ReferralCode.vue';
 
 const appStore = useAppStore();
 const { isDark } = storeToRefs(appStore);
@@ -17,7 +17,7 @@ const { referralOfferDialog } = storeToRefs(dialogStore);
   <v-dialog v-model="referralOfferDialog" max-width="500px">
     <v-card :color="isDark ? 'grey-darken-4' : 'white'" class="tw-p-4">
       <v-card-title class="tw-text-center tw-text-xl tw-font-bold tw-mb-4">
-        <v-icon icon="fa-solid fa-gift" color="purple" class="tw-mr-2" />
+        <v-icon icon="fa-solid fa-gift" color="#C9A84C" class="tw-mr-2" />
         Special Referral Offer
       </v-card-title>
 
@@ -25,7 +25,7 @@ const { referralOfferDialog } = storeToRefs(dialogStore);
         <div class="tw-p-4 tw-rounded-lg tw-mb-6">
           <p
             class="tw-font-semibold tw-text-center"
-            :class="isDark ? 'tw-text-white' : 'tw-text-purple-900'"
+            :class="isDark ? 'tw-text-white' : 'tw-text-[#7A6428]'"
           >
             Refer a friend and get <span class="tw-font-bold">1 month of Pro access</span> for FREE!
           </p>
@@ -36,7 +36,7 @@ const { referralOfferDialog } = storeToRefs(dialogStore);
             Limited time offer
           </p>
         </div>
-        <div class="tw-bg-[#9333ea] dark:tw-bg-[#6b21a8] tw-p-6 tw-rounded-lg">
+        <div class="tw-bg-[#C9A84C] dark:tw-bg-[#C98A5A] tw-p-6 tw-rounded-lg">
           <p class="tw-mb-4">
             Share your unique referral code with friends. After they signup and use your code,
             you'll automatically be upgraded to Pro for a month!
@@ -48,7 +48,9 @@ const { referralOfferDialog } = storeToRefs(dialogStore);
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="purple" @click="dialogStore.hideReferralOffer()" variant="tonal">Close</v-btn>
+        <v-btn color="#C9A84C" @click="dialogStore.hideReferralOffer()" variant="tonal"
+          >Close</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>

@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { useLenis } from "@/composables/useLenis";
+import { useLenis } from '@/composables/useLenis';
 
-import AmbientCanvas from "@/components/Landing/AmbientCanvas.vue";
-import CapabilitiesSection from "@/components/Landing/CapabilitiesSection.vue";
-import FaqSection from "@/components/Landing/FaqSection.vue";
-import FinalCta from "@/components/Landing/FinalCta.vue";
-import LandingFooter from "@/components/Landing/LandingFooter.vue";
-import LandingHero from "@/components/Landing/LandingHero.vue";
-import LandingNav from "@/components/Landing/LandingNav.vue";
-import PricingTeaser from "@/components/Landing/PricingTeaser.vue";
-import ShowcaseGallery from "@/components/Landing/ShowcaseGallery.vue";
-import ToolChapter from "@/components/Landing/ToolChapter.vue";
+import AmbientCanvas from '@/components/Landing/AmbientCanvas.vue';
+import CapabilitiesSection from '@/components/Landing/CapabilitiesSection.vue';
+import FaqSection from '@/components/Landing/FaqSection.vue';
+import FinalCta from '@/components/Landing/FinalCta.vue';
+import LandingFooter from '@/components/Landing/LandingFooter.vue';
+import LandingHero from '@/components/Landing/LandingHero.vue';
+import LandingNav from '@/components/Landing/LandingNav.vue';
+import PricingTeaser from '@/components/Landing/PricingTeaser.vue';
+import ShowcaseGallery from '@/components/Landing/ShowcaseGallery.vue';
+import ToolChapter from '@/components/Landing/ToolChapter.vue';
 
-import { TOOLS } from "@/utils/landing";
+import { TOOLS } from '@/utils/landing';
 
 useLenis();
 </script>
@@ -52,9 +52,9 @@ useLenis();
 <style scoped lang="scss">
 .landing {
   position: relative;
-  background: #18120e;
-  color: #f0e8dc;
-  font-family: "Source Sans 3", system-ui, sans-serif;
+  background-color: rgb(var(--tw-canvas));
+  color: rgb(var(--tw-ink-primary));
+  font-family: 'Source Sans 3', system-ui, sans-serif;
   overflow-x: hidden;
 }
 
@@ -69,18 +69,18 @@ useLenis();
   text-align: center;
 }
 .tools__title {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-weight: 400;
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.1;
   letter-spacing: -0.015em;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   margin: 1rem 0 0;
 }
 .tools__sub {
   margin: 1rem auto 0;
   font-size: 1.1rem;
   line-height: 1.65;
-  color: #a89888;
+  color: rgb(var(--tw-ink-muted));
 }
 </style>

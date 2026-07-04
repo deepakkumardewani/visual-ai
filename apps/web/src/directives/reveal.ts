@@ -1,6 +1,6 @@
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import type { Directive } from "vue";
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import type { Directive } from 'vue';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,7 +19,7 @@ interface RevealElement extends HTMLElement {
 }
 
 const prefersReducedMotion = (): boolean =>
-  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /**
  * `v-reveal` — fades + lifts an element into view once on scroll.
@@ -38,8 +38,8 @@ export const vReveal: Directive<RevealElement, RevealBinding | undefined> = {
       y: 0,
       duration: REVEAL_DURATION,
       delay,
-      ease: "power3.out",
-      scrollTrigger: { trigger: el, start: "top 88%", once: true },
+      ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true },
     });
   },
   unmounted(el) {

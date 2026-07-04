@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
-import { useDisplay } from "vuetify";
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
+import { useDisplay } from 'vuetify';
 
-import { useDialogStore } from "@/stores/dialog";
-import { useUserStore } from "@/stores/user";
+import { useDialogStore } from '@/stores/dialog';
+import { useUserStore } from '@/stores/user';
 
-import AnimatedCounter from "@/components/Header/AnimatedCounter.vue";
+import AnimatedCounter from '@/components/Header/AnimatedCounter.vue';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();

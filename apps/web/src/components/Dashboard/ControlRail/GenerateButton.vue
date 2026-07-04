@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDashboardMotion } from "@/composables/useDashboardMotion";
+import { useDashboardMotion } from '@/composables/useDashboardMotion';
 
 defineProps<{
   disabled: boolean;
@@ -36,6 +36,6 @@ const { pressable } = useDashboardMotion();
       class="tw-inline-block tw-h-4 tw-w-4 tw-animate-spin tw-rounded-full tw-border-2 tw-border-canvas/30 tw-border-t-canvas motion-reduce:tw-animate-none"
       aria-hidden="true"
     />
-    <span>{{ loading ? "Generating…" : "Generate" }}</span>
+    <span>{{ loading ? 'Generating…' : 'Generate' }}</span>
   </button>
 </template>

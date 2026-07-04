@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { Model } from "@/types/model";
+import type { Model } from '@/types/model';
 
-import { useDashboardMotion } from "@/composables/useDashboardMotion";
+import { useDashboardMotion } from '@/composables/useDashboardMotion';
 
-import ProviderIcon from "@/components/primitives/ProviderIcon.vue";
-import TierBadge from "@/components/primitives/TierBadge.vue";
+import ProviderIcon from '@/components/primitives/ProviderIcon.vue';
+import TierBadge from '@/components/primitives/TierBadge.vue';
 
-import { formatPrice } from "@/utils/models";
+import { formatPrice } from '@/utils/models';
 
 defineProps<{
   model: Model;

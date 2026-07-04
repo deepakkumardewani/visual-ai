@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MODELS } from "@/utils/landing";
+import { MODELS } from '@/utils/landing';
 </script>
 
 <template>
@@ -43,19 +43,19 @@ import { MODELS } from "@/utils/landing";
   margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
 }
 .caps__title {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-weight: 400;
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.1;
   letter-spacing: -0.015em;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   margin: 1rem 0 0;
 }
 .caps__sub {
   margin: 1rem 0 0;
   font-size: 1.1rem;
   line-height: 1.65;
-  color: #a89888;
+  color: rgb(var(--tw-ink-muted));
 }
 
 .caps__models {
@@ -87,10 +87,10 @@ import { MODELS } from "@/utils/landing";
   margin-bottom: 0.6rem;
 }
 .model__name {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-weight: 400;
   font-size: 1.2rem;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   margin: 0;
 }
 .model__pro {
@@ -108,7 +108,7 @@ import { MODELS } from "@/utils/landing";
   margin: 0;
   font-size: 0.92rem;
   line-height: 1.6;
-  color: #a89888;
+  color: rgb(var(--tw-ink-muted));
 }
 
 @media (prefers-reduced-motion: reduce) {

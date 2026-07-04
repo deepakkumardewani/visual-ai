@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import LandingButton from "@/components/Landing/LandingButton.vue";
+import LandingButton from '@/components/Landing/LandingButton.vue';
 
-import { SHOWCASE } from "@/utils/landing";
+import { SHOWCASE } from '@/utils/landing';
 </script>
 
 <template>
@@ -43,18 +43,18 @@ import { SHOWCASE } from "@/utils/landing";
   margin-bottom: clamp(2.5rem, 5vw, 4rem);
 }
 .showcase__title {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-weight: 400;
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.1;
   letter-spacing: -0.015em;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   margin: 1rem 0 0;
 }
 .showcase__sub {
   margin: 1rem 0 0;
   font-size: 1.1rem;
-  color: #a89888;
+  color: rgb(var(--tw-ink-muted));
 }
 
 .wall {
@@ -104,7 +104,7 @@ import { SHOWCASE } from "@/utils/landing";
 .tile__prompt {
   font-size: 0.82rem;
   line-height: 1.5;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;

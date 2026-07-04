@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
-import { useDialogStore } from "@/stores/dialog";
+import { useDialogStore } from '@/stores/dialog';
 
-import { ImgComparisonSlider } from "@img-comparison-slider/vue";
+import { ImgComparisonSlider } from '@img-comparison-slider/vue';
 
 const router = useRouter();
 const dialogStore = useDialogStore();
@@ -20,12 +20,12 @@ const reviveImage1 = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/revive-1.png
 
 const handleSignup = () => {
   signupDialog.value = false;
-  router.push("/signup");
+  router.push('/signup');
 };
 
 const handleLogin = () => {
   signupDialog.value = false;
-  router.push("/signin");
+  router.push('/signin');
 };
 </script>
 
@@ -53,7 +53,7 @@ const handleLogin = () => {
                 color="primary"
                 size="x-large"
                 @click="handleSignup"
-                class="tw-h-12 tw-flex-1 tw-capitalize tw-bg-gradient-to-r tw-from-indigo-500 tw-to-purple-500"
+                class="tw-h-12 tw-flex-1 tw-capitalize tw-bg-gradient-to-r tw-from-[#C9A84C] tw-to-[#D4B577]"
               >
                 Sign up for free
               </v-btn>
@@ -180,7 +180,7 @@ const handleLogin = () => {
 }
 
 .v-img::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(

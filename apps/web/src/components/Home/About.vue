@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useParallax } from "@vueuse/core";
-import { useDisplay } from "vuetify";
+import { useParallax } from '@vueuse/core';
+import { useDisplay } from 'vuetify';
 
-import Chip from "@/components/Home/Chip.vue";
+import Chip from '@/components/Home/Chip.vue';
 
 const { mobile } = useDisplay();
 const container = ref(null);

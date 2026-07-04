@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
 
-import { useAppStore } from "@/stores/app";
+import { useAppStore } from '@/stores/app';
 
-import SideBySide from "@/components/SideBySide.vue";
+import SideBySide from '@/components/SideBySide.vue';
 
 const appStore = useAppStore();
 const { isDark } = storeToRefs(appStore);
@@ -79,7 +79,7 @@ const reviveExamples = [
   <v-tabs
     v-model="tab"
     align-tabs="center"
-    color="deep-purple-accent-4"
+    color="#C9A84C"
     :class="isDark ? 'tw-bg-black' : 'tw-bg-white'"
   >
     <v-tab :value="1">Upscale</v-tab>

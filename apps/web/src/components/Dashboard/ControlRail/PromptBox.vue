@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed, onMounted, ref, watch } from "vue";
-import { useDisplay } from "vuetify";
+import { storeToRefs } from 'pinia';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useDisplay } from 'vuetify';
 
-import { useReducedMotion } from "@/composables/useReducedMotion";
-import { useAsideStore } from "@/stores/aside";
-import { useGenerateStore } from "@/stores/generate";
+import { useReducedMotion } from '@/composables/useReducedMotion';
+import { useAsideStore } from '@/stores/aside';
+import { useGenerateStore } from '@/stores/generate';
 
-import Heading from "@/components/Aside/Heading.vue";
-import PromptAiMenu from "@/components/Dashboard/ControlRail/PromptAiMenu.vue";
+import Heading from '@/components/Aside/Heading.vue';
+import PromptAiMenu from '@/components/Dashboard/ControlRail/PromptAiMenu.vue';
 
-const PROMPT_INFO = "Describe style, subject, colors, mood, and composition of your desired image";
+const PROMPT_INFO = 'Describe style, subject, colors, mood, and composition of your desired image';
 
 const asideStore = useAsideStore();
 const generateStore = useGenerateStore();
@@ -49,7 +49,7 @@ function applyPrompt(text: string) {
 
 function typePrompt(text: string) {
   isTyping.value = true;
-  typingPrompt.value = "";
+  typingPrompt.value = '';
 
   let index = 0;
   const interval = setInterval(() => {
@@ -66,7 +66,7 @@ function typePrompt(text: string) {
 
 function clearPrompt() {
   if (isReadonly.value) return;
-  typingPrompt.value = "";
+  typingPrompt.value = '';
   focusTextarea();
 }
 
@@ -83,7 +83,7 @@ watch(typingPrompt, (value) => {
 });
 
 onMounted(() => {
-  typingPrompt.value = promptText.value ?? "";
+  typingPrompt.value = promptText.value ?? '';
 });
 </script>
 

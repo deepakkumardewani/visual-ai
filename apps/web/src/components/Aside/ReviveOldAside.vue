@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useUser } from "vue-clerk";
-import { useRouter } from "vue-router";
+import { storeToRefs } from 'pinia';
+import { useUser } from 'vue-clerk';
+import { useRouter } from 'vue-router';
 
-import { useAppStore } from "@/stores/app";
-import { useDialogStore } from "@/stores/dialog";
-import { useGenerateStore } from "@/stores/generate";
-import { useUserStore } from "@/stores/user";
+import { useAppStore } from '@/stores/app';
+import { useDialogStore } from '@/stores/dialog';
+import { useGenerateStore } from '@/stores/generate';
+import { useUserStore } from '@/stores/user';
 
-import ImageUpload from "@/components/Aside/ImageUpload.vue";
-import SignupDialog from "@/components/Dialogs/SignupDialog.vue";
+import ImageUpload from '@/components/Aside/ImageUpload.vue';
+import SignupDialog from '@/components/Dialogs/SignupDialog.vue';
 
 const router = useRouter();
 const { isSignedIn } = useUser();
@@ -46,15 +46,15 @@ async function reviveImage() {
     generateStore.reviveOldImage(body);
     progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?userId=${userId.value}`;
     appStore.reviveOpen();
-    localStorage.setItem("reviveInProgress", "true");
+    localStorage.setItem('reviveInProgress', 'true');
     reviveInProgress.value = true;
   } else {
-    router.push("/signin");
+    router.push('/signin');
   }
 }
 
 onMounted(async () => {
-  const inProgress = JSON.parse(localStorage.getItem("reviveInProgress") as string);
+  const inProgress = JSON.parse(localStorage.getItem('reviveInProgress') as string);
   if (inProgress === true) {
     reviveInProgress.value = true;
     appStore.reviveOpen();
@@ -71,7 +71,7 @@ onMounted(async () => {
         <div class="tw-flex tw-items-center tw-gap-2">
           <v-checkbox
             v-model="highResolution"
-            color="purple-lighten-2"
+            color="#C98A5A"
             label="High Resolution"
             hide-details
           ></v-checkbox>
@@ -87,7 +87,7 @@ onMounted(async () => {
         <div class="tw-flex tw-items-center tw-gap-2">
           <v-checkbox
             v-model="scratched"
-            color="purple-lighten-2"
+            color="#C98A5A"
             label="Scratched"
             hide-details
           ></v-checkbox>
@@ -105,7 +105,7 @@ onMounted(async () => {
       @click="reviveImage"
       text="Revive"
       :disabled="!imageUpload?.image || reviveInProgress"
-      color="purple-lighten-2"
+      color="#C98A5A"
       block
       dark
     >

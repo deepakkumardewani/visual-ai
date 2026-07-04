@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FeatureType } from "@/pages/utils";
+import { FeatureType } from '@/pages/utils';
 import {
   faChevronLeft,
   faChevronRight,
@@ -9,20 +9,20 @@ import {
   faTrashAlt,
   farHeart,
   fasHeart,
-} from "@/plugins/icons";
-import { storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
-import { useDisplay } from "vuetify";
+} from '@/plugins/icons';
+import { storeToRefs } from 'pinia';
+import { computed, ref, watch } from 'vue';
+import { useDisplay } from 'vuetify';
 
-import { IImageObject } from "@/types";
+import { IImageObject } from '@/types';
 
-import { useDialogStore } from "@/stores/dialog";
-import { useGenerateStore } from "@/stores/generate";
-import { useUserStore } from "@/stores/user";
+import { useDialogStore } from '@/stores/dialog';
+import { useGenerateStore } from '@/stores/generate';
+import { useUserStore } from '@/stores/user';
 
-import SideBySide from "@/components/SideBySide.vue";
+import SideBySide from '@/components/SideBySide.vue';
 
-import { deleteImage, downloadImage, favoriteImage, formatFileSize } from "@/utils/helpers";
+import { deleteImage, downloadImage, favoriteImage, formatFileSize } from '@/utils/helpers';
 
 const { mobile } = useDisplay();
 const dialogStore = useDialogStore();
@@ -53,7 +53,7 @@ const previousImage = () => {
 };
 
 const downloadImageUrl = computed(() => {
-  if (!props.item?.images) return "";
+  if (!props.item?.images) return '';
   const publicId = props.item.images[currentImageIndex.value]?.aiImagePublicId
     ? props.item.images[currentImageIndex.value]?.aiImagePublicId
     : props.item.images[currentImageIndex.value]?.enhancedPublicId;
@@ -64,7 +64,7 @@ const downloadImageUrl = computed(() => {
 });
 const getCurrentImageUrl = () => {
   const images = props.item?.images;
-  if (!images) return "";
+  if (!images) return '';
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
   const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.aiImagePublicId}`;
   return images[currentImageIndex.value]?.aiImagePublicId
@@ -74,7 +74,7 @@ const getCurrentImageUrl = () => {
 
 const originalImageUrl = computed(() => {
   const images = props.item?.images;
-  if (!images) return "";
+  if (!images) return '';
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
   const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.originalPublicId}`;
   return images[currentImageIndex.value]?.originalPublicId
@@ -83,7 +83,7 @@ const originalImageUrl = computed(() => {
 });
 const enhancedImageUrl = computed(() => {
   const images = props.item?.images;
-  if (!images) return "";
+  if (!images) return '';
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
   const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.enhancedPublicId}`;
   return images[currentImageIndex.value]?.enhancedPublicId

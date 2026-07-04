@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { groupByDate } from "@/pages/utils";
-import { faCircleCheck, faXmark } from "@/plugins/icons";
-import { storeToRefs } from "pinia";
-import { useDisplay } from "vuetify";
+import { groupByDate } from '@/pages/utils';
+import { faCircleCheck, faXmark } from '@/plugins/icons';
+import { storeToRefs } from 'pinia';
+import { useDisplay } from 'vuetify';
 
-import type { GroupedObject, IImage, IImageObject } from "@/types";
+import type { GroupedObject, IImage, IImageObject } from '@/types';
 
-import { useAppStore } from "@/stores/app";
-import { useDialogStore } from "@/stores/dialog";
-import { useHistoryStore } from "@/stores/history";
-import { useUserStore } from "@/stores/user";
+import { useAppStore } from '@/stores/app';
+import { useDialogStore } from '@/stores/dialog';
+import { useHistoryStore } from '@/stores/history';
+import { useUserStore } from '@/stores/user';
 
-import ImageDialog from "@/components/Dialogs/ImageDialog.vue";
-import FeatureIcon from "@/components/History/FeatureIcon.vue";
-import Filter from "@/components/History/Filter.vue";
-import ImageActionButtons from "@/components/History/ImageActionButtons.vue";
-import NoResults from "@/components/History/NoResults.vue";
-import SelectActionButtons from "@/components/History/SelectActionButtons.vue";
+import ImageDialog from '@/components/Dialogs/ImageDialog.vue';
+import FeatureIcon from '@/components/History/FeatureIcon.vue';
+import Filter from '@/components/History/Filter.vue';
+import ImageActionButtons from '@/components/History/ImageActionButtons.vue';
+import NoResults from '@/components/History/NoResults.vue';
+import SelectActionButtons from '@/components/History/SelectActionButtons.vue';
 
-import { SIZE_CLASSES } from "@/utils/constants";
+import { SIZE_CLASSES } from '@/utils/constants';
 
 const props = withDefaults(defineProps<{ isFavorites?: boolean }>(), {
   isFavorites: false,
@@ -35,7 +35,7 @@ const { selectedSize } = storeToRefs(useHistoryStore());
 const groupedHistory = ref<GroupedObject[]>([]);
 const imageDialogItem = ref<IImageObject | undefined>();
 const selectedFeatureType = ref<string[]>([]);
-const searchQuery = ref("");
+const searchQuery = ref('');
 const sizeClasses = SIZE_CLASSES;
 
 const carouselIndexes = ref<{ [key: string]: number }>({});

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { faHeart, faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons";
-import { computed } from "vue";
+import { faHeart, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
+import { computed } from 'vue';
 
-import { useDashboardMotion } from "@/composables/useDashboardMotion";
+import { useDashboardMotion } from '@/composables/useDashboardMotion';
 
-import type { CommunityFeedItem } from "@/utils/communityMock";
+import type { CommunityFeedItem } from '@/utils/communityMock';
 
 const props = defineProps<{
   item: CommunityFeedItem;
@@ -17,8 +17,8 @@ const emit = defineEmits<{
 const { cardHover, imageHoverZoom, interactiveTransition, pressable } = useDashboardMotion();
 
 const aspectRatioStyle = computed(() => {
-  const [width, height] = props.item.aspectRatio.split(":").map(Number);
-  if (!width || !height) return "3 / 4";
+  const [width, height] = props.item.aspectRatio.split(':').map(Number);
+  if (!width || !height) return '3 / 4';
   return `${width} / ${height}`;
 });
 
@@ -27,7 +27,7 @@ const imageAlt = computed(
 );
 
 function handleRemix() {
-  emit("remix", props.item.prompt);
+  emit('remix', props.item.prompt);
 }
 </script>
 

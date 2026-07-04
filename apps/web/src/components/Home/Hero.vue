@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { faChevronDown, faRocket } from "@/plugins/icons";
-import { storeToRefs } from "pinia";
-import { onMounted, onUnmounted, ref } from "vue";
-import { useAuth } from "vue-clerk";
+import { faChevronDown, faRocket } from '@/plugins/icons';
+import { storeToRefs } from 'pinia';
+import { onMounted, onUnmounted, ref } from 'vue';
+import { useAuth } from 'vue-clerk';
 
-import { useAppStore } from "@/stores/app";
+import { useAppStore } from '@/stores/app';
 
-import FeatureScroll from "@/components/Home/FeatureScroll.vue";
+import FeatureScroll from '@/components/Home/FeatureScroll.vue';
 
 const { isSignedIn } = useAuth();
 const showScrollIndicator = ref(true);
@@ -25,17 +25,17 @@ function handleScroll() {
 }
 
 onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
+  window.addEventListener('scroll', handleScroll);
 });
 
 onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener('scroll', handleScroll);
 });
 
 const scrollToAbout = () => {
-  const aboutSection = document.querySelector("#about");
+  const aboutSection = document.querySelector('#about');
   if (aboutSection) {
-    aboutSection.scrollIntoView({ behavior: "smooth" });
+    aboutSection.scrollIntoView({ behavior: 'smooth' });
   }
 };
 </script>
@@ -74,7 +74,7 @@ const scrollToAbout = () => {
               }"
               :delay="200"
               :duration="600"
-              class="tw-text-6xl md:tw-text-7xl lg:tw-text-8xl tw-font-bold tw-bg-gradient-to-r tw-from-purple-500 tw-to-pink-500 dark:tw-from-purple-400 dark:tw-to-pink-400 tw-bg-clip-text tw-text-transparent text-center"
+              class="tw-text-6xl md:tw-text-7xl lg:tw-text-8xl tw-font-bold tw-bg-gradient-to-r tw-from-[#C9A84C] tw-to-[#E89B7C] dark:tw-from-[#D4B577] dark:tw-to-[#E8A578] tw-bg-clip-text tw-text-transparent text-center"
             >
               Visual AI
             </div>
@@ -117,7 +117,7 @@ const scrollToAbout = () => {
       <v-btn
         to="/signup"
         class="text-none tw-px-8"
-        color="purple-lighten-1"
+        color="#C98A5A"
         size="x-large"
         variant="flat"
         elevation="2"
@@ -163,7 +163,7 @@ const scrollToAbout = () => {
       >
         <font-awesome-icon
           :icon="faChevronDown"
-          class="bounce tw-text-2xl tw-text-purple-500 dark:tw-text-purple-400"
+          class="bounce tw-text-2xl tw-text-[#C9A84C] dark:tw-text-[#D4B577]"
         />
       </div>
     </Transition>

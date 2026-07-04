@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends string | number">
-import type { SegmentedOption } from "@/types/primitives";
+import type { SegmentedOption } from '@/types/primitives';
 
 const props = defineProps<{
   modelValue: T;
@@ -8,18 +8,18 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  "update:modelValue": [value: T];
+  'update:modelValue': [value: T];
 }>();
 
 const select = (value: T) => {
   if (value !== props.modelValue) {
-    emit("update:modelValue", value);
+    emit('update:modelValue', value);
   }
 };
 
 const onKeydown = (event: KeyboardEvent, index: number) => {
   const { key } = event;
-  if (key !== "ArrowLeft" && key !== "ArrowRight" && key !== "Home" && key !== "End") {
+  if (key !== 'ArrowLeft' && key !== 'ArrowRight' && key !== 'Home' && key !== 'End') {
     return;
   }
 
@@ -27,10 +27,10 @@ const onKeydown = (event: KeyboardEvent, index: number) => {
   const lastIndex = props.options.length - 1;
   let nextIndex = index;
 
-  if (key === "ArrowLeft") nextIndex = Math.max(0, index - 1);
-  if (key === "ArrowRight") nextIndex = Math.min(lastIndex, index + 1);
-  if (key === "Home") nextIndex = 0;
-  if (key === "End") nextIndex = lastIndex;
+  if (key === 'ArrowLeft') nextIndex = Math.max(0, index - 1);
+  if (key === 'ArrowRight') nextIndex = Math.min(lastIndex, index + 1);
+  if (key === 'Home') nextIndex = 0;
+  if (key === 'End') nextIndex = lastIndex;
 
   select(props.options[nextIndex].value);
 };

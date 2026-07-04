@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { faImages } from "@/plugins/icons";
-import { storeToRefs } from "pinia";
-import { ref } from "vue";
-import { ref as vueRef } from "vue";
-import { useDisplay } from "vuetify";
+import { faImages } from '@/plugins/icons';
+import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
+import { ref as vueRef } from 'vue';
+import { useDisplay } from 'vuetify';
 
-import { useAppStore } from "@/stores/app";
+import { useAppStore } from '@/stores/app';
 
-import Chip from "@/components/Home/Chip.vue";
+import Chip from '@/components/Home/Chip.vue';
 
-import gallery from "@/utils/gallery.json";
+import gallery from '@/utils/gallery.json';
 
 // Get 5 random images from gallery data
 const randomImages = vueRef([...gallery].sort(() => 0.5 - Math.random()).slice(0, 6));
@@ -47,7 +47,7 @@ const showImageDetails = (img: any) => {
           <v-btn
             to="/gallery"
             v-motion-pop-visible-once
-            :color="isDark ? 'purple-lighten-2' : 'purple-darken-2'"
+            :color="isDark ? '#C98A5A' : '#9E7D35'"
             size="large"
             class="text-center"
             variant="outlined"
@@ -81,16 +81,13 @@ const showImageDetails = (img: any) => {
                 <v-img :src="img.url" cover class="gallery-image">
                   <template v-slot:placeholder>
                     <v-row class="fill-height ma-0" align="center" justify="center">
-                      <v-progress-circular
-                        indeterminate
-                        color="purple-lighten-2"
-                      ></v-progress-circular>
+                      <v-progress-circular indeterminate color="#C98A5A"></v-progress-circular>
                     </v-row>
                   </template>
                   <v-expand-transition>
                     <div
                       v-if="isHovering"
-                      class="tw-absolute tw-inset-0 tw-bg-purple-900/50 tw-p-6 tw-flex tw-flex-col tw-justify-end"
+                      class="tw-absolute tw-inset-0 tw-bg-[#2A2119]/50 tw-p-6 tw-flex tw-flex-col tw-justify-end"
                     >
                       <p class="text-body-1 font-weight-medium tw-text-white">{{ img.prompt }}</p>
                       <!-- <v-btn
@@ -125,14 +122,11 @@ const showImageDetails = (img: any) => {
                 <v-img :src="img.url" cover>
                   <template v-slot:placeholder>
                     <v-row class="fill-height ma-0" align="center" justify="center">
-                      <v-progress-circular
-                        indeterminate
-                        color="purple-lighten-2"
-                      ></v-progress-circular>
+                      <v-progress-circular indeterminate color="#C98A5A"></v-progress-circular>
                     </v-row>
                   </template>
                 </v-img>
-                <v-card-text class="tw-bg-purple-900/50">
+                <v-card-text class="tw-bg-[#2A2119]/50">
                   <p class="text-body-2">{{ img.prompt }}</p>
                 </v-card-text>
               </v-card>

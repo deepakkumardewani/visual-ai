@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { v4 as uuidv4 } from "uuid";
-import { computed, onMounted, ref } from "vue";
-import { useUser } from "vue-clerk";
-import { useRouter } from "vue-router";
+import { storeToRefs } from 'pinia';
+import { v4 as uuidv4 } from 'uuid';
+import { computed, onMounted, ref } from 'vue';
+import { useUser } from 'vue-clerk';
+import { useRouter } from 'vue-router';
 
-import type { SegmentedOption } from "@/types/primitives";
+import type { SegmentedOption } from '@/types/primitives';
 
-import { useAppStore } from "@/stores/app";
-import { useAsideStore } from "@/stores/aside";
-import { useDialogStore } from "@/stores/dialog";
-import { useGenerateStore } from "@/stores/generate";
-import { useUserStore } from "@/stores/user";
+import { useAppStore } from '@/stores/app';
+import { useAsideStore } from '@/stores/aside';
+import { useDialogStore } from '@/stores/dialog';
+import { useGenerateStore } from '@/stores/generate';
+import { useUserStore } from '@/stores/user';
 
-import { useLocal } from "@/composables/local";
+import { useLocal } from '@/composables/local';
 
-import Heading from "@/components/Aside/Heading.vue";
-import ImageUpload from "@/components/Aside/ImageUpload.vue";
-import SegmentedControl from "@/components/primitives/SegmentedControl.vue";
-import SignupDialog from "@/components/Dialogs/SignupDialog.vue";
+import Heading from '@/components/Aside/Heading.vue';
+import ImageUpload from '@/components/Aside/ImageUpload.vue';
+import SegmentedControl from '@/components/primitives/SegmentedControl.vue';
+import SignupDialog from '@/components/Dialogs/SignupDialog.vue';
 
-import { IMAGE_FORMATS, IMAGE_SIZES } from "@/utils/constants";
+import { IMAGE_FORMATS, IMAGE_SIZES } from '@/utils/constants';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
@@ -48,7 +48,7 @@ const formatValue = computed({
 
     if (!isPro.value && item.isPro) {
       imageFormat.value = IMAGE_FORMATS[0];
-      router.push("/pricing");
+      router.push('/pricing');
     } else {
       imageFormat.value = item;
     }
@@ -56,22 +56,22 @@ const formatValue = computed({
 });
 
 const SCALE = {
-  "2X": 2,
-  "4X": 4,
+  '2X': 2,
+  '4X': 4,
 };
 
 const imageUpload = ref();
-const scale = ref<string>("2X");
+const scale = ref<string>('2X');
 const creativity = ref<number>(0.1);
-const prompt = ref<string>("");
-const negativePrompt = ref<string>("");
+const prompt = ref<string>('');
+const negativePrompt = ref<string>('');
 // Add computed property for output dimensions
 const outputDimensions = computed(() => {
   if (imageUpload.value?.width && imageUpload.value?.height) {
     const multiplier = SCALE[scale.value as keyof typeof SCALE];
     return `${imageUpload.value?.width * multiplier}x${imageUpload.value?.height * multiplier}px`;
   }
-  return "";
+  return '';
 });
 
 async function upscaleImage() {
@@ -92,13 +92,13 @@ async function upscaleImage() {
 
   if (isSignedIn.value) {
     const jobId = uuidv4();
-    localStore.setLocal("upscaleJobId", jobId);
+    localStore.setLocal('upscaleJobId', jobId);
     const data = {
       jobId,
       prompt: prompt.value,
       negativePrompt: negativePrompt.value,
       image: imageUpload?.value?.image,
-      format: imageUpload?.value?.image.name.split(".").pop(),
+      format: imageUpload?.value?.image.name.split('.').pop(),
       creativity: creativity.value,
       scale: SCALE[scale.value as keyof typeof SCALE],
       outputFormat: imageFormat.value.title.toLowerCase(),
@@ -108,19 +108,19 @@ async function upscaleImage() {
 
     progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?jobId=${jobId}`;
     appStore.upscaleOpen();
-    localStorage.setItem("upscaleInProgress", "true");
+    localStorage.setItem('upscaleInProgress', 'true');
     upscaleInProgress.value = true;
   } else {
-    router.push("/signin");
+    router.push('/signin');
   }
 }
 
 onMounted(async () => {
-  const inProgress = JSON.parse(localStorage.getItem("upscaleInProgress") as string);
+  const inProgress = JSON.parse(localStorage.getItem('upscaleInProgress') as string);
   // console.log('inProgress', inProgress)
   if (inProgress === true) {
     upscaleInProgress.value = true;
-    const jobId = localStore.getLocal("upscaleJobId");
+    const jobId = localStore.getLocal('upscaleJobId');
     if (jobId) {
       progressUrl.value = `${import.meta.env.VITE_API_BASEPATH}/progress?jobId=${jobId}`;
       appStore.upscaleOpen();
@@ -209,7 +209,7 @@ onMounted(async () => {
       @click="upscaleImage"
       text="Upscale"
       :disabled="!imageUpload?.image || upscaleInProgress"
-      color="purple-lighten-2"
+      color="#C98A5A"
       block
       dark
     >

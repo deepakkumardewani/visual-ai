@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref } from 'vue';
 
-import { getProviderLettermark, getProviderLogo, isKnownProvider } from "@/utils/providerLogos";
+import { getProviderLettermark, getProviderLogo, isKnownProvider } from '@/utils/providerLogos';
 
 const props = defineProps<{
   provider: string;
-  size?: "sm" | "md";
+  size?: 'sm' | 'md';
 }>();
 
 const imageFailed = ref(false);
@@ -17,7 +17,7 @@ const hasLogo = computed(() => Boolean(logoSrc.value) && !imageFailed.value);
 const lettermark = computed(() => getProviderLettermark(props.provider));
 
 const sizeClass = computed(() =>
-  props.size === "sm" ? "tw-h-6 tw-w-6 tw-text-[10px]" : "tw-h-8 tw-w-8 tw-text-xs",
+  props.size === 'sm' ? 'tw-h-6 tw-w-6 tw-text-[10px]' : 'tw-h-8 tw-w-8 tw-text-xs',
 );
 
 const onImageError = () => {

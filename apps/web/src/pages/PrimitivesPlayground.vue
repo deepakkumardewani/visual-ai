@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue';
 
-import Popover from "@/components/primitives/Popover.vue";
-import ProviderIcon from "@/components/primitives/ProviderIcon.vue";
-import SegmentedControl from "@/components/primitives/SegmentedControl.vue";
-import Stepper from "@/components/primitives/Stepper.vue";
-import TierBadge from "@/components/primitives/TierBadge.vue";
-import TokenScratch from "@/components/primitives/TokenScratch.vue";
-import type { ModelTier } from "@/types/primitives";
-import { KNOWN_PROVIDERS } from "@/utils/providerLogos";
+import Popover from '@/components/primitives/Popover.vue';
+import ProviderIcon from '@/components/primitives/ProviderIcon.vue';
+import SegmentedControl from '@/components/primitives/SegmentedControl.vue';
+import Stepper from '@/components/primitives/Stepper.vue';
+import TierBadge from '@/components/primitives/TierBadge.vue';
+import TokenScratch from '@/components/primitives/TokenScratch.vue';
+import type { ModelTier } from '@/types/primitives';
+import { KNOWN_PROVIDERS } from '@/utils/providerLogos';
 
-const aspect = ref("1:1");
-const quality = ref("standard");
+const aspect = ref('1:1');
+const quality = ref('standard');
 const variations = ref(2);
 
 const aspectOptions = [
-  { label: "1:1", value: "1:1" },
-  { label: "16:9", value: "16:9" },
-  { label: "9:16", value: "9:16" },
+  { label: '1:1', value: '1:1' },
+  { label: '16:9', value: '16:9' },
+  { label: '9:16', value: '9:16' },
 ];
 
 const qualityOptions = [
-  { label: "Fast", value: "fast" },
-  { label: "Standard", value: "standard" },
-  { label: "Ultra", value: "ultra" },
+  { label: 'Fast', value: 'fast' },
+  { label: 'Standard', value: 'standard' },
+  { label: 'Ultra', value: 'ultra' },
 ];
 
-const tiers: ModelTier[] = ["budget", "standard", "premium"];
+const tiers: ModelTier[] = ['budget', 'standard', 'premium'];
 </script>
 
 <template>

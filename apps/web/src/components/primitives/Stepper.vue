@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed } from 'vue';
 
 const props = withDefaults(
   defineProps<{
@@ -17,7 +17,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  "update:modelValue": [value: number];
+  'update:modelValue': [value: number];
 }>();
 
 const canDecrement = computed(() => props.modelValue - props.step >= props.min);
@@ -27,19 +27,19 @@ const clamp = (value: number) => Math.min(props.max, Math.max(props.min, value))
 
 const decrement = () => {
   if (!canDecrement.value) return;
-  emit("update:modelValue", clamp(props.modelValue - props.step));
+  emit('update:modelValue', clamp(props.modelValue - props.step));
 };
 
 const increment = () => {
   if (!canIncrement.value) return;
-  emit("update:modelValue", clamp(props.modelValue + props.step));
+  emit('update:modelValue', clamp(props.modelValue + props.step));
 };
 
 const onInputKeydown = (event: KeyboardEvent) => {
-  if (event.key === "ArrowUp") {
+  if (event.key === 'ArrowUp') {
     event.preventDefault();
     increment();
-  } else if (event.key === "ArrowDown") {
+  } else if (event.key === 'ArrowDown') {
     event.preventDefault();
     decrement();
   }

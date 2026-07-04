@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useDisplay } from "vuetify";
+import { storeToRefs } from 'pinia';
+import { useDisplay } from 'vuetify';
 
-import { useAppStore } from "@/stores/app";
-import { useDialogStore } from "@/stores/dialog";
+import { useAppStore } from '@/stores/app';
+import { useDialogStore } from '@/stores/dialog';
 
 const dialogStore = useDialogStore();
 const appStore = useAppStore();
@@ -13,31 +13,31 @@ const { smAndUp } = useDisplay();
 
 const features = [
   {
-    icon: "fa-solid fa-bolt",
-    title: "Priority Processing",
-    description: "Get faster image generation and processing",
+    icon: 'fa-solid fa-bolt',
+    title: 'Priority Processing',
+    description: 'Get faster image generation and processing',
   },
   {
-    icon: "fa-solid fa-images",
-    title: "Higher Quality",
-    description: "Access to premium image quality settings",
+    icon: 'fa-solid fa-images',
+    title: 'Higher Quality',
+    description: 'Access to premium image quality settings',
   },
   {
-    icon: "fa-solid fa-download",
-    title: "Unlimited Downloads",
-    description: "Download as many images as you need",
+    icon: 'fa-solid fa-download',
+    title: 'Unlimited Downloads',
+    description: 'Download as many images as you need',
   },
   {
-    icon: "fa-solid fa-credit-card",
-    title: "Reduced Credit Usage",
-    description: "Use fewer credits for special operations",
+    icon: 'fa-solid fa-credit-card',
+    title: 'Reduced Credit Usage',
+    description: 'Use fewer credits for special operations',
   },
 ];
 </script>
 
 <template>
   <v-dialog v-model="showProUpgradeDialog" :max-width="smAndUp ? '600px' : '95%'">
-    <v-card :color="isDark ? '#3b0764' : '#f5f3ff'" class="tw-p-6 tw-overflow-hidden tw-relative">
+    <v-card :color="isDark ? '#1A1410' : '#F5E6D3'" class="tw-p-6 tw-overflow-hidden tw-relative">
       <!-- Background decoration -->
       <div class="tw-absolute tw-right-0 tw-top-0 tw-opacity-10">
         <v-icon icon="fa-solid fa-crown" size="150"></v-icon>
@@ -62,14 +62,10 @@ const features = [
             :key="feature.title"
             :class="[
               'tw-p-4 tw-rounded-lg tw-flex tw-items-center tw-gap-3',
-              isDark ? 'tw-bg-purple-900/50' : 'tw-bg-purple-100',
+              isDark ? 'tw-bg-[#2A2119]/50' : 'tw-bg-[#F5E6D3]',
             ]"
           >
-            <v-avatar
-              size="40"
-              :color="isDark ? 'purple-darken-1' : 'purple'"
-              class="tw-flex-shrink-0"
-            >
+            <v-avatar size="40" :color="isDark ? '#C98A5A' : '#C9A84C'" class="tw-flex-shrink-0">
               <v-icon :icon="feature.icon" color="white" size="18"></v-icon>
             </v-avatar>
             <div>
@@ -84,7 +80,7 @@ const features = [
       <v-card-actions class="tw-justify-center tw-mt-4">
         <v-btn
           size="large"
-          color="purple"
+          color="#C9A84C"
           variant="elevated"
           class="tw-px-8 tw-py-2"
           @click="dialogStore.hideProUpgrade"

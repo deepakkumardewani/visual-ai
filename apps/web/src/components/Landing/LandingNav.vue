@@ -1,20 +1,28 @@
 <script setup lang="ts">
-import { useWindowScroll } from "@vueuse/core";
-import { computed, ref } from "vue";
+import { useWindowScroll } from '@vueuse/core';
+import { computed, ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 
-import { scrollToSection } from "@/composables/useLenis";
+import { scrollToSection } from '@/composables/useLenis';
 
-import LandingButton from "@/components/Landing/LandingButton.vue";
+import LandingButton from '@/components/Landing/LandingButton.vue';
+import ThemeButton from '@/components/Header/ThemeButton.vue';
 
-import { NAV_LINKS } from "@/utils/landing";
+import { NAV_LINKS } from '@/utils/landing';
 
 const { y } = useWindowScroll();
 const scrolled = computed(() => y.value > 24);
 const menuOpen = ref(false);
+const auth = useAuthStore();
+const showScrollTop = computed(() => y.value > 400);
 
 function go(href: string) {
   menuOpen.value = false;
   scrollToSection(href);
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
 
@@ -38,8 +46,10 @@ function go(href: string) {
       </nav>
 
       <div class="nav__actions">
-        <router-link to="/signin" class="nav__signin">Sign in</router-link>
-        <LandingButton to="/signup">Start free</LandingButton>
+        <ThemeButton class="nav__theme-btn" />
+        <LandingButton :to="auth.isSignedIn ? '/dashboard' : '/signup'">
+          {{ auth.isSignedIn ? 'Open Dashboard' : 'Start free' }}
+        </LandingButton>
       </div>
 
       <button
@@ -64,11 +74,42 @@ function go(href: string) {
           {{ link.label }}
         </a>
         <div class="nav__sheet-actions">
-          <router-link to="/signin" class="nav__signin">Sign in</router-link>
-          <LandingButton to="/signup" size="lg">Start free</LandingButton>
+          <ThemeButton class="nav__sheet-theme-btn" />
+          <LandingButton
+            :to="auth.isSignedIn ? '/dashboard' : '/signup'"
+            size="lg"
+            class="nav__sheet-cta"
+          >
+            {{ auth.isSignedIn ? 'Open Dashboard' : 'Start free' }}
+          </LandingButton>
         </div>
       </div>
     </transition>
+
+    <Teleport to="body">
+      <Transition name="scroll-top-fade">
+        <button
+          v-if="showScrollTop"
+          class="scroll-top-btn"
+          aria-label="Scroll to top"
+          @click="scrollToTop"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M10 17V3" />
+            <path d="M3 10l7-7 7 7" />
+          </svg>
+        </button>
+      </Transition>
+    </Teleport>
   </header>
 </template>
 
@@ -81,14 +122,32 @@ function go(href: string) {
   z-index: 50;
   transition:
     background-color 0.3s ease,
-    border-color 0.3s ease,
     backdrop-filter 0.3s ease;
-  border-bottom: 1px solid transparent;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.35), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
   &--solid {
-    background: rgba(24, 18, 14, 0.72);
+    background: rgb(var(--tw-canvas) / 0.72);
     backdrop-filter: blur(14px);
-    border-bottom-color: #3a2e22;
+
+    &::after {
+      opacity: 1;
+    }
+
+    .nav__inner {
+      padding-top: 0.7rem;
+      padding-bottom: 0.7rem;
+    }
   }
 }
 
@@ -99,15 +158,21 @@ function go(href: string) {
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  transition: padding 0.3s ease;
 }
 
 .nav__brand {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-size: 1.4rem;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   text-decoration: none;
   letter-spacing: -0.01em;
   margin-right: auto;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: rgb(var(--tw-ink-primary));
+  }
 }
 .nav__brand-accent {
   color: #c98a5a;
@@ -121,13 +186,13 @@ function go(href: string) {
 
 .nav__link {
   font-size: 0.95rem;
-  color: #a89888;
+  color: rgb(var(--tw-ink-muted));
   text-decoration: none;
   position: relative;
   transition: color 0.2s ease;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     left: 0;
     bottom: -4px;
@@ -140,7 +205,7 @@ function go(href: string) {
   }
 
   &:hover {
-    color: #f0e8dc;
+    color: rgb(var(--tw-ink-primary));
   }
   &:hover::after {
     transform: scaleX(1);
@@ -151,18 +216,6 @@ function go(href: string) {
   display: none;
   align-items: center;
   gap: 1rem;
-}
-
-.nav__signin {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #f0e8dc;
-  text-decoration: none;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: #c98a5a;
-  }
 }
 
 .nav__burger {
@@ -178,11 +231,11 @@ function go(href: string) {
   span,
   span::before,
   span::after {
-    content: "";
+    content: '';
     display: block;
     width: 22px;
     height: 2px;
-    background: #f0e8dc;
+    background: rgb(var(--tw-ink-primary));
     transition:
       transform 0.3s ease,
       opacity 0.2s ease;
@@ -214,24 +267,26 @@ function go(href: string) {
   flex-direction: column;
   gap: 0.25rem;
   padding: 1rem 1.5rem 1.75rem;
-  background: rgba(24, 18, 14, 0.96);
+  background: rgb(var(--tw-canvas) / 0.96);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid #3a2e22;
+  border-bottom: 1px solid rgb(var(--tw-hairline));
 }
 
 .nav__sheet-link {
   padding: 0.85rem 0;
   font-size: 1.1rem;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   text-decoration: none;
-  border-bottom: 1px solid #2d2319;
+  border-bottom: 1px solid rgb(var(--tw-hairline));
 }
 
 .nav__sheet-actions {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-top: 1rem;
+}
+
+.nav__sheet-cta {
+  width: 100%;
 }
 
 .sheet-enter-active,
@@ -244,6 +299,71 @@ function go(href: string) {
 .sheet-leave-to {
   opacity: 0;
   transform: translateY(-8px);
+}
+
+.nav__theme-btn {
+  border-color: rgba(201, 168, 76, 0.25);
+  color: rgb(var(--tw-ink-muted));
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.nav__theme-btn:hover {
+  border-color: rgba(201, 168, 76, 0.5);
+  color: rgb(var(--tw-ink-primary));
+}
+
+.nav__sheet-theme-btn {
+  border-color: rgba(201, 168, 76, 0.25);
+  color: rgb(var(--tw-ink-muted));
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.nav__sheet-theme-btn:hover {
+  border-color: rgba(201, 168, 76, 0.5);
+  color: rgb(var(--tw-ink-primary));
+}
+
+.scroll-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  background: rgb(var(--tw-canvas) / 0.8);
+  color: #c9a84c;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.scroll-top-btn:hover {
+  background: rgb(var(--tw-canvas) / 0.95);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(201, 168, 76, 0.15);
+}
+
+.scroll-top-fade-enter-active,
+.scroll-top-fade-leave-active {
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.scroll-top-fade-enter-from,
+.scroll-top-fade-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
 }
 
 @media (min-width: 900px) {

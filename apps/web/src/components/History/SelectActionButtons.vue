@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useDisplay } from "vuetify";
+import { storeToRefs } from 'pinia';
+import { useDisplay } from 'vuetify';
 
-import { IImageObject } from "@/types";
+import { IImageObject } from '@/types';
 
-import { useAppStore } from "@/stores/app";
-import { useGenerateStore } from "@/stores/generate";
+import { useAppStore } from '@/stores/app';
+import { useGenerateStore } from '@/stores/generate';
 
-import { bulkDelete, bulkDownload, bulkFavorite } from "@/utils/helpers";
+import { bulkDelete, bulkDownload, bulkFavorite } from '@/utils/helpers';
 
 const { mobile } = useDisplay();
 const appStore = useAppStore();

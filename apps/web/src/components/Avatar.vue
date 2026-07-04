@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { useUser } from "vue-clerk";
+import { useUser } from 'vue-clerk';
 
 const { user } = useUser();
 
-const userInitials = ref("");
-const userImage = ref("");
+const userInitials = ref('');
+const userImage = ref('');
 
 withDefaults(defineProps<{ size?: string }>(), {
-  size: "small",
+  size: 'small',
 });
 
 function getUserInitials() {
-  if (!user.value) return "";
-  if (!user.value.firstName || !user.value.lastName) return "";
+  if (!user.value) return '';
+  if (!user.value.firstName || !user.value.lastName) return '';
   return user.value?.firstName?.charAt(0) + user.value?.lastName?.charAt(0);
 }
 

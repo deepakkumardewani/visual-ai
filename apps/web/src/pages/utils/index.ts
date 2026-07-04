@@ -1,17 +1,17 @@
-import type { GroupedObject, IImageObject } from "@/types";
+import type { GroupedObject, IImageObject } from '@/types';
 
 export enum FeatureType {
-  IMAGE = "image",
-  UPSCALE = "upscale",
-  COLORIZE = "colorize",
-  REVIVE = "revive",
+  IMAGE = 'image',
+  UPSCALE = 'upscale',
+  COLORIZE = 'colorize',
+  REVIVE = 'revive',
 }
 
 export const FeatureIconMap = {
-  image: "$imageFrame",
-  upscale: "$expand",
-  colorize: "$dropper",
-  revive: "$camera",
+  image: '$imageFrame',
+  upscale: '$expand',
+  colorize: '$dropper',
+  revive: '$camera',
 };
 
 export function groupByDate(data: IImageObject[]): GroupedObject[] {
@@ -40,21 +40,21 @@ export function groupByDate(data: IImageObject[]): GroupedObject[] {
 function formatDate(date: string): string {
   // Assuming the input date is in "MM/DD/YYYY" format
   const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
-  const [month, day] = date.split("/");
+  const [month, day] = date.split('/');
 
   // Convert month number to month name (zero-indexed)
   const monthName = months[parseInt(month, 10) - 1];

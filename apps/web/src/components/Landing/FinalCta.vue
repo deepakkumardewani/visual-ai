@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import LandingButton from "@/components/Landing/LandingButton.vue";
+import LandingButton from '@/components/Landing/LandingButton.vue';
 </script>
 
 <template>
@@ -35,12 +35,12 @@ import LandingButton from "@/components/Landing/LandingButton.vue";
     #1d1610;
 }
 .cta__title {
-  font-family: "Young Serif", Georgia, serif;
+  font-family: 'Young Serif', Georgia, serif;
   font-weight: 400;
   font-size: clamp(2rem, 4.5vw, 3.25rem);
   line-height: 1.1;
   letter-spacing: -0.015em;
-  color: #f0e8dc;
+  color: rgb(var(--tw-ink-primary));
   margin: 0;
 }
 .cta__sub {
@@ -48,7 +48,7 @@ import LandingButton from "@/components/Landing/LandingButton.vue";
   max-width: 32rem;
   font-size: 1.1rem;
   line-height: 1.6;
-  color: #a89888;
+  color: rgb(var(--tw-ink-muted));
 }
 .cta__actions {
   margin-top: 2.5rem;

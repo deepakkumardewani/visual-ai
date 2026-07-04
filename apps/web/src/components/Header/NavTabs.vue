@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
 
-import { useAppStore } from "@/stores/app";
+import { useAppStore } from '@/stores/app';
 
 const appStore = useAppStore();
 const { tab } = storeToRefs(appStore);
 
 const tabs = [
-  { id: 1, name: "Create" },
-  { id: 2, name: "Explore" },
-  { id: 3, name: "Assets" },
+  { id: 1, name: 'Create' },
+  { id: 2, name: 'Explore' },
+  { id: 3, name: 'Assets' },
 ] as const;
 
 const tabRefs = ref<(HTMLButtonElement | null)[]>([]);
@@ -28,21 +28,21 @@ function focusTab(index: number) {
 function onKeydown(event: KeyboardEvent, index: number) {
   const lastIndex = tabs.length - 1;
 
-  if (event.key === "ArrowRight") {
+  if (event.key === 'ArrowRight') {
     event.preventDefault();
     const next = index === lastIndex ? 0 : index + 1;
     selectTab(tabs[next].id);
     focusTab(next);
-  } else if (event.key === "ArrowLeft") {
+  } else if (event.key === 'ArrowLeft') {
     event.preventDefault();
     const prev = index === 0 ? lastIndex : index - 1;
     selectTab(tabs[prev].id);
     focusTab(prev);
-  } else if (event.key === "Home") {
+  } else if (event.key === 'Home') {
     event.preventDefault();
     selectTab(tabs[0].id);
     focusTab(0);
-  } else if (event.key === "End") {
+  } else if (event.key === 'End') {
     event.preventDefault();
     selectTab(tabs[lastIndex].id);
     focusTab(lastIndex);
@@ -54,10 +54,10 @@ function onKeydown(event: KeyboardEvent, index: number) {
   <nav
     data-testid="nav-tabs"
     aria-label="Dashboard sections"
-    class="nav-tabs tw-w-full tw-max-w-md tw-px-2"
+    class="nav-tabs tw-w-full tw-max-w-md"
   >
     <div
-      class="nav-tabs__track tw-relative tw-flex tw-rounded-full tw-border tw-border-border/60 tw-bg-surface-1/50 tw-p-1"
+      class="nav-tabs__track tw-relative tw-flex tw-rounded-full tw-border tw-border-border tw-bg-surface-1/60 tw-p-1"
       role="tablist"
     >
       <button
@@ -69,7 +69,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
         :data-testid="`nav-tab-${tabItem.name.toLowerCase()}`"
         :aria-selected="tab === tabItem.id"
         :tabindex="tab === tabItem.id ? 0 : -1"
-        class="nav-tabs__tab tw-relative tw-z-[1] tw-min-h-11 tw-flex-1 tw-rounded-full tw-border-0 tw-bg-transparent tw-px-3 tw-text-sm tw-font-medium tw-text-ink-muted tw-transition-colors focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
+        class="nav-tabs__tab tw-relative tw-z-[1] tw-min-h-11 tw-flex-1 tw-rounded-full tw-border-0 tw-bg-transparent tw-px-3 tw-text-sm tw-font-medium tw-text-ink-muted tw-transition-colors tw-duration-fast hover:tw-text-ink-primary focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
         :class="{ 'nav-tabs__tab--active tw-text-ink-primary': tab === tabItem.id }"
         @click="selectTab(tabItem.id)"
         @keydown="onKeydown($event, index)"
@@ -78,7 +78,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
       </button>
       <div
         aria-hidden="true"
-        class="nav-tabs__slider tw-pointer-events-none tw-absolute tw-bottom-1 tw-left-1 tw-top-1 tw-rounded-full tw-bg-accent/20 tw-ring-1 tw-ring-accent/40 tw-transition-transform tw-duration-300 tw-ease-out"
+        class="nav-tabs__slider tw-pointer-events-none tw-absolute tw-bottom-1 tw-left-1 tw-top-1 tw-rounded-full tw-bg-accent/15 tw-ring-1 tw-ring-accent/40 tw-transition-transform tw-duration-300 tw-ease-out"
         :style="{
           transform: `translateX(${activeTabIndex * 100}%)`,
           width: `calc(${100 / tabs.length}% - 0.25rem)`,

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useDisplay } from "vuetify";
+import { storeToRefs } from 'pinia';
+import { useDisplay } from 'vuetify';
 
-import { useDialogStore } from "@/stores/dialog";
+import { useDialogStore } from '@/stores/dialog';
 
 const { mobile } = useDisplay();
 
@@ -12,20 +12,20 @@ const { showPremiumDialog } = storeToRefs(dialogStore);
 const aboutImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/about.jpg`;
 const features = [
   {
-    title: "AI Image Generator",
-    description: "Create High Quality Images using Text",
+    title: 'AI Image Generator',
+    description: 'Create High Quality Images using Text',
   },
   {
-    title: "Upscale Images",
-    description: "Upscale Images in High Resolution",
+    title: 'Upscale Images',
+    description: 'Upscale Images in High Resolution',
   },
   {
-    title: "Colorize Images",
-    description: "Put Color back into your Images",
+    title: 'Colorize Images',
+    description: 'Put Color back into your Images',
   },
   {
-    title: "Deoldify Images",
-    description: "Bring your Old photos back to Life",
+    title: 'Deoldify Images',
+    description: 'Bring your Old photos back to Life',
   },
 ];
 </script>
@@ -38,7 +38,7 @@ const features = [
       :max-width="mobile ? '100%' : '1000'"
       content-class="tw-flex tw-items-center tw-justify-center"
     >
-      <v-card class="no-scrollbar tw-flex tw-flex-col tw-h-full purple-gradient">
+      <v-card class="no-scrollbar tw-flex tw-flex-col tw-h-full gold-glow-bg">
         <v-card-text class="pa-0">
           <div
             class="tw-flex tw-h-screen tw-items-center tw-justify-center tw-flex-col md:tw-flex-row tw-p-4 tw-pb-0"
@@ -98,7 +98,7 @@ const features = [
 </template>
 
 <style scoped>
-.purple-gradient {
-  background: linear-gradient(to bottom, #8733cc, #691bef);
+.gold-glow-bg {
+  background: radial-gradient(circle at 50% 0%, rgba(201, 168, 76, 0.12), transparent 60%), #0d0a07;
 }
 </style>

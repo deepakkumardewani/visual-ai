@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 
-import { FeatureType } from "@/types";
+import { FeatureType } from '@/types';
 
-import { useAppStore } from "@/stores/app";
+import { useAppStore } from '@/stores/app';
 
-import AIImageAside from "@/components/Aside/AIImageAside.vue";
-import ColorizeImageAside from "@/components/Aside/ColorizeImageAside.vue";
-import ReviveOldAside from "@/components/Aside/ReviveOldAside.vue";
-import UpscaleImageAside from "@/components/Aside/UpscaleImageAside.vue";
-import BuyMoreCreditsDialog from "@/components/Dialogs/BuyMoreCreditsDialog.vue";
-import LowCreditsDialog from "@/components/Dialogs/LowCreditsDialog.vue";
+import AIImageAside from '@/components/Aside/AIImageAside.vue';
+import ColorizeImageAside from '@/components/Aside/ColorizeImageAside.vue';
+import ReviveOldAside from '@/components/Aside/ReviveOldAside.vue';
+import UpscaleImageAside from '@/components/Aside/UpscaleImageAside.vue';
+import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue';
+import LowCreditsDialog from '@/components/Dialogs/LowCreditsDialog.vue';
 
 const appStore = useAppStore();
 const { feature } = storeToRefs(appStore);

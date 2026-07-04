@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { faXmark } from "@/plugins/icons";
-import { storeToRefs } from "pinia";
-import { onMounted, ref } from "vue";
+import { faXmark } from '@/plugins/icons';
+import { storeToRefs } from 'pinia';
+import { onMounted, ref } from 'vue';
 
-import type { GalleryImage } from "@/types";
+import type { GalleryImage } from '@/types';
 
-import { useAppStore } from "@/stores/app";
+import { useAppStore } from '@/stores/app';
 
-import gallery from "@/utils/gallery.json";
+import gallery from '@/utils/gallery.json';
 
 const appStore = useAppStore();
 const { isDark } = storeToRefs(appStore);
@@ -57,7 +57,7 @@ const openDialog = (image: GalleryImage, event?: MouseEvent) => {
 
 const handleClickOutside = (e: MouseEvent) => {
   const target = e.target as HTMLElement;
-  if (target.classList.contains("v-overlay__scrim")) {
+  if (target.classList.contains('v-overlay__scrim')) {
     dialog.value = false;
   }
 };
@@ -185,7 +185,7 @@ const handleClickOutside = (e: MouseEvent) => {
   opacity: 0;
   transform: scale(0.5);
   transform-origin: v-bind(
-    "`${dialogOrigin.x + dialogOrigin.width/2}px ${dialogOrigin.y + dialogOrigin.height/2}px`"
+    '`${dialogOrigin.x + dialogOrigin.width/2}px ${dialogOrigin.y + dialogOrigin.height/2}px`'
   );
 }
 

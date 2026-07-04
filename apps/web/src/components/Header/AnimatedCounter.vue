@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue';
 
 const props = defineProps<{
   number: number;

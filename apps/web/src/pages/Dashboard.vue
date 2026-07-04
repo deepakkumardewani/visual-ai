@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useRoute } from "vue-router";
-import { useDisplay } from "vuetify";
+import { storeToRefs } from 'pinia';
+import { useRoute } from 'vue-router';
+import { useDisplay } from 'vuetify';
 
-import { useAppStore } from "@/stores/app";
+import { useAppStore } from '@/stores/app';
 
-import BuyMoreCreditsDialog from "@/components/Dialogs/BuyMoreCreditsDialog.vue";
-import LowCreditsDialog from "@/components/Dialogs/LowCreditsDialog.vue";
-import ResultCanvas from "@/components/Dashboard/Canvas/ResultCanvas.vue";
-import PromptBar from "@/components/Dashboard/Composer/PromptBar.vue";
-import DashboardShell from "@/components/Dashboard/DashboardShell.vue";
-import DashboardSidebar from "@/components/Dashboard/Sidebar/DashboardSidebar.vue";
-import NavTabs from "@/components/Header/NavTabs.vue";
-import History from "@/components/History/History.vue";
-import SignupDialog from "@/components/Dialogs/SignupDialog.vue";
+import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue';
+import LowCreditsDialog from '@/components/Dialogs/LowCreditsDialog.vue';
+import ResultCanvas from '@/components/Dashboard/Canvas/ResultCanvas.vue';
+import PromptBar from '@/components/Dashboard/Composer/PromptBar.vue';
+import DashboardShell from '@/components/Dashboard/DashboardShell.vue';
+import DashboardSidebar from '@/components/Dashboard/Sidebar/DashboardSidebar.vue';
+import NavTabs from '@/components/Header/NavTabs.vue';
+import History from '@/components/History/History.vue';
+import SignupDialog from '@/components/Dialogs/SignupDialog.vue';
 
 const appStore = useAppStore();
 const { tab } = storeToRefs(appStore);

@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
 
-import { useDashboardMotion } from "@/composables/useDashboardMotion";
-import { useAsideStore } from "@/stores/aside";
+import { useDashboardMotion } from '@/composables/useDashboardMotion';
+import { useAsideStore } from '@/stores/aside';
 
-import ComposerTextarea from "@/components/Dashboard/Composer/ComposerTextarea.vue";
-import GenerateCTA from "@/components/Dashboard/Composer/GenerateCTA.vue";
+import ComposerTextarea from '@/components/Dashboard/Composer/ComposerTextarea.vue';
+import GenerateCTA from '@/components/Dashboard/Composer/GenerateCTA.vue';
 
-import { describeImage } from "@/utils/promptAi";
+import { describeImage } from '@/utils/promptAi';
 
 const asideStore = useAsideStore();
 const { typingPrompt } = storeToRefs(asideStore);
@@ -25,7 +25,7 @@ function openUpload() {
 async function handleFileChange(event: Event) {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
-  input.value = "";
+  input.value = '';
   if (!file) return;
 
   isUploading.value = true;

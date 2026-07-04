@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { computed, onMounted, watch } from "vue";
-import { useRouter } from "vue-router";
+import { storeToRefs } from 'pinia';
+import { computed, onMounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
-import { useAsideStore } from "@/stores/aside";
-import { useUserStore } from "@/stores/user";
+import { useAsideStore } from '@/stores/aside';
+import { useUserStore } from '@/stores/user';
 
-import ModelPicker from "@/components/Dashboard/ControlRail/ModelPicker.vue";
+import ModelPicker from '@/components/Dashboard/ControlRail/ModelPicker.vue';
 
-import { ASPECT_RATIOS, IMAGE_FORMATS, MODEL_IDS } from "@/utils/constants";
+import { ASPECT_RATIOS, IMAGE_FORMATS, MODEL_IDS } from '@/utils/constants';
 
 const router = useRouter();
 const asideStore = useAsideStore();
@@ -26,7 +26,7 @@ const disableCount = computed(
 function selectAspect(ratio: (typeof ASPECT_RATIOS)[number]) {
   if (!isPro.value && ratio.isPro) {
     aspectRatio.value = ASPECT_RATIOS[0];
-    router.push("/pricing");
+    router.push('/pricing');
     return;
   }
   aspectRatio.value = ratio;
@@ -35,7 +35,7 @@ function selectAspect(ratio: (typeof ASPECT_RATIOS)[number]) {
 function selectFormat(format: (typeof IMAGE_FORMATS)[number]) {
   if (!isPro.value && format.isPro) {
     imageFormat.value = IMAGE_FORMATS[0];
-    router.push("/pricing");
+    router.push('/pricing');
     return;
   }
   imageFormat.value = format;
@@ -47,7 +47,7 @@ function selectCount(count: number) {
     return;
   }
   if (count === 4 && !isPro.value) {
-    router.push("/pricing");
+    router.push('/pricing');
     return;
   }
   noOfOutputs.value = count;
@@ -56,7 +56,7 @@ function selectCount(count: number) {
 function selectQuality(value: 0 | 1) {
   if (!isPro.value && value === 1) {
     outputQuality.value = 0;
-    router.push("/pricing");
+    router.push('/pricing');
     return;
   }
   outputQuality.value = value;
@@ -65,7 +65,7 @@ function selectQuality(value: 0 | 1) {
 watch(outputQuality, (newVal) => {
   if (!isPro.value && newVal === 1) {
     outputQuality.value = 0;
-    router.push("/pricing");
+    router.push('/pricing');
   }
 });
 
@@ -199,12 +199,12 @@ onMounted(() => {
 </template>
 
 <style scoped>
-:deep([data-testid="model-picker"] .tw-relative.tw-inline-block) {
+:deep([data-testid='model-picker'] .tw-relative.tw-inline-block) {
   display: block;
   width: 100%;
 }
 
-:deep([data-testid="model-picker"] .tw-relative.tw-inline-block > button) {
+:deep([data-testid='model-picker'] .tw-relative.tw-inline-block > button) {
   width: 100%;
   min-height: 44px;
   justify-content: flex-start;
@@ -213,7 +213,7 @@ onMounted(() => {
   background: transparent;
 }
 
-:deep([data-testid="model-chip"]) {
+:deep([data-testid='model-chip']) {
   width: 100%;
 }
 </style>
