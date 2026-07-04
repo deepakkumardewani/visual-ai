@@ -17,12 +17,12 @@
 
 ### Canvas & Surfaces
 
-| Token       | Hex       | Usage                             |
-| ----------- | --------- | --------------------------------- |
-| `canvas`    | `#18120E` | Page background (warm near-black) |
-| `surface-1` | `#221A14` | Elevated cards, panels            |
-| `surface-2` | `#2D2319` | Hover states, nested surfaces     |
-| `surface-3` | `#3A2E22` | Active states, borders on dark    |
+| Token       | Hex       | Usage                                       |
+| ----------- | --------- | ------------------------------------------- |
+| `canvas`    | `#0D0A07` | Page background (near-black, subtle warmth) |
+| `surface-1` | `#15110D` | Elevated cards, panels                      |
+| `surface-2` | `#1D1712` | Hover states, nested surfaces               |
+| `surface-3` | `#2A2119` | Active states, borders on dark              |
 
 ### Text
 
@@ -58,6 +58,7 @@
 - Gold ≤ ~3 moments per viewport (signature moments aside)
 - Amber never replaces gold in headline/CTA roles
 - Light theme: gold text uses `gold.muted` for contrast; gold glow reduced to `0.15` opacity
+- Background is near-black; gold/amber are subtle highlights only — never an ambient wash
 
 **Light theme gold/amber overrides:** Use `gold.muted` for gold text on light backgrounds. Reduce `gold-glow` shadow opacity by ~60%. Amber tints remain but at 50% opacity.
 
@@ -74,7 +75,7 @@
 
 | Token          | Hex       | Usage                        |
 | -------------- | --------- | ---------------------------- |
-| `border`       | `#3A2E22` | Dividers, card outlines      |
+| `border`       | `#2A2119` | Dividers, card outlines      |
 | `border-light` | `#D9CFC6` | Dividers on light background |
 
 ---
