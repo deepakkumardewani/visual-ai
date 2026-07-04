@@ -1,24 +1,35 @@
 // Plugins
-import { URL, fileURLToPath } from "node:url";
-import AutoImport from "unplugin-auto-import/vite";
+import path from 'node:path';
+import { URL, fileURLToPath } from 'node:url';
+import AutoImport from 'unplugin-auto-import/vite';
 // import Fonts from 'unplugin-fonts/vite'
-import Components from "unplugin-vue-components/vite";
+import Components from 'unplugin-vue-components/vite';
 // Utilities
 /// <reference types="vitest" />
-import { defineConfig } from "vitest/config";
-import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
+import { defineConfig } from 'vitest/config';
+import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 
-import Vue from "@vitejs/plugin-vue";
+import Vue from '@vitejs/plugin-vue';
+import autoprefixer from 'autoprefixer';
+import tailwindcss from 'tailwindcss';
+
+const appDir = path.dirname(fileURLToPath(import.meta.url));
+const tailwindConfigPath = path.join(appDir, 'tailwind.config.js');
 
 export default defineConfig({
+  css: {
+    postcss: {
+      plugins: [tailwindcss({ config: tailwindConfigPath }), autoprefixer()],
+    },
+  },
   test: {
-    environment: "happy-dom",
+    environment: 'happy-dom',
     globals: true,
-    include: ["src/**/*.{test,spec}.{ts,tsx}"],
-    setupFiles: ["src/test/setup.ts"],
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    setupFiles: ['src/test/setup.ts'],
   },
   build: {
-    minify: "terser", // Use terser for better minification
+    minify: 'terser', // Use terser for better minification
     cssCodeSplit: false, // Prevent splitting CSS to reduce overhead
     sourcemap: false, // Disable source maps
     terserOptions: {
@@ -32,39 +43,39 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (
-            id.includes("node_modules/vue/") ||
-            id.includes("node_modules/vue-router") ||
-            id.includes("node_modules/pinia")
+            id.includes('node_modules/vue/') ||
+            id.includes('node_modules/vue-router') ||
+            id.includes('node_modules/pinia')
           ) {
-            return "vue-vendor";
+            return 'vue-vendor';
           }
-          if (id.includes("node_modules/vuetify")) {
-            return "vuetify";
+          if (id.includes('node_modules/vuetify')) {
+            return 'vuetify';
           }
         },
         // Optimize chunk names
-        chunkFileNames: "assets/js/[name]-[hash].js",
-        entryFileNames: "assets/js/[name]-[hash].js",
-        assetFileNames: "assets/[ext]/[name]-[hash].[ext]",
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
       },
     },
   },
   plugins: [
     AutoImport({
       imports: [
-        "vue",
+        'vue',
         {
-          "vue-router/auto": ["useRoute", "useRouter"],
+          'vue-router/auto': ['useRoute', 'useRouter'],
         },
       ],
-      dts: "src/auto-imports.d.ts",
+      dts: 'src/auto-imports.d.ts',
       eslintrc: {
         enabled: true,
       },
       vueTemplate: true,
     }),
     Components({
-      dts: "src/components.d.ts",
+      dts: 'src/components.d.ts',
     }),
     Vue({
       template: { transformAssetUrls },
@@ -73,7 +84,7 @@ export default defineConfig({
     Vuetify({
       autoImport: true,
       styles: {
-        configFile: "src/styles/settings.scss",
+        configFile: 'src/styles/settings.scss',
       },
     }),
     // Fonts({
@@ -87,14 +98,17 @@ export default defineConfig({
     //   }
     // })
   ],
-  define: { "process.env": {} },
+  define: { 'process.env': {} },
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
-    extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
+    extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.vue'],
   },
   server: {
-    port: 3000,
+    port: 3005,
+  },
+  preview: {
+    port: 3005,
   },
 });
