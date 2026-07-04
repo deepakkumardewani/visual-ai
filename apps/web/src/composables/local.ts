@@ -5,7 +5,6 @@ export function useLocal() {
 
   function getLocal(key: string) {
     const data = localStorage.getItem(key);
-    console.log("data", data);
     return data ? JSON.parse(data) : undefined;
   }
 

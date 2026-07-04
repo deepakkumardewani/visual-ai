@@ -12,7 +12,7 @@ export interface Plan {
   isFree: boolean;
 }
 
-export type { Model } from "./model";
+export type { Model } from './model';
 export interface Mode {
   title: string;
   id: string;
@@ -53,10 +53,10 @@ export interface IPayment {
 }
 
 export enum FeatureType {
-  IMAGE = "image",
-  COLORIZE = "colorize",
-  REVIVE = "revive",
-  UPSCALE = "upscale",
+  IMAGE = 'image',
+  COLORIZE = 'colorize',
+  REVIVE = 'revive',
+  UPSCALE = 'upscale',
 }
 export interface IImage {
   _id: string;

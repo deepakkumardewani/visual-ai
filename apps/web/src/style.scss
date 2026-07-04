@@ -18,8 +18,8 @@
   display: none;
 }
 
-.purple-gradient {
-  background: linear-gradient(to bottom, #20112d, #19063a);
+.gold-glow-bg {
+  background: radial-gradient(circle at 50% 0%, rgba(201, 168, 76, 0.12), transparent 60%), #0d0a07;
 }
 
 /* Landing-page shared utility: copper eyebrow label */
@@ -29,4 +29,32 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #c98a5a;
+}
+
+/* === Theme tokens (RGB channels — Tailwind reads these at runtime, not build time) === */
+:root {
+  --tw-canvas: 250 246 241;
+  --tw-surface-1: 242 235 227;
+  --tw-surface-2: 232 224 214;
+  --tw-surface-3: 217 207 198;
+  --tw-ink: 28 20 14;
+  --tw-ink-primary: 28 20 14;
+  --tw-ink-muted: 122 107 94;
+  --tw-ink-faint: 168 152 136;
+  --tw-hairline: 217 207 198;
+  --tw-border: 217 207 198;
+  --tw-border-light: 42 33 25;
+}
+.tw-dark {
+  --tw-canvas: 13 10 7;
+  --tw-surface-1: 21 17 13;
+  --tw-surface-2: 29 23 18;
+  --tw-surface-3: 42 33 25;
+  --tw-ink: 240 232 220;
+  --tw-ink-primary: 240 232 220;
+  --tw-ink-muted: 168 152 136;
+  --tw-ink-faint: 107 94 81;
+  --tw-hairline: 42 33 25;
+  --tw-border: 42 33 25;
+  --tw-border-light: 217 207 198;
 }

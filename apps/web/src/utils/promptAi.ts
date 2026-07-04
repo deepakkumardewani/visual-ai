@@ -5,14 +5,14 @@
  * responses. Replace with real API calls when backend endpoints ship.
  */
 
-import PROMPTS from "@/utils/prompts.json";
-import REALISTIC_PROMPTS from "@/utils/realisticPrompts.json";
-import { MODEL_IDS } from "@/utils/modelIds";
+import PROMPTS from '@/utils/prompts.json';
+import REALISTIC_PROMPTS from '@/utils/realisticPrompts.json';
+import { MODEL_IDS } from '@/utils/modelIds';
 
 const MOCK_DELAY_MS = 1200;
 
 const EMPTY_PROMPT_FALLBACK =
-  "A cinematic portrait with soft golden hour lighting, shallow depth of field, and rich atmospheric haze.";
+  'A cinematic portrait with soft golden hour lighting, shallow depth of field, and rich atmospheric haze.';
 
 export interface ImprovePromptResult {
   text: string;
@@ -44,7 +44,7 @@ export async function improvePrompt(currentPrompt: string): Promise<ImprovePromp
 export async function describeImage(file: File): Promise<DescribeImageResult> {
   await delay(MOCK_DELAY_MS);
 
-  const baseName = file.name.replace(/\.[^.]+$/, "");
+  const baseName = file.name.replace(/\.[^.]+$/, '');
   return {
     text: `A detailed image description based on ${baseName}: rich colors, balanced composition, and striking visual elements.`,
   };

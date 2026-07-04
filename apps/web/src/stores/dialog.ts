@@ -1,6 +1,6 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
-export const useDialogStore = defineStore("dialog", () => {
+export const useDialogStore = defineStore('dialog', () => {
   const showPricingDialog = ref(false);
   const showPremiumDialog = ref(false);
   const showLowCreditsDialog = ref(false);
@@ -11,10 +11,10 @@ export const useDialogStore = defineStore("dialog", () => {
   const showBuyCreditsDialog = ref(false);
   const showCancelSubscriptionDialog = ref(false);
   const showProUpgradeDialog = ref(false);
-  const imageUrl = ref("");
-  const prompt = ref("");
-  const originalImage = ref("");
-  const enhancedImage = ref("");
+  const imageUrl = ref('');
+  const prompt = ref('');
+  const originalImage = ref('');
+  const enhancedImage = ref('');
   const lowCreditsDialog = ref(false);
   const signupDialog = ref(false);
   const referralOfferDialog = ref(false);

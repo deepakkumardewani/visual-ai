@@ -1,6 +1,6 @@
-import { onBeforeUnmount, onMounted, type Ref } from "vue";
+import { onBeforeUnmount, onMounted, type Ref } from 'vue';
 
-import { useReducedMotion } from "@/composables/useReducedMotion";
+import { useReducedMotion } from '@/composables/useReducedMotion';
 
 /**
  * Adds a magnetic hover effect to an element — the element softly follows the
@@ -34,29 +34,29 @@ export function useMagnetic(el: Ref<HTMLElement | null>, strength = 0.3) {
   function onMouseEnter() {
     const node = dom();
     if (!node) return;
-    node.style.transition = "transform 0.1s ease";
+    node.style.transition = 'transform 0.1s ease';
   }
 
   function onMouseLeave() {
     const node = dom();
     if (!node) return;
-    node.style.transition = "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)";
-    node.style.transform = "";
+    node.style.transition = 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
+    node.style.transform = '';
   }
 
   onMounted(() => {
     const node = dom();
     if (!node) return;
-    node.addEventListener("mousemove", onMouseMove);
-    node.addEventListener("mouseenter", onMouseEnter);
-    node.addEventListener("mouseleave", onMouseLeave);
+    node.addEventListener('mousemove', onMouseMove);
+    node.addEventListener('mouseenter', onMouseEnter);
+    node.addEventListener('mouseleave', onMouseLeave);
   });
 
   onBeforeUnmount(() => {
     const node = dom();
     if (!node) return;
-    node.removeEventListener("mousemove", onMouseMove);
-    node.removeEventListener("mouseenter", onMouseEnter);
-    node.removeEventListener("mouseleave", onMouseLeave);
+    node.removeEventListener('mousemove', onMouseMove);
+    node.removeEventListener('mouseenter', onMouseEnter);
+    node.removeEventListener('mouseleave', onMouseLeave);
   });
 }

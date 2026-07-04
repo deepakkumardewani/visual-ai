@@ -1,4 +1,4 @@
-import type { ModelProvider, ModelTier } from "@/types/primitives";
+import type { ModelProvider, ModelTier } from '@/types/primitives';
 
 export interface Model {
   title: string;

@@ -1,25 +1,28 @@
-import { isEmpty } from "lodash-es";
-import { defineStore, storeToRefs } from "pinia";
+import { isEmpty } from 'lodash-es';
+import { defineStore, storeToRefs } from 'pinia';
 
-import type { IGenerateResponse, IImage, IImageObject, ImageBody } from "@/types";
+import type { IGenerateResponse, IImage, IImageObject, ImageBody } from '@/types';
 
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from '@/stores/user';
 
-import { useLocal } from "@/composables/local";
-import { useFetch } from "@/composables/useFetch";
+import { useLocal } from '@/composables/local';
+import { useFetch } from '@/composables/useFetch';
 
-import { MODEL_IDS } from "@/utils/constants";
+import { MODEL_IDS } from '@/utils/constants';
+import { createLogger } from '@/utils/logger';
 
-import { useAppStore } from "./app";
+import { useAppStore } from './app';
 
-export const useGenerateStore = defineStore("generate", () => {
-  const promptText = ref<string>("");
+const log = createLogger('generate');
+
+export const useGenerateStore = defineStore('generate', () => {
+  const promptText = ref<string>('');
   const isLoading = ref(false);
   const isDeleting = ref(false);
   const isFavoriting = ref(false);
   const images = ref<IImage[]>([]);
   const imageData = ref<IImageObject | null>(null);
-  const errMsg = ref<string>("");
+  const errMsg = ref<string>('');
   const deletingImageIds = ref<string[]>([]);
   const upscaleInProgress = ref<boolean>(false);
   const colorizeInProgress = ref<boolean>(false);
@@ -30,33 +33,33 @@ export const useGenerateStore = defineStore("generate", () => {
   const { setLocal } = useLocal();
 
   async function generateImage(imgData?: ImageBody) {
-    appStore.sendSignal("generate_image");
+    appStore.sendSignal('generate_image');
     isLoading.value = true;
     images.value = [];
 
     const url = `/generate/image`;
 
     const { error } = await useFetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        mode: "cors",
+        'Content-Type': 'application/json',
+        mode: 'cors',
       },
       body: JSON.stringify({
         jobId: imgData?.jobId,
         userId: userId.value,
         modelId: imgData?.modelId ?? MODEL_IDS.FLUX_BASIC,
-        imageType: imgData?.imageType ?? "horizontal",
-        modelName: imgData?.modelName ?? "Flux Lightening",
-        prompt: imgData?.prompt ?? "",
+        imageType: imgData?.imageType ?? 'horizontal',
+        modelName: imgData?.modelName ?? 'Flux Lightening',
+        prompt: imgData?.prompt ?? '',
         numOfOutputs: imgData?.noOfOutputs ?? 1,
         outputQuality: imgData?.outputQuality ?? 70,
-        aspectRatio: imgData?.aspectRatio ?? "16:9",
-        outputFormat: imgData?.outputFormat ?? "jpg",
+        aspectRatio: imgData?.aspectRatio ?? '16:9',
+        outputFormat: imgData?.outputFormat ?? 'jpg',
       }),
     }).json<IGenerateResponse>();
     if (error.value) {
-      console.error("error", error.value);
+      log.error('generateImage failed', { error: error.value, jobId: imgData?.jobId });
       return;
     }
     // if (data.value) {
@@ -68,89 +71,89 @@ export const useGenerateStore = defineStore("generate", () => {
   }
 
   async function upscaleImage(imgData: any) {
-    appStore.sendSignal("upscale_image");
+    appStore.sendSignal('upscale_image');
     images.value = [];
 
     const url = `/generate/upscale/image`;
     const { prompt, image, format, creativity, scale, negativePrompt, jobId, outputFormat } =
       imgData;
     const formData = new FormData();
-    formData.append("feature", "upscale");
-    formData.append("prompt", prompt);
-    formData.append("negativePrompt", negativePrompt);
-    formData.append("userId", userId.value);
-    formData.append("creativity", creativity);
-    formData.append("scale", scale);
-    formData.append("format", format);
-    formData.append("image", image);
-    formData.append("jobId", jobId);
-    formData.append("outputFormat", outputFormat);
+    formData.append('feature', 'upscale');
+    formData.append('prompt', prompt);
+    formData.append('negativePrompt', negativePrompt);
+    formData.append('userId', userId.value);
+    formData.append('creativity', creativity);
+    formData.append('scale', scale);
+    formData.append('format', format);
+    formData.append('image', image);
+    formData.append('jobId', jobId);
+    formData.append('outputFormat', outputFormat);
     const { error } = await useFetch(url, {
-      method: "POST",
+      method: 'POST',
       body: formData,
     }).json();
 
     if (error.value) {
-      console.error("error", error.value);
-      if (typeof error.value === "object" && !isEmpty(error.value)) {
-        setLocal("upscaleInProgress", false);
+      log.error('upscaleImage failed', { error: error.value, jobId });
+      if (typeof error.value === 'object' && !isEmpty(error.value)) {
+        setLocal('upscaleInProgress', false);
         upscaleInProgress.value = false;
         isLoading.value = false;
-        errMsg.value = "Sorry, there was an error processing your request. Please try again.";
+        errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
       }
       return;
     }
   }
 
   async function colorizeImage(data: any) {
-    appStore.sendSignal("colorize_image");
+    appStore.sendSignal('colorize_image');
     images.value = [];
 
     const url = `/generate/colorize/image`;
     const { image, modelId } = data;
     const formData = new FormData();
-    formData.append("feature", "colorize");
-    formData.append("userId", userId.value);
-    formData.append("modelId", modelId);
-    formData.append("image", image);
+    formData.append('feature', 'colorize');
+    formData.append('userId', userId.value);
+    formData.append('modelId', modelId);
+    formData.append('image', image);
     const { error } = await useFetch(url, {
-      method: "POST",
+      method: 'POST',
       body: formData,
     }).json();
 
     if (error.value) {
-      console.error("error", error.value);
-      if (typeof error.value === "object" && !isEmpty(error.value)) {
-        setLocal("colorizeInProgress", false);
+      log.error('colorizeImage failed', { error: error.value, modelId });
+      if (typeof error.value === 'object' && !isEmpty(error.value)) {
+        setLocal('colorizeInProgress', false);
         colorizeInProgress.value = false;
         isLoading.value = false;
-        errMsg.value = "Sorry, there was an error processing your request. Please try again.";
+        errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
       }
       return;
     }
   }
 
   async function reviveOldImage(data: any) {
-    appStore.sendSignal("revive_image");
+    appStore.sendSignal('revive_image');
     images.value = [];
 
     const { image } = data;
     const formData = new FormData();
-    formData.append("userId", userId.value);
-    formData.append("feature", "revive");
-    formData.append("image", image);
+    formData.append('userId', userId.value);
+    formData.append('feature', 'revive');
+    formData.append('image', image);
     const url = `/generate/revive/image`;
     const { error } = await useFetch(url, {
-      method: "POST",
+      method: 'POST',
       body: formData,
     }).json();
     if (error.value) {
-      console.error("error", error.value);
-      if (typeof error.value === "object" && !isEmpty(error.value)) {
-        setLocal("reviveInProgress", false);
+      log.error('reviveOldImage failed', { error: error.value });
+      if (typeof error.value === 'object' && !isEmpty(error.value)) {
+        setLocal('reviveInProgress', false);
         reviveInProgress.value = false;
         isLoading.value = false;
-        errMsg.value = "Sorry, there was an error processing your request. Please try again.";
+        errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
       }
       return;
     }

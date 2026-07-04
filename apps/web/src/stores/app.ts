@@ -1,14 +1,17 @@
-import TelemetryDeck from "@telemetrydeck/sdk";
-import { useEventSource } from "@vueuse/core";
-import { defineStore, storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
-import { useTheme } from "vuetify";
+import TelemetryDeck from '@telemetrydeck/sdk';
+import { useEventSource, useStorage } from '@vueuse/core';
+import { defineStore, storeToRefs } from 'pinia';
+import { computed, ref, watch } from 'vue';
 
-import type { JobStatus } from "@/types";
-import { FeatureType } from "@/types";
+import type { JobStatus } from '@/types';
+import { FeatureType } from '@/types';
 
-import { useGenerateStore } from "@/stores/generate";
-import { useUserStore } from "@/stores/user";
+import vuetify from '@/plugins/vuetify';
+import { useGenerateStore } from '@/stores/generate';
+import { useUserStore } from '@/stores/user';
+import { createLogger } from '@/utils/logger';
+
+const log = createLogger('app');
 
 export interface Feature {
   title: string;
@@ -23,24 +26,23 @@ export interface Plan {
   features: Feature[];
   isFree: boolean;
 }
-export const useAppStore = defineStore("app", () => {
+export const useAppStore = defineStore('app', () => {
   const generateStore = useGenerateStore();
   const userStore = useUserStore();
   const { history, userId } = storeToRefs(userStore);
   const { isLoading, upscaleInProgress, colorizeInProgress, reviveInProgress, images, imageData } =
     storeToRefs(generateStore);
-  const feature = ref<string>("");
-  const theme = useTheme();
+  const feature = ref<string>('');
   const tab = ref(1);
-  const isDark = computed(() => theme.global.name.value === "dark");
+  const isDark = useStorage('visual-ai-theme', true);
   const snackbar = ref(false);
   const snackbarTimeout = ref(2000);
-  const snackbarText = ref("");
-  const progressUrl = ref("");
+  const snackbarText = ref('');
+  const progressUrl = ref('');
 
   const td = new TelemetryDeck({
     appID: import.meta.env.VITE_TELEMETRYDECK_APP_ID,
-    clientUser: "",
+    clientUser: '',
   });
 
   const eventSourceOptions = computed(() => ({
@@ -77,15 +79,15 @@ export const useAppStore = defineStore("app", () => {
   } = useEventSource(progressUrl, [], eventSourceOptions.value);
 
   function handleEventSourceData(feature: string, data: JobStatus) {
-    if (data.status === "processing") {
-      localStorage.setItem(`${feature}InProgress`, "true");
-      if (feature === "upscale") upscaleInProgress.value = true;
-      if (feature === "colorize") colorizeInProgress.value = true;
-      if (feature === "revive") reviveInProgress.value = true;
+    if (data.status === 'processing') {
+      localStorage.setItem(`${feature}InProgress`, 'true');
+      if (feature === 'upscale') upscaleInProgress.value = true;
+      if (feature === 'colorize') colorizeInProgress.value = true;
+      if (feature === 'revive') reviveInProgress.value = true;
 
       if (data.image) {
         // console.log('before upload: data.image', data.image)
-        localStorage.setItem(`${feature}InProgress`, "false");
+        localStorage.setItem(`${feature}InProgress`, 'false');
         if (feature === FeatureType.IMAGE) isLoading.value = false;
         if (feature === FeatureType.UPSCALE) upscaleInProgress.value = false;
         if (feature === FeatureType.COLORIZE) colorizeInProgress.value = false;
@@ -98,7 +100,7 @@ export const useAppStore = defineStore("app", () => {
       }
     }
 
-    if (data.status === "completed") {
+    if (data.status === 'completed') {
       closeEventSource(feature);
 
       if (data.image) {
@@ -146,8 +148,8 @@ export const useAppStore = defineStore("app", () => {
   }
 
   function handleEventSourceError(feature: string, error: any) {
-    console.error(`${feature} error:`, error);
-    localStorage.setItem(`${feature}InProgress`, "false");
+    log.error('event source error', { feature, error });
+    localStorage.setItem(`${feature}InProgress`, 'false');
     if (feature === FeatureType.IMAGE) {
       imageClose();
     }
@@ -169,11 +171,11 @@ export const useAppStore = defineStore("app", () => {
     feature.value = id;
   }
   function toggleTheme() {
-    theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
+    isDark.value = !isDark.value;
   }
 
   function sendSignal(signal: string) {
-    if (import.meta.env.VITE_TELEMETRYDECK_DEBUG === "true") {
+    if (import.meta.env.VITE_TELEMETRYDECK_DEBUG === 'true') {
       void td.signal(`test_${signal}`, { testMode: true });
       return;
     }
@@ -183,23 +185,23 @@ export const useAppStore = defineStore("app", () => {
 
   watch(userId, async (newUserId) => {
     td.clientUser = newUserId;
-    sendSignal("page_view");
+    sendSignal('page_view');
   });
 
   watch(imgData, (newVal) => {
-    handleEventSourceData("image", JSON.parse(newVal as string));
+    handleEventSourceData('image', JSON.parse(newVal as string));
   });
 
   watch(upscaleData, (newVal) => {
-    handleEventSourceData("upscale", JSON.parse(newVal as string));
+    handleEventSourceData('upscale', JSON.parse(newVal as string));
   });
 
   watch(colorizeData, (newVal) => {
-    handleEventSourceData("colorize", JSON.parse(newVal as string));
+    handleEventSourceData('colorize', JSON.parse(newVal as string));
   });
 
   watch(reviveData, (newVal) => {
-    handleEventSourceData("revive", JSON.parse(newVal as string));
+    handleEventSourceData('revive', JSON.parse(newVal as string));
   });
 
   watch([imgError, upscaleError, colorizeError, reviveError], ([imgErr, upErr, colErr, revErr]) => {
@@ -209,13 +211,14 @@ export const useAppStore = defineStore("app", () => {
     if (revErr) handleEventSourceError(FeatureType.REVIVE, revErr);
   });
 
-  watch(isDark, (newVal) => {
-    if (newVal) {
-      document.documentElement.classList.add("tw-dark");
-    } else {
-      document.documentElement.classList.remove("tw-dark");
-    }
-  });
+  watch(
+    isDark,
+    (newVal) => {
+      document.documentElement.classList.toggle('tw-dark', newVal);
+      vuetify.theme.global.name.value = newVal ? 'dark' : 'light';
+    },
+    { immediate: true },
+  );
   return {
     setFeature,
     toggleTheme,

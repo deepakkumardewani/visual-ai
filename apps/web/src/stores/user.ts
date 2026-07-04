@@ -1,16 +1,19 @@
-import { defineStore } from "pinia";
-import { useUser } from "vue-clerk";
+import { defineStore } from 'pinia';
+import { useUser } from 'vue-clerk';
 
-import type { IImageObject, IPayment, IUser } from "@/types";
+import type { IImageObject, IPayment, IUser } from '@/types';
 
-import { useFetch } from "@/composables/useFetch";
+import { useFetch } from '@/composables/useFetch';
+import { createLogger } from '@/utils/logger';
 
-export const useUserStore = defineStore("user", () => {
+const log = createLogger('user');
+
+export const useUserStore = defineStore('user', () => {
   const { user } = useUser();
   const userDetails = ref<IUser | null>(null);
   const history = ref<IImageObject[]>([]);
   const payments = ref<IPayment[]>([]);
-  const userId = ref("");
+  const userId = ref('');
   const credits = ref(0);
   const isPro = ref(false);
   const hasJustSubscribed = ref(false);
@@ -22,10 +25,10 @@ export const useUserStore = defineStore("user", () => {
   async function getUserDetails() {
     const url = `/users/${userId.value}`;
     const { error, data: userData } = await useFetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        mode: "cors",
+        'Content-Type': 'application/json',
+        mode: 'cors',
       },
     }).json<IUser>();
 
@@ -37,13 +40,13 @@ export const useUserStore = defineStore("user", () => {
       const dataToStoreInLocalStorage = {
         userId: userData.value.userId,
       };
-      if (localStorage.getItem("userDetails") === null) {
-        localStorage.setItem("userDetails", JSON.stringify(dataToStoreInLocalStorage));
+      if (localStorage.getItem('userDetails') === null) {
+        localStorage.setItem('userDetails', JSON.stringify(dataToStoreInLocalStorage));
       }
       credits.value = userData.value.credits;
     }
     if (error.value) {
-      console.error("Error fetching user details:", error.value);
+      log.error('getUserDetails failed', { error: error.value, userId: userId.value });
       return;
     }
   }
@@ -52,17 +55,17 @@ export const useUserStore = defineStore("user", () => {
     const url = `/users/fullname`;
     isUpdatingName.value = true;
     const { error } = await useFetch(url, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
-        mode: "cors",
+        'Content-Type': 'application/json',
+        mode: 'cors',
       },
       body: JSON.stringify({ firstName, lastName, userId: userId.value }),
     }).json();
     isUpdatingName.value = false;
 
     if (error.value) {
-      console.error("Error updating name:", error.value);
+      log.error('updateName failed', { error: error.value, userId: userId.value });
       return;
     }
   }
@@ -71,16 +74,16 @@ export const useUserStore = defineStore("user", () => {
     const url = `/users/username`;
     isUpdatingUsername.value = true;
     const { error } = await useFetch(url, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
-        mode: "cors",
+        'Content-Type': 'application/json',
+        mode: 'cors',
       },
       body: JSON.stringify({ userName: username, userId: userId.value }),
     }).json();
     isUpdatingUsername.value = false;
     if (error.value) {
-      console.error("Error updating username:", error.value);
+      log.error('updateUsername failed', { error: error.value, userId: userId.value });
       return;
     }
   }

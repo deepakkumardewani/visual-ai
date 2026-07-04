@@ -1,19 +1,19 @@
-import type { ModelProvider } from "@/types/primitives";
+import type { ModelProvider } from '@/types/primitives';
 
-import bflLogo from "@/assets/providers/bfl.svg";
-import bytedanceLogo from "@/assets/providers/bytedance.svg";
-import googleLogo from "@/assets/providers/google.svg";
-import openaiLogo from "@/assets/providers/openai.svg";
-import xaiLogo from "@/assets/providers/xai.svg";
+import bflLogo from '@/assets/providers/bfl.svg';
+import bytedanceLogo from '@/assets/providers/bytedance.svg';
+import googleLogo from '@/assets/providers/google.svg';
+import openaiLogo from '@/assets/providers/openai.svg';
+import xaiLogo from '@/assets/providers/xai.svg';
 
 export const KNOWN_PROVIDERS: readonly ModelProvider[] = [
-  "openai",
-  "google",
-  "bfl",
-  "bytedance",
-  "xai",
-  "pruna",
-  "zimage",
+  'openai',
+  'google',
+  'bfl',
+  'bytedance',
+  'xai',
+  'pruna',
+  'zimage',
 ] as const;
 
 /**
@@ -30,13 +30,13 @@ const PROVIDER_LOGOS: Partial<Record<ModelProvider, string>> = {
 };
 
 const PROVIDER_LABELS: Record<ModelProvider, string> = {
-  openai: "OpenAI",
-  google: "Google",
-  bfl: "BFL",
-  bytedance: "ByteDance",
-  xai: "xAI",
-  pruna: "Pruna",
-  zimage: "Z-Image",
+  openai: 'OpenAI',
+  google: 'Google',
+  bfl: 'BFL',
+  bytedance: 'ByteDance',
+  xai: 'xAI',
+  pruna: 'Pruna',
+  zimage: 'Z-Image',
 };
 
 export function isKnownProvider(provider: string): provider is ModelProvider {
@@ -51,5 +51,5 @@ export function getProviderLettermark(provider: string): string {
   if (isKnownProvider(provider)) {
     return PROVIDER_LABELS[provider].charAt(0).toUpperCase();
   }
-  return provider.charAt(0).toUpperCase() || "?";
+  return provider.charAt(0).toUpperCase() || '?';
 }

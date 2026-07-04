@@ -6,15 +6,15 @@ import {
   faQuestionCircle,
   faShieldAlt,
   faTag,
-} from "@/plugins/icons";
+} from '@/plugins/icons';
 
-import { type FeatureSelect, FeatureType, type Plan, type RazorpayProduct } from "@/types";
+import { type FeatureSelect, FeatureType, type Plan, type RazorpayProduct } from '@/types';
 
-import generalFAQ from "./generalFAQ.json";
-import pricingFAQ from "./pricingFAQ.json";
+import generalFAQ from './generalFAQ.json';
+import pricingFAQ from './pricingFAQ.json';
 
-export { MODEL_IDS } from "./modelIds";
-export { FLUX_MODES, MODELS } from "./models";
+export { MODEL_IDS } from './modelIds';
+export { FLUX_MODES, MODELS } from './models';
 
 // Pricing FAQs
 export const PRICING_FAQS = pricingFAQ;
@@ -23,90 +23,90 @@ export const GENERAL_FAQS = [...generalFAQ, ...pricingFAQ];
 
 // Plans
 export const STARTER_PLAN: Plan = {
-  title: "Starter",
-  price: "0",
-  description: "Free forever",
+  title: 'Starter',
+  price: '0',
+  description: 'Free forever',
   isFree: true,
   features: [
     {
-      title: "20 credits/day | Resets Daily",
+      title: '20 credits/day | Resets Daily',
       available: true,
     },
     {
-      title: "No rollover credits",
+      title: 'No rollover credits',
       available: false,
     },
     {
-      title: "Standard quality images",
+      title: 'Standard quality images',
       available: false,
     },
     {
-      title: "Only 2 image variations",
+      title: 'Only 2 image variations',
       available: false,
     },
     {
-      title: "Only JPG format",
+      title: 'Only JPG format',
       available: false,
     },
     {
-      title: "Colorize Images",
+      title: 'Colorize Images',
       available: true,
-      tooltip: "Uses 3 credits per image",
+      tooltip: 'Uses 3 credits per image',
     },
     {
-      title: "Upscale Images",
+      title: 'Upscale Images',
       available: true,
-      tooltip: "Uses 3 credits per image",
+      tooltip: 'Uses 3 credits per image',
     },
     {
-      title: "Revive Old Photos",
+      title: 'Revive Old Photos',
       available: true,
-      tooltip: "Uses 3 credits per image",
+      tooltip: 'Uses 3 credits per image',
     },
   ],
 };
 
 export const PRO_PLAN: Plan = {
-  title: "Pro",
-  price: "299",
-  description: "Billed monthly",
+  title: 'Pro',
+  price: '299',
+  description: 'Billed monthly',
   isFree: false,
   features: [
     {
-      title: "1000 credits/month | Resets Monthly",
+      title: '1000 credits/month | Resets Monthly',
       available: true,
     },
     {
-      title: "2000 Rollover Credits Capacity",
+      title: '2000 Rollover Credits Capacity',
       available: true,
-      tooltip: "Unused monthly credits will rollover to a maxiumum of 2000 rollover credits",
+      tooltip: 'Unused monthly credits will rollover to a maxiumum of 2000 rollover credits',
     },
     {
-      title: "High quality images",
-      available: true,
-    },
-    {
-      title: "Upto 4 image variations",
+      title: 'High quality images',
       available: true,
     },
     {
-      title: "Webp, PNG & JPG formats",
+      title: 'Upto 4 image variations',
       available: true,
     },
     {
-      title: "Colorize Images",
+      title: 'Webp, PNG & JPG formats',
       available: true,
-      tooltip: "Uses 1 credit per image",
     },
     {
-      title: "Upscale Images",
+      title: 'Colorize Images',
       available: true,
-      tooltip: "Uses 1 credit per image",
+      tooltip: 'Uses 1 credit per image',
     },
     {
-      title: "Revive Old Photos",
+      title: 'Upscale Images',
       available: true,
-      tooltip: "Uses 1 credit per image",
+      tooltip: 'Uses 1 credit per image',
+    },
+    {
+      title: 'Revive Old Photos',
+      available: true,
+      tooltip: 'Uses 1 credit per image',
     },
   ],
 };
@@ -114,15 +114,15 @@ export const PRO_PLAN: Plan = {
 // Image Formats
 export const IMAGE_FORMATS = [
   {
-    title: "JPG",
+    title: 'JPG',
     isPro: false,
   },
   {
-    title: "PNG",
+    title: 'PNG',
     isPro: true,
   },
   {
-    title: "WEBP",
+    title: 'WEBP',
     isPro: true,
   },
 ];
@@ -150,146 +150,146 @@ export const IMAGE_FORMATS = [
 //   }
 // ]
 
-export const IMAGE_SIZES = ["2X", "4X"];
+export const IMAGE_SIZES = ['2X', '4X'];
 
 export const IMAGE_SIZE_OPTIONS = [
-  { value: "mini", title: "Mini" },
-  { value: "small", title: "Small" },
-  { value: "medium", title: "Medium" },
-  { value: "large", title: "Large" },
+  { value: 'mini', title: 'Mini' },
+  { value: 'small', title: 'Small' },
+  { value: 'medium', title: 'Medium' },
+  { value: 'large', title: 'Large' },
 ];
 
 export const SIZE_CLASSES = {
-  mini: "tw-grid-cols-3 sm:tw-grid-cols-4 md:tw-grid-cols-6 lg:tw-grid-cols-8",
-  small: "tw-grid-cols-2 sm:tw-grid-cols-3 md:tw-grid-cols-5 lg:tw-grid-cols-6",
-  medium: "tw-grid-cols-2 sm:tw-grid-cols-3 md:tw-grid-cols-4 lg:tw-grid-cols-5",
-  large: "tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-3 lg:tw-grid-cols-4",
+  mini: 'tw-grid-cols-3 sm:tw-grid-cols-4 md:tw-grid-cols-6 lg:tw-grid-cols-8',
+  small: 'tw-grid-cols-2 sm:tw-grid-cols-3 md:tw-grid-cols-5 lg:tw-grid-cols-6',
+  medium: 'tw-grid-cols-2 sm:tw-grid-cols-3 md:tw-grid-cols-4 lg:tw-grid-cols-5',
+  large: 'tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-3 lg:tw-grid-cols-4',
 };
 
 // Aspect Ratios
 export const ASPECT_RATIOS = [
   {
-    title: "1:1",
+    title: '1:1',
     isPro: false,
-    name: "Square",
-    icon: "$square",
-    type: "square",
+    name: 'Square',
+    icon: '$square',
+    type: 'square',
   },
   {
-    title: "2:3",
+    title: '2:3',
     isPro: true,
-    name: "Portrait",
-    icon: "$portrait",
-    type: "vertical",
+    name: 'Portrait',
+    icon: '$portrait',
+    type: 'vertical',
   },
   {
-    title: "3:2",
+    title: '3:2',
     isPro: true,
-    name: "Standard",
-    icon: "$standard",
-    type: "horizontal",
+    name: 'Standard',
+    icon: '$standard',
+    type: 'horizontal',
   },
   {
-    title: "4:5",
+    title: '4:5',
     isPro: true,
-    name: "Social Post",
-    icon: "$socialPost",
-    type: "vertical",
+    name: 'Social Post',
+    icon: '$socialPost',
+    type: 'vertical',
   },
   {
-    title: "9:16",
+    title: '9:16',
     isPro: false,
-    name: "Social Story",
-    icon: "$socialStory",
-    type: "vertical",
+    name: 'Social Story',
+    icon: '$socialStory',
+    type: 'vertical',
   },
   {
-    title: "16:9",
+    title: '16:9',
     isPro: false,
-    name: "Widescreen",
-    icon: "$widescreen",
-    type: "horizontal",
+    name: 'Widescreen',
+    icon: '$widescreen',
+    type: 'horizontal',
   },
   {
-    title: "21:9",
+    title: '21:9',
     isPro: true,
-    name: "Cinematic",
-    icon: "$cinematic",
-    type: "horizontal",
+    name: 'Cinematic',
+    icon: '$cinematic',
+    type: 'horizontal',
   },
 ];
 
 export const FEATURES: FeatureSelect[] = [
   {
     id: FeatureType.IMAGE,
-    name: "image",
-    title: "AI Image Generator",
-    icon: "$imageFrame",
+    name: 'image',
+    title: 'AI Image Generator',
+    icon: '$imageFrame',
   },
   {
     id: FeatureType.UPSCALE,
-    name: "upscaler",
-    title: "Image Upscaler",
-    icon: "$expand",
+    name: 'upscaler',
+    title: 'Image Upscaler',
+    icon: '$expand',
   },
   {
     id: FeatureType.COLORIZE,
-    name: "colorizer",
-    title: "Colorize Image",
-    icon: "$dropper",
+    name: 'colorizer',
+    title: 'Colorize Image',
+    icon: '$dropper',
   },
   {
     id: FeatureType.REVIVE,
-    name: "reviver",
-    title: "Revive Photos",
-    icon: "$camera",
+    name: 'reviver',
+    title: 'Revive Photos',
+    icon: '$camera',
   },
 ];
 
 export const FOOTER_LINKS = [
-  { text: "Examples", path: "/examples", icon: faImages },
-  { text: "Contact Us", path: "/contact", icon: faEnvelope },
-  { text: "Privacy Policy", path: "/privacy", icon: faShieldAlt },
-  { text: "Terms of Service", path: "/terms", icon: faFileContract },
-  { text: "Refund Policy", path: "/refund", icon: faHandHolding },
-  { text: "Pricing", path: "/pricing", icon: faTag },
-  { text: "FAQ", path: "/faqs", icon: faQuestionCircle },
+  { text: 'Examples', path: '/examples', icon: faImages },
+  { text: 'Contact Us', path: '/contact', icon: faEnvelope },
+  { text: 'Privacy Policy', path: '/privacy', icon: faShieldAlt },
+  { text: 'Terms of Service', path: '/terms', icon: faFileContract },
+  { text: 'Refund Policy', path: '/refund', icon: faHandHolding },
+  { text: 'Pricing', path: '/pricing', icon: faTag },
+  { text: 'FAQ', path: '/faqs', icon: faQuestionCircle },
 ];
 export const RAZORPAY_PRODUCTS: RazorpayProduct[] = [
-  { id: 1, type: "single", credits: 120, price: 99, description: "120 credits", currency: "INR" },
+  { id: 1, type: 'single', credits: 120, price: 99, description: '120 credits', currency: 'INR' },
   {
     id: 2,
-    type: "single",
+    type: 'single',
     credits: 250,
     price: 199,
-    savings: "11%",
-    description: "250 credits",
-    currency: "INR",
+    savings: '11%',
+    description: '250 credits',
+    currency: 'INR',
   },
   {
     id: 3,
-    type: "single",
+    type: 'single',
     credits: 380,
     price: 299,
-    savings: "22%",
-    description: "380 credits",
-    currency: "INR",
+    savings: '22%',
+    description: '380 credits',
+    currency: 'INR',
   },
   {
     id: 4,
-    type: "single",
+    type: 'single',
     credits: 500,
     price: 399,
-    savings: "31%",
-    description: "500 credits",
-    currency: "INR",
+    savings: '31%',
+    description: '500 credits',
+    currency: 'INR',
   },
   {
     id: 5,
-    type: "monthly",
+    type: 'monthly',
     credits: 1000,
     price: 299,
-    description: "1000 credits",
-    currency: "INR",
+    description: '1000 credits',
+    currency: 'INR',
   },
 ];

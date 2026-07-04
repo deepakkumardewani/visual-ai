@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
-export const useHistoryStore = defineStore("history", () => {
-  const selectedSize = ref("medium");
+export const useHistoryStore = defineStore('history', () => {
+  const selectedSize = ref('medium');
   const isBulkDeleting = ref(false);
   const isBulkFavoriting = ref(false);
   const isBulkDownloading = ref(false);

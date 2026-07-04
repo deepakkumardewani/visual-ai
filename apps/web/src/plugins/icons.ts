@@ -1,5 +1,5 @@
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faSquare, faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSquare, faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
 import {
   faBolt,
   faCaretDown,
@@ -47,7 +47,7 @@ import {
   faXmark,
   faXmarkCircle,
   faHeart as fasHeart,
-} from "@fortawesome/free-solid-svg-icons";
+} from '@fortawesome/free-solid-svg-icons';
 
 library.add(
   // Regular icons

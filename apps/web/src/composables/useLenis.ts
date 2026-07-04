@@ -1,9 +1,9 @@
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
-import { onBeforeUnmount, onMounted } from "vue";
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
+import { onBeforeUnmount, onMounted } from 'vue';
 
-import { useReducedMotion } from "@/composables/useReducedMotion";
+import { useReducedMotion } from '@/composables/useReducedMotion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,8 +17,8 @@ export function scrollToSection(target: string | HTMLElement) {
     instance.scrollTo(target, { offset: -8 });
     return;
   }
-  const el = typeof target === "string" ? document.querySelector(target) : target;
-  el?.scrollIntoView({ behavior: "auto", block: "start" });
+  const el = typeof target === 'string' ? document.querySelector(target) : target;
+  el?.scrollIntoView({ behavior: 'auto', block: 'start' });
 }
 
 /**
@@ -40,7 +40,7 @@ export function useLenis() {
       smoothWheel: true,
     });
 
-    instance.on("scroll", () => ScrollTrigger.update());
+    instance.on('scroll', () => ScrollTrigger.update());
 
     tick = (time) => instance?.raf(time * 1000);
     gsap.ticker.add(tick);

@@ -1,13 +1,16 @@
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 
-import type { IImage, IImageObject } from "@/types";
+import type { IImage, IImageObject } from '@/types';
 
-import { useDialogStore } from "@/stores/dialog";
-import { useGenerateStore } from "@/stores/generate";
-import { useHistoryStore } from "@/stores/history";
-import { useUserStore } from "@/stores/user";
+import { useDialogStore } from '@/stores/dialog';
+import { useGenerateStore } from '@/stores/generate';
+import { useHistoryStore } from '@/stores/history';
+import { useUserStore } from '@/stores/user';
 
-import { useFetch } from "@/composables/useFetch";
+import { useFetch } from '@/composables/useFetch';
+import { createLogger } from '@/utils/logger';
+
+const log = createLogger('helpers');
 
 export const deleteImage = async (event: Event, image: IImageObject) => {
   event.stopPropagation();
@@ -22,10 +25,10 @@ export const deleteImage = async (event: Event, image: IImageObject) => {
   const { userId, history } = storeToRefs(userStore);
   const url = `/image/delete`;
   const { error, data } = await useFetch(url, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
-      "Content-Type": "application/json",
-      mode: "cors",
+      'Content-Type': 'application/json',
+      mode: 'cors',
     },
     body: JSON.stringify({
       image,
@@ -33,7 +36,7 @@ export const deleteImage = async (event: Event, image: IImageObject) => {
     }),
   }).json();
   if (error.value) {
-    console.error("error", error.value);
+    log.error('deleteImage failed', { error: error.value, imageId: image._id });
     isDeleting.value = false;
     deletingImageIds.value = deletingImageIds.value.filter((id) => id !== image._id);
     return;
@@ -54,10 +57,10 @@ export const favoriteImage = async (event: Event, imageId: string) => {
   isFavoriting.value = true;
   const url = `/image/favorite`;
   const { error, data } = await useFetch(url, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
-      mode: "cors",
+      'Content-Type': 'application/json',
+      mode: 'cors',
     },
     body: JSON.stringify({
       imageId,
@@ -65,7 +68,7 @@ export const favoriteImage = async (event: Event, imageId: string) => {
     }),
   }).json();
   if (error.value) {
-    console.error("error", error.value);
+    log.error('favoriteImage failed', { error: error.value, imageId });
     isFavoriting.value = false;
     return;
   }
@@ -88,15 +91,15 @@ export const downloadImage = async (event?: Event, image?: string) => {
     const response = await fetch(image);
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = `image-${Date.now()}.${image.split(".").pop()}`;
+    a.download = `image-${Date.now()}.${image.split('.').pop()}`;
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
   } catch (error) {
-    console.error("Error downloading image:", error);
+    log.error('downloadImage failed', { error, image });
   }
 };
 
@@ -108,15 +111,15 @@ export const bulkFavorite = async (images: IImageObject[]) => {
   isBulkFavoriting.value = true;
   const url = `/image/favorite/bulk`;
   const { error, data } = await useFetch(url, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
-      mode: "cors",
+      'Content-Type': 'application/json',
+      mode: 'cors',
     },
     body: JSON.stringify({ imageIds: images.map((img) => img._id), userId: userId.value }),
   }).json();
   if (error.value) {
-    console.error("error", error.value);
+    log.error('bulkFavorite failed', { error: error.value, count: images.length });
     isBulkFavoriting.value = false;
     return;
   }
@@ -138,10 +141,10 @@ export const bulkDelete = async (images: IImageObject[]) => {
   isBulkDeleting.value = true;
   const url = `/image/delete/bulk`;
   const { error, data } = await useFetch(url, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
-      "Content-Type": "application/json",
-      mode: "cors",
+      'Content-Type': 'application/json',
+      mode: 'cors',
     },
     body: JSON.stringify({
       publicIds,
@@ -150,7 +153,7 @@ export const bulkDelete = async (images: IImageObject[]) => {
     }),
   }).json();
   if (error.value) {
-    console.error("error", error.value);
+    log.error('bulkDelete failed', { error: error.value, count: images.length });
     isBulkDeleting.value = false;
     return;
   }
@@ -166,7 +169,7 @@ export const bulkDownload = async (images: IImageObject[]) => {
     if (!image) return;
 
     try {
-      if (image.featureType === "image") {
+      if (image.featureType === 'image') {
         for (const img of image.images) {
           if (img.aiImagePublicId) {
             const imageUrl = getDownloadImageUrl(img);
@@ -182,7 +185,7 @@ export const bulkDownload = async (images: IImageObject[]) => {
         }
       }
     } catch (error) {
-      console.error("Error downloading images:", error);
+      log.error('bulkDownload failed', { error, imageId: image._id });
     }
   });
 };
@@ -193,10 +196,10 @@ export const applyReferralCode = async (code: string) => {
   const { userId, userDetails } = storeToRefs(userStore);
   const url = `/users/apply-referral`;
   const { error, data, response } = await useFetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      mode: "cors",
+      'Content-Type': 'application/json',
+      mode: 'cors',
     },
     body: JSON.stringify({
       userId: userId.value,
@@ -217,17 +220,17 @@ export const applyReferralCode = async (code: string) => {
       throw new Error(errorData.message);
     }
     // Handle other types of errors
-    console.error("Error:", error.value);
-    throw new Error("Something went wrong");
+    log.error('applyReferralCode failed', { error: error.value, code });
+    throw new Error('Something went wrong');
   }
 };
 export const contactForm = async (formData: any) => {
   const url = `/users/contact`;
   const { error, data, response } = await useFetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      mode: "cors",
+      'Content-Type': 'application/json',
+      mode: 'cors',
     },
     body: JSON.stringify({
       name: formData.name,
@@ -244,15 +247,15 @@ export const contactForm = async (formData: any) => {
       throw new Error(errorData.message);
     }
     // Handle other types of errors
-    console.error("Error:", error.value);
-    throw new Error("Something went wrong");
+    log.error('contactForm failed', { error: error.value });
+    throw new Error('Something went wrong');
   }
   if (data.value) {
-    console.log("data", data.value);
+    log.debug('contactForm submitted', { data: data.value });
   }
 };
 export const formatFileSize = (bytes: number | undefined): string => {
-  if (!bytes) return "";
+  if (!bytes) return '';
 
   const kb = bytes / 1024;
   if (kb < 1024) {
@@ -267,7 +270,7 @@ export function getPublicIds(images: IImageObject[]): string[] {
   const publicIdsToDelete: string[] = [];
 
   images.forEach((image) => {
-    if (image.featureType === "image") {
+    if (image.featureType === 'image') {
       // For image type, only collect aiImagePublicId
       image.images.forEach((img: IImage) => {
         if (img.aiImagePublicId) {
@@ -299,8 +302,8 @@ export const getDownloadImageUrl = (image: IImage) => {
 
 export const cancelSubscription = (subscriptionId: string) => ({
   url: `/api/subscriptions/${subscriptionId}`,
-  method: "DELETE",
+  method: 'DELETE',
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
