@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router';
 import { useAsideStore } from '@/stores/aside';
 import { useUserStore } from '@/stores/user';
 
-import ModelPicker from '@/components/Dashboard/ControlRail/ModelPicker.vue';
+import ModelPicker from '@/components/Dashboard/ModelPicker/ModelPicker.vue';
 
 import { ASPECT_RATIOS, IMAGE_FORMATS, MODEL_IDS } from '@/utils/constants';
 
@@ -18,6 +18,14 @@ const { isPro } = storeToRefs(userStore);
 const { aspectRatio, imageFormat, outputQuality, noOfOutputs, mode } = storeToRefs(asideStore);
 
 const countOptions = [1, 2, 3, 4] as const;
+
+const ASPECT_ICON_MAX_PX = 11;
+
+function aspectIconSize(title: string) {
+  const [w, h] = title.split(':').map(Number);
+  const scale = ASPECT_ICON_MAX_PX / Math.max(w, h);
+  return { width: Math.round(w * scale), height: Math.round(h * scale) };
+}
 
 const disableCount = computed(
   () => mode.value.id === MODEL_IDS.FLUX_PRO || mode.value.id === MODEL_IDS.FLUX_1_1_PRO,
@@ -79,23 +87,23 @@ onMounted(() => {
 <template>
   <nav
     data-testid="dashboard-sidebar"
-    class="tw-flex tw-h-full tw-flex-col tw-gap-5 tw-p-3 sm:tw-p-4"
+    class="tw-flex tw-flex-col tw-gap-6 tw-p-3 sm:tw-p-4"
     aria-label="Generation settings"
   >
     <section class="tw-flex tw-flex-col tw-gap-2">
-      <span
-        class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest tw-text-ink-muted"
-      >
-        Model
+      <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-muted">
+        <font-awesome-icon icon="wand-magic-sparkles" class="tw-h-2.5 tw-w-2.5 tw-text-accent" />
+        <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest">
+          Model
+        </span>
       </span>
       <ModelPicker chip />
     </section>
 
     <section class="tw-flex tw-flex-col tw-gap-2">
-      <span
-        class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest tw-text-ink-muted"
-      >
-        Size
+      <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-muted">
+        <font-awesome-icon icon="expand" class="tw-h-2.5 tw-w-2.5 tw-text-accent" />
+        <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest"> Size </span>
       </span>
       <div class="tw-grid tw-grid-cols-4 tw-gap-1.5" role="group" aria-label="Aspect ratio">
         <button
@@ -105,23 +113,32 @@ onMounted(() => {
           :data-testid="`aspect-${ratio.title}`"
           :aria-pressed="aspectRatio.title === ratio.title"
           :class="[
-            'tw-flex tw-min-h-[44px] tw-flex-col tw-items-center tw-justify-center tw-gap-0.5 tw-rounded-md tw-border tw-text-eyebrow tw-font-medium tw-transition-colors tw-duration-fast focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
+            'tw-flex tw-h-9 tw-items-center tw-justify-center tw-gap-1 tw-rounded-chip tw-border tw-text-body-sm tw-font-medium tw-transition-colors tw-duration-fast focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
             aspectRatio.title === ratio.title
               ? 'tw-border-accent/60 tw-bg-accent-subtle tw-text-ink'
               : 'tw-border-hairline tw-bg-surface-2 tw-text-ink-muted hover:tw-border-accent/30 hover:tw-text-ink',
           ]"
           @click="selectAspect(ratio)"
         >
+          <span
+            class="tw-block tw-shrink-0 tw-border tw-border-current tw-opacity-60"
+            :style="{
+              width: `${aspectIconSize(ratio.title).width}px`,
+              height: `${aspectIconSize(ratio.title).height}px`,
+            }"
+            aria-hidden="true"
+          />
           <span>{{ ratio.title }}</span>
         </button>
       </div>
     </section>
 
     <section class="tw-flex tw-flex-col tw-gap-2">
-      <span
-        class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest tw-text-ink-muted"
-      >
-        Quality
+      <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-muted">
+        <font-awesome-icon icon="bolt" class="tw-h-2.5 tw-w-2.5 tw-text-accent" />
+        <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest">
+          Quality
+        </span>
       </span>
       <div class="tw-grid tw-grid-cols-2 tw-gap-1.5" role="group" aria-label="Output quality">
         <button
@@ -133,7 +150,7 @@ onMounted(() => {
           type="button"
           :aria-pressed="outputQuality === option.value"
           :class="[
-            'tw-min-h-[44px] tw-rounded-md tw-border tw-text-body-sm tw-font-medium tw-transition-colors tw-duration-fast focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
+            'tw-h-9 tw-rounded-chip tw-border tw-text-body-sm tw-font-medium tw-transition-colors tw-duration-fast focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
             outputQuality === option.value
               ? 'tw-border-accent/60 tw-bg-accent-subtle tw-text-ink'
               : 'tw-border-hairline tw-bg-surface-2 tw-text-ink-muted hover:tw-border-accent/30 hover:tw-text-ink',
@@ -146,10 +163,11 @@ onMounted(() => {
     </section>
 
     <section class="tw-flex tw-flex-col tw-gap-2">
-      <span
-        class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest tw-text-ink-muted"
-      >
-        Images
+      <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-muted">
+        <font-awesome-icon icon="images" class="tw-h-2.5 tw-w-2.5 tw-text-accent" />
+        <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest">
+          Images
+        </span>
       </span>
       <div class="tw-grid tw-grid-cols-4 tw-gap-1.5" role="group" aria-label="Number of images">
         <button
@@ -159,7 +177,7 @@ onMounted(() => {
           :aria-pressed="noOfOutputs === count"
           :disabled="disableCount && count > 1"
           :class="[
-            'tw-min-h-[44px] tw-rounded-md tw-border tw-text-body-sm tw-font-semibold tw-transition-colors tw-duration-fast focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40',
+            'tw-h-9 tw-rounded-chip tw-border tw-text-body-sm tw-font-semibold tw-transition-colors tw-duration-fast focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40',
             noOfOutputs === count
               ? 'tw-border-accent/60 tw-bg-accent-subtle tw-text-ink'
               : 'tw-border-hairline tw-bg-surface-2 tw-text-ink-muted hover:tw-border-accent/30 hover:tw-text-ink',
@@ -172,10 +190,11 @@ onMounted(() => {
     </section>
 
     <section class="tw-flex tw-flex-col tw-gap-2">
-      <span
-        class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest tw-text-ink-muted"
-      >
-        Format
+      <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-muted">
+        <font-awesome-icon icon="file" class="tw-h-2.5 tw-w-2.5 tw-text-accent" />
+        <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest">
+          Format
+        </span>
       </span>
       <div class="tw-grid tw-grid-cols-3 tw-gap-1.5" role="group" aria-label="Output format">
         <button
@@ -184,7 +203,7 @@ onMounted(() => {
           type="button"
           :aria-pressed="imageFormat.title === format.title"
           :class="[
-            'tw-min-h-[44px] tw-rounded-md tw-border tw-text-body-sm tw-font-medium tw-transition-colors tw-duration-fast focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
+            'tw-h-9 tw-rounded-chip tw-border tw-text-body-sm tw-font-medium tw-transition-colors tw-duration-fast focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
             imageFormat.title === format.title
               ? 'tw-border-accent/60 tw-bg-accent-subtle tw-text-ink'
               : 'tw-border-hairline tw-bg-surface-2 tw-text-ink-muted hover:tw-border-accent/30 hover:tw-text-ink',

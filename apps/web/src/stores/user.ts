@@ -1,15 +1,14 @@
 import { defineStore } from 'pinia';
-import { useUser } from 'vue-clerk';
 
 import type { IImageObject, IPayment, IUser } from '@/types';
 
+import { useAuthStore } from '@/stores/auth';
 import { useFetch } from '@/composables/useFetch';
 import { createLogger } from '@/utils/logger';
 
 const log = createLogger('user');
 
 export const useUserStore = defineStore('user', () => {
-  const { user } = useUser();
   const userDetails = ref<IUser | null>(null);
   const history = ref<IImageObject[]>([]);
   const payments = ref<IPayment[]>([]);
@@ -23,31 +22,42 @@ export const useUserStore = defineStore('user', () => {
     credits.value = value;
   }
   async function getUserDetails() {
-    const url = `/users/${userId.value}`;
-    const { error, data: userData } = await useFetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        mode: 'cors',
-      },
-    }).json<IUser>();
+    if (!userId.value) return;
 
-    if (userData.value) {
-      userDetails.value = userData.value;
-      history.value = userData.value.history;
-      payments.value = userData.value.payments;
-      isPro.value = userData.value.isPro;
+    const { getToken } = useAuthStore();
+    const token = await getToken();
+    const url = `${import.meta.env.VITE_API_BASEPATH}/users/${userId.value}`;
+
+    try {
+      const response = await fetch(url, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        log.error('getUserDetails failed', {
+          status: response.status,
+          userId: userId.value,
+        });
+        return;
+      }
+
+      const userData = (await response.json()) as IUser;
+      userDetails.value = userData;
+      history.value = userData.history ?? [];
+      payments.value = userData.payments ?? [];
+      isPro.value = userData.isPro;
       const dataToStoreInLocalStorage = {
-        userId: userData.value.userId,
+        userId: userData.userId,
       };
       if (localStorage.getItem('userDetails') === null) {
         localStorage.setItem('userDetails', JSON.stringify(dataToStoreInLocalStorage));
       }
-      credits.value = userData.value.credits;
-    }
-    if (error.value) {
-      log.error('getUserDetails failed', { error: error.value, userId: userId.value });
-      return;
+      credits.value = userData.credits;
+    } catch (error) {
+      log.error('getUserDetails failed', { error, userId: userId.value });
     }
   }
 
@@ -87,13 +97,12 @@ export const useUserStore = defineStore('user', () => {
       return;
     }
   }
-  watch(user, () => {
-    if (user.value) {
-      const { id } = user.value;
-      userId.value = id;
-      void getUserDetails();
-    }
-  });
+  async function syncFromClerk(clerkUserId: string) {
+    if (!clerkUserId) return;
+    userId.value = clerkUserId;
+    await getUserDetails();
+  }
+
   return {
     userId,
     credits,
@@ -105,6 +114,8 @@ export const useUserStore = defineStore('user', () => {
     isUpdatingName,
     isUpdatingUsername,
     setCredits,
+    syncFromClerk,
+    getUserDetails,
     updateName,
     updateUsername,
   };

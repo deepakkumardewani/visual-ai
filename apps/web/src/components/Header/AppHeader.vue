@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { useMediaQuery } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { computed, watch } from 'vue';
-import { SignedIn, SignedOut } from 'vue-clerk';
+import { SignedIn, SignedOut, useAuth } from 'vue-clerk';
 import { useRoute } from 'vue-router';
-import { useDisplay } from 'vuetify';
 
 import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
@@ -13,35 +13,38 @@ import CustomButton from '@/components/CustomButton.vue';
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue';
 import ProUpgradeDialog from '@/components/Dialogs/ProUpgradeDialog.vue';
 import ReferralOfferDialog from '@/components/Dialogs/ReferralOfferDialog.vue';
-import Coin from '@/components/Header/Coin.vue';
+import CreditsChip from '@/components/Header/CreditsChip.vue';
 import FeatureSelect from '@/components/Header/FeatureSelect.vue';
 import Logo from '@/components/Header/Logo.vue';
+import NavTabs from '@/components/Header/NavTabs.vue';
 import ReferralOffer from '@/components/Header/ReferralOffer.vue';
-import Tabs from '@/components/Header/Tabs.vue';
 import ThemeButton from '@/components/Header/ThemeButton.vue';
 import UserMenu from '@/components/Header/UserMenu.vue';
 
-const { smAndUp } = useDisplay();
+const smAndUp = useMediaQuery('(min-width: 600px)');
+const { isLoaded: isAuthLoaded } = useAuth();
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
-const { isPro } = storeToRefs(userStore);
 const route = useRoute();
+const { isPro } = storeToRefs(userStore);
 const appStore = useAppStore();
-const { isDark, tab } = storeToRefs(appStore);
+const { tab } = storeToRefs(appStore);
+
+const isDashboard = computed(() => route.path === '/dashboard');
 
 const isThemeButtonVisible = computed(() => {
   return route.path !== '/privacy' && route.path !== '/terms' && route.path !== '/refund';
 });
 
-// Function to check if pro upgrade dialog has been shown
-const hasProDialogBeenShown = () => {
-  return localStorage.getItem('proUpgradeShown') === 'true';
-};
+const showDesktopNavTabs = computed(() => smAndUp.value && isDashboard.value);
 
-// Function to mark pro dialog as shown
-const markProDialogAsShown = () => {
+function hasProDialogBeenShown() {
+  return localStorage.getItem('proUpgradeShown') === 'true';
+}
+
+function markProDialogAsShown() {
   localStorage.setItem('proUpgradeShown', 'true');
-};
+}
 
 watch(isPro, (newValue) => {
   if (newValue && !hasProDialogBeenShown()) {
@@ -50,71 +53,93 @@ watch(isPro, (newValue) => {
   }
 });
 </script>
+
 <template>
-  <div>
+  <div data-testid="app-header-v2">
     <SignedIn>
-      <ReferralOffer v-if="!smAndUp && route.path === '/dashboard'" />
+      <ReferralOffer v-if="!smAndUp && isDashboard" />
     </SignedIn>
-    <v-app-bar
-      :elevation="0"
-      :class="{ header: !smAndUp && route.path === '/dashboard' }"
-      :color="isDark ? '#1A1410' : '#C9A84C'"
+    <header
+      class="header-v2 tw-fixed tw-left-0 tw-right-0 tw-top-0 tw-z-50 tw-h-16 tw-bg-surface-1/80 tw-backdrop-blur-[14px]"
+      :class="{ 'header-v2--dashboard-mobile': !smAndUp && isDashboard }"
     >
-      <v-row class="align-center">
-        <v-col :cols="smAndUp ? 4 : route.path === '/dashboard' ? 7 : 6">
-          <div class="tw-relative tw-flex tw-min-w-0 tw-shrink-0 tw-items-center tw-gap-3">
-            <Logo />
-            <div class="tw-relative tw-min-w-0 tw-flex-1 tw-lg:tw-flex-none">
-              <FeatureSelect v-if="route.path === '/dashboard' && tab === 1" />
-            </div>
+      <div
+        class="header-v2__inner tw-mx-auto tw-flex tw-h-16 tw-w-full tw-items-center tw-gap-3 tw-px-4 lg:tw-gap-5 lg:tw-px-6"
+      >
+        <div
+          class="header-v2__start tw-flex tw-min-w-0 tw-flex-1 tw-items-center tw-gap-3 lg:tw-flex-none lg:tw-basis-1/4"
+        >
+          <Logo />
+          <div
+            v-if="isDashboard && tab === 1"
+            class="tw-relative tw-hidden tw-min-w-0 tw-flex-1 md:tw-block lg:tw-flex-none"
+          >
+            <FeatureSelect />
           </div>
-        </v-col>
+        </div>
 
-        <v-col v-if="smAndUp" cols="5">
-          <SignedIn>
-            <Tabs v-if="route.path === '/dashboard'" />
+        <div
+          v-if="showDesktopNavTabs"
+          class="header-v2__center tw-hidden tw-flex-1 tw-justify-center md:tw-flex"
+        >
+          <div
+            v-if="!isAuthLoaded"
+            aria-hidden="true"
+            class="tw-h-11 tw-w-full tw-max-w-md tw-animate-pulse tw-rounded-full tw-bg-surface-2"
+          />
+          <SignedIn v-else>
+            <NavTabs />
           </SignedIn>
-        </v-col>
-        <v-col :cols="smAndUp ? 3 : route.path === '/dashboard' ? 5 : 6">
-          <div class="tw-flex tw-shrink-0 tw-gap-4 tw-mr-3">
-            <div id="export-area" class="ml-auto tw-flex tw-items-center tw-gap-4 tw-lg:tw-gap-4">
-              <SignedOut>
-                <ThemeButton v-if="isThemeButtonVisible" />
-                <v-btn
-                  v-if="route.path === '/'"
-                  class="mx-4"
-                  variant="tonal"
-                  size="small"
-                  color="#C98A5A"
-                  to="/dashboard"
-                  >Try it now</v-btn
-                >
+        </div>
 
-                <v-btn
-                  v-if="route.path === '/dashboard'"
-                  class="mx-4"
-                  variant="tonal"
-                  :color="isDark ? '#C98A5A' : '#9E7D35'"
-                  size="small"
-                  to="/signin"
-                >
-                  Sign In
-                </v-btn>
-              </SignedOut>
-
-              <SignedIn>
-                <!-- Only show ReferralOffer on desktop -->
-                <ReferralOffer v-if="smAndUp && route.path === '/dashboard'" />
-                <Coin v-if="route.path === '/dashboard'" />
-                <CustomButton v-if="route.path !== '/dashboard'" title="Dashboard" />
-                <UserMenu />
-              </SignedIn>
-            </div>
+        <div
+          class="header-v2__end tw-ml-auto tw-flex tw-shrink-0 tw-items-center tw-gap-2 lg:tw-basis-1/4 lg:tw-justify-end lg:tw-gap-3"
+        >
+          <div
+            v-if="!isAuthLoaded"
+            aria-hidden="true"
+            class="tw-flex tw-items-center tw-gap-2 lg:tw-gap-3"
+          >
+            <div class="tw-h-11 tw-w-11 tw-animate-pulse tw-rounded-full tw-bg-surface-2" />
           </div>
-        </v-col>
-      </v-row>
-    </v-app-bar>
-    <!-- <PricingDialog /> -->
+          <div v-else id="export-area" class="tw-flex tw-items-center tw-gap-2 lg:tw-gap-3">
+            <SignedOut>
+              <ThemeButton v-if="isThemeButtonVisible" />
+              <router-link
+                v-if="route.path === '/'"
+                to="/dashboard"
+                class="tw-inline-flex tw-min-h-11 tw-items-center tw-rounded-chip tw-border tw-border-accent/30 tw-bg-accent/10 tw-px-3 tw-py-1.5 tw-text-sm tw-font-medium tw-text-ink-primary tw-transition-colors tw-duration-fast hover:tw-bg-accent/20 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
+              >
+                Try it now
+              </router-link>
+              <router-link
+                v-if="isDashboard"
+                to="/signin"
+                data-testid="header-sign-in"
+                class="tw-inline-flex tw-min-h-11 tw-items-center tw-rounded-chip tw-border tw-border-border tw-bg-surface-1/60 tw-px-3 tw-py-1.5 tw-text-sm tw-font-medium tw-text-ink-primary tw-transition-colors tw-duration-fast hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
+              >
+                Sign In
+              </router-link>
+            </SignedOut>
+
+            <SignedIn>
+              <ReferralOffer v-if="smAndUp && isDashboard" />
+              <CreditsChip v-if="isDashboard" />
+              <router-link
+                v-if="isDashboard && !isPro"
+                to="/pricing"
+                data-testid="header-upgrade-btn"
+                class="tw-inline-flex tw-min-h-9 tw-items-center tw-justify-center tw-rounded-chip tw-bg-gradient-gold tw-px-3 tw-py-1 tw-text-sm tw-font-semibold tw-text-canvas tw-transition-opacity tw-duration-fast hover:tw-opacity-90 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-gold"
+              >
+                Upgrade
+              </router-link>
+              <CustomButton v-if="!isDashboard" title="Dashboard" />
+              <UserMenu />
+            </SignedIn>
+          </div>
+        </div>
+      </div>
+    </header>
     <BuyMoreCreditsDialog />
     <ReferralOfferDialog />
     <ProUpgradeDialog />
@@ -122,7 +147,18 @@ watch(isPro, (newValue) => {
 </template>
 
 <style scoped lang="scss">
-.header {
+.header-v2 {
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.35), transparent) 1;
+}
+
+.header-v2--dashboard-mobile {
   position: relative !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-v2 {
+    backdrop-filter: none;
+  }
 }
 </style>

@@ -1,147 +1,76 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 
-import { useReducedMotion } from '@/composables/useReducedMotion';
 import { useAsideStore } from '@/stores/aside';
 import { useGenerateStore } from '@/stores/generate';
 
-import PromptAiMenu from '@/components/Dashboard/ControlRail/PromptAiMenu.vue';
+import PromptAiMenu from '@/components/Dashboard/ModelPicker/PromptAiMenu.vue';
 
-const props = withDefaults(
-  defineProps<{
-    embedded?: boolean;
-  }>(),
-  { embedded: false },
-);
+const PLACEHOLDER = 'Describe your image';
+const MAX_HEIGHT = 200; // pixels
 
-const PLACEHOLDER_EXAMPLES = [
-  'Describe your image',
-  'A serene mountain lake at golden hour…',
-  'Cyberpunk portrait with neon reflections…',
-];
+const props = defineProps<{
+  embedded?: boolean;
+  hideAiMenu?: boolean;
+  aiLoading?: boolean;
+}>();
+
+const emit = defineEmits<{
+  'multiline-change': [value: boolean];
+}>();
 
 const asideStore = useAsideStore();
 const generateStore = useGenerateStore();
-const reducedMotion = useReducedMotion();
 
 const { typingPrompt } = storeToRefs(asideStore);
 const { promptText } = storeToRefs(generateStore);
 
-const isTyping = ref(false);
 const isAiLoading = ref(false);
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
-const placeholderText = ref(PLACEHOLDER_EXAMPLES[0]);
-const showPlaceholder = ref(true);
 
-const isReadonly = computed(() => isTyping.value || isAiLoading.value);
+const isReadonly = computed(() => isAiLoading.value || Boolean(props.aiLoading));
+const showAiLoadingBar = computed(() => isAiLoading.value || Boolean(props.aiLoading));
 
 function focusTextarea() {
   textareaRef.value?.focus();
+}
+
+function emitMultilineState() {
+  const el = textareaRef.value;
+  if (!props.embedded || !el) return;
+
+  const style = window.getComputedStyle(el);
+  const lineHeight = Number.parseFloat(style.lineHeight) || 20;
+  const padding = Number.parseFloat(style.paddingTop) + Number.parseFloat(style.paddingBottom);
+  const singleLineMax = lineHeight + padding;
+
+  emit('multiline-change', el.scrollHeight > singleLineMax + 2);
 }
 
 function adjustHeight() {
   const el = textareaRef.value;
   if (!el) return;
   el.style.height = 'auto';
-  el.style.height = `${Math.max(el.scrollHeight, 80)}px`;
+  el.style.height = `${Math.min(el.scrollHeight, MAX_HEIGHT)}px`;
+  emitMultilineState();
 }
 
 function applyPrompt(text: string) {
-  showPlaceholder.value = false;
-  if (reducedMotion.value) {
-    typingPrompt.value = text;
-    promptText.value = text;
-    nextTick(adjustHeight);
-    focusTextarea();
-    return;
-  }
-
-  typePrompt(text);
-}
-
-function typePrompt(text: string) {
-  isTyping.value = true;
-  typingPrompt.value = '';
-
-  let index = 0;
-  const interval = setInterval(() => {
-    if (index < text.length) {
-      typingPrompt.value += text.charAt(index);
-      index++;
-      nextTick(adjustHeight);
-    } else {
-      clearInterval(interval);
-      isTyping.value = false;
-      focusTextarea();
-    }
-  }, 5);
+  typingPrompt.value = text;
+  promptText.value = text;
+  nextTick(adjustHeight);
+  focusTextarea();
 }
 
 function clearPrompt() {
   if (isReadonly.value) return;
   typingPrompt.value = '';
-  showPlaceholder.value = true;
   focusTextarea();
 }
 
 function handleInput() {
-  showPlaceholder.value = typingPrompt.value.length === 0;
   adjustHeight();
-}
-
-function handleFocus() {
-  showPlaceholder.value = typingPrompt.value.length === 0;
-}
-
-function handleBlur() {
-  showPlaceholder.value = typingPrompt.value.length === 0;
-}
-
-let placeholderTimer: ReturnType<typeof setInterval> | null = null;
-const placeholderState = { exampleIndex: 0, charIndex: 0, deleting: false, pauseTicks: 0 };
-
-function startPlaceholderCycle() {
-  if (reducedMotion.value || typingPrompt.value) return;
-  stopPlaceholderCycle();
-
-  placeholderTimer = setInterval(
-    () => {
-      if (typingPrompt.value || isTyping.value) return;
-
-      const target = PLACEHOLDER_EXAMPLES[placeholderState.exampleIndex];
-
-      if (placeholderState.pauseTicks > 0) {
-        placeholderState.pauseTicks--;
-        return;
-      }
-
-      if (!placeholderState.deleting) {
-        placeholderText.value = target.slice(0, placeholderState.charIndex + 1);
-        placeholderState.charIndex++;
-        if (placeholderState.charIndex >= target.length) {
-          placeholderState.deleting = true;
-          placeholderState.pauseTicks = 24;
-        }
-      } else {
-        placeholderText.value = target.slice(0, placeholderState.charIndex - 1);
-        placeholderState.charIndex--;
-        if (placeholderState.charIndex <= 0) {
-          placeholderState.deleting = false;
-          placeholderState.exampleIndex =
-            (placeholderState.exampleIndex + 1) % PLACEHOLDER_EXAMPLES.length;
-        }
-      }
-    },
-    placeholderState.deleting ? 20 : 35,
-  );
-}
-
-function stopPlaceholderCycle() {
-  if (placeholderTimer) {
-    clearInterval(placeholderTimer);
-    placeholderTimer = null;
-  }
 }
 
 watch(typingPrompt, (value) => {
@@ -149,46 +78,39 @@ watch(typingPrompt, (value) => {
   nextTick(adjustHeight);
 });
 
-watch(isTyping, (typing) => {
-  if (typing) stopPlaceholderCycle();
-  else if (!typingPrompt.value) startPlaceholderCycle();
-});
-
 onMounted(() => {
   typingPrompt.value = promptText.value ?? '';
-  nextTick(() => {
-    adjustHeight();
-    if (!typingPrompt.value && !reducedMotion.value) {
-      startPlaceholderCycle();
-    }
-  });
+  nextTick(adjustHeight);
 });
-
-onBeforeUnmount(stopPlaceholderCycle);
 </script>
 
 <template>
-  <div data-testid="composer-textarea" :class="props.embedded ? 'tw-relative' : 'tw-relative'">
+  <div data-testid="composer-textarea" class="tw-relative">
     <textarea
       ref="textareaRef"
       v-model.trim="typingPrompt"
       data-testid="composer-textarea-input"
       rows="1"
-      :placeholder="reducedMotion ? PLACEHOLDER_EXAMPLES[0] : placeholderText"
+      :placeholder="PLACEHOLDER"
       :readonly="isReadonly"
-      class="tw-w-full tw-resize-none tw-rounded-md tw-border-0 tw-bg-transparent tw-px-1 tw-py-2 tw-pr-10 tw-text-body-base tw-text-ink tw-placeholder-ink-muted focus-visible:tw-outline-none disabled:tw-cursor-not-allowed disabled:tw-opacity-70"
-      :aria-busy="isTyping || isAiLoading"
+      :class="[
+        'tw-w-full tw-resize-none tw-border-0 tw-bg-transparent tw-text-body-base tw-leading-normal tw-text-ink tw-placeholder-ink-muted focus-visible:tw-outline-none disabled:tw-cursor-not-allowed disabled:tw-opacity-70',
+        embedded
+          ? 'tw-rounded-none tw-px-0 tw-py-1.5 tw-pr-8'
+          : 'tw-rounded-md tw-px-1 tw-py-1 tw-pr-9',
+      ]"
+      :aria-busy="isAiLoading"
       @input="handleInput"
-      @focus="handleFocus"
-      @blur="handleBlur"
     />
 
-    <div class="tw-absolute tw-right-0 tw-top-1 tw-flex tw-items-start tw-gap-1">
+    <div
+      class="tw-absolute tw-right-0 tw-top-1/2 tw-flex -tw-translate-y-1/2 tw-items-center tw-gap-1"
+    >
       <button
         v-if="typingPrompt && !isReadonly"
         type="button"
         data-testid="composer-textarea-clear"
-        class="tw-inline-flex tw-min-h-[32px] tw-min-w-[32px] tw-items-center tw-justify-center tw-rounded-sm tw-text-ink-muted hover:tw-text-ink focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
+        class="tw-inline-flex tw-min-h-[28px] tw-min-w-[28px] tw-items-center tw-justify-center tw-rounded-md tw-text-ink-muted hover:tw-text-ink focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
         aria-label="Clear prompt"
         @click="clearPrompt"
       >
@@ -196,6 +118,7 @@ onBeforeUnmount(stopPlaceholderCycle);
       </button>
 
       <PromptAiMenu
+        v-if="!hideAiMenu"
         :current-prompt="typingPrompt"
         :disabled="isReadonly"
         @apply-prompt="applyPrompt"
@@ -204,7 +127,7 @@ onBeforeUnmount(stopPlaceholderCycle);
     </div>
 
     <div
-      v-if="isAiLoading"
+      v-if="showAiLoadingBar"
       data-testid="composer-textarea-ai-loading"
       class="tw-pointer-events-none tw-absolute tw-inset-x-0 tw-bottom-0 tw-h-0.5 tw-overflow-hidden"
       aria-hidden="true"

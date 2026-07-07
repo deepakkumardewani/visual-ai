@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
-import ModelPickerTrigger from '@/components/Dashboard/ControlRail/ModelPickerTrigger.vue';
+import ModelPickerTrigger from '@/components/Dashboard/ModelPicker/ModelPickerTrigger.vue';
 import { FLUX_MODES } from '@/utils/models';
 
 describe('ModelPickerTrigger', () => {

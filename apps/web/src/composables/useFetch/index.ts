@@ -27,14 +27,11 @@ export const useFetch = createFetch({
         options,
       };
     },
-    afterFetch(ctx) {
-      const _ctx = ctx as any;
-      const start = (_ctx.options as Record<symbol, number> | undefined)?.[REQUEST_START];
-      const duration = start ? Date.now() - start : undefined;
-      apiLogger.debug(`${_ctx.options.method ?? 'GET'} ${_ctx.url} → ${_ctx.response?.status}`, {
-        duration,
+    afterFetch({ data, response }) {
+      apiLogger.debug(`→ ${response.status}`, {
+        url: response.url,
       });
-      return ctx;
+      return { data, response };
     },
     onFetchError(ctx) {
       if (ctx.error?.code === CANCELLED_REQUEST) {

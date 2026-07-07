@@ -1,16 +1,30 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
+import { watch } from 'vue';
+import { useUser } from 'vue-clerk';
 import { useRoute } from 'vue-router';
 
 import { useAppStore } from '@/stores/app';
+import { useUserStore } from '@/stores/user';
 
 import AppFooter from '@/components/AppFooter.vue';
 import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue';
-import AppHeaderV2 from '@/components/Header/AppHeaderV2.vue';
+import AppHeader from '@/components/Header/AppHeader.vue';
 
 const appStore = useAppStore();
+const userStore = useUserStore();
+const { user, isLoaded } = useUser();
 const { tab, snackbar, snackbarTimeout, snackbarText } = storeToRefs(appStore);
 const route = useRoute();
+
+watch(
+  [user, isLoaded],
+  ([currentUser, loaded]) => {
+    if (!loaded || !currentUser) return;
+    void userStore.syncFromClerk(currentUser.id);
+  },
+  { immediate: true },
+);
 // The landing page ships its own immersive nav and footer, so the
 // global Vuetify chrome is suppressed on '/'.
 const isLanding = computed(() => route.path === '/');
@@ -37,7 +51,7 @@ const isFooterVisible = computed(() => {
 </script>
 <template>
   <v-app class="tw-bg-canvas">
-    <AppHeaderV2 v-if="isHeaderVisible" />
+    <AppHeader v-if="isHeaderVisible" />
     <v-main
       :class="{
         'tw-h-[98vh] tw-overflow-y-hidden': overflowHidden,

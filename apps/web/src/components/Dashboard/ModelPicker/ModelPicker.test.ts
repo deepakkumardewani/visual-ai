@@ -13,7 +13,7 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ push: pushMock }),
 }));
 
-import ModelPicker from '@/components/Dashboard/ControlRail/ModelPicker.vue';
+import ModelPicker from '@/components/Dashboard/ModelPicker/ModelPicker.vue';
 import { useAsideStore } from '@/stores/aside';
 import { useUserStore } from '@/stores/user';
 import { MODEL_IDS } from '@/utils/modelIds';

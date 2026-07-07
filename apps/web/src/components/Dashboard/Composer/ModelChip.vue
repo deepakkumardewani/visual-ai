@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import type { Model } from '@/types/model';
+import { computed } from 'vue';
 
 import { useDashboardMotion } from '@/composables/useDashboardMotion';
+import { getModelLogoUrl } from '@/utils/models';
 
 import ProviderIcon from '@/components/primitives/ProviderIcon.vue';
 
-defineProps<{
+const props = defineProps<{
   model: Model;
   open?: boolean;
 }>();
 
 const { chevronTransition, interactiveTransition } = useDashboardMotion();
+
+const logoUrl = computed(() => getModelLogoUrl(props.model.iconUrl));
 </script>
 
 <template>
@@ -22,7 +26,14 @@ const { chevronTransition, interactiveTransition } = useDashboardMotion();
       open ? 'tw-border-accent/50' : 'hover:tw-border-accent/30',
     ]"
   >
-    <ProviderIcon :provider="model.provider" size="sm" />
+    <!-- Display model logo or fallback to provider icon -->
+    <img
+      v-if="logoUrl"
+      :src="logoUrl"
+      :alt="`${model.title} logo`"
+      class="tw-h-6 tw-w-6 tw-shrink-0 tw-rounded tw-object-contain"
+    />
+    <ProviderIcon v-else :provider="model.provider" size="sm" />
     <span class="tw-min-w-0 tw-flex-1 tw-truncate tw-text-body-sm tw-font-medium tw-text-ink">
       {{ model.title }}
     </span>

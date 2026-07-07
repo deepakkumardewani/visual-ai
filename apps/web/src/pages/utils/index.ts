@@ -20,7 +20,9 @@ export function groupByDate(data: IImageObject[]): GroupedObject[] {
   data
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .forEach((item) => {
-      const date = item.humanReadableDate;
+      const date =
+        item.humanReadableDate ||
+        (item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Unknown');
       if (!grouped[date]) {
         grouped[date] = [];
       }
@@ -38,6 +40,8 @@ export function groupByDate(data: IImageObject[]): GroupedObject[] {
 }
 
 function formatDate(date: string): string {
+  if (date === 'Unknown') return date;
+
   // Assuming the input date is in "MM/DD/YYYY" format
   const months = [
     'Jan',

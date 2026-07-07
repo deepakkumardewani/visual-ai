@@ -1,14 +1,9 @@
 import { createPinia, setActivePinia } from 'pinia';
 import { mount } from '@vue/test-utils';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
 
-const reducedMotionRef = ref(false);
 const promptTextRef = ref('');
-
-vi.mock('@/composables/useReducedMotion', () => ({
-  useReducedMotion: () => reducedMotionRef,
-}));
 
 vi.mock('@/stores/generate', () => ({
   useGenerateStore: () => ({
@@ -16,7 +11,7 @@ vi.mock('@/stores/generate', () => ({
   }),
 }));
 
-vi.mock('@/components/Dashboard/ControlRail/PromptAiMenu.vue', () => ({
+vi.mock('@/components/Dashboard/ModelPicker/PromptAiMenu.vue', () => ({
   default: {
     props: ['currentPrompt', 'disabled'],
     emits: ['apply-prompt', 'loading'],
@@ -35,13 +30,7 @@ import { useAsideStore } from '@/stores/aside';
 describe('ComposerTextarea', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
-    reducedMotionRef.value = false;
     promptTextRef.value = '';
-    vi.useFakeTimers();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
   });
 
   const mountTextarea = () => {
@@ -80,23 +69,11 @@ describe('ComposerTextarea', () => {
     expect(useAsideStore().typingPrompt).toBe('Saved prompt');
   });
 
-  it('reveals applied prompt with typewriter effect', async () => {
+  it('applies prompt instantly with no typewriter animation', async () => {
     const { wrapper, asideStore } = mountTextarea();
 
     await wrapper.get('[data-testid="stub-apply"]').trigger('click');
 
-    for (let i = 0; i < 'Typed prompt'.length; i++) {
-      await vi.advanceTimersByTimeAsync(5);
-    }
-
-    expect(asideStore.typingPrompt).toBe('Typed prompt');
-  });
-
-  it('applies prompt immediately when reduced motion is preferred', async () => {
-    reducedMotionRef.value = true;
-    const { wrapper, asideStore } = mountTextarea();
-
-    await wrapper.get('[data-testid="stub-apply"]').trigger('click');
     expect(asideStore.typingPrompt).toBe('Typed prompt');
   });
 

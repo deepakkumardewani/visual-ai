@@ -1,26 +1,26 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
-import ModelOption from '@/components/Dashboard/ControlRail/ModelOption.vue';
+import ModelOption from '@/components/Dashboard/ModelPicker/ModelOption.vue';
 import { FLUX_MODES } from '@/utils/models';
 
 describe('ModelOption', () => {
-  it('renders model name, description, tier badge, and provider icon', () => {
+  it('renders model name and description without tier badge', () => {
     const model = FLUX_MODES[2];
     const wrapper = mount(ModelOption, { props: { model } });
 
     expect(wrapper.text()).toContain(model.title);
     expect(wrapper.text()).toContain(model.description);
-    expect(wrapper.text()).toContain('Premium');
-    expect(wrapper.find('[role="img"]').exists()).toBe(true);
+    expect(wrapper.text()).not.toContain('Premium');
   });
 
-  it('shows best-at and price when provided', () => {
-    const model = FLUX_MODES[0];
+  it('displays logo image when iconUrl is provided', () => {
+    const model = FLUX_MODES[2]; // Has iconUrl
     const wrapper = mount(ModelOption, { props: { model } });
 
-    expect(wrapper.text()).toContain(model.bestAt!);
-    expect(wrapper.text()).toContain('/img');
+    const img = wrapper.find('img[alt*="logo"]');
+    expect(img.exists()).toBe(true);
+    expect(img.attributes('src')).toBeDefined();
   });
 
   it('emits select on click', async () => {

@@ -35,7 +35,7 @@ const showUserHistory = computed(
 </script>
 
 <template>
-  <div data-testid="result-canvas" class="result-canvas tw-h-full tw-w-full tw-bg-canvas">
+  <div data-testid="result-canvas" class="result-canvas tw-w-full tw-bg-canvas">
     <CommunityFeed v-if="showCommunityFeed" />
     <UserGenerationsGrid v-else-if="showUserHistory" />
     <ResultColumn v-else />

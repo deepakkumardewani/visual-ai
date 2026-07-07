@@ -36,11 +36,11 @@ const { xs } = useDisplay();
         <DashboardSidebar />
       </template>
       <template #canvas>
-        <div class="tw-flex tw-h-full tw-flex-col">
+        <div class="tw-flex tw-h-full tw-min-h-0 tw-flex-col">
           <div class="tw-shrink-0 tw-border-b tw-border-hairline tw-p-3 sm:tw-p-4">
             <PromptBar />
           </div>
-          <div class="tw-min-h-0 tw-flex-1 tw-overflow-y-auto">
+          <div class="tw-min-h-0 tw-flex-1 tw-overflow-y-auto no-scrollbar">
             <ResultCanvas />
           </div>
         </div>

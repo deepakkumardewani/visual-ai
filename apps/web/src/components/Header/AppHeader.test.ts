@@ -77,11 +77,11 @@ vi.mock('@/components/Dialogs/ProUpgradeDialog.vue', () => ({
   default: { template: '<div />' },
 }));
 
-import AppHeaderV2 from '@/components/Header/AppHeaderV2.vue';
+import AppHeader from '@/components/Header/AppHeader.vue';
 import { useAppStore } from '@/stores/app';
 import { useUserStore } from '@/stores/user';
 
-describe('AppHeaderV2', () => {
+describe('AppHeader', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
     routePathRef.value = '/dashboard';
@@ -96,7 +96,7 @@ describe('AppHeaderV2', () => {
     const userStore = useUserStore();
     userStore.isPro = isProRef.value;
 
-    return mount(AppHeaderV2, {
+    return mount(AppHeader, {
       global: {
         plugins: [pinia],
       },

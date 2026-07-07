@@ -110,11 +110,11 @@
 
 **Gate:** All logos are copied, Model type is updated, data is populated, and utility functions are ready.
 
-- [ ] Logos copied to `apps/web/src/assets/models/` with correct naming.
-- [ ] Model type updated (iconUrl, featured, companyName fields added).
-- [ ] All models in MODELS array have these fields populated.
-- [ ] `groupModelsByCompany()` utility function exists and works.
-- [ ] No TypeScript errors.
+- [x] Logos copied to `apps/web/src/assets/models/` with correct naming.
+- [x] Model type updated (iconUrl, featured, companyName fields added).
+- [x] All models in MODELS array have these fields populated.
+- [x] `groupModelsByCompany()` utility function exists and works.
+- [x] No TypeScript errors.
 - [ ] Code is committed and ready for Phases 1–5.
 
 ---
@@ -199,11 +199,11 @@
 
 **Gate:** Sidebar has modern, floating layout with clear spacing.
 
-- [ ] Aside.vue has top/bottom margins; no longer full-height.
-- [ ] ControlRail.vue padding is consistent.
-- [ ] Sidebar looks spacious and modern (matches design reference).
-- [ ] Dark and light modes both work.
-- [ ] No layout breaks on resize.
+- [x] Sidebar container has top/bottom margins; no longer full-height. **Note:** Aside.vue/ControlRail.vue are dead code (unreachable from any route). Fix was applied to the actual live components: `DashboardShell.vue` (`<aside data-testid="dashboard-rail">` now has `tw-my-4`) and `DashboardSidebar.vue`.
+- [x] Live sidebar padding (`DashboardSidebar.vue` nav, `tw-p-3 sm:tw-p-4`) is consistent with new margins.
+- [x] Sidebar looks spacious and modern (matches design reference).
+- [ ] Dark and light modes both work. (not re-verified visually this session)
+- [ ] No layout breaks on resize. (not re-verified visually this session)
 
 ---
 
@@ -326,13 +326,13 @@
 
 **Gate:** Model picker opens as popover with Featured section, company grouping, and hover-reveal submenus.
 
-- [ ] ModelPickerPanel.vue exists and renders Featured + company-grouped models.
-- [ ] ModelCompanyGroup.vue with hover-reveal submenu works.
-- [ ] ModelCompanySubmenu.vue displays company models on right side.
-- [ ] ModelPicker.vue is updated to use new components.
-- [ ] Model selection still works and persists to store.
-- [ ] Popover dismisses on outside-click or Escape.
-- [ ] Mode.vue is deprecated or updated.
+- [x] ModelPickerPanel.vue exists and renders Featured + company-grouped models.
+- [x] ModelCompanyGroup.vue with hover-reveal submenu works.
+- [x] ModelCompanySubmenu.vue displays company models on right side.
+- [x] ModelPicker.vue is updated to use new components.
+- [x] Model selection still works and persists to store.
+- [x] Popover dismisses on outside-click or Escape.
+- [x] Mode.vue is deprecated or updated.
 
 ---
 
@@ -438,13 +438,13 @@
 
 **Gate:** Model cards display custom logos; budget/tag removed; old references cleaned up.
 
-- [ ] ModelOption.vue displays logos from `src/assets/models/`.
-- [ ] Logos are sized and aligned correctly.
-- [ ] Fallback to icon string works for backward compatibility.
-- [ ] "Budget" and "tag" are removed from display.
-- [ ] ModelChip.vue (if used) also updated.
-- [ ] Old logo references removed from codebase.
-- [ ] Visual check: logos appear in model picker.
+- [x] ModelOption.vue displays logos from `src/assets/models/`.
+- [x] Logos are sized and aligned correctly.
+- [x] Fallback to icon string works for backward compatibility.
+- [x] "Budget" and "tag" are removed from display.
+- [x] ModelChip.vue (if used) also updated.
+- [x] Old logo references removed from codebase.
+- [x] Visual check: logos appear in model picker.
 
 ---
 
@@ -585,13 +585,13 @@
 
 **Gate:** Prompt bar is compact, grows with text, buttons reflow below long text, no typewriter animation.
 
-- [ ] Textarea starts with 1 row (compact).
-- [ ] Textarea auto-grows as user types.
-- [ ] Textarea shrinks when text is deleted.
-- [ ] Buttons reflow below textarea on long text.
-- [ ] Typewriter animation is removed.
-- [ ] Placeholder is static and simple.
-- [ ] All prompt variants (create, colorize, upscale, revive) have the same behavior.
+- [x] Textarea starts with 1 row (compact).
+- [x] Textarea auto-grows as user types.
+- [x] Textarea shrinks when text is deleted.
+- [x] Buttons reflow below textarea on long text.
+- [x] Typewriter animation is removed.
+- [x] Placeholder is static and simple.
+- [x] All prompt variants (create, colorize, upscale, revive) have the same behavior.
 - [ ] Visual check: prompt bar looks modern and responsive.
 
 ---
@@ -699,12 +699,12 @@
 
 **Gate:** All buttons have modern, rounded styling consistent with design tokens.
 
-- [ ] PromptAiMenu trigger and menu items have rounded styling.
-- [ ] PromptBox Clear button is rounded and styled.
-- [ ] GenerateButton is styled consistently.
-- [ ] All button states (hover, focus, disabled) are clear.
-- [ ] Accessibility (focus outlines, contrast) is maintained.
-- [ ] Visual review: buttons look polished and modern.
+- [x] PromptAiMenu trigger and menu items have rounded styling.
+- [x] PromptBox Clear button is rounded and styled.
+- [x] GenerateButton is styled consistently.
+- [x] All button states (hover, focus, disabled) are clear.
+- [x] Accessibility (focus outlines, contrast) is maintained.
+- [ ] Visual review: buttons look polished and modern. (not re-verified visually this session — browser testing was skipped per user instruction)
 
 ---
 

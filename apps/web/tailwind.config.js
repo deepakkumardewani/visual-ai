@@ -74,8 +74,10 @@ export default {
         card: '0 4px 24px rgba(0,0,0,0.4)',
         elevated: '0 8px 40px rgba(0,0,0,0.55)',
         accent: '0 4px 24px rgba(201,138,90,0.2)',
-        // Gold luminous glow for primary CTA
+        // Gold luminous glow for primary CTA (hero moments — hover/active only)
         'gold-glow': '0 0 32px rgba(201,168,76,0.35), 0 4px 16px rgba(201,168,76,0.15)',
+        // Resting gold cue for compact controls — thin edge, no blur halo
+        'gold-subtle': '0 1px 2px rgba(0,0,0,0.3), 0 0 0 1px rgba(158,125,53,0.45)',
       },
       transitionTimingFunction: {
         'out-expo': 'cubic-bezier(0.16,1,0.3,1)',

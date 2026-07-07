@@ -19,7 +19,7 @@ function handleRemix(prompt: string) {
   <section
     data-testid="community-feed"
     aria-label="Community generations"
-    class="tw-h-full tw-w-full tw-overflow-y-auto tw-px-4 tw-py-6 sm:tw-px-6"
+    class="tw-w-full tw-px-4 tw-py-6 sm:tw-px-6"
   >
     <header class="tw-mb-6 tw-text-center">
       <h2 class="tw-text-xl tw-font-bold tw-uppercase tw-tracking-wide tw-text-ink">

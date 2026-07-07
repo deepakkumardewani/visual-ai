@@ -15,7 +15,7 @@ vi.mock('@/utils/promptAi', () => ({
   pickRandomPrompt: vi.fn(() => 'Random JSON prompt'),
 }));
 
-import PromptAiMenu from '@/components/Dashboard/ControlRail/PromptAiMenu.vue';
+import PromptAiMenu from '@/components/Dashboard/ModelPicker/PromptAiMenu.vue';
 import { useAsideStore } from '@/stores/aside';
 import { describeImage, improvePrompt, pickRandomPrompt } from '@/utils/promptAi';
 import { FLUX_MODES } from '@/utils/models';

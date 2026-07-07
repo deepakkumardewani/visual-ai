@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import type { Model } from '@/types/model';
+import { computed } from 'vue';
 
 import { useDashboardMotion } from '@/composables/useDashboardMotion';
+import { getModelLogoUrl } from '@/utils/models';
 
 import ProviderIcon from '@/components/primitives/ProviderIcon.vue';
-import TierBadge from '@/components/primitives/TierBadge.vue';
 
-import { formatPrice } from '@/utils/models';
-
-defineProps<{
+const props = defineProps<{
   model: Model;
   selected?: boolean;
 }>();
@@ -18,6 +17,8 @@ defineEmits<{
 }>();
 
 const { interactiveTransition, pressable } = useDashboardMotion();
+
+const logoUrl = computed(() => getModelLogoUrl(props.model.iconUrl));
 </script>
 
 <template>
@@ -34,25 +35,19 @@ const { interactiveTransition, pressable } = useDashboardMotion();
     ]"
     @click="$emit('select')"
   >
-    <ProviderIcon :provider="model.provider" size="sm" />
+    <!-- Display model logo or fallback to provider icon -->
+    <img
+      v-if="logoUrl"
+      :src="logoUrl"
+      :alt="`${model.title} logo`"
+      class="tw-h-8 tw-w-8 tw-shrink-0 tw-rounded tw-object-contain"
+    />
+    <ProviderIcon v-else :provider="model.provider" size="sm" />
 
     <span class="tw-min-w-0 tw-flex-1">
-      <span class="tw-flex tw-flex-wrap tw-items-center tw-gap-2">
-        <span class="tw-text-sm tw-font-semibold tw-text-ink">{{ model.title }}</span>
-        <TierBadge :tier="model.tier" />
-      </span>
+      <span class="tw-block tw-text-sm tw-font-semibold tw-text-ink">{{ model.title }}</span>
 
       <span class="tw-mt-0.5 tw-block tw-text-xs tw-text-ink-muted">{{ model.description }}</span>
-
-      <span
-        v-if="model.bestAt || model.pricePerImage !== undefined"
-        class="tw-mt-1 tw-flex tw-flex-wrap tw-gap-x-2 tw-text-[11px] tw-text-ink-muted"
-      >
-        <span v-if="model.bestAt">{{ model.bestAt }}</span>
-        <span v-if="formatPrice(model.pricePerImage)" class="tw-text-accent">
-          {{ formatPrice(model.pricePerImage) }}/img
-        </span>
-      </span>
     </span>
   </button>
 </template>

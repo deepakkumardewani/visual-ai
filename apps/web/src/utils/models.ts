@@ -13,8 +13,9 @@ export const MODELS: Model[] = [
     bestAt: 'Fastest generation',
     tier: 'budget',
     pricePerImage: 0.005,
-    icon: '$fluxFast',
     isPro: false,
+    iconUrl: 'bfl.png',
+    companyName: 'Black Forest Labs',
   },
   {
     title: 'Flux Fast',
@@ -24,8 +25,9 @@ export const MODELS: Model[] = [
     bestAt: 'Balanced speed & quality',
     tier: 'standard',
     pricePerImage: 0.014,
-    icon: '$fluxFast',
     isPro: false,
+    iconUrl: 'bfl.png',
+    companyName: 'Black Forest Labs',
   },
   {
     title: 'Flux Pro',
@@ -35,8 +37,10 @@ export const MODELS: Model[] = [
     bestAt: 'Prompt adherence',
     tier: 'premium',
     pricePerImage: 0.04,
-    icon: '$fluxPro',
     isPro: true,
+    featured: true,
+    iconUrl: 'bfl.png',
+    companyName: 'Black Forest Labs',
   },
   {
     title: 'Flux 1.1 Pro',
@@ -46,8 +50,10 @@ export const MODELS: Model[] = [
     bestAt: 'Quality + speed',
     tier: 'premium',
     pricePerImage: 0.04,
-    icon: '$fluxPro',
     isPro: true,
+    featured: true,
+    iconUrl: 'bfl.png',
+    companyName: 'Black Forest Labs',
   },
   {
     title: 'Flux Realism',
@@ -57,8 +63,9 @@ export const MODELS: Model[] = [
     bestAt: 'Ultra-realistic photos',
     tier: 'premium',
     pricePerImage: 0.03,
-    icon: '$fluxRealism',
     isPro: true,
+    iconUrl: 'bfl.png',
+    companyName: 'Black Forest Labs',
   },
 
   // — Pruna —
@@ -71,6 +78,8 @@ export const MODELS: Model[] = [
     tier: 'budget',
     pricePerImage: 0.005,
     isPro: false,
+    iconUrl: 'prunaai.png',
+    companyName: 'Pruna',
   },
   {
     title: 'P-Image',
@@ -81,6 +90,8 @@ export const MODELS: Model[] = [
     tier: 'budget',
     pricePerImage: 0.005,
     isPro: false,
+    iconUrl: 'prunaai.png',
+    companyName: 'Pruna',
   },
 
   // — Z-Image —
@@ -93,7 +104,8 @@ export const MODELS: Model[] = [
     tier: 'budget',
     pricePerImage: 0.02,
     isPro: false,
-    featured: true,
+    iconUrl: 'xai.jpg',
+    companyName: 'Z-Image',
   },
 
   // — xAI —
@@ -106,6 +118,8 @@ export const MODELS: Model[] = [
     tier: 'budget',
     pricePerImage: 0.02,
     isPro: false,
+    iconUrl: 'xai.jpg',
+    companyName: 'xAI',
   },
   {
     title: 'Grok Imagine Quality',
@@ -116,6 +130,8 @@ export const MODELS: Model[] = [
     tier: 'standard',
     pricePerImage: 0.07,
     isPro: false,
+    iconUrl: 'xai.jpg',
+    companyName: 'xAI',
   },
 
   // — ByteDance —
@@ -128,7 +144,8 @@ export const MODELS: Model[] = [
     tier: 'standard',
     pricePerImage: 0.03,
     isPro: false,
-    featured: true,
+    iconUrl: 'bytedance.png',
+    companyName: 'ByteDance',
   },
 
   // — BFL (new generation) —
@@ -141,6 +158,8 @@ export const MODELS: Model[] = [
     tier: 'standard',
     pricePerImage: 0.014,
     isPro: false,
+    iconUrl: 'bfl.png',
+    companyName: 'Black Forest Labs',
   },
   {
     title: 'Flux 2 Pro',
@@ -152,6 +171,8 @@ export const MODELS: Model[] = [
     pricePerImage: 0.015,
     isPro: false,
     featured: true,
+    iconUrl: 'bfl.png',
+    companyName: 'Black Forest Labs',
   },
   {
     title: 'Flux Kontext Pro',
@@ -162,6 +183,8 @@ export const MODELS: Model[] = [
     tier: 'standard',
     pricePerImage: 0.04,
     isPro: false,
+    iconUrl: 'bfl.png',
+    companyName: 'Black Forest Labs',
   },
   {
     title: 'Flux 2 Max',
@@ -172,6 +195,8 @@ export const MODELS: Model[] = [
     tier: 'premium',
     pricePerImage: 0.12,
     isPro: true,
+    iconUrl: 'bfl.png',
+    companyName: 'Black Forest Labs',
   },
   {
     title: 'Flux Kontext Max',
@@ -182,6 +207,8 @@ export const MODELS: Model[] = [
     tier: 'premium',
     pricePerImage: 0.08,
     isPro: true,
+    iconUrl: 'bfl.png',
+    companyName: 'Black Forest Labs',
   },
 
   // — Google —
@@ -194,7 +221,8 @@ export const MODELS: Model[] = [
     tier: 'standard',
     pricePerImage: 0.067,
     isPro: false,
-    featured: true,
+    iconUrl: 'google.png',
+    companyName: 'Google',
   },
   {
     title: 'Imagen 4 Ultra',
@@ -205,6 +233,8 @@ export const MODELS: Model[] = [
     tier: 'standard',
     pricePerImage: 0.06,
     isPro: false,
+    iconUrl: 'google.png',
+    companyName: 'Google',
   },
   {
     title: 'Nano Banana Pro',
@@ -216,6 +246,8 @@ export const MODELS: Model[] = [
     pricePerImage: 0.15,
     isPro: true,
     featured: true,
+    iconUrl: 'google.png',
+    companyName: 'Google',
   },
 
   // — OpenAI —
@@ -229,6 +261,8 @@ export const MODELS: Model[] = [
     pricePerImage: 0.128,
     isPro: true,
     featured: true,
+    iconUrl: 'openai.png',
+    companyName: 'OpenAI',
   },
 ];
 
@@ -269,6 +303,42 @@ export function groupModelsByProvider(models: Model[]): Map<string, Model[]> {
     groups.set(model.provider, list);
   }
   return groups;
+}
+
+export function groupModelsByCompany(models: Model[] = MODELS): Map<string, Model[]> {
+  // Separate featured and non-featured models
+  const featured = models.filter((m) => m.featured);
+  const nonFeatured = models.filter((m) => !m.featured);
+
+  // Create groups for non-featured models, sorted by company name
+  const groups = new Map<string, Model[]>();
+  for (const model of nonFeatured) {
+    const company = model.companyName ?? model.provider;
+    const list = groups.get(company) ?? [];
+    list.push(model);
+    groups.set(company, list);
+  }
+
+  // Create the result with featured models first, then other companies alphabetically
+  const result = new Map<string, Model[]>();
+
+  // Add featured models first
+  if (featured.length > 0) {
+    result.set('Featured', featured);
+  }
+
+  // Add other companies in alphabetical order
+  const sortedCompanies = Array.from(groups.keys()).sort();
+  for (const company of sortedCompanies) {
+    result.set(company, groups.get(company) ?? []);
+  }
+
+  return result;
+}
+
+export function getModelLogoUrl(iconUrl?: string): string | null {
+  if (!iconUrl) return null;
+  return new URL(`../assets/models/${iconUrl}`, import.meta.url).href;
 }
 
 export function formatPrice(price?: number): string | null {

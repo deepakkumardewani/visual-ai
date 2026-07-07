@@ -137,6 +137,7 @@ watch(
   [history, selectedFeatureType, searchQuery],
   ([newHistory, newFeatureTypes, query]) => {
     if (newHistory) {
+      console.log('newHistory', newHistory);
       let filteredHistory = newHistory;
 
       // Feature type filter

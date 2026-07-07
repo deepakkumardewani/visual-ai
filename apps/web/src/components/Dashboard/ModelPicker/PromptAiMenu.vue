@@ -95,14 +95,18 @@ async function handleFileChange(event: Event) {
         <span
           data-testid="prompt-ai-trigger"
           :class="[
-            'tw-inline-flex tw-min-h-[44px] tw-min-w-[44px] tw-items-center tw-justify-center tw-rounded-chip tw-border tw-border-hairline tw-bg-surface-1 tw-text-ink-muted hover:tw-border-accent/40 hover:tw-text-accent focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
+            'tw-inline-flex tw-min-h-[36px] tw-min-w-[36px] tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2 tw-text-ink-muted hover:tw-border-accent/40 hover:tw-text-accent focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
             interactiveTransition,
             open ? 'tw-border-accent/50 tw-text-accent' : '',
             isLoading() ? 'tw-opacity-60' : '',
           ]"
           :aria-busy="isLoading()"
         >
-          <font-awesome-icon icon="wand-magic-sparkles" class="tw-h-4 tw-w-4" aria-hidden="true" />
+          <font-awesome-icon
+            icon="wand-magic-sparkles"
+            class="tw-h-3.5 tw-w-3.5"
+            aria-hidden="true"
+          />
           <span class="tw-sr-only">AI prompt actions</span>
         </span>
       </template>
@@ -110,14 +114,14 @@ async function handleFileChange(event: Event) {
       <div
         role="menu"
         aria-label="AI prompt actions"
-        class="tw-min-w-[12rem]"
+        class="tw-flex tw-min-w-[12rem] tw-flex-col tw-gap-0.5"
         data-testid="prompt-ai-panel"
       >
         <button
           type="button"
           role="menuitem"
           data-testid="prompt-ai-improve"
-          class="tw-flex tw-w-full tw-min-h-[44px] tw-items-center tw-gap-2 tw-rounded-sm tw-px-3 tw-py-2 tw-text-left tw-text-body-sm tw-text-ink hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[-2px] disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
+          class="tw-flex tw-w-full tw-min-h-[44px] tw-items-center tw-gap-2 tw-rounded-md tw-px-3 tw-py-2 tw-text-left tw-text-body-sm tw-text-ink hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[-2px] disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
           :class="[interactiveTransition, pressable]"
           :disabled="disabled || isLoading()"
           @click="handleImprove"
@@ -137,7 +141,7 @@ async function handleFileChange(event: Event) {
           type="button"
           role="menuitem"
           data-testid="prompt-ai-random"
-          class="tw-flex tw-w-full tw-min-h-[44px] tw-items-center tw-gap-2 tw-rounded-sm tw-px-3 tw-py-2 tw-text-left tw-text-body-sm tw-text-ink hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[-2px] disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
+          class="tw-flex tw-w-full tw-min-h-[44px] tw-items-center tw-gap-2 tw-rounded-md tw-px-3 tw-py-2 tw-text-left tw-text-body-sm tw-text-ink hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[-2px] disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
           :class="[interactiveTransition, pressable]"
           :disabled="disabled || isLoading()"
           @click="handleRandom"
@@ -153,11 +157,13 @@ async function handleFileChange(event: Event) {
           </span>
         </button>
 
+        <div class="tw-my-1 tw-h-px tw-bg-border" aria-hidden="true" />
+
         <button
           type="button"
           role="menuitem"
           data-testid="prompt-ai-describe"
-          class="tw-flex tw-w-full tw-min-h-[44px] tw-items-center tw-gap-2 tw-rounded-sm tw-px-3 tw-py-2 tw-text-left tw-text-body-sm tw-text-ink hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[-2px] disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
+          class="tw-flex tw-w-full tw-min-h-[44px] tw-items-center tw-gap-2 tw-rounded-md tw-px-3 tw-py-2 tw-text-left tw-text-body-sm tw-text-ink hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[-2px] disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
           :class="[interactiveTransition, pressable]"
           :disabled="disabled || isLoading()"
           @click="handleDescribeClick"
@@ -183,8 +189,8 @@ async function handleFileChange(event: Event) {
 }
 
 :deep(.tw-relative.tw-inline-block > button) {
-  min-height: 44px;
-  min-width: 44px;
+  min-height: 36px;
+  min-width: 36px;
   padding: 0;
   border: none;
   background: transparent;

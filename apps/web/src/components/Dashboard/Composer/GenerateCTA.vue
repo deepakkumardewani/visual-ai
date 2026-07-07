@@ -71,10 +71,10 @@ async function generateImage() {
     type="button"
     data-testid="generate-cta"
     :class="[
-      'tw-inline-flex tw-min-h-[44px] tw-items-center tw-gap-2 tw-rounded-md tw-px-4 tw-py-2 tw-text-body-sm tw-font-semibold tw-text-canvas focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40 motion-reduce:tw-transition-none',
+      'tw-inline-flex tw-min-h-[36px] tw-items-center tw-gap-1.5 tw-rounded-md tw-px-3.5 tw-py-1.5 tw-text-body-sm tw-font-semibold tw-text-canvas tw-transition-shadow tw-duration-base tw-ease-soft focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40 motion-reduce:tw-transition-none',
       pressable,
       isPremium
-        ? 'tw-bg-gradient-gold tw-shadow-gold-glow focus-visible:tw-outline-gold'
+        ? 'tw-bg-gradient-gold tw-shadow-gold-subtle hover:tw-shadow-gold-glow focus-visible:tw-outline-gold'
         : 'tw-bg-accent tw-shadow-accent focus-visible:tw-outline-accent hover:tw-bg-accent-hover',
     ]"
     :data-premium-cue="isPremium ? 'true' : undefined"
@@ -93,7 +93,7 @@ async function generateImage() {
       <span>Generate</span>
       <span
         data-testid="generate-cta-credits"
-        class="tw-inline-flex tw-items-center tw-gap-1 tw-rounded-chip tw-bg-canvas/20 tw-px-2 tw-py-0.5 tw-text-eyebrow tw-font-bold"
+        class="tw-inline-flex tw-items-center tw-gap-1 tw-rounded-sm tw-bg-canvas/20 tw-px-2 tw-py-0.5 tw-text-eyebrow tw-font-bold"
       >
         <font-awesome-icon icon="coins" class="tw-h-3 tw-w-3" aria-hidden="true" />
         {{ creditCost }}

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core';
-import { nextTick, ref, watch } from 'vue';
+import { nextTick, onBeforeUnmount, ref, watch } from 'vue';
 
 import { useFocusTrap } from '@/composables/useFocusTrap';
 
@@ -98,18 +98,6 @@ const onPanelKeydown = (event: KeyboardEvent) => {
   }
 };
 
-watch(isOpen, async (open) => {
-  if (open) {
-    await nextTick();
-    panelRef.value?.focus();
-
-    const firstItem = panelRef.value?.querySelector<HTMLElement>(
-      'button:not([disabled]), [role="option"], [role="menuitem"]',
-    );
-    firstItem?.focus();
-  }
-});
-
 onClickOutside(
   panelRef,
   (event) => {
@@ -123,11 +111,53 @@ onClickOutside(
 
 useFocusTrap(panelRef, isOpen);
 
-const placementClass: Record<string, string> = {
-  'bottom-start': 'tw-left-0 tw-top-full tw-mt-2',
-  'bottom-end': 'tw-right-0 tw-top-full tw-mt-2',
-  'top-start': 'tw-left-0 tw-bottom-full tw-mb-2',
-};
+const floatingStyle = ref<{ top: string; left: string }>({
+  top: '-9999px',
+  left: '-9999px',
+});
+
+function updatePosition() {
+  const trigger = triggerRef.value;
+  const panel = panelRef.value;
+  if (!trigger || !panel) return;
+
+  const triggerRect = trigger.getBoundingClientRect();
+  const panelRect = panel.getBoundingClientRect();
+  const gap = 8;
+
+  const top =
+    props.placement === 'top-start'
+      ? triggerRect.top - panelRect.height - gap
+      : triggerRect.bottom + gap;
+
+  const left =
+    props.placement === 'bottom-end' ? triggerRect.right - panelRect.width : triggerRect.left;
+
+  floatingStyle.value = { top: `${top}px`, left: `${left}px` };
+}
+
+watch(isOpen, async (open) => {
+  if (!open) return;
+  await nextTick();
+  updatePosition();
+  panelRef.value?.focus();
+
+  const firstItem = panelRef.value?.querySelector<HTMLElement>(
+    'button:not([disabled]), [role="option"], [role="menuitem"]',
+  );
+  firstItem?.focus();
+});
+
+window.addEventListener('scroll', updatePosition, {
+  capture: true,
+  passive: true,
+});
+window.addEventListener('resize', updatePosition);
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', updatePosition, { capture: true });
+  window.removeEventListener('resize', updatePosition);
+});
 </script>
 
 <template>
@@ -144,19 +174,22 @@ const placementClass: Record<string, string> = {
       <slot name="trigger" :open="isOpen" />
     </button>
 
-    <div
-      v-if="isOpen"
-      ref="panelRef"
-      role="dialog"
-      tabindex="-1"
-      :class="['tw-absolute tw-z-50 tw-min-w-[12rem]', placementClass[placement]]"
-      @keydown="onPanelKeydown"
-    >
+    <Teleport to="body">
       <div
-        class="tw-rounded-md tw-border tw-border-hairline tw-bg-surface-1 tw-p-3 tw-shadow-elevated"
+        v-if="isOpen"
+        ref="panelRef"
+        role="dialog"
+        tabindex="-1"
+        class="tw-fixed tw-z-50 tw-min-w-[12rem]"
+        :style="floatingStyle"
+        @keydown="onPanelKeydown"
       >
-        <slot />
+        <div
+          class="tw-rounded-md tw-border tw-border-hairline tw-bg-surface-1 tw-p-3 tw-shadow-elevated"
+        >
+          <slot />
+        </div>
       </div>
-    </div>
+    </Teleport>
   </div>
 </template>
