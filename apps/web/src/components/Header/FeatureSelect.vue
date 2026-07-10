@@ -120,7 +120,7 @@ void iconComponent;
       data-testid="feature-select-trigger"
       aria-haspopup="listbox"
       :aria-expanded="isOpen"
-      class="feature-select__trigger tw-flex tw-h-10 tw-w-full tw-items-center tw-gap-2 tw-rounded-full tw-border tw-border-border/60 tw-bg-surface-1/50 tw-px-3 tw-text-left tw-transition-colors tw-duration-fast hover:tw-border-accent/40 hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
+      class="feature-select__trigger tw-flex tw-h-10 tw-w-full tw-items-center tw-gap-2 tw-rounded-md tw-border tw-border-border/60 tw-bg-surface-1/50 tw-pl-3 tw-pr-2 tw-text-left tw-transition-colors tw-duration-fast hover:tw-border-accent/40 hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
       @click="toggle"
       @keydown="onTriggerKeydown"
     >
@@ -134,12 +134,13 @@ void iconComponent;
       >
         {{ feature.title }}
       </span>
-      <font-awesome-icon
-        :icon="faChevronDown"
-        class="tw-shrink-0 tw-text-[0.625rem] tw-text-ink-muted tw-transition-transform tw-duration-fast"
+      <span
+        class="tw-flex tw-h-6 tw-w-6 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-sm tw-bg-surface-2/80 tw-text-ink-muted tw-transition-transform tw-duration-fast"
         :class="{ 'tw-rotate-180': isOpen }"
         aria-hidden="true"
-      />
+      >
+        <font-awesome-icon :icon="faChevronDown" class="tw-text-[0.625rem]" />
+      </span>
     </button>
 
     <transition name="feature-select-fade">
@@ -147,7 +148,7 @@ void iconComponent;
         v-if="isOpen"
         role="listbox"
         data-testid="feature-select-menu"
-        class="feature-select__panel tw-absolute tw-left-0 tw-top-full tw-z-50 tw-mt-2 tw-min-w-[16rem] tw-overflow-hidden tw-rounded-md tw-border tw-border-border tw-bg-surface-1 tw-py-1.5 tw-shadow-elevated"
+        class="feature-select__panel tw-absolute tw-left-0 tw-top-full tw-z-50 tw-mt-2 tw-min-w-[17rem] tw-overflow-hidden tw-rounded-md tw-border tw-border-border tw-bg-surface-1 tw-p-1.5 tw-shadow-elevated"
       >
         <button
           v-for="(item, index) in features"
@@ -157,8 +158,8 @@ void iconComponent;
           role="option"
           :aria-selected="item.id === feature.id"
           :data-testid="`feature-select-option-${item.id}`"
-          class="feature-select__item tw-flex tw-w-full tw-items-center tw-gap-3 tw-border-0 tw-bg-transparent tw-px-3 tw-py-2 tw-text-left tw-text-sm tw-text-ink-primary tw-transition-colors tw-duration-fast hover:tw-bg-surface-2 focus-visible:tw-bg-surface-2 focus-visible:tw-outline-none"
-          :class="{ 'feature-select__item--active': item.id === feature.id }"
+          class="feature-select__item tw-flex tw-w-full tw-items-center tw-gap-3 tw-rounded-sm tw-border-0 tw-bg-transparent tw-px-2.5 tw-py-2.5 tw-text-left tw-text-sm tw-text-ink-primary tw-transition-colors tw-duration-fast hover:tw-bg-surface-2 focus-visible:tw-bg-surface-2 focus-visible:tw-outline-none"
+          :class="{ 'feature-select__item--active tw-bg-surface-2/60': item.id === feature.id }"
           @click="handleSelected(item)"
           @keydown="onItemKeydown($event, index)"
         >

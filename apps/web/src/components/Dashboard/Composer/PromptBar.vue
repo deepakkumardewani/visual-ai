@@ -52,7 +52,7 @@ function applyPrompt(text: string) {
 <template>
   <div
     data-testid="prompt-bar"
-    class="tw-overflow-visible tw-rounded-xl tw-border tw-border-hairline tw-bg-surface-1 tw-p-2 sm:tw-p-2.5"
+    class="tw-overflow-visible tw-rounded-2xl tw-border tw-border-hairline tw-bg-surface-1 tw-p-2.5 tw-shadow-[0_1px_2px_rgba(0,0,0,0.25)] tw-transition-[border-color,box-shadow] tw-duration-base focus-within:tw-border-accent focus-within:tw-shadow-[0_1px_2px_rgba(0,0,0,0.25),0_8px_18px_-12px_rgba(201,138,90,0.6)] sm:tw-p-3 motion-reduce:tw-transition-none"
   >
     <div
       :class="['tw-flex tw-gap-2 sm:tw-gap-3', isMultiline ? 'tw-items-start' : 'tw-items-center']"
@@ -71,7 +71,7 @@ function applyPrompt(text: string) {
         type="button"
         data-testid="prompt-bar-upload"
         :class="[
-          'tw-inline-flex tw-min-h-[36px] tw-min-w-[36px] tw-shrink-0 tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2 tw-text-ink-muted hover:tw-border-accent/40 hover:tw-text-accent focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-opacity-50',
+          'tw-inline-flex tw-min-h-[38px] tw-min-w-[38px] tw-shrink-0 tw-items-center tw-justify-center tw-rounded-lg tw-border tw-border-hairline/60 tw-bg-surface-2/60 tw-text-ink-muted hover:tw-border-accent/40 hover:tw-bg-surface-2 hover:tw-text-accent focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-opacity-50',
           interactiveTransition,
         ]"
         :disabled="isUploading || isAiLoading"

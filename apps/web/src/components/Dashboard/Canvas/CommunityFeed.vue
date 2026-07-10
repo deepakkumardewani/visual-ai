@@ -21,11 +21,9 @@ function handleRemix(prompt: string) {
     aria-label="Community generations"
     class="tw-w-full tw-px-4 tw-py-6 sm:tw-px-6"
   >
-    <header class="tw-mb-6 tw-text-center">
-      <h2 class="tw-text-xl tw-font-bold tw-uppercase tw-tracking-wide tw-text-ink">
-        Looking for inspiration?
-      </h2>
-      <p class="tw-mt-2 tw-text-sm tw-text-ink-muted">Remix a community prompt to get started.</p>
+    <header class="tw-mb-7 tw-mt-2 tw-text-center">
+      <h2 class="tw-font-display tw-text-display-md tw-text-ink">Looking for inspiration?</h2>
+      <p class="tw-mt-1.5 tw-text-sm tw-text-ink-muted">Remix a community prompt to get started.</p>
     </header>
 
     <div class="community-feed-grid" role="list" aria-label="Community generation cards">

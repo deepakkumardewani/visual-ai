@@ -30,8 +30,15 @@ export const useAppStore = defineStore('app', () => {
   const generateStore = useGenerateStore();
   const userStore = useUserStore();
   const { history, userId } = storeToRefs(userStore);
-  const { isLoading, upscaleInProgress, colorizeInProgress, reviveInProgress, images, imageData } =
-    storeToRefs(generateStore);
+  const {
+    isLoading,
+    upscaleInProgress,
+    colorizeInProgress,
+    reviveInProgress,
+    images,
+    imageData,
+    errMsg,
+  } = storeToRefs(generateStore);
   const feature = ref<string>('');
   const tab = ref(1);
   const isDark = useStorage('visual-ai-theme', true);
@@ -104,29 +111,30 @@ export const useAppStore = defineStore('app', () => {
       closeEventSource(feature);
 
       if (data.image) {
-        // Find the image in history and update its fields
+        // The completed payload is the persisted DB record (Cloudinary ids for
+        // every image) — replace the optimistic entry wholesale.
         const historyIndex = history.value.findIndex((img) => img._id === data.image._id);
         if (historyIndex !== -1) {
-          const imageIndex = data.image.images.findIndex(
-            (img) => img._id === data.image.images[0]._id,
-          );
-          if (imageIndex !== -1) {
-            history.value[historyIndex].images[imageIndex].originalImageUrl =
-              data.image.images[0].aiImageUrl;
-            history.value[historyIndex].images[imageIndex].originalImageUrl =
-              data.image.images[0].originalImageUrl;
-            history.value[historyIndex].images[imageIndex].enhancedImageUrl =
-              data.image.images[0].enhancedImageUrl;
-            history.value[historyIndex].images[imageIndex].aiImagePublicId =
-              data.image.images[0].aiImagePublicId;
-            history.value[historyIndex].images[imageIndex].originalPublicId =
-              data.image.images[0].originalPublicId;
-            history.value[historyIndex].images[imageIndex].enhancedPublicId =
-              data.image.images[0].enhancedPublicId;
-          }
+          history.value[historyIndex] = data.image;
+        } else {
+          history.value.push(data.image);
         }
-        // console.log('after upload: data.image', data.image)
+        if (feature === FeatureType.IMAGE) {
+          images.value = data.image.images;
+          imageData.value = data.image;
+          isLoading.value = false;
+        }
       }
+    }
+
+    if (data.status === 'error') {
+      closeEventSource(feature);
+      localStorage.setItem(`${feature}InProgress`, 'false');
+      if (feature === FeatureType.IMAGE) isLoading.value = false;
+      if (feature === FeatureType.UPSCALE) upscaleInProgress.value = false;
+      if (feature === FeatureType.COLORIZE) colorizeInProgress.value = false;
+      if (feature === FeatureType.REVIVE) reviveInProgress.value = false;
+      errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
     }
   }
 
@@ -151,6 +159,7 @@ export const useAppStore = defineStore('app', () => {
     log.error('event source error', { feature, error });
     localStorage.setItem(`${feature}InProgress`, 'false');
     if (feature === FeatureType.IMAGE) {
+      isLoading.value = false;
       imageClose();
     }
     if (feature === FeatureType.UPSCALE) {

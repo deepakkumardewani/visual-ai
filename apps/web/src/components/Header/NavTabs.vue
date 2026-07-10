@@ -57,7 +57,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
     class="nav-tabs tw-w-full tw-max-w-md"
   >
     <div
-      class="nav-tabs__track tw-relative tw-flex tw-rounded-full tw-border tw-border-border tw-bg-surface-1/60 tw-p-1"
+      class="nav-tabs__track tw-relative tw-flex tw-rounded-full tw-border tw-border-border tw-bg-surface-2/60 tw-p-1"
       role="tablist"
     >
       <button
@@ -78,7 +78,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
       </button>
       <div
         aria-hidden="true"
-        class="nav-tabs__slider tw-pointer-events-none tw-absolute tw-bottom-1 tw-left-1 tw-top-1 tw-rounded-full tw-bg-accent/15 tw-ring-1 tw-ring-accent/40 tw-transition-transform tw-duration-300 tw-ease-out"
+        class="nav-tabs__slider tw-pointer-events-none tw-absolute tw-bottom-1 tw-left-1 tw-top-1 tw-rounded-full tw-bg-surface-3 tw-shadow-sm tw-ring-1 tw-ring-border tw-transition-transform tw-duration-300 tw-ease-out"
         :style="{
           transform: `translateX(${activeTabIndex * 100}%)`,
           width: `calc(${100 / tabs.length}% - 0.25rem)`,

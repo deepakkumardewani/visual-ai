@@ -17,6 +17,8 @@ const log = createLogger('generate');
 
 export const useGenerateStore = defineStore('generate', () => {
   const promptText = ref<string>('');
+  /** Prompt of the generation currently in flight — drives the pending row caption. */
+  const activePrompt = ref<string>('');
   const isLoading = ref(false);
   const isDeleting = ref(false);
   const isFavoriting = ref(false);
@@ -35,6 +37,8 @@ export const useGenerateStore = defineStore('generate', () => {
   async function generateImage(imgData?: ImageBody) {
     appStore.sendSignal('generate_image');
     isLoading.value = true;
+    errMsg.value = '';
+    activePrompt.value = imgData?.prompt ?? '';
     images.value = [];
 
     const url = `/generate/image`;
@@ -60,14 +64,10 @@ export const useGenerateStore = defineStore('generate', () => {
     }).json<IGenerateResponse>();
     if (error.value) {
       log.error('generateImage failed', { error: error.value, jobId: imgData?.jobId });
-      return;
+      isLoading.value = false;
+      appStore.closeEventSource('image');
+      errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
     }
-    // if (data.value) {
-    //   userStore.setCredits(data.value.userCreditsRemaining)
-    //   imageData.value = data.value.image
-    //   history.value.push(data.value.image)
-    //   images.value = data.value.image.images
-    // }
   }
 
   async function upscaleImage(imgData: any) {
@@ -171,6 +171,7 @@ export const useGenerateStore = defineStore('generate', () => {
     colorizeImage,
     reviveOldImage,
     promptText,
+    activePrompt,
     isLoading,
     deletingImageIds,
     isDeleting,

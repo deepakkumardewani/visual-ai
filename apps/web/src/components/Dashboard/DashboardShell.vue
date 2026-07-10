@@ -10,19 +10,17 @@
     data-testid="dashboard-shell"
     class="dashboard-shell tw-h-[calc(100vh-60px)] tw-max-h-[calc(100vh-60px)] tw-min-h-0 tw-overflow-hidden tw-bg-canvas"
   >
-    <div
-      class="dashboard-shell__grid tw-grid tw-h-full tw-min-h-0 tw-gap-x-1 tw-gap-y-1 tw-px-1 tw-py-3"
-    >
+    <div class="dashboard-shell__grid tw-grid tw-h-full tw-min-h-0">
       <aside
         data-testid="dashboard-rail"
-        class="dashboard-shell__rail tw-min-h-0 tw-h-full tw-overflow-y-auto tw-rounded-card tw-border tw-border-hairline tw-bg-surface-1 tw-p-1 no-scrollbar"
+        class="dashboard-shell__rail tw-min-h-0 tw-h-full tw-overflow-y-auto tw-border-b tw-border-hairline tw-bg-surface-1/60 sm:tw-border-b-0 sm:tw-border-r no-scrollbar"
       >
         <slot name="rail" />
       </aside>
 
       <main
         data-testid="dashboard-canvas"
-        class="dashboard-shell__canvas tw-min-h-0 tw-h-full tw-overflow-hidden tw-rounded-card tw-bg-canvas"
+        class="dashboard-shell__canvas tw-min-h-0 tw-h-full tw-overflow-hidden tw-bg-canvas"
       >
         <slot name="canvas" />
       </main>
@@ -38,7 +36,7 @@
 
 @media (min-width: 640px) {
   .dashboard-shell__grid {
-    grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 16.5rem) minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
   }
 }

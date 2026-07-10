@@ -25,38 +25,36 @@ function create() {
 <template>
   <div
     v-if="history.length === 0"
-    class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl tw-mx-auto"
+    class="tw-flex tw-h-full tw-items-center tw-justify-center tw-px-6"
   >
-    <div class="tw-text-center tw-text-neutral-400">
-      <div>You have not created any thing yet.</div>
-      <div>
+    <div class="tw-text-center">
+      <p class="tw-text-sm tw-font-medium tw-text-ink">Nothing here yet</p>
+      <p class="tw-mt-1 tw-text-sm tw-text-ink-muted">
         Go ahead and
-        <span
+        <button
+          type="button"
+          class="tw-font-medium tw-text-accent hover:tw-underline"
           @click="create"
-          class="tw-text-[#ba68c8] tw-cursor-pointer tw-font-bold hover:tw-underline"
-          >create</span
         >
+          create
+        </button>
         something.
-      </div>
+      </p>
     </div>
   </div>
 
   <div
     v-if="!isFavorites && history.length !== 0 && groupedHistory?.length === 0"
-    class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl tw-mx-auto"
+    class="tw-flex tw-h-full tw-items-center tw-justify-center tw-px-6"
   >
-    <div class="tw-text-center tw-text-neutral-400">
-      <div>No results found.</div>
-    </div>
+    <p class="tw-text-sm tw-text-ink-muted">No results match your filters.</p>
   </div>
 
   <div
     v-if="isFavorites && history.length !== 0 && groupedHistory?.length === 0"
-    class="tw-flex tw-justify-center tw-items-center tw-h-full tw-text-xl tw-mx-auto"
+    class="tw-flex tw-h-full tw-items-center tw-justify-center tw-px-6"
   >
-    <div class="tw-text-center tw-text-neutral-400">
-      <div>You have not added any favorites yet.</div>
-    </div>
+    <p class="tw-text-sm tw-text-ink-muted">You have not added any favorites yet.</p>
   </div>
 </template>
 <style scoped lang="scss"></style>

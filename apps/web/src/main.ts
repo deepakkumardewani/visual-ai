@@ -25,6 +25,6 @@ useAppStore();
 // Wait for the router to resolve the initial route before mounting, so route-derived
 // layout classes (e.g. header padding) are correct on first paint instead of toggling
 // in a moment after mount — which otherwise animates via Vuetify's v-main transition.
-router.isReady().then(() => {
+void router.isReady().then(() => {
   app.mount('#app');
 });

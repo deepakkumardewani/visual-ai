@@ -71,11 +71,11 @@ async function generateImage() {
     type="button"
     data-testid="generate-cta"
     :class="[
-      'tw-inline-flex tw-min-h-[36px] tw-items-center tw-gap-1.5 tw-rounded-md tw-px-3.5 tw-py-1.5 tw-text-body-sm tw-font-semibold tw-text-canvas tw-transition-shadow tw-duration-base tw-ease-soft focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40 motion-reduce:tw-transition-none',
+      'tw-inline-flex tw-min-h-[38px] tw-items-center tw-gap-2 tw-rounded-lg tw-px-4 tw-py-1.5 tw-text-body-sm tw-font-semibold tw-text-canvas tw-shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.35)] tw-transition-[filter,background-color] tw-duration-fast tw-ease-soft focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40 disabled:tw-shadow-none motion-reduce:tw-transition-none',
       pressable,
       isPremium
-        ? 'tw-bg-gradient-gold tw-shadow-gold-subtle hover:tw-shadow-gold-glow focus-visible:tw-outline-gold'
-        : 'tw-bg-accent tw-shadow-accent focus-visible:tw-outline-accent hover:tw-bg-accent-hover',
+        ? 'tw-bg-gradient-gold hover:tw-brightness-110 focus-visible:tw-outline-gold'
+        : 'tw-bg-accent focus-visible:tw-outline-accent hover:tw-bg-accent-hover',
     ]"
     :data-premium-cue="isPremium ? 'true' : undefined"
     :disabled="isDisabled"

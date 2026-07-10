@@ -221,7 +221,7 @@ function setItemRef(index: number) {
             type="button"
             role="menuitem"
             :data-testid="`user-menu-item-${item.id}`"
-            class="user-menu__item tw-flex tw-w-full tw-items-center tw-gap-3 tw-border-0 tw-bg-transparent tw-px-4 tw-py-2 tw-text-left tw-text-sm tw-text-ink-primary tw-transition-colors tw-duration-fast hover:tw:bg-surface-2 focus-visible:tw-bg-surface-2 focus-visible:tw-outline-none"
+            class="user-menu__item tw-flex tw-w-full tw-items-center tw-gap-3 tw-border-0 tw-bg-transparent tw-px-4 tw-py-2 tw-text-left tw-text-sm tw-text-ink-primary tw-transition-colors tw-duration-fast hover:tw-bg-surface-2 focus-visible:tw-bg-surface-2 focus-visible:tw-outline-none"
             @click="item.action()"
             @keydown="onItemKeydown($event, index)"
           >
@@ -252,7 +252,7 @@ function setItemRef(index: number) {
             type="button"
             role="menuitem"
             data-testid="user-menu-item-theme"
-            class="user-menu__item tw-flex tw-w-full tw-items-center tw-gap-3 tw-border-0 tw-bg-transparent tw-px-4 tw-py-2 tw-text-left tw-text-sm tw-text-ink-primary tw-transition-colors tw-duration-fast hover:tw:bg-surface-2 focus-visible:tw:bg-surface-2 focus-visible:tw-outline-none"
+            class="user-menu__item tw-flex tw-w-full tw-items-center tw-gap-3 tw-border-0 tw-bg-transparent tw-px-4 tw-py-2 tw-text-left tw-text-sm tw-text-ink-primary tw-transition-colors tw-duration-fast hover:tw-bg-surface-2 focus-visible:tw-bg-surface-2 focus-visible:tw-outline-none"
             @click="appStore.toggleTheme"
           >
             <span class="tw-inline-flex tw-w-4 tw-shrink-0 tw-justify-center">
@@ -277,7 +277,7 @@ function setItemRef(index: number) {
             type="button"
             role="menuitem"
             data-testid="user-menu-item-logout"
-            class="user-menu__item user-menu__item--danger tw-flex tw-w-full tw-items-center tw-gap-3 tw-border-0 tw-bg-transparent tw-px-4 tw-py-2 tw-text-left tw-text-sm tw-text-ink-primary tw-transition-colors tw-duration-fast hover:tw:bg-[#8B2E2E]/20 hover:tw-text-[#E08585] focus-visible:tw:bg-[#8B2E2E]/20 focus-visible:tw-outline-none"
+            class="user-menu__item user-menu__item--danger tw-flex tw-w-full tw-items-center tw-gap-3 tw-border-0 tw-bg-transparent tw-px-4 tw-py-2 tw-text-left tw-text-sm tw-text-ink-primary tw-transition-colors tw-duration-fast hover:tw-bg-[#8B2E2E]/20 hover:tw-text-[#E08585] focus-visible:tw-bg-[#8B2E2E]/20 focus-visible:tw-outline-none"
             @click="handleSignOut"
           >
             <font-awesome-icon

@@ -37,7 +37,7 @@ const { xs } = useDisplay();
       </template>
       <template #canvas>
         <div class="tw-flex tw-h-full tw-min-h-0 tw-flex-col">
-          <div class="tw-shrink-0 tw-border-b tw-border-hairline tw-p-3 sm:tw-p-4">
+          <div class="tw-shrink-0 tw-px-3 tw-pb-2 tw-pt-3 sm:tw-px-6 sm:tw-pt-5">
             <PromptBar />
           </div>
           <div class="tw-min-h-0 tw-flex-1 tw-overflow-y-auto no-scrollbar">

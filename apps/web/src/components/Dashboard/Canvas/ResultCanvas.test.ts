@@ -7,13 +7,6 @@ const isLoadingRef = ref(false);
 const imagesRef = ref<{ aiImageUrl?: string }[]>([]);
 const historyRef = ref<{ featureType: string }[]>([]);
 
-vi.mock('@/components/ResultColumn.vue', () => ({
-  default: {
-    name: 'ResultColumn',
-    template: '<div data-testid="result-column-stub">Results</div>',
-  },
-}));
-
 vi.mock('@/components/Dashboard/Canvas/CommunityFeed.vue', () => ({
   default: {
     name: 'CommunityFeed',
@@ -56,7 +49,6 @@ describe('ResultCanvas', () => {
 
     expect(wrapper.find('[data-testid="result-canvas"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="community-feed-stub"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="result-column-stub"]').exists()).toBe(false);
     expect(wrapper.find('[data-testid="user-generations-stub"]').exists()).toBe(false);
   });
 
@@ -69,21 +61,22 @@ describe('ResultCanvas', () => {
     expect(wrapper.find('[data-testid="community-feed-stub"]').exists()).toBe(false);
   });
 
-  it('shows results while loading', () => {
+  it('keeps the generations feed mounted while loading so results stream in place', () => {
     isLoadingRef.value = true;
 
     const wrapper = mount(ResultCanvas);
 
-    expect(wrapper.find('[data-testid="result-column-stub"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="user-generations-stub"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="community-feed-stub"]').exists()).toBe(false);
   });
 
-  it('shows results when images are available', () => {
-    imagesRef.value = [{ aiImageUrl: 'https://example.com/generated.jpg' }];
+  it('keeps the generations feed visible regardless of the selected header feature', async () => {
+    const { useAppStore } = await import('@/stores/app');
+    useAppStore().setFeature('upscale');
+    historyRef.value = [{ featureType: 'image' }];
 
     const wrapper = mount(ResultCanvas);
 
-    expect(wrapper.find('[data-testid="result-column-stub"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="community-feed-stub"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="user-generations-stub"]').exists()).toBe(true);
   });
 });

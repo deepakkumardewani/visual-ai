@@ -31,7 +31,7 @@ const { chevronTransition } = useDashboardMotion();
       :class="[chevronTransition, open ? 'tw-rotate-180' : '']"
       aria-hidden="true"
     >
-      ▾
+      <font-awesome-icon icon="chevron-down" class="tw-h-2.5 tw-w-2.5" />
     </span>
   </span>
 </template>

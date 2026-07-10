@@ -2,11 +2,9 @@
 import { groupByDate } from '@/pages/utils';
 import { faCircleCheck, faXmark } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
-import { useDisplay } from 'vuetify';
 
 import type { GroupedObject, IImage, IImageObject } from '@/types';
 
-import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
 import { useHistoryStore } from '@/stores/history';
 import { useUserStore } from '@/stores/user';
@@ -26,78 +24,45 @@ const props = withDefaults(defineProps<{ isFavorites?: boolean }>(), {
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
 
-const { mobile } = useDisplay();
-const { isDark } = storeToRefs(useAppStore());
-const { isBulkDeleting, isBulkFavoriting, isBulkDownloading } = storeToRefs(useHistoryStore());
+const {
+  isBulkDeleting,
+  isBulkFavoriting,
+  isBulkDownloading,
+  selectedSize,
+  selectedFeatureTypes,
+  searchQuery,
+} = storeToRefs(useHistoryStore());
 const { history } = storeToRefs(userStore);
-const { selectedSize } = storeToRefs(useHistoryStore());
 
 const groupedHistory = ref<GroupedObject[]>([]);
 const imageDialogItem = ref<IImageObject | undefined>();
-const selectedFeatureType = ref<string[]>([]);
-const searchQuery = ref('');
 const sizeClasses = SIZE_CLASSES;
 
-const carouselIndexes = ref<{ [key: string]: number }>({});
-const carouselIntervals = ref<{ [key: string]: number }>({});
-const isCarouselActive = ref<{ [key: string]: boolean }>({});
-const carouselTimeouts = ref<{ [key: string]: number }>({});
 const selectedImages = ref<IImageObject[]>([]);
 
+const isBulkBusy = computed(
+  () => isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value,
+);
+const isSelecting = computed(() => selectedImages.value.length > 0);
+
 const showImage = (item: IImageObject) => {
-  if (isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value) return;
+  if (isBulkBusy.value) return;
   imageDialogItem.value = item;
   dialogStore.showImage();
 };
 
-// watch(deletingImageIds, (newVal) => {
-//   // console.log('deletingImageIds', newVal)
-// })
-
-const startCarousel = (itemId: string, images: IImage[]) => {
-  if (carouselIntervals.value[itemId]) return;
-
-  // Create a timeout before starting the carousel
-  carouselTimeouts.value[itemId] = window.setTimeout(() => {
-    // Only start if the timeout wasn't cleared
-    if (carouselTimeouts.value[itemId]) {
-      // Set active state for smooth transition
-      isCarouselActive.value[itemId] = true;
-
-      carouselIndexes.value[itemId] = 0;
-      carouselIntervals.value[itemId] = window.setInterval(() => {
-        carouselIndexes.value[itemId] = (carouselIndexes.value[itemId] + 1) % images.length;
-      }, 2000);
-
-      // Clear the timeout reference
-      delete carouselTimeouts.value[itemId];
-    }
-  }, 500);
-};
-
-const stopCarousel = (itemId: string) => {
-  // Clear the timeout if it exists
-  if (carouselTimeouts.value[itemId]) {
-    clearTimeout(carouselTimeouts.value[itemId]);
-    delete carouselTimeouts.value[itemId];
-  }
-
-  // Clear the interval if it exists
-  if (carouselIntervals.value[itemId]) {
-    clearInterval(carouselIntervals.value[itemId]);
-    delete carouselIntervals.value[itemId];
-    delete carouselIndexes.value[itemId];
-    isCarouselActive.value[itemId] = false;
-  }
-};
 const getImageUrl = (image: IImage) => {
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${image.aiImagePublicId ? image.aiImagePublicId : image.enhancedPublicId}`;
-  return optimizedUrl;
+  const publicId = image.aiImagePublicId ?? image.enhancedPublicId;
+  if (publicId) {
+    return `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}`;
+  }
+  // Fresh generations may not be on Cloudinary yet — fall back to the raw URL.
+  return image.aiImageUrl ?? image.enhancedImageUrl ?? '';
 };
 
 const toggleImageSelection = async (event: Event, image: IImageObject) => {
-  if (isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value) return;
+  if (isBulkBusy.value) return;
   event.stopPropagation();
   if (selectedImages.value.some((item) => item._id === image._id)) {
     selectedImages.value = selectedImages.value.filter((item) => item._id !== image._id);
@@ -107,7 +72,7 @@ const toggleImageSelection = async (event: Event, image: IImageObject) => {
 };
 
 const isImageSelected = (imageId: string) => {
-  return Array.from(selectedImages.value).some((item) => item._id === imageId);
+  return selectedImages.value.some((item) => item._id === imageId);
 };
 
 const selectAllInGroup = (groupData: IImageObject[]) => {
@@ -118,12 +83,12 @@ const selectAllInGroup = (groupData: IImageObject[]) => {
 
 const areAllSelectedInGroup = (groupData: IImageObject[]): boolean => {
   return groupData.every((item) =>
-    Array.from(selectedImages.value).some((selected) => selected._id === item._id),
+    selectedImages.value.some((selected) => selected._id === item._id),
   );
 };
 
 const toggleGroupSelection = (groupData: IImageObject[]) => {
-  if (isBulkDeleting.value || isBulkFavoriting.value || isBulkDownloading.value) return;
+  if (isBulkBusy.value) return;
   if (areAllSelectedInGroup(groupData)) {
     groupData.forEach((item) => {
       selectedImages.value = selectedImages.value.filter((selected) => selected._id !== item._id);
@@ -134,10 +99,9 @@ const toggleGroupSelection = (groupData: IImageObject[]) => {
 };
 
 watch(
-  [history, selectedFeatureType, searchQuery],
+  [history, selectedFeatureTypes, searchQuery],
   ([newHistory, newFeatureTypes, query]) => {
     if (newHistory) {
-      console.log('newHistory', newHistory);
       let filteredHistory = newHistory;
 
       // Feature type filter
@@ -168,8 +132,8 @@ watch(
 
 watch(
   [isBulkDeleting, isBulkFavoriting, isBulkDownloading],
-  ([isDeleting, isFavoriting, isDownloading]) => {
-    if (isDeleting || isFavoriting || isDownloading) {
+  ([deleting, favoriting, downloading]) => {
+    if (deleting || favoriting || downloading) {
       selectedImages.value = [];
     }
   },
@@ -177,190 +141,136 @@ watch(
 </script>
 
 <template>
-  <div class="history-container tw-p-3 tw-h-[calc(100vh-64px)] tw-flex tw-flex-col">
-    <div class="tw-flex-none">
-      <div
-        v-if="history.length > 0"
-        class="tw-flex tw-justify-between tw-mt-4 tw-pb-4 tw-gap-4 tw-border-b dark:tw-border-neutral-800"
-      >
-        <div
-          v-if="selectedImages.length > 0"
-          class="tw-flex tw-flex-1 tw-items-center tw-justify-start tw-gap-2"
+  <div class="history-container tw-flex tw-flex-col tw-px-4 sm:tw-px-6">
+    <div
+      v-if="history.length > 0"
+      class="tw-flex tw-flex-none tw-flex-wrap tw-items-center tw-gap-3 tw-border-b tw-border-hairline tw-py-4"
+    >
+      <template v-if="isSelecting">
+        <button
+          type="button"
+          aria-label="Clear selection"
+          class="tw-flex tw-h-9 tw-w-9 tw-items-center tw-justify-center tw-rounded-full tw-text-ink-muted tw-transition-colors tw-duration-fast hover:tw-bg-surface-2 hover:tw-text-ink"
+          @click="selectedImages = []"
         >
-          <div>
-            <v-btn icon size="large" variant="text" @click="selectedImages = []">
-              <font-awesome-icon :icon="faXmark" :color="isDark ? 'white' : 'black'" />
-            </v-btn>
-          </div>
-          <div class="tw-text-2xl tw-text-black dark:tw-text-white">
-            {{ selectedImages.length }}
-          </div>
-        </div>
-
-        <div
-          v-if="selectedImages.length === 0"
-          class="tw-flex tw-flex-1 tw-items-center tw-justify-end tw-flex-wrap"
-        >
-          <Filter ref="filterRef" />
-        </div>
-        <div v-else class="tw-flex tw-items-center tw-justify-end tw-gap-0 sm:tw-gap-4">
+          <font-awesome-icon :icon="faXmark" class="tw-h-4 tw-w-4" aria-hidden="true" />
+        </button>
+        <span class="tw-text-sm tw-font-medium tw-text-ink">
+          {{ selectedImages.length }} selected
+        </span>
+        <div class="tw-ml-auto">
           <SelectActionButtons :selectedImages="selectedImages" />
         </div>
-      </div>
+      </template>
+
+      <template v-else>
+        <h2 class="tw-text-lg tw-font-semibold tw-tracking-tight tw-text-ink">
+          {{ props.isFavorites ? 'Favorites' : 'Assets' }}
+        </h2>
+        <div class="tw-ml-auto tw-flex tw-min-w-0 tw-flex-1 tw-justify-end sm:tw-flex-none">
+          <Filter />
+        </div>
+      </template>
     </div>
 
-    <div class="tw-flex-1 tw-overflow-y-auto tw-pt-4">
+    <div class="tw-flex-1 tw-overflow-y-auto tw-pb-12 tw-pt-6 no-scrollbar">
       <NoResults :isFavorites="props.isFavorites" :groupedHistory="groupedHistory" />
 
-      <div v-for="item in groupedHistory" :key="item.title" class="tw-mb-6">
-        <v-hover v-slot="{ isHovering, props }">
-          <div v-bind="props" class="tw-flex tw-items-center tw-gap-2">
+      <div v-for="item in groupedHistory" :key="item.title" class="tw-mb-10">
+        <div class="group-header tw-mb-3 tw-flex tw-items-baseline tw-gap-2.5">
+          <h3 class="tw-text-sm tw-font-semibold tw-text-ink">{{ item.title }}</h3>
+          <span class="tw-text-xs tw-text-ink-faint">{{ item.data.length }}</span>
+          <button
+            type="button"
+            class="group-check"
+            :class="{
+              'group-check--visible': isSelecting,
+              'tw-cursor-not-allowed': isBulkBusy,
+              'tw-text-accent': areAllSelectedInGroup(item.data),
+              'tw-text-ink-faint': !areAllSelectedInGroup(item.data),
+            }"
+            :aria-label="`Select all in ${item.title}`"
+            @click="toggleGroupSelection(item.data)"
+          >
+            <font-awesome-icon :icon="faCircleCheck" class="tw-h-4 tw-w-4" aria-hidden="true" />
+          </button>
+        </div>
+
+        <div :class="['tw-grid tw-gap-3', sizeClasses[selectedSize as keyof typeof sizeClasses]]">
+          <div
+            v-for="subItem in item.data"
+            :key="subItem._id"
+            class="asset-tile tw-relative tw-aspect-square tw-cursor-pointer tw-overflow-hidden tw-rounded-card tw-bg-surface-2"
+            :class="{
+              'asset-tile--selecting': isSelecting,
+              'tw-opacity-50':
+                isBulkDeleting || isBulkFavoriting || (isBulkDownloading && isSelecting),
+              'tw-ring-2 tw-ring-accent': isImageSelected(subItem._id),
+              'tw-ring-1 tw-ring-hairline/60': !isImageSelected(subItem._id),
+            }"
+            @click="showImage(subItem)"
+          >
+            <img
+              v-if="subItem.images.length === 1"
+              :src="getImageUrl(subItem.images[0])"
+              :alt="subItem.prompt?.slice(0, 80) || subItem.featureType"
+              loading="lazy"
+              class="asset-tile__img tw-h-full tw-w-full tw-object-cover"
+            />
+
             <div
-              class="tw-text-2xl tw-font-bold tw-mb-2 tw-text-neutral-500 dark:tw-text-neutral-400"
+              v-else
+              class="multi-image-stack tw-h-full"
+              :class="`multi-image-stack--${Math.min(subItem.images.length, 4)}`"
             >
-              {{ item.title }}
-            </div>
-            <font-awesome-icon
-              v-if="isHovering || selectedImages.length > 0"
-              :icon="faCircleCheck"
-              :class="[
-                isBulkDeleting || isBulkFavoriting || isBulkDownloading
-                  ? 'tw-cursor-not-allowed'
-                  : 'tw-cursor-pointer',
-                areAllSelectedInGroup(item.data) ? 'tw-text-blue-500' : 'tw-text-neutral-500',
-              ]"
-              size="lg"
-              @click="toggleGroupSelection(item.data)"
-            ></font-awesome-icon>
-          </div>
-        </v-hover>
-
-        <div :class="['tw-grid tw-gap-4', sizeClasses[selectedSize as keyof typeof sizeClasses]]">
-          <template v-for="subItem in item.data" :key="subItem._id">
-            <v-hover v-slot="{ isHovering, props }">
               <div
-                v-bind="props"
-                class="tw-cursor-pointer dark:tw-bg-darkBorder tw-bg-lightBorder tw-p-1 tw-aspect-square"
-                :class="{
-                  'tw-opacity-50':
-                    isBulkDeleting ||
-                    isBulkFavoriting ||
-                    (isBulkDownloading && selectedImages.length > 0),
-                }"
+                v-for="(img, index) in subItem.images.slice(0, 4)"
+                :key="index"
+                class="multi-image-stack__cell"
               >
-                <div class="tw-h-full tw-relative">
-                  <!-- Image content -->
-                  <div class="tw-h-full tw-z-[1]" @click="showImage(subItem)">
-                    <template v-if="subItem.images.length === 1">
-                      <v-img
-                        :aspect-ratio="1"
-                        cover
-                        :src="getImageUrl(subItem.images[0])"
-                        :alt="subItem.featureType"
-                        class="tw-rounded-lg tw-h-full"
-                      >
-                        <template v-slot:placeholder>
-                          <div class="d-flex align-center justify-center fill-height">
-                            <v-progress-circular
-                              color="grey-lighten-4"
-                              indeterminate
-                            ></v-progress-circular>
-                          </div>
-                        </template>
-                      </v-img>
-                    </template>
+                <img
+                  :src="getImageUrl(img)"
+                  :alt="subItem.prompt?.slice(0, 80) || subItem.featureType"
+                  loading="lazy"
+                  class="asset-tile__img tw-h-full tw-w-full tw-object-cover"
+                />
+              </div>
+              <span
+                class="tw-pointer-events-none tw-absolute tw-bottom-1.5 tw-right-1.5 tw-z-[2] tw-rounded-full tw-bg-black/60 tw-px-2 tw-py-0.5 tw-text-xs tw-font-semibold tw-text-white"
+              >
+                {{ subItem.images.length }}
+              </span>
+            </div>
 
-                    <template v-else>
-                      <div
-                        class="tw-relative tw-flex tw-h-full"
-                        @mouseenter="startCarousel(subItem._id, subItem.images)"
-                        @mouseleave="stopCarousel(subItem._id)"
-                      >
-                        <template v-for="(img, index) in subItem.images" :key="index">
-                          <v-img
-                            cover
-                            :src="img.aiImageUrl"
-                            :alt="subItem.featureType"
-                            class="tw-rounded-sm"
-                            :class="{
-                              'tw-border-black tw-border-2': !isCarouselActive[subItem._id],
-                            }"
-                            :style="{
-                              transition: 'all 0.5s ease-in-out',
-                              width: isHovering
-                                ? carouselIndexes[subItem._id] === index
-                                  ? '100%'
-                                  : '0%'
-                                : '25%',
-                              transform: !isHovering
-                                ? `translateX(${index * 1}px)`
-                                : `translateX(0)`,
-                            }"
-                          >
-                            <template v-slot:placeholder>
-                              <div class="d-flex align-center justify-center fill-height">
-                                <v-progress-circular
-                                  color="grey-lighten-4"
-                                  indeterminate
-                                ></v-progress-circular>
-                              </div>
-                            </template>
-                          </v-img>
-                        </template>
-                      </div>
-                    </template>
-                  </div>
+            <div class="tile-overlay tw-pointer-events-none tw-absolute tw-inset-0">
+              <div
+                class="tw-absolute tw-inset-x-0 tw-top-0 tw-h-20 tw-bg-gradient-to-b tw-from-black/50 tw-to-transparent"
+              />
+              <div class="tw-relative tw-z-10 tw-flex tw-items-start tw-justify-between tw-p-2">
+                <div class="tw-flex tw-items-center tw-gap-1.5">
+                  <button
+                    type="button"
+                    class="tw-pointer-events-auto tw-flex tw-h-6 tw-w-6 tw-items-center tw-justify-center"
+                    :class="isBulkBusy ? 'tw-cursor-not-allowed' : 'tw-cursor-pointer'"
+                    :aria-label="isImageSelected(subItem._id) ? 'Deselect image' : 'Select image'"
+                    @click.stop="toggleImageSelection($event, subItem)"
+                  >
+                    <font-awesome-icon
+                      :icon="faCircleCheck"
+                      class="tw-h-[18px] tw-w-[18px] tw-drop-shadow"
+                      :class="isImageSelected(subItem._id) ? 'tw-text-accent' : 'tw-text-white/80'"
+                      aria-hidden="true"
+                    />
+                  </button>
+                  <FeatureIcon :item="subItem" />
+                </div>
 
-                  <!-- Overlay content -->
-                  <div class="tw-absolute tw-inset-0 tw-p-2 tw-pointer-events-none">
-                    <!-- Add vignette gradient -->
-                    <div
-                      v-if="isHovering || mobile"
-                      class="tw-absolute tw-inset-0 tw-bg-gradient-to-b tw-from-black/50 tw-to-transparent tw-h-20 tw-pointer-events-none"
-                    ></div>
-
-                    <div class="tw-flex tw-justify-between tw-items-start tw-relative tw-z-10">
-                      <!-- Left side icons -->
-                      <div class="tw-flex tw-items-center tw-gap-1 tw-pointer-events-auto">
-                        <div
-                          class="tw-w-6 tw-h-6 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
-                        >
-                          <v-icon
-                            v-if="isHovering || mobile || selectedImages.length > 0"
-                            @click.stop="toggleImageSelection($event, subItem)"
-                            icon="fas fa-circle-check"
-                            class="tw-z-[2] !tw-h-5 !tw-w-5 check-icon-with-gradient"
-                            :class="[
-                              isBulkDeleting || isBulkFavoriting || isBulkDownloading
-                                ? 'tw-cursor-not-allowed'
-                                : 'tw-cursor-pointer',
-                              isImageSelected(subItem._id)
-                                ? 'tw-text-blue-500'
-                                : 'tw-text-neutral-200',
-                            ]"
-                            size="small"
-                          ></v-icon>
-                        </div>
-                        <div
-                          class="tw-h-6 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
-                        >
-                          <FeatureIcon v-if="isHovering || mobile" :item="subItem" />
-                        </div>
-                      </div>
-
-                      <!-- Right side action buttons -->
-                      <div
-                        v-if="isHovering || mobile"
-                        class="tw-flex tw-flex-col tw-gap-2 tw-pointer-events-auto"
-                      >
-                        <ImageActionButtons :item="subItem" />
-                      </div>
-                    </div>
-                  </div>
+                <div class="tw-pointer-events-auto tw-flex tw-flex-col tw-gap-1.5">
+                  <ImageActionButtons :item="subItem" />
                 </div>
               </div>
-            </v-hover>
-          </template>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -369,36 +279,94 @@ watch(
 </template>
 
 <style scoped lang="scss">
-.v-btn {
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
+.history-container {
+  height: calc(100vh - 64px);
+  overflow: hidden;
+}
 
-  &:hover {
+/* Overlay chrome appears on hover, in selection mode, or always on touch devices */
+.tile-overlay {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.asset-tile:hover .tile-overlay,
+.asset-tile:focus-within .tile-overlay,
+.asset-tile--selecting .tile-overlay {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .tile-overlay {
     opacity: 1;
   }
 }
 
-.image-list-move,
-.image-list-enter-active,
-.image-list-leave-active {
-  transition: all 0.3s ease;
+.asset-tile__img {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.image-list-enter-from,
-.image-list-leave-to {
+.asset-tile:hover .asset-tile__img {
+  transform: scale(1.04);
+}
+
+/* Group select-all: revealed by header hover, selection mode, or touch */
+.group-check {
   opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease;
 }
 
-.image-list-leave-active {
-  position: absolute;
+.group-header:hover .group-check,
+.group-check:focus-visible,
+.group-check--visible {
+  opacity: 1;
 }
 
-.v-img {
-  transition: clip-path 0.3s ease;
+@media (hover: none) {
+  .group-check {
+    opacity: 1;
+  }
 }
 
-.history-container {
-  height: calc(100vh - 64px);
+/* Quad-stack preview for multi-image generations — every image visible at a glance */
+.multi-image-stack {
+  display: grid;
+  gap: 2px;
+
+  &--2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  &--3 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+
+    .multi-image-stack__cell:first-child {
+      grid-row: span 2;
+    }
+  }
+
+  &--4 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}
+
+.multi-image-stack__cell {
   overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asset-tile__img {
+    transition: none;
+  }
+
+  .asset-tile:hover .asset-tile__img {
+    transform: none;
+  }
 }
 </style>
