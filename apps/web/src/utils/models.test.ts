@@ -26,7 +26,7 @@ describe('models catalog', () => {
 
   it('keeps FLUX_MODES alias for legacy backend model ids', () => {
     expect(FLUX_MODES.length).toBe(5);
-    expect(FLUX_MODES[0].title).toBe('Flux Lightening');
+    expect(FLUX_MODES[0].title).toBe('Flux Lightning');
     expect(FLUX_MODES[0].id).toBe(MODEL_IDS.FLUX_BASIC);
 
     const ids = FLUX_MODES.map((m) => m.id);

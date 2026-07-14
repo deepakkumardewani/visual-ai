@@ -54,7 +54,7 @@ export const useGenerateStore = defineStore('generate', () => {
         userId: userId.value,
         modelId: imgData?.modelId ?? MODEL_IDS.FLUX_BASIC,
         imageType: imgData?.imageType ?? 'horizontal',
-        modelName: imgData?.modelName ?? 'Flux Lightening',
+        modelName: imgData?.modelName ?? 'Flux Lightning',
         prompt: imgData?.prompt ?? '',
         numOfOutputs: imgData?.noOfOutputs ?? 1,
         outputQuality: imgData?.outputQuality ?? 70,

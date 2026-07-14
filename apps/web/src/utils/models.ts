@@ -6,7 +6,7 @@ import { MODEL_IDS } from '@/utils/modelIds';
 export const MODELS: Model[] = [
   // — Legacy FLUX models (backend-ready via MODEL_IDS) —
   {
-    title: 'Flux Lightening',
+    title: 'Flux Lightning',
     id: MODEL_IDS.FLUX_BASIC,
     provider: 'bfl',
     description: 'Prefers speed over quality. Good prompt adherence.',

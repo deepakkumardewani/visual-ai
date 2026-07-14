@@ -10,7 +10,7 @@ describe('ModelPickerTrigger', () => {
       props: { model: FLUX_MODES[0], open: false },
     });
 
-    expect(wrapper.get('[data-testid="model-picker-trigger"]').text()).toContain('Flux Lightening');
+    expect(wrapper.get('[data-testid="model-picker-trigger"]').text()).toContain('Flux Lightning');
     expect(wrapper.find('[role="img"]').exists()).toBe(true);
   });
 
