@@ -1,12 +1,28 @@
 <script setup lang="ts">
 import { useMediaQuery } from '@vueuse/core';
+import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+
+const props = withDefaults(
+  defineProps<{
+    /** Show mark + wordmark. Landing can hide the mark for a text-only brand. */
+    showMark?: boolean;
+    /** Force wordmark even on dashboard. */
+    forceWordmark?: boolean;
+  }>(),
+  {
+    showMark: true,
+    forceWordmark: false,
+  },
+);
 
 const route = useRoute();
 const router = useRouter();
 const isMobile = useMediaQuery('(max-width: 600px)');
 
 const logoImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/logo.png`;
+
+const showWordmark = computed(() => props.forceWordmark || route.path !== '/dashboard');
 
 function goHome() {
   router.push('/');
@@ -21,6 +37,7 @@ function goHome() {
     @click="goHome"
   >
     <img
+      v-if="showMark"
       :src="logoImage"
       :width="isMobile ? 30 : 34"
       :height="isMobile ? 30 : 34"
@@ -28,29 +45,35 @@ function goHome() {
       alt=""
       aria-hidden="true"
     />
-    <span v-if="route.path !== '/dashboard'" class="logo__wordmark tw-flex tw-items-baseline">
-      <span
-        class="logo__name tw-font-display tw-text-2xl tw-leading-none tw-text-gold sm:tw-text-[1.625rem]"
-      >
-        Visual AI
-      </span>
-      <span
-        class="logo__tm tw-ml-0.5 tw-font-display tw-text-[0.5rem] tw-font-bold tw-leading-none tw-text-gold tw-opacity-70"
-      >
-        TM
-      </span>
+    <span v-if="showWordmark" class="logo__wordmark tw-flex tw-items-baseline">
+      <span class="logo__name">Visual</span>
+      <span class="logo__accent">AI</span>
     </span>
   </button>
 </template>
 
 <style scoped>
-.logo__name {
+.logo__name,
+.logo__accent {
+  font-family: 'Young Serif', Georgia, serif;
+  font-size: 1.4rem;
+  line-height: 1;
   letter-spacing: -0.01em;
 }
 
-/* Light theme: gold.muted for contrast on light canvas */
-:global(html:not(.tw-dark)) .logo__name,
-:global(html:not(.tw-dark)) .logo__tm {
-  color: #9e7d35;
+.logo__name {
+  color: rgb(var(--tw-ink-primary));
+}
+
+.logo__accent {
+  color: #c98a5a;
+  margin-left: 0.15em;
+}
+
+@media (min-width: 640px) {
+  .logo__name,
+  .logo__accent {
+    font-size: 1.5rem;
+  }
 }
 </style>

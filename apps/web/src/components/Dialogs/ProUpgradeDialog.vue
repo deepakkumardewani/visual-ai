@@ -1,34 +1,32 @@
 <script setup lang="ts">
+import { faBolt, faCreditCard, faCrown, faDownload, faImages } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
-import { useDisplay } from 'vuetify';
 
-import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
 
+import AppModal from '@/components/AppModal.vue';
+
 const dialogStore = useDialogStore();
-const appStore = useAppStore();
-const { isDark } = storeToRefs(appStore);
 const { showProUpgradeDialog } = storeToRefs(dialogStore);
-const { smAndUp } = useDisplay();
 
 const features = [
   {
-    icon: 'fa-solid fa-bolt',
+    icon: faBolt,
     title: 'Priority Processing',
     description: 'Get faster image generation and processing',
   },
   {
-    icon: 'fa-solid fa-images',
+    icon: faImages,
     title: 'Higher Quality',
     description: 'Access to premium image quality settings',
   },
   {
-    icon: 'fa-solid fa-download',
+    icon: faDownload,
     title: 'Unlimited Downloads',
     description: 'Download as many images as you need',
   },
   {
-    icon: 'fa-solid fa-credit-card',
+    icon: faCreditCard,
     title: 'Reduced Credit Usage',
     description: 'Use fewer credits for special operations',
   },
@@ -36,58 +34,147 @@ const features = [
 </script>
 
 <template>
-  <v-dialog v-model="showProUpgradeDialog" :max-width="smAndUp ? '600px' : '95%'">
-    <v-card :color="isDark ? '#1A1410' : '#F5E6D3'" class="tw-p-6 tw-overflow-hidden tw-relative">
-      <!-- Background decoration -->
-      <div class="tw-absolute tw-right-0 tw-top-0 tw-opacity-10">
-        <v-icon icon="fa-solid fa-crown" size="150"></v-icon>
+  <AppModal
+    :open="showProUpgradeDialog"
+    max-width="36rem"
+    labelled-by="pro-upgrade-title"
+    @close="dialogStore.hideProUpgrade"
+  >
+    <template #title>
+      <span id="pro-upgrade-title">Welcome to Pro</span>
+    </template>
+
+    <div class="pro">
+      <div class="pro__hero">
+        <span class="pro__badge" aria-hidden="true">
+          <font-awesome-icon :icon="faCrown" />
+        </span>
+        <p class="pro__subtitle">Your experience just got a major upgrade.</p>
       </div>
 
-      <!-- Header section -->
-      <div class="tw-text-center tw-mb-6">
-        <v-avatar size="80" color="amber" class="tw-mb-4">
-          <v-icon icon="fa-solid fa-crown" size="40" color="white"></v-icon>
-        </v-avatar>
-        <v-card-title class="text-h4 tw-font-bold tw-mb-2">🎉 Welcome to Pro!</v-card-title>
-        <v-card-subtitle class="tw-text-lg">
-          Your experience just got a major upgrade
-        </v-card-subtitle>
-      </div>
+      <ul class="pro__grid">
+        <li v-for="feature in features" :key="feature.title" class="pro__item">
+          <span class="pro__item-icon" aria-hidden="true">
+            <font-awesome-icon :icon="feature.icon" />
+          </span>
+          <span>
+            <span class="pro__item-title">{{ feature.title }}</span>
+            <span class="pro__item-desc">{{ feature.description }}</span>
+          </span>
+        </li>
+      </ul>
+    </div>
 
-      <!-- Features section -->
-      <v-card-text class="tw-py-4">
-        <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4">
-          <div
-            v-for="feature in features"
-            :key="feature.title"
-            :class="[
-              'tw-p-4 tw-rounded-lg tw-flex tw-items-center tw-gap-3',
-              isDark ? 'tw-bg-[#2A2119]/50' : 'tw-bg-[#F5E6D3]',
-            ]"
-          >
-            <v-avatar size="40" :color="isDark ? '#C98A5A' : '#C9A84C'" class="tw-flex-shrink-0">
-              <v-icon :icon="feature.icon" color="white" size="18"></v-icon>
-            </v-avatar>
-            <div>
-              <h3 class="tw-font-semibold tw-mb-1">{{ feature.title }}</h3>
-              <p class="tw-text-sm tw-opacity-80">{{ feature.description }}</p>
-            </div>
-          </div>
-        </div>
-      </v-card-text>
-
-      <!-- Action button -->
-      <v-card-actions class="tw-justify-center tw-mt-4">
-        <v-btn
-          size="large"
-          color="#C9A84C"
-          variant="elevated"
-          class="tw-px-8 tw-py-2"
-          @click="dialogStore.hideProUpgrade"
-        >
-          Start Creating
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+    <template #actions>
+      <button
+        type="button"
+        class="modal-btn modal-btn--primary"
+        @click="dialogStore.hideProUpgrade"
+      >
+        Start creating
+      </button>
+    </template>
+  </AppModal>
 </template>
+
+<style scoped lang="scss">
+.pro__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.pro__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #e8c96b 0%, #c9a84c 45%, #9e7d35 100%);
+  color: #fff;
+  font-size: 1.4rem;
+}
+
+.pro__subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgb(var(--tw-ink-muted));
+}
+
+.pro__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pro__item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.9rem;
+  border-radius: 12px;
+  background: rgb(var(--tw-surface-2) / 0.55);
+  border: 1px solid rgb(var(--tw-border) / 0.55);
+}
+
+.pro__item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: rgba(201, 138, 90, 0.2);
+  color: #c98a5a;
+  font-size: 0.85rem;
+}
+
+.pro__item-title {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgb(var(--tw-ink-primary));
+}
+
+.pro__item-desc {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: rgb(var(--tw-ink-muted));
+}
+
+.modal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.55rem 1.5rem;
+  border: 0;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-btn--primary {
+  background: linear-gradient(135deg, #e8c96b 0%, #c9a84c 45%, #9e7d35 100%);
+  color: #fff;
+
+  &:focus-visible {
+    outline: 2px solid #c9a84c;
+    outline-offset: 2px;
+  }
+}
+</style>

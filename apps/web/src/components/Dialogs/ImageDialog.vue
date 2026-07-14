@@ -10,9 +10,9 @@ import {
   farHeart,
   fasHeart,
 } from '@/plugins/icons';
+import { useMediaQuery } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import { useDisplay } from 'vuetify';
 
 import { IImageObject } from '@/types';
 
@@ -20,11 +20,12 @@ import { useDialogStore } from '@/stores/dialog';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
 
+import AppModal from '@/components/AppModal.vue';
 import SideBySide from '@/components/SideBySide.vue';
 
 import { deleteImage, downloadImage, favoriteImage, formatFileSize } from '@/utils/helpers';
 
-const { mobile } = useDisplay();
+const isMobile = useMediaQuery('(max-width: 600px)');
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
 const { history } = storeToRefs(userStore);
@@ -38,19 +39,19 @@ const props = defineProps<{
   item: IImageObject | undefined;
 }>();
 
-const nextImage = () => {
+function nextImage() {
   if (!props.item?.images) return;
   const urls = Array.isArray(props.item.images) ? props.item.images : [];
   if (currentImageIndex.value < urls.length - 1) {
     currentImageIndex.value++;
   }
-};
+}
 
-const previousImage = () => {
+function previousImage() {
   if (currentImageIndex.value > 0) {
     currentImageIndex.value--;
   }
-};
+}
 
 const downloadImageUrl = computed(() => {
   if (!props.item?.images) return '';
@@ -59,10 +60,10 @@ const downloadImageUrl = computed(() => {
     : props.item.images[currentImageIndex.value]?.enhancedPublicId;
   const format = props.item.images[currentImageIndex.value]?.format;
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`;
-  return optimizedUrl;
+  return `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`;
 });
-const getCurrentImageUrl = () => {
+
+function getCurrentImageUrl() {
   const images = props.item?.images;
   if (!images) return '';
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
@@ -70,7 +71,7 @@ const getCurrentImageUrl = () => {
   return images[currentImageIndex.value]?.aiImagePublicId
     ? optimizedUrl
     : (images[currentImageIndex.value]?.aiImageUrl as string);
-};
+}
 
 const originalImageUrl = computed(() => {
   const images = props.item?.images;
@@ -81,6 +82,7 @@ const originalImageUrl = computed(() => {
     ? optimizedUrl
     : (images[currentImageIndex.value]?.originalImageUrl as string);
 });
+
 const enhancedImageUrl = computed(() => {
   const images = props.item?.images;
   if (!images) return '';
@@ -90,10 +92,11 @@ const enhancedImageUrl = computed(() => {
     ? optimizedUrl
     : (images[currentImageIndex.value]?.enhancedImageUrl as string);
 });
+
 watch(
   () => props.item,
   (newItem) => {
-    const item = history.value.find((item) => item._id === newItem?._id);
+    const item = history.value.find((entry) => entry._id === newItem?._id);
     if (item) {
       isFavorite.value = item.isFavorite;
     }
@@ -102,7 +105,7 @@ watch(
 );
 
 watch(history, (newHistory) => {
-  const newItem = newHistory.find((item) => item._id === props.item?._id);
+  const newItem = newHistory.find((entry) => entry._id === props.item?._id);
   if (newItem) {
     isFavorite.value = newItem.isFavorite;
   }
@@ -110,118 +113,100 @@ watch(history, (newHistory) => {
 </script>
 
 <template>
-  <v-dialog
-    :fullscreen="mobile"
-    :max-width="mobile ? '100%' : '1000'"
-    :max-height="mobile ? '100%' : '1000'"
-    v-model="showImageDialog"
-    content-class="tw-flex tw-items-center tw-justify-center"
+  <AppModal
+    :open="showImageDialog"
+    :fullscreen="isMobile"
+    max-width="62rem"
+    :show-close="false"
+    labelled-by="image-dialog-title"
+    @close="dialogStore.hideImage"
   >
-    <v-card class="tw-flex tw-flex-col tw-h-[98vh] tw-w-[95vw]">
-      <div class="action-buttons tw-flex tw-p-4">
-        <div class="tw-flex tw-flex-2 tw-items-center tw-justify-start">
-          <v-btn icon size="small" variant="text" @click="dialogStore.hideImage()">
-            <font-awesome-icon :icon="faTimes" />
-          </v-btn>
-
-          <div
-            v-if="item?.prompt && !mobile"
-            class="tw-flex tw-items-center tw-font-normal tw-ml-3 tw-mr-10"
+    <div class="image-dialog">
+      <div class="image-dialog__toolbar">
+        <div class="image-dialog__start">
+          <button
+            type="button"
+            class="icon-btn"
+            aria-label="Close"
+            @click="dialogStore.hideImage()"
           >
+            <font-awesome-icon :icon="faTimes" aria-hidden="true" />
+          </button>
+          <p v-if="item?.prompt && !isMobile" id="image-dialog-title" class="image-dialog__prompt">
             {{ item.prompt }}
-          </div>
+          </p>
+          <span v-else id="image-dialog-title" class="tw-sr-only">Image preview</span>
         </div>
 
-        <div class="tw-flex tw-flex-1 tw-gap-3 tw-justify-end">
-          <v-tooltip location="bottom" text="Favorite">
-            <template v-slot:activator="{ props }">
-              <v-btn
-                v-bind="props"
-                icon
-                :loading="isFavoriting"
-                size="x-small"
-                variant="text"
-                @click="favoriteImage($event, item?._id ?? '')"
-              >
-                <font-awesome-icon :icon="isFavorite ? fasHeart : farHeart" />
-              </v-btn>
-            </template>
-          </v-tooltip>
-          <v-tooltip location="bottom" text="Download">
-            <template v-slot:activator="{ props }">
-              <v-btn
-                v-bind="props"
-                icon
-                size="x-small"
-                variant="text"
-                @click="downloadImage($event, downloadImageUrl)"
-              >
-                <font-awesome-icon :icon="faDownload" />
-              </v-btn>
-            </template>
-          </v-tooltip>
-
-          <v-tooltip location="bottom" text="Delete">
-            <template v-slot:activator="{ props }">
-              <v-btn
-                v-bind="props"
-                icon
-                :loading="isDeleting"
-                size="x-small"
-                variant="text"
-                @click="deleteImage($event, item as IImageObject)"
-              >
-                <font-awesome-icon :icon="faTrashAlt" />
-              </v-btn>
-            </template>
-          </v-tooltip>
-        </div>
-      </div>
-
-      <div
-        v-if="item?.prompt && mobile"
-        class="tw-flex tw-items-center tw-font-normal tw-ml-3 tw-mr-10"
-      >
-        {{ item.prompt }}
-      </div>
-      <div class="image tw-flex-grow tw-flex tw-items-center tw-justify-center tw-p-0">
-        <div v-if="item?.featureType === FeatureType.IMAGE" class="tw-relative tw-w-full tw-h-full">
-          <div
-            v-if="item?.images?.length > 1"
-            class="tw-absolute tw-inset-0 tw-flex tw-items-center tw-justify-between tw-px-4 tw-pointer-events-none"
+        <div class="image-dialog__actions">
+          <button
+            type="button"
+            class="icon-btn"
+            title="Favorite"
+            :disabled="isFavoriting"
+            aria-label="Favorite"
+            @click="favoriteImage($event, item?._id ?? '')"
           >
-            <v-btn
-              icon
-              variant="tonal"
-              class="nav-btn tw-pointer-events-auto tw-z-10"
-              @click="previousImage"
-              :disabled="currentImageIndex === 0"
-            >
-              <font-awesome-icon :icon="faChevronLeft" />
-            </v-btn>
+            <font-awesome-icon :icon="isFavorite ? fasHeart : farHeart" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            class="icon-btn"
+            title="Download"
+            aria-label="Download"
+            @click="downloadImage($event, downloadImageUrl)"
+          >
+            <font-awesome-icon :icon="faDownload" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            class="icon-btn"
+            title="Delete"
+            :disabled="isDeleting"
+            aria-label="Delete"
+            @click="deleteImage($event, item as IImageObject)"
+          >
+            <font-awesome-icon :icon="faTrashAlt" aria-hidden="true" />
+          </button>
+        </div>
+      </div>
 
-            <v-btn
-              icon
-              variant="tonal"
-              class="nav-btn tw-pointer-events-auto tw-z-10"
-              @click="nextImage"
-              :disabled="currentImageIndex === item.images.length - 1"
+      <p v-if="item?.prompt && isMobile" class="image-dialog__prompt image-dialog__prompt--mobile">
+        {{ item.prompt }}
+      </p>
+
+      <div class="image-dialog__stage">
+        <div v-if="item?.featureType === FeatureType.IMAGE" class="image-dialog__viewer">
+          <div v-if="(item?.images?.length ?? 0) > 1" class="image-dialog__nav">
+            <button
+              type="button"
+              class="nav-btn"
+              :disabled="currentImageIndex === 0"
+              aria-label="Previous image"
+              @click="previousImage"
             >
-              <font-awesome-icon :icon="faChevronRight" />
-            </v-btn>
+              <font-awesome-icon :icon="faChevronLeft" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              class="nav-btn"
+              :disabled="currentImageIndex === (item.images?.length ?? 1) - 1"
+              aria-label="Next image"
+              @click="nextImage"
+            >
+              <font-awesome-icon :icon="faChevronRight" aria-hidden="true" />
+            </button>
           </div>
 
-          <v-img
+          <img
             :key="currentImageIndex"
             :src="getCurrentImageUrl()"
-            height="80vh"
-            :width="mobile ? '100vw' : 'auto'"
-            contain
-            class="tw-mx-auto"
-          ></v-img>
+            :alt="item?.prompt || 'Generated image'"
+            class="image-dialog__img"
+          />
         </div>
 
-        <div v-if="item?.featureType !== FeatureType.IMAGE">
+        <div v-else>
           <SideBySide
             :original-image="originalImageUrl"
             :enhanced-image="enhancedImageUrl"
@@ -230,48 +215,163 @@ watch(history, (newHistory) => {
         </div>
       </div>
 
-      <div class="tw-flex">
-        <div
-          v-if="item?.images && item?.images?.length > 1"
-          class="tw-flex tw-flex-1 tw-items-center tw-justify-end tw-py-2"
-        >
-          {{ currentImageIndex + 1 }} / {{ item.images?.length }}
+      <div class="image-dialog__meta">
+        <div v-if="(item?.images?.length ?? 0) > 1" class="image-dialog__count">
+          {{ currentImageIndex + 1 }} / {{ item?.images?.length }}
         </div>
-        <div class="tw-flex tw-flex-1 tw-gap-4 tw-justify-end tw-p-4">
-          <div v-if="item?.modelName" class="tw-flex tw-gap-2">
-            <v-chip size="small">{{ item.modelName }}</v-chip>
-          </div>
-          <div v-if="item?.images?.[0]?.aspectRatio" class="tw-flex tw-gap-2">
-            <v-chip size="small">{{ item.images?.[0]?.aspectRatio }}</v-chip>
-          </div>
-          <div v-if="item?.images?.[0]?.bytes" class="tw-flex tw-gap-2">
-            <v-chip size="small">{{
-              formatFileSize(item?.images?.[currentImageIndex]?.bytes)
-            }}</v-chip>
-          </div>
-          <div class="tw-flex tw-items-center">
-            <v-chip size="small">
-              <font-awesome-icon :icon="faFile" class="tw-text-sm" />
-              <div class="tw-ml-1">
-                {{ item?.images?.[0]?.width }} x {{ item?.images?.[0]?.height }}
-              </div>
-            </v-chip>
-          </div>
+        <div class="image-dialog__chips">
+          <span v-if="item?.modelName" class="chip">{{ item.modelName }}</span>
+          <span v-if="item?.images?.[0]?.aspectRatio" class="chip">{{
+            item.images?.[0]?.aspectRatio
+          }}</span>
+          <span v-if="item?.images?.[0]?.bytes" class="chip">{{
+            formatFileSize(item?.images?.[currentImageIndex]?.bytes)
+          }}</span>
+          <span class="chip">
+            <font-awesome-icon :icon="faFile" aria-hidden="true" />
+            {{ item?.images?.[0]?.width }} × {{ item?.images?.[0]?.height }}
+          </span>
         </div>
       </div>
-    </v-card>
-  </v-dialog>
+    </div>
+  </AppModal>
 </template>
 
 <style scoped lang="scss">
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: all 0.3s ease-out;
+.image-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: min(80dvh, 48rem);
+  margin: -0.5rem;
 }
 
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateX(20px);
-  opacity: 0;
+.image-dialog__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.image-dialog__start,
+.image-dialog__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.image-dialog__prompt {
+  margin: 0;
+  max-width: 36rem;
+  font-size: 0.9rem;
+  color: rgb(var(--tw-ink-muted));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-dialog__prompt--mobile {
+  white-space: normal;
+  padding: 0 0.25rem;
+}
+
+.image-dialog__stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+}
+
+.image-dialog__viewer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-dialog__nav {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.75rem;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.image-dialog__img {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.image-dialog__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.image-dialog__count {
+  margin-right: auto;
+  font-size: 0.85rem;
+  color: rgb(var(--tw-ink-muted));
+  font-variant-numeric: tabular-nums;
+}
+
+.image-dialog__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: flex-end;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 1.75rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: rgb(var(--tw-surface-2));
+  border: 1px solid rgb(var(--tw-border) / 0.6);
+  color: rgb(var(--tw-ink-muted));
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.icon-btn,
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(var(--tw-surface-2) / 0.8);
+  color: rgb(var(--tw-ink-primary));
+  cursor: pointer;
+  pointer-events: auto;
+
+  &:hover:not(:disabled) {
+    background: rgb(var(--tw-surface-3));
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #c9a84c;
+    outline-offset: 2px;
+  }
 }
 </style>

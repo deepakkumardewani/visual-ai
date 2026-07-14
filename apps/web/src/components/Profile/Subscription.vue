@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { useMediaQuery } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useDisplay } from 'vuetify';
 
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
@@ -10,14 +10,15 @@ import { useUserStore } from '@/stores/user';
 import ConfirmCancelSubDialog from '@/components/Dialogs/ConfirmCancelSubDialog.vue';
 
 import { RAZORPAY_PRODUCTS } from '@/utils/constants';
-import { cancelSubscription, initiatePayment } from '@/utils/payment';
+import { initiatePayment } from '@/utils/payment';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
 const { userDetails, isPro } = storeToRefs(userStore);
 const isLoading = ref(false);
 const router = useRouter();
-const { mobile } = useDisplay();
+const isMobile = useMediaQuery('(max-width: 600px)');
+
 async function handlePlan() {
   if (!isPro.value) {
     try {
@@ -29,120 +30,227 @@ async function handlePlan() {
     } finally {
       isLoading.value = false;
     }
-  } else {
-    try {
-      //TODO: show a confirm dialog
-      dialogStore.showCancelSubscription();
-      isLoading.value = true;
-      await cancelSubscription();
-    } catch (error) {
-      console.error('Cancellation failed:', error);
-    } finally {
-      isLoading.value = false;
-    }
+    return;
   }
+
+  dialogStore.showCancelSubscription();
+}
+
+function goToPayments() {
+  router.push('/profile?tab=payments');
 }
 </script>
 
 <template>
-  <v-container class="tw-max-w-3xl tw-mx-auto tw-py-8">
-    <v-row justify="center">
-      <v-col cols="12" sm="8">
-        <h1 class="tw-text-2xl tw-font-medium tw-mb-8">My subscription</h1>
-
-        <!-- Plan Section -->
-        <div class="tw-mb-8">
-          <h2 class="tw-text-white tw-mb-4">Plan</h2>
-          <v-card variant="outlined" class="tw-p-4 tw-transition-all" elevation="0">
-            <div class="tw-flex tw-justify-between tw-items-center">
-              <v-chip :color="isPro ? '#C9A84C' : 'grey'" size="large" class="tw-ml-2">
-                {{ isPro ? 'Pro' : 'Free' }}
-              </v-chip>
-              <v-btn
-                @click="handlePlan"
-                :color="isPro ? 'red-lighten-1' : '#C98A5A'"
-                variant="tonal"
-                class="tw-font-medium"
-                :loading="isLoading"
-                :disabled="isLoading"
-              >
-                {{ isPro ? 'Cancel subscription' : 'Upgrade plan' }}
-              </v-btn>
-            </div>
-          </v-card>
-          <div class="tw-flex tw-items-center tw-text-sm text-grey-darken-1 tw-mt-2">
-            <div>See limits on the</div>
-            <v-btn
-              to="/pricing"
-              variant="text"
-              color="#C98A5A"
-              class="tw-font-medium tw-px-1 tw-min-w-0 !tw-lowercase"
-              density="compact"
-            >
-              pricing page
-            </v-btn>
-          </div>
+  <div class="subscription">
+    <section class="subscription__section">
+      <h2 class="subscription__heading">Plan</h2>
+      <div class="subscription__card">
+        <div class="subscription__plan-row">
+          <span
+            class="subscription__badge"
+            :class="isPro ? 'subscription__badge--pro' : 'subscription__badge--free'"
+          >
+            {{ isPro ? 'Pro' : 'Free' }}
+          </span>
+          <button
+            type="button"
+            class="btn"
+            :class="isPro ? 'btn--danger' : 'btn--primary'"
+            :disabled="isLoading"
+            @click="handlePlan"
+          >
+            {{ isLoading ? 'Working…' : isPro ? 'Cancel subscription' : 'Upgrade plan' }}
+          </button>
         </div>
+      </div>
+      <p class="subscription__meta">
+        See limits on the
+        <router-link to="/pricing" class="subscription__link">pricing page</router-link>
+      </p>
+    </section>
 
-        <!-- Credits Section -->
-        <!-- <div class="tw-mb-8">
-          <h2 class="tw-text-white tw-mb-4">Credits</h2>
-          <v-card variant="outlined" class="tw-p-4 tw-transition-all" elevation="0">
-            <div class="tw-mb-2 text-grey-darken-3">
-              Limited daily use of generative AI and edition tools
-            </div>
-            <div class="tw-text-sm text-grey-darken-1">
-              See limits on the
-              <v-btn
-                to="/pricing"
-                variant="text"
-                color="#9E7D35"
-                class="tw-font-medium tw-px-1 tw-min-w-0 !tw-lowercase"
-                density="compact"
-              >
-                pricing page
-              </v-btn>
-            </div>
-          </v-card>
-        </div> -->
-
-        <!-- Billing Information Section -->
-        <div>
-          <h2 class="tw-text-white tw-mb-4">Billing information</h2>
-          <v-card variant="outlined" class="tw-p-4 tw-transition-all" elevation="0">
-            <div class="tw-flex tw-justify-between tw-items-center">
-              <span class="text-grey-darken-1">{{ userDetails?.email }}</span>
-              <v-btn
-                v-if="!mobile"
-                @click="router.push('/profile?tab=payments')"
-                color="#C98A5A"
-                variant="tonal"
-                class="tw-font-medium"
-              >
-                Billing history
-              </v-btn>
-            </div>
-          </v-card>
-          <div class="tw-mt-2">
-            <v-btn
-              v-if="mobile"
-              @click="router.push('/profile?tab=payments')"
-              color="#C98A5A"
-              variant="text"
-              class="tw-font-medium tw-p-0"
-            >
-              Billing history
-            </v-btn>
-          </div>
+    <section class="subscription__section">
+      <h2 class="subscription__heading">Billing information</h2>
+      <div class="subscription__card">
+        <div class="subscription__billing-row">
+          <span class="subscription__email">{{ userDetails?.email || '—' }}</span>
+          <button v-if="!isMobile" type="button" class="btn btn--ghost" @click="goToPayments">
+            Billing history
+          </button>
         </div>
-      </v-col>
-    </v-row>
-  </v-container>
+      </div>
+      <button v-if="isMobile" type="button" class="subscription__text-link" @click="goToPayments">
+        Billing history
+      </button>
+    </section>
+  </div>
   <ConfirmCancelSubDialog />
 </template>
 
-<style scoped>
-.v-card {
-  border-color: rgb(var(--v-border-color)) !important;
+<style scoped lang="scss">
+.subscription {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 36rem;
+}
+
+.subscription__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.subscription__heading {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(var(--tw-ink-muted));
+}
+
+.subscription__card {
+  padding: 1rem 1.1rem;
+  border: 1px solid rgb(var(--tw-border) / 0.7);
+  border-radius: 12px;
+  background: rgb(var(--tw-surface-2) / 0.45);
+}
+
+.subscription__plan-row,
+.subscription__billing-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.subscription__badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.subscription__badge--pro {
+  background: rgba(201, 168, 76, 0.16);
+  color: #c9a84c;
+}
+
+.subscription__badge--free {
+  background: rgb(var(--tw-surface-3));
+  color: rgb(var(--tw-ink-muted));
+}
+
+.subscription__email {
+  font-size: 0.95rem;
+  color: rgb(var(--tw-ink-muted));
+  word-break: break-all;
+}
+
+.subscription__meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgb(var(--tw-ink-muted));
+}
+
+.subscription__link,
+.subscription__text-link {
+  color: #c98a5a;
+  font-weight: 600;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #c9a84c;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+.subscription__text-link {
+  align-self: flex-start;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    opacity 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #c9a84c;
+    outline-offset: 2px;
+  }
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, #e8c96b 0%, #c9a84c 45%, #9e7d35 100%);
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    opacity: 0.92;
+  }
+}
+
+.btn--ghost {
+  border-color: rgb(var(--tw-border));
+  background: transparent;
+  color: rgb(var(--tw-ink-primary));
+
+  &:hover:not(:disabled) {
+    background: rgb(var(--tw-surface-3) / 0.45);
+  }
+}
+
+.btn--danger {
+  border-color: rgba(176, 60, 60, 0.4);
+  background: rgba(176, 60, 60, 0.1);
+  color: #e08585;
+
+  &:hover:not(:disabled) {
+    background: rgba(176, 60, 60, 0.18);
+  }
+}
+
+:global(html:not(.tw-dark)) .btn--danger {
+  color: #b03c3c;
+}
+
+:global(html:not(.tw-dark)) .subscription__badge--pro {
+  color: #9e7d35;
 }
 </style>

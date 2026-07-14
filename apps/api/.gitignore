@@ -29,3 +29,4 @@ logs
 dist/
 buildcache/
 scripts/
+!.env.example

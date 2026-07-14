@@ -1,57 +1,126 @@
 <script setup lang="ts">
+import { faGift } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
 
-import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
 
+import AppModal from '@/components/AppModal.vue';
 import ReferralCode from '@/components/ReferralCode.vue';
-
-const appStore = useAppStore();
-const { isDark } = storeToRefs(appStore);
 
 const dialogStore = useDialogStore();
 const { referralOfferDialog } = storeToRefs(dialogStore);
 </script>
 
 <template>
-  <v-dialog v-model="referralOfferDialog" max-width="500px">
-    <v-card :color="isDark ? 'grey-darken-4' : 'white'" class="tw-p-4">
-      <v-card-title class="tw-text-center tw-text-xl tw-font-bold tw-mb-4">
-        <v-icon icon="fa-solid fa-gift" color="#C9A84C" class="tw-mr-2" />
-        Special Referral Offer
-      </v-card-title>
+  <AppModal
+    :open="referralOfferDialog"
+    max-width="30rem"
+    labelled-by="referral-offer-title"
+    @close="dialogStore.hideReferralOffer"
+  >
+    <template #title>
+      <span id="referral-offer-title" class="offer__title">
+        <font-awesome-icon :icon="faGift" class="offer__icon" aria-hidden="true" />
+        Special referral offer
+      </span>
+    </template>
 
-      <v-card-text>
-        <div class="tw-p-4 tw-rounded-lg tw-mb-6">
-          <p
-            class="tw-font-semibold tw-text-center"
-            :class="isDark ? 'tw-text-white' : 'tw-text-[#7A6428]'"
-          >
-            Refer a friend and get <span class="tw-font-bold">1 month of Pro access</span> for FREE!
-          </p>
-          <p
-            class="tw-text-sm tw-mt-2 tw-text-center"
-            :class="isDark ? 'tw-text-gray-300' : 'tw-text-gray-700'"
-          >
-            Limited time offer
-          </p>
-        </div>
-        <div class="tw-bg-[#C9A84C] dark:tw-bg-[#C98A5A] tw-p-6 tw-rounded-lg">
-          <p class="tw-mb-4">
-            Share your unique referral code with friends. After they signup and use your code,
-            you'll automatically be upgraded to Pro for a month!
-          </p>
+    <div class="offer">
+      <p class="offer__lead">
+        Refer a friend and get <strong>1 month of Pro access</strong> for free.
+      </p>
+      <p class="offer__meta">Limited time offer</p>
 
-          <ReferralCode />
-        </div>
-      </v-card-text>
+      <div class="offer__box">
+        <p class="offer__box-copy">
+          Share your unique referral code. After they sign up and use your code, you'll be upgraded
+          to Pro for a month.
+        </p>
+        <ReferralCode />
+      </div>
+    </div>
 
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="#C9A84C" @click="dialogStore.hideReferralOffer()" variant="tonal"
-          >Close</v-btn
-        >
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+    <template #actions>
+      <button
+        type="button"
+        class="modal-btn modal-btn--primary"
+        @click="dialogStore.hideReferralOffer"
+      >
+        Close
+      </button>
+    </template>
+  </AppModal>
 </template>
+
+<style scoped lang="scss">
+.offer__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.offer__icon {
+  color: #c9a84c;
+  font-size: 0.95rem;
+}
+
+.offer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.offer__lead {
+  margin: 0;
+  text-align: center;
+  font-size: 1rem;
+  color: rgb(var(--tw-ink-primary));
+}
+
+.offer__meta {
+  margin: 0 0 0.75rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgb(var(--tw-ink-muted));
+}
+
+.offer__box {
+  padding: 1.25rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #c9a84c 0%, #9e7d35 100%);
+  color: #fff;
+}
+
+.offer__box-copy {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.modal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.55rem 1.25rem;
+  border: 0;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-btn--primary {
+  background: linear-gradient(135deg, #e8c96b 0%, #c9a84c 45%, #9e7d35 100%);
+  color: #fff;
+
+  &:hover {
+    opacity: 0.92;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #c9a84c;
+    outline-offset: 2px;
+  }
+}
+</style>

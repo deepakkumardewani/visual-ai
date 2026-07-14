@@ -22,13 +22,14 @@
   background: radial-gradient(circle at 50% 0%, rgba(201, 168, 76, 0.12), transparent 60%), #0d0a07;
 }
 
-/* Landing-page shared utility: copper eyebrow label */
+/* Landing-page shared utility: copper eyebrow label.
+   #d29467 keeps the copper hue at ≥7:1 on the near-black canvas (AA for small caps text). */
 .eyebrow {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #c98a5a;
+  color: #d29467;
 }
 
 /* === Theme tokens (RGB channels — Tailwind reads these at runtime, not build time) === */

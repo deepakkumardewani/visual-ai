@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { faCoins } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 
-import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
+
+import AppModal from '@/components/AppModal.vue';
 
 import { RAZORPAY_PRODUCTS } from '@/utils/constants';
 import { initiatePayment } from '@/utils/payment';
@@ -11,34 +13,12 @@ import { initiatePayment } from '@/utils/payment';
 const dialogStore = useDialogStore();
 const { showBuyCreditsDialog } = storeToRefs(dialogStore);
 
-const appStore = useAppStore();
-const { isDark } = storeToRefs(appStore);
 const loading = ref(false);
-const price = ref(0);
-const packages = ref(RAZORPAY_PRODUCTS.filter((product) => product.type === 'single'));
+const packages = RAZORPAY_PRODUCTS.filter((product) => product.type === 'single');
+const selectedIndex = ref(0);
+const currentPackage = computed(() => packages[selectedIndex.value]);
 
-const ticks = computed(() => {
-  return packages.value.reduce(
-    (acc, product, index) => {
-      acc[index + 1] = product.credits.toString();
-      return acc;
-    },
-    {} as Record<number, string>,
-  );
-});
-
-const currentPackageIndex = ref(0);
-const currentPackage = computed(() => packages.value[currentPackageIndex.value]);
-
-watch(price, (newVal) => {
-  currentPackageIndex.value = newVal - 1;
-});
-
-// const getTrackColor = (index: number): string => {
-//   return index <= currentPackageIndex.value ? '#6b21a8' : 'grey'
-// }
-
-const handlePurchase = async () => {
+async function handlePurchase() {
   loading.value = true;
   try {
     await initiatePayment(currentPackage.value);
@@ -47,71 +27,193 @@ const handlePurchase = async () => {
   } finally {
     loading.value = false;
   }
-};
+}
 </script>
 
 <template>
-  <v-dialog v-model="showBuyCreditsDialog" width="600" opacity="0.7" scrim="black">
-    <v-card class="tw-rounded-xl">
-      <div class="tw-flex tw-justify-between tw-items-center tw-p-4">
-        <div class="tw-text-2xl tw-font-bold">Buy More Credits</div>
-        <v-btn icon="$close" variant="text" @click="showBuyCreditsDialog = false"></v-btn>
-      </div>
-      <v-divider></v-divider>
+  <AppModal
+    :open="showBuyCreditsDialog"
+    max-width="34rem"
+    labelled-by="buy-credits-title"
+    @close="dialogStore.hideBuyCredits"
+  >
+    <template #title>
+      <span id="buy-credits-title">Buy more credits</span>
+    </template>
 
-      <div class="tw-p-6">
-        <div class="tw-flex tw-justify-between tw-items-center tw-mb-8">
-          <div class="tw-flex tw-items-center tw-gap-3">
-            <v-icon size="40" icon="$coin" class="tw-text-[#C9A84C]" />
-            <div class="tw-flex tw-flex-col">
-              <div class="tw-text-4xl tw-font-bold tw-text-[#C9A84C]">
-                {{ currentPackage.credits }}
-              </div>
-              <div class="tw-text-gray-500 tw-text-sm">Credits</div>
-            </div>
-          </div>
-          <div class="tw-flex tw-flex-col tw-items-end">
-            <div class="tw-text-3xl tw-font-bold">INR {{ currentPackage.price }}</div>
-            <div v-if="currentPackage.savings" class="tw-text-green-500 tw-text-sm">
-              Save {{ currentPackage.savings }}
-            </div>
+    <div class="buy">
+      <div class="buy__summary">
+        <div class="buy__credits">
+          <font-awesome-icon :icon="faCoins" class="buy__coin" aria-hidden="true" />
+          <div>
+            <div class="buy__credits-value">{{ currentPackage?.credits }}</div>
+            <div class="buy__credits-label">Credits</div>
           </div>
         </div>
-
-        <v-slider
-          v-model="price"
-          min="1"
-          max="4"
-          step="1"
-          :color="isDark ? '#C98A5A' : '#C9A84C'"
-          track-color="#C98A5A"
-          show-ticks="always"
-          tick-size="5"
-          :ticks="ticks"
-        ></v-slider>
-
-        <v-btn
-          :color="isDark ? '#C98A5A' : '#C9A84C'"
-          size="large"
-          block
-          class="tw-mt-6"
-          elevation="0"
-          :loading="loading"
-          @click="handlePurchase"
-        >
-          Buy Now
-        </v-btn>
+        <div class="buy__price">
+          <div class="buy__price-value">INR {{ currentPackage?.price }}</div>
+          <div v-if="currentPackage?.savings" class="buy__savings">
+            Save {{ currentPackage.savings }}
+          </div>
+        </div>
       </div>
-    </v-card>
-  </v-dialog>
+
+      <div class="buy__packages" role="radiogroup" aria-label="Credit packages">
+        <button
+          v-for="(pkg, index) in packages"
+          :key="pkg.credits"
+          type="button"
+          class="buy__pkg"
+          :class="{ 'buy__pkg--active': selectedIndex === index }"
+          role="radio"
+          :aria-checked="selectedIndex === index"
+          @click="selectedIndex = index"
+        >
+          <span class="buy__pkg-credits">{{ pkg.credits }}</span>
+          <span class="buy__pkg-price">₹{{ pkg.price }}</span>
+        </button>
+      </div>
+    </div>
+
+    <template #actions>
+      <button
+        type="button"
+        class="modal-btn modal-btn--primary"
+        :disabled="loading"
+        @click="handlePurchase"
+      >
+        {{ loading ? 'Processing…' : 'Buy now' }}
+      </button>
+    </template>
+  </AppModal>
 </template>
 
 <style scoped lang="scss">
-:deep(.v-slider .v-slider-track__fill) {
-  background: linear-gradient(90deg, #9c27b0 0%, #aa00ff 100%);
+.buy__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
 }
 
-// :deep(.v-slider .v-slider-thumb__surface) {
-//   border: 3px solid #9c27b0;
-// }
+.buy__credits {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.buy__coin {
+  color: #c9a84c;
+  font-size: 1.75rem;
+}
+
+.buy__credits-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #c9a84c;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.buy__credits-label {
+  font-size: 0.8rem;
+  color: rgb(var(--tw-ink-muted));
+}
+
+.buy__price {
+  text-align: right;
+}
+
+.buy__price-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.buy__savings {
+  font-size: 0.8rem;
+  color: #6faf7a;
+}
+
+.buy__packages {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+
+  @media (min-width: 520px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.buy__pkg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 4.5rem;
+  padding: 0.75rem 0.5rem;
+  border: 1px solid rgb(var(--tw-border));
+  border-radius: 12px;
+  background: rgb(var(--tw-surface-2) / 0.45);
+  color: rgb(var(--tw-ink-primary));
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+
+  &:hover {
+    border-color: rgba(201, 168, 76, 0.4);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #c9a84c;
+    outline-offset: 2px;
+  }
+}
+
+.buy__pkg--active {
+  border-color: rgba(201, 168, 76, 0.65);
+  background: rgba(201, 168, 76, 0.12);
+  box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.2);
+}
+
+.buy__pkg-credits {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.buy__pkg-price {
+  font-size: 0.8rem;
+  color: rgb(var(--tw-ink-muted));
+}
+
+.modal-btn {
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #c9a84c;
+    outline-offset: 2px;
+  }
+}
+
+.modal-btn--primary {
+  background: linear-gradient(135deg, #e8c96b 0%, #c9a84c 45%, #9e7d35 100%);
+  color: #fff;
+}
 </style>

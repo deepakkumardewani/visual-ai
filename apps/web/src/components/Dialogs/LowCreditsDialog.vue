@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faCoins, faCreditCard, faCrown } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
@@ -9,36 +10,33 @@ import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
+import AppModal from '@/components/AppModal.vue';
+
 const router = useRouter();
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
-
 const appStore = useAppStore();
 const { feature } = storeToRefs(appStore);
-const closeDialog = () => {
-  dialogStore.showLowCreditsDialog = false;
-};
 
-const handleNavigateToPricing = () => {
+function closeDialog() {
+  dialogStore.showLowCreditsDialog = false;
+}
+
+function handleNavigateToPricing() {
   closeDialog();
   router.push('/pricing');
-};
+}
 
-const handleBuyCredits = () => {
+function handleBuyCredits() {
   closeDialog();
   dialogStore.showBuyCredits();
-};
+}
 
-const creditTextColor = computed(() => {
-  return userStore.credits <= 5 ? 'error' : 'warning';
-});
+const isCritical = computed(() => userStore.credits <= 5);
 
 const creditRequirement = computed(() => {
-  const isPaidPlan = userStore.isPro;
-  if (feature.value === FeatureType.IMAGE) {
-    return 1;
-  }
-  return isPaidPlan ? 1 : 3;
+  if (feature.value === FeatureType.IMAGE) return 1;
+  return userStore.isPro ? 1 : 3;
 });
 
 const featureText = computed(() => {
@@ -58,59 +56,134 @@ const featureText = computed(() => {
 </script>
 
 <template>
-  <v-dialog v-model="dialogStore.showLowCreditsDialog" max-width="500">
-    <v-card class="tw-p-6 tw-rounded-lg">
-      <div class="tw-flex tw-justify-between tw-items-center tw-mb-6">
-        <v-card-title class="tw-flex tw-items-center !tw-p-0">
-          <v-icon icon="$coin" :color="creditTextColor" size="x-large" class="tw-mr-3" />
-          <span class="tw-text-2xl tw-font-bold">Low Credits Alert</span>
-        </v-card-title>
-        <v-btn
-          icon="fas fa-xmark"
-          variant="text"
-          size="small"
-          class="tw-opacity-70 hover:tw-opacity-100"
-          @click="closeDialog"
+  <AppModal
+    :open="dialogStore.showLowCreditsDialog"
+    max-width="30rem"
+    labelled-by="low-credits-title"
+    @close="closeDialog"
+  >
+    <template #title>
+      <span id="low-credits-title" class="low__title">
+        <font-awesome-icon
+          :icon="faCoins"
+          class="low__icon"
+          :class="{ 'low__icon--critical': isCritical }"
+          aria-hidden="true"
         />
+        Low credits
+      </span>
+    </template>
+
+    <div class="low">
+      <p class="low__copy">
+        You are running low on credits. To {{ featureText }},
+        {{ creditRequirement }}
+        {{ creditRequirement === 1 ? 'credit is' : 'credits are' }} required. Add more credits or
+        subscribe to Pro
+        <template v-if="!userStore.isPro && feature !== 'generate'">
+          to reduce usage to 1 credit per operation</template
+        >.
+      </p>
+
+      <div class="low__chip" :class="{ 'low__chip--critical': isCritical }">
+        <font-awesome-icon :icon="faCoins" aria-hidden="true" />
+        {{ userStore.credits }} credits remaining
       </div>
+    </div>
 
-      <v-card-text class="tw-text-center tw-py-4">
-        <p class="tw-text-lg tw-mb-6 tw-text-gray-400">
-          You are running low on credits. To {{ featureText }}, {{ creditRequirement }}
-          {{ creditRequirement === 1 ? 'credit is' : 'credits are' }} required. To continue, add
-          more credits or subscribe to pro
-          <template v-if="!userStore.isPro && feature !== 'generate'">
-            to reduce credit usage to 1 credit per operation</template
-          >.
-        </p>
-        <v-chip :color="creditTextColor" variant="outlined" size="large" class="tw-px-6 tw-py-3">
-          <v-icon start icon="fas fa-coins" class="tw-mr-2" />
-          <span class="tw-text-xl tw-font-bold">{{ userStore.credits }} credits remaining</span>
-        </v-chip>
-      </v-card-text>
-
-      <v-card-actions class="tw-justify-center tw-gap-4 tw-mt-4">
-        <v-btn
-          color="primary"
-          size="large"
-          variant="elevated"
-          class="tw-px-6"
-          @click="handleNavigateToPricing"
-        >
-          <v-icon start icon="fas fa-crown" class="tw-mr-2" />
-          Upgrade Plan
-        </v-btn>
-        <v-btn
-          color="secondary"
-          size="large"
-          variant="elevated"
-          class="tw-px-6"
-          @click="handleBuyCredits"
-        >
-          <v-icon start icon="fas fa-credit-card" class="tw-mr-2" />
-          Buy Credits
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+    <template #actions>
+      <button type="button" class="modal-btn modal-btn--primary" @click="handleNavigateToPricing">
+        <font-awesome-icon :icon="faCrown" aria-hidden="true" />
+        Upgrade plan
+      </button>
+      <button type="button" class="modal-btn modal-btn--ghost" @click="handleBuyCredits">
+        <font-awesome-icon :icon="faCreditCard" aria-hidden="true" />
+        Buy credits
+      </button>
+    </template>
+  </AppModal>
 </template>
+
+<style scoped lang="scss">
+.low__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.low__icon {
+  color: #c9a84c;
+}
+
+.low__icon--critical {
+  color: #e08585;
+}
+
+.low__copy {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgb(var(--tw-ink-muted));
+  text-align: center;
+}
+
+.low__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 auto;
+  min-height: 2.5rem;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 168, 76, 0.45);
+  color: #c9a84c;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.low__chip--critical {
+  border-color: rgba(176, 60, 60, 0.45);
+  color: #e08585;
+}
+
+.low {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0.55rem 1.15rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid #c9a84c;
+    outline-offset: 2px;
+  }
+}
+
+.modal-btn--primary {
+  background: linear-gradient(135deg, #e8c96b 0%, #c9a84c 45%, #9e7d35 100%);
+  color: #fff;
+  border: 0;
+}
+
+.modal-btn--ghost {
+  border-color: rgb(var(--tw-border));
+  background: transparent;
+  color: rgb(var(--tw-ink-primary));
+
+  &:hover {
+    background: rgb(var(--tw-surface-2));
+  }
+}
+</style>
