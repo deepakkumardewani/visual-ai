@@ -3,6 +3,8 @@ import { MotionPlugin } from '@vueuse/motion';
 import type { App } from 'vue';
 import { clerkPlugin } from 'vue-clerk';
 
+import { clerkAppearance } from '@/utils/clerkAppearance';
+
 import { vReveal } from '../directives/reveal';
 import router from '../router';
 import pinia from '../stores';
@@ -23,6 +25,9 @@ export function registerPlugins(app: App) {
     forceRedirectUrl: AFTER_SIGN_IN_URL,
     afterSignInUrl: AFTER_SIGN_IN_URL,
     afterSignUpUrl: AFTER_SIGN_UP_URL,
+    signInUrl: '/signin',
+    signUpUrl: '/signup',
+    appearance: clerkAppearance,
   });
   app.use(MotionPlugin);
   app.directive('reveal', vReveal);
