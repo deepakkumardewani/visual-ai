@@ -7,6 +7,7 @@ import { scrollToSection } from '@/composables/useLenis';
 
 import LandingButton from '@/components/Landing/LandingButton.vue';
 import ThemeButton from '@/components/Header/ThemeButton.vue';
+import Logo from '@/components/Header/Logo.vue';
 
 import { NAV_LINKS } from '@/utils/landing';
 
@@ -29,9 +30,9 @@ function scrollToTop() {
 <template>
   <header class="nav" :class="{ 'nav--solid': scrolled }">
     <div class="nav__inner">
-      <router-link to="/" class="nav__brand" aria-label="Visual AI home">
-        Visual<span class="nav__brand-accent">AI</span>
-      </router-link>
+      <div class="nav__brand">
+        <Logo :show-mark="false" force-wordmark />
+      </div>
 
       <nav class="nav__links" aria-label="Primary">
         <a
@@ -162,18 +163,11 @@ function scrollToTop() {
 }
 
 .nav__brand {
-  font-family: 'Young Serif', Georgia, serif;
-  font-size: 1.4rem;
-  color: rgb(var(--tw-ink-primary));
-  text-decoration: none;
-  letter-spacing: -0.01em;
   margin-right: auto;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: rgb(var(--tw-ink-primary));
-  }
+  display: flex;
+  align-items: center;
 }
+
 .nav__brand-accent {
   color: #c98a5a;
   margin-left: 0.15em;

@@ -24,6 +24,11 @@ import { MODELS } from '@/utils/landing';
           <span v-if="model.isPro" class="model__pro">Pro</span>
         </div>
         <p class="model__desc">{{ model.description }}</p>
+        <dl v-if="model.bestAt" class="model__meta">
+          <dt class="model__meta-label">Best at</dt>
+          <dd class="model__meta-value">{{ model.bestAt }}</dd>
+          <dd class="model__tier">{{ model.tier }}</dd>
+        </dl>
       </article>
     </div>
   </section>
@@ -35,7 +40,7 @@ import { MODELS } from '@/utils/landing';
   z-index: 1;
   max-width: 80rem;
   margin: 0 auto;
-  padding: clamp(4rem, 8vw, 7rem) 1.5rem;
+  padding: clamp(3.5rem, 6vw, 5.5rem) 1.5rem;
 }
 
 .caps__head {
@@ -109,6 +114,38 @@ import { MODELS } from '@/utils/landing';
   font-size: 0.92rem;
   line-height: 1.6;
   color: rgb(var(--tw-ink-muted));
+}
+
+.model__meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 1.1rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid #2d2319;
+}
+.model__meta-label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #d29467;
+}
+.model__meta-value {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgb(var(--tw-ink-primary));
+}
+.model__tier {
+  margin: 0 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: capitalize;
+  color: rgb(var(--tw-ink-muted));
+  padding: 0.15rem 0.5rem;
+  border: 1px solid #3a2e22;
+  border-radius: 9999px;
 }
 
 @media (prefers-reduced-motion: reduce) {

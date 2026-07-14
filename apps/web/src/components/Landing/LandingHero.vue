@@ -99,7 +99,7 @@ onBeforeUnmount(() => ctx?.revert());
   z-index: 1;
   max-width: 80rem;
   margin: 0 auto;
-  padding: clamp(7rem, 12vw, 9.5rem) 1.5rem clamp(4rem, 8vw, 6rem);
+  padding: clamp(5.5rem, 8vw, 7rem) 1.5rem clamp(3rem, 5vw, 4rem);
   display: grid;
   gap: clamp(2.5rem, 5vw, 4rem);
   align-items: center;
@@ -168,8 +168,8 @@ onBeforeUnmount(() => ctx?.revert());
   display: grid;
   grid-template-columns: repeat(2, auto);
   gap: 1.5rem 2.5rem;
-  margin: 3rem 0 0;
-  padding-top: 2rem;
+  margin: 2.25rem 0 0;
+  padding-top: 1.5rem;
   border-top: 1px solid #2d2319;
 
   @media (min-width: 560px) {
@@ -185,7 +185,7 @@ onBeforeUnmount(() => ctx?.revert());
 .hero__stat-label {
   margin: 0.35rem 0 0;
   font-size: 0.8rem;
-  color: #6b5e51;
+  color: rgb(var(--tw-ink-muted));
 }
 
 .hero__visual-wrap {
@@ -193,7 +193,8 @@ onBeforeUnmount(() => ctx?.revert());
 }
 .hero__visual {
   position: relative;
-  margin: 0;
+  margin: 0 auto;
+  max-width: 32rem;
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid #3a2e22;
@@ -205,7 +206,9 @@ onBeforeUnmount(() => ctx?.revert());
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 2 / 3;
+  /* 3:4 capped to the viewport so the card and the stats row resolve inside the fold */
+  aspect-ratio: 3 / 4;
+  max-height: min(68vh, 38rem);
   object-fit: cover;
 }
 .hero__prompt {

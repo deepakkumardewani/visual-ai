@@ -79,7 +79,7 @@ const plans = [
   z-index: 1;
   max-width: 70rem;
   margin: 0 auto;
-  padding: clamp(4rem, 8vw, 7rem) 1.5rem;
+  padding: clamp(3.5rem, 6vw, 5.5rem) 1.5rem;
 }
 
 .pricing__head {
@@ -163,7 +163,7 @@ const plans = [
 .plan__cadence {
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 0.95rem;
-  color: #6b5e51;
+  color: rgb(var(--tw-ink-muted));
   margin-left: 0.4rem;
 }
 .plan__points {

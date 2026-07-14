@@ -34,7 +34,7 @@ const columns = [
       <div class="footer__brand">
         <router-link to="/" class="footer__wordmark">Visual<span>AI</span></router-link>
         <p class="footer__tagline">
-          One studio to generate, upscale, colorize, and revive images — powered by the FLUX models.
+          One studio to generate, upscale, colorize, and revive images — powered by the Flux models.
         </p>
       </div>
 
@@ -92,7 +92,7 @@ const columns = [
   max-width: 24rem;
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #6b5e51;
+  color: rgb(var(--tw-ink-muted));
 }
 
 .footer__cols {
@@ -136,7 +136,7 @@ const columns = [
   padding-top: 1.75rem;
   border-top: 1px solid #2d2319;
   font-size: 0.85rem;
-  color: #6b5e51;
+  color: rgb(var(--tw-ink-muted));
 
   p {
     margin: 0;

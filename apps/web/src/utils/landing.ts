@@ -35,7 +35,7 @@ export interface Faq {
 export const STATS: Stat[] = [
   { value: '500+', label: 'Creators on board' },
   { value: 'Thousands', label: 'Images rendered' },
-  { value: '5', label: 'FLUX models' },
+  { value: '5', label: 'Flux models' },
 ];
 
 const galleryItems = galleryData as GalleryItem[];
@@ -48,9 +48,9 @@ export const TOOLS: ToolChapter[] = [
     id: 'generate',
     eyebrow: 'Text to image',
     title: 'Words in. Images out.',
-    body: 'Type a prompt and FLUX renders it — photoreal, painterly, or conceptual. Prompt adherence tight enough that your first try is usually your last.',
+    body: 'Type a prompt and Flux renders it — photoreal, painterly, or conceptual. Prompt adherence tight enough that your first try is usually your last.',
     points: [
-      'FLUX Lightning through FLUX 1.1 Pro',
+      'Flux Lightning through Flux 1.1 Pro',
       'Seven aspect ratios — square to cinematic 21:9',
       'Up to four variations per prompt',
     ],
@@ -134,7 +134,7 @@ export const FAQS: Faq[] = [
   {
     question: 'Which models can I use?',
     answer:
-      'The full FLUX family — from FLUX Lightning for speed to FLUX 1.1 Pro and FLUX Realism for top-tier quality and prompt adherence.',
+      'The full Flux family — from Flux Lightning for speed to Flux 1.1 Pro and Flux Realism for top-tier quality and prompt adherence.',
   },
   {
     question: 'What formats can I download?',

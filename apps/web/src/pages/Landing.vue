@@ -5,6 +5,7 @@ import AmbientCanvas from '@/components/Landing/AmbientCanvas.vue';
 import CapabilitiesSection from '@/components/Landing/CapabilitiesSection.vue';
 import FaqSection from '@/components/Landing/FaqSection.vue';
 import FinalCta from '@/components/Landing/FinalCta.vue';
+import GalleryStrip from '@/components/Landing/GalleryStrip.vue';
 import LandingFooter from '@/components/Landing/LandingFooter.vue';
 import LandingHero from '@/components/Landing/LandingHero.vue';
 import LandingNav from '@/components/Landing/LandingNav.vue';
@@ -24,6 +25,7 @@ useLenis();
 
     <main>
       <LandingHero />
+      <GalleryStrip />
 
       <section id="tools" class="tools">
         <header class="tools__head">

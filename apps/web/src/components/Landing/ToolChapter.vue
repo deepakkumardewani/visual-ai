@@ -57,7 +57,8 @@ defineProps<{ tool: ToolChapter; index: number }>();
 .chapter {
   max-width: 80rem;
   margin: 0 auto;
-  padding: clamp(3.5rem, 7vw, 6rem) 1.5rem;
+  /* Half the section rhythm — chapters stack inside one section, so gaps stay tight. */
+  padding: clamp(2.5rem, 4vw, 4rem) 1.5rem;
   display: grid;
   gap: clamp(2rem, 5vw, 4.5rem);
   align-items: center;
@@ -79,13 +80,13 @@ defineProps<{ tool: ToolChapter; index: number }>();
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #c98a5a;
+  color: #d29467;
   margin-bottom: 1.25rem;
 }
 .chapter__num {
   font-family: 'Young Serif', Georgia, serif;
   font-size: 0.95rem;
-  color: #6b5e51;
+  color: rgb(var(--tw-ink-muted));
   letter-spacing: 0;
 }
 
