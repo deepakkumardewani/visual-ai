@@ -5,6 +5,9 @@ import {
 } from "@clerk/clerk-sdk-node"
 import { Request, Response } from "express"
 
+import { env } from "../config/env.js"
+import { createLogger } from "../lib/logger.js"
+
 /* eslint-disable no-unused-vars */
 declare global {
     namespace Express {
@@ -13,10 +16,12 @@ declare global {
 }
 /* eslint-disable no-unused-vars */
 
+const logger = createLogger("clerk-middleware")
+
 const authorizedParties = ["http://localhost:3000", "https://visual-ai.app"]
 const clerkOptions = {
-    secretKey: process.env.CLERK_SECRET_KEY,
-    publishableKey: process.env.CLERK_PUBLISHABLE_KEY,
+    secretKey: env.CLERK_SECRET_KEY,
+    publishableKey: env.CLERK_PUBLISHABLE_KEY,
 }
 export const clerkClient = createClerkClient(clerkOptions)
 export const ClerkExpressRequireAuth = createClerkExpressRequireAuth({
@@ -27,13 +32,13 @@ export const authenticateProgress = async (req: Request, res: Response, next: Fu
     const token = req.query.token as string
     try {
         await clerkClient.verifyToken(token, {
-            jwtKey: process.env.CLERK_JWT_KEY,
+            jwtKey: env.CLERK_JWT_KEY,
             authorizedParties,
         })
         next()
         return
     } catch (error) {
-        console.error("error======", error)
+        logger.error({ err: error }, "Token verification failed")
         return res.status(401).json({ message: "Unauthorized" })
     }
 }

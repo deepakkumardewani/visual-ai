@@ -1,7 +1,10 @@
 import cron from "node-cron"
 
+import { createLogger } from "../lib/logger.js"
 import { emailNotificationService } from "./email-notification-service.js"
 import { healthCheckService } from "./health-check-service.js"
+
+const logger = createLogger("periodic-health-check")
 
 export class PeriodicHealthCheckService {
     private lastHealthStatus: "healthy" | "unhealthy" | null = null
@@ -9,7 +12,7 @@ export class PeriodicHealthCheckService {
 
     public startPeriodicHealthCheck(): void {
         if (this.isRunning) {
-            console.log("Periodic health check is already running")
+            logger.info("Periodic health check is already running")
             return
         }
 
@@ -18,8 +21,12 @@ export class PeriodicHealthCheckService {
             try {
                 const currentHealthStatus = await healthCheckService.performHealthCheck()
 
-                console.log(
-                    `Health check completed: ${currentHealthStatus.status} at ${currentHealthStatus.timestamp.toISOString()}`,
+                logger.info(
+                    {
+                        status: currentHealthStatus.status,
+                        timestamp: currentHealthStatus.timestamp,
+                    },
+                    "Health check completed",
                 )
 
                 // Send email only when status changes from healthy to unhealthy
@@ -35,19 +42,19 @@ export class PeriodicHealthCheckService {
                 // Update last status
                 this.lastHealthStatus = currentHealthStatus.status
             } catch (error) {
-                console.error("Error during periodic health check:", error)
+                logger.error({ err: error }, "Error during periodic health check")
             }
         })
 
         this.isRunning = true
-        console.log("Periodic health check started - running every 5 minutes")
+        logger.info("Periodic health check started - running every 5 minutes")
     }
 
     public stopPeriodicHealthCheck(): void {
         // Note: node-cron doesn't provide a direct way to stop specific tasks
         // This is a placeholder for potential future implementation
         this.isRunning = false
-        console.log("Periodic health check stopped")
+        logger.info("Periodic health check stopped")
     }
 
     public getStatus(): {

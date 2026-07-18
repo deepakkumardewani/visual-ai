@@ -3,31 +3,35 @@ import { Router } from "express"
 import { Request, Response } from "express"
 import Razorpay from "razorpay"
 
+import { env } from "../config/env.js"
+import { asyncHandler } from "../lib/async-handler.js"
+import { BadRequestError } from "../lib/errors.js"
+import { createLogger } from "../lib/logger.js"
 import { PaymentModel as Payment } from "../models/payment.js"
-import { UserModel as User } from "../models/user.js"
+import { getUserOrThrow } from "../services/user-service.js"
+
+const logger = createLogger("payments-route")
 
 export const paymentsRoute = Router()
 
 const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID || "",
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
+    key_id: env.RAZORPAY_KEY_ID,
+    key_secret: env.RAZORPAY_KEY_SECRET,
 })
 
 // POST /payments/subscription/create
 // Subscribe to the pro plan
-paymentsRoute.post("/payments/subscription/create", async (req: Request, res: Response) => {
-    try {
+paymentsRoute.post(
+    "/payments/subscription/create",
+    asyncHandler(async (req: Request, res: Response) => {
         const { planId } = req.body
 
-        console.log("planId", planId)
-        // Validate request
         if (!planId) {
-            return res.status(400).json({
-                message: "Missing required fields: planId",
-            })
+            throw new BadRequestError("Missing required fields: planId")
         }
 
-        // Create subscription
+        logger.debug({ planId }, "Creating subscription")
+
         const subscription = await razorpay.subscriptions.create({
             plan_id: planId,
             customer_notify: 0,
@@ -44,101 +48,85 @@ paymentsRoute.post("/payments/subscription/create", async (req: Request, res: Re
             ],
         })
 
-        console.log("subscription", subscription)
+        logger.debug({ subscriptionId: subscription.id }, "Subscription created")
 
-        return res.status(200).json({
+        res.status(200).json({
             subscription,
             message: "Subscription created successfully",
         })
-    } catch (error) {
-        console.error("Error creating subscription:", error)
-        return res.status(500).json({
-            message: "Error creating subscription",
-            error: error instanceof Error ? error.message : "Unknown error",
-        })
-    }
-})
+    }),
+)
 
 // POST /payments
-// Make a payment (for additional credits or subscription)
-// paymentsRoute.post("/payments", async (req: Request, res: Response) => {})
-
-// GET /payments
 // Get the list of payments made by the user
-paymentsRoute.post("/payments", async (req: Request, res: Response) => {
-    try {
+paymentsRoute.post(
+    "/payments",
+    asyncHandler(async (req: Request, res: Response) => {
         const userId = req.body.id
         const payments = await Payment.find({ userId })
-        return res.status(200).json({ payments })
-    } catch (error) {
-        return res.status(500).send(error)
-    }
-})
+        res.status(200).json({ payments })
+    }),
+)
 
 // GET /payments/:id
 // Get details of a specific payment
-paymentsRoute.get("/payments/:id", async (req: Request, res: Response) => {
-    try {
+paymentsRoute.get(
+    "/payments/:id",
+    asyncHandler(async (req: Request, res: Response) => {
         const paymentId = req.params.id
         const payment = await Payment.findById(paymentId)
-        return res.status(200).json({ payment })
-    } catch (error) {
-        return res.status(500).send(error)
-    }
-})
+        res.status(200).json({ payment })
+    }),
+)
 
 // POST /payments/order/create
 // Create an order for a payment
-paymentsRoute.post("/payments/order/create", async (req: Request, res: Response) => {
-    const { amount, currency, receipt } = req.body // Example: { amount: 500, currency: 'INR', receipt: 'order_rcptid_11' }
-    try {
+paymentsRoute.post(
+    "/payments/order/create",
+    asyncHandler(async (req: Request, res: Response) => {
+        const { amount, currency, receipt } = req.body
         const order = await razorpay.orders.create({
             amount: amount * 100,
             currency,
             receipt,
         })
         res.status(200).json(order)
-    } catch (error) {
-        res.status(500).send(error)
-    }
-})
+    }),
+)
 
 // POST /payments/verify-payment
-// Verify a payment
+// Verify a Razorpay payment using HMAC signature
 paymentsRoute.post("/payments/verify-payment", (req: Request, res: Response) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body
 
     const generatedSignature = crypto
-        .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET || "")
+        .createHmac("sha256", env.RAZORPAY_KEY_SECRET)
         .update(`${razorpay_order_id}|${razorpay_payment_id}`)
         .digest("hex")
 
     if (generatedSignature === razorpay_signature) {
-        console.log("Payment verified successfully")
+        logger.info("Payment verified successfully")
         res.json({ success: true })
     } else {
-        console.log("Payment verification failed")
+        logger.warn("Payment verification failed")
         res.status(400).json({ success: false })
     }
 })
 
-// POST /payments/cancel-subscription
-// Cancel user's subscription
-paymentsRoute.post("/payments/subscription/cancel", async (req: Request, res: Response) => {
-    const { userId } = req.body
-    const user = await User.findOne({ userId })
-    if (!user) {
-        return res.status(404).json({ message: "User not found" })
-    }
+// POST /payments/subscription/cancel
+// Cancel user's active subscription
+paymentsRoute.post(
+    "/payments/subscription/cancel",
+    asyncHandler(async (req: Request, res: Response) => {
+        const { userId } = req.body
+        const user = await getUserOrThrow(userId)
 
-    console.log("user", user)
-    razorpay.subscriptions.cancel(user?.subscriptionId || "", 0, (err, response) => {
-        if (err) {
-            console.error("Error canceling subscription:", err)
-            return res.status(500).json({ message: "Internal server error" })
-        } else {
-            console.log("Subscription canceled:", response)
-            return res.status(200).json({ message: "Subscription canceled" })
-        }
-    })
-})
+        logger.debug({ userId }, "Canceling subscription")
+
+        // Razorpay cancel returns a Promise when no callback is passed
+        await razorpay.subscriptions.cancel(user.subscriptionId || "", 0)
+
+        logger.info({ subscriptionId: user.subscriptionId }, "Subscription canceled")
+        res.status(200).json({ message: "Subscription canceled" })
+    }),
+)

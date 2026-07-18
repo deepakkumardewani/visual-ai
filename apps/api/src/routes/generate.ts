@@ -1,16 +1,21 @@
 import { Router } from "express"
 import { Request, Response } from "express"
 
+import { asyncHandler } from "../lib/async-handler.js"
+import { BadRequestError } from "../lib/errors.js"
+import { createLogger } from "../lib/logger.js"
 import {
-    processColorization,
+    processColorize,
     processImage,
     processRevive,
     processUpscale,
-} from "../helpers/generateRouteHelpers.js"
+} from "../services/generation-service.js"
 import { ClerkExpressRequireAuth } from "../middlewares/clerk.js"
 import { upload } from "../middlewares/multer.js"
 import { RedisService } from "../services/redis-service.js"
 import { Props } from "../types"
+
+const logger = createLogger("generate-route")
 
 const jobStatusService = new RedisService()
 
@@ -58,7 +63,7 @@ generateRoute.get("/progress", async (req: Request, res: Response) => {
     }, 1000)
 
     const cleanup = async () => {
-        console.log("connection closed")
+        logger.debug("Connection closed")
         clearInterval(interval)
         await jobStatusService.deleteStatus(jobId)
         res.end()
@@ -68,137 +73,94 @@ generateRoute.get("/progress", async (req: Request, res: Response) => {
 })
 
 // AI Image Generation Endpoint
-// Generates AI images based on text prompts
+// Fire-and-forget: starts background job, returns 202 immediately
 generateRoute.post(
     "/generate/image",
     // @ts-ignore
     ClerkExpressRequireAuth({}),
-    async (req: Request, res: Response) => {
-        const { body } = req
-        // Start processing in the background
-        try {
-            void processImage(body)
-        } catch (error) {
-            console.error("Background processing error:", error)
-        }
-
-        // Return immediately
-        return res.status(202).json({
+    asyncHandler(async (req: Request, res: Response) => {
+        void processImage(req.body)
+        res.status(202).json({
             message: "Processing started",
             status: "processing",
         })
-    },
+    }),
 )
 
-// Update the upscale endpoint
+// Upscale Endpoint
+// Fire-and-forget: uploads image, starts background job, returns 202
 generateRoute.post(
     "/generate/upscale/image",
     // @ts-ignore
     ClerkExpressRequireAuth({}),
     upload.single("image"),
-    async (req: Request, res: Response) => {
-        try {
-            const { body } = req
-
-            if (!req.file?.path) {
-                return res.status(400).json({ error: "No image file provided" })
-            }
-
-            // Start processing in the background
-            try {
-                const props: Props = {
-                    body,
-                    filePath: req.file.path,
-                    fileName: req.file.filename,
-                }
-                void processUpscale(props)
-            } catch (error) {
-                console.error("Background processing error:", error)
-            }
-
-            // Return immediately
-            return res.status(202).json({
-                message: "Processing started",
-                status: "processing",
-            })
-        } catch (error) {
-            console.error("error", error)
-            return res.status(500).send(error)
+    asyncHandler(async (req: Request, res: Response) => {
+        if (!req.file?.path) {
+            throw new BadRequestError("No image file provided")
         }
-    },
+
+        const props: Props = {
+            body: req.body,
+            filePath: req.file.path,
+            fileName: req.file.filename,
+        }
+        void processUpscale(props)
+
+        res.status(202).json({
+            message: "Processing started",
+            status: "processing",
+        })
+    }),
 )
 
-// Update the revive endpoint
+// Revive Endpoint
+// Fire-and-forget: uploads image, starts background job, returns 202
 generateRoute.post(
     "/generate/revive/image",
     // @ts-ignore
     ClerkExpressRequireAuth({}),
     upload.single("image"),
-    async (req: Request, res: Response) => {
-        try {
-            const { body } = req
-
-            if (!req.file?.path) {
-                return res.status(400).json({ error: "No image file provided" })
-            }
-
-            // Start processing in the background
-            try {
-                const props: Props = {
-                    body,
-                    filePath: req.file.path,
-                    fileName: req.file.filename,
-                }
-                void processRevive(props)
-            } catch (error) {
-                console.error("Background processing error:", error)
-            }
-
-            // Return immediately
-            return res.status(202).json({
-                message: "Processing started",
-                status: "processing",
-            })
-        } catch (error) {
-            console.error("error", error)
-            return res.status(500).send(error)
+    asyncHandler(async (req: Request, res: Response) => {
+        if (!req.file?.path) {
+            throw new BadRequestError("No image file provided")
         }
-    },
+
+        const props: Props = {
+            body: req.body,
+            filePath: req.file.path,
+            fileName: req.file.filename,
+        }
+        void processRevive(props)
+
+        res.status(202).json({
+            message: "Processing started",
+            status: "processing",
+        })
+    }),
 )
 
-// Update the colorize endpoint
+// Colorize Endpoint
+// Fire-and-forget: uploads image, starts background job, returns 202
 generateRoute.post(
     "/generate/colorize/image",
     // @ts-ignore
     ClerkExpressRequireAuth({}),
     upload.single("image"),
-    async (req, res) => {
-        try {
-            const { body } = req
-
-            if (!req.file?.path) {
-                return res.status(400).json({ error: "No image file provided" })
-            }
-            // Start processing in the background
-            try {
-                const props: Props = {
-                    body,
-                    filePath: req.file.path,
-                    fileName: req.file.filename,
-                }
-                void processColorization(props)
-            } catch (error) {
-                console.error("Background processing error:", error)
-            }
-
-            // Return immediately
-            return res.status(202).json({
-                message: "Processing started",
-                status: "processing",
-            })
-        } catch (error) {
-            console.error("error", error)
-            return res.status(500).send(error)
+    asyncHandler(async (req: Request, res: Response) => {
+        if (!req.file?.path) {
+            throw new BadRequestError("No image file provided")
         }
-    },
+
+        const props: Props = {
+            body: req.body,
+            filePath: req.file.path,
+            fileName: req.file.filename,
+        }
+        void processColorize(props)
+
+        res.status(202).json({
+            message: "Processing started",
+            status: "processing",
+        })
+    }),
 )

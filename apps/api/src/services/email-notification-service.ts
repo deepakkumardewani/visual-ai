@@ -1,5 +1,10 @@
 import nodemailer from "nodemailer"
 
+import { env } from "../config/env.js"
+import { createLogger } from "../lib/logger.js"
+
+const logger = createLogger("email-notification")
+
 interface HealthStatus {
     status: "healthy" | "unhealthy"
     timestamp: Date
@@ -25,8 +30,8 @@ export class EmailNotificationService {
         this.transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASSWORD,
+                user: env.EMAIL_USER,
+                pass: env.EMAIL_PASSWORD,
             },
         })
     }
@@ -75,16 +80,16 @@ export class EmailNotificationService {
     public async sendHealthCheckFailureNotification(healthStatus: HealthStatus): Promise<void> {
         try {
             const mailOptions = {
-                from: process.env.EMAIL_USER,
+                from: env.EMAIL_USER,
                 to: this.targetEmail,
                 subject: `🚨 Health Check Failed - ${new Date().toISOString()}`,
                 html: this.formatHealthStatus(healthStatus),
             }
 
             await this.transporter.sendMail(mailOptions)
-            console.log("Health check failure notification sent successfully")
+            logger.info("Health check failure notification sent successfully")
         } catch (error) {
-            console.error("Failed to send health check notification:", error)
+            logger.error({ err: error }, "Failed to send health check notification")
         }
     }
 }

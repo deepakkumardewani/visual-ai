@@ -1,87 +1,24 @@
-export interface RazorpayProduct {
-    id: number
-    type: string
-    credits: number
-    price: number
-    savings?: string
-    description: string
-    currency: string
-}
+// Re-export shared domain types
+export { FeatureType } from "@visual-ai/shared"
 
-export enum FeatureType {
-    IMAGE = "image",
-    UPSCALE = "upscale",
-    COLORIZE = "colorize",
-    REVIVE = "revive",
-}
+export type {
+    IImage,
+    IImageObject,
+    JobStatus,
+    RazorpayProduct,
+    IPayment,
+    IReferral,
+    IUser,
+} from "@visual-ai/shared"
 
-// Image
-export interface IImage {
-    name: string
-    aiImagePublicId?: string
-    originalPublicId?: string
-    enhancedPublicId?: string
-    aiImageUrl?: string
-    originalImageUrl?: string
-    enhancedImageUrl?: string
-    resolution: string
-    aspectRatio: string
-    width: number
-    height: number
-    format: string
-    bytes: number
-}
-export interface IImageObject {
-    _id?: string
-    userId: string
-    prompt: string
-    featureType: FeatureType
-    modelName?: string
-    imageType?: string
-    isFavorite?: boolean
-    images: IImage[]
-    humanReadableDate?: string
-    createdAt?: Date
-}
-
-// Payment
-export interface IPayment {
-    transactionId: string
-    amount: number
-    description: string
-    status: string
-    paymentMethod: string
-    createdAt: Date
-    humanReadableDate: string
-}
-
-export interface IReferral {
-    userId: string
-    userEmail: string
-    userName: string
-    timestamp: Date
-}
-
-export interface IUser {
-    userId: string
-    userName: string
-    firstName: string
-    lastName: string
-    fullName: string
-    email: string
-    plan: string
-    subscriptionId: string
-    credits: number
-    monthlyCredits: number
-    isPro: boolean
-    referralCode: string
-    referrals: IReferral[]
-    subscriptionEnd: Date
-    payments: IPayment[]
-    history: IImageObject[]
-    favorites: IImageObject[]
-    activities: { action: string; timestamp: Date; image: IImageObject }[]
-}
+export type {
+    AIImageInput,
+    UpscaleInput,
+    ColorizeInput,
+    ReviveInput,
+    Body,
+    Props,
+} from "@visual-ai/shared"
 
 // Clerk
 
@@ -177,68 +114,4 @@ interface ExternalAccount {
     updated_at: number
     username: string | null
     verification: Verification
-}
-
-export interface JobStatus {
-    status: string
-    image: IImageObject | undefined
-    userCreditsRemaining: number | null
-    progress?: number
-}
-
-export interface Body {
-    userId: string
-    jobId: string
-    modelId?: string
-    filePath?: string
-    name?: string
-    aiImagePublicId?: string
-    modelName?: string
-    numOfOutputs?: number
-    outputQuality?: number
-    outputFormat?: string
-    originalPublicId?: string
-    enhancedPublicId?: string
-    imageType?: string
-    resolution?: string
-    aspectRatio?: string
-    width?: number
-    height?: number
-    format?: string
-    bytes?: number
-    prompt?: string
-    creativity?: number
-    scale?: number
-    negativePrompt?: string
-}
-
-export interface Props {
-    body: Body
-    filePath: string
-    fileName: string
-}
-// Interface for AI image generation input parameters
-export interface AIImageInput {
-    prompt: string
-    output_quality: number
-    num_outputs?: number
-    aspect_ratio: string
-    output_format: string
-}
-
-export interface UpscaleInput {
-    image: string
-    prompt: string
-    creativity: number
-    scale_factor: number
-    negative_prompt: string
-    output_format: string
-}
-
-export interface ColorizeInput {
-    image: string
-}
-
-export interface ReviveInput {
-    img: string
 }

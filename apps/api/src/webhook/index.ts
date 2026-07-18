@@ -2,9 +2,13 @@ import { Router } from "express"
 import express from "express"
 import { Webhook } from "svix"
 
-import { signUpHandler } from "../helpers/userRouteHelpers.js"
+import { env } from "../config/env.js"
+import { createLogger } from "../lib/logger.js"
+import { signUpHandler } from "../services/user-service.js"
 import { PaymentModel as Payment } from "../models/payment.js"
 import { UserModel as User } from "../models/user.js"
+
+const logger = createLogger("webhook")
 
 export const webhookRouter = Router()
 
@@ -14,11 +18,6 @@ webhookRouter.post(
     "/webhooks/clerk",
     express.raw({ type: "application/json" }),
     async (req, res) => {
-        const { WEBHOOK_SECRET } = process.env
-        if (!WEBHOOK_SECRET) {
-            throw new Error("You need a WEBHOOK_SECRET in your .env")
-        }
-
         // Get the headers and body
         const headers = req.headers
         const payload = req.body
@@ -36,7 +35,7 @@ webhookRouter.post(
         }
 
         // Create a new Svix instance with your secret.
-        const wh = new Webhook(WEBHOOK_SECRET)
+        const wh = new Webhook(env.WEBHOOK_SECRET)
 
         let evt: any
 
@@ -50,7 +49,7 @@ webhookRouter.post(
                 "svix-signature": svix_signature,
             })
         } catch (err) {
-            console.log("Error verifying webhook:", (err as Error).message)
+            logger.error({ err }, "Error verifying webhook")
             return res.status(400).json({
                 success: false,
                 message: (err as Error).message,
@@ -62,9 +61,7 @@ webhookRouter.post(
         const { id } = evt.data
         const eventType = evt.type
         if (eventType === "user.created") {
-            console.log("userId:", evt.data.id)
-            console.log(`Webhook with an ID of ${id} and type of ${eventType}`)
-            console.log("Webhook body:", evt)
+            logger.info({ userId: evt.data.id, eventType, id }, "User created webhook received")
         }
 
         await signUpHandler(evt)
@@ -77,19 +74,8 @@ webhookRouter.post(
 )
 
 webhookRouter.post("/webhooks/razorpay", express.json(), async (req, res) => {
-    // console.log("=============")
-    // console.log("body", JSON.stringify(req.body, null, 2))
-    // console.log("=============")
     const { event } = req.body
-    console.log("event", event)
-    // if (event === "payment.authorized") {
-    //     const { payment } = req.body.payload
-    //     console.log("payment", payment)
-    // }
-    // if (event === "order.paid") {
-    //     const { payment } = req.body.payload
-    //     console.log("payment", payment)
-    // }
+    logger.debug({ event }, "Razorpay webhook received")
     if (event === "payment.captured") {
         const { payment } = req.body.payload
 
@@ -125,7 +111,7 @@ webhookRouter.post("/webhooks/razorpay", express.json(), async (req, res) => {
             )
 
             if (!user) {
-                console.error(`User not found with ID: ${userId}`)
+                logger.error({ userId }, "User not found")
                 return res.status(404).json({ message: "User not found" })
             }
 
@@ -135,7 +121,7 @@ webhookRouter.post("/webhooks/razorpay", express.json(), async (req, res) => {
                 user,
             })
         } catch (error) {
-            console.error("Error updating user payments and credits:", error)
+            logger.error({ err: error }, "Error updating user payments and credits")
             return res.status(500).json({ message: "Internal server error" })
         }
     } else {

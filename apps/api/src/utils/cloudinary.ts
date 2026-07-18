@@ -2,8 +2,11 @@ import cloudinary from "cloudinary"
 import probe from "probe-image-size"
 import sharp from "sharp"
 
+import { createLogger } from "../lib/logger.js"
 import { UserModel as User } from "../models/user.js"
 import type { IImage, IImageObject } from "../types/index.js"
+
+const logger = createLogger("cloudinary")
 
 const MAX_FILE_SIZE_MB = 10
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
@@ -181,7 +184,7 @@ export async function uploadToCloudinary(data: any) {
             }
         }
     } catch (error) {
-        console.error("Error uploading to Cloudinary:", error)
+        logger.error({ err: error }, "Error uploading to Cloudinary")
         throw error // Re-throw the error to be handled by the caller
     }
 }
@@ -196,7 +199,7 @@ export async function getImageDetails(url: string) {
             bytes: result.length,
         }
     } catch (error) {
-        console.error("Error getting image details:", error)
+        logger.error({ err: error }, "Error getting image details")
         throw error
     }
 }

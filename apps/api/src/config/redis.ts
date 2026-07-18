@@ -1,25 +1,29 @@
 import IORedis from "ioredis"
 
+import { env } from "./env.js"
+import { createLogger } from "../lib/logger.js"
+
+const logger = createLogger("redis")
+
 interface RedisConfig {
     host: string
     port: number
 }
 
 const redisConfig: RedisConfig = {
-    host: process.env.REDIS_HOST || "redis",
-    port: parseInt(process.env.REDIS_PORT || "6379", 10),
+    host: env.REDIS_HOST,
+    port: env.REDIS_PORT,
 }
 
 export const createRedisClient = (): IORedis => {
     const redis = new IORedis(redisConfig)
 
     redis.on("error", (err: Error) => {
-        console.error("Redis Client Error:", err)
+        logger.error({ err }, "Redis client error")
     })
 
     redis.on("connect", () => {
-        console.log("Redis Client Connected")
-        console.log("===========================")
+        logger.info("Redis client connected")
     })
 
     return redis

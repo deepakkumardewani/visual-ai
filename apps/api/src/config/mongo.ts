@@ -1,21 +1,19 @@
 import mongoose from "mongoose"
 
-const { MONGO_URI } = process.env
+import { env } from "./env.js"
+import { createLogger } from "../lib/logger.js"
+
+const logger = createLogger("mongo")
 mongoose.Promise = global.Promise
-// const opts = {
-//     useMongoClient: true,
-// }
 
 export const connectDB = () => {
     mongoose
-        .connect(MONGO_URI as string)
+        .connect(env.MONGO_URI)
         .then(() => {
-            console.log("Successfully connected to Mongo")
-            console.log("===========================")
+            logger.info("Successfully connected to Mongo")
         })
         .catch((error: any) => {
-            console.log("database connection failed. exiting now...")
-            console.error(error)
+            logger.error({ err: error }, "Database connection failed")
             process.exit(1)
         })
 }
