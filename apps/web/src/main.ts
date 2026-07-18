@@ -8,6 +8,7 @@
 import { registerPlugins } from '@/plugins';
 import router from '@/router';
 import { useAppStore } from '@/stores/app';
+
 import { createApp } from 'vue';
 
 // Components

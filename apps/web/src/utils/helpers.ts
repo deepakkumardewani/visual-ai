@@ -20,7 +20,9 @@ export const deleteImage = async (event: Event, image: IImageObject) => {
   const userStore = useUserStore();
 
   isDeleting.value = true;
-  deletingImageIds.value.push(image._id);
+  if (image._id) {
+    deletingImageIds.value.push(image._id);
+  }
 
   const { userId, history } = storeToRefs(userStore);
   const url = `/image/delete`;

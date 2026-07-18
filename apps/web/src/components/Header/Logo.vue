@@ -20,8 +20,6 @@ const route = useRoute();
 const router = useRouter();
 const isMobile = useMediaQuery('(max-width: 600px)');
 
-const logoImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/logo.png`;
-
 const showWordmark = computed(() => props.forceWordmark || route.path !== '/dashboard');
 
 function goHome() {
@@ -36,14 +34,10 @@ function goHome() {
     :aria-label="route.path === '/dashboard' ? 'Visual AI home' : 'Visual AI'"
     @click="goHome"
   >
-    <img
+    <LogoMark
       v-if="showMark"
-      :src="logoImage"
-      :width="isMobile ? 30 : 34"
-      :height="isMobile ? 30 : 34"
-      class="tw-block tw-shrink-0 tw-rounded-[6px] tw-transition-transform tw-duration-fast tw-ease-out group-hover:tw-scale-[1.04]"
-      alt=""
-      aria-hidden="true"
+      :size="isMobile ? 30 : 34"
+      class="tw-block tw-shrink-0 tw-transition-transform tw-duration-fast tw-ease-out group-hover:tw-scale-[1.04]"
     />
     <span v-if="showWordmark" class="logo__wordmark tw-flex tw-items-baseline">
       <span class="logo__name">Visual</span>

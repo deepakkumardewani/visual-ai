@@ -21,6 +21,7 @@
     "@img-comparison-slider/vue": "^8.0.0",
     "@mdi/font": "7.4.47",
     "@telemetrydeck/sdk": "^2.0.4",
+    "@visual-ai/shared": "workspace:*",
     "@vueuse/core": "^10.11.1",
     "@vueuse/motion": "^2.2.6",
     "core-js": "^3.37.1",

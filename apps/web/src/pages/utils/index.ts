@@ -18,7 +18,7 @@ export function groupByDate(data: IImageObject[]): GroupedObject[] {
   const grouped: { [key: string]: IImageObject[] } = {};
   // Group objects by humanReadableDate in descending order
   data
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
     .forEach((item) => {
       const date =
         item.humanReadableDate ||

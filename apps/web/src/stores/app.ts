@@ -103,7 +103,9 @@ export const useAppStore = defineStore('app', () => {
         images.value = data.image.images;
         imageData.value = data.image;
         history.value.push(data.image);
-        userStore.setCredits(data.userCreditsRemaining);
+        if (data.userCreditsRemaining !== null && data.userCreditsRemaining !== undefined) {
+          userStore.setCredits(data.userCreditsRemaining);
+        }
       }
     }
 
@@ -113,7 +115,7 @@ export const useAppStore = defineStore('app', () => {
       if (data.image) {
         // The completed payload is the persisted DB record (Cloudinary ids for
         // every image) — replace the optimistic entry wholesale.
-        const historyIndex = history.value.findIndex((img) => img._id === data.image._id);
+        const historyIndex = history.value.findIndex((img) => img._id === data.image?._id);
         if (historyIndex !== -1) {
           history.value[historyIndex] = data.image;
         } else {

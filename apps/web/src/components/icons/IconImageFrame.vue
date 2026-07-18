@@ -17,7 +17,7 @@
       <path
         id="secondary"
         d="M4,4H20a1,1,0,0,1,1,1V15.73L15.29,10,10.51,14.8,7.71,12,3,16.71V5A1,1,0,0,1,4,4Z"
-        style="fill: #ba68c8; stroke-width: 2"
+        style="fill: #c98a5a; stroke-width: 2"
       />
 
       <line
