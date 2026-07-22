@@ -1,7 +1,6 @@
 # Tasks: Backend Modernization Epic (visual-ai)
 
 > Source: `agent_docs/SPEC_backend_modernization.md` · Plan: `agent_docs/PLAN_backend_modernization.md`
-> Legend: ⬜ todo · 🔄 in progress · ✅ done (only after phase-verifier PASS) · ⏭️ dropped
 > Every task's Verify step must pass before ✅. Never run/restart the dev server.
 
 ---
@@ -295,7 +294,7 @@
 
 ## Phase 4 — Hono decision gate (T4)
 
-### ⬜ Task 4.1: Hono evaluation spike → `agent_docs/DECISION_hono.md`
+### ✅ Task 4.1: Hono evaluation spike → `agent_docs/DECISION_hono.md`
 
 **Description:** Read-only spike (throwaway branch/scratch code allowed, nothing merged). Evaluate the five gates from the spec: (1) Clerk auth parity via `@hono/clerk-auth`; (2) Svix + Razorpay raw-body signature verification parity; (3) Multer replacement (`c.req.parseBody()` + Cloudinary streaming) matching field names/size limits/mime filtering; (4) cookie-parser/CORS/node-cron/health-check/SIGTERM equivalents; (5) `Bun.serve` benefit (nice-to-have). Write `DECISION_hono.md` with per-gate evidence and a definitive migrate/stay recommendation.
 
@@ -314,7 +313,7 @@
 
 ---
 
-### ⬜ Task 4.2: 🔒 GATED — Execute Hono migration (only on "migrate" + user sign-off)
+### ⏭️ Task 4.2: 🔒 GATED — Execute Hono migration (only on "migrate" + user sign-off) — DROPPED (4.1 recommends stay)
 
 **Description:** Only if 4.1 recommends migrate AND the user signs off. Port middleware chain, routes (thin services make this mechanical), webhooks (raw-body!), upload handling, cron/health/SIGTERM to Hono; re-run the full Checkpoint 3 manual matrix. If 4.1 says stay → mark ⏭️ dropped.
 
@@ -340,18 +339,18 @@
 
 ## Phase 5 — Model registry (T5)
 
-### ⬜ Task 5.1: Registry types + seeded `MODEL_REGISTRY` in shared
+### ✅ Task 5.1: Registry types + seeded `MODEL_REGISTRY` in shared
 
 **Description:** Create `packages/shared/src/models/types.ts` (`ModelDefinition`, `FieldSpec`, `Tier` — per the spec's style example) and `registry.ts` seeded with the current catalog (FLUX_QUICK/BASIC/PRO/1.1_PRO/REALISM + utility models) from `MODELS_COMPARISON.md` §2–§4: field specs, `inputKey` variants, `tier`, `pricePerImage`. Registry shape must express the candidate models' differences (resolution/dimensions/imageInput field specs exist even if unused by current catalog).
 
 **Acceptance criteria:**
 
-- [ ] Every current model has a registry entry matching MODELS_COMPARISON semantics
-- [ ] `isPro`-equivalent derivable from `tier === "premium"` matches today's hardcoded flags
+- [x] Every current model has a registry entry matching MODELS_COMPARISON semantics
+- [x] `isPro`-equivalent derivable from `tier === "premium"` matches today's hardcoded flags
 
 **Verification:**
 
-- [ ] Unit tests: registry entries typecheck against `ModelDefinition`; tier→isPro mapping equals current `MODELS` flags
+- [x] Unit tests: registry entries typecheck against `ModelDefinition`; tier→isPro mapping equals current `MODELS` flags
 
 **Dependencies:** Checkpoint 1 (Phase 4 outcome determines API framework, but registry is framework-neutral)
 **Files likely touched:** `packages/shared/src/models/{types,registry}.ts`, `packages/shared/src/index.ts`, test file
@@ -359,7 +358,7 @@
 
 ---
 
-### ⬜ Task 5.2: Backend — `buildModelInput` + registry-driven validation
+### Task 5.2: Backend — `buildModelInput` + registry-driven validation
 
 **Description:** `buildModelInput(modelKey, userParams)` in `lib/replicate.ts` builds the Replicate input purely from the registry's `fields` (drops unsupported params, maps `inputKey` variants like `num_outputs`/`max_images`). Request validation rejects params the selected model doesn't support. Delete the `FLUX_PRO`/`FLUX_1_1_PRO` special-case left in 3.4 — **no per-model conditionals outside the registry**.
 
@@ -379,7 +378,7 @@
 
 ---
 
-### ⬜ Task 5.3: Frontend — stores consume registry; delete duplicate constants
+### ✅ Task 5.3: Frontend — stores consume registry; delete duplicate constants
 
 **Description:** `stores/aside.ts` and `stores/generate.ts` read model metadata from `@visual-ai/shared` registry. Delete web's duplicate `utils/modelIds.ts` and the `MODEL_IDS`/`FLUX_MODES`/`MODELS` duplicates in `utils/models.ts`/`constants.ts` (keep pure-UI presentation data local if any). `isPro` gating derives from `tier === "premium"`.
 
@@ -399,7 +398,7 @@
 
 ---
 
-### ⬜ Task 5.4: Sidebar field visibility driven by registry
+### ✅ Task 5.4: Sidebar field visibility driven by registry
 
 **Description:** `ImageGenerateAside.vue` controls (AspectRatio, ImageFormat, OutputQuality, ImageVariation) render only if the selected model's registry entry declares the field; option lists come from registry `values`. Extract controls into child components if markup exceeds ~20 lines (code-style rule). Controls for future-model fields (resolution, imageInput, dimensions) are visibility-wired but naturally hidden for the current catalog. ⚠️ Resolves Open Question 3: confirm with user that the OutputQuality slider disappearing for models that ignore it is acceptable — ask before shipping.
 
@@ -419,7 +418,7 @@
 
 ---
 
-### ⬜ Task 5.5: Epic-end verification sweep
+### Task 5.5: Epic-end verification sweep
 
 **Description:** Run the full success-criteria audit from the spec §Success Criteria (1–7): greps for duplicated constants and console.\*, error-code behavior, DECISION doc existence, registry-driven behavior on both sides, and the full manual flow matrix (generate, upscale, colorize, revive, credits, payments, history, webhooks) via agent-browser.
 
@@ -446,25 +445,25 @@
 
 ## Task Summary
 
-| #   | Task                                     | Size | Depends on     | Status |
-| --- | ---------------------------------------- | ---- | -------------- | ------ |
-| 1.1 | Scaffold packages/shared, prove pipeline | S    | —              | ⬜     |
-| 1.2 | Move shared types/DTOs                   | M    | 1.1            | ⬜     |
-| 1.3 | Zod request schemas                      | M    | 1.2            | ⬜     |
-| 2.1 | Pino factory + request-id                | S    | —              | ⬜     |
-| 2.2 | Console sweep: config/utils/services     | M    | 2.1            | ⬜     |
-| 2.3 | Console sweep: routes/helpers/webhook    | M    | 2.2            | ⬜     |
-| 2.4 | Error-handler status-code fix            | S    | 2.1            | ⬜     |
-| 3.1 | Zod-validated env config                 | M    | CP2            | ✅     |
-| 3.2 | getUserOrThrow + asyncHandler pilot      | M    | 2.4            | ✅     |
-| 3.3 | Dissolve userRouteHelpers                | M    | 3.2            | ✅     |
-| 3.4 | runGenerationJob dedupe                  | L    | 3.2            | ✅     |
-| 3.5 | Thin remaining routes                    | L    | 3.3, 3.4       | ✅     |
-| 3.6 | 🔒 TS bump + dead deps (ask-first)       | S    | 3.5            | ✅     |
-| 4.1 | Hono evaluation → DECISION doc           | M    | CP3            | ⬜     |
-| 4.2 | 🔒 Hono migration (gated)                | L    | 4.1 + sign-off | ⬜     |
-| 5.1 | Registry types + seed                    | M    | CP1            | ⬜     |
-| 5.2 | buildModelInput (backend)                | M    | 5.1            | ⬜     |
-| 5.3 | Stores consume registry (frontend)       | M    | 5.1            | ⬜     |
-| 5.4 | Sidebar visibility (frontend)            | M    | 5.3            | ⬜     |
-| 5.5 | Epic-end verification sweep              | S    | 5.2, 5.4       | ⬜     |
+| #   | Task                                     | Size | Depends on     | Status     |
+| --- | ---------------------------------------- | ---- | -------------- | ---------- |
+| 1.1 | Scaffold packages/shared, prove pipeline | S    | —              |            |
+| 1.2 | Move shared types/DTOs                   | M    | 1.1            |            |
+| 1.3 | Zod request schemas                      | M    | 1.2            |            |
+| 2.1 | Pino factory + request-id                | S    | —              |            |
+| 2.2 | Console sweep: config/utils/services     | M    | 2.1            |            |
+| 2.3 | Console sweep: routes/helpers/webhook    | M    | 2.2            |            |
+| 2.4 | Error-handler status-code fix            | S    | 2.1            |            |
+| 3.1 | Zod-validated env config                 | M    | CP2            | ✅         |
+| 3.2 | getUserOrThrow + asyncHandler pilot      | M    | 2.4            | ✅         |
+| 3.3 | Dissolve userRouteHelpers                | M    | 3.2            | ✅         |
+| 3.4 | runGenerationJob dedupe                  | L    | 3.2            | ✅         |
+| 3.5 | Thin remaining routes                    | L    | 3.3, 3.4       | ✅         |
+| 3.6 | 🔒 TS bump + dead deps (ask-first)       | S    | 3.5            | ✅         |
+| 4.1 | Hono evaluation → DECISION doc           | M    | CP3            | ✅         |
+| 4.2 | 🔒 Hono migration (gated)                | L    | 4.1 + sign-off | ⏭️         |
+| 5.1 | Registry types + seed                    | M    | CP1            | ✅         |
+| 5.2 | buildModelInput (backend)                | M    | 5.1            | ⚠️ partial |
+| 5.3 | Stores consume registry (frontend)       | M    | 5.1            | ✅         |
+| 5.4 | Sidebar visibility (frontend)            | M    | 5.3            | ✅         |
+| 5.5 | Epic-end verification sweep              | S    | 5.2, 5.4       | ❌         |
