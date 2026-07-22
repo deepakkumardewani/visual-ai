@@ -1,4 +1,4 @@
-import { FLUX_MODES } from '@/utils/constants';
+import { FLUX_MODES } from '@/utils/models';
 import galleryData from '@/utils/gallery.json';
 
 const BASE_URL = import.meta.env.VITE_CLOUDINARY_BASE_URL;

@@ -8,7 +8,7 @@ import { useUserStore } from '@/stores/user';
 import { useLocal } from '@/composables/local';
 import { useFetch } from '@/composables/useFetch';
 
-import { MODEL_IDS } from '@/utils/constants';
+import { MODEL_REGISTRY } from '@visual-ai/shared';
 import { createLogger } from '@/utils/logger';
 
 import { useAppStore } from './app';
@@ -52,7 +52,8 @@ export const useGenerateStore = defineStore('generate', () => {
       body: JSON.stringify({
         jobId: imgData?.jobId,
         userId: userId.value,
-        modelId: imgData?.modelId ?? MODEL_IDS.FLUX_BASIC,
+        // Default model is sourced from MODEL_REGISTRY to keep metadata in sync with the registry
+        modelId: imgData?.modelId ?? MODEL_REGISTRY.FLUX_BASIC.replicateId,
         imageType: imgData?.imageType ?? 'horizontal',
         modelName: imgData?.modelName ?? 'Flux Lightning',
         prompt: imgData?.prompt ?? '',

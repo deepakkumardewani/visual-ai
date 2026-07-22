@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { MODEL_IDS } from '@/utils/modelIds';
+import { MODEL_IDS } from '@visual-ai/shared';
 import {
   FLUX_MODES,
   formatPrice,

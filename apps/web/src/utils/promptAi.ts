@@ -7,7 +7,7 @@
 
 import PROMPTS from '@/utils/prompts.json';
 import REALISTIC_PROMPTS from '@/utils/realisticPrompts.json';
-import { MODEL_IDS } from '@/utils/modelIds';
+import { MODEL_IDS } from '@visual-ai/shared';
 
 const MOCK_DELAY_MS = 1200;
 

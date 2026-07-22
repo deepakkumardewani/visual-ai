@@ -16,7 +16,7 @@ vi.mock('vue-router', () => ({
 import ModelPicker from '@/components/Dashboard/ModelPicker/ModelPicker.vue';
 import { useAsideStore } from '@/stores/aside';
 import { useUserStore } from '@/stores/user';
-import { MODEL_IDS } from '@/utils/modelIds';
+import { MODEL_IDS } from '@visual-ai/shared';
 import { FLUX_MODES, MODELS } from '@/utils/models';
 
 describe('ModelPicker', () => {

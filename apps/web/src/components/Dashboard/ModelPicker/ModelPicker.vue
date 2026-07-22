@@ -18,7 +18,7 @@ const { chip = false } = defineProps<{
   chip?: boolean;
 }>();
 
-import { MODEL_IDS } from '@/utils/modelIds';
+import { MODEL_IDS } from '@visual-ai/shared';
 import { FLUX_MODES, MODELS } from '@/utils/models';
 
 const router = useRouter();

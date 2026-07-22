@@ -13,8 +13,7 @@ import { type FeatureSelect, FeatureType, type Plan, type RazorpayProduct } from
 import generalFAQ from './generalFAQ.json';
 import pricingFAQ from './pricingFAQ.json';
 
-export { MODEL_IDS } from './modelIds';
-export { FLUX_MODES, MODELS } from './models';
+export { MODEL_IDS } from '@visual-ai/shared';
 
 // Pricing FAQs
 export const PRICING_FAQS = pricingFAQ;

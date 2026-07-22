@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { MODEL_REGISTRY } from '@visual-ai/shared';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
@@ -8,7 +9,7 @@ import { useUserStore } from '@/stores/user';
 
 import ModelPicker from '@/components/Dashboard/ModelPicker/ModelPicker.vue';
 
-import { ASPECT_RATIOS, IMAGE_FORMATS, MODEL_IDS } from '@/utils/constants';
+import { ASPECT_RATIOS, IMAGE_FORMATS } from '@/utils/constants';
 
 const router = useRouter();
 const asideStore = useAsideStore();
@@ -19,6 +20,31 @@ const { aspectRatio, imageFormat, outputQuality, noOfOutputs, mode } = storeToRe
 
 const countOptions = [1, 2, 3, 4] as const;
 
+/** Registry fields for the currently selected model — null for non-registry models. */
+const selectedModelFields = computed(() => {
+  const entry = MODEL_REGISTRY[mode.value.id as keyof typeof MODEL_REGISTRY];
+  return entry?.fields ?? null;
+});
+
+// Section visibility — each control only renders if the model's registry entry declares the field
+const showAspectRatio = computed(() => Boolean(selectedModelFields.value?.aspectRatio));
+const showOutputQuality = computed(() => Boolean(selectedModelFields.value?.outputQuality));
+const showNumOutputs = computed(() => Boolean(selectedModelFields.value?.numOutputs));
+const showOutputFormat = computed(() => Boolean(selectedModelFields.value?.outputFormat));
+
+// Option lists sourced from registry values, filtered against UI constants (which carry isPro flags)
+const aspectRatioOptions = computed(() => {
+  const registryValues = selectedModelFields.value?.aspectRatio?.values;
+  if (!registryValues) return ASPECT_RATIOS.slice(0, 4);
+  return ASPECT_RATIOS.filter((r) => registryValues.includes(r.title)).slice(0, 4);
+});
+
+const outputFormatOptions = computed(() => {
+  const registryValues = selectedModelFields.value?.outputFormat?.values;
+  if (!registryValues) return IMAGE_FORMATS;
+  return IMAGE_FORMATS.filter((f) => registryValues.includes(f.title.toLowerCase()));
+});
+
 const ASPECT_ICON_MAX_PX = 11;
 
 function aspectIconSize(title: string) {
@@ -26,10 +52,6 @@ function aspectIconSize(title: string) {
   const scale = ASPECT_ICON_MAX_PX / Math.max(w, h);
   return { width: Math.round(w * scale), height: Math.round(h * scale) };
 }
-
-const disableCount = computed(
-  () => mode.value.id === MODEL_IDS.FLUX_PRO || mode.value.id === MODEL_IDS.FLUX_1_1_PRO,
-);
 
 const SEGMENT_BASE =
   'tw-relative tw-flex tw-h-8 tw-items-center tw-justify-center tw-gap-1 tw-rounded-sm tw-text-body-sm tw-font-medium tw-transition-colors tw-duration-fast focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40';
@@ -66,10 +88,6 @@ function selectFormat(format: (typeof IMAGE_FORMATS)[number]) {
 }
 
 function selectCount(count: number) {
-  if (disableCount.value) {
-    noOfOutputs.value = 1;
-    return;
-  }
   if (count === 4 && !isPro.value) {
     router.push('/pricing');
     return;
@@ -91,6 +109,11 @@ watch(outputQuality, (newVal) => {
     outputQuality.value = 0;
     router.push('/pricing');
   }
+});
+
+// Reset count to 1 when switching to a model that doesn't support multiple outputs
+watch(showNumOutputs, (supported) => {
+  if (!supported) noOfOutputs.value = 1;
 });
 
 onMounted(() => {
@@ -116,7 +139,7 @@ onMounted(() => {
       <ModelPicker chip />
     </section>
 
-    <section class="tw-flex tw-flex-col tw-gap-2.5">
+    <section v-if="showAspectRatio" class="tw-flex tw-flex-col tw-gap-2.5">
       <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-faint">
         <font-awesome-icon icon="expand" class="tw-h-2.5 tw-w-2.5" />
         <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest"> Size </span>
@@ -127,7 +150,7 @@ onMounted(() => {
         aria-label="Aspect ratio"
       >
         <button
-          v-for="ratio in ASPECT_RATIOS.slice(0, 4)"
+          v-for="ratio in aspectRatioOptions"
           :key="ratio.title"
           type="button"
           :data-testid="`aspect-${ratio.title}`"
@@ -154,7 +177,7 @@ onMounted(() => {
       </div>
     </section>
 
-    <section class="tw-flex tw-flex-col tw-gap-2.5">
+    <section v-if="showOutputQuality" class="tw-flex tw-flex-col tw-gap-2.5">
       <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-faint">
         <font-awesome-icon icon="bolt" class="tw-h-2.5 tw-w-2.5" />
         <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest">
@@ -188,7 +211,7 @@ onMounted(() => {
       </div>
     </section>
 
-    <section class="tw-flex tw-flex-col tw-gap-2.5">
+    <section v-if="showNumOutputs" class="tw-flex tw-flex-col tw-gap-2.5">
       <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-faint">
         <font-awesome-icon icon="images" class="tw-h-2.5 tw-w-2.5" />
         <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest">
@@ -205,7 +228,6 @@ onMounted(() => {
           :key="count"
           type="button"
           :aria-pressed="noOfOutputs === count"
-          :disabled="disableCount && count > 1"
           :class="segmentClass(noOfOutputs === count)"
           @click="selectCount(count)"
         >
@@ -220,7 +242,7 @@ onMounted(() => {
       </div>
     </section>
 
-    <section class="tw-flex tw-flex-col tw-gap-2.5">
+    <section v-if="showOutputFormat" class="tw-flex tw-flex-col tw-gap-2.5">
       <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-faint">
         <font-awesome-icon icon="file" class="tw-h-2.5 tw-w-2.5" />
         <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest">
@@ -233,7 +255,7 @@ onMounted(() => {
         aria-label="Output format"
       >
         <button
-          v-for="format in IMAGE_FORMATS"
+          v-for="format in outputFormatOptions"
           :key="format.title"
           type="button"
           :aria-pressed="imageFormat.title === format.title"

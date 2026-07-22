@@ -1,72 +1,69 @@
 import type { Model } from '@/types/model';
 
-import { MODEL_IDS } from '@/utils/modelIds';
+import { MODEL_IDS, MODEL_REGISTRY, isPro as isProFromRegistry } from '@visual-ai/shared';
+
+/**
+ * Derive Model fields from the shared registry entry when available.
+ * For registry-backed models, tier/pricePerImage/isPro come from the single source of truth.
+ */
+function fromRegistry(
+  key: keyof typeof MODEL_REGISTRY,
+  overrides: Omit<Model, 'id' | 'tier' | 'pricePerImage' | 'isPro'>,
+): Model {
+  const entry = MODEL_REGISTRY[key];
+  return {
+    ...overrides,
+    id: MODEL_IDS[key],
+    tier: entry.tier,
+    pricePerImage: entry.pricePerImage,
+    isPro: isProFromRegistry(entry),
+  };
+}
 
 /** Full model catalog sourced from MODELS_COMPARISON.md */
 export const MODELS: Model[] = [
-  // — Legacy FLUX models (backend-ready via MODEL_IDS) —
-  {
+  // — Legacy FLUX models — tier/pricePerImage/isPro derived from MODEL_REGISTRY —
+  // Note: Flux Lightning uses FLUX_BASIC registry entry (legacy mapping for backward compat)
+  fromRegistry('FLUX_BASIC', {
     title: 'Flux Lightning',
-    id: MODEL_IDS.FLUX_BASIC,
     provider: 'bfl',
     description: 'Prefers speed over quality. Good prompt adherence.',
     bestAt: 'Fastest generation',
-    tier: 'budget',
-    pricePerImage: 0.005,
-    isPro: false,
     iconUrl: 'bfl.png',
     companyName: 'Black Forest Labs',
-  },
-  {
+  }),
+  fromRegistry('FLUX_QUICK', {
     title: 'Flux Fast',
-    id: MODEL_IDS.FLUX_BASIC,
     provider: 'bfl',
     description: 'Combines speed with high quality. Great prompt adherence.',
     bestAt: 'Balanced speed & quality',
-    tier: 'standard',
-    pricePerImage: 0.014,
-    isPro: false,
     iconUrl: 'bfl.png',
     companyName: 'Black Forest Labs',
-  },
-  {
+  }),
+  fromRegistry('FLUX_PRO', {
     title: 'Flux Pro',
-    id: MODEL_IDS.FLUX_PRO,
     provider: 'bfl',
     description: 'State-of-the-art image generation. Top of the line prompt following.',
     bestAt: 'Prompt adherence',
-    tier: 'premium',
-    pricePerImage: 0.04,
-    isPro: true,
-    featured: true,
     iconUrl: 'bfl.png',
     companyName: 'Black Forest Labs',
-  },
-  {
+  }),
+  fromRegistry('FLUX_1_1_PRO', {
     title: 'Flux 1.1 Pro',
-    id: MODEL_IDS.FLUX_1_1_PRO,
     provider: 'bfl',
     description: 'Faster, better FLUX Pro. Excellent image quality & prompt adherence.',
     bestAt: 'Quality + speed',
-    tier: 'premium',
-    pricePerImage: 0.04,
-    isPro: true,
-    featured: true,
     iconUrl: 'bfl.png',
     companyName: 'Black Forest Labs',
-  },
-  {
+  }),
+  fromRegistry('FLUX_REALISM', {
     title: 'Flux Realism',
-    id: MODEL_IDS.FLUX_REALISM,
     provider: 'bfl',
     description: 'Best at ultra realistic photos. Prioritizes details and textures.',
     bestAt: 'Ultra-realistic photos',
-    tier: 'premium',
-    pricePerImage: 0.03,
-    isPro: true,
     iconUrl: 'bfl.png',
     companyName: 'Black Forest Labs',
-  },
+  }),
 
   // — Pruna —
   {
@@ -104,6 +101,7 @@ export const MODELS: Model[] = [
     tier: 'budget',
     pricePerImage: 0.02,
     isPro: false,
+    featured: true,
     iconUrl: 'xai.jpg',
     companyName: 'Z-Image',
   },
@@ -144,6 +142,7 @@ export const MODELS: Model[] = [
     tier: 'standard',
     pricePerImage: 0.03,
     isPro: false,
+    featured: true,
     iconUrl: 'bytedance.png',
     companyName: 'ByteDance',
   },
@@ -221,6 +220,7 @@ export const MODELS: Model[] = [
     tier: 'standard',
     pricePerImage: 0.067,
     isPro: false,
+    featured: true,
     iconUrl: 'google.png',
     companyName: 'Google',
   },

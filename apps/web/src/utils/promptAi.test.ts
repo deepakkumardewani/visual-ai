@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import PROMPTS from '@/utils/prompts.json';
 import REALISTIC_PROMPTS from '@/utils/realisticPrompts.json';
-import { MODEL_IDS } from '@/utils/modelIds';
+import { MODEL_IDS } from '@visual-ai/shared';
 import { describeImage, improvePrompt, pickRandomPrompt } from '@/utils/promptAi';
 
 describe('promptAi', () => {
