@@ -1,12 +1,13 @@
 import type { Prediction } from "replicate"
 
+import type { ModelKey } from "@visual-ai/shared"
+
 import { createLogger } from "../lib/logger.js"
-import { replicate } from "../lib/replicate.js"
+import { buildModelInput, getModelReplicateId, replicate } from "../lib/replicate.js"
 import { ImageModel as Image } from "../models/image.js"
 import { UserModel as User } from "../models/user.js"
 import { RedisService } from "../services/redis-service.js"
 import {
-    type AIImageInput,
     type Body,
     type ColorizeInput,
     FeatureType,
@@ -18,7 +19,6 @@ import {
 } from "../types/index.js"
 import { getImageDetails, uploadToCloudinary } from "../utils/cloudinary.js"
 import { calculateCreditCost } from "../utils/credit-calculator.js"
-import { MODEL_IDS } from "../utils/constants.js"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -236,18 +236,16 @@ export async function processImage(body: Body): Promise<void> {
         outputFormat,
     } = body
 
-    const model = MODEL_IDS[modelId as keyof typeof MODEL_IDS] as ModelType
-    const input: AIImageInput = {
-        prompt: prompt ?? "",
-        output_quality: outputQuality ?? 0,
-        aspect_ratio: aspectRatio ?? "",
-        output_format: outputFormat ?? "",
-    }
-
-    // FLUX_PRO and FLUX_1_1_PRO do not support num_outputs (T5 constraint)
-    if (model !== MODEL_IDS.FLUX_1_1_PRO && model !== MODEL_IDS.FLUX_PRO) {
-        input.num_outputs = numOfOutputs
-    }
+    // Registry drives both the replicate model ID and supported input fields.
+    // No per-model conditionals needed — unsupported params are simply not added.
+    const model = getModelReplicateId(modelId as ModelKey) as ModelType
+    const input = buildModelInput(modelId as ModelKey, {
+        prompt,
+        aspectRatio,
+        outputFormat,
+        outputQuality,
+        numOfOutputs,
+    })
 
     return runGenerationJob({
         model,
@@ -299,7 +297,7 @@ export async function processUpscale(props: Props): Promise<void> {
     }
 
     return runGenerationJob({
-        model: MODEL_IDS.UPSCALE_IMAGE as ModelType,
+        model: getModelReplicateId("UPSCALE_IMAGE") as ModelType,
         input,
         jobId,
         userId: userId ?? "",
@@ -330,7 +328,7 @@ export async function processRevive(props: Props): Promise<void> {
     const input: ReviveInput = { img: filePath }
 
     return runGenerationJob({
-        model: MODEL_IDS.REVIVE as ModelType,
+        model: getModelReplicateId("REVIVE") as ModelType,
         input,
         jobId,
         userId: userId ?? "",
@@ -357,7 +355,7 @@ export async function processColorize(props: Props): Promise<void> {
     const user = await User.findOne({ userId })
     const creditCost = calculateCreditCost(FeatureType.COLORIZE, user?.isPro ?? false)
 
-    const model = MODEL_IDS[modelId as keyof typeof MODEL_IDS] as ModelType
+    const model = getModelReplicateId(modelId as ModelKey) as ModelType
     const input: ColorizeInput = { image: filePath }
 
     return runGenerationJob({
