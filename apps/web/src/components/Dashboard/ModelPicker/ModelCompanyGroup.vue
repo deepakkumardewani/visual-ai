@@ -17,19 +17,43 @@ defineEmits<{
   selectModel: [model: Model];
 }>();
 
+const SUBMENU_MAX_HEIGHT_PX = 320;
+const SUBMENU_VIEWPORT_PAD_PX = 8;
+const SUBMENU_ROW_ESTIMATE_PX = 44;
+const SUBMENU_HEADER_ESTIMATE_PX = 36;
+
 const isHovered = ref(false);
 const rowRef = ref<HTMLElement | null>(null);
-const submenuStyle = ref({ top: '0px', left: '0px' });
+const submenuStyle = ref({ top: '0px', left: '0px', maxHeight: `${SUBMENU_MAX_HEIGHT_PX}px` });
 
 const companyLogoUrl = computed(() => getModelLogoUrl(props.models[0]?.iconUrl));
 const companyIconProvider = computed(() => props.models[0]?.provider);
+
+function estimateSubmenuHeight() {
+  return Math.min(
+    SUBMENU_MAX_HEIGHT_PX,
+    SUBMENU_HEADER_ESTIMATE_PX + props.models.length * SUBMENU_ROW_ESTIMATE_PX,
+  );
+}
 
 async function openSubmenu() {
   isHovered.value = true;
   await nextTick();
   const rect = rowRef.value?.getBoundingClientRect();
   if (!rect) return;
-  submenuStyle.value = { top: `${rect.top}px`, left: `${rect.right}px` };
+
+  const height = estimateSubmenuHeight();
+  let top = rect.top;
+  const overflowBottom = top + height - (window.innerHeight - SUBMENU_VIEWPORT_PAD_PX);
+  if (overflowBottom > 0) {
+    top = Math.max(SUBMENU_VIEWPORT_PAD_PX, top - overflowBottom);
+  }
+
+  submenuStyle.value = {
+    top: `${top}px`,
+    left: `${rect.right}px`,
+    maxHeight: `${SUBMENU_MAX_HEIGHT_PX}px`,
+  };
 }
 
 function closeSubmenu() {

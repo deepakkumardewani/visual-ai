@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { Model } from '@/types/model';
 
-import { useDashboardMotion } from '@/composables/useDashboardMotion';
-
+import ChevronCaret from '@/components/primitives/ChevronCaret.vue';
 import ProviderIcon from '@/components/primitives/ProviderIcon.vue';
 import TierBadge from '@/components/primitives/TierBadge.vue';
 
@@ -10,8 +9,6 @@ defineProps<{
   model: Model;
   open?: boolean;
 }>();
-
-const { chevronTransition } = useDashboardMotion();
 </script>
 
 <template>
@@ -26,12 +23,6 @@ const { chevronTransition } = useDashboardMotion();
       </span>
     </span>
     <TierBadge v-if="model.tier === 'premium'" :tier="model.tier" />
-    <span
-      class="tw-shrink-0 tw-text-ink-muted"
-      :class="[chevronTransition, open ? 'tw-rotate-180' : '']"
-      aria-hidden="true"
-    >
-      <font-awesome-icon icon="chevron-down" class="tw-h-2.5 tw-w-2.5" />
-    </span>
+    <ChevronCaret :open="open" :boxed="false" />
   </span>
 </template>
