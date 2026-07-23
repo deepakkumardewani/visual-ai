@@ -26,7 +26,7 @@ const { isLoaded: isAuthLoaded } = useAuth();
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
 const route = useRoute();
-const { isPro } = storeToRefs(userStore);
+const { isPro, isReady: isUserReady } = storeToRefs(userStore);
 const appStore = useAppStore();
 const { tab } = storeToRefs(appStore);
 
@@ -37,6 +37,19 @@ const isThemeButtonVisible = computed(() => {
 });
 
 const showDesktopNavTabs = computed(() => smAndUp.value && isDashboard.value);
+
+/** Dashboard is auth-gated — show tabs once Clerk is loaded (don't wait for SignedIn). */
+const showNavTabs = computed(() => Boolean(isAuthLoaded.value) && isDashboard.value);
+
+/**
+ * Right chrome needs credits/profile data. Keep a layout-matched skeleton until
+ * Clerk is loaded and (on dashboard) user details have synced.
+ */
+const showEndSkeleton = computed(() => {
+  if (!isAuthLoaded.value) return true;
+  if (isDashboard.value && !isUserReady.value) return true;
+  return false;
+});
 
 function hasProDialogBeenShown() {
   return localStorage.getItem('proUpgradeShown') === 'true';
@@ -83,24 +96,31 @@ watch(isPro, (newValue) => {
           class="header-v2__center tw-hidden tw-flex-1 tw-justify-center md:tw-flex"
         >
           <div
-            v-if="!isAuthLoaded"
+            v-if="!showNavTabs"
             aria-hidden="true"
             class="tw-h-11 tw-w-full tw-max-w-md tw-animate-pulse tw-rounded-full tw-bg-surface-2"
           />
-          <SignedIn v-else>
-            <NavTabs />
-          </SignedIn>
+          <NavTabs v-else />
         </div>
 
         <div
           class="header-v2__end tw-ml-auto tw-flex tw-shrink-0 tw-items-center tw-gap-2 lg:tw-basis-1/4 lg:tw-justify-end lg:tw-gap-3"
         >
           <div
-            v-if="!isAuthLoaded"
+            v-if="showEndSkeleton"
             aria-hidden="true"
+            data-testid="header-end-skeleton"
             class="tw-flex tw-items-center tw-gap-2 lg:tw-gap-3"
           >
-            <div class="tw-h-11 tw-w-11 tw-animate-pulse tw-rounded-full tw-bg-surface-2" />
+            <div
+              v-if="isDashboard"
+              class="tw-h-9 tw-w-[4.5rem] tw-animate-pulse tw-rounded-chip tw-bg-surface-2"
+            />
+            <div
+              v-if="isDashboard"
+              class="tw-h-9 tw-w-[4.75rem] tw-animate-pulse tw-rounded-chip tw-bg-surface-2"
+            />
+            <div class="tw-h-9 tw-w-9 tw-animate-pulse tw-rounded-full tw-bg-surface-2" />
           </div>
           <div v-else id="export-area" class="tw-flex tw-items-center tw-gap-2 lg:tw-gap-3">
             <SignedOut>

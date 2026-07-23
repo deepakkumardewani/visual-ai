@@ -15,6 +15,8 @@ export const useUserStore = defineStore('user', () => {
   const userId = ref('');
   const credits = ref(0);
   const isPro = ref(false);
+  /** True after the first getUserDetails attempt finishes (success or failure). */
+  const isReady = ref(false);
   const hasJustSubscribed = ref(false);
   const isUpdatingName = ref(false);
   const isUpdatingUsername = ref(false);
@@ -58,6 +60,8 @@ export const useUserStore = defineStore('user', () => {
       credits.value = userData.credits;
     } catch (error) {
       log.error('getUserDetails failed', { error, userId: userId.value });
+    } finally {
+      isReady.value = true;
     }
   }
 
@@ -109,6 +113,7 @@ export const useUserStore = defineStore('user', () => {
     userDetails,
     history,
     isPro,
+    isReady,
     payments,
     hasJustSubscribed,
     isUpdatingName,

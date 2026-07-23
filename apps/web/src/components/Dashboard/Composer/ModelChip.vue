@@ -5,6 +5,7 @@ import { computed } from 'vue';
 import { useDashboardMotion } from '@/composables/useDashboardMotion';
 import { getModelLogoUrl } from '@/utils/models';
 
+import ChevronCaret from '@/components/primitives/ChevronCaret.vue';
 import ProviderIcon from '@/components/primitives/ProviderIcon.vue';
 
 const props = defineProps<{
@@ -12,7 +13,7 @@ const props = defineProps<{
   open?: boolean;
 }>();
 
-const { chevronTransition, interactiveTransition } = useDashboardMotion();
+const { interactiveTransition } = useDashboardMotion();
 
 const logoUrl = computed(() => getModelLogoUrl(props.model.iconUrl));
 </script>
@@ -39,12 +40,6 @@ const logoUrl = computed(() => getModelLogoUrl(props.model.iconUrl));
     <span class="tw-min-w-0 tw-flex-1 tw-truncate tw-text-body-sm tw-font-medium tw-text-ink">
       {{ model.title }}
     </span>
-    <span
-      class="tw-flex tw-h-6 tw-w-6 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-sm tw-bg-surface-3/70 tw-text-ink-muted"
-      :class="[chevronTransition, open ? 'tw-rotate-180' : '']"
-      aria-hidden="true"
-    >
-      <font-awesome-icon icon="chevron-down" class="tw-h-2.5 tw-w-2.5" />
-    </span>
+    <ChevronCaret :open="open" />
   </span>
 </template>
