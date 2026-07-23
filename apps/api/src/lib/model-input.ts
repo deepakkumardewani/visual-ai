@@ -13,6 +13,17 @@ export interface UserGenerationParams {
 }
 
 /**
+ * Maps UI format labels (`jpg`) onto the model's OpenAPI enum (`jpeg` for GPT Image 2).
+ */
+function normalizeOutputFormat(format: string, allowed: ReadonlyArray<string>): string {
+    if (!format) return format
+    if (allowed.includes(format)) return format
+    if (format === "jpg" && allowed.includes("jpeg")) return "jpeg"
+    if (format === "jpeg" && allowed.includes("jpg")) return "jpg"
+    return format
+}
+
+/**
  * Validates that the user-supplied params do not include fields unsupported by the selected model.
  * Throws a BadRequestError (400) if an unsupported param is provided with a non-default value.
  */
@@ -25,6 +36,15 @@ export function validateModelParams(modelKey: ModelKey, userParams: UserGenerati
     if (userParams.aspectRatio !== undefined && !fields.aspectRatio) {
         throw new BadRequestError(
             `Model "${modelKey}" does not support aspectRatio. Remove this parameter from the request.`,
+        )
+    }
+    if (
+        userParams.aspectRatio &&
+        fields.aspectRatio &&
+        !fields.aspectRatio.values.includes(userParams.aspectRatio)
+    ) {
+        throw new BadRequestError(
+            `Model "${modelKey}" does not support aspect ratio "${userParams.aspectRatio}". Allowed: ${fields.aspectRatio.values.join(", ")}.`,
         )
     }
     if (userParams.outputQuality !== undefined && !fields.outputQuality) {
@@ -65,7 +85,10 @@ export function buildModelInput(
         input.aspect_ratio = userParams.aspectRatio ?? ""
     }
     if (fields.outputFormat) {
-        input.output_format = userParams.outputFormat ?? ""
+        input.output_format = normalizeOutputFormat(
+            userParams.outputFormat ?? "",
+            fields.outputFormat.values,
+        )
     }
     if (fields.outputQuality) {
         input.output_quality = userParams.outputQuality ?? 0
