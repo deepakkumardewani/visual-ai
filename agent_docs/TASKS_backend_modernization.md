@@ -343,14 +343,18 @@
 
 **Description:** Create `packages/shared/src/models/types.ts` (`ModelDefinition`, `FieldSpec`, `Tier` — per the spec's style example) and `registry.ts` seeded with the current catalog (FLUX_QUICK/BASIC/PRO/1.1_PRO/REALISM + utility models) from `MODELS_COMPARISON.md` §2–§4: field specs, `inputKey` variants, `tier`, `pricePerImage`. Registry shape must express the candidate models' differences (resolution/dimensions/imageInput field specs exist even if unused by current catalog).
 
+> **Follow-up (2026-07-22):** FE had already onboarded candidate models into `MODELS` with Replicate slug ids, but they were missing from `MODEL_REGISTRY` — breaking Task 5.4 sidebar visibility and BE `buildModelInput` lookups. Catalog keys (NANO*BANANA*_, FLUX*2*_, SEEDREAM_4, GPT_IMAGE_2, …) are now seeded with §4 field specs; FE `MODELS` uses `fromRegistry` for every entry so `mode.id` is the registry key.
+
 **Acceptance criteria:**
 
 - [x] Every current model has a registry entry matching MODELS_COMPARISON semantics
 - [x] `isPro`-equivalent derivable from `tier === "premium"` matches today's hardcoded flags
+- [x] Every FE catalog model (MODELS_COMPARISON §2) has a registry entry; FE ids are registry keys
 
 **Verification:**
 
 - [x] Unit tests: registry entries typecheck against `ModelDefinition`; tier→isPro mapping equals current `MODELS` flags
+- [x] Unit tests cover catalog keys (Nano Banana, Seedream, GPT Image, Z-Image field diffs)
 
 **Dependencies:** Checkpoint 1 (Phase 4 outcome determines API framework, but registry is framework-neutral)
 **Files likely touched:** `packages/shared/src/models/{types,registry}.ts`, `packages/shared/src/index.ts`, test file
@@ -404,12 +408,13 @@
 
 **Acceptance criteria:**
 
-- [ ] Each control shows/hides per selected model's registry entry; options sourced from registry
-- [ ] No hardcoded per-model conditionals in sidebar components
+- [x] Each control shows/hides per selected model's registry entry; options sourced from registry
+- [x] No hardcoded per-model conditionals in sidebar components
+- [x] Catalog models (e.g. Nano Banana) resolve fields from registry — no empty sidebar / no default-fields fallback
 
 **Verification:**
 
-- [ ] Component tests (Vue Test Utils/happy-dom): visibility computed per registry entry for at least 3 models
+- [x] Component tests (Vue Test Utils/happy-dom): visibility computed per registry entry for at least 3 models
 - [ ] Manual (agent-browser): switch models; controls appear/disappear correctly; generate still works
 
 **Dependencies:** 5.3
