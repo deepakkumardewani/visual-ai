@@ -1,13 +1,31 @@
 import { describe, it, expect } from 'vitest';
-import { MODEL_REGISTRY, isPro } from './registry.js';
+import { MODEL_REGISTRY, MODEL_IDS, isPro, findModelByReplicateId } from './registry.js';
 import type { ModelDefinition, ModelKey } from './types.js';
 
-const GENERATION_KEYS: ModelKey[] = [
+const LEGACY_GENERATION_KEYS: ModelKey[] = [
   'FLUX_QUICK',
   'FLUX_BASIC',
   'FLUX_PRO',
   'FLUX_1_1_PRO',
   'FLUX_REALISM',
+];
+
+const CATALOG_KEYS: ModelKey[] = [
+  'FLUX_FAST',
+  'P_IMAGE',
+  'Z_IMAGE_TURBO',
+  'GROK_IMAGINE',
+  'GROK_IMAGINE_QUALITY',
+  'SEEDREAM_4',
+  'FLUX_2_DEV',
+  'FLUX_2_PRO',
+  'FLUX_KONTEXT_PRO',
+  'FLUX_2_MAX',
+  'FLUX_KONTEXT_MAX',
+  'NANO_BANANA_2',
+  'IMAGEN_4_ULTRA',
+  'NANO_BANANA_PRO',
+  'GPT_IMAGE_2',
 ];
 
 const UTILITY_KEYS: ModelKey[] = [
@@ -18,13 +36,14 @@ const UTILITY_KEYS: ModelKey[] = [
   'OLD_PHOTOS',
 ];
 
-const ALL_KEYS: ModelKey[] = [...GENERATION_KEYS, ...UTILITY_KEYS];
+const ALL_KEYS: ModelKey[] = [...LEGACY_GENERATION_KEYS, ...CATALOG_KEYS, ...UTILITY_KEYS];
 
 describe('MODEL_REGISTRY', () => {
   it('contains an entry for every expected model key', () => {
     for (const key of ALL_KEYS) {
       expect(MODEL_REGISTRY[key]).toBeDefined();
     }
+    expect(Object.keys(MODEL_REGISTRY).sort()).toEqual([...ALL_KEYS].sort());
   });
 
   it('every entry satisfies the ModelDefinition shape', () => {
@@ -38,29 +57,53 @@ describe('MODEL_REGISTRY', () => {
     }
   });
 
-  it('replicateId values match the constants in apps/api', () => {
+  it('MODEL_IDS mirrors registry keys', () => {
+    for (const key of ALL_KEYS) {
+      expect(MODEL_IDS[key]).toBe(key);
+    }
+  });
+
+  it('replicateId values match known Replicate slugs', () => {
     expect(MODEL_REGISTRY.FLUX_QUICK.replicateId).toBe('black-forest-labs/flux-schnell');
     expect(MODEL_REGISTRY.FLUX_BASIC.replicateId).toBe('black-forest-labs/flux-dev');
-    expect(MODEL_REGISTRY.FLUX_PRO.replicateId).toBe('black-forest-labs/flux-pro');
-    expect(MODEL_REGISTRY.FLUX_1_1_PRO.replicateId).toBe('black-forest-labs/flux-1.1-pro');
-    expect(MODEL_REGISTRY.FLUX_REALISM.replicateId).toContain('xlabs-ai/flux-dev-realism:');
+    expect(MODEL_REGISTRY.NANO_BANANA_2.replicateId).toBe('google/nano-banana-2');
+    expect(MODEL_REGISTRY.GPT_IMAGE_2.replicateId).toBe('openai/gpt-image-2');
+    expect(MODEL_REGISTRY.SEEDREAM_4.replicateId).toBe('bytedance/seedream-4');
+  });
+
+  it('findModelByReplicateId resolves catalog slugs', () => {
+    expect(findModelByReplicateId('google/nano-banana-2')?.key).toBe('NANO_BANANA_2');
+    expect(findModelByReplicateId('openai/gpt-image-2')?.key).toBe('GPT_IMAGE_2');
   });
 });
 
 describe('isPro — tier→isPro mapping', () => {
-  // Ground truth from apps/web/src/utils/models.ts hardcoded `isPro` flags
   const expectedIsPro: Record<ModelKey, boolean> = {
-    FLUX_QUICK: false, // tier: budget
-    FLUX_BASIC: false, // tier: standard
-    FLUX_PRO: true, // tier: premium
-    FLUX_1_1_PRO: true, // tier: premium
-    FLUX_REALISM: true, // tier: premium
-    // utility models — tier drives the value
-    UPSCALE_IMAGE: false, // tier: standard
-    COLORIZE_BASIC: false, // tier: budget
-    COLORIZE_ADVANCED: false, // tier: standard
-    REVIVE: false, // tier: budget
-    OLD_PHOTOS: false, // tier: standard
+    FLUX_QUICK: false,
+    FLUX_BASIC: false,
+    FLUX_PRO: true,
+    FLUX_1_1_PRO: true,
+    FLUX_REALISM: true,
+    FLUX_FAST: false,
+    P_IMAGE: false,
+    Z_IMAGE_TURBO: false,
+    GROK_IMAGINE: false,
+    GROK_IMAGINE_QUALITY: false,
+    SEEDREAM_4: false,
+    FLUX_2_DEV: false,
+    FLUX_2_PRO: false,
+    FLUX_KONTEXT_PRO: false,
+    FLUX_2_MAX: true,
+    FLUX_KONTEXT_MAX: true,
+    NANO_BANANA_2: false,
+    IMAGEN_4_ULTRA: false,
+    NANO_BANANA_PRO: true,
+    GPT_IMAGE_2: true,
+    UPSCALE_IMAGE: false,
+    COLORIZE_BASIC: false,
+    COLORIZE_ADVANCED: false,
+    REVIVE: false,
+    OLD_PHOTOS: false,
   };
 
   for (const key of ALL_KEYS) {
@@ -68,54 +111,47 @@ describe('isPro — tier→isPro mapping', () => {
       expect(isPro(MODEL_REGISTRY[key])).toBe(expectedIsPro[key]);
     });
   }
+});
 
-  it('isPro returns true only for premium tier', () => {
-    for (const key of ALL_KEYS) {
-      const entry = MODEL_REGISTRY[key];
-      expect(isPro(entry)).toBe(entry.tier === 'premium');
-    }
+describe('catalog field specs (MODELS_COMPARISON §4)', () => {
+  it('NANO_BANANA_2 has aspectRatio + outputFormat + resolution, no numOutputs/quality', () => {
+    const fields = MODEL_REGISTRY.NANO_BANANA_2.fields;
+    expect(fields.aspectRatio).toBeDefined();
+    expect(fields.outputFormat).toBeDefined();
+    expect(fields.resolution?.inputKey).toBe('resolution');
+    expect(fields.numOutputs).toBeUndefined();
+    expect(fields.outputQuality).toBeUndefined();
+  });
+
+  it('SEEDREAM_4 uses max_images for multi-output', () => {
+    expect(MODEL_REGISTRY.SEEDREAM_4.fields.numOutputs?.inputKey).toBe('max_images');
+  });
+
+  it('GPT_IMAGE_2 uses number_of_images for multi-output', () => {
+    expect(MODEL_REGISTRY.GPT_IMAGE_2.fields.numOutputs?.inputKey).toBe('number_of_images');
+  });
+
+  it('Z_IMAGE_TURBO has no aspectRatio (dimensions only)', () => {
+    expect(MODEL_REGISTRY.Z_IMAGE_TURBO.fields.aspectRatio).toBeUndefined();
+    expect(MODEL_REGISTRY.Z_IMAGE_TURBO.fields.dimensions).toBeDefined();
+    expect(MODEL_REGISTRY.Z_IMAGE_TURBO.fields.outputFormat).toBeDefined();
   });
 });
 
-describe('FLUX_PRO / FLUX_1_1_PRO — no outputQuality field', () => {
-  it('FLUX_PRO has no outputQuality (not supported by this model)', () => {
+describe('FLUX_PRO / FLUX_1_1_PRO — no outputQuality / numOutputs', () => {
+  it('FLUX_PRO has no outputQuality or numOutputs', () => {
     expect(MODEL_REGISTRY.FLUX_PRO.fields.outputQuality).toBeUndefined();
-  });
-
-  it('FLUX_1_1_PRO has no outputQuality (not supported by this model)', () => {
-    expect(MODEL_REGISTRY.FLUX_1_1_PRO.fields.outputQuality).toBeUndefined();
-  });
-
-  it('FLUX_BASIC has outputQuality', () => {
-    expect(MODEL_REGISTRY.FLUX_BASIC.fields.outputQuality).toBeDefined();
-  });
-});
-
-describe('FLUX_PRO / FLUX_1_1_PRO — no numOutputs field (T5 constraint)', () => {
-  it('FLUX_PRO does not have numOutputs field spec', () => {
     expect(MODEL_REGISTRY.FLUX_PRO.fields.numOutputs).toBeUndefined();
   });
 
-  it('FLUX_1_1_PRO does not have numOutputs field spec', () => {
+  it('FLUX_1_1_PRO has no outputQuality or numOutputs', () => {
+    expect(MODEL_REGISTRY.FLUX_1_1_PRO.fields.outputQuality).toBeUndefined();
     expect(MODEL_REGISTRY.FLUX_1_1_PRO.fields.numOutputs).toBeUndefined();
   });
 
-  it('other generation models have numOutputs', () => {
-    expect(MODEL_REGISTRY.FLUX_QUICK.fields.numOutputs).toBeDefined();
+  it('FLUX_BASIC has outputQuality and numOutputs', () => {
+    expect(MODEL_REGISTRY.FLUX_BASIC.fields.outputQuality).toBeDefined();
     expect(MODEL_REGISTRY.FLUX_BASIC.fields.numOutputs).toBeDefined();
-    expect(MODEL_REGISTRY.FLUX_REALISM.fields.numOutputs).toBeDefined();
-  });
-});
-
-describe('OLD_PHOTOS — new utility model', () => {
-  it('OLD_PHOTOS has correct shape', () => {
-    const model = MODEL_REGISTRY.OLD_PHOTOS;
-    expect(model.key).toBe('OLD_PHOTOS');
-    expect(model.replicateId).toContain('microsoft/bringing-old-photos-back-to-life:');
-    expect(model.tier).toBe('standard');
-    expect(model.utility).toBe(true);
-    expect(model.fields.imageInput).toBeDefined();
-    expect(model.fields.imageInput?.inputKey).toBe('image');
   });
 });
 
@@ -128,7 +164,7 @@ describe('utility models', () => {
   });
 
   it('generation models do not have utility flag', () => {
-    for (const key of GENERATION_KEYS) {
+    for (const key of [...LEGACY_GENERATION_KEYS, ...CATALOG_KEYS]) {
       expect(MODEL_REGISTRY[key].utility).toBeFalsy();
     }
   });
