@@ -3,8 +3,8 @@ import type { Model } from '@/types/model';
 import { MODEL_IDS, MODEL_REGISTRY, isPro as isProFromRegistry } from '@visual-ai/shared';
 
 /**
- * Derive Model fields from the shared registry entry when available.
- * For registry-backed models, tier/pricePerImage/isPro come from the single source of truth.
+ * Derive Model fields from the shared registry entry.
+ * tier / pricePerImage / isPro / id come from the single source of truth.
  */
 function fromRegistry(
   key: keyof typeof MODEL_REGISTRY,
@@ -20,10 +20,9 @@ function fromRegistry(
   };
 }
 
-/** Full model catalog sourced from MODELS_COMPARISON.md */
+/** Full model catalog — metadata from MODEL_REGISTRY; presentation fields local. */
 export const MODELS: Model[] = [
-  // — Legacy FLUX models — tier/pricePerImage/isPro derived from MODEL_REGISTRY —
-  // Note: Flux Lightning uses FLUX_BASIC registry entry (legacy mapping for backward compat)
+  // — Legacy FLUX models —
   fromRegistry('FLUX_BASIC', {
     title: 'Flux Lightning',
     provider: 'bfl',
@@ -33,7 +32,7 @@ export const MODELS: Model[] = [
     companyName: 'Black Forest Labs',
   }),
   fromRegistry('FLUX_QUICK', {
-    title: 'Flux Fast',
+    title: 'Flux Schnell',
     provider: 'bfl',
     description: 'Combines speed with high quality. Great prompt adherence.',
     bestAt: 'Balanced speed & quality',
@@ -66,204 +65,144 @@ export const MODELS: Model[] = [
   }),
 
   // — Pruna —
-  {
+  fromRegistry('FLUX_FAST', {
     title: 'Flux Fast',
-    id: 'prunaai/flux-fast',
     provider: 'pruna',
     description: 'Fastest Flux variant for high-volume batch generation.',
     bestAt: 'Fastest Flux, batch volume',
-    tier: 'budget',
-    pricePerImage: 0.005,
-    isPro: false,
     iconUrl: 'prunaai.png',
     companyName: 'Pruna',
-  },
-  {
+  }),
+  fromRegistry('P_IMAGE', {
     title: 'P-Image',
-    id: 'prunaai/p-image',
     provider: 'pruna',
     description: 'Sub-second production images with LoRA support.',
     bestAt: 'Sub-1s production, LoRA support',
-    tier: 'budget',
-    pricePerImage: 0.005,
-    isPro: false,
     iconUrl: 'prunaai.png',
     companyName: 'Pruna',
-  },
+  }),
 
   // — Z-Image —
-  {
+  fromRegistry('Z_IMAGE_TURBO', {
     title: 'Z-Image Turbo',
-    id: 'prunaai/z-image-turbo',
     provider: 'zimage',
     description: 'Super-fast 6B parameter model for rapid iteration.',
     bestAt: 'Super-fast 6B model',
-    tier: 'budget',
-    pricePerImage: 0.02,
-    isPro: false,
     featured: true,
     iconUrl: 'xai.jpg',
     companyName: 'Z-Image',
-  },
+  }),
 
   // — xAI —
-  {
+  fromRegistry('GROK_IMAGINE', {
     title: 'Grok Imagine',
-    id: 'xai/grok-imagine-image',
     provider: 'xai',
     description: 'Affordable xAI image generation with simple controls.',
     bestAt: 'Cheap, simple xAI gen',
-    tier: 'budget',
-    pricePerImage: 0.02,
-    isPro: false,
     iconUrl: 'xai.jpg',
     companyName: 'xAI',
-  },
-  {
+  }),
+  fromRegistry('GROK_IMAGINE_QUALITY', {
     title: 'Grok Imagine Quality',
-    id: 'xai/grok-imagine-image-quality',
     provider: 'xai',
     description: 'Sharper xAI output with better text rendering up to 2K.',
     bestAt: 'Sharper xAI, better text, 2K',
-    tier: 'standard',
-    pricePerImage: 0.07,
-    isPro: false,
     iconUrl: 'xai.jpg',
     companyName: 'xAI',
-  },
+  }),
 
   // — ByteDance —
-  {
+  fromRegistry('SEEDREAM_4', {
     title: 'Seedream 4',
-    id: 'bytedance/seedream-4',
     provider: 'bytedance',
     description: '4K generation with single-sentence editing capabilities.',
     bestAt: '4K + single-sentence editing',
-    tier: 'standard',
-    pricePerImage: 0.03,
-    isPro: false,
     featured: true,
     iconUrl: 'bytedance.png',
     companyName: 'ByteDance',
-  },
+  }),
 
-  // — BFL (new generation) —
-  {
+  // — BFL (Flux 2 / Kontext) —
+  fromRegistry('FLUX_2_DEV', {
     title: 'Flux 2 Dev',
-    id: 'black-forest-labs/flux-2-dev',
     provider: 'bfl',
     description: 'Open-weight quality generation and editing model.',
     bestAt: 'Quality gen+edit, open-weight',
-    tier: 'standard',
-    pricePerImage: 0.014,
-    isPro: false,
     iconUrl: 'bfl.png',
     companyName: 'Black Forest Labs',
-  },
-  {
+  }),
+  fromRegistry('FLUX_2_PRO', {
     title: 'Flux 2 Pro',
-    id: 'black-forest-labs/flux-2-pro',
     provider: 'bfl',
     description: 'Quality generation with up to 8 reference images.',
     bestAt: 'Quality + up to 8 reference images',
-    tier: 'standard',
-    pricePerImage: 0.015,
-    isPro: false,
     featured: true,
     iconUrl: 'bfl.png',
     companyName: 'Black Forest Labs',
-  },
-  {
+  }),
+  fromRegistry('FLUX_KONTEXT_PRO', {
     title: 'Flux Kontext Pro',
-    id: 'black-forest-labs/flux-kontext-pro',
     provider: 'bfl',
     description: 'State-of-the-art prompt-based image editing.',
     bestAt: 'SOTA prompt-based image editing',
-    tier: 'standard',
-    pricePerImage: 0.04,
-    isPro: false,
     iconUrl: 'bfl.png',
     companyName: 'Black Forest Labs',
-  },
-  {
+  }),
+  fromRegistry('FLUX_2_MAX', {
     title: 'Flux 2 Max',
-    id: 'black-forest-labs/flux-2-max',
     provider: 'bfl',
     description: 'Highest-fidelity Flux generation up to 4 megapixels.',
     bestAt: 'Highest-fidelity Flux',
-    tier: 'premium',
-    pricePerImage: 0.12,
-    isPro: true,
     iconUrl: 'bfl.png',
     companyName: 'Black Forest Labs',
-  },
-  {
+  }),
+  fromRegistry('FLUX_KONTEXT_MAX', {
     title: 'Flux Kontext Max',
-    id: 'black-forest-labs/flux-kontext-max',
     provider: 'bfl',
     description: 'Premium editing with superior typography rendering.',
     bestAt: 'Premium editing + typography',
-    tier: 'premium',
-    pricePerImage: 0.08,
-    isPro: true,
     iconUrl: 'bfl.png',
     companyName: 'Black Forest Labs',
-  },
+  }),
 
   // — Google —
-  {
+  fromRegistry('NANO_BANANA_2', {
     title: 'Nano Banana 2',
-    id: 'google/nano-banana-2',
     provider: 'google',
     description: 'Fast Google generation with editing and grounding.',
     bestAt: 'Fast Google gen, editing, grounding',
-    tier: 'standard',
-    pricePerImage: 0.067,
-    isPro: false,
     featured: true,
     iconUrl: 'google.png',
     companyName: 'Google',
-  },
-  {
+  }),
+  fromRegistry('IMAGEN_4_ULTRA', {
     title: 'Imagen 4 Ultra',
-    id: 'google/imagen-4-ultra',
     provider: 'google',
     description: 'Photorealistic output with strong prompt adherence.',
     bestAt: 'Photorealism, prompt adherence',
-    tier: 'standard',
-    pricePerImage: 0.06,
-    isPro: false,
     iconUrl: 'google.png',
     companyName: 'Google',
-  },
-  {
+  }),
+  fromRegistry('NANO_BANANA_PRO', {
     title: 'Nano Banana Pro',
-    id: 'google/nano-banana-pro',
     provider: 'google',
     description: 'Google SOTA with character consistency up to 4K.',
     bestAt: 'Google SOTA, character consistency',
-    tier: 'premium',
-    pricePerImage: 0.15,
-    isPro: true,
     featured: true,
     iconUrl: 'google.png',
     companyName: 'Google',
-  },
+  }),
 
   // — OpenAI —
-  {
+  fromRegistry('GPT_IMAGE_2', {
     title: 'GPT Image 2',
-    id: 'openai/gpt-image-2',
     provider: 'openai',
     description: 'Instruction-following generation with sharp text rendering.',
     bestAt: 'Instruction following, sharp text',
-    tier: 'premium',
-    pricePerImage: 0.128,
-    isPro: true,
     featured: true,
     iconUrl: 'openai.png',
     companyName: 'OpenAI',
-  },
+  }),
 ];
 
 const LEGACY_MODEL_IDS: ReadonlySet<string> = new Set([
@@ -281,10 +220,10 @@ export function getFeaturedModels(models: Model[] = MODELS): Model[] {
   return models.filter((m) => m.featured);
 }
 
-export const PROVIDER_DISPLAY_NAMES: Record<string, string> = {
+const PROVIDER_DISPLAY_NAMES: Record<string, string> = {
+  bfl: 'Black Forest Labs',
   openai: 'OpenAI',
   google: 'Google',
-  bfl: 'Black Forest Labs',
   bytedance: 'ByteDance',
   xai: 'xAI',
   pruna: 'Pruna',
@@ -306,28 +245,24 @@ export function groupModelsByProvider(models: Model[]): Map<string, Model[]> {
 }
 
 export function groupModelsByCompany(models: Model[] = MODELS): Map<string, Model[]> {
-  // Separate featured and non-featured models
   const featured = models.filter((m) => m.featured);
-  const nonFeatured = models.filter((m) => !m.featured);
 
-  // Create groups for non-featured models, sorted by company name
+  // Company submenus must include every model for that company — including
+  // featured ones (e.g. Nano Banana still appears under Google on hover).
   const groups = new Map<string, Model[]>();
-  for (const model of nonFeatured) {
+  for (const model of models) {
     const company = model.companyName ?? model.provider;
     const list = groups.get(company) ?? [];
     list.push(model);
     groups.set(company, list);
   }
 
-  // Create the result with featured models first, then other companies alphabetically
   const result = new Map<string, Model[]>();
 
-  // Add featured models first
   if (featured.length > 0) {
     result.set('Featured', featured);
   }
 
-  // Add other companies in alphabetical order
   const sortedCompanies = Array.from(groups.keys()).sort();
   for (const company of sortedCompanies) {
     result.set(company, groups.get(company) ?? []);

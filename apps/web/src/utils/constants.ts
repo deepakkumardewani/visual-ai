@@ -165,7 +165,10 @@ export const SIZE_CLASSES = {
   large: 'tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-3 lg:tw-grid-cols-4',
 };
 
-// Aspect Ratios
+/** How many aspect ratios show in the sidebar primary row */
+export const PRIMARY_ASPECT_COUNT = 4;
+
+// Aspect Ratios — order defines primary-row preference (first N available per model)
 export const ASPECT_RATIOS = [
   {
     title: '1:1',
@@ -215,6 +218,111 @@ export const ASPECT_RATIOS = [
     name: 'Cinematic',
     icon: '$cinematic',
     type: 'horizontal',
+  },
+  {
+    title: '4:3',
+    isPro: true,
+    name: 'Classic',
+    icon: '$standard',
+    type: 'horizontal',
+  },
+  {
+    title: '3:4',
+    isPro: true,
+    name: 'Classic Portrait',
+    icon: '$portrait',
+    type: 'vertical',
+  },
+  {
+    title: '5:4',
+    isPro: true,
+    name: 'Soft Landscape',
+    icon: '$standard',
+    type: 'horizontal',
+  },
+  {
+    title: '9:21',
+    isPro: true,
+    name: 'Tall Cinematic',
+    icon: '$socialStory',
+    type: 'vertical',
+  },
+  {
+    title: '2:1',
+    isPro: true,
+    name: 'Ultra Wide',
+    icon: '$cinematic',
+    type: 'horizontal',
+  },
+  {
+    title: '1:2',
+    isPro: true,
+    name: 'Tall',
+    icon: '$portrait',
+    type: 'vertical',
+  },
+  {
+    title: '19.5:9',
+    isPro: true,
+    name: 'Phone Wide',
+    icon: '$cinematic',
+    type: 'horizontal',
+  },
+  {
+    title: '9:19.5',
+    isPro: true,
+    name: 'Phone Tall',
+    icon: '$socialStory',
+    type: 'vertical',
+  },
+  {
+    title: '20:9',
+    isPro: true,
+    name: 'Cinema Wide',
+    icon: '$cinematic',
+    type: 'horizontal',
+  },
+  {
+    title: '9:20',
+    isPro: true,
+    name: 'Cinema Tall',
+    icon: '$socialStory',
+    type: 'vertical',
+  },
+  {
+    title: '4:1',
+    isPro: true,
+    name: 'Banner Wide',
+    icon: '$cinematic',
+    type: 'horizontal',
+  },
+  {
+    title: '1:4',
+    isPro: true,
+    name: 'Banner Tall',
+    icon: '$portrait',
+    type: 'vertical',
+  },
+  {
+    title: '8:1',
+    isPro: true,
+    name: 'Strip Wide',
+    icon: '$cinematic',
+    type: 'horizontal',
+  },
+  {
+    title: '1:8',
+    isPro: true,
+    name: 'Strip Tall',
+    icon: '$portrait',
+    type: 'vertical',
+  },
+  {
+    title: 'auto',
+    isPro: true,
+    name: 'Auto',
+    icon: '$square',
+    type: 'square',
   },
 ];
 
