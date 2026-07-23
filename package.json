@@ -14,7 +14,8 @@
     "build:api": "cd apps/api && bun build",
     "lint": "vp lint --fix",
     "check": "vp check",
-    "test": "vp test run"
+    "test": "vp test run",
+    "check:model-docs": "bun scripts/check-model-docs.mjs"
   },
   "devDependencies": {
     "vite-plus": "0.1.18"
