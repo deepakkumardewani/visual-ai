@@ -7,9 +7,12 @@ import { useRouter } from 'vue-router';
 import { useAsideStore } from '@/stores/aside';
 import { useUserStore } from '@/stores/user';
 
+import AspectRatioPicker from '@/components/Dashboard/Sidebar/AspectRatioPicker.vue';
 import ModelPicker from '@/components/Dashboard/ModelPicker/ModelPicker.vue';
 
-import { ASPECT_RATIOS, IMAGE_FORMATS } from '@/utils/constants';
+import { ASPECT_RATIOS, IMAGE_FORMATS, PRIMARY_ASPECT_COUNT } from '@/utils/constants';
+
+type FormatOption = (typeof IMAGE_FORMATS)[number];
 
 const router = useRouter();
 const asideStore = useAsideStore();
@@ -20,38 +23,38 @@ const { aspectRatio, imageFormat, outputQuality, noOfOutputs, mode } = storeToRe
 
 const countOptions = [1, 2, 3, 4] as const;
 
-/** Registry fields for the currently selected model — null for non-registry models. */
+/** Registry fields for the selected model — every MODELS entry must be registered. */
 const selectedModelFields = computed(() => {
   const entry = MODEL_REGISTRY[mode.value.id as keyof typeof MODEL_REGISTRY];
   return entry?.fields ?? null;
 });
 
-// Section visibility — each control only renders if the model's registry entry declares the field
 const showAspectRatio = computed(() => Boolean(selectedModelFields.value?.aspectRatio));
 const showOutputQuality = computed(() => Boolean(selectedModelFields.value?.outputQuality));
 const showNumOutputs = computed(() => Boolean(selectedModelFields.value?.numOutputs));
 const showOutputFormat = computed(() => Boolean(selectedModelFields.value?.outputFormat));
 
-// Option lists sourced from registry values, filtered against UI constants (which carry isPro flags)
-const aspectRatioOptions = computed(() => {
+const allAspectRatioOptions = computed(() => {
   const registryValues = selectedModelFields.value?.aspectRatio?.values;
-  if (!registryValues) return ASPECT_RATIOS.slice(0, 4);
-  return ASPECT_RATIOS.filter((r) => registryValues.includes(r.title)).slice(0, 4);
+  if (!registryValues) return ASPECT_RATIOS.slice(0, PRIMARY_ASPECT_COUNT);
+  return ASPECT_RATIOS.filter((r) => registryValues.includes(r.title));
 });
 
 const outputFormatOptions = computed(() => {
   const registryValues = selectedModelFields.value?.outputFormat?.values;
   if (!registryValues) return IMAGE_FORMATS;
-  return IMAGE_FORMATS.filter((f) => registryValues.includes(f.title.toLowerCase()));
+  return IMAGE_FORMATS.filter((f) => {
+    const key = f.title.toLowerCase();
+    return registryValues.includes(key) || (key === 'jpg' && registryValues.includes('jpeg'));
+  });
 });
 
-const ASPECT_ICON_MAX_PX = 11;
-
-function aspectIconSize(title: string) {
-  const [w, h] = title.split(':').map(Number);
-  const scale = ASPECT_ICON_MAX_PX / Math.max(w, h);
-  return { width: Math.round(w * scale), height: Math.round(h * scale) };
-}
+const formatGridClass = computed(() => {
+  const cols = outputFormatOptions.value.length;
+  if (cols <= 1) return 'tw-grid-cols-1';
+  if (cols === 2) return 'tw-grid-cols-2';
+  return 'tw-grid-cols-3';
+});
 
 const SEGMENT_BASE =
   'tw-relative tw-flex tw-h-8 tw-items-center tw-justify-center tw-gap-1 tw-rounded-sm tw-text-body-sm tw-font-medium tw-transition-colors tw-duration-fast focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40';
@@ -69,16 +72,12 @@ function isProLocked(optionIsPro: boolean) {
   return optionIsPro && !isPro.value;
 }
 
-function selectAspect(ratio: (typeof ASPECT_RATIOS)[number]) {
-  if (!isPro.value && ratio.isPro) {
-    aspectRatio.value = ASPECT_RATIOS[0];
-    router.push('/pricing');
-    return;
-  }
-  aspectRatio.value = ratio;
+function onAspectProRequired() {
+  aspectRatio.value = ASPECT_RATIOS[0];
+  router.push('/pricing');
 }
 
-function selectFormat(format: (typeof IMAGE_FORMATS)[number]) {
+function selectFormat(format: FormatOption) {
   if (!isPro.value && format.isPro) {
     imageFormat.value = IMAGE_FORMATS[0];
     router.push('/pricing');
@@ -111,10 +110,25 @@ watch(outputQuality, (newVal) => {
   }
 });
 
-// Reset count to 1 when switching to a model that doesn't support multiple outputs
 watch(showNumOutputs, (supported) => {
   if (!supported) noOfOutputs.value = 1;
 });
+
+watch(
+  () => mode.value.id,
+  () => {
+    const aspects = allAspectRatioOptions.value;
+    if (showAspectRatio.value && aspects.length > 0) {
+      const stillValid = aspects.some((r) => r.title === aspectRatio.value.title);
+      if (!stillValid) aspectRatio.value = aspects[0];
+    }
+    const formats = outputFormatOptions.value;
+    if (showOutputFormat.value && formats.length > 0) {
+      const stillValid = formats.some((f) => f.title === imageFormat.value.title);
+      if (!stillValid) imageFormat.value = formats[0];
+    }
+  },
+);
 
 onMounted(() => {
   aspectRatio.value = ASPECT_RATIOS[0];
@@ -144,37 +158,12 @@ onMounted(() => {
         <font-awesome-icon icon="expand" class="tw-h-2.5 tw-w-2.5" />
         <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest"> Size </span>
       </span>
-      <div
-        class="tw-grid tw-grid-cols-4 tw-gap-1 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2/60 tw-p-1"
-        role="group"
-        aria-label="Aspect ratio"
-      >
-        <button
-          v-for="ratio in aspectRatioOptions"
-          :key="ratio.title"
-          type="button"
-          :data-testid="`aspect-${ratio.title}`"
-          :aria-pressed="aspectRatio.title === ratio.title"
-          :class="segmentClass(aspectRatio.title === ratio.title)"
-          @click="selectAspect(ratio)"
-        >
-          <span
-            class="tw-block tw-shrink-0 tw-rounded-[2px] tw-border tw-border-current tw-opacity-60"
-            :style="{
-              width: `${aspectIconSize(ratio.title).width}px`,
-              height: `${aspectIconSize(ratio.title).height}px`,
-            }"
-            aria-hidden="true"
-          />
-          <span>{{ ratio.title }}</span>
-          <span
-            v-if="isProLocked(ratio.isPro)"
-            class="tw-absolute tw-right-1 tw-top-1 tw-h-1 tw-w-1 tw-rounded-full tw-bg-gold"
-            aria-hidden="true"
-          />
-          <span v-if="isProLocked(ratio.isPro)" class="tw-sr-only">(Pro)</span>
-        </button>
-      </div>
+      <AspectRatioPicker
+        v-model="aspectRatio"
+        :options="allAspectRatioOptions"
+        :is-pro="isPro"
+        @pro-required="onAspectProRequired"
+      />
     </section>
 
     <section v-if="showOutputQuality" class="tw-flex tw-flex-col tw-gap-2.5">
@@ -250,7 +239,8 @@ onMounted(() => {
         </span>
       </span>
       <div
-        class="tw-grid tw-grid-cols-3 tw-gap-1 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2/60 tw-p-1"
+        class="tw-grid tw-gap-1 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2/60 tw-p-1"
+        :class="formatGridClass"
         role="group"
         aria-label="Output format"
       >
