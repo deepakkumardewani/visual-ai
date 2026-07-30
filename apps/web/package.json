@@ -9,7 +9,8 @@
     "preview": "vp preview",
     "lint": "vp lint --fix",
     "check": "vp check",
-    "test": "vp test run"
+    "test": "vp test run",
+    "verify": "vp lint --fix && vp check --fix"
   },
   "dependencies": {
     "@clerk/clerk-js": "^5.14.0",

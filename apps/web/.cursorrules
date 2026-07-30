@@ -39,6 +39,5 @@ const additionalInstructions = `
 9. Use Vue Router for navigation
 10. Always Use the custom useFetch composable for API calls
 11. Always create a new method in the helpers.ts file for each new API call
-12. Always Use Vuetify for UI components
-13. Always Use fontawesome icons and not material icons
+12. Always Use fontawesome icons and not material icons
     `
