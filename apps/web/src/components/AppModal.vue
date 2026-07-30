@@ -11,6 +11,12 @@ const props = withDefaults(
     showClose?: boolean;
     labelledBy?: string;
     describedBy?: string;
+    /** When false, Escape will not close the modal (useful for stacked confirms). */
+    closeOnEscape?: boolean;
+    /** When false, clicking the backdrop will not close the modal. */
+    closeOnOverlay?: boolean;
+    /** Stacking layer — increases z-index so nested confirms sit above. */
+    layer?: number;
   }>(),
   {
     maxWidth: '32rem',
@@ -18,6 +24,9 @@ const props = withDefaults(
     showClose: true,
     labelledBy: 'app-modal-title',
     describedBy: undefined,
+    closeOnEscape: true,
+    closeOnOverlay: true,
+    layer: 0,
   },
 );
 
@@ -40,19 +49,29 @@ function close() {
 }
 
 function onOverlayClick(event: MouseEvent) {
+  if (!props.closeOnOverlay) return;
   if (event.target === event.currentTarget) close();
 }
 
-onKeyStroke('Escape', () => {
-  if (props.open) close();
+const overlayStyle = computed(() => ({
+  zIndex: 1200 + props.layer * 20,
+}));
+
+onKeyStroke('Escape', (event) => {
+  if (!props.open || !props.closeOnEscape) return;
+  event.preventDefault();
+  close();
 });
 
 watch(
   () => props.open,
   (open) => {
-    bodyLocked.value = open;
+    // Nested modals share body lock — only unlock when this instance closes if still top-level.
     if (open) {
+      bodyLocked.value = true;
       requestAnimationFrame(() => panelRef.value?.focus());
+    } else if (props.layer === 0) {
+      bodyLocked.value = false;
     }
   },
 );
@@ -65,6 +84,7 @@ watch(
         v-if="isOpen"
         class="app-modal"
         :class="{ 'app-modal--fullscreen': fullscreen }"
+        :style="overlayStyle"
         role="presentation"
         @click="onOverlayClick"
       >
@@ -112,7 +132,6 @@ watch(
 .app-modal {
   position: fixed;
   inset: 0;
-  z-index: 1200;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,8 +146,10 @@ watch(
 
 .app-modal__panel {
   position: relative;
-  width: min(100%, 32rem);
-  max-height: min(90dvh, 52rem);
+  /* width is 100% so the maxWidth prop can actually expand the dialog */
+  width: 100%;
+  max-width: 32rem;
+  max-height: 92dvh;
   overflow: auto;
   border: 1px solid rgb(var(--tw-border) / 0.75);
   border-radius: 16px;

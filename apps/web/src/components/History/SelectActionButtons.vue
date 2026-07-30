@@ -55,7 +55,7 @@ const handleBulkDownload = async () => {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  min-height: 36px;
+  min-height: 44px;
   padding: 0 0.875rem;
   border: 1px solid rgb(var(--tw-hairline));
   border-radius: 9999px;

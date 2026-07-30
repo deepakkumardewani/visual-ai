@@ -48,7 +48,7 @@ const isSelecting = computed(() => selectedImages.value.length > 0);
 const showImage = (item: IImageObject) => {
   if (isBulkBusy.value) return;
   imageDialogItem.value = item;
-  dialogStore.showImage();
+  dialogStore.showImage(item._id);
 };
 
 const getImageUrl = (image: IImage) => {
@@ -141,45 +141,59 @@ watch(
 </script>
 
 <template>
-  <div class="history-container tw-flex tw-flex-col tw-px-4 sm:tw-px-6">
+  <div class="history-container tw-flex tw-flex-col">
     <div
       v-if="history.length > 0"
-      class="tw-flex tw-flex-none tw-flex-wrap tw-items-center tw-gap-3 tw-border-b tw-border-hairline tw-py-4"
+      class="history-toolbar tw-relative tw-flex tw-flex-none tw-items-center tw-border-b tw-border-hairline/70 tw-py-4"
     >
-      <template v-if="isSelecting">
-        <button
-          type="button"
-          aria-label="Clear selection"
-          class="tw-flex tw-h-9 tw-w-9 tw-items-center tw-justify-center tw-rounded-full tw-text-ink-muted tw-transition-colors tw-duration-fast hover:tw-bg-surface-2 hover:tw-text-ink"
-          @click="selectedImages = []"
-        >
-          <font-awesome-icon :icon="faXmark" class="tw-h-4 tw-w-4" aria-hidden="true" />
-        </button>
-        <span class="tw-text-sm tw-font-medium tw-text-ink">
-          {{ selectedImages.length }} selected
-        </span>
-        <div class="tw-ml-auto">
-          <SelectActionButtons :selectedImages="selectedImages" />
-        </div>
-      </template>
-
-      <template v-else>
-        <h2 class="tw-text-lg tw-font-semibold tw-tracking-tight tw-text-ink">
+      <!-- Default chrome always occupies space so selection mode cannot shift layout -->
+      <div
+        class="history-toolbar__row tw-flex tw-w-full tw-items-center tw-gap-4"
+        :class="{ 'tw-invisible tw-pointer-events-none': isSelecting }"
+        :aria-hidden="isSelecting"
+        :inert="isSelecting"
+      >
+        <h2 class="history-toolbar__title">
           {{ props.isFavorites ? 'Favorites' : 'Assets' }}
         </h2>
         <div class="tw-ml-auto tw-flex tw-min-w-0 tw-flex-1 tw-justify-end sm:tw-flex-none">
           <Filter />
         </div>
-      </template>
+      </div>
+
+      <div
+        v-if="isSelecting"
+        class="history-toolbar__selection tw-absolute tw-inset-y-0 tw-left-0 tw-right-0 tw-flex tw-items-center tw-gap-3"
+      >
+        <button
+          type="button"
+          aria-label="Clear selection"
+          class="tw-flex tw-h-11 tw-w-11 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-full tw-text-ink-muted tw-transition-colors tw-duration-fast hover:tw-bg-surface-2 hover:tw-text-ink"
+          @click="selectedImages = []"
+        >
+          <font-awesome-icon :icon="faXmark" class="tw-h-4 tw-w-4" aria-hidden="true" />
+        </button>
+        <span class="tw-text-sm tw-font-medium tw-tabular-nums tw-text-ink">
+          {{ selectedImages.length }} selected
+        </span>
+        <div class="tw-ml-auto">
+          <SelectActionButtons :selectedImages="selectedImages" />
+        </div>
+      </div>
     </div>
 
-    <div class="tw-flex-1 tw-overflow-y-auto tw-pb-12 tw-pt-6 no-scrollbar">
+    <div class="history-scroll tw-flex-1 tw-overflow-y-auto tw-pb-16 tw-pt-6 no-scrollbar">
       <NoResults :isFavorites="props.isFavorites" :groupedHistory="groupedHistory" />
 
-      <div v-for="item in groupedHistory" :key="item.title" class="tw-mb-10">
-        <div class="group-header tw-mb-3 tw-flex tw-items-baseline tw-gap-2.5">
-          <h3 class="tw-text-sm tw-font-semibold tw-text-ink">{{ item.title }}</h3>
-          <span class="tw-text-xs tw-text-ink-faint">{{ item.data.length }}</span>
+      <div
+        v-for="(item, groupIndex) in groupedHistory"
+        :key="item.title"
+        class="history-date-group"
+        :class="{ 'history-date-group--divided': groupIndex > 0 }"
+      >
+        <div class="group-header tw-mb-3 tw-flex tw-items-center tw-gap-2.5">
+          <h3 class="history-date-group__title">{{ item.title }}</h3>
+          <span class="history-date-group__count" aria-hidden="true">{{ item.data.length }}</span>
           <button
             type="button"
             class="group-check"
@@ -196,17 +210,17 @@ watch(
           </button>
         </div>
 
-        <div :class="['tw-grid tw-gap-3', sizeClasses[selectedSize as keyof typeof sizeClasses]]">
+        <div :class="['asset-grid', sizeClasses[selectedSize as keyof typeof sizeClasses]]">
           <div
             v-for="subItem in item.data"
             :key="subItem._id"
             class="asset-tile tw-relative tw-aspect-square tw-cursor-pointer tw-overflow-hidden tw-rounded-card tw-bg-surface-2"
             :class="{
               'asset-tile--selecting': isSelecting,
+              'asset-tile--selected': isImageSelected(subItem._id ?? ''),
+              'asset-tile--idle': !isImageSelected(subItem._id ?? ''),
               'tw-opacity-50':
                 isBulkDeleting || isBulkFavoriting || (isBulkDownloading && isSelecting),
-              'tw-ring-2 tw-ring-accent': isImageSelected(subItem._id),
-              'tw-ring-1 tw-ring-hairline/60': !isImageSelected(subItem._id),
             }"
             @click="showImage(subItem)"
           >
@@ -235,30 +249,29 @@ watch(
                   class="asset-tile__img tw-h-full tw-w-full tw-object-cover"
                 />
               </div>
-              <span
-                class="tw-pointer-events-none tw-absolute tw-bottom-1.5 tw-right-1.5 tw-z-[2] tw-rounded-full tw-bg-black/60 tw-px-2 tw-py-0.5 tw-text-xs tw-font-semibold tw-text-white"
-              >
-                {{ subItem.images.length }}
-              </span>
             </div>
 
             <div class="tile-overlay tw-pointer-events-none tw-absolute tw-inset-0">
               <div
-                class="tw-absolute tw-inset-x-0 tw-top-0 tw-h-20 tw-bg-gradient-to-b tw-from-black/50 tw-to-transparent"
+                class="tw-absolute tw-inset-x-0 tw-top-0 tw-h-16 tw-bg-gradient-to-b tw-from-black/45 tw-to-transparent"
               />
               <div class="tw-relative tw-z-10 tw-flex tw-items-start tw-justify-between tw-p-2">
                 <div class="tw-flex tw-items-center tw-gap-1.5">
                   <button
                     type="button"
-                    class="tw-pointer-events-auto tw-flex tw-h-6 tw-w-6 tw-items-center tw-justify-center"
+                    class="tw-pointer-events-auto tw-flex tw-h-7 tw-w-7 tw-items-center tw-justify-center"
                     :class="isBulkBusy ? 'tw-cursor-not-allowed' : 'tw-cursor-pointer'"
-                    :aria-label="isImageSelected(subItem._id) ? 'Deselect image' : 'Select image'"
+                    :aria-label="
+                      isImageSelected(subItem._id ?? '') ? 'Deselect image' : 'Select image'
+                    "
                     @click.stop="toggleImageSelection($event, subItem)"
                   >
                     <font-awesome-icon
                       :icon="faCircleCheck"
                       class="tw-h-[18px] tw-w-[18px] tw-drop-shadow"
-                      :class="isImageSelected(subItem._id) ? 'tw-text-accent' : 'tw-text-white/80'"
+                      :class="
+                        isImageSelected(subItem._id ?? '') ? 'tw-text-accent' : 'tw-text-white/80'
+                      "
                       aria-hidden="true"
                     />
                   </button>
@@ -284,10 +297,64 @@ watch(
   overflow: hidden;
 }
 
+/*
+  Padding lives on the children — not the overflow:hidden parent.
+  Parent padding + overflow:hidden clips selection rings so the orange
+  border looks flush against the viewport edge when an item is selected.
+*/
+.history-toolbar,
+.history-scroll {
+  min-width: 0;
+  padding-inline: 2.5rem;
+}
+
+.history-toolbar__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: rgb(var(--tw-ink));
+}
+
+.history-toolbar__selection {
+  /* Match parent horizontal padding so overlay aligns with the reserved row */
+  padding-inline: 2.5rem;
+}
+
+.history-date-group {
+  margin-bottom: 2rem;
+}
+
+.history-date-group--divided {
+  margin-top: 2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgb(var(--tw-hairline) / 0.7);
+}
+
+.history-date-group__title {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: rgb(var(--tw-ink-muted));
+}
+
+.history-date-group__count {
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: rgb(var(--tw-ink-faint));
+}
+
+.asset-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
 /* Overlay chrome appears on hover, in selection mode, or always on touch devices */
 .tile-overlay {
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .asset-tile:hover .tile-overlay,
@@ -307,12 +374,22 @@ watch(
 }
 
 .asset-tile:hover .asset-tile__img {
-  transform: scale(1.04);
+  transform: scale(1.03);
+}
+
+/* Inset selection ring — never clipped by overflow ancestors */
+.asset-tile--selected {
+  box-shadow: inset 0 0 0 2px rgb(201 138 90);
+}
+
+.asset-tile--idle {
+  box-shadow: inset 0 0 0 1px rgb(var(--tw-hairline) / 0.55);
 }
 
 /* Group select-all: revealed by header hover, selection mode, or touch */
 .group-check {
   opacity: 0;
+  margin-left: 0.15rem;
   transition:
     opacity 0.15s ease,
     color 0.15s ease;
@@ -361,7 +438,8 @@ watch(
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .asset-tile__img {
+  .asset-tile__img,
+  .tile-overlay {
     transition: none;
   }
 
