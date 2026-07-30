@@ -14,6 +14,7 @@ import {
     type IImageObject,
     type JobStatus,
     type Props,
+    type RemoveBgInput,
     type ReviveInput,
     type UpscaleInput,
 } from "../types/index.js"
@@ -371,6 +372,40 @@ export async function processColorize(props: Props): Promise<void> {
             type: FeatureType.COLORIZE,
             original: filePath,
             imageUrl: output,
+            originalPublicId: fileName,
+            userId,
+            prompt: "",
+            imageId,
+        }),
+    })
+}
+
+export async function processRemoveBg(props: Props): Promise<void> {
+    const { body, filePath, fileName } = props
+    const { userId, jobId } = body
+
+    const user = await User.findOne({ userId })
+    const creditCost = calculateCreditCost(FeatureType.REMOVE_BG, user?.isPro ?? false)
+
+    const input: RemoveBgInput = {
+        image: filePath,
+        format: "png",
+        background_type: "rgba",
+    }
+
+    return runGenerationJob({
+        model: getModelReplicateId("BACKGROUND_REMOVER") as ModelType,
+        input,
+        jobId,
+        userId: userId ?? "",
+        featureType: FeatureType.REMOVE_BG,
+        filePath,
+        fileName,
+        creditCost,
+        buildCloudinaryPayload: (output, imageId) => ({
+            type: FeatureType.REMOVE_BG,
+            original: filePath,
+            imageUrl: Array.isArray(output) ? output[0] : output,
             originalPublicId: fileName,
             userId,
             prompt: "",

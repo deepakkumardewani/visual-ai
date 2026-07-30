@@ -7,6 +7,7 @@ import { createLogger } from "../lib/logger.js"
 import {
     processColorize,
     processImage,
+    processRemoveBg,
     processRevive,
     processUpscale,
 } from "../services/generation-service.js"
@@ -157,6 +158,32 @@ generateRoute.post(
             fileName: req.file.filename,
         }
         void processColorize(props)
+
+        res.status(202).json({
+            message: "Processing started",
+            status: "processing",
+        })
+    }),
+)
+
+// Remove Background Endpoint
+// Fire-and-forget: uploads image, starts background job, returns 202
+generateRoute.post(
+    "/generate/remove-bg/image",
+    // @ts-ignore
+    ClerkExpressRequireAuth({}),
+    upload.single("image"),
+    asyncHandler(async (req: Request, res: Response) => {
+        if (!req.file?.path) {
+            throw new BadRequestError("No image file provided")
+        }
+
+        const props: Props = {
+            body: req.body,
+            filePath: req.file.path,
+            fileName: req.file.filename,
+        }
+        void processRemoveBg(props)
 
         res.status(202).json({
             message: "Processing started",
