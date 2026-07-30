@@ -21,6 +21,12 @@ export interface ColorizeInput {
   image: string;
 }
 
+export interface RemoveBgInput {
+  image: string;
+  format?: string;
+  background_type?: string;
+}
+
 export interface ReviveInput {
   img: string;
 }

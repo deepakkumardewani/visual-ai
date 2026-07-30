@@ -34,6 +34,7 @@ const UTILITY_KEYS: ModelKey[] = [
   'COLORIZE_ADVANCED',
   'REVIVE',
   'OLD_PHOTOS',
+  'BACKGROUND_REMOVER',
 ];
 
 const ALL_KEYS: ModelKey[] = [...LEGACY_GENERATION_KEYS, ...CATALOG_KEYS, ...UTILITY_KEYS];
@@ -104,6 +105,7 @@ describe('isPro — tier→isPro mapping', () => {
     COLORIZE_ADVANCED: false,
     REVIVE: false,
     OLD_PHOTOS: false,
+    BACKGROUND_REMOVER: false,
   };
 
   for (const key of ALL_KEYS) {

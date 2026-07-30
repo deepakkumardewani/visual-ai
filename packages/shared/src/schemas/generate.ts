@@ -37,3 +37,9 @@ export const ReviveRequestSchema = z.object({
 });
 
 export type ReviveRequest = z.infer<typeof ReviveRequestSchema>;
+
+export const RemoveBgRequestSchema = z.object({
+  image: z.string().min(1, 'Image URL is required'),
+});
+
+export type RemoveBgRequest = z.infer<typeof RemoveBgRequestSchema>;

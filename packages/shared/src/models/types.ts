@@ -11,7 +11,8 @@ export type LegacyModelKey =
   | 'COLORIZE_BASIC'
   | 'COLORIZE_ADVANCED'
   | 'REVIVE'
-  | 'OLD_PHOTOS';
+  | 'OLD_PHOTOS'
+  | 'BACKGROUND_REMOVER';
 
 /**
  * Expanded catalog keys from MODELS_COMPARISON.md §2–§4.
