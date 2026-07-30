@@ -22,6 +22,7 @@ const {
   upscaleInProgress,
   colorizeInProgress,
   reviveInProgress,
+  removeBgInProgress,
   imageData,
   errMsg,
 } = storeToRefs(generateStore);
@@ -52,6 +53,11 @@ const originalImageUrl = computed((): string => {
       ? optimizedUrl
       : (images.value[0]?.originalImageUrl as string);
   }
+  if (feature.value === 'remove_bg' && imageData.value?.featureType === 'remove_bg') {
+    return images.value[0]?.originalPublicId
+      ? optimizedUrl
+      : (images.value[0]?.originalImageUrl as string);
+  }
   return '';
 });
 const enhancedImageUrl = computed((): string => {
@@ -68,6 +74,11 @@ const enhancedImageUrl = computed((): string => {
       : (images.value[0]?.enhancedImageUrl as string);
   }
   if (feature.value === 'revive' && imageData.value?.featureType === 'revive') {
+    return images.value[0]?.enhancedPublicId
+      ? optimizedUrl
+      : (images.value[0]?.enhancedImageUrl as string);
+  }
+  if (feature.value === 'remove_bg' && imageData.value?.featureType === 'remove_bg') {
     return images.value[0]?.enhancedPublicId
       ? optimizedUrl
       : (images.value[0]?.enhancedImageUrl as string);
@@ -92,7 +103,9 @@ const alertTitle = computed(() => {
         ? 'Colorizing'
         : reviveInProgress.value && feature.value === 'revive'
           ? 'Reviving'
-          : '';
+          : removeBgInProgress.value && feature.value === 'remove_bg'
+            ? 'Removing background'
+            : '';
   if (action) {
     return `${action} your image`;
   }
@@ -106,7 +119,9 @@ const alertText = computed(() => {
         ? 'colorizing'
         : reviveInProgress.value && feature.value === 'revive'
           ? 'reviving'
-          : '';
+          : removeBgInProgress.value && feature.value === 'remove_bg'
+            ? 'removing the background'
+            : '';
 
   if (action) {
     return `You can keep working -- ${action} runs in the background and might take longer than expected. You can close this dialog and check later on the history tab.`;
@@ -127,6 +142,9 @@ const showSkeleton = computed(() => {
   if (feature.value === FeatureType.REVIVE) {
     return reviveInProgress.value;
   }
+  if (feature.value === FeatureType.REMOVE_BG) {
+    return removeBgInProgress.value;
+  }
   return false;
 });
 const showAlert = computed(() => {
@@ -141,6 +159,9 @@ const showAlert = computed(() => {
   }
   if (feature.value === FeatureType.REVIVE) {
     return reviveInProgress.value;
+  }
+  if (feature.value === FeatureType.REMOVE_BG) {
+    return removeBgInProgress.value;
   }
   return false;
 });
@@ -262,7 +283,11 @@ watch(errMsg, (newVal) => {
               class="tw-w-full tw-h-full sm:tw-h-[90vh] tw-flex tw-items-center tw-justify-center tw-relative"
               v-bind="props"
             >
-              <SideBySide :original-image="originalImageUrl" :enhanced-image="enhancedImageUrl" />
+              <SideBySide
+                :original-image="originalImageUrl"
+                :enhanced-image="enhancedImageUrl"
+                :transparent="feature === FeatureType.REMOVE_BG"
+              />
               <div
                 v-if="
                   (images?.[0] &&

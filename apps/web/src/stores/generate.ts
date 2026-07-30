@@ -29,6 +29,7 @@ export const useGenerateStore = defineStore('generate', () => {
   const upscaleInProgress = ref<boolean>(false);
   const colorizeInProgress = ref<boolean>(false);
   const reviveInProgress = ref<boolean>(false);
+  const removeBgInProgress = ref<boolean>(false);
   const userStore = useUserStore();
   const appStore = useAppStore();
   const { userId } = storeToRefs(userStore);
@@ -111,12 +112,13 @@ export const useGenerateStore = defineStore('generate', () => {
     images.value = [];
 
     const url = `/generate/colorize/image`;
-    const { image, modelId } = data;
+    const { image, modelId, jobId } = data;
     const formData = new FormData();
     formData.append('feature', 'colorize');
     formData.append('userId', userId.value);
     formData.append('modelId', modelId);
     formData.append('image', image);
+    if (jobId) formData.append('jobId', jobId);
     const { error } = await useFetch(url, {
       method: 'POST',
       body: formData,
@@ -127,6 +129,33 @@ export const useGenerateStore = defineStore('generate', () => {
       if (typeof error.value === 'object' && !isEmpty(error.value)) {
         setLocal('colorizeInProgress', false);
         colorizeInProgress.value = false;
+        isLoading.value = false;
+        errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
+      }
+      return;
+    }
+  }
+
+  async function removeBgImage(data: { image: File; jobId: string }) {
+    appStore.sendSignal('remove_bg_image');
+    images.value = [];
+
+    const url = `/generate/remove-bg/image`;
+    const formData = new FormData();
+    formData.append('feature', 'remove_bg');
+    formData.append('userId', userId.value);
+    formData.append('image', data.image);
+    formData.append('jobId', data.jobId);
+    const { error } = await useFetch(url, {
+      method: 'POST',
+      body: formData,
+    }).json();
+
+    if (error.value) {
+      log.error('removeBgImage failed', { error: error.value, jobId: data.jobId });
+      if (typeof error.value === 'object' && !isEmpty(error.value)) {
+        setLocal('removeBgInProgress', false);
+        removeBgInProgress.value = false;
         isLoading.value = false;
         errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
       }
@@ -170,6 +199,7 @@ export const useGenerateStore = defineStore('generate', () => {
     generateImage,
     upscaleImage,
     colorizeImage,
+    removeBgImage,
     reviveOldImage,
     promptText,
     activePrompt,
@@ -182,6 +212,7 @@ export const useGenerateStore = defineStore('generate', () => {
     upscaleInProgress,
     colorizeInProgress,
     reviveInProgress,
+    removeBgInProgress,
     errMsg,
   };
 });

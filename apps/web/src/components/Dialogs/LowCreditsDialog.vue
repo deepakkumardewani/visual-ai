@@ -41,12 +41,18 @@ const creditRequirement = computed(() => {
 
 const featureText = computed(() => {
   switch (feature.value) {
+    case FeatureType.UPSCALE:
     case 'image_upscaler':
       return 'upscale an image';
+    case FeatureType.COLORIZE:
     case 'colorize_image':
       return 'colorize an image';
+    case FeatureType.REVIVE:
     case 'revive_old_photos':
       return 'revive an old photo';
+    case FeatureType.REMOVE_BG:
+      return 'remove a background';
+    case FeatureType.IMAGE:
     case 'generate':
       return 'generate an AI image';
     default:
