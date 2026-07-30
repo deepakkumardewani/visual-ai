@@ -5,6 +5,8 @@ export { FeatureType } from '@visual-ai/shared';
 
 export type {
   IImage,
+  ExploreFeedItem,
+  ExploreFeedResponse,
   JobStatus,
   RazorpayProduct,
   IPayment,

@@ -6,6 +6,7 @@ import Landing from '@/pages/Landing.vue';
 
 const Contact = () => import('@/pages/Contact.vue');
 const Dashboard = () => import('@/pages/Dashboard.vue');
+const ExploreImage = () => import('@/pages/ExploreImage.vue');
 const Examples = () => import('@/pages/Examples.vue');
 const Faqs = () => import('@/pages/Frequent.vue');
 const Gallery = () => import('@/pages/Gallery.vue');
@@ -27,6 +28,11 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: Dashboard,
+  },
+  {
+    path: '/explore/:id',
+    name: 'explore-image',
+    component: ExploreImage,
   },
   {
     path: '/profile',
@@ -108,14 +114,14 @@ router.beforeEach((to) => {
   const { isSignedIn } = useUser();
 
   // List of routes that require authentication
-  const authRequiredRoutes = ['profile'];
+  const authRequiredRoutes = ['profile', 'explore-image'];
 
   if (
     authRequiredRoutes.includes(to.name as string) &&
     (isSignedIn.value === undefined || isSignedIn.value === false)
   ) {
     // Redirect to signin page if trying to access protected route while not authenticated
-    return { name: 'signin' };
+    return { name: 'signin', query: { redirect: to.fullPath } };
   }
 });
 

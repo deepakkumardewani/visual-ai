@@ -12,6 +12,7 @@ import LowCreditsDialog from '@/components/Dialogs/LowCreditsDialog.vue';
 import ResultCanvas from '@/components/Dashboard/Canvas/ResultCanvas.vue';
 import PromptBar from '@/components/Dashboard/Composer/PromptBar.vue';
 import DashboardShell from '@/components/Dashboard/DashboardShell.vue';
+import ExploreFeed from '@/components/Dashboard/Feed/ExploreFeed.vue';
 import DashboardSidebar from '@/components/Dashboard/Sidebar/DashboardSidebar.vue';
 import NavTabs from '@/components/Header/NavTabs.vue';
 import History from '@/components/History/History.vue';
@@ -62,7 +63,9 @@ const isImageFeature = computed(() => !feature.value || feature.value === Featur
     v-show="tab === 2"
     data-testid="dashboard-explore-panel"
     class="tw-h-[calc(100vh-60px)] tw-overflow-y-auto tw-bg-canvas no-scrollbar"
-  />
+  >
+    <ExploreFeed />
+  </div>
 
   <div
     v-show="tab === 3"
