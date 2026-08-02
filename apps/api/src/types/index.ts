@@ -4,6 +4,8 @@ export { FeatureType } from "@visual-ai/shared"
 export type {
     IImage,
     IImageObject,
+    ExploreFeedItem,
+    ExploreFeedResponse,
     JobStatus,
     RazorpayProduct,
     IPayment,
@@ -15,6 +17,7 @@ export type {
     AIImageInput,
     UpscaleInput,
     ColorizeInput,
+    RemoveBgInput,
     ReviveInput,
     Body,
     Props,

@@ -6,6 +6,7 @@ export enum FeatureType {
   UPSCALE = 'upscale',
   COLORIZE = 'colorize',
   REVIVE = 'revive',
+  REMOVE_BG = 'remove_bg',
 }
 
 export interface IImage {
@@ -35,6 +36,23 @@ export interface IImageObject {
   images: IImage[];
   humanReadableDate?: string;
   createdAt?: Date;
+}
+
+/** Lean community/explore feed card — one image per generation. */
+export interface ExploreFeedItem {
+  id: string;
+  imageUrl: string;
+  aspectRatio: string;
+  prompt: string;
+  modelName: string;
+  author: string;
+  authorUserId: string;
+  createdAt: string;
+}
+
+export interface ExploreFeedResponse {
+  items: ExploreFeedItem[];
+  nextCursor: string | null;
 }
 
 export interface JobStatus {

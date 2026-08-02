@@ -12,6 +12,7 @@ import { useUserStore } from '@/stores/user';
 import { groupByDate } from '@/pages/utils';
 
 import ImageDialog from '@/components/Dialogs/ImageDialog.vue';
+import ImageActionButtons from '@/components/History/ImageActionButtons.vue';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
@@ -82,7 +83,14 @@ function generationTime(item: IImageObject): string {
 
 function showImage(item: IImageObject) {
   imageDialogItem.value = item;
-  dialogStore.showImage();
+  dialogStore.showImage(item._id);
+}
+
+function onTileKeydown(event: KeyboardEvent, item: IImageObject) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    showImage(item);
+  }
 }
 
 function handleRemix(prompt: string) {
@@ -91,12 +99,8 @@ function handleRemix(prompt: string) {
 </script>
 
 <template>
-  <section
-    data-testid="user-generations-grid"
-    aria-label="Your generations"
-    class="tw-px-4 tw-pb-12 tw-pt-6 sm:tw-px-6"
-  >
-    <header class="tw-mb-6 tw-flex tw-items-baseline tw-gap-2.5">
+  <section data-testid="user-generations-grid" aria-label="Your generations" class="creations-grid">
+    <header class="tw-mb-8 tw-flex tw-items-baseline tw-gap-2.5">
       <h2 class="tw-text-lg tw-font-semibold tw-tracking-tight tw-text-ink">Your creations</h2>
       <span
         class="tw-rounded-full tw-bg-surface-2 tw-px-2 tw-py-0.5 tw-text-xs tw-font-medium tw-text-ink-muted"
@@ -133,7 +137,7 @@ function handleRemix(prompt: string) {
       </p>
     </div>
 
-    <div class="tw-flex tw-flex-col tw-gap-10">
+    <div class="creations-stack">
       <!-- Pending generation: appears in place, above previous creations -->
       <article
         v-if="isLoading"
@@ -141,7 +145,7 @@ function handleRemix(prompt: string) {
         aria-live="polite"
         class="generation-row"
       >
-        <div class="tw-mb-2.5 tw-flex tw-items-center tw-gap-2 tw-text-sm">
+        <div class="tw-mb-3 tw-flex tw-items-center tw-gap-2 tw-text-sm">
           <span class="pending-dot" aria-hidden="true" />
           <span class="tw-font-medium tw-text-ink">
             Generating {{ noOfOutputs }} {{ noOfOutputs === 1 ? 'image' : 'images' }}
@@ -169,14 +173,13 @@ function handleRemix(prompt: string) {
         v-for="group in groupedHistory"
         :key="group.title"
         data-testid="generation-date-group"
+        class="date-group"
       >
-        <h3
-          class="tw-mb-4 tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide tw-text-ink-faint"
-        >
+        <h3 class="date-group__title">
           {{ group.title }}
         </h3>
 
-        <div class="tw-flex tw-flex-col tw-gap-8">
+        <div class="date-group__rows">
           <article
             v-for="item in group.data"
             :key="item._id"
@@ -185,39 +188,18 @@ function handleRemix(prompt: string) {
             :class="{ 'generation-row--fresh': item._id === freshRowId }"
             @animationend="settleFreshRow"
           >
-            <div class="tw-mb-2.5 tw-flex tw-min-w-0 tw-items-start tw-justify-between tw-gap-3">
-              <p
-                class="tw-min-w-0 tw-flex-1 tw-truncate tw-text-sm tw-text-ink"
-                :title="item.prompt"
-              >
-                {{ item.prompt }}
-              </p>
-              <button
-                type="button"
-                class="remix-btn tw-shrink-0 tw-rounded-sm tw-px-1.5 tw-py-0.5 tw-text-xs tw-font-medium tw-text-ink-muted tw-transition-colors tw-duration-fast hover:tw-bg-surface-2 hover:tw-text-accent focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent"
-                :aria-label="`Remix prompt: ${item.prompt.slice(0, 60)}`"
-                @click="handleRemix(item.prompt)"
-              >
-                <font-awesome-icon icon="rotate-right" class="tw-mr-1 tw-h-2.5 tw-w-2.5" />
-                Remix
-              </button>
-            </div>
-
-            <div class="tw-mb-3 tw-flex tw-flex-wrap tw-items-center tw-gap-1.5">
-              <span class="meta-pill">{{ item.modelName }}</span>
-              <span v-if="dimensions(item)" class="meta-pill">{{ dimensions(item) }}</span>
-              <span class="meta-pill">{{ generationTime(item) }}</span>
-            </div>
-
+            <!-- Primary: images are the hero -->
             <div class="generation-tiles">
-              <button
+              <div
                 v-for="(img, index) in item.images"
                 :key="img._id || img.name || index"
-                type="button"
-                class="generation-tile tw-group tw-overflow-hidden tw-rounded-card tw-bg-surface-2 tw-ring-1 tw-ring-hairline/60 tw-transition-shadow tw-duration-fast hover:tw-shadow-elevated hover:tw-ring-accent/40 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
+                role="button"
+                tabindex="0"
+                class="generation-tile tw-group tw-relative tw-overflow-hidden tw-rounded-card tw-bg-surface-2 tw-ring-1 tw-ring-hairline/60 tw-transition-shadow tw-duration-fast hover:tw-shadow-elevated hover:tw-ring-accent/40 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
                 :style="{ aspectRatio: tileAspect(item), animationDelay: `${index * 90}ms` }"
                 :aria-label="`View image ${index + 1} of ${item.images.length}: ${item.prompt.slice(0, 60)}`"
                 @click="showImage(item)"
+                @keydown="onTileKeydown($event, item)"
               >
                 <img
                   v-if="getImageUrl(img)"
@@ -226,7 +208,48 @@ function handleRemix(prompt: string) {
                   loading="lazy"
                   class="tw-h-full tw-w-full tw-object-cover tw-transition-transform tw-duration-base tw-ease-soft group-hover:tw-scale-[1.03] motion-reduce:tw-transition-none motion-reduce:group-hover:tw-scale-100"
                 />
-              </button>
+
+                <div class="tile-overlay tw-pointer-events-none tw-absolute tw-inset-0">
+                  <div
+                    class="tw-absolute tw-inset-x-0 tw-top-0 tw-h-16 tw-bg-gradient-to-b tw-from-black/45 tw-to-transparent"
+                  />
+                  <div
+                    class="tw-pointer-events-auto tw-absolute tw-right-2 tw-top-2 tw-flex tw-flex-col tw-gap-1.5"
+                    @click.stop
+                  >
+                    <ImageActionButtons :item="item" :image-index="index" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Secondary: prompt + remix -->
+            <div class="generation-caption tw-mt-3">
+              <div class="tw-flex tw-min-w-0 tw-items-start tw-justify-between tw-gap-3">
+                <p class="generation-prompt" :title="item.prompt">
+                  {{ item.prompt }}
+                </p>
+                <button
+                  type="button"
+                  class="remix-btn tw-shrink-0 tw-rounded-sm tw-px-1.5 tw-py-0.5 tw-text-xs tw-font-medium tw-text-ink-muted tw-transition-colors tw-duration-fast hover:tw-bg-surface-2 hover:tw-text-accent focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent"
+                  :aria-label="`Remix prompt: ${item.prompt.slice(0, 60)}`"
+                  @click="handleRemix(item.prompt)"
+                >
+                  <font-awesome-icon icon="rotate-right" class="tw-mr-1 tw-h-2.5 tw-w-2.5" />
+                  Remix
+                </button>
+              </div>
+
+              <!-- Tertiary: quiet meta line -->
+              <p class="generation-meta">
+                <span>{{ item.modelName }}</span>
+                <template v-if="dimensions(item)">
+                  <span class="generation-meta__sep" aria-hidden="true">·</span>
+                  <span>{{ dimensions(item) }}</span>
+                </template>
+                <span class="generation-meta__sep" aria-hidden="true">·</span>
+                <span>{{ generationTime(item) }}</span>
+              </p>
             </div>
           </article>
         </div>
@@ -238,6 +261,40 @@ function handleRemix(prompt: string) {
 </template>
 
 <style scoped lang="scss">
+.creations-grid {
+  padding: 1.5rem 2.5rem 3rem;
+}
+
+.creations-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.date-group {
+  padding-bottom: 0.5rem;
+}
+
+.date-group + .date-group {
+  margin-top: 2.75rem;
+  padding-top: 2.25rem;
+  border-top: 1px solid rgb(var(--tw-hairline) / 0.75);
+}
+
+.date-group__title {
+  margin: 0 0 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: rgb(var(--tw-ink));
+}
+
+.date-group__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
 .generation-tiles {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -248,26 +305,59 @@ function handleRemix(prompt: string) {
   }
 }
 
-/* Divider between rows so consecutive generations read as distinct
-   sections instead of one continuous grid. */
+.generation-tile {
+  cursor: pointer;
+}
+
+/* Overlay chrome appears on hover, focus, or always on touch */
+.tile-overlay {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.generation-tile:hover .tile-overlay,
+.generation-tile:focus-within .tile-overlay {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .tile-overlay {
+    opacity: 1;
+  }
+}
+
+/* Secondary caption sits tight under the images */
+.generation-prompt {
+  margin: 0;
+  min-width: 0;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: rgb(var(--tw-ink));
+}
+
+.generation-meta {
+  margin: 0.375rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: rgb(var(--tw-ink-faint));
+}
+
+.generation-meta__sep {
+  margin-inline: 0.35rem;
+}
+
+/* Generous separation between generations; tight within a row */
 .generation-row + .generation-row {
-  padding-top: 1.5rem;
-  border-top: 1px solid rgb(var(--tw-hairline) / 0.6);
+  padding-top: 2rem;
+  border-top: 1px solid rgb(var(--tw-hairline) / 0.55);
 }
 
-.meta-pill {
-  border-radius: 9999px;
-  background: rgb(var(--tw-surface-2));
-  padding: 0.1875rem 0.625rem;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  color: rgb(var(--tw-ink-muted));
-}
-
-/* Only the row that just finished generating reveals its tiles — no row
-   itself ever animates (in place or on mount), just its images fading/
-   sliding in. */
+/* Only the row that just finished generating reveals its tiles */
 .generation-row--fresh .generation-tile {
   animation: tile-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
@@ -283,7 +373,6 @@ function handleRemix(prompt: string) {
   }
 }
 
-/* Remix stays out of the way until the row is engaged (pointer devices only) */
 @media (hover: hover) {
   .remix-btn {
     opacity: 0;
@@ -296,7 +385,7 @@ function handleRemix(prompt: string) {
   }
 }
 
-/* --- Pending tiles: one slow warm glow wandering each canvas --- */
+/* --- Pending tiles --- */
 .pending-dot {
   width: 7px;
   height: 7px;
@@ -314,7 +403,6 @@ function handleRemix(prompt: string) {
   background: rgb(var(--tw-surface-2));
   box-shadow: inset 0 0 0 1px rgb(var(--tw-hairline) / 0.5);
 
-  // Negative inline delays desync the drift so tiles never move in lockstep
   &::before {
     content: '';
     position: absolute;

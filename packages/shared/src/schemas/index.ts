@@ -3,6 +3,13 @@ export {
   UpscaleRequestSchema,
   ColorizeRequestSchema,
   ReviveRequestSchema,
+  RemoveBgRequestSchema,
 } from './generate';
 
-export type { GenerateRequest, UpscaleRequest, ColorizeRequest, ReviveRequest } from './generate';
+export type {
+  GenerateRequest,
+  UpscaleRequest,
+  ColorizeRequest,
+  ReviveRequest,
+  RemoveBgRequest,
+} from './generate';

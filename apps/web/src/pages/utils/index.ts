@@ -5,6 +5,7 @@ export enum FeatureType {
   UPSCALE = 'upscale',
   COLORIZE = 'colorize',
   REVIVE = 'revive',
+  REMOVE_BG = 'remove_bg',
 }
 
 export const FeatureIconMap = {
@@ -12,56 +13,50 @@ export const FeatureIconMap = {
   upscale: '$expand',
   colorize: '$dropper',
   revive: '$camera',
+  remove_bg: '$layers',
 };
+
+/** Calendar-day key (YYYY-MM-DD) for stable grouping across locales. */
+function getDateKey(item: IImageObject): string {
+  if (!item.createdAt) return 'Unknown';
+  const date = new Date(item.createdAt);
+  if (Number.isNaN(date.getTime())) return 'Unknown';
+  // Local calendar day — avoids UTC midnight shifting the label.
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+/** e.g. "Sunday, 23 April 2023" */
+function formatFullDate(dateKey: string): string {
+  if (dateKey === 'Unknown') return dateKey;
+  const date = new Date(`${dateKey}T12:00:00`);
+  if (Number.isNaN(date.getTime())) return dateKey;
+  return date.toLocaleDateString('en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
 
 export function groupByDate(data: IImageObject[]): GroupedObject[] {
   const grouped: { [key: string]: IImageObject[] } = {};
-  // Group objects by humanReadableDate in descending order
+
   data
     .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
     .forEach((item) => {
-      const date =
-        item.humanReadableDate ||
-        (item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Unknown');
-      if (!grouped[date]) {
-        grouped[date] = [];
+      const key = getDateKey(item);
+      if (!grouped[key]) {
+        grouped[key] = [];
       }
-      grouped[date].push(item);
+      grouped[key].push(item);
     });
 
-  // Convert the grouped data into the desired format
-  const result: GroupedObject[] = Object.keys(grouped).map((date) => ({
-    title: formatDate(date), // Formatting date to desired format like "08 Oct"
-    data: grouped[date],
+  return Object.keys(grouped).map((key) => ({
+    title: formatFullDate(key),
+    data: grouped[key],
     isDeleting: false,
   }));
-
-  return result;
-}
-
-function formatDate(date: string): string {
-  if (date === 'Unknown') return date;
-
-  // Assuming the input date is in "MM/DD/YYYY" format
-  const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-
-  const [month, day] = date.split('/');
-
-  // Convert month number to month name (zero-indexed)
-  const monthName = months[parseInt(month, 10) - 1];
-
-  return `${day} ${monthName}`;
 }

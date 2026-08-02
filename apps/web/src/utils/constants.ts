@@ -351,6 +351,12 @@ export const FEATURES: FeatureSelect[] = [
     title: 'Revive Photos',
     icon: '$camera',
   },
+  {
+    id: FeatureType.REMOVE_BG,
+    name: 'remove_bg',
+    title: 'Remove Background',
+    icon: '$layers',
+  },
 ];
 
 export const FOOTER_LINKS = [

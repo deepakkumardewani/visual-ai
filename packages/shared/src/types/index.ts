@@ -4,6 +4,8 @@ export { FeatureType } from './domain';
 export type {
   IImage,
   IImageObject,
+  ExploreFeedItem,
+  ExploreFeedResponse,
   JobStatus,
   RazorpayProduct,
   IPayment,
@@ -11,4 +13,12 @@ export type {
   IUser,
 } from './domain';
 
-export type { AIImageInput, UpscaleInput, ColorizeInput, ReviveInput, Body, Props } from './api';
+export type {
+  AIImageInput,
+  UpscaleInput,
+  ColorizeInput,
+  RemoveBgInput,
+  ReviveInput,
+  Body,
+  Props,
+} from './api';

@@ -21,6 +21,7 @@ const FEATURE_TYPE_OPTIONS = [
   { id: 'upscale', title: 'Upscale' },
   { id: 'colorize', title: 'Colorize' },
   { id: 'revive', title: 'Revive' },
+  { id: 'remove_bg', title: 'Remove BG' },
 ];
 
 const { selectedSize, selectedFeatureTypes, searchQuery } = storeToRefs(useHistoryStore());
@@ -162,18 +163,18 @@ function toggleFeatureType(id: string) {
   gap: 0.5rem;
   min-height: 44px;
   width: 100%;
-  padding: 0 0.75rem;
+  padding: 0 0.875rem;
   border: 1px solid rgb(var(--tw-hairline));
   border-radius: 9999px;
   background: rgb(var(--tw-surface-1));
   transition: border-color 0.15s ease;
 
   &:focus-within {
-    border-color: rgba(201, 138, 90, 0.4);
+    border-color: rgba(201, 138, 90, 0.45);
   }
 
   @media (min-width: 640px) {
-    width: 14rem;
+    width: 15rem;
   }
 }
 

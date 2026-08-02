@@ -15,10 +15,10 @@ describe('communityMock', () => {
       expect(item.id).toBeTruthy();
       expect(item.imageUrl).toMatch(/^https:\/\//);
       expect(item.author).toBeTruthy();
-      expect(typeof item.likes).toBe('number');
-      expect(item.likes).toBeGreaterThan(0);
+      expect(item.authorUserId).toBeTruthy();
       expect(item.prompt).toBeTruthy();
       expect(item.aspectRatio).toMatch(/^\d+:\d+$/);
+      expect(item.createdAt).toBeTruthy();
     }
   });
 

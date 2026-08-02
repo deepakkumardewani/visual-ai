@@ -1,27 +1,63 @@
 <script setup lang="ts">
 import { faDownload, farHeart, fasHeart, faTrashAlt } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
 
-import { IImageObject } from '@/types';
+import type { IImageObject } from '@/types';
 
 import { useGenerateStore } from '@/stores/generate';
 
+import ConfirmDeleteImageDialog from '@/components/Dialogs/ConfirmDeleteImageDialog.vue';
+
 import { deleteImage, downloadImage, favoriteImage, getDownloadImageUrl } from '@/utils/helpers';
 
-const props = defineProps<{
-  item: IImageObject;
-}>();
+const props = withDefaults(
+  defineProps<{
+    item: IImageObject;
+    /** When set, download that specific image instead of the first. */
+    imageIndex?: number;
+  }>(),
+  { imageIndex: 0 },
+);
+
 const generateStore = useGenerateStore();
 const { deletingImageIds } = storeToRefs(generateStore);
 
-const isDeletingThis = computed(() => deletingImageIds.value.includes(props.item._id));
+const showDeleteConfirm = ref(false);
+
+const isDeletingThis = computed(() =>
+  props.item._id ? deletingImageIds.value.includes(props.item._id) : false,
+);
+
+const downloadTarget = computed(() => {
+  const images = props.item.images ?? [];
+  return images[props.imageIndex] ?? images[0];
+});
+
+const imageCount = computed(() => props.item.images?.length ?? 1);
+
+function openDeleteConfirm(event: Event) {
+  event.stopPropagation();
+  showDeleteConfirm.value = true;
+}
+
+function closeDeleteConfirm() {
+  showDeleteConfirm.value = false;
+}
+
+async function confirmDelete(event: Event) {
+  showDeleteConfirm.value = false;
+  await deleteImage(event, props.item);
+}
 </script>
+
 <template>
   <button
     type="button"
     class="tile-action"
     aria-label="Download image"
-    @click="downloadImage($event, getDownloadImageUrl(props.item.images[0]))"
+    :disabled="!downloadTarget"
+    @click="downloadTarget && downloadImage($event, getDownloadImageUrl(downloadTarget))"
   >
     <font-awesome-icon :icon="faDownload" class="tw-h-3 tw-w-3" aria-hidden="true" />
   </button>
@@ -30,7 +66,7 @@ const isDeletingThis = computed(() => deletingImageIds.value.includes(props.item
     type="button"
     class="tile-action"
     :aria-label="props.item.isFavorite ? 'Remove from favorites' : 'Add to favorites'"
-    @click="favoriteImage($event, props.item._id)"
+    @click="favoriteImage($event, props.item._id ?? '')"
   >
     <font-awesome-icon
       :icon="props.item.isFavorite ? fasHeart : farHeart"
@@ -46,11 +82,20 @@ const isDeletingThis = computed(() => deletingImageIds.value.includes(props.item
     :class="{ 'tile-action--busy': isDeletingThis }"
     :disabled="isDeletingThis"
     aria-label="Delete image"
-    @click="deleteImage($event, props.item)"
+    @click="openDeleteConfirm"
   >
     <font-awesome-icon :icon="faTrashAlt" class="tw-h-3 tw-w-3" aria-hidden="true" />
   </button>
+
+  <ConfirmDeleteImageDialog
+    :open="showDeleteConfirm"
+    :image-count="imageCount"
+    :loading="isDeletingThis"
+    @close="closeDeleteConfirm"
+    @confirm="confirmDelete"
+  />
 </template>
+
 <style scoped lang="scss">
 .tile-action {
   display: flex;

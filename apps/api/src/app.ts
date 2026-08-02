@@ -42,11 +42,28 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.options("*", cors(corsOptions))
 
-// HTTP request logging with request ID
+// HTTP access logs: one-liners. Skip generate (domain logs cover those) + health/SSE noise.
 app.use(
     pinoHttp({
         logger,
         genReqId: () => uuidv4(),
+        quietReqLogger: true,
+        autoLogging: {
+            ignore: (req) => {
+                const url = req.url ?? ""
+                return (
+                    url.startsWith("/health") ||
+                    url.startsWith("/progress") ||
+                    url.startsWith("/generate")
+                )
+            },
+        },
+        customSuccessMessage: (req, res) => `${req.method} ${req.url} ${res.statusCode}`,
+        customErrorMessage: (req, res) => `${req.method} ${req.url} ${res.statusCode}`,
+        serializers: {
+            req: () => undefined,
+            res: () => undefined,
+        },
     }),
 )
 

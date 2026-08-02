@@ -5,6 +5,7 @@ export const useDialogStore = defineStore('dialog', () => {
   const showPremiumDialog = ref(false);
   const showLowCreditsDialog = ref(false);
   const showImageDialog = ref(false);
+  const activeImageId = ref<string | null>(null);
   const showReferralDialog = ref(false);
   const showCopyReferralDialog = ref(false);
   const showDeleteDialog = ref(false);
@@ -30,11 +31,13 @@ export const useDialogStore = defineStore('dialog', () => {
   function hideLowCredits() {
     showLowCreditsDialog.value = false;
   }
-  function showImage() {
+  function showImage(imageId?: string) {
+    activeImageId.value = imageId ?? null;
     showImageDialog.value = true;
   }
   function hideImage() {
     showImageDialog.value = false;
+    activeImageId.value = null;
   }
   function showReferral() {
     showReferralDialog.value = true;
@@ -95,6 +98,7 @@ export const useDialogStore = defineStore('dialog', () => {
     showPricingDialog,
     showPremiumDialog,
     showImageDialog,
+    activeImageId,
     showReferralDialog,
     showCopyReferralDialog,
     showLowCreditsDialog,

@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { faExpand, faImages, faPalette, faWandMagicSparkles } from '@/plugins/icons';
+import {
+  faExpand,
+  faImages,
+  faObjectUngroup,
+  faPalette,
+  faWandMagicSparkles,
+} from '@/plugins/icons';
 
 import { IImageObject } from '@/types';
 
@@ -12,6 +18,7 @@ const FEATURE_ICONS = {
   upscale: faExpand,
   colorize: faPalette,
   revive: faWandMagicSparkles,
+  remove_bg: faObjectUngroup,
 } as const;
 
 const icon = computed(() => FEATURE_ICONS[props.item.featureType as keyof typeof FEATURE_ICONS]);

@@ -465,6 +465,19 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       imageInput: { inputKey: 'image' },
     },
   },
+
+  BACKGROUND_REMOVER: {
+    key: 'BACKGROUND_REMOVER',
+    replicateId:
+      '851-labs/background-remover:a029dff38972b5fda4ec5d75d7d1cd25aeff621d2cf4946a41055d7db66b80bc',
+    label: 'Background Remover',
+    tier: 'standard',
+    utility: true,
+    fields: {
+      prompt: true,
+      imageInput: { inputKey: 'image' },
+    },
+  },
 };
 
 /** Derive isPro from tier — single source of truth for premium gating */

@@ -7,6 +7,7 @@ import { createLogger } from "../lib/logger.js"
 import {
     processColorize,
     processImage,
+    processRemoveBg,
     processRevive,
     processUpscale,
 } from "../services/generation-service.js"
@@ -20,6 +21,13 @@ const logger = createLogger("generate-route")
 const jobStatusService = new RedisService()
 
 export const generateRoute = Router()
+
+function acceptResponse(res: Response) {
+    res.status(202).json({
+        message: "Processing started",
+        status: "processing",
+    })
+}
 
 // Real-time Progress Tracking Endpoint
 // Provides SSE (Server-Sent Events) for tracking upscale job progress
@@ -63,7 +71,7 @@ generateRoute.get("/progress", async (req: Request, res: Response) => {
     }, 1000)
 
     const cleanup = async () => {
-        logger.debug("Connection closed")
+        logger.debug({ jobId }, "SSE connection closed")
         clearInterval(interval)
         await jobStatusService.deleteStatus(jobId)
         res.end()
@@ -80,10 +88,7 @@ generateRoute.post(
     ClerkExpressRequireAuth({}),
     asyncHandler(async (req: Request, res: Response) => {
         void processImage(req.body)
-        res.status(202).json({
-            message: "Processing started",
-            status: "processing",
-        })
+        acceptResponse(res)
     }),
 )
 
@@ -98,18 +103,13 @@ generateRoute.post(
         if (!req.file?.path) {
             throw new BadRequestError("No image file provided")
         }
-
         const props: Props = {
             body: req.body,
             filePath: req.file.path,
             fileName: req.file.filename,
         }
         void processUpscale(props)
-
-        res.status(202).json({
-            message: "Processing started",
-            status: "processing",
-        })
+        acceptResponse(res)
     }),
 )
 
@@ -124,18 +124,13 @@ generateRoute.post(
         if (!req.file?.path) {
             throw new BadRequestError("No image file provided")
         }
-
         const props: Props = {
             body: req.body,
             filePath: req.file.path,
             fileName: req.file.filename,
         }
         void processRevive(props)
-
-        res.status(202).json({
-            message: "Processing started",
-            status: "processing",
-        })
+        acceptResponse(res)
     }),
 )
 
@@ -150,17 +145,33 @@ generateRoute.post(
         if (!req.file?.path) {
             throw new BadRequestError("No image file provided")
         }
-
         const props: Props = {
             body: req.body,
             filePath: req.file.path,
             fileName: req.file.filename,
         }
         void processColorize(props)
+        acceptResponse(res)
+    }),
+)
 
-        res.status(202).json({
-            message: "Processing started",
-            status: "processing",
-        })
+// Remove Background Endpoint
+// Fire-and-forget: uploads image, starts background job, returns 202
+generateRoute.post(
+    "/generate/remove-bg/image",
+    // @ts-ignore
+    ClerkExpressRequireAuth({}),
+    upload.single("image"),
+    asyncHandler(async (req: Request, res: Response) => {
+        if (!req.file?.path) {
+            throw new BadRequestError("No image file provided")
+        }
+        const props: Props = {
+            body: req.body,
+            filePath: req.file.path,
+            fileName: req.file.filename,
+        }
+        void processRemoveBg(props)
+        acceptResponse(res)
     }),
 )

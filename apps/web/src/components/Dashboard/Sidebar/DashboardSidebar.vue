@@ -7,6 +7,7 @@ import { useAppStore } from '@/stores/app';
 
 import ColorizeImageAside from '@/components/Dashboard/Sidebar/ColorizeImageAside.vue';
 import ImageGenerateAside from '@/components/Dashboard/Sidebar/ImageGenerateAside.vue';
+import RemoveBgAside from '@/components/Dashboard/Sidebar/RemoveBgAside.vue';
 import ReviveOldAside from '@/components/Dashboard/Sidebar/ReviveOldAside.vue';
 import UpscaleImageAside from '@/components/Dashboard/Sidebar/UpscaleImageAside.vue';
 
@@ -24,5 +25,6 @@ const { feature } = storeToRefs(appStore);
     <UpscaleImageAside v-else-if="feature === FeatureType.UPSCALE" />
     <ColorizeImageAside v-else-if="feature === FeatureType.COLORIZE" />
     <ReviveOldAside v-else-if="feature === FeatureType.REVIVE" />
+    <RemoveBgAside v-else-if="feature === FeatureType.REMOVE_BG" />
   </nav>
 </template>

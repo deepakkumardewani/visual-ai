@@ -28,20 +28,23 @@ watch(
 // The landing page ships its own immersive nav and footer, so the
 // global Vuetify chrome is suppressed on '/'.
 const isLanding = computed(() => route.path === '/');
+const isExploreViewer = computed(() => route.name === 'explore-image');
 const isHeaderVisible = computed(() => {
   return (
     !isLanding.value &&
+    !isExploreViewer.value &&
     route.path !== '/signin' &&
     route.path !== '/login' &&
     route.path !== '/signup'
   );
 });
 const overflowHidden = computed(() => {
-  return route.path === '/dashboard' && tab.value === 1;
+  return (route.path === '/dashboard' && tab.value === 1) || isExploreViewer.value;
 });
 const isFooterVisible = computed(() => {
   return (
     !isLanding.value &&
+    !isExploreViewer.value &&
     route.path !== '/signin' &&
     route.path !== '/login' &&
     route.path !== '/signup' &&
@@ -54,9 +57,10 @@ const isFooterVisible = computed(() => {
     <AppHeader v-if="isHeaderVisible" />
     <v-main
       :class="{
-        'tw-h-[98vh] tw-overflow-y-hidden': overflowHidden,
-        'tw-pt-0': isLanding,
-        'tw-pt-14': isHeaderVisible && !isLanding,
+        'tw-h-[98vh] tw-overflow-y-hidden': overflowHidden && !isExploreViewer,
+        'tw-h-[100dvh] tw-overflow-hidden': isExploreViewer,
+        'tw-pt-0': isLanding || isExploreViewer,
+        'tw-pt-14': isHeaderVisible && !isLanding && !isExploreViewer,
       }"
     >
       <router-view />

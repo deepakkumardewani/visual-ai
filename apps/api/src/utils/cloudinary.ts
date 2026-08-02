@@ -109,12 +109,15 @@ export async function uploadToCloudinary(data: any) {
         } else {
             const imageDetails = await getImageDetails(imageUrl)
             let imageString = imageUrl
-            if (imageDetails.bytes > MAX_FILE_SIZE_BYTES) {
+            const preserveAlpha = type === "remove_bg"
+            // JPEG compression destroys transparency — never flatten remove-bg PNGs.
+            if (!preserveAlpha && imageDetails.bytes > MAX_FILE_SIZE_BYTES) {
                 const compressedBuffer = await compressImage(imageUrl)
                 imageString = `data:image/jpeg;base64,${compressedBuffer.toString("base64")}`
             }
             const result = await cloudinary.v2.uploader.upload(imageString, {
                 folder: `${basePath}/${type}`,
+                ...(preserveAlpha ? { format: "png" } : {}),
             })
 
             const { secure_url, public_id, width, height, format, bytes, original_filename } =
@@ -159,11 +162,35 @@ export async function uploadToCloudinary(data: any) {
                     },
                 )
             }
-            if (data.type === "upscale" || data.type === "colorize" || data.type === "revive") {
+            if (
+                data.type === "upscale" ||
+                data.type === "colorize" ||
+                data.type === "revive" ||
+                data.type === "remove_bg"
+            ) {
+                // Prefer a Cloudinary-hosted original so History Before/After works in-browser.
+                // `data.original` is often a local multer path — upload it when possible.
+                let originalUrl = typeof data.original === "string" ? data.original : ""
+                let originalId = originalPublicId
+                const originalIsRemote =
+                    typeof originalUrl === "string" && /^https?:\/\//i.test(originalUrl)
+
+                if (!originalIsRemote && typeof data.original === "string" && data.original) {
+                    try {
+                        const originalUpload = await cloudinary.v2.uploader.upload(data.original, {
+                            folder: `${basePath}/${type}/originals`,
+                        })
+                        originalUrl = originalUpload.secure_url
+                        originalId = originalUpload.public_id
+                    } catch (err) {
+                        logger.error({ err }, "Failed to upload transform original to Cloudinary")
+                    }
+                }
+
                 if (image.images[0]) {
-                    image.images[0].originalImageUrl = data.original
+                    image.images[0].originalImageUrl = originalUrl
                     image.images[0].enhancedImageUrl = secure_url
-                    image.images[0].originalPublicId = originalPublicId
+                    image.images[0].originalPublicId = originalId
                     image.images[0].enhancedPublicId = public_id
                 }
                 await User.updateOne(
@@ -173,9 +200,9 @@ export async function uploadToCloudinary(data: any) {
                     },
                     {
                         $set: {
-                            "history.$.images.0.originalImageUrl": data.original,
+                            "history.$.images.0.originalImageUrl": originalUrl,
                             "history.$.images.0.enhancedImageUrl": result.secure_url,
-                            "history.$.images.0.originalPublicId": originalPublicId,
+                            "history.$.images.0.originalPublicId": originalId,
                             "history.$.images.0.enhancedPublicId": result.public_id,
                             "history.$.images.0.aspectRatio": aspectRatio,
                         },

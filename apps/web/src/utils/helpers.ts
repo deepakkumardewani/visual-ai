@@ -87,21 +87,27 @@ export const favoriteImage = async (event: Event, imageId: string) => {
 export const downloadImage = async (event?: Event, image?: string) => {
   event?.stopPropagation();
 
-  if (!image) return;
+  if (!image) return false;
 
   try {
     const response = await fetch(image);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `image-${Date.now()}.${image.split('.').pop()}`;
+    const mimeExt = blob.type.split('/')[1]?.replace('jpeg', 'jpg');
+    const pathExt = image.split('?')[0]?.split('.').pop();
+    const ext = mimeExt || pathExt || 'png';
+    a.download = `image-${Date.now()}.${ext}`;
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
+    return true;
   } catch (error) {
     log.error('downloadImage failed', { error, image });
+    return false;
   }
 };
 

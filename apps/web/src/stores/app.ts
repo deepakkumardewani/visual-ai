@@ -35,6 +35,7 @@ export const useAppStore = defineStore('app', () => {
     upscaleInProgress,
     colorizeInProgress,
     reviveInProgress,
+    removeBgInProgress,
     images,
     imageData,
     errMsg,
@@ -85,20 +86,28 @@ export const useAppStore = defineStore('app', () => {
     error: reviveError,
   } = useEventSource(progressUrl, [], eventSourceOptions.value);
 
+  const {
+    open: removeBgOpen,
+    close: removeBgClose,
+    data: removeBgData,
+    error: removeBgError,
+  } = useEventSource(progressUrl, [], eventSourceOptions.value);
+
   function handleEventSourceData(feature: string, data: JobStatus) {
     if (data.status === 'processing') {
       localStorage.setItem(`${feature}InProgress`, 'true');
       if (feature === 'upscale') upscaleInProgress.value = true;
       if (feature === 'colorize') colorizeInProgress.value = true;
       if (feature === 'revive') reviveInProgress.value = true;
+      if (feature === FeatureType.REMOVE_BG) removeBgInProgress.value = true;
 
       if (data.image) {
-        // console.log('before upload: data.image', data.image)
         localStorage.setItem(`${feature}InProgress`, 'false');
         if (feature === FeatureType.IMAGE) isLoading.value = false;
         if (feature === FeatureType.UPSCALE) upscaleInProgress.value = false;
         if (feature === FeatureType.COLORIZE) colorizeInProgress.value = false;
         if (feature === FeatureType.REVIVE) reviveInProgress.value = false;
+        if (feature === FeatureType.REMOVE_BG) removeBgInProgress.value = false;
 
         images.value = data.image.images;
         imageData.value = data.image;
@@ -113,8 +122,6 @@ export const useAppStore = defineStore('app', () => {
       closeEventSource(feature);
 
       if (data.image) {
-        // The completed payload is the persisted DB record (Cloudinary ids for
-        // every image) — replace the optimistic entry wholesale.
         const historyIndex = history.value.findIndex((img) => img._id === data.image?._id);
         if (historyIndex !== -1) {
           history.value[historyIndex] = data.image;
@@ -136,6 +143,7 @@ export const useAppStore = defineStore('app', () => {
       if (feature === FeatureType.UPSCALE) upscaleInProgress.value = false;
       if (feature === FeatureType.COLORIZE) colorizeInProgress.value = false;
       if (feature === FeatureType.REVIVE) reviveInProgress.value = false;
+      if (feature === FeatureType.REMOVE_BG) removeBgInProgress.value = false;
       errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
     }
   }
@@ -153,6 +161,9 @@ export const useAppStore = defineStore('app', () => {
         break;
       case FeatureType.REVIVE:
         reviveClose();
+        break;
+      case FeatureType.REMOVE_BG:
+        removeBgClose();
         break;
     }
   }
@@ -175,6 +186,10 @@ export const useAppStore = defineStore('app', () => {
     if (feature === FeatureType.REVIVE) {
       reviveInProgress.value = false;
       reviveClose();
+    }
+    if (feature === FeatureType.REMOVE_BG) {
+      removeBgInProgress.value = false;
+      removeBgClose();
     }
   }
 
@@ -215,12 +230,20 @@ export const useAppStore = defineStore('app', () => {
     handleEventSourceData('revive', JSON.parse(newVal as string));
   });
 
-  watch([imgError, upscaleError, colorizeError, reviveError], ([imgErr, upErr, colErr, revErr]) => {
-    if (imgErr) handleEventSourceError(FeatureType.IMAGE, imgErr);
-    if (upErr) handleEventSourceError(FeatureType.UPSCALE, upErr);
-    if (colErr) handleEventSourceError(FeatureType.COLORIZE, colErr);
-    if (revErr) handleEventSourceError(FeatureType.REVIVE, revErr);
+  watch(removeBgData, (newVal) => {
+    handleEventSourceData(FeatureType.REMOVE_BG, JSON.parse(newVal as string));
   });
+
+  watch(
+    [imgError, upscaleError, colorizeError, reviveError, removeBgError],
+    ([imgErr, upErr, colErr, revErr, remErr]) => {
+      if (imgErr) handleEventSourceError(FeatureType.IMAGE, imgErr);
+      if (upErr) handleEventSourceError(FeatureType.UPSCALE, upErr);
+      if (colErr) handleEventSourceError(FeatureType.COLORIZE, colErr);
+      if (revErr) handleEventSourceError(FeatureType.REVIVE, revErr);
+      if (remErr) handleEventSourceError(FeatureType.REMOVE_BG, remErr);
+    },
+  );
 
   watch(
     isDark,
@@ -240,6 +263,8 @@ export const useAppStore = defineStore('app', () => {
     colorizeClose,
     reviveOpen,
     reviveClose,
+    removeBgOpen,
+    removeBgClose,
     sendSignal,
     imageOpen,
     imageClose,

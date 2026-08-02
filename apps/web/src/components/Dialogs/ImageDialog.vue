@@ -1,104 +1,144 @@
 <script setup lang="ts">
 import { FeatureType } from '@/pages/utils';
-import {
-  faChevronLeft,
-  faChevronRight,
-  faDownload,
-  faFile,
-  faTimes,
-  faTrashAlt,
-  farHeart,
-  fasHeart,
-} from '@/plugins/icons';
+import { faDownload, faTimes, faTrashAlt, farHeart, fasHeart } from '@/plugins/icons';
 import { useMediaQuery } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 
-import { IImageObject } from '@/types';
+import type { IImageObject } from '@/types';
 
 import { useDialogStore } from '@/stores/dialog';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
 
 import AppModal from '@/components/AppModal.vue';
+import ConfirmDeleteImageDialog from '@/components/Dialogs/ConfirmDeleteImageDialog.vue';
 import SideBySide from '@/components/SideBySide.vue';
 
-import { deleteImage, downloadImage, favoriteImage, formatFileSize } from '@/utils/helpers';
+import { deleteImage, downloadImage, favoriteImage, getDownloadImageUrl } from '@/utils/helpers';
 
 const isMobile = useMediaQuery('(max-width: 600px)');
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
 const { history } = storeToRefs(userStore);
-const { showImageDialog } = storeToRefs(dialogStore);
+const { showImageDialog, activeImageId } = storeToRefs(dialogStore);
 const generateStore = useGenerateStore();
 const { isDeleting, isFavoriting } = storeToRefs(generateStore);
+
 const isFavorite = ref(false);
-const currentImageIndex = ref(0);
+const showDeleteConfirm = ref(false);
 
 const props = defineProps<{
   item: IImageObject | undefined;
 }>();
 
-function nextImage() {
-  if (!props.item?.images) return;
-  const urls = Array.isArray(props.item.images) ? props.item.images : [];
-  if (currentImageIndex.value < urls.length - 1) {
-    currentImageIndex.value++;
-  }
-}
+const isThisDialogOpen = computed(
+  () => showImageDialog.value && !!props.item && props.item._id === activeImageId.value,
+);
 
-function previousImage() {
-  if (currentImageIndex.value > 0) {
-    currentImageIndex.value--;
-  }
-}
+const imageCount = computed(() => props.item?.images?.length ?? 0);
 
-const downloadImageUrl = computed(() => {
-  if (!props.item?.images) return '';
-  const publicId = props.item.images[currentImageIndex.value]?.aiImagePublicId
-    ? props.item.images[currentImageIndex.value]?.aiImagePublicId
-    : props.item.images[currentImageIndex.value]?.enhancedPublicId;
-  const format = props.item.images[currentImageIndex.value]?.format;
-  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
-  return `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`;
+const galleryLayoutClass = computed(() => {
+  const count = imageCount.value;
+  if (count <= 1) return 'image-dialog__gallery--single';
+  if (count === 2) return 'image-dialog__gallery--two';
+  if (count === 3) return 'image-dialog__gallery--three';
+  return 'image-dialog__gallery--grid';
 });
 
-function getCurrentImageUrl() {
+const isImageFeature = computed(() => props.item?.featureType === FeatureType.IMAGE);
+
+const primaryImage = computed(() => props.item?.images?.[0]);
+
+const enhanceDownloadUrl = computed(() => {
+  const image = primaryImage.value;
+  if (!image) return '';
+  return getDownloadImageUrl(image);
+});
+
+function getImageUrl(index: number): string {
   const images = props.item?.images;
-  if (!images) return '';
+  if (!images?.[index]) return '';
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.aiImagePublicId}`;
-  return images[currentImageIndex.value]?.aiImagePublicId
-    ? optimizedUrl
-    : (images[currentImageIndex.value]?.aiImageUrl as string);
+  const image = images[index];
+  if (image.aiImagePublicId) {
+    return `${cloudinaryBaseUrl}/q_auto,f_auto/${image.aiImagePublicId}`;
+  }
+  return (image.aiImageUrl as string) || '';
+}
+
+function downloadAtIndex(event: Event, index: number) {
+  const image = props.item?.images?.[index];
+  if (!image) return;
+  void downloadImage(event, getDownloadImageUrl(image));
 }
 
 const originalImageUrl = computed(() => {
-  const images = props.item?.images;
-  if (!images) return '';
+  const image = primaryImage.value;
+  if (!image) return '';
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.originalPublicId}`;
-  return images[currentImageIndex.value]?.originalPublicId
-    ? optimizedUrl
-    : (images[currentImageIndex.value]?.originalImageUrl as string);
+  const remoteOriginal =
+    typeof image.originalImageUrl === 'string' && /^https?:\/\//i.test(image.originalImageUrl)
+      ? image.originalImageUrl
+      : '';
+  // Prefer remote originals; multer filenames are not valid Cloudinary public IDs.
+  if (image.originalPublicId && image.originalPublicId.includes('/')) {
+    return `${cloudinaryBaseUrl}/q_auto,f_auto/${image.originalPublicId}`;
+  }
+  if (remoteOriginal) return remoteOriginal;
+  if (image.originalPublicId) {
+    return `${cloudinaryBaseUrl}/q_auto,f_auto/${image.originalPublicId}`;
+  }
+  return '';
 });
 
 const enhancedImageUrl = computed(() => {
-  const images = props.item?.images;
-  if (!images) return '';
+  const image = primaryImage.value;
+  if (!image) return '';
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
-  const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${images[currentImageIndex.value]?.enhancedPublicId}`;
-  return images[currentImageIndex.value]?.enhancedPublicId
-    ? optimizedUrl
-    : (images[currentImageIndex.value]?.enhancedImageUrl as string);
+  if (image.enhancedPublicId) {
+    // Preserve alpha for remove-bg — f_auto can flatten to JPEG (black matte).
+    const formatTransform =
+      props.item?.featureType === FeatureType.REMOVE_BG ? 'q_auto,f_png' : 'q_auto,f_auto';
+    return `${cloudinaryBaseUrl}/${formatTransform}/${image.enhancedPublicId}`;
+  }
+  return (image.enhancedImageUrl as string) || '';
 });
+
+const isTransparentEnhance = computed(() => props.item?.featureType === FeatureType.REMOVE_BG);
+
+function openDeleteConfirm() {
+  showDeleteConfirm.value = true;
+}
+
+function closeDeleteConfirm() {
+  showDeleteConfirm.value = false;
+}
+
+async function confirmDelete(event: Event) {
+  if (!props.item) return;
+  showDeleteConfirm.value = false;
+  await deleteImage(event, props.item);
+}
+
+function closeImageDialog() {
+  showDeleteConfirm.value = false;
+  dialogStore.hideImage();
+}
+
+watch(
+  () => props.item?._id,
+  () => {
+    showDeleteConfirm.value = false;
+  },
+);
 
 watch(
   () => props.item,
   (newItem) => {
     const item = history.value.find((entry) => entry._id === newItem?._id);
     if (item) {
-      isFavorite.value = item.isFavorite;
+      isFavorite.value = item.isFavorite ?? false;
     }
   },
   { immediate: true, deep: true },
@@ -107,35 +147,33 @@ watch(
 watch(history, (newHistory) => {
   const newItem = newHistory.find((entry) => entry._id === props.item?._id);
   if (newItem) {
-    isFavorite.value = newItem.isFavorite;
+    isFavorite.value = newItem.isFavorite ?? false;
   }
+});
+
+watch(isThisDialogOpen, (open) => {
+  if (!open) showDeleteConfirm.value = false;
 });
 </script>
 
 <template>
   <AppModal
-    :open="showImageDialog"
+    :open="isThisDialogOpen"
     :fullscreen="isMobile"
-    max-width="62rem"
+    max-width="min(96vw, 88rem)"
     :show-close="false"
+    :close-on-escape="!showDeleteConfirm"
+    :close-on-overlay="!showDeleteConfirm"
     labelled-by="image-dialog-title"
-    @close="dialogStore.hideImage"
+    @close="closeImageDialog"
   >
     <div class="image-dialog">
-      <div class="image-dialog__toolbar">
+      <header class="image-dialog__toolbar">
         <div class="image-dialog__start">
-          <button
-            type="button"
-            class="icon-btn"
-            aria-label="Close"
-            @click="dialogStore.hideImage()"
-          >
+          <button type="button" class="icon-btn" aria-label="Close" @click="closeImageDialog">
             <font-awesome-icon :icon="faTimes" aria-hidden="true" />
           </button>
-          <p v-if="item?.prompt && !isMobile" id="image-dialog-title" class="image-dialog__prompt">
-            {{ item.prompt }}
-          </p>
-          <span v-else id="image-dialog-title" class="tw-sr-only">Image preview</span>
+          <span id="image-dialog-title" class="tw-sr-only">Image preview</span>
         </div>
 
         <div class="image-dialog__actions">
@@ -144,97 +182,99 @@ watch(history, (newHistory) => {
             class="icon-btn"
             title="Favorite"
             :disabled="isFavoriting"
-            aria-label="Favorite"
+            :aria-label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
             @click="favoriteImage($event, item?._id ?? '')"
           >
-            <font-awesome-icon :icon="isFavorite ? fasHeart : farHeart" aria-hidden="true" />
+            <font-awesome-icon
+              :icon="isFavorite ? fasHeart : farHeart"
+              :class="{ 'icon-btn__fav--active': isFavorite }"
+              aria-hidden="true"
+            />
           </button>
           <button
+            v-if="!isImageFeature"
             type="button"
             class="icon-btn"
             title="Download"
             aria-label="Download"
-            @click="downloadImage($event, downloadImageUrl)"
+            :disabled="!enhanceDownloadUrl"
+            @click="downloadImage($event, enhanceDownloadUrl)"
           >
             <font-awesome-icon :icon="faDownload" aria-hidden="true" />
           </button>
           <button
             type="button"
-            class="icon-btn"
+            class="icon-btn icon-btn--danger"
             title="Delete"
             :disabled="isDeleting"
             aria-label="Delete"
-            @click="deleteImage($event, item as IImageObject)"
+            @click="openDeleteConfirm"
           >
             <font-awesome-icon :icon="faTrashAlt" aria-hidden="true" />
           </button>
         </div>
-      </div>
-
-      <p v-if="item?.prompt && isMobile" class="image-dialog__prompt image-dialog__prompt--mobile">
-        {{ item.prompt }}
-      </p>
+      </header>
 
       <div class="image-dialog__stage">
-        <div v-if="item?.featureType === FeatureType.IMAGE" class="image-dialog__viewer">
-          <div v-if="(item?.images?.length ?? 0) > 1" class="image-dialog__nav">
-            <button
-              type="button"
-              class="nav-btn"
-              :disabled="currentImageIndex === 0"
-              aria-label="Previous image"
-              @click="previousImage"
-            >
-              <font-awesome-icon :icon="faChevronLeft" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              class="nav-btn"
-              :disabled="currentImageIndex === (item.images?.length ?? 1) - 1"
-              aria-label="Next image"
-              @click="nextImage"
-            >
-              <font-awesome-icon :icon="faChevronRight" aria-hidden="true" />
-            </button>
-          </div>
-
-          <img
-            :key="currentImageIndex"
-            :src="getCurrentImageUrl()"
-            :alt="item?.prompt || 'Generated image'"
-            class="image-dialog__img"
-          />
+        <div v-if="isImageFeature" class="image-dialog__gallery" :class="galleryLayoutClass">
+          <figure
+            v-for="(img, index) in item?.images"
+            :key="img.name || index"
+            class="image-dialog__frame"
+          >
+            <img
+              :src="getImageUrl(index)"
+              :alt="item?.prompt || `Generated image ${index + 1}`"
+              class="image-dialog__img"
+              draggable="false"
+            />
+            <div class="image-dialog__overlay">
+              <div class="image-dialog__overlay-fade" aria-hidden="true" />
+              <button
+                type="button"
+                class="tile-download"
+                :aria-label="`Download image ${index + 1}`"
+                @click="downloadAtIndex($event, index)"
+              >
+                <font-awesome-icon :icon="faDownload" class="tw-h-3 tw-w-3" aria-hidden="true" />
+              </button>
+            </div>
+          </figure>
         </div>
 
-        <div v-else>
+        <div v-else class="image-dialog__compare">
           <SideBySide
             :original-image="originalImageUrl"
             :enhanced-image="enhancedImageUrl"
-            :in-dialog="true"
+            :transparent="isTransparentEnhance"
+            max-height="min(70dvh, 42rem)"
           />
         </div>
       </div>
 
-      <div class="image-dialog__meta">
-        <div v-if="(item?.images?.length ?? 0) > 1" class="image-dialog__count">
-          {{ currentImageIndex + 1 }} / {{ item?.images?.length }}
-        </div>
+      <footer class="image-dialog__footer">
+        <p v-if="item?.prompt" class="image-dialog__prompt">
+          {{ item.prompt }}
+        </p>
         <div class="image-dialog__chips">
           <span v-if="item?.modelName" class="chip">{{ item.modelName }}</span>
-          <span v-if="item?.images?.[0]?.aspectRatio" class="chip">{{
-            item.images?.[0]?.aspectRatio
-          }}</span>
-          <span v-if="item?.images?.[0]?.bytes" class="chip">{{
-            formatFileSize(item?.images?.[currentImageIndex]?.bytes)
-          }}</span>
-          <span class="chip">
-            <font-awesome-icon :icon="faFile" aria-hidden="true" />
-            {{ item?.images?.[0]?.width }} × {{ item?.images?.[0]?.height }}
+          <span v-if="primaryImage?.aspectRatio" class="chip">{{ primaryImage.aspectRatio }}</span>
+          <span v-if="primaryImage?.width && primaryImage?.height" class="chip">
+            {{ primaryImage.width }} × {{ primaryImage.height }}
           </span>
         </div>
-      </div>
+      </footer>
     </div>
   </AppModal>
+
+  <ConfirmDeleteImageDialog
+    :open="showDeleteConfirm"
+    :image-count="imageCount"
+    :loading="isDeleting"
+    :layer="1"
+    @close="closeDeleteConfirm"
+    @confirm="confirmDelete"
+  />
 </template>
 
 <style scoped lang="scss">
@@ -242,7 +282,6 @@ watch(history, (newHistory) => {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  min-height: min(80dvh, 48rem);
   margin: -0.5rem;
 }
 
@@ -257,108 +296,186 @@ watch(history, (newHistory) => {
 .image-dialog__actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
+}
+
+.image-dialog__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.image-dialog__gallery {
+  width: 100%;
+  display: grid;
+  gap: 0.65rem;
+  align-items: stretch;
+
+  &--single {
+    grid-template-columns: 1fr;
+    max-width: 52rem;
+    margin-inline: auto;
+  }
+
+  &--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  &--three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &--grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    @media (min-width: 1100px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+}
+
+.image-dialog__compare {
+  width: 100%;
+}
+
+.image-dialog__frame {
+  position: relative;
+  margin: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgb(var(--tw-surface-2));
+  box-shadow: inset 0 0 0 1px rgb(var(--tw-hairline) / 0.5);
+
+  &:hover .image-dialog__overlay,
+  &:focus-within .image-dialog__overlay {
+    opacity: 1;
+  }
+}
+
+.image-dialog__img {
+  display: block;
+  width: 100%;
+  max-height: min(64dvh, 38rem);
+  object-fit: contain;
+  background: rgb(var(--tw-surface-2));
+  pointer-events: none;
+  user-select: none;
+}
+
+.image-dialog__gallery--single .image-dialog__img {
+  max-height: min(70dvh, 42rem);
+}
+
+.image-dialog__overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.image-dialog__overlay-fade {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 3.5rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent);
+}
+
+.tile-download {
+  pointer-events: auto;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.75rem;
+  width: 1.75rem;
+  border: 0;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #c9a84c;
+    outline-offset: 2px;
+  }
+}
+
+@media (hover: none) {
+  .image-dialog__overlay {
+    opacity: 1;
+  }
+}
+
+.image-dialog__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.65rem 1rem;
+  padding-top: 0.15rem;
 }
 
 .image-dialog__prompt {
   margin: 0;
-  max-width: 36rem;
-  font-size: 0.9rem;
+  flex: 1 1 16rem;
+  min-width: 0;
+  max-width: 48rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
   color: rgb(var(--tw-ink-muted));
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.image-dialog__prompt--mobile {
   white-space: normal;
-  padding: 0 0.25rem;
-}
-
-.image-dialog__stage {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-}
-
-.image-dialog__viewer {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image-dialog__nav {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 0.75rem;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.image-dialog__img {
-  max-width: 100%;
-  max-height: 70vh;
-  object-fit: contain;
-  border-radius: 8px;
-}
-
-.image-dialog__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.75rem;
-}
-
-.image-dialog__count {
-  margin-right: auto;
-  font-size: 0.85rem;
-  color: rgb(var(--tw-ink-muted));
-  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
 }
 
 .image-dialog__chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.35rem;
   justify-content: flex-end;
+  margin-left: auto;
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  min-height: 1.75rem;
-  padding: 0.2rem 0.65rem;
+  min-height: 1.6rem;
+  padding: 0.15rem 0.6rem;
   border-radius: 999px;
   background: rgb(var(--tw-surface-2));
-  border: 1px solid rgb(var(--tw-border) / 0.6);
+  border: 1px solid rgb(var(--tw-border) / 0.55);
   color: rgb(var(--tw-ink-muted));
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
-.icon-btn,
-.nav-btn {
+.icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.4rem;
+  height: 2.4rem;
   border: 0;
   border-radius: 999px;
   background: rgb(var(--tw-surface-2) / 0.8);
   color: rgb(var(--tw-ink-primary));
   cursor: pointer;
-  pointer-events: auto;
+  transition: background-color 0.15s ease;
 
   &:hover:not(:disabled) {
     background: rgb(var(--tw-surface-3));
@@ -372,6 +489,23 @@ watch(history, (newHistory) => {
   &:focus-visible {
     outline: 2px solid #c9a84c;
     outline-offset: 2px;
+  }
+}
+
+.icon-btn__fav--active {
+  color: #c98a5a;
+}
+
+.icon-btn--danger:hover:not(:disabled) {
+  background: rgba(176, 60, 60, 0.18);
+  color: #e08585;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-dialog__overlay,
+  .tile-download,
+  .icon-btn {
+    transition: none;
   }
 }
 </style>
