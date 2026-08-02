@@ -26,7 +26,7 @@ defineEmits<{
         {{ companyName }} models
       </h4>
 
-      <div class="tw-flex tw-min-h-0 tw-flex-col tw-gap-0.5 tw-overflow-y-auto">
+      <div class="tw-flex tw-min-h-0 tw-flex-col tw-gap-0.5 tw-overflow-y-auto no-scrollbar">
         <ModelOption
           v-for="model in models"
           :key="`${model.id}-${model.title}`"

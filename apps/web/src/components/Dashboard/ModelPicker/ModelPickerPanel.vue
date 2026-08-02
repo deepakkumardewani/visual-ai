@@ -29,7 +29,7 @@ const companyGroups = computed(() =>
   <div
     role="listbox"
     aria-label="Select a model"
-    class="tw-max-h-[min(24rem,60vh)] tw-w-[min(22rem,calc(100vw-2rem))] tw-overflow-y-auto"
+    class="tw-max-h-[min(24rem,60vh)] tw-w-[min(22rem,calc(100vw-2rem))] tw-overflow-y-auto no-scrollbar"
   >
     <div v-if="featuredModels.length" class="tw-mb-3">
       <h3

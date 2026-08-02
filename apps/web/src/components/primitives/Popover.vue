@@ -8,10 +8,13 @@ const props = withDefaults(
   defineProps<{
     open?: boolean;
     placement?: 'bottom-start' | 'bottom-end' | 'top-start';
+    /** Constrain the panel to the trigger's width instead of its own intrinsic width. */
+    matchTriggerWidth?: boolean;
   }>(),
   {
     open: undefined,
     placement: 'bottom-start',
+    matchTriggerWidth: false,
   },
 );
 
@@ -111,7 +114,7 @@ onClickOutside(
 
 useFocusTrap(panelRef, isOpen);
 
-const floatingStyle = ref<{ top: string; left: string }>({
+const floatingStyle = ref<{ top: string; left: string; width?: string; maxWidth?: string }>({
   top: '-9999px',
   left: '-9999px',
 });
@@ -133,7 +136,15 @@ function updatePosition() {
   const left =
     props.placement === 'bottom-end' ? triggerRect.right - panelRect.width : triggerRect.left;
 
-  floatingStyle.value = { top: `${top}px`, left: `${left}px` };
+  const viewportMargin = 16;
+  const maxWidth = window.innerWidth - left - viewportMargin;
+
+  floatingStyle.value = {
+    top: `${top}px`,
+    left: `${left}px`,
+    maxWidth: `${maxWidth}px`,
+    width: props.matchTriggerWidth ? `${triggerRect.width}px` : undefined,
+  };
 }
 
 watch(isOpen, async (open) => {

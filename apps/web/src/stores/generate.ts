@@ -1,5 +1,6 @@
 import { isEmpty } from 'lodash-es';
 import { defineStore, storeToRefs } from 'pinia';
+import { useStorage } from '@vueuse/core';
 
 import type { IGenerateResponse, IImage, IImageObject, ImageBody } from '@/types';
 
@@ -8,7 +9,7 @@ import { useUserStore } from '@/stores/user';
 import { useLocal } from '@/composables/local';
 import { useFetch } from '@/composables/useFetch';
 
-import { MODEL_REGISTRY } from '@visual-ai/shared';
+import { MODEL_REGISTRY, type StyleId, type EnhanceMode } from '@visual-ai/shared';
 import { createLogger } from '@/utils/logger';
 
 import { useAppStore } from './app';
@@ -29,6 +30,10 @@ export const useGenerateStore = defineStore('generate', () => {
   const upscaleInProgress = ref<boolean>(false);
   const colorizeInProgress = ref<boolean>(false);
   const reviveInProgress = ref<boolean>(false);
+  /** Style preset id (persisted) — t2i only */
+  const styleId = useStorage<StyleId>('visual-ai-style-id', 'dynamic');
+  /** Enhancement mode (persisted) — t2i only */
+  const enhanceMode = useStorage<EnhanceMode>('visual-ai-enhance-mode', 'auto');
   const userStore = useUserStore();
   const appStore = useAppStore();
   const { userId } = storeToRefs(userStore);
@@ -61,6 +66,8 @@ export const useGenerateStore = defineStore('generate', () => {
         outputQuality: imgData?.outputQuality ?? 70,
         aspectRatio: imgData?.aspectRatio ?? '16:9',
         outputFormat: imgData?.outputFormat ?? 'jpg',
+        styleId: styleId.value,
+        enhanceMode: enhanceMode.value,
       }),
     }).json<IGenerateResponse>();
     if (error.value) {
@@ -183,5 +190,7 @@ export const useGenerateStore = defineStore('generate', () => {
     colorizeInProgress,
     reviveInProgress,
     errMsg,
+    styleId,
+    enhanceMode,
   };
 });

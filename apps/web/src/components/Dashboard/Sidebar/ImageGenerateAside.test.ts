@@ -26,6 +26,15 @@ vi.mock('@/components/Dashboard/ModelPicker/ModelPicker.vue', () => ({
   default: { template: '<div data-testid="model-picker-stub" />' },
 }));
 
+// Stub out StylePicker and PromptEnhancePicker
+vi.mock('@/components/Dashboard/Sidebar/StylePicker.vue', () => ({
+  default: { template: '<div data-testid="style-picker-stub" />' },
+}));
+
+vi.mock('@/components/Dashboard/Sidebar/PromptEnhancePicker.vue', () => ({
+  default: { template: '<div data-testid="prompt-enhance-picker-stub" />' },
+}));
+
 import ImageGenerateAside from '@/components/Dashboard/Sidebar/ImageGenerateAside.vue';
 import { useAsideStore } from '@/stores/aside';
 import { useUserStore } from '@/stores/user';
@@ -84,5 +93,16 @@ describe('ImageGenerateAside section visibility', () => {
     expect(wrapper.find('[aria-label="Output quality"]').exists()).toBe(true);
     expect(wrapper.find('[aria-label="Number of images"]').exists()).toBe(true);
     expect(wrapper.find('[aria-label="Output format"]').exists()).toBe(true);
+  });
+
+  it('renders Style and Enhance pickers for all models', async () => {
+    const { wrapper, pinia } = mount_();
+    setActivePinia(pinia);
+    const aside = useAsideStore();
+    aside.mode = findByModelKey('FLUX_BASIC');
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('[data-testid="style-picker-stub"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="prompt-enhance-picker-stub"]').exists()).toBe(true);
   });
 });

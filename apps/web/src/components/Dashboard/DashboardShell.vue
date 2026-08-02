@@ -13,7 +13,7 @@
     <div class="dashboard-shell__grid tw-grid tw-h-full tw-min-h-0">
       <aside
         data-testid="dashboard-rail"
-        class="dashboard-shell__rail tw-min-h-0 tw-h-full tw-overflow-y-auto tw-border-b tw-border-hairline tw-bg-surface-1/60 sm:tw-border-b-0 sm:tw-border-r no-scrollbar"
+        class="dashboard-shell__rail tw-min-h-0 tw-h-full tw-overflow-y-auto tw-overscroll-contain tw-border-b tw-border-hairline tw-bg-surface-1/60 sm:tw-border-b-0 sm:tw-border-r no-scrollbar"
       >
         <slot name="rail" />
       </aside>

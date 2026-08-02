@@ -6,8 +6,11 @@ import { useRouter } from 'vue-router';
 
 import { useAsideStore } from '@/stores/aside';
 import { useUserStore } from '@/stores/user';
+import { useGenerateStore } from '@/stores/generate';
 
 import AspectRatioPicker from '@/components/Dashboard/Sidebar/AspectRatioPicker.vue';
+import StylePicker from '@/components/Dashboard/Sidebar/StylePicker.vue';
+import PromptEnhancePicker from '@/components/Dashboard/Sidebar/PromptEnhancePicker.vue';
 import ModelPicker from '@/components/Dashboard/ModelPicker/ModelPicker.vue';
 
 import { ASPECT_RATIOS, IMAGE_FORMATS, PRIMARY_ASPECT_COUNT } from '@/utils/constants';
@@ -17,9 +20,11 @@ type FormatOption = (typeof IMAGE_FORMATS)[number];
 const router = useRouter();
 const asideStore = useAsideStore();
 const userStore = useUserStore();
+const generateStore = useGenerateStore();
 
 const { isPro } = storeToRefs(userStore);
 const { aspectRatio, imageFormat, outputQuality, noOfOutputs, mode } = storeToRefs(asideStore);
+const { styleId, enhanceMode } = storeToRefs(generateStore);
 
 const countOptions = [1, 2, 3, 4] as const;
 
@@ -144,20 +149,22 @@ onMounted(() => {
     aria-label="Image generation settings"
   >
     <section class="tw-flex tw-flex-col tw-gap-2.5">
-      <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-faint">
-        <font-awesome-icon icon="wand-magic-sparkles" class="tw-h-2.5 tw-w-2.5" />
-        <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest">
-          Model
-        </span>
-      </span>
+      <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Model </span>
       <ModelPicker chip />
     </section>
 
+    <section class="tw-flex tw-flex-col tw-gap-2.5">
+      <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Style </span>
+      <StylePicker v-model="styleId" />
+    </section>
+
+    <section class="tw-flex tw-flex-col tw-gap-2.5">
+      <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Enhance </span>
+      <PromptEnhancePicker v-model="enhanceMode" />
+    </section>
+
     <section v-if="showAspectRatio" class="tw-flex tw-flex-col tw-gap-2.5">
-      <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-faint">
-        <font-awesome-icon icon="expand" class="tw-h-2.5 tw-w-2.5" />
-        <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest"> Size </span>
-      </span>
+      <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Size </span>
       <AspectRatioPicker
         v-model="aspectRatio"
         :options="allAspectRatioOptions"
@@ -167,12 +174,7 @@ onMounted(() => {
     </section>
 
     <section v-if="showOutputQuality" class="tw-flex tw-flex-col tw-gap-2.5">
-      <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-faint">
-        <font-awesome-icon icon="bolt" class="tw-h-2.5 tw-w-2.5" />
-        <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest">
-          Quality
-        </span>
-      </span>
+      <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Quality </span>
       <div
         class="tw-grid tw-grid-cols-2 tw-gap-1 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2/60 tw-p-1"
         role="group"
@@ -201,12 +203,7 @@ onMounted(() => {
     </section>
 
     <section v-if="showNumOutputs" class="tw-flex tw-flex-col tw-gap-2.5">
-      <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-faint">
-        <font-awesome-icon icon="images" class="tw-h-2.5 tw-w-2.5" />
-        <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest">
-          Images
-        </span>
-      </span>
+      <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Images </span>
       <div
         class="tw-grid tw-grid-cols-4 tw-gap-1 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2/60 tw-p-1"
         role="group"
@@ -232,12 +229,7 @@ onMounted(() => {
     </section>
 
     <section v-if="showOutputFormat" class="tw-flex tw-flex-col tw-gap-2.5">
-      <span class="tw-flex tw-items-center tw-gap-1.5 tw-text-ink-faint">
-        <font-awesome-icon icon="file" class="tw-h-2.5 tw-w-2.5" />
-        <span class="tw-text-eyebrow tw-font-semibold tw-uppercase tw-tracking-widest">
-          Format
-        </span>
-      </span>
+      <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Format </span>
       <div
         class="tw-grid tw-gap-1 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2/60 tw-p-1"
         :class="formatGridClass"
