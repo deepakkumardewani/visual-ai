@@ -1,6 +1,35 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite-plus';
+import vue from '@vitejs/plugin-vue';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  plugins: [vue()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'apps/web/src'),
+    },
+  },
+  test: {
+    environment: 'happy-dom',
+    globals: true,
+    include: ['**/*.test.ts', '**/*.spec.ts'],
+    exclude: [
+      'node_modules',
+      'dist',
+      '**/dist/**',
+      '**/node_modules/**',
+      'apps/web/tailwind.config.test.ts',
+    ],
+    environmentOptions: {
+      env: {
+        NODE_ENV: 'test',
+      },
+    },
+    setupFiles: [],
+  },
   lint: {
     plugins: ['typescript'],
     options: {

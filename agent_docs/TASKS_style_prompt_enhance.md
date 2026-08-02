@@ -12,9 +12,9 @@ Plan: [PLAN_style_prompt_enhance.md](PLAN_style_prompt_enhance.md) · Spec: [/SP
 
 **Acceptance criteria:**
 
-- [ ] `STYLE_PRESETS` exported from `packages/shared` with ≥15 entries incl. None (empty suffix) and Dynamic
-- [ ] `StyleId` type derived from catalog; `getStylePreset` throws on unknown id
-- [ ] Catalog test: unique ids, non-empty labels, None empty / others non-empty suffixes
+- [x] ✅ `STYLE_PRESETS` exported from `packages/shared` with ≥15 entries incl. None (empty suffix) and Dynamic
+- [x] ✅ `StyleId` type derived from catalog; `getStylePreset` throws on unknown id
+- [x] ✅ Catalog test: unique ids, non-empty labels, None empty / others non-empty suffixes
 
 **Verification:** `bun run test` (new `styles.test.ts` passes), `bun run check`
 
@@ -26,9 +26,9 @@ Plan: [PLAN_style_prompt_enhance.md](PLAN_style_prompt_enhance.md) · Spec: [/SP
 
 **Acceptance criteria:**
 
-- [ ] `EnhanceMode` + `ENHANCE_MODES` exported from `packages/shared`
-- [ ] `ModelDefinition.fields.promptEnhance` optional field compiles; registry unchanged
-- [ ] Existing registry tests still pass
+- [x] ✅ `EnhanceMode` + `ENHANCE_MODES` exported from `packages/shared`
+- [x] ✅ `ModelDefinition.fields.promptEnhance` optional field compiles; registry unchanged
+- [x] ✅ Existing registry tests still pass
 
 **Verification:** `bun run test`, `bun run check`
 
@@ -36,7 +36,7 @@ Plan: [PLAN_style_prompt_enhance.md](PLAN_style_prompt_enhance.md) · Spec: [/SP
 
 ## Checkpoint 1 — Foundation
 
-- [ ] `bun run test` and `bun run check` clean
+- [x] ✅ `bun run test` and `bun run check` clean
 
 ---
 
@@ -48,9 +48,9 @@ Plan: [PLAN_style_prompt_enhance.md](PLAN_style_prompt_enhance.md) · Spec: [/SP
 
 **Acceptance criteria:**
 
-- [ ] Provider construction confined to one factory function; rest of module provider-agnostic
-- [ ] `shouldEnhance`: true for <12 words, false at ≥12 (boundary tested), false for empty/whitespace
-- [ ] `enhancePrompt` returns trimmed rewritten text; errors propagate (fallback handled by pipeline)
+- [x] ✅ Provider construction confined to one factory function; rest of module provider-agnostic
+- [x] ✅ `shouldEnhance`: true for <12 words, false at ≥12 (boundary tested), false for empty/whitespace
+- [x] ✅ `enhancePrompt` returns trimmed rewritten text; errors propagate (fallback handled by pipeline)
 
 **Verification:** `bun run test` (unit tests with mocked `generateText`), `bun run check`
 
@@ -62,9 +62,9 @@ Plan: [PLAN_style_prompt_enhance.md](PLAN_style_prompt_enhance.md) · Spec: [/SP
 
 **Acceptance criteria:**
 
-- [ ] `on` always enhances; `off`/absent never; `auto` only when `shouldEnhance` is true
-- [ ] Style suffix appended for non-None styles; prompt untouched for None/absent
-- [ ] Enhancer rejection ⇒ original (styled) prompt returned + error logged; generation path never throws
+- [x] ✅ `on` always enhances; `off`/absent never; `auto` only when `shouldEnhance` is true
+- [x] ✅ Style suffix appended for non-None styles; prompt untouched for None/absent
+- [x] ✅ Enhancer rejection ⇒ original (styled) prompt returned + error logged; generation path never throws
 
 **Verification:** `bun run test` (pipeline tests, enhancer mocked), `bun run check`
 
@@ -76,9 +76,9 @@ Plan: [PLAN_style_prompt_enhance.md](PLAN_style_prompt_enhance.md) · Spec: [/SP
 
 **Acceptance criteria:**
 
-- [ ] Request without the new fields behaves exactly as today (backward compatible)
-- [ ] Unknown `styleId`/`enhanceMode` rejected with a clear validation error
-- [ ] Transformed prompt is what reaches `buildModelInput`/Replicate (asserted in service test); utility paths untouched
+- [x] ✅ Request without the new fields behaves exactly as today (backward compatible)
+- [x] ✅ Unknown `styleId`/`enhanceMode` rejected with a clear validation error
+- [x] ✅ Transformed prompt is what reaches `buildModelInput`/Replicate (asserted in service test); utility paths untouched
 
 **Verification:** `bun run test` (generation-service tests extended), `bun run check`
 
@@ -86,7 +86,7 @@ Plan: [PLAN_style_prompt_enhance.md](PLAN_style_prompt_enhance.md) · Spec: [/SP
 
 ## Checkpoint 2 — API pipeline (human review before UI)
 
-- [ ] All Phase 2 tests green; `bun run check` clean
+- [x] ✅ All Phase 2 tests green; `bun run check` clean
 - [ ] With `DEEPSEEK_API_KEY` set, a real request with `styleId: 'dynamic', enhanceMode: 'on'` logs a rewritten+styled prompt
 - [ ] Human sign-off on enhancement quality (spot-check 2–3 rewrites)
 

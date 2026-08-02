@@ -17,6 +17,9 @@
     "test": "vp test run",
     "check:model-docs": "bun scripts/check-model-docs.mjs"
   },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^6.0.8"
+  },
   "devDependencies": {
     "vite-plus": "0.1.18"
   },

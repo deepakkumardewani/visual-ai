@@ -6,7 +6,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 // Utilities
 /// <reference types="vitest" />
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vite-plus';
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 
 import Vue from '@vitejs/plugin-vue';
@@ -15,6 +15,7 @@ import tailwindcss from 'tailwindcss';
 
 const appDir = path.dirname(fileURLToPath(import.meta.url));
 const tailwindConfigPath = path.join(appDir, 'tailwind.config.js');
+const srcDir = fileURLToPath(new URL('./src', import.meta.url));
 
 export default defineConfig({
   css: {
@@ -101,7 +102,7 @@ export default defineConfig({
   define: { 'process.env': {} },
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@': srcDir,
     },
     extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.vue'],
   },

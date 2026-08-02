@@ -4,6 +4,7 @@
 - `vp install` instead of `npm install`
 - `vp check` instead of `npm run lint`
 - `vp build` instead of `npm run build`
+- no prettier in the project
 
 ## Important to Follow always
 
