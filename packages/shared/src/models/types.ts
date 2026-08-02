@@ -1,5 +1,9 @@
 export type Tier = 'budget' | 'standard' | 'premium';
 
+export type EnhanceMode = 'on' | 'off' | 'auto';
+
+export const ENHANCE_MODES = ['on', 'off', 'auto'] as const satisfies readonly EnhanceMode[];
+
 /** Legacy generation + utility keys (pre-catalog expansion). */
 export type LegacyModelKey =
   | 'FLUX_QUICK'
@@ -67,5 +71,7 @@ export interface ModelDefinition {
       inputKey: 'image' | 'image_input' | 'input_image' | 'input_images';
       max?: number;
     };
+    /** Native prompt enhancement hook — when present, skips local enhancement */
+    promptEnhance?: { inputKey: string };
   };
 }

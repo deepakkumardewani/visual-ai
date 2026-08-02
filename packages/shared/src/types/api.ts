@@ -49,6 +49,10 @@ export interface Body {
   creativity?: number;
   scale?: number;
   negativePrompt?: string;
+  /** Style preset id (e.g. 'dynamic', 'photography') — t2i only */
+  styleId?: string;
+  /** Enhancement mode ('on', 'off', 'auto') — t2i only */
+  enhanceMode?: string;
 }
 
 export interface Props {

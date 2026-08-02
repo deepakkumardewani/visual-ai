@@ -1,4 +1,4 @@
-import { MODEL_REGISTRY } from "@visual-ai/shared"
+import { ENHANCE_MODES, MODEL_REGISTRY, STYLE_PRESETS } from "@visual-ai/shared"
 import type { ModelKey } from "@visual-ai/shared"
 
 import { BadRequestError } from "./errors.js"
@@ -10,6 +10,10 @@ export interface UserGenerationParams {
     outputFormat?: string
     outputQuality?: number
     numOfOutputs?: number
+    /** Style preset id — t2i only */
+    styleId?: string
+    /** Enhancement mode — t2i only */
+    enhanceMode?: string
 }
 
 /**
@@ -60,6 +64,25 @@ export function validateModelParams(modelKey: ModelKey, userParams: UserGenerati
         throw new BadRequestError(
             `Model "${modelKey}" does not support multiple outputs (numOfOutputs > 1). Remove this parameter from the request.`,
         )
+    }
+
+    // Validate styleId if provided
+    if (userParams.styleId !== undefined && userParams.styleId !== "") {
+        const validStyleIds = STYLE_PRESETS.map((p) => p.id)
+        if (!validStyleIds.includes(userParams.styleId as any)) {
+            throw new BadRequestError(
+                `Unknown styleId: "${userParams.styleId}". Allowed: ${validStyleIds.join(", ")}.`,
+            )
+        }
+    }
+
+    // Validate enhanceMode if provided
+    if (userParams.enhanceMode !== undefined && userParams.enhanceMode !== "") {
+        if (!ENHANCE_MODES.includes(userParams.enhanceMode as any)) {
+            throw new BadRequestError(
+                `Unknown enhanceMode: "${userParams.enhanceMode}". Allowed: ${ENHANCE_MODES.join(", ")}.`,
+            )
+        }
     }
 }
 

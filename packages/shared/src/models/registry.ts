@@ -484,6 +484,15 @@ export const MODEL_IDS = Object.fromEntries(
   Object.keys(MODEL_REGISTRY).map((k) => [k, k]),
 ) as Record<ModelKey, ModelKey>;
 
+/** Look up a registry entry by model key. Throws if key is not found. */
+export function getModelDefinition(key: ModelKey): ModelDefinition {
+  const model = MODEL_REGISTRY[key];
+  if (!model) {
+    throw new Error(`Unknown model key: ${key}`);
+  }
+  return model;
+}
+
 /** Look up a registry entry by Replicate slug (with or without version hash). */
 export function findModelByReplicateId(replicateId: string): ModelDefinition | undefined {
   const base = replicateId.split(':')[0];

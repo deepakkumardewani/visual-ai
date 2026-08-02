@@ -14,8 +14,10 @@
         "type-check": "tsc --noEmit --composite false --project tsconfig.json"
     },
     "dependencies": {
+        "@ai-sdk/deepseek": "^3.0.19",
         "@clerk/clerk-sdk-node": "^5.0.33",
         "@visual-ai/shared": "workspace:*",
+        "ai": "^4.0.0",
         "body-parser": "^1.18.2",
         "cloudinary": "^2.4.0",
         "cookie-parser": "^1.4.6",
@@ -40,7 +42,7 @@
         "tsx": "^4.19.0",
         "typescript": "^5.0.0",
         "uuid": "^10.0.0",
-        "zod": "3.23.8"
+        "zod": "3.25.76"
     },
     "devDependencies": {
         "@types/cookie-parser": "^1.4.7",

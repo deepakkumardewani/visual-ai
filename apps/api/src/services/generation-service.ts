@@ -3,7 +3,9 @@ import type { Prediction } from "replicate"
 import type { ModelKey } from "@visual-ai/shared"
 
 import { createLogger } from "../lib/logger.js"
-import { buildModelInput, getModelReplicateId, replicate } from "../lib/replicate.js"
+import { buildModelInput, getModelReplicateId, validateModelParams } from "../lib/model-input.js"
+import { preparePrompt } from "../lib/prompt-pipeline.js"
+import { replicate } from "../lib/replicate.js"
 import { ImageModel as Image } from "../models/image.js"
 import { UserModel as User } from "../models/user.js"
 import { RedisService } from "../services/redis-service.js"
@@ -229,18 +231,44 @@ export async function processImage(body: Body): Promise<void> {
         modelId,
         modelName,
         imageType,
-        prompt,
+        prompt: userPrompt,
         numOfOutputs,
         outputQuality,
         aspectRatio,
         outputFormat,
+        styleId,
+        enhanceMode,
     } = body
+
+    const modelKey = modelId as ModelKey
+
+    // Validate style and enhancement mode parameters
+    validateModelParams(modelKey, {
+        prompt: userPrompt,
+        aspectRatio,
+        outputFormat,
+        outputQuality,
+        numOfOutputs,
+        styleId,
+        enhanceMode,
+    })
+
+    // Prepare the prompt with style and enhancement (if applicable)
+    let finalPrompt = userPrompt ?? ""
+    if (finalPrompt) {
+        finalPrompt = await preparePrompt({
+            prompt: finalPrompt,
+            styleId,
+            enhanceMode: (enhanceMode as any) ?? undefined,
+            modelKey,
+        })
+    }
 
     // Registry drives both the replicate model ID and supported input fields.
     // No per-model conditionals needed — unsupported params are simply not added.
-    const model = getModelReplicateId(modelId as ModelKey) as ModelType
-    const input = buildModelInput(modelId as ModelKey, {
-        prompt,
+    const model = getModelReplicateId(modelKey) as ModelType
+    const input = buildModelInput(modelKey, {
+        prompt: finalPrompt,
         aspectRatio,
         outputFormat,
         outputQuality,
@@ -255,7 +283,7 @@ export async function processImage(body: Body): Promise<void> {
         featureType: FeatureType.IMAGE,
         modelName,
         aspectRatio,
-        prompt,
+        prompt: finalPrompt,
         imageType,
         creditCost: calculateCreditCost(FeatureType.IMAGE, false),
         buildCloudinaryPayload: (output, imageId) => {
@@ -271,7 +299,7 @@ export async function processImage(body: Body): Promise<void> {
                 imageUrl,
                 imageType,
                 userId,
-                prompt,
+                prompt: finalPrompt,
                 modelName,
                 aspectRatio,
                 imageId,
