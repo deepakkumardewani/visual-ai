@@ -2,7 +2,7 @@ import type { Prediction } from "replicate"
 
 import type { ModelKey } from "@visual-ai/shared"
 
-import { createLogger } from "../lib/logger.js"
+import { createLogger, shortId } from "../lib/logger.js"
 import { buildModelInput, getModelReplicateId, replicate } from "../lib/replicate.js"
 import { ImageModel as Image } from "../models/image.js"
 import { UserModel as User } from "../models/user.js"
@@ -168,20 +168,38 @@ async function runGenerationJob(
         buildCloudinaryPayload,
     } = params
     const { jobStatus } = services
+    const startedAt = Date.now()
+    const jid = shortId(jobId)
+    const label = modelName || model
+    const elapsed = () => `${((Date.now() - startedAt) / 1000).toFixed(1)}s`
+
+    logger.info(`gen started  job=${jid} feature=${featureType} model=${label} cost=${creditCost}`)
 
     try {
+        let lastReplicateStatus: string | undefined
         const output = (await replicate.run(
             model as `${string}/${string}`,
             { input },
             (p: Prediction) => {
-                logger.debug({ status: p.status }, "Replicate prediction progress")
+                if (p.status === lastReplicateStatus) return
+                lastReplicateStatus = p.status
+                // Skip noisy "starting" — processing/succeeded are enough
+                if (p.status === "starting") return
+                logger.info(`gen progress job=${jid} replicate=${p.status} +${elapsed()}`)
             },
         )) as string[] | string
 
         if (!output) {
-            logger.error({ model, userId }, "Model returned no output")
+            logger.error(`gen failed   job=${jid} reason=no_output +${elapsed()}`)
+            await jobStatus.setStatus(jobId, {
+                status: "error",
+                image: undefined,
+                userCreditsRemaining: null,
+            })
             return
         }
+
+        logger.debug(`gen progress job=${jid} stage=persist +${elapsed()}`)
 
         const imageObj = await buildImageObject(
             userId,
@@ -201,11 +219,17 @@ async function runGenerationJob(
             userCreditsRemaining: credits,
         })
 
+        logger.debug(`gen progress job=${jid} stage=upload +${elapsed()}`)
         const cloudinaryData = buildCloudinaryPayload(output, newImage._id)
         await uploadToCloudinary(cloudinaryData)
         await finalizeJob(jobId, userId, newImage._id?.toString(), jobStatus)
+
+        logger.info(
+            `gen done     job=${jid} image=${shortId(newImage._id?.toString())} credits=${credits} ${elapsed()}`,
+        )
     } catch (error) {
-        logger.error({ err: error, userId, jobId }, "Generation job failed")
+        const message = error instanceof Error ? error.message : String(error)
+        logger.error({ err: error }, `gen failed   job=${jid} reason=${message} +${elapsed()}`)
         await jobStatus.setStatus(jobId, {
             status: "error",
             image: undefined,
