@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { MODEL_REGISTRY } from '@visual-ai/shared';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
@@ -47,6 +48,9 @@ async function generateImage() {
   }
 
   const jobId = uuidv4();
+  const supportsOutputQuality = Boolean(
+    MODEL_REGISTRY[mode.value.id as keyof typeof MODEL_REGISTRY]?.fields.outputQuality,
+  );
   const input: ImageBody = {
     jobId,
     modelId: mode.value.id,
@@ -54,7 +58,7 @@ async function generateImage() {
     modelName: mode.value.title,
     prompt: typingPrompt.value,
     noOfOutputs: noOfOutputs.value,
-    outputQuality: outputQuality.value === 0 ? 70 : 100,
+    ...(supportsOutputQuality ? { outputQuality: outputQuality.value === 0 ? 70 : 100 } : {}),
     aspectRatio: aspectRatio.value.title,
     outputFormat: imageFormat.value.title.toLowerCase(),
   };

@@ -45,7 +45,7 @@ export type ImageBody = {
   modelName: string;
   prompt: string;
   noOfOutputs: number;
-  outputQuality: number;
+  outputQuality?: number;
   aspectRatio: string;
   outputFormat: string;
   imageType: string;

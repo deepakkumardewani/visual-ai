@@ -144,7 +144,8 @@ export const useAppStore = defineStore('app', () => {
       if (feature === FeatureType.COLORIZE) colorizeInProgress.value = false;
       if (feature === FeatureType.REVIVE) reviveInProgress.value = false;
       if (feature === FeatureType.REMOVE_BG) removeBgInProgress.value = false;
-      errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
+      errMsg.value =
+        data.message ?? 'Sorry, there was an error processing your request. Please try again.';
     }
   }
 

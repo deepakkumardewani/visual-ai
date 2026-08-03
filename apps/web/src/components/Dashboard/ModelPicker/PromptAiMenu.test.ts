@@ -1,5 +1,5 @@
 import { createPinia, setActivePinia } from 'pinia';
-import { mount } from '@vue/test-utils';
+import { mount, type VueWrapper } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/utils/promptAi', () => ({
@@ -20,7 +20,15 @@ import { useAsideStore } from '@/stores/aside';
 import { describeImage, improvePrompt, pickRandomPrompt } from '@/utils/promptAi';
 import { FLUX_MODES } from '@/utils/models';
 
+// The menu panel renders through Popover's <Teleport to="body">, so its content
+// lands outside `wrapper.element` — query it via `document` rather than the wrapper.
+const getPanel = () => document.body.querySelector<HTMLElement>('[data-testid="prompt-ai-panel"]');
+const getByTestId = (testId: string) =>
+  document.body.querySelector<HTMLElement>(`[data-testid="${testId}"]`);
+
 describe('PromptAiMenu', () => {
+  let activeWrapper: VueWrapper | null = null;
+
   beforeEach(() => {
     setActivePinia(createPinia());
     vi.useFakeTimers();
@@ -30,10 +38,12 @@ describe('PromptAiMenu', () => {
   });
 
   afterEach(() => {
+    activeWrapper?.unmount();
+    activeWrapper = null;
     vi.useRealTimers();
   });
 
-  const mountMenu = (currentPrompt = 'A forest scene', attachTo?: HTMLElement) => {
+  const mountMenu = (currentPrompt = 'A forest scene') => {
     const pinia = createPinia();
     setActivePinia(pinia);
     const asideStore = useAsideStore();
@@ -42,8 +52,9 @@ describe('PromptAiMenu', () => {
     const wrapper = mount(PromptAiMenu, {
       props: { currentPrompt },
       global: { plugins: [pinia] },
-      attachTo,
+      attachTo: document.body,
     });
+    activeWrapper = wrapper;
 
     return { wrapper, asideStore };
   };
@@ -57,36 +68,35 @@ describe('PromptAiMenu', () => {
     expect(wrapper.find('[data-testid="prompt-ai-menu"]').exists()).toBe(true);
 
     await openMenu(wrapper);
-    expect(wrapper.find('[data-testid="prompt-ai-panel"]').exists()).toBe(true);
-    expect(wrapper.text()).toContain('Improve Prompt');
-    expect(wrapper.text()).toContain('New Random Prompt');
-    expect(wrapper.text()).toContain('Describe with image');
+    expect(getPanel()).not.toBeNull();
+    expect(getPanel()?.textContent).toContain('Improve Prompt');
+    expect(getPanel()?.textContent).toContain('New Random Prompt');
+    expect(getPanel()?.textContent).toContain('Describe with image');
   });
 
   it('supports arrow-key navigation between menu items', async () => {
-    const { wrapper } = mountMenu('A forest scene', document.body);
+    const { wrapper } = mountMenu('A forest scene');
 
     await openMenu(wrapper);
 
-    const improve = wrapper.get('[data-testid="prompt-ai-improve"]').element as HTMLButtonElement;
-    const random = wrapper.get('[data-testid="prompt-ai-random"]').element as HTMLButtonElement;
+    const improve = getByTestId('prompt-ai-improve') as HTMLButtonElement;
+    const random = getByTestId('prompt-ai-random') as HTMLButtonElement;
 
     expect(document.activeElement).toBe(improve);
 
-    await wrapper.find('[role="dialog"]').trigger('keydown', { key: 'ArrowDown' });
+    const dialog = document.body.querySelector('[role="dialog"]');
+    dialog?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
     expect(document.activeElement).toBe(random);
-
-    wrapper.unmount();
   });
 
   it('emits apply-prompt after Improve Prompt completes', async () => {
     const { wrapper } = mountMenu('Sunset');
 
     await openMenu(wrapper);
-    await wrapper.get('[data-testid="prompt-ai-improve"]').trigger('click');
+    getByTestId('prompt-ai-improve')?.click();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find('[data-testid="prompt-ai-loading-improve"]').exists()).toBe(true);
+    expect(getByTestId('prompt-ai-loading-improve')).not.toBeNull();
     expect(wrapper.emitted('loading')?.[0]).toEqual([true]);
 
     await vi.advanceTimersByTimeAsync(1200);
@@ -100,7 +110,7 @@ describe('PromptAiMenu', () => {
     const { wrapper, asideStore } = mountMenu();
 
     await openMenu(wrapper);
-    await wrapper.get('[data-testid="prompt-ai-random"]').trigger('click');
+    getByTestId('prompt-ai-random')?.click();
     await vi.runAllTimersAsync();
 
     expect(pickRandomPrompt).toHaveBeenCalledWith(asideStore.mode.id);

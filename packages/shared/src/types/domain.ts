@@ -60,6 +60,8 @@ export interface JobStatus {
   image: IImageObject | undefined;
   userCreditsRemaining: number | null;
   progress?: number;
+  /** User-facing explanation, set on 'error' status for known/expected failure reasons (e.g. moderation rejection) */
+  message?: string;
 }
 
 export interface RazorpayProduct {

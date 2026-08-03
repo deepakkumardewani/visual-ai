@@ -1,7 +1,13 @@
 import { createPinia, setActivePinia } from 'pinia';
-import { mount } from '@vue/test-utils';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { DOMWrapper, mount, type VueWrapper } from '@vue/test-utils';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
+
+// The dropdown panel is teleported to document.body (see Popover.vue),
+// so options are queried via a DOMWrapper over document.body rather than the wrapper's own subtree.
+function body() {
+  return new DOMWrapper(document.body);
+}
 
 const pushMock = vi.fn();
 
@@ -17,18 +23,42 @@ import ModelPicker from '@/components/Dashboard/ModelPicker/ModelPicker.vue';
 import { useAsideStore } from '@/stores/aside';
 import { useUserStore } from '@/stores/user';
 import { MODEL_IDS } from '@visual-ai/shared';
-import { FLUX_MODES, MODELS } from '@/utils/models';
+import { FLUX_MODES, getFeaturedModels, MODELS } from '@/utils/models';
+
+// Non-featured models live in a per-company submenu that only renders on hover
+// (ModelCompanyGroup.vue). Simulate the mouseenter that Popover's real DOM would receive.
+function openCompanySubmenu(companyName: string) {
+  const label = body()
+    .findAll('span')
+    .find((el) => el.text() === companyName)!;
+  const row = label.element.parentElement!.parentElement as HTMLElement;
+  row.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+}
 
 describe('ModelPicker', () => {
+  let activeWrapper: VueWrapper | null = null;
+
   beforeEach(() => {
     setActivePinia(createPinia());
     pushMock.mockClear();
   });
 
+  afterEach(() => {
+    activeWrapper?.unmount();
+    activeWrapper = null;
+    document.body.innerHTML = '';
+  });
+
   const mountPicker = (options: { attachTo?: HTMLElement } = {}) => {
     const pinia = createPinia();
     setActivePinia(pinia);
-    return { wrapper: mount(ModelPicker, { global: { plugins: [pinia] }, ...options }), pinia };
+    const wrapper = mount(ModelPicker, {
+      global: { plugins: [pinia] },
+      attachTo: document.body,
+      ...options,
+    });
+    activeWrapper = wrapper;
+    return { wrapper, pinia };
   };
 
   it('renders "Model" label and trigger', () => {
@@ -38,28 +68,26 @@ describe('ModelPicker', () => {
   });
 
   it('opens popover and lists grouped model options', async () => {
-    const { wrapper } = mountPicker();
+    const { wrapper } = mountPicker({ attachTo: document.body });
 
     await wrapper.get('button').trigger('click');
-    const options = wrapper.findAll('[data-testid="model-option"]');
-    expect(options.length).toBe(MODELS.length);
-    expect(wrapper.text()).toContain('Black Forest Labs');
-    expect(wrapper.text()).toContain('OpenAI');
+    const options = body().findAll('[data-testid="model-option"]');
+    expect(options.length).toBe(getFeaturedModels().length);
+    expect(body().text()).toContain('Black Forest Labs');
+    expect(body().text()).toContain('OpenAI');
   });
 
   it('supports keyboard navigation between model options', async () => {
     const { wrapper } = mountPicker({ attachTo: document.body });
 
     await wrapper.get('button').trigger('click');
-    const first = wrapper.findAll('[data-testid="model-option"]')[0].element as HTMLButtonElement;
-    const second = wrapper.findAll('[data-testid="model-option"]')[1].element as HTMLButtonElement;
+    const first = body().findAll('[data-testid="model-option"]')[0].element as HTMLButtonElement;
+    const second = body().findAll('[data-testid="model-option"]')[1].element as HTMLButtonElement;
 
     expect(document.activeElement).toBe(first);
 
-    await wrapper.find('[role="dialog"]').trigger('keydown', { key: 'ArrowDown' });
+    await body().find('[role="dialog"]').trigger('keydown', { key: 'ArrowDown' });
     expect(document.activeElement).toBe(second);
-
-    wrapper.unmount();
   });
 
   it('redirects non-pro users selecting premium model to pricing', async () => {
@@ -72,11 +100,14 @@ describe('ModelPicker', () => {
     const asideStore = useAsideStore();
     asideStore.mode = FLUX_MODES[0];
 
-    const wrapper = mount(ModelPicker, { global: { plugins: [pinia] } });
+    const wrapper = mount(ModelPicker, { global: { plugins: [pinia] }, attachTo: document.body });
+    activeWrapper = wrapper;
     await wrapper.get('button').trigger('click');
 
     const fluxPro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_PRO)!;
-    const proOption = wrapper
+    openCompanySubmenu(fluxPro.companyName!);
+    await wrapper.vm.$nextTick();
+    const proOption = body()
       .findAll('[data-testid="model-option"]')
       .find((el) => el.text().includes(fluxPro.title))!;
 
@@ -96,11 +127,14 @@ describe('ModelPicker', () => {
     const asideStore = useAsideStore();
     asideStore.noOfOutputs = 4;
 
-    const wrapper = mount(ModelPicker, { global: { plugins: [pinia] } });
+    const wrapper = mount(ModelPicker, { global: { plugins: [pinia] }, attachTo: document.body });
+    activeWrapper = wrapper;
     await wrapper.get('button').trigger('click');
 
     const fluxPro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_PRO)!;
-    const proOption = wrapper
+    openCompanySubmenu(fluxPro.companyName!);
+    await wrapper.vm.$nextTick();
+    const proOption = body()
       .findAll('[data-testid="model-option"]')
       .find((el) => el.text().includes(fluxPro.title))!;
 
@@ -120,11 +154,14 @@ describe('ModelPicker', () => {
     const asideStore = useAsideStore();
     asideStore.noOfOutputs = 3;
 
-    const wrapper = mount(ModelPicker, { global: { plugins: [pinia] } });
+    const wrapper = mount(ModelPicker, { global: { plugins: [pinia] }, attachTo: document.body });
+    activeWrapper = wrapper;
     await wrapper.get('button').trigger('click');
 
     const flux11Pro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_1_1_PRO)!;
-    const proOption = wrapper
+    openCompanySubmenu(flux11Pro.companyName!);
+    await wrapper.vm.$nextTick();
+    const proOption = body()
       .findAll('[data-testid="model-option"]')
       .find((el) => el.text().includes(flux11Pro.title))!;
 

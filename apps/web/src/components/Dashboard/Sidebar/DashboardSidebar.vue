@@ -18,7 +18,7 @@ const { feature } = storeToRefs(appStore);
 <template>
   <nav
     data-testid="dashboard-sidebar"
-    class="tw-flex tw-flex-col tw-gap-7 tw-p-4"
+    class="tw-flex tw-flex-col tw-gap-4 tw-p-3"
     aria-label="Feature settings"
   >
     <ImageGenerateAside v-if="!feature || feature === FeatureType.IMAGE" />

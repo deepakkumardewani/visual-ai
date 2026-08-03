@@ -2,12 +2,13 @@ import { v2 as cloudinary } from "cloudinary"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 import "dotenv/config"
-import express, { Application } from "express"
+import express, { Application, NextFunction, Request, Response } from "express"
 import pinoHttp from "pino-http"
 import { v4 as uuidv4 } from "uuid"
 
 import { connectDB } from "./config/mongo.js"
 import { env } from "./config/env.js"
+import { isHttpError } from "./lib/errors.js"
 import { logger } from "./lib/logger.js"
 import { healthCheckRoute } from "./routes/healthcheck.js"
 import { router } from "./routes/index.js"
@@ -85,6 +86,16 @@ app.use(cookieParser() as any)
 // Application routes
 router.use(express.json())
 app.use("/", router)
+
+// Catch-all error handler — must be registered last. Ensures thrown HttpErrors
+// (and anything else) reach the client with the right status code and a clean
+// log line, instead of Express's default handler dumping a raw stack trace.
+app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
+    const statusCode = isHttpError(err) ? err.statusCode : 500
+    const message = err instanceof Error ? err.message : "Internal server error"
+    logger.error({ err }, `${req.method} ${req.url} ${statusCode} ${message}`)
+    res.status(statusCode).json({ error: message })
+})
 
 // Cloudinary configuration
 cloudinary.config({

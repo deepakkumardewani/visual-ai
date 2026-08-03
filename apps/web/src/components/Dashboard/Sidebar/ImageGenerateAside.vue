@@ -62,7 +62,7 @@ const formatGridClass = computed(() => {
 });
 
 const SEGMENT_BASE =
-  'tw-relative tw-flex tw-h-8 tw-items-center tw-justify-center tw-gap-1 tw-rounded-sm tw-text-body-sm tw-font-medium tw-transition-colors tw-duration-fast focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40';
+  'tw-relative tw-flex tw-h-7 tw-items-center tw-justify-center tw-gap-1 tw-rounded-sm tw-text-body-sm tw-font-medium tw-transition-colors tw-duration-fast focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40';
 
 function segmentClass(active: boolean) {
   return [
@@ -145,25 +145,25 @@ onMounted(() => {
 <template>
   <div
     data-testid="image-generate-aside"
-    class="tw-flex tw-flex-col tw-gap-7"
+    class="tw-flex tw-flex-col tw-gap-4"
     aria-label="Image generation settings"
   >
-    <section class="tw-flex tw-flex-col tw-gap-2.5">
+    <section class="tw-flex tw-flex-col tw-gap-1.5">
       <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Model </span>
       <ModelPicker chip />
     </section>
 
-    <section class="tw-flex tw-flex-col tw-gap-2.5">
+    <section class="tw-flex tw-flex-col tw-gap-1.5">
       <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Style </span>
       <StylePicker v-model="styleId" />
     </section>
 
-    <section class="tw-flex tw-flex-col tw-gap-2.5">
+    <section class="tw-flex tw-flex-col tw-gap-1.5">
       <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Enhance </span>
       <PromptEnhancePicker v-model="enhanceMode" />
     </section>
 
-    <section v-if="showAspectRatio" class="tw-flex tw-flex-col tw-gap-2.5">
+    <section v-if="showAspectRatio" class="tw-flex tw-flex-col tw-gap-1.5">
       <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Size </span>
       <AspectRatioPicker
         v-model="aspectRatio"
@@ -173,7 +173,7 @@ onMounted(() => {
       />
     </section>
 
-    <section v-if="showOutputQuality" class="tw-flex tw-flex-col tw-gap-2.5">
+    <section v-if="showOutputQuality" class="tw-flex tw-flex-col tw-gap-1.5">
       <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Quality </span>
       <div
         class="tw-grid tw-grid-cols-2 tw-gap-1 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2/60 tw-p-1"
@@ -202,7 +202,7 @@ onMounted(() => {
       </div>
     </section>
 
-    <section v-if="showNumOutputs" class="tw-flex tw-flex-col tw-gap-2.5">
+    <section v-if="showNumOutputs" class="tw-flex tw-flex-col tw-gap-1.5">
       <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Images </span>
       <div
         class="tw-grid tw-grid-cols-4 tw-gap-1 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2/60 tw-p-1"
@@ -228,7 +228,7 @@ onMounted(() => {
       </div>
     </section>
 
-    <section v-if="showOutputFormat" class="tw-flex tw-flex-col tw-gap-2.5">
+    <section v-if="showOutputFormat" class="tw-flex tw-flex-col tw-gap-1.5">
       <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Format </span>
       <div
         class="tw-grid tw-gap-1 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2/60 tw-p-1"
@@ -265,7 +265,7 @@ onMounted(() => {
 
 :deep([data-testid='model-picker'] .tw-relative.tw-inline-block > button) {
   width: 100%;
-  min-height: 44px;
+  min-height: 36px;
   justify-content: flex-start;
   padding: 0;
   border: none;

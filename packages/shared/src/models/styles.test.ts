@@ -41,6 +41,19 @@ describe('STYLE_PRESETS catalog', () => {
     }
   });
 
+  // Image models read descriptor tags as scene content, so any subject-implying token
+  // in a style string invents a person the user never prompted for (a landscape + the
+  // Portrait style used to render a woman). Styles may only describe how, never what.
+  it('no preset string contains subject-implying tokens', () => {
+    const SUBJECT_TOKENS =
+      /\b(skin|eyes|pose|posed|character|characters|couture|model|face|facial|portrait of)\b/i;
+
+    for (const preset of STYLE_PRESETS) {
+      expect(preset.promptSuffix).not.toMatch(SUBJECT_TOKENS);
+      expect(preset.styleDescription).not.toMatch(SUBJECT_TOKENS);
+    }
+  });
+
   it('each preset has valid id, label, and promptSuffix properties', () => {
     for (const preset of STYLE_PRESETS) {
       expect(typeof preset.id).toBe('string');

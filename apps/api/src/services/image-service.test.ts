@@ -5,75 +5,9 @@
  * when the user/image is absent, and that the correct error types are used.
  */
 
+import { describe, expect, it } from "vitest"
+
 import { isHttpError, NotFoundError, BadRequestError } from "../lib/errors.js"
-
-// ---------------------------------------------------------------------------
-// 1. NotFoundError shape tests (used by toggleFavorite, deleteUserImage, etc.)
-// ---------------------------------------------------------------------------
-
-function testNotFoundErrorIs404() {
-    const err = new NotFoundError("User not found")
-    if (err.statusCode !== 404) {
-        console.error(`FAIL: NotFoundError should map to 404, got ${err.statusCode}`)
-        process.exit(1)
-    }
-    if (err.message !== "User not found") {
-        console.error(`FAIL: NotFoundError should carry the provided message`)
-        process.exit(1)
-    }
-    console.log("PASS: NotFoundError maps to 404 status code")
-}
-
-function testNotFoundErrorForImage() {
-    const err = new NotFoundError("Image not found")
-    if (err.statusCode !== 404) {
-        console.error(`FAIL: Image NotFoundError should map to 404, got ${err.statusCode}`)
-        process.exit(1)
-    }
-    console.log("PASS: Image NotFoundError maps to 404 status code")
-}
-
-// ---------------------------------------------------------------------------
-// 2. BadRequestError shape tests (used by generate routes for missing file)
-// ---------------------------------------------------------------------------
-
-function testBadRequestErrorIs400() {
-    const err = new BadRequestError("No image file provided")
-    if (err.statusCode !== 400) {
-        console.error(`FAIL: BadRequestError should map to 400, got ${err.statusCode}`)
-        process.exit(1)
-    }
-    console.log("PASS: BadRequestError maps to 400 status code")
-}
-
-// ---------------------------------------------------------------------------
-// 3. Error handler mapping tests (asserting the isHttpError contract)
-// ---------------------------------------------------------------------------
-
-function testIsHttpErrorWithNotFound() {
-    const notFound = new NotFoundError("Image not found")
-    if (!isHttpError(notFound)) {
-        console.error("FAIL: NotFoundError should pass isHttpError check")
-        process.exit(1)
-    }
-    console.log("PASS: NotFoundError is detected as HttpError")
-}
-
-function testIsHttpErrorWithGenericError() {
-    const generic = new Error("Some unexpected failure")
-    if (isHttpError(generic)) {
-        console.error("FAIL: Generic Error should NOT pass isHttpError check")
-        process.exit(1)
-    }
-    console.log("PASS: Generic Error is NOT detected as HttpError (→ maps to 500)")
-}
-
-// ---------------------------------------------------------------------------
-// 4. Error handler simulation — verify status-code mapping contract
-//
-// Routes use asyncHandler → next(err) → central error handler.
-// We verify the mapping logic without spinning up Express.
-// ---------------------------------------------------------------------------
 
 /** Simulates what the central error handler (index.ts) returns for a given error */
 function simulateErrorHandler(err: unknown): { status: number; body: Record<string, unknown> } {
@@ -83,68 +17,47 @@ function simulateErrorHandler(err: unknown): { status: number; body: Record<stri
     return { status: 500, body: { message: "Internal server error", status: 500 } }
 }
 
-async function testMissingUserMapsTo404() {
-    const err = new NotFoundError("User not found")
-    const response = simulateErrorHandler(err)
-    if (response.status !== 404) {
-        console.error(`FAIL: User not found should produce 404, got ${response.status}`)
-        process.exit(1)
-    }
-    console.log("PASS: Missing user → NotFoundError → error handler returns 404")
-}
+describe("error types", () => {
+    it("NotFoundError maps to 404 and carries the provided message", () => {
+        const err = new NotFoundError("User not found")
+        expect(err.statusCode).toBe(404)
+        expect(err.message).toBe("User not found")
+    })
 
-async function testMissingImageMapsTo404() {
-    const err = new NotFoundError("Image not found")
-    const response = simulateErrorHandler(err)
-    if (response.status !== 404) {
-        console.error(`FAIL: Image not found should produce 404, got ${response.status}`)
-        process.exit(1)
-    }
-    console.log("PASS: Missing image → NotFoundError → error handler returns 404")
-}
+    it("BadRequestError maps to 400", () => {
+        const err = new BadRequestError("No image file provided")
+        expect(err.statusCode).toBe(400)
+    })
 
-async function testUnexpectedErrorMapsTo500() {
-    const err = new Error("Database connection lost")
-    const response = simulateErrorHandler(err)
-    if (response.status !== 500) {
-        console.error(`FAIL: Unexpected error should produce 500, got ${response.status}`)
-        process.exit(1)
-    }
-    console.log("PASS: Unexpected error → generic Error → error handler returns 500")
-}
+    it("isHttpError detects NotFoundError", () => {
+        expect(isHttpError(new NotFoundError("Image not found"))).toBe(true)
+    })
 
-async function testBadRequestMapsTo400() {
-    const err = new BadRequestError("No image file provided")
-    const response = simulateErrorHandler(err)
-    if (response.status !== 400) {
-        console.error(`FAIL: Bad request should produce 400, got ${response.status}`)
-        process.exit(1)
-    }
-    console.log("PASS: BadRequestError → error handler returns 400")
-}
+    it("isHttpError does not detect a generic Error", () => {
+        expect(isHttpError(new Error("Some unexpected failure"))).toBe(false)
+    })
+})
 
-// ---------------------------------------------------------------------------
-// Runner
-// ---------------------------------------------------------------------------
+// Routes use asyncHandler → next(err) → central error handler.
+// We verify the mapping logic without spinning up Express.
+describe("error handler status-code mapping", () => {
+    it("maps a missing user to 404", () => {
+        const response = simulateErrorHandler(new NotFoundError("User not found"))
+        expect(response.status).toBe(404)
+    })
 
-async function main() {
-    console.log("Running image-service unit tests...")
+    it("maps a missing image to 404", () => {
+        const response = simulateErrorHandler(new NotFoundError("Image not found"))
+        expect(response.status).toBe(404)
+    })
 
-    testNotFoundErrorIs404()
-    testNotFoundErrorForImage()
-    testBadRequestErrorIs400()
-    testIsHttpErrorWithNotFound()
-    testIsHttpErrorWithGenericError()
+    it("maps an unexpected error to 500", () => {
+        const response = simulateErrorHandler(new Error("Database connection lost"))
+        expect(response.status).toBe(500)
+    })
 
-    await testMissingUserMapsTo404()
-    await testMissingImageMapsTo404()
-    await testUnexpectedErrorMapsTo500()
-    await testBadRequestMapsTo400()
-
-    console.log("\nAll image-service tests passed!")
-}
-
-main().catch((err) => {
-    console.error("FAIL: Unexpected error in test runner:", err)
-    process.exit(1)
+    it("maps a bad request to 400", () => {
+        const response = simulateErrorHandler(new BadRequestError("No image file provided"))
+        expect(response.status).toBe(400)
+    })
 })

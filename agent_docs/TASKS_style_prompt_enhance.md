@@ -100,8 +100,8 @@ Plan: [PLAN_style_prompt_enhance.md](PLAN_style_prompt_enhance.md) · Spec: [/SP
 
 **Acceptance criteria:**
 
-- [ ] Defaults Dynamic + Auto on fresh state; values persist across reload like existing settings
-- [ ] Generation payload includes `styleId` + `enhanceMode` for t2i requests only
+- [x] ✅ Defaults Dynamic + Auto on fresh state; values persist across reload like existing settings
+- [x] ✅ Generation payload includes `styleId` + `enhanceMode` for t2i requests only
 
 **Verification:** `bun run test` (store test), `bun run check`
 
@@ -113,8 +113,8 @@ Plan: [PLAN_style_prompt_enhance.md](PLAN_style_prompt_enhance.md) · Spec: [/SP
 
 **Acceptance criteria:**
 
-- [ ] Both dropdowns render from shared catalog/constants (no hardcoded duplicate lists), show current selection, update the store
-- [ ] Present in `ImageGenerateAside`; absent from Colorize/Upscale/Revive asides
+- [x] ✅ Both dropdowns render from shared catalog/constants (no hardcoded duplicate lists), show current selection, update the store
+- [x] ✅ Present in `ImageGenerateAside`; absent from Colorize/Upscale/Revive asides
 - [ ] Component tests: options render, selection emits/updates, defaults correct; `ImageGenerateAside.test.ts` extended
 
 **Verification:** `bun run test`, `bun run check`, agent-browser check (defaults, selection persists after reload, hidden on utility asides)

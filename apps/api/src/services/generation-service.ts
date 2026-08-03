@@ -5,6 +5,7 @@ import type { ModelKey } from "@visual-ai/shared"
 import { createLogger, shortId } from "../lib/logger.js"
 import { buildModelInput, getModelReplicateId, validateModelParams } from "../lib/model-input.js"
 import { preparePrompt } from "../lib/prompt-pipeline.js"
+import { isContentSafetyError, PromptModerationError } from "../lib/prompt-moderation.js"
 import { replicate } from "../lib/replicate.js"
 import { ImageModel as Image } from "../models/image.js"
 import { UserModel as User } from "../models/user.js"
@@ -236,6 +237,9 @@ async function runGenerationJob(
             status: "error",
             image: undefined,
             userCreditsRemaining: null,
+            message: isContentSafetyError(message)
+                ? "Your prompt or the generated image was flagged as sensitive. Please try a different prompt."
+                : undefined,
         })
     }
 }
@@ -267,38 +271,52 @@ export async function processImage(body: Body): Promise<void> {
 
     const modelKey = modelId as ModelKey
 
-    // Validate style and enhancement mode parameters
-    validateModelParams(modelKey, {
-        prompt: userPrompt,
-        aspectRatio,
-        outputFormat,
-        outputQuality,
-        numOfOutputs,
-        styleId,
-        enhanceMode,
-    })
-
-    // Prepare the prompt with style and enhancement (if applicable)
+    let model: ModelType
+    let input: Record<string, unknown>
     let finalPrompt = userPrompt ?? ""
-    if (finalPrompt) {
-        finalPrompt = await preparePrompt({
-            prompt: finalPrompt,
+    try {
+        // Validate style and enhancement mode parameters
+        validateModelParams(modelKey, {
+            prompt: userPrompt,
+            aspectRatio,
+            outputFormat,
+            outputQuality,
+            numOfOutputs,
             styleId,
-            enhanceMode: (enhanceMode as any) ?? undefined,
-            modelKey,
+            enhanceMode,
         })
-    }
 
-    // Registry drives both the replicate model ID and supported input fields.
-    // No per-model conditionals needed — unsupported params are simply not added.
-    const model = getModelReplicateId(modelKey) as ModelType
-    const input = buildModelInput(modelKey, {
-        prompt: finalPrompt,
-        aspectRatio,
-        outputFormat,
-        outputQuality,
-        numOfOutputs,
-    })
+        // Prepare the prompt with style and enhancement (if applicable)
+        if (finalPrompt) {
+            finalPrompt = await preparePrompt({
+                prompt: finalPrompt,
+                styleId,
+                enhanceMode: (enhanceMode as any) ?? undefined,
+                modelKey,
+            })
+        }
+
+        // Registry drives both the replicate model ID and supported input fields.
+        // No per-model conditionals needed — unsupported params are simply not added.
+        model = getModelReplicateId(modelKey) as ModelType
+        input = buildModelInput(modelKey, {
+            prompt: finalPrompt,
+            aspectRatio,
+            outputFormat,
+            outputQuality,
+            numOfOutputs,
+        })
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error)
+        logger.error({ err: error }, `gen rejected job=${jobId} reason=${message}`)
+        await new RedisService().setStatus(jobId, {
+            status: "error",
+            image: undefined,
+            userCreditsRemaining: null,
+            message: error instanceof PromptModerationError ? error.reason : undefined,
+        })
+        return
+    }
 
     return runGenerationJob({
         model,

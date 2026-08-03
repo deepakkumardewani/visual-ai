@@ -48,6 +48,10 @@ export const useGenerateStore = defineStore('generate', () => {
     images.value = [];
 
     const url = `/generate/image`;
+    const modelId = imgData?.modelId ?? MODEL_REGISTRY.FLUX_BASIC.key;
+    const supportsOutputQuality = Boolean(
+      MODEL_REGISTRY[modelId as keyof typeof MODEL_REGISTRY]?.fields.outputQuality,
+    );
 
     const { error } = await useFetch(url, {
       method: 'POST',
@@ -59,12 +63,12 @@ export const useGenerateStore = defineStore('generate', () => {
         jobId: imgData?.jobId,
         userId: userId.value,
         // Default model is sourced from MODEL_REGISTRY to keep metadata in sync with the registry
-        modelId: imgData?.modelId ?? MODEL_REGISTRY.FLUX_BASIC.replicateId,
+        modelId,
         imageType: imgData?.imageType ?? 'horizontal',
         modelName: imgData?.modelName ?? 'Flux Lightning',
         prompt: imgData?.prompt ?? '',
         numOfOutputs: imgData?.noOfOutputs ?? 1,
-        outputQuality: imgData?.outputQuality ?? 70,
+        ...(supportsOutputQuality ? { outputQuality: imgData?.outputQuality ?? 70 } : {}),
         aspectRatio: imgData?.aspectRatio ?? '16:9',
         outputFormat: imgData?.outputFormat ?? 'jpg',
         styleId: styleId.value,

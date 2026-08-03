@@ -7,7 +7,7 @@ import { z } from "zod"
  */
 const envSchema = z.object({
     // Node environment
-    NODE_ENV: z.enum(["development", "production"]).default("development"),
+    NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
     LOG_LEVEL: z.string().default("info"),
 
     // Server
@@ -52,6 +52,10 @@ const envSchema = z.object({
 
     // Webhooks
     WEBHOOK_SECRET: z.string().min(1, "WEBHOOK_SECRET is required"),
+
+    // Prompt enhancement (DeepSeek)
+    DEEPSEEK_API_KEY: z.string().min(1, "DEEPSEEK_API_KEY is required"),
+    ENHANCE_MODEL: z.string().default("deepseek-chat"),
 })
 
 /**

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest"
 import { z } from "zod"
 
 /**
@@ -5,7 +6,7 @@ import { z } from "zod"
  * Mirrors the schema in env.ts
  */
 const envSchema = z.object({
-    NODE_ENV: z.enum(["development", "production"]).default("development"),
+    NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
     LOG_LEVEL: z.string().default("info"),
     APP_PORT: z
         .string()
@@ -34,250 +35,84 @@ const envSchema = z.object({
     WEBHOOK_SECRET: z.string().min(1, "WEBHOOK_SECRET is required"),
 })
 
-/**
- * Test suite: Environment validation schema
- * Validates that all required environment variables are correctly typed and validated
- */
-
-// Test 1: Reject missing REPLICATE_API_TOKEN
-function testRejectMissingReplicateToken() {
-    const testEnv = {
-        MONGO_URI: "mongodb://localhost/test",
-        CLOUDINARY_CLOUD_NAME: "test",
-        CLOUDINARY_API_KEY: "test",
-        CLOUDINARY_API_SECRET: "test",
-        CLERK_SECRET_KEY: "test",
-        CLERK_PUBLISHABLE_KEY: "test",
-        CLERK_JWT_KEY: "test",
-        RAZORPAY_KEY_ID: "test",
-        RAZORPAY_KEY_SECRET: "test",
-        EMAIL_USER: "test@test.com",
-        EMAIL_PASSWORD: "test",
-        WEBHOOK_SECRET: "test",
-    } as Record<string, string>
-
-    const result = envSchema.safeParse(testEnv)
-    if (result.success) {
-        console.error("FAIL: Schema should reject missing REPLICATE_API_TOKEN")
-        process.exit(1)
-    }
-    const errorPaths = result.error.issues.map((i) => i.path.join("."))
-    if (!errorPaths.includes("REPLICATE_API_TOKEN")) {
-        console.error("FAIL: Error should mention REPLICATE_API_TOKEN")
-        process.exit(1)
-    }
-    console.log("PASS: Correctly rejected missing REPLICATE_API_TOKEN")
+const VALID_ENV: Record<string, string> = {
+    MONGO_URI: "mongodb://localhost/test",
+    REPLICATE_API_TOKEN: "test-token",
+    CLOUDINARY_CLOUD_NAME: "test-cloud",
+    CLOUDINARY_API_KEY: "test-key",
+    CLOUDINARY_API_SECRET: "test-secret",
+    CLERK_SECRET_KEY: "clerk-secret",
+    CLERK_PUBLISHABLE_KEY: "clerk-pub",
+    CLERK_JWT_KEY: "clerk-jwt",
+    RAZORPAY_KEY_ID: "razorpay-id",
+    RAZORPAY_KEY_SECRET: "razorpay-secret",
+    EMAIL_USER: "test@example.com",
+    EMAIL_PASSWORD: "password",
+    WEBHOOK_SECRET: "webhook-secret",
 }
 
-// Test 2: Reject missing MONGO_URI
-function testRejectMissingMongoUri() {
-    const testEnv = {
-        REPLICATE_API_TOKEN: "test",
-        CLOUDINARY_CLOUD_NAME: "test",
-        CLOUDINARY_API_KEY: "test",
-        CLOUDINARY_API_SECRET: "test",
-        CLERK_SECRET_KEY: "test",
-        CLERK_PUBLISHABLE_KEY: "test",
-        CLERK_JWT_KEY: "test",
-        RAZORPAY_KEY_ID: "test",
-        RAZORPAY_KEY_SECRET: "test",
-        EMAIL_USER: "test@test.com",
-        EMAIL_PASSWORD: "test",
-        WEBHOOK_SECRET: "test",
-    } as Record<string, string>
+describe("environment validation schema", () => {
+    it("rejects a missing REPLICATE_API_TOKEN", () => {
+        const { REPLICATE_API_TOKEN: _omit, ...testEnv } = VALID_ENV
+        const result = envSchema.safeParse(testEnv)
+        expect(result.success).toBe(false)
+        if (!result.success) {
+            const errorPaths = result.error.issues.map((i) => i.path.join("."))
+            expect(errorPaths).toContain("REPLICATE_API_TOKEN")
+        }
+    })
 
-    const result = envSchema.safeParse(testEnv)
-    if (result.success) {
-        console.error("FAIL: Schema should reject missing MONGO_URI")
-        process.exit(1)
-    }
-    const errorPaths = result.error.issues.map((i) => i.path.join("."))
-    if (!errorPaths.includes("MONGO_URI")) {
-        console.error("FAIL: Error should mention MONGO_URI")
-        process.exit(1)
-    }
-    console.log("PASS: Correctly rejected missing MONGO_URI")
-}
+    it("rejects a missing MONGO_URI", () => {
+        const { MONGO_URI: _omit, ...testEnv } = VALID_ENV
+        const result = envSchema.safeParse(testEnv)
+        expect(result.success).toBe(false)
+        if (!result.success) {
+            const errorPaths = result.error.issues.map((i) => i.path.join("."))
+            expect(errorPaths).toContain("MONGO_URI")
+        }
+    })
 
-// Test 3: Reject invalid MONGO_URI format
-function testRejectInvalidMongoUriFormat() {
-    const testEnv = {
-        MONGO_URI: "not-a-valid-uri",
-        REPLICATE_API_TOKEN: "test",
-        CLOUDINARY_CLOUD_NAME: "test",
-        CLOUDINARY_API_KEY: "test",
-        CLOUDINARY_API_SECRET: "test",
-        CLERK_SECRET_KEY: "test",
-        CLERK_PUBLISHABLE_KEY: "test",
-        CLERK_JWT_KEY: "test",
-        RAZORPAY_KEY_ID: "test",
-        RAZORPAY_KEY_SECRET: "test",
-        EMAIL_USER: "test@test.com",
-        EMAIL_PASSWORD: "test",
-        WEBHOOK_SECRET: "test",
-    } as Record<string, string>
+    it("rejects an invalid MONGO_URI format", () => {
+        const testEnv = { ...VALID_ENV, MONGO_URI: "not-a-valid-uri" }
+        const result = envSchema.safeParse(testEnv)
+        expect(result.success).toBe(false)
+    })
 
-    const result = envSchema.safeParse(testEnv)
-    if (result.success) {
-        console.error("FAIL: Schema should reject invalid MONGO_URI format")
-        process.exit(1)
-    }
-    console.log("PASS: Correctly rejected invalid MONGO_URI format")
-}
+    it("rejects an invalid EMAIL_USER format", () => {
+        const testEnv = { ...VALID_ENV, EMAIL_USER: "not-an-email" }
+        const result = envSchema.safeParse(testEnv)
+        expect(result.success).toBe(false)
+        if (!result.success) {
+            const errorMessages = result.error.issues.map((i) => i.message)
+            expect(errorMessages.some((msg) => msg.includes("email"))).toBe(true)
+        }
+    })
 
-// Test 4: Reject invalid EMAIL_USER format
-function testRejectInvalidEmailFormat() {
-    const testEnv = {
-        MONGO_URI: "mongodb://localhost/test",
-        REPLICATE_API_TOKEN: "test",
-        CLOUDINARY_CLOUD_NAME: "test",
-        CLOUDINARY_API_KEY: "test",
-        CLOUDINARY_API_SECRET: "test",
-        CLERK_SECRET_KEY: "test",
-        CLERK_PUBLISHABLE_KEY: "test",
-        CLERK_JWT_KEY: "test",
-        RAZORPAY_KEY_ID: "test",
-        RAZORPAY_KEY_SECRET: "test",
-        EMAIL_USER: "not-an-email",
-        EMAIL_PASSWORD: "test",
-        WEBHOOK_SECRET: "test",
-    } as Record<string, string>
+    it("accepts a valid environment", () => {
+        const result = envSchema.safeParse(VALID_ENV)
+        expect(result.success).toBe(true)
+    })
 
-    const result = envSchema.safeParse(testEnv)
-    if (result.success) {
-        console.error("FAIL: Schema should reject invalid email format")
-        process.exit(1)
-    }
-    const errorMessages = result.error.issues.map((i) => i.message)
-    if (!errorMessages.some((msg) => msg.includes("email"))) {
-        console.error("FAIL: Error should mention email validation")
-        process.exit(1)
-    }
-    console.log("PASS: Correctly rejected invalid email format")
-}
+    it("provides default values", () => {
+        const result = envSchema.safeParse(VALID_ENV)
+        expect(result.success).toBe(true)
+        if (result.success) {
+            expect(result.data.NODE_ENV).toBe("development")
+            expect(result.data.LOG_LEVEL).toBe("info")
+            expect(result.data.APP_PORT).toBe(8080)
+            expect(result.data.APP_SERVER).toBe("http://localhost")
+            expect(result.data.REDIS_HOST).toBe("redis")
+            expect(result.data.REDIS_PORT).toBe(6379)
+        }
+    })
 
-// Test 5: Accept valid environment
-function testAcceptValidEnvironment() {
-    const testEnv = {
-        MONGO_URI: "mongodb://localhost/test",
-        REPLICATE_API_TOKEN: "test-token",
-        CLOUDINARY_CLOUD_NAME: "test-cloud",
-        CLOUDINARY_API_KEY: "test-key",
-        CLOUDINARY_API_SECRET: "test-secret",
-        CLERK_SECRET_KEY: "clerk-secret",
-        CLERK_PUBLISHABLE_KEY: "clerk-pub",
-        CLERK_JWT_KEY: "clerk-jwt",
-        RAZORPAY_KEY_ID: "razorpay-id",
-        RAZORPAY_KEY_SECRET: "razorpay-secret",
-        EMAIL_USER: "test@example.com",
-        EMAIL_PASSWORD: "password",
-        WEBHOOK_SECRET: "webhook-secret",
-    } as Record<string, string>
-
-    const result = envSchema.safeParse(testEnv)
-    if (!result.success) {
-        console.error("FAIL: Schema should accept valid environment variables")
-        console.error(result.error.issues)
-        process.exit(1)
-    }
-    console.log("PASS: Correctly accepted valid environment")
-}
-
-// Test 6: Provide default values
-function testDefaultValues() {
-    const testEnv = {
-        MONGO_URI: "mongodb://localhost/test",
-        REPLICATE_API_TOKEN: "test",
-        CLOUDINARY_CLOUD_NAME: "test",
-        CLOUDINARY_API_KEY: "test",
-        CLOUDINARY_API_SECRET: "test",
-        CLERK_SECRET_KEY: "test",
-        CLERK_PUBLISHABLE_KEY: "test",
-        CLERK_JWT_KEY: "test",
-        RAZORPAY_KEY_ID: "test",
-        RAZORPAY_KEY_SECRET: "test",
-        EMAIL_USER: "test@test.com",
-        EMAIL_PASSWORD: "test",
-        WEBHOOK_SECRET: "test",
-    } as Record<string, string>
-
-    const result = envSchema.safeParse(testEnv)
-    if (!result.success) {
-        console.error("FAIL: Schema should provide default values")
-        process.exit(1)
-    }
-    const data = result.data
-    if (data.NODE_ENV !== "development") {
-        console.error("FAIL: NODE_ENV should default to development")
-        process.exit(1)
-    }
-    if (data.LOG_LEVEL !== "info") {
-        console.error("FAIL: LOG_LEVEL should default to info")
-        process.exit(1)
-    }
-    if (data.APP_PORT !== 8080) {
-        console.error("FAIL: APP_PORT should default to 8080")
-        process.exit(1)
-    }
-    if (data.APP_SERVER !== "http://localhost") {
-        console.error("FAIL: APP_SERVER should default to http://localhost")
-        process.exit(1)
-    }
-    if (data.REDIS_HOST !== "redis") {
-        console.error("FAIL: REDIS_HOST should default to redis")
-        process.exit(1)
-    }
-    if (data.REDIS_PORT !== 6379) {
-        console.error("FAIL: REDIS_PORT should default to 6379")
-        process.exit(1)
-    }
-    console.log("PASS: Default values are correct")
-}
-
-// Test 7: Transform port strings to numbers
-function testPortTransformation() {
-    const testEnv = {
-        MONGO_URI: "mongodb://localhost/test",
-        REPLICATE_API_TOKEN: "test",
-        APP_PORT: "3000",
-        REDIS_PORT: "6380",
-        CLOUDINARY_CLOUD_NAME: "test",
-        CLOUDINARY_API_KEY: "test",
-        CLOUDINARY_API_SECRET: "test",
-        CLERK_SECRET_KEY: "test",
-        CLERK_PUBLISHABLE_KEY: "test",
-        CLERK_JWT_KEY: "test",
-        RAZORPAY_KEY_ID: "test",
-        RAZORPAY_KEY_SECRET: "test",
-        EMAIL_USER: "test@test.com",
-        EMAIL_PASSWORD: "test",
-        WEBHOOK_SECRET: "test",
-    } as Record<string, string>
-
-    const result = envSchema.safeParse(testEnv)
-    if (!result.success) {
-        console.error("FAIL: Schema should handle port transformation")
-        process.exit(1)
-    }
-    const data = result.data
-    if (data.APP_PORT !== 3000 || typeof data.APP_PORT !== "number") {
-        console.error("FAIL: APP_PORT should be transformed to number 3000")
-        process.exit(1)
-    }
-    if (data.REDIS_PORT !== 6380 || typeof data.REDIS_PORT !== "number") {
-        console.error("FAIL: REDIS_PORT should be transformed to number 6380")
-        process.exit(1)
-    }
-    console.log("PASS: Port transformation works correctly")
-}
-
-// Run all tests
-console.log("Running environment validation tests...")
-testRejectMissingReplicateToken()
-testRejectMissingMongoUri()
-testRejectInvalidMongoUriFormat()
-testRejectInvalidEmailFormat()
-testAcceptValidEnvironment()
-testDefaultValues()
-testPortTransformation()
-console.log("\nAll environment validation tests passed!")
+    it("transforms port strings to numbers", () => {
+        const testEnv = { ...VALID_ENV, APP_PORT: "3000", REDIS_PORT: "6380" }
+        const result = envSchema.safeParse(testEnv)
+        expect(result.success).toBe(true)
+        if (result.success) {
+            expect(result.data.APP_PORT).toBe(3000)
+            expect(result.data.REDIS_PORT).toBe(6380)
+        }
+    })
+})
