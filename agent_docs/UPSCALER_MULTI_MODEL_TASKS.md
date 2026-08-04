@@ -264,9 +264,9 @@ Upscale one image with **each** of the six models: progress → result → histo
 
 ---
 
-## Phase 5 — `/compare` page
+## Phase 5 — `/compare` page ✅
 
-### T5.1 — Source six low-res CC0 images
+### T5.1 — Source six low-res CC0 images ✅
 
 Per the spec's §5 table — portrait (Real-ESRGAN), wide landscape (Pruna), product/logo on
 flat background (Recraft), everyday photo (Google), close-up skin texture (Clarity Pro), CGI
@@ -280,7 +280,7 @@ visible.
 - **Approved deviation:** All six sources were sourced (including `google-source.jpg`), but
   Google's showcase entry is unused downstream — see T5.3.
 
-### T5.2 — Write `apps/web/scripts/generate-upscaler-showcase.ts`
+### T5.2 — Write `apps/web/scripts/generate-upscaler-showcase.ts` ✅
 
 Reads the sources, calls each model through Replicate with that model's registry-derived
 params, writes compressed outputs alongside, and emits `utils/upscalerShowcase.ts`. A dev
@@ -290,7 +290,7 @@ tool — not wired into the build.
   commits it. Adds no new dependency.
 - **Verify:** Dry-run mode (or a single model) before the full run.
 
-### T5.3 — Run the script
+### T5.3 — Run the script ✅
 
 Approved spend, ~$0.15–0.30 total.
 
@@ -302,7 +302,7 @@ Approved spend, ~$0.15–0.30 total.
   chose to skip Google and ship the other five. Actual committed total: **eleven assets (6
   source + 5 upscaled)**, all outputs < 400 KB.
 
-### T5.4 — Build `Compare.vue` + `ComparisonCard.vue` + route
+### T5.4 — Build `Compare.vue` + `ComparisonCard.vue` + route ✅
 
 Public lazy route named `compare` in `apps/web/src/router/index.ts`, **not** added to
 `authRequiredRoutes`. `Compare.vue` maps the data module onto `ComparisonCard.vue` (extracted
