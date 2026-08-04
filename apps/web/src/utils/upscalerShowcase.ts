@@ -6,7 +6,6 @@
  */
 
 export const UPSCALER_SHOWCASE = [
-
   {
     modelKey: 'UPSCALE_REAL_ESRGAN',
     source: '/showcase/upscalers/source/real-esrgan-source.jpg',
