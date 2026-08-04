@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import Landing from '@/pages/Landing.vue';
 
+const Compare = () => import('@/pages/Compare.vue');
 const Contact = () => import('@/pages/Contact.vue');
 const Dashboard = () => import('@/pages/Dashboard.vue');
 const ExploreImage = () => import('@/pages/ExploreImage.vue');
@@ -88,6 +89,11 @@ const routes = [
     path: '/examples',
     name: 'examples',
     component: Examples,
+  },
+  {
+    path: '/compare',
+    name: 'compare',
+    component: Compare,
   },
   ...(import.meta.env.DEV
     ? [
