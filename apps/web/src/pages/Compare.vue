@@ -1,20 +1,13 @@
 <script setup lang="ts">
 import ComparisonCard from '@/components/Compare/ComparisonCard.vue';
-import { UPSCALER_SHOWCASE, getShowcaseEntry } from '@/utils/upscalerShowcase';
+import { FeatureType } from '@/types';
+import { APP_SURFACE } from '@/utils/dashboardRoutes';
+import { UPSCALER_SHOWCASE } from '@/utils/upscalerShowcase';
 import { UPSCALER_MODELS } from '@/utils/models';
 
-/**
- * Map showcase entries to comparison cards
- * Each model gets its corresponding showcase images
- */
 const comparisonCards = UPSCALER_SHOWCASE.map((entry) => {
   const model = UPSCALER_MODELS.find((m) => m.id === entry.modelKey);
-
-  if (!model) {
-    console.warn(`Model not found for showcase entry: ${entry.modelKey}`);
-    return null;
-  }
-
+  if (!model) return null;
   return {
     model,
     source: entry.source,
@@ -24,28 +17,31 @@ const comparisonCards = UPSCALER_SHOWCASE.map((entry) => {
   (card): card is { model: (typeof UPSCALER_MODELS)[0]; source: string; upscaled: string } =>
     card !== null,
 );
+
+const createUpscaleTo = {
+  name: APP_SURFACE.CREATE,
+  params: { feature: FeatureType.UPSCALE },
+};
 </script>
 
 <template>
   <div class="compare-page">
-    <!-- Header -->
     <section class="compare-page__header">
       <div class="compare-page__container">
-        <h1 class="compare-page__title">Upscaler Comparison</h1>
+        <h1 class="compare-page__title">Compare upscale models</h1>
         <p class="compare-page__subtitle">
-          Explore how different upscaling models handle various image types. Slide each image to
-          compare the before and after results.
+          Each card shows a different sample. Drag the slider to compare the original with that
+          model's upscale.
         </p>
       </div>
     </section>
 
-    <!-- Comparison Grid -->
     <section class="compare-page__content">
       <div class="compare-page__container">
         <div class="compare-page__grid">
           <ComparisonCard
-            v-for="(card, idx) in comparisonCards"
-            :key="idx"
+            v-for="card in comparisonCards"
+            :key="card.model.id"
             :model="card.model"
             :source="card.source"
             :upscaled="card.upscaled"
@@ -54,27 +50,26 @@ const comparisonCards = UPSCALER_SHOWCASE.map((entry) => {
       </div>
     </section>
 
-    <!-- CTA Section -->
     <section class="compare-page__footer">
-      <div class="compare-page__container">
-        <div class="compare-page__footer-content">
-          <h2 class="compare-page__footer-title">Ready to upscale?</h2>
+      <div class="compare-page__container compare-page__footer-inner">
+        <div class="compare-page__footer-copy">
+          <h2 class="compare-page__footer-title">Try it on your image</h2>
           <p class="compare-page__footer-text">
-            Choose your favorite upscaler and start creating stunning high-quality images today.
+            Open the upscaler, pick a model, and upload a file.
           </p>
-          <router-link to="/dashboard" class="compare-page__footer-cta">
-            Go to Dashboard
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </router-link>
         </div>
+        <router-link :to="createUpscaleTo" class="compare-page__footer-cta">
+          Open upscaler
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </router-link>
       </div>
     </section>
   </div>
@@ -83,133 +78,118 @@ const comparisonCards = UPSCALER_SHOWCASE.map((entry) => {
 <style scoped lang="scss">
 .compare-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0a07 0%, #1a140f 100%);
+  background: rgb(var(--tw-canvas));
   color: rgb(var(--tw-ink-primary));
 }
 
 .compare-page__container {
-  max-width: 1200px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 clamp(1.25rem, 3vw, 2rem);
 }
 
+/* Editorial intro — left-aligned, airy */
 .compare-page__header {
-  padding: 4rem 0;
-  text-align: center;
-  border-bottom: 1px solid rgba(201, 138, 90, 0.1);
+  padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2rem, 4vw, 3rem);
 }
 
 .compare-page__title {
-  margin: 0 0 1rem 0;
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 700;
-  background: linear-gradient(135deg, #c98a5a 0%, #f5d5b8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  margin: 0 0 0.75rem;
+  max-width: 20ch;
+  font-family: 'Young Serif', Georgia, serif;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: rgb(var(--tw-ink-primary));
 }
 
 .compare-page__subtitle {
   margin: 0;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  font-size: 1.125rem;
-  line-height: 1.6;
-  color: rgb(var(--tw-ink-primary) / 0.8);
+  max-width: 36rem;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: rgb(var(--tw-ink-muted));
 }
 
 .compare-page__content {
-  padding: 4rem 0;
+  padding: 0 0 clamp(3rem, 6vw, 5rem);
 }
 
+/* Generous separation between cards; stretch so CTAs align when meta wraps */
 .compare-page__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: stretch;
 }
 
 .compare-page__footer {
-  padding: 4rem 0;
-  background: rgba(201, 138, 90, 0.05);
-  border-top: 1px solid rgba(201, 138, 90, 0.1);
+  padding: clamp(2.5rem, 5vw, 4rem) 0;
+  border-top: 1px solid rgb(var(--tw-hairline) / 0.7);
 }
 
-.compare-page__footer-content {
-  text-align: center;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+.compare-page__footer-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem 2.5rem;
+  flex-wrap: wrap;
+}
+
+.compare-page__footer-copy {
+  max-width: 28rem;
 }
 
 .compare-page__footer-title {
-  margin: 0 0 1rem 0;
-  font-size: 2rem;
-  font-weight: 700;
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  margin: 0 0 0.4rem;
+  font-family: 'Young Serif', Georgia, serif;
+  font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+  font-weight: 400;
+  line-height: 1.25;
 }
 
 .compare-page__footer-text {
-  margin: 0 0 2rem 0;
-  font-size: 1rem;
-  line-height: 1.6;
-  color: rgb(var(--tw-ink-primary) / 0.8);
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: rgb(var(--tw-ink-muted));
 }
 
 .compare-page__footer-cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 2rem;
-  background: linear-gradient(135deg, #c98a5a 0%, #a0723a 100%);
-  color: #1a1410;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  padding: 0.75rem 1.25rem;
+  background: rgb(var(--tw-accent));
+  color: rgb(var(--tw-canvas));
   border-radius: 8px;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.3s ease;
   font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: background 150ms ease;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(201, 138, 90, 0.3);
+    background: rgb(217 153 106);
   }
 
   svg {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1rem;
+    height: 1rem;
   }
 }
 
-@media (max-width: 768px) {
-  .compare-page__header {
-    padding: 2rem 0;
-  }
-
-  .compare-page__title {
-    font-size: 2rem;
-  }
-
-  .compare-page__subtitle {
-    font-size: 1rem;
-  }
-
-  .compare-page__content {
-    padding: 2rem 0;
-  }
-
+@media (max-width: 860px) {
   .compare-page__grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
 
-  .compare-page__footer {
-    padding: 2rem 0;
-  }
-
-  .compare-page__footer-title {
-    font-size: 1.5rem;
+  .compare-page__footer-inner {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 </style>

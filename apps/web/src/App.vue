@@ -11,10 +11,12 @@ import AppFooter from '@/components/AppFooter.vue';
 import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue';
 import AppHeader from '@/components/Header/AppHeader.vue';
 
+import { APP_SURFACE, isAppShellRoute } from '@/utils/dashboardRoutes';
+
 const appStore = useAppStore();
 const userStore = useUserStore();
 const { user, isLoaded } = useUser();
-const { tab, snackbar, snackbarTimeout, snackbarText } = storeToRefs(appStore);
+const { snackbar, snackbarTimeout, snackbarText } = storeToRefs(appStore);
 const route = useRoute();
 
 watch(
@@ -39,16 +41,16 @@ const isHeaderVisible = computed(() => {
   );
 });
 const overflowHidden = computed(() => {
-  return (route.path === '/dashboard' && tab.value === 1) || isExploreViewer.value;
+  return route.name === APP_SURFACE.CREATE || isExploreViewer.value;
 });
 const isFooterVisible = computed(() => {
   return (
     !isLanding.value &&
     !isExploreViewer.value &&
+    !isAppShellRoute(route) &&
     route.path !== '/signin' &&
     route.path !== '/login' &&
-    route.path !== '/signup' &&
-    route.path !== '/dashboard'
+    route.path !== '/signup'
   );
 });
 </script>
@@ -66,9 +68,6 @@ const isFooterVisible = computed(() => {
       <router-view />
       <ReferralDialog />
     </v-main>
-    <div v-if="isFooterVisible" class="tw-relative tw-flex tw-py-1 tw-items-center">
-      <div class="tw-flex-grow tw-border-t tw-border-neutral-600"></div>
-    </div>
     <AppFooter v-if="isFooterVisible" />
 
     <v-snackbar

@@ -3,12 +3,13 @@ import { mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
 
-const routePathRef = ref('/dashboard');
+const routePathRef = ref('/create');
+const routeNameRef = ref('create');
 const smAndUpRef = ref(true);
 const isProRef = ref(false);
 
 vi.mock('vue-router', () => ({
-  useRoute: () => ({ path: routePathRef.value }),
+  useRoute: () => ({ path: routePathRef.value, name: routeNameRef.value }),
   useRouter: () => ({ push: vi.fn() }),
 }));
 
@@ -83,13 +84,13 @@ vi.mock('@/components/Dialogs/ProUpgradeDialog.vue', () => ({
 }));
 
 import AppHeader from '@/components/Header/AppHeader.vue';
-import { useAppStore } from '@/stores/app';
 import { useUserStore } from '@/stores/user';
 
 describe('AppHeader', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
-    routePathRef.value = '/dashboard';
+    routePathRef.value = '/create';
+    routeNameRef.value = 'create';
     smAndUpRef.value = true;
     isProRef.value = false;
     localStorage.clear();
@@ -120,8 +121,6 @@ describe('AppHeader', () => {
 
   it('shows dashboard nav tabs and credits for signed-in dashboard users', () => {
     const wrapper = mountHeader();
-    const store = useAppStore();
-    store.tab = 1;
 
     expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="credits-chip-stub"]').exists()).toBe(true);
@@ -144,6 +143,7 @@ describe('AppHeader', () => {
 
   it('renders logo on non-dashboard pages without nav tabs', () => {
     routePathRef.value = '/pricing';
+    routeNameRef.value = 'pricing';
     const wrapper = mountHeader();
 
     expect(wrapper.find('[data-testid="logo-stub"]').exists()).toBe(true);

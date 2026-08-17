@@ -1,18 +1,15 @@
 /**
- * Placeholder AI prompt utilities.
- *
- * These functions simulate async AI endpoints with a fixed delay and mock
- * responses. Replace with real API calls when backend endpoints ship.
+ * AI prompt utilities — calls backend `/prompt/*` endpoints via useFetch.
+ * Random generation falls back to local JSON catalogs when the API fails.
  */
 
+import { useFetch } from '@/composables/useFetch';
+import { createLogger } from '@/utils/logger';
 import PROMPTS from '@/utils/prompts.json';
 import REALISTIC_PROMPTS from '@/utils/realisticPrompts.json';
 import { MODEL_IDS } from '@visual-ai/shared';
 
-const MOCK_DELAY_MS = 1200;
-
-const EMPTY_PROMPT_FALLBACK =
-  'A cinematic portrait with soft golden hour lighting, shallow depth of field, and rich atmospheric haze.';
+const log = createLogger('promptAi');
 
 export interface ImprovePromptResult {
   text: string;
@@ -22,32 +19,80 @@ export interface DescribeImageResult {
   text: string;
 }
 
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+type PromptTextResponse = {
+  text?: string;
+};
+
+function extractText(
+  data: { value: PromptTextResponse | null },
+  error: { value: unknown },
+): string | null {
+  if (error.value) return null;
+  const text = data.value?.text;
+  return typeof text === 'string' && text.trim().length > 0 ? text : null;
 }
 
-/** Placeholder: enriches the current prompt with more descriptive detail. */
+/** Enriches the current prompt via POST `/prompt/improve`. */
 export async function improvePrompt(currentPrompt: string): Promise<ImprovePromptResult> {
-  await delay(MOCK_DELAY_MS);
+  const { data, error } = await useFetch('/prompt/improve', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      mode: 'cors',
+    },
+    body: JSON.stringify({ prompt: currentPrompt }),
+  }).json<PromptTextResponse>();
 
-  const trimmed = currentPrompt.trim();
-  if (!trimmed) {
-    return { text: EMPTY_PROMPT_FALLBACK };
+  const text = extractText(data, error);
+  if (!text) {
+    throw new Error('Failed to improve prompt. Please try again.');
   }
 
-  return {
-    text: `${trimmed}, enhanced with vivid detail, cinematic lighting, and professional composition.`,
-  };
+  return { text };
 }
 
-/** Placeholder: generates a text description from an uploaded image file. */
+/** Generates a text description from an uploaded image via POST `/prompt/describe`. */
 export async function describeImage(file: File): Promise<DescribeImageResult> {
-  await delay(MOCK_DELAY_MS);
+  const formData = new FormData();
+  formData.append('image', file);
 
-  const baseName = file.name.replace(/\.[^.]+$/, '');
-  return {
-    text: `A detailed image description based on ${baseName}: rich colors, balanced composition, and striking visual elements.`,
-  };
+  const { data, error } = await useFetch('/prompt/describe', {
+    method: 'POST',
+    body: formData,
+  }).json<PromptTextResponse>();
+
+  const text = extractText(data, error);
+  if (!text) {
+    throw new Error('Failed to describe image. Please try again.');
+  }
+
+  return { text };
+}
+
+/**
+ * Generates a random prompt via POST `/prompt/random`.
+ * On API failure, falls back to the local JSON catalog so the UI never dead-ends.
+ */
+export async function generateRandomPrompt(modelId: string): Promise<string> {
+  try {
+    const { data, error } = await useFetch('/prompt/random', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        mode: 'cors',
+      },
+      body: JSON.stringify({}),
+    }).json<PromptTextResponse>();
+
+    const text = extractText(data, error);
+    if (text) return text;
+
+    log.warn('Random prompt API failed, falling back to catalog', { error: error.value });
+  } catch (err) {
+    log.warn('Random prompt API failed, falling back to catalog', { error: err });
+  }
+
+  return pickRandomPrompt(modelId);
 }
 
 /** Picks a random prompt from the existing JSON catalogs (offline fallback). */

@@ -11,6 +11,8 @@ import { useUserStore } from '@/stores/user';
 
 import { groupByDate } from '@/pages/utils';
 
+import GenerationErrorBanner from '@/components/Dashboard/Canvas/GenerationErrorBanner.vue';
+import ResultNextActions from '@/components/Dashboard/Canvas/ResultNextActions.vue';
 import ImageDialog from '@/components/Dialogs/ImageDialog.vue';
 import ImageActionButtons from '@/components/History/ImageActionButtons.vue';
 
@@ -21,7 +23,7 @@ const generateStore = useGenerateStore();
 
 const { history } = storeToRefs(userStore);
 const { typingPrompt, aspectRatio, noOfOutputs } = storeToRefs(asideStore);
-const { isLoading, activePrompt, errMsg } = storeToRefs(generateStore);
+const { isLoading, activePrompt, jobProgress, jobStatus } = storeToRefs(generateStore);
 
 const imageDialogItem = ref<IImageObject | undefined>();
 
@@ -36,16 +38,45 @@ const groupedHistory = computed(() => groupByDate(imageHistory.value.slice()));
 
 const pendingTiles = computed(() => Array.from({ length: noOfOutputs.value }, (_, i) => i));
 
+/** Real progress percent from SSE when the API provides it. */
+const progressPercent = computed(() => {
+  if (typeof jobProgress.value !== 'number' || !Number.isFinite(jobProgress.value)) return null;
+  return Math.max(0, Math.min(100, Math.round(jobProgress.value)));
+});
+
+/** Label derived only from real jobStatus — no invented stages. */
+const progressStatusLabel = computed(() => {
+  if (!jobStatus.value) return null;
+  if (jobStatus.value === 'processing') return 'Processing';
+  return jobStatus.value;
+});
+
+const progressRingStyle = computed(() => {
+  if (progressPercent.value == null) return undefined;
+  const pct = progressPercent.value;
+  return {
+    background: `conic-gradient(#c98a5a ${pct * 3.6}deg, rgb(var(--tw-surface-3)) 0deg)`,
+  };
+});
+
 /**
  * The single row whose tiles should reveal-in: the one that was just added
  * by the generation that finished. Every other row — including everything
  * present at mount — is never "fresh", so only that one row's images animate.
  */
 const freshRowId = ref<string | null>(null);
+/** Persists after reveal animation so next-actions remain available. */
+const actionRowId = ref<string | null>(null);
 
 watch(isLoading, (loading, wasLoading) => {
+  if (loading) {
+    actionRowId.value = null;
+    return;
+  }
   if (wasLoading && !loading) {
-    freshRowId.value = imageHistory.value[0]?._id ?? null;
+    const id = imageHistory.value[0]?._id ?? null;
+    freshRowId.value = id;
+    actionRowId.value = id;
   }
 });
 
@@ -109,33 +140,7 @@ function handleRemix(prompt: string) {
       </span>
     </header>
 
-    <div
-      v-if="errMsg"
-      data-testid="generation-error"
-      role="alert"
-      class="tw-mb-5 tw-flex tw-items-center tw-justify-between tw-gap-3 tw-rounded-card tw-border tw-border-red-500/30 tw-bg-red-500/10 tw-px-4 tw-py-3 tw-text-sm tw-text-ink"
-    >
-      <span>{{ errMsg }}</span>
-      <button
-        type="button"
-        class="tw-shrink-0 tw-text-ink-muted hover:tw-text-ink"
-        aria-label="Dismiss error"
-        @click="errMsg = ''"
-      >
-        <font-awesome-icon icon="xmark" class="tw-h-3.5 tw-w-3.5" aria-hidden="true" />
-      </button>
-    </div>
-
-    <div
-      v-if="!isLoading && imageHistory.length === 0"
-      data-testid="empty-creations"
-      class="tw-flex tw-flex-col tw-items-start tw-gap-1.5 tw-rounded-card tw-border tw-border-dashed tw-border-hairline tw-px-6 tw-py-10"
-    >
-      <p class="tw-text-sm tw-font-medium tw-text-ink">Nothing here yet</p>
-      <p class="tw-text-sm tw-text-ink-muted">
-        Describe an idea in the prompt bar above and your creations will appear here.
-      </p>
-    </div>
+    <GenerationErrorBanner :feature="FeatureType.IMAGE" />
 
     <div class="creations-stack">
       <!-- Pending generation: appears in place, above previous creations -->
@@ -146,9 +151,21 @@ function handleRemix(prompt: string) {
         class="generation-row"
       >
         <div class="tw-mb-3 tw-flex tw-items-center tw-gap-2 tw-text-sm">
-          <span class="pending-dot" aria-hidden="true" />
+          <span
+            v-if="progressPercent != null"
+            class="progress-ring"
+            :style="progressRingStyle"
+            :aria-label="`${progressPercent}% complete`"
+          >
+            <span class="progress-ring__inner">{{ progressPercent }}</span>
+          </span>
+          <span v-else class="pending-dot" aria-hidden="true" />
           <span class="tw-font-medium tw-text-ink">
-            Generating {{ noOfOutputs }} {{ noOfOutputs === 1 ? 'image' : 'images' }}
+            <template v-if="progressPercent != null">{{ progressPercent }}%</template>
+            <template v-else-if="progressStatusLabel">{{ progressStatusLabel }}</template>
+            <template v-else>
+              Generating {{ noOfOutputs }} {{ noOfOutputs === 1 ? 'image' : 'images' }}
+            </template>
           </span>
           <span class="tw-min-w-0 tw-truncate tw-text-ink-muted">{{ activePrompt }}</span>
         </div>
@@ -160,7 +177,15 @@ function handleRemix(prompt: string) {
             class="pending-tile tw-rounded-card"
             :style="{ aspectRatio: cssAspect(aspectRatio.title), animationDelay: `${-i * 1.9}s` }"
           >
+            <div
+              v-if="progressPercent != null"
+              class="progress-ring progress-ring--lg"
+              :style="progressRingStyle"
+            >
+              <span class="progress-ring__inner">{{ progressPercent }}%</span>
+            </div>
             <font-awesome-icon
+              v-else
               icon="wand-magic-sparkles"
               class="pending-tile__icon"
               aria-hidden="true"
@@ -239,6 +264,8 @@ function handleRemix(prompt: string) {
                   Remix
                 </button>
               </div>
+
+              <ResultNextActions v-if="item._id === actionRowId" :item="item" :image-index="0" />
 
               <!-- Tertiary: quiet meta line -->
               <p class="generation-meta">
@@ -386,6 +413,39 @@ function handleRemix(prompt: string) {
 }
 
 /* --- Pending tiles --- */
+.progress-ring {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.progress-ring__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% - 3px);
+  height: calc(100% - 3px);
+  border-radius: 9999px;
+  background: rgb(var(--tw-surface-1));
+  color: rgb(var(--tw-ink));
+  font-size: 0.5rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.progress-ring--lg {
+  width: 3rem;
+  height: 3rem;
+
+  .progress-ring__inner {
+    font-size: 0.6875rem;
+  }
+}
+
 .pending-dot {
   width: 7px;
   height: 7px;

@@ -4,11 +4,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { computed, onMounted, ref } from 'vue';
 import { useUser } from 'vue-clerk';
 
+import { FeatureType } from '@/types';
+
 import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
 
+import { useFeatureSubmit } from '@/composables/useFeatureSubmit';
 import { useLocal } from '@/composables/local';
 
 import ImageUpload from '@/components/Dashboard/Sidebar/ImageUpload.vue';
@@ -53,6 +56,11 @@ async function removeBackground() {
   localStorage.setItem('remove_bgInProgress', 'true');
   removeBgInProgress.value = true;
 }
+
+useFeatureSubmit(FeatureType.REMOVE_BG, {
+  canSubmit: () => canSubmit.value,
+  submit: () => removeBackground(),
+});
 
 onMounted(() => {
   const raw = localStorage.getItem('remove_bgInProgress');

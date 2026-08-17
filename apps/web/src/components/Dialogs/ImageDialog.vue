@@ -1,7 +1,20 @@
 <script setup lang="ts">
 import { FeatureType } from '@/pages/utils';
-import { faDownload, faTimes, faTrashAlt, farHeart, fasHeart } from '@/plugins/icons';
-import { useMediaQuery } from '@vueuse/core';
+import {
+  faCopy,
+  faDice,
+  faDownload,
+  faEllipsis,
+  faExpand,
+  faLink,
+  faObjectUngroup,
+  faTimes,
+  faTrashAlt,
+  faUpload,
+  farHeart,
+  fasHeart,
+} from '@/plugins/icons';
+import { onClickOutside, useMediaQuery } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 
@@ -15,6 +28,8 @@ import AppModal from '@/components/AppModal.vue';
 import ConfirmDeleteImageDialog from '@/components/Dialogs/ConfirmDeleteImageDialog.vue';
 import SideBySide from '@/components/SideBySide.vue';
 
+import { useImageChainActions } from '@/composables/useImageChainActions';
+import { useShareActions } from '@/composables/useShareActions';
 import { deleteImage, downloadImage, favoriteImage, getDownloadImageUrl } from '@/utils/helpers';
 
 const isMobile = useMediaQuery('(max-width: 600px)');
@@ -24,9 +39,17 @@ const { history } = storeToRefs(userStore);
 const { showImageDialog, activeImageId } = storeToRefs(dialogStore);
 const generateStore = useGenerateStore();
 const { isDeleting, isFavoriting } = storeToRefs(generateStore);
+const { shareLink, copyPrompt } = useShareActions();
+const { useAsReference, sendToUpscale, sendToRemoveBg, moreLikeThis } = useImageChainActions();
 
 const isFavorite = ref(false);
 const showDeleteConfirm = ref(false);
+const chainMenuOpen = ref(false);
+const chainMenuRoot = ref<HTMLElement | null>(null);
+
+onClickOutside(chainMenuRoot, () => {
+  chainMenuOpen.value = false;
+});
 
 const props = defineProps<{
   item: IImageObject | undefined;
@@ -54,6 +77,13 @@ const enhanceDownloadUrl = computed(() => {
   const image = primaryImage.value;
   if (!image) return '';
   return getDownloadImageUrl(image);
+});
+
+const hasPrompt = computed(() => Boolean(props.item?.prompt?.trim()));
+
+const shareUrl = computed(() => {
+  if (enhanceDownloadUrl.value) return enhanceDownloadUrl.value;
+  return typeof window !== 'undefined' ? window.location.href : '';
 });
 
 function getImageUrl(index: number): string {
@@ -126,6 +156,28 @@ function closeImageDialog() {
   dialogStore.hideImage();
 }
 
+async function handleShare() {
+  await shareLink({ title: 'Visual AI creation', url: shareUrl.value });
+}
+
+async function handleCopyPrompt() {
+  if (!props.item?.prompt) return;
+  await copyPrompt(props.item.prompt);
+}
+
+function toggleChainMenu(event: Event) {
+  event.stopPropagation();
+  chainMenuOpen.value = !chainMenuOpen.value;
+}
+
+async function runChain(action: () => void | Promise<boolean | void>, event: Event) {
+  event.stopPropagation();
+  chainMenuOpen.value = false;
+  const result = await action();
+  if (result === false) return;
+  dialogStore.hideImage();
+}
+
 watch(
   () => props.item?._id,
   () => {
@@ -180,6 +232,26 @@ watch(isThisDialogOpen, (open) => {
           <button
             type="button"
             class="icon-btn"
+            title="Share"
+            aria-label="Share"
+            :disabled="!shareUrl"
+            @click="handleShare"
+          >
+            <font-awesome-icon :icon="faLink" aria-hidden="true" />
+          </button>
+          <button
+            v-if="hasPrompt"
+            type="button"
+            class="icon-btn"
+            title="Copy prompt"
+            aria-label="Copy prompt"
+            @click="handleCopyPrompt"
+          >
+            <font-awesome-icon :icon="faCopy" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            class="icon-btn"
             title="Favorite"
             :disabled="isFavoriting"
             :aria-label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
@@ -202,6 +274,69 @@ watch(isThisDialogOpen, (open) => {
           >
             <font-awesome-icon :icon="faDownload" aria-hidden="true" />
           </button>
+
+          <div ref="chainMenuRoot" class="chain-menu">
+            <button
+              type="button"
+              class="icon-btn"
+              title="More actions"
+              aria-label="More actions"
+              aria-haspopup="menu"
+              :aria-expanded="chainMenuOpen"
+              @click="toggleChainMenu"
+            >
+              <font-awesome-icon :icon="faEllipsis" aria-hidden="true" />
+            </button>
+            <div
+              v-if="chainMenuOpen"
+              class="chain-menu__panel"
+              role="menu"
+              aria-label="Image chaining actions"
+              @click.stop
+            >
+              <button
+                type="button"
+                role="menuitem"
+                class="chain-menu__item"
+                :disabled="!primaryImage"
+                @click="runChain(() => useAsReference(primaryImage), $event)"
+              >
+                <font-awesome-icon :icon="faUpload" aria-hidden="true" />
+                Use as reference
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                class="chain-menu__item"
+                :disabled="!primaryImage"
+                @click="runChain(() => sendToUpscale(primaryImage), $event)"
+              >
+                <font-awesome-icon :icon="faExpand" aria-hidden="true" />
+                Upscale this
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                class="chain-menu__item"
+                :disabled="!primaryImage"
+                @click="runChain(() => sendToRemoveBg(primaryImage), $event)"
+              >
+                <font-awesome-icon :icon="faObjectUngroup" aria-hidden="true" />
+                Remove background
+              </button>
+              <button
+                v-if="hasPrompt"
+                type="button"
+                role="menuitem"
+                class="chain-menu__item"
+                @click="runChain(() => moreLikeThis(item), $event)"
+              >
+                <font-awesome-icon :icon="faDice" aria-hidden="true" />
+                More like this
+              </button>
+            </div>
+          </div>
+
           <button
             type="button"
             class="icon-btn icon-btn--danger"
@@ -297,6 +432,55 @@ watch(isThisDialogOpen, (open) => {
   display: flex;
   align-items: center;
   gap: 0.4rem;
+}
+
+.chain-menu {
+  position: relative;
+}
+
+.chain-menu__panel {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  right: 0;
+  z-index: 30;
+  display: flex;
+  min-width: 11.5rem;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 0.35rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(var(--tw-hairline) / 0.8);
+  background: rgb(var(--tw-surface-1) / 0.98);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.chain-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.375rem;
+  color: rgb(var(--tw-ink));
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background: rgb(var(--tw-surface-2));
+    color: #c98a5a;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #c98a5a;
+    outline-offset: 1px;
+  }
 }
 
 .image-dialog__stage {

@@ -8,6 +8,7 @@ import { storeToRefs } from 'pinia';
 import { computed, nextTick, onBeforeUnmount, ref } from 'vue';
 
 import { useDashboardMotion } from '@/composables/useDashboardMotion';
+import { ACCEPTED_IMAGE_ACCEPT, validateImageFile } from '@/composables/useImageDrop';
 import { useAsideStore } from '@/stores/aside';
 
 import Popover from '@/components/primitives/Popover.vue';
@@ -73,8 +74,10 @@ function handleFileChange(event: Event) {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
   input.value = '';
-  if (!file || !file.type.startsWith('image/')) return;
-  asideStore.setReferenceImage(file);
+  if (!file) return;
+  const result = validateImageFile(file);
+  if (!result.ok) return;
+  asideStore.setReferenceImage(result.file);
 }
 </script>
 
@@ -83,7 +86,7 @@ function handleFileChange(event: Event) {
     <input
       ref="fileInputRef"
       type="file"
-      accept="image/*"
+      :accept="ACCEPTED_IMAGE_ACCEPT"
       class="tw-sr-only"
       tabindex="-1"
       aria-hidden="true"

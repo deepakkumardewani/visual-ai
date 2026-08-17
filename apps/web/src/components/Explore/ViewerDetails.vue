@@ -173,9 +173,8 @@ const downloadLabel = computed(() => (props.hasResult ? 'Download result' : 'Dow
             >
               <span class="tw-inline-flex tw-items-center tw-gap-2.5">
                 <font-awesome-icon :icon="faExpand" aria-hidden="true" />
-                Upscale
+                Upscale this
               </span>
-              <span class="viewer-details__credit">{{ creditLabel }}</span>
             </button>
             <button
               type="button"
@@ -201,9 +200,8 @@ const downloadLabel = computed(() => (props.hasResult ? 'Download result' : 'Dow
             >
               <span class="tw-inline-flex tw-items-center tw-gap-2.5">
                 <font-awesome-icon :icon="faObjectUngroup" aria-hidden="true" />
-                Remove BG
+                Remove background
               </span>
-              <span class="viewer-details__credit">{{ creditLabel }}</span>
             </button>
           </div>
         </section>

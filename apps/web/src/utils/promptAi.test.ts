@@ -1,46 +1,129 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+vi.mock('@/composables/useFetch', () => ({
+  useFetch: vi.fn(),
+}));
+
+import { useFetch } from '@/composables/useFetch';
 import PROMPTS from '@/utils/prompts.json';
 import REALISTIC_PROMPTS from '@/utils/realisticPrompts.json';
+import {
+  describeImage,
+  generateRandomPrompt,
+  improvePrompt,
+  pickRandomPrompt,
+} from '@/utils/promptAi';
 import { MODEL_IDS } from '@visual-ai/shared';
-import { describeImage, improvePrompt, pickRandomPrompt } from '@/utils/promptAi';
+
+type FetchResult = {
+  data: { value: { text?: string } | null };
+  error: { value: unknown };
+};
+
+function mockFetchJson(result: FetchResult) {
+  vi.mocked(useFetch).mockReturnValue({
+    json: async () => result,
+  } as unknown as ReturnType<typeof useFetch>);
+}
 
 describe('promptAi', () => {
   beforeEach(() => {
-    vi.useFakeTimers();
+    vi.mocked(useFetch).mockReset();
   });
 
   afterEach(() => {
-    vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   describe('improvePrompt', () => {
-    it('returns a fallback prompt when input is empty', async () => {
-      const promise = improvePrompt('   ');
-      await vi.advanceTimersByTimeAsync(1200);
-      const result = await promise;
+    it('returns improved text on success', async () => {
+      mockFetchJson({
+        data: { value: { text: 'A red fox in snow, cinematic lighting' } },
+        error: { value: null },
+      });
 
-      expect(result.text).toContain('cinematic portrait');
+      const result = await improvePrompt('A red fox in snow');
+
+      expect(useFetch).toHaveBeenCalledWith(
+        '/prompt/improve',
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({ prompt: 'A red fox in snow' }),
+        }),
+      );
+      expect(result.text).toBe('A red fox in snow, cinematic lighting');
     });
 
-    it('enhances a non-empty prompt', async () => {
-      const promise = improvePrompt('A red fox in snow');
-      await vi.advanceTimersByTimeAsync(1200);
-      const result = await promise;
+    it('throws when the API returns an error', async () => {
+      mockFetchJson({
+        data: { value: null },
+        error: { value: { message: 'bad request' } },
+      });
 
-      expect(result.text).toContain('A red fox in snow');
-      expect(result.text).toContain('enhanced');
+      await expect(improvePrompt('A red fox')).rejects.toThrow(
+        'Failed to improve prompt. Please try again.',
+      );
+    });
+
+    it('throws when the response is missing text', async () => {
+      mockFetchJson({
+        data: { value: {} },
+        error: { value: null },
+      });
+
+      await expect(improvePrompt('A red fox')).rejects.toThrow(
+        'Failed to improve prompt. Please try again.',
+      );
     });
   });
 
   describe('describeImage', () => {
-    it('returns a mock description derived from the file name', async () => {
-      const file = new File(['pixels'], 'sunset-beach.png', { type: 'image/png' });
-      const promise = describeImage(file);
-      await vi.advanceTimersByTimeAsync(1200);
-      const result = await promise;
+    it('returns description text on success', async () => {
+      mockFetchJson({
+        data: { value: { text: 'A sunset over a beach' } },
+        error: { value: null },
+      });
 
-      expect(result.text).toContain('sunset-beach');
+      const file = new File(['pixels'], 'sunset-beach.png', { type: 'image/png' });
+      const result = await describeImage(file);
+
+      expect(useFetch).toHaveBeenCalledWith(
+        '/prompt/describe',
+        expect.objectContaining({
+          method: 'POST',
+          body: expect.any(FormData),
+        }),
+      );
+      expect(result.text).toBe('A sunset over a beach');
+    });
+  });
+
+  describe('generateRandomPrompt', () => {
+    it('returns API text on success', async () => {
+      mockFetchJson({
+        data: { value: { text: 'Neon city at midnight' } },
+        error: { value: null },
+      });
+
+      const text = await generateRandomPrompt(MODEL_IDS.FLUX_BASIC);
+
+      expect(useFetch).toHaveBeenCalledWith(
+        '/prompt/random',
+        expect.objectContaining({ method: 'POST' }),
+      );
+      expect(text).toBe('Neon city at midnight');
+    });
+
+    it('falls back to pickRandomPrompt when the API fails', async () => {
+      mockFetchJson({
+        data: { value: null },
+        error: { value: { message: 'network' } },
+      });
+      vi.spyOn(Math, 'random').mockReturnValue(0);
+
+      const text = await generateRandomPrompt(MODEL_IDS.FLUX_BASIC);
+
+      expect(text).toBe(PROMPTS[0]);
     });
   });
 

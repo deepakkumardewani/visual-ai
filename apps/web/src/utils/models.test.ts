@@ -8,6 +8,7 @@ import {
   getProviderDisplayName,
   groupModelsByProvider,
   MODELS,
+  UPSCALER_MODELS,
 } from '@/utils/models';
 
 describe('models catalog', () => {
@@ -82,5 +83,45 @@ describe('models catalog', () => {
     expect(formatPrice(0.014)).toBe('$0.014');
     expect(formatPrice(0.15)).toBe('$0.15');
     expect(formatPrice(undefined)).toBeNull();
+  });
+});
+
+describe('upscaler models', () => {
+  it('exports UPSCALER_MODELS with 7 entries', () => {
+    expect(UPSCALER_MODELS.length).toBe(7);
+  });
+
+  it('includes required upscaler models without hand-set tier/price', () => {
+    const modelIds = new Set([
+      'UPSCALE_IMAGE',
+      'UPSCALE_REAL_ESRGAN',
+      'UPSCALE_PRUNA',
+      'UPSCALE_RECRAFT',
+      'UPSCALE_GOOGLE',
+      'UPSCALE_CLARITY_PRO',
+      'UPSCALE_TOPAZ',
+    ]);
+    const upscalerIds = new Set(UPSCALER_MODELS.map((m) => m.id));
+    expect(upscalerIds).toEqual(modelIds);
+
+    for (const model of UPSCALER_MODELS) {
+      expect(model.title).toBeTruthy();
+      expect(model.provider).toBeTruthy();
+      expect(model.description).toBeTruthy();
+      expect(['budget', 'standard', 'premium']).toContain(model.tier);
+      expect(typeof model.isPro).toBe('boolean');
+    }
+  });
+
+  it('maps premium tier models to isPro === true', () => {
+    const premiumUpscalers = UPSCALER_MODELS.filter((m) => m.tier === 'premium');
+    expect(premiumUpscalers.length).toBe(2); // Clarity Pro and Topaz
+    for (const model of premiumUpscalers) {
+      expect(model.isPro).toBe(true);
+    }
+  });
+
+  it('includes UPSCALE_IMAGE as first entry for backward compatibility', () => {
+    expect(UPSCALER_MODELS[0].id).toBe('UPSCALE_IMAGE');
   });
 });

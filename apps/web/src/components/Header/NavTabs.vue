@@ -1,24 +1,45 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 import { useAppStore } from '@/stores/app';
 
+import {
+  APP_SURFACE,
+  APP_SURFACE_TAB,
+  createFeatureLocation,
+  tabFromRouteName,
+} from '@/utils/dashboardRoutes';
+import { FeatureType } from '@/types';
+
+const route = useRoute();
+const router = useRouter();
 const appStore = useAppStore();
-const { tab } = storeToRefs(appStore);
+const { feature } = storeToRefs(appStore);
 
 const tabs = [
-  { id: 1, name: 'Create' },
-  { id: 2, name: 'Explore' },
-  { id: 3, name: 'Assets' },
+  { id: APP_SURFACE_TAB.create, name: 'Create', routeName: APP_SURFACE.CREATE },
+  { id: APP_SURFACE_TAB.explore, name: 'Explore', routeName: APP_SURFACE.EXPLORE },
+  { id: APP_SURFACE_TAB.assets, name: 'Assets', routeName: APP_SURFACE.ASSETS },
 ] as const;
 
 const tabRefs = ref<(HTMLButtonElement | null)[]>([]);
 
-const activeTabIndex = computed(() => tabs.findIndex((item) => item.id === tab.value));
+const activeTabId = computed(() => tabFromRouteName(route.name) ?? APP_SURFACE_TAB.create);
+
+const activeTabIndex = computed(() => tabs.findIndex((item) => item.id === activeTabId.value));
 
 function selectTab(id: number) {
-  tab.value = id;
+  const tabItem = tabs.find((item) => item.id === id);
+  if (!tabItem) return;
+
+  if (tabItem.routeName === APP_SURFACE.CREATE) {
+    void router.push(createFeatureLocation(feature.value || FeatureType.IMAGE, route.query));
+    return;
+  }
+
+  void router.push({ name: tabItem.routeName });
 }
 
 function focusTab(index: number) {
@@ -67,10 +88,10 @@ function onKeydown(event: KeyboardEvent, index: number) {
         type="button"
         role="tab"
         :data-testid="`nav-tab-${tabItem.name.toLowerCase()}`"
-        :aria-selected="tab === tabItem.id"
-        :tabindex="tab === tabItem.id ? 0 : -1"
+        :aria-selected="activeTabId === tabItem.id"
+        :tabindex="activeTabId === tabItem.id ? 0 : -1"
         class="nav-tabs__tab tw-relative tw-z-[1] tw-min-h-11 tw-flex-1 tw-rounded-full tw-border-0 tw-bg-transparent tw-px-3 tw-text-sm tw-font-medium tw-text-ink-muted tw-transition-colors tw-duration-fast hover:tw-text-ink-primary focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
-        :class="{ 'nav-tabs__tab--active tw-text-ink-primary': tab === tabItem.id }"
+        :class="{ 'nav-tabs__tab--active tw-text-ink-primary': activeTabId === tabItem.id }"
         @click="selectTab(tabItem.id)"
         @keydown="onKeydown($event, index)"
       >

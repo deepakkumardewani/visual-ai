@@ -3,7 +3,8 @@ import type { Model } from '@/types/model';
 import { computed } from 'vue';
 
 import { useDashboardMotion } from '@/composables/useDashboardMotion';
-import { getModelLogoUrl } from '@/utils/models';
+import { getTierCreditLabel } from '@/utils/generationCredits';
+import { getModelBestForHint, getModelLogoUrl, getModelSpeedHint } from '@/utils/models';
 
 import ProviderIcon from '@/components/primitives/ProviderIcon.vue';
 
@@ -19,6 +20,9 @@ defineEmits<{
 const { interactiveTransition, pressable } = useDashboardMotion();
 
 const logoUrl = computed(() => getModelLogoUrl(props.model.iconUrl));
+const speedHint = computed(() => getModelSpeedHint(props.model.id));
+const costLabel = computed(() => getTierCreditLabel(props.model.tier));
+const bestFor = computed(() => getModelBestForHint(props.model));
 </script>
 
 <template>
@@ -35,7 +39,6 @@ const logoUrl = computed(() => getModelLogoUrl(props.model.iconUrl));
     ]"
     @click="$emit('select')"
   >
-    <!-- Display model logo or fallback to provider icon -->
     <img
       v-if="logoUrl"
       :src="logoUrl"
@@ -45,9 +48,26 @@ const logoUrl = computed(() => getModelLogoUrl(props.model.iconUrl));
     <ProviderIcon v-else :provider="model.provider" size="sm" />
 
     <span class="tw-min-w-0 tw-flex-1">
-      <span class="tw-block tw-text-sm tw-font-semibold tw-text-ink">{{ model.title }}</span>
+      <span class="tw-flex tw-min-w-0 tw-items-center tw-gap-2">
+        <span class="tw-truncate tw-text-sm tw-font-semibold tw-text-ink">{{ model.title }}</span>
+        <span class="tw-flex tw-shrink-0 tw-items-center tw-gap-1">
+          <span
+            v-if="speedHint"
+            class="tw-inline-flex tw-items-center tw-rounded-chip tw-border tw-border-hairline tw-bg-surface-1 tw-px-1.5 tw-py-0.5 tw-text-[10px] tw-font-medium tw-uppercase tw-tracking-wide tw-text-ink-muted"
+          >
+            {{ speedHint }}
+          </span>
+          <span
+            class="tw-inline-flex tw-items-center tw-rounded-chip tw-border tw-border-accent/30 tw-bg-accent-subtle tw-px-1.5 tw-py-0.5 tw-text-[10px] tw-font-medium tw-tabular-nums tw-text-accent"
+          >
+            {{ costLabel }}
+          </span>
+        </span>
+      </span>
 
-      <span class="tw-mt-0.5 tw-block tw-text-xs tw-text-ink-muted">{{ model.description }}</span>
+      <span class="tw-mt-0.5 tw-block tw-truncate tw-text-xs tw-text-ink-muted">
+        Best for {{ bestFor }}
+      </span>
     </span>
   </button>
 </template>

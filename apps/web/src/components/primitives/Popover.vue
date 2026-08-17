@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core';
-import { nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 
 import { useFocusTrap } from '@/composables/useFocusTrap';
 
@@ -10,11 +10,14 @@ const props = withDefaults(
     placement?: 'bottom-start' | 'bottom-end' | 'top-start';
     /** Constrain the panel to the trigger's width instead of its own intrinsic width. */
     matchTriggerWidth?: boolean;
+    /** Render the trigger slot as the clickable control, without the default 44px bordered button. */
+    unstyledTrigger?: boolean;
   }>(),
   {
     open: undefined,
     placement: 'bottom-start',
     matchTriggerWidth: false,
+    unstyledTrigger: false,
   },
 );
 
@@ -63,6 +66,19 @@ const onTriggerKeydown = (event: KeyboardEvent) => {
     triggerElement.value?.focus();
   }
 };
+
+function setTriggerElement(el: Element | null) {
+  triggerElement.value = el instanceof HTMLElement ? el : null;
+}
+
+const unstyledTriggerProps = computed(() => ({
+  ref: setTriggerElement,
+  type: 'button' as const,
+  'aria-haspopup': 'dialog' as const,
+  'aria-expanded': isOpen.value,
+  onClick: toggle,
+  onKeydown: onTriggerKeydown,
+}));
 
 const onPanelKeydown = (event: KeyboardEvent) => {
   if (event.key === 'Escape') {
@@ -174,6 +190,7 @@ onBeforeUnmount(() => {
 <template>
   <div ref="triggerRef" class="tw-relative tw-inline-block">
     <button
+      v-if="!unstyledTrigger"
       ref="triggerElement"
       type="button"
       aria-haspopup="dialog"
@@ -184,6 +201,7 @@ onBeforeUnmount(() => {
     >
       <slot name="trigger" :open="isOpen" />
     </button>
+    <slot v-else name="trigger" :open="isOpen" :trigger-props="unstyledTriggerProps" />
 
     <Teleport to="body">
       <div

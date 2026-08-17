@@ -12,12 +12,13 @@ vi.mock('@/utils/promptAi', () => ({
   describeImage: vi.fn(async (file: File) => ({
     text: `described ${file.name}`,
   })),
+  generateRandomPrompt: vi.fn(async () => 'Random AI prompt'),
   pickRandomPrompt: vi.fn(() => 'Random JSON prompt'),
 }));
 
 import PromptAiMenu from '@/components/Dashboard/ModelPicker/PromptAiMenu.vue';
 import { useAsideStore } from '@/stores/aside';
-import { describeImage, improvePrompt, pickRandomPrompt } from '@/utils/promptAi';
+import { describeImage, generateRandomPrompt, improvePrompt } from '@/utils/promptAi';
 import { FLUX_MODES } from '@/utils/models';
 
 // The menu panel renders through Popover's <Teleport to="body">, so its content
@@ -34,7 +35,7 @@ describe('PromptAiMenu', () => {
     vi.useFakeTimers();
     vi.mocked(improvePrompt).mockClear();
     vi.mocked(describeImage).mockClear();
-    vi.mocked(pickRandomPrompt).mockClear();
+    vi.mocked(generateRandomPrompt).mockClear();
   });
 
   afterEach(() => {
@@ -63,15 +64,30 @@ describe('PromptAiMenu', () => {
     await wrapper.get('[data-testid="prompt-ai-trigger"]').trigger('click');
   };
 
-  it('renders sparkle trigger and opens menu', async () => {
+  it('opens menu with Improve, Random, Describe, Save, and Saved', async () => {
     const { wrapper } = mountMenu();
     expect(wrapper.find('[data-testid="prompt-ai-menu"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="prompt-ai-improve"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="prompt-ai-random"]').exists()).toBe(false);
 
     await openMenu(wrapper);
     expect(getPanel()).not.toBeNull();
-    expect(getPanel()?.textContent).toContain('Improve Prompt');
-    expect(getPanel()?.textContent).toContain('New Random Prompt');
-    expect(getPanel()?.textContent).toContain('Describe with image');
+    expect(getPanel()?.textContent).toContain('Improve');
+    expect(getPanel()?.textContent).toContain('Random');
+    expect(getPanel()?.textContent).toContain('Describe With AI');
+    expect(getPanel()?.textContent).toContain('Save current prompt');
+    expect(getPanel()?.textContent).toContain('Saved prompts');
+
+    const itemIds = [...(getPanel()?.querySelectorAll('[role="menuitem"]') ?? [])].map((el) =>
+      el.getAttribute('data-testid'),
+    );
+    expect(itemIds).toEqual([
+      'prompt-ai-improve',
+      'prompt-ai-random',
+      'prompt-ai-describe',
+      'prompt-ai-save-current',
+      'prompt-ai-saved',
+    ]);
   });
 
   it('supports arrow-key navigation between menu items', async () => {
@@ -106,18 +122,18 @@ describe('PromptAiMenu', () => {
     expect(wrapper.emitted('loading')?.at(-1)).toEqual([false]);
   });
 
-  it('emits apply-prompt from random JSON fallback', async () => {
+  it('emits apply-prompt after generateRandomPrompt completes', async () => {
     const { wrapper, asideStore } = mountMenu();
 
     await openMenu(wrapper);
     getByTestId('prompt-ai-random')?.click();
     await vi.runAllTimersAsync();
 
-    expect(pickRandomPrompt).toHaveBeenCalledWith(asideStore.mode.id);
-    expect(wrapper.emitted('apply-prompt')?.[0]).toEqual(['Random JSON prompt']);
+    expect(generateRandomPrompt).toHaveBeenCalledWith(asideStore.mode.id);
+    expect(wrapper.emitted('apply-prompt')?.[0]).toEqual(['Random AI prompt']);
   });
 
-  it('emits apply-prompt after Describe with image upload', async () => {
+  it('emits apply-prompt after Describe With AI upload', async () => {
     const { wrapper } = mountMenu();
     const file = new File(['img'], 'photo.jpg', { type: 'image/jpeg' });
 

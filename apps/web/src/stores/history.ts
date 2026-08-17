@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
 export const useHistoryStore = defineStore('history', () => {
   const selectedSize = ref('medium');

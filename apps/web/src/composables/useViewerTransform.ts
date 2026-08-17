@@ -96,6 +96,12 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
     if (action === 'remove_bg') appStore.removeBgOpen();
   }
 
+  function featureForAction(action: ViewerTransformAction): string {
+    if (action === 'upscale') return FeatureType.UPSCALE;
+    if (action === 'colorize') return FeatureType.COLORIZE;
+    return FeatureType.REMOVE_BG;
+  }
+
   async function startAction(action: ViewerTransformAction) {
     if (isProcessing.value) return;
     if (!guardCredits()) return;
@@ -139,7 +145,10 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
       log.error('viewer transform failed to start', { action, error });
       processingAction.value = null;
       resetResult();
-      errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
+      generateStore.setFeatureError(
+        featureForAction(action),
+        'Sorry, there was an error processing your request. Please try again.',
+      );
     }
   }
 
@@ -172,10 +181,16 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
     processingAction.value = null;
   });
 
-  watch(errMsg, (message) => {
-    if (!processingAction.value || !message) return;
-    processingAction.value = null;
-  });
+  watch(
+    errMsg,
+    (errors) => {
+      if (!processingAction.value) return;
+      if (errors[featureForAction(processingAction.value)]) {
+        processingAction.value = null;
+      }
+    },
+    { deep: true },
+  );
 
   // Clear staged result when browsing to another explore item.
   watch(

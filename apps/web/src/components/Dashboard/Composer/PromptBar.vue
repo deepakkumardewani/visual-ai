@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { useDashboardMotion } from '@/composables/useDashboardMotion';
+import { useImageDrop } from '@/composables/useImageDrop';
 import { useAsideStore } from '@/stores/aside';
 import { useGenerateStore } from '@/stores/generate';
 
@@ -13,12 +14,27 @@ import PromptAiMenu from '@/components/Dashboard/ModelPicker/PromptAiMenu.vue';
 
 const asideStore = useAsideStore();
 const generateStore = useGenerateStore();
-const { typingPrompt, referenceImage } = storeToRefs(asideStore);
+const { typingPrompt, referenceImage, supportsImageInput } = storeToRefs(asideStore);
 const { promptText } = storeToRefs(generateStore);
 const { interactiveTransition } = useDashboardMotion();
 
 const isAiLoading = ref(false);
 const isMultiline = ref(false);
+const dropError = ref('');
+
+const canAcceptReference = computed(() => supportsImageInput.value);
+
+const { isDragging, handleDragOver, handleDragLeave, handleDrop } = useImageDrop({
+  enabled: canAcceptReference,
+  listenPaste: canAcceptReference,
+  onImage: (file) => {
+    dropError.value = '';
+    asideStore.setReferenceImage(file);
+  },
+  onError: (message) => {
+    dropError.value = message;
+  },
+});
 
 function applyPrompt(text: string) {
   typingPrompt.value = text;
@@ -33,8 +49,22 @@ function removeReference() {
 <template>
   <div
     data-testid="prompt-bar"
-    class="tw-overflow-visible tw-rounded-xl tw-border tw-border-hairline tw-bg-surface-1 tw-p-2 tw-shadow-[0_1px_2px_rgba(0,0,0,0.25)] tw-transition-[border-color,box-shadow] tw-duration-base focus-within:tw-border-accent/60 focus-within:tw-shadow-[0_1px_2px_rgba(0,0,0,0.25),0_8px_18px_-12px_rgba(201,138,90,0.45)] motion-reduce:tw-transition-none"
+    :class="[
+      'tw-overflow-visible tw-rounded-xl tw-border tw-bg-surface-1 tw-p-2 tw-shadow-[0_1px_2px_rgba(0,0,0,0.25)] tw-transition-[border-color,box-shadow] tw-duration-base focus-within:tw-border-accent/60 focus-within:tw-shadow-[0_1px_2px_rgba(0,0,0,0.25),0_8px_18px_-12px_rgba(201,138,90,0.45)] motion-reduce:tw-transition-none',
+      isDragging ? 'tw-border-accent tw-bg-accent/5' : 'tw-border-hairline',
+    ]"
+    @dragover="handleDragOver"
+    @dragleave="handleDragLeave"
+    @drop="handleDrop"
   >
+    <p
+      v-if="dropError"
+      data-testid="prompt-bar-drop-error"
+      class="tw-mb-1.5 tw-text-caption tw-text-red-400"
+      role="alert"
+    >
+      {{ dropError }}
+    </p>
     <div :class="['tw-flex tw-gap-2', isMultiline ? 'tw-items-start' : 'tw-items-center']">
       <ReferenceImageControl />
 

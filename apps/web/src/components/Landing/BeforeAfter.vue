@@ -1,30 +1,89 @@
 <script setup lang="ts">
 import { ImgComparisonSlider } from '@img-comparison-slider/vue';
-import { onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 
-defineProps<{
+const props = defineProps<{
   before: string;
   after: string;
   beforeLabel?: string;
   afterLabel?: string;
+  /** Fill parent box and crop with object-fit: cover (for equal card frames). */
+  fill?: boolean;
 }>();
 
 const firstLoaded = ref(false);
 const secondLoaded = ref(false);
 const firstImg = ref<HTMLImageElement | null>(null);
 const secondImg = ref<HTMLImageElement | null>(null);
+const sliderRef = ref<InstanceType<typeof ImgComparisonSlider> | null>(null);
 
-onMounted(() => {
-  // Images slotted into web components can fire @load before Vue attaches the
-  // handler when the browser has cached them. Check .complete as a fallback.
+const FILL_SHADOW_CSS = `
+  :host {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute !important;
+    inset: 0 !important;
+  }
+  .first,
+  .second,
+  .first-overlay,
+  .first-overlay-container {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+  }
+  .second {
+    overflow: hidden !important;
+  }
+  ::slotted(img) {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+`;
+
+function applyFillStyles() {
+  if (!props.fill) return;
+  const host = sliderRef.value?.$el as HTMLElement | undefined;
+  const shadow = host?.shadowRoot;
+  if (!shadow) return;
+
+  let styleEl = shadow.getElementById('ba-fill-styles') as HTMLStyleElement | null;
+  if (!styleEl) {
+    styleEl = document.createElement('style');
+    styleEl.id = 'ba-fill-styles';
+    shadow.appendChild(styleEl);
+  }
+  styleEl.textContent = FILL_SHADOW_CSS;
+}
+
+onMounted(async () => {
   if (firstImg.value?.complete) firstLoaded.value = true;
   if (secondImg.value?.complete) secondLoaded.value = true;
+  await nextTick();
+  applyFillStyles();
+  // Component may upgrade shadow after first paint
+  requestAnimationFrame(applyFillStyles);
 });
+
+watch(
+  () => props.fill,
+  async () => {
+    await nextTick();
+    applyFillStyles();
+  },
+);
 </script>
 
 <template>
-  <figure class="ba">
-    <ImgComparisonSlider class="ba__slider" value="45" hover="hover">
+  <figure class="ba" :class="{ 'ba--fill': fill }">
+    <ImgComparisonSlider ref="sliderRef" class="ba__slider" value="45" hover="hover">
       <img
         ref="firstImg"
         slot="first"
@@ -69,6 +128,14 @@ onMounted(() => {
   border: 1px solid #3a2e22;
 }
 
+.ba--fill {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  border: none;
+  box-shadow: none;
+}
+
 .ba__slider {
   --divider-width: 2px;
   --divider-color: #c98a5a;
@@ -79,11 +146,25 @@ onMounted(() => {
   width: 100%;
 }
 
+.ba--fill .ba__slider {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .ba__img {
   display: block;
   width: 100%;
   height: auto;
   object-fit: cover;
+}
+
+.ba--fill .ba__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .ba__skeleton {
@@ -97,6 +178,7 @@ onMounted(() => {
 .ba__tag {
   position: absolute;
   top: 1rem;
+  z-index: 2;
   padding: 0.3rem 0.7rem;
   font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 0.7rem;

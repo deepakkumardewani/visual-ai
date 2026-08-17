@@ -1,8 +1,10 @@
 import { isEmpty } from 'lodash-es';
 import { defineStore, storeToRefs } from 'pinia';
+import { computed, ref, watch } from 'vue';
 import { useStorage } from '@vueuse/core';
 
 import type { IGenerateResponse, IImage, IImageObject, ImageBody } from '@/types';
+import { FeatureType } from '@/types';
 
 import { useUserStore } from '@/stores/user';
 
@@ -16,6 +18,15 @@ import { useAppStore } from './app';
 
 const log = createLogger('generate');
 
+const GENERIC_ERROR = 'Sorry, there was an error processing your request. Please try again.';
+
+type RetryAction = 'generate' | 'upscale' | 'colorize' | 'remove_bg' | 'revive';
+
+interface RetryEntry {
+  action: RetryAction;
+  payload: unknown;
+}
+
 export const useGenerateStore = defineStore('generate', () => {
   const promptText = ref<string>('');
   /** Prompt of the generation currently in flight — drives the pending row caption. */
@@ -25,7 +36,14 @@ export const useGenerateStore = defineStore('generate', () => {
   const isFavoriting = ref(false);
   const images = ref<IImage[]>([]);
   const imageData = ref<IImageObject | null>(null);
-  const errMsg = ref<string>('');
+  /** Per-feature error messages (replaces a single global errMsg string). */
+  const errMsg = ref<Partial<Record<string, string>>>({});
+  /** Last request params keyed by feature — used by Retry. */
+  const retryByFeature = ref<Partial<Record<string, RetryEntry>>>({});
+  /** Real SSE job status string when available (e.g. "processing"). */
+  const jobStatus = ref<string | null>(null);
+  /** Real SSE progress percent when the API provides it. */
+  const jobProgress = ref<number | null>(null);
   const deletingImageIds = ref<string[]>([]);
   const upscaleInProgress = ref<boolean>(false);
   const colorizeInProgress = ref<boolean>(false);
@@ -40,10 +58,75 @@ export const useGenerateStore = defineStore('generate', () => {
   const { userId } = storeToRefs(userStore);
   const { setLocal } = useLocal();
 
+  const hasAnyError = computed(() => Object.keys(errMsg.value).length > 0);
+
+  function clearFeatureError(feature: string) {
+    if (!(feature in errMsg.value)) return;
+    const next = { ...errMsg.value };
+    delete next[feature];
+    errMsg.value = next;
+  }
+
+  function setFeatureError(feature: string, message: string) {
+    errMsg.value = { ...errMsg.value, [feature]: message };
+    clearJobProgress();
+  }
+
+  function rememberRetry(feature: string, action: RetryAction, payload: unknown) {
+    retryByFeature.value = {
+      ...retryByFeature.value,
+      [feature]: { action, payload },
+    };
+  }
+
+  function clearJobProgress() {
+    jobStatus.value = null;
+    jobProgress.value = null;
+  }
+
+  function updateJobProgress(data: { status?: string; progress?: number }) {
+    if (typeof data.status === 'string' && data.status.length > 0) {
+      jobStatus.value = data.status;
+    }
+    if (typeof data.progress === 'number' && Number.isFinite(data.progress)) {
+      jobProgress.value = data.progress;
+    }
+  }
+
+  async function retryFailed(feature: string) {
+    const entry = retryByFeature.value[feature];
+    if (!entry) {
+      log.error('retryFailed: no retry payload', { feature });
+      return;
+    }
+    clearFeatureError(feature);
+    switch (entry.action) {
+      case 'generate':
+        await generateImage(entry.payload as ImageBody);
+        break;
+      case 'upscale':
+        await upscaleImage(entry.payload);
+        break;
+      case 'colorize':
+        await colorizeImage(entry.payload);
+        break;
+      case 'remove_bg':
+        await removeBgImage(entry.payload as { image: File; jobId: string });
+        break;
+      case 'revive':
+        await reviveOldImage(entry.payload);
+        break;
+      default:
+        log.error('retryFailed: unknown action', { feature, action: entry.action });
+    }
+  }
+
   async function generateImage(imgData?: ImageBody) {
     appStore.sendSignal('generate_image');
     isLoading.value = true;
-    errMsg.value = '';
+    clearFeatureError(FeatureType.IMAGE);
+    clearJobProgress();
+    if (imgData) rememberRetry(FeatureType.IMAGE, 'generate', imgData);
     activePrompt.value = imgData?.prompt ?? '';
     images.value = [];
 
@@ -79,28 +162,30 @@ export const useGenerateStore = defineStore('generate', () => {
       log.error('generateImage failed', { error: error.value, jobId: imgData?.jobId });
       isLoading.value = false;
       appStore.closeEventSource('image');
-      errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
+      setFeatureError(FeatureType.IMAGE, GENERIC_ERROR);
     }
   }
 
   async function upscaleImage(imgData: any) {
     appStore.sendSignal('upscale_image');
     images.value = [];
+    clearFeatureError(FeatureType.UPSCALE);
+    clearJobProgress();
+    if (imgData) rememberRetry(FeatureType.UPSCALE, 'upscale', imgData);
 
     const url = `/generate/upscale/image`;
-    const { prompt, image, format, creativity, scale, negativePrompt, jobId, outputFormat } =
-      imgData;
+    const { image, format, scale, jobId, outputFormat, model } = imgData;
     const formData = new FormData();
     formData.append('feature', 'upscale');
-    formData.append('prompt', prompt);
-    formData.append('negativePrompt', negativePrompt);
     formData.append('userId', userId.value);
-    formData.append('creativity', creativity);
     formData.append('scale', scale);
     formData.append('format', format);
     formData.append('image', image);
     formData.append('jobId', jobId);
     formData.append('outputFormat', outputFormat);
+    if (model) {
+      formData.append('model', model);
+    }
     const { error } = await useFetch(url, {
       method: 'POST',
       body: formData,
@@ -112,7 +197,7 @@ export const useGenerateStore = defineStore('generate', () => {
         setLocal('upscaleInProgress', false);
         upscaleInProgress.value = false;
         isLoading.value = false;
-        errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
+        setFeatureError(FeatureType.UPSCALE, GENERIC_ERROR);
       }
       return;
     }
@@ -121,6 +206,9 @@ export const useGenerateStore = defineStore('generate', () => {
   async function colorizeImage(data: any) {
     appStore.sendSignal('colorize_image');
     images.value = [];
+    clearFeatureError(FeatureType.COLORIZE);
+    clearJobProgress();
+    if (data) rememberRetry(FeatureType.COLORIZE, 'colorize', data);
 
     const url = `/generate/colorize/image`;
     const { image, modelId, jobId } = data;
@@ -141,7 +229,7 @@ export const useGenerateStore = defineStore('generate', () => {
         setLocal('colorizeInProgress', false);
         colorizeInProgress.value = false;
         isLoading.value = false;
-        errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
+        setFeatureError(FeatureType.COLORIZE, GENERIC_ERROR);
       }
       return;
     }
@@ -150,6 +238,9 @@ export const useGenerateStore = defineStore('generate', () => {
   async function removeBgImage(data: { image: File; jobId: string }) {
     appStore.sendSignal('remove_bg_image');
     images.value = [];
+    clearFeatureError(FeatureType.REMOVE_BG);
+    clearJobProgress();
+    if (data) rememberRetry(FeatureType.REMOVE_BG, 'remove_bg', data);
 
     const url = `/generate/remove-bg/image`;
     const formData = new FormData();
@@ -168,7 +259,7 @@ export const useGenerateStore = defineStore('generate', () => {
         setLocal('removeBgInProgress', false);
         removeBgInProgress.value = false;
         isLoading.value = false;
-        errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
+        setFeatureError(FeatureType.REMOVE_BG, GENERIC_ERROR);
       }
       return;
     }
@@ -177,6 +268,9 @@ export const useGenerateStore = defineStore('generate', () => {
   async function reviveOldImage(data: any) {
     appStore.sendSignal('revive_image');
     images.value = [];
+    clearFeatureError(FeatureType.REVIVE);
+    clearJobProgress();
+    if (data) rememberRetry(FeatureType.REVIVE, 'revive', data);
 
     const { image } = data;
     const formData = new FormData();
@@ -194,7 +288,7 @@ export const useGenerateStore = defineStore('generate', () => {
         setLocal('reviveInProgress', false);
         reviveInProgress.value = false;
         isLoading.value = false;
-        errMsg.value = 'Sorry, there was an error processing your request. Please try again.';
+        setFeatureError(FeatureType.REVIVE, GENERIC_ERROR);
       }
       return;
     }
@@ -212,6 +306,11 @@ export const useGenerateStore = defineStore('generate', () => {
     colorizeImage,
     removeBgImage,
     reviveOldImage,
+    clearFeatureError,
+    setFeatureError,
+    retryFailed,
+    updateJobProgress,
+    clearJobProgress,
     promptText,
     activePrompt,
     isLoading,
@@ -225,6 +324,10 @@ export const useGenerateStore = defineStore('generate', () => {
     reviveInProgress,
     removeBgInProgress,
     errMsg,
+    retryByFeature,
+    jobStatus,
+    jobProgress,
+    hasAnyError,
     styleId,
     enhanceMode,
   };

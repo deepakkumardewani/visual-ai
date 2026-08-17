@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
 import { computed } from 'vue';
 
 import type { ExploreFeedItem } from '@/types';
 
 import { useDashboardMotion } from '@/composables/useDashboardMotion';
+import { useShareActions } from '@/composables/useShareActions';
 import { getAuthorAvatarColor } from '@/utils/authorAvatarColor';
 
 const props = defineProps<{
@@ -17,6 +18,7 @@ const emit = defineEmits<{
 }>();
 
 const { imageHoverZoom, interactiveTransition, pressable } = useDashboardMotion();
+const { copyPrompt } = useShareActions();
 
 const aspectRatioStyle = computed(() => {
   const [width, height] = props.item.aspectRatio.split(':').map(Number);
@@ -39,9 +41,16 @@ const avatarColor = computed(() =>
   getAuthorAvatarColor(props.item.authorUserId || props.item.author),
 );
 
+const hasPrompt = computed(() => Boolean(props.item.prompt?.trim()));
+
 function handleRemix(event: MouseEvent) {
   event.stopPropagation();
   emit('remix', props.item.prompt);
+}
+
+async function handleCopyPrompt(event: MouseEvent) {
+  event.stopPropagation();
+  await copyPrompt(props.item.prompt);
 }
 
 function handleOpen() {
@@ -113,22 +122,37 @@ function handleKeydown(event: KeyboardEvent) {
           {{ item.prompt }}
         </p>
 
-        <button
-          type="button"
-          data-testid="community-remix-button"
-          class="tw-inline-flex tw-h-8 tw-shrink-0 tw-items-center tw-justify-center tw-gap-1 tw-rounded-full tw-bg-accent tw-px-3 tw-text-eyebrow tw-font-semibold tw-text-canvas hover:tw-brightness-110 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
-          :class="[interactiveTransition, pressable]"
-          :aria-label="`Remix prompt by ${item.author}`"
-          :title="item.modelName || undefined"
-          @click="handleRemix"
-        >
-          <font-awesome-icon
-            :icon="faWandMagicSparkles"
-            class="tw-text-eyebrow"
-            aria-hidden="true"
-          />
-          Remix
-        </button>
+        <div class="tw-flex tw-w-full tw-shrink-0 tw-items-center tw-justify-center tw-gap-1.5">
+          <button
+            v-if="hasPrompt"
+            type="button"
+            data-testid="community-copy-prompt-button"
+            class="tw-inline-flex tw-h-8 tw-shrink-0 tw-items-center tw-justify-center tw-gap-1 tw-rounded-full tw-border tw-border-hairline/50 tw-bg-surface-1/80 tw-px-3 tw-text-eyebrow tw-font-semibold tw-text-ink hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
+            :class="[interactiveTransition, pressable]"
+            :aria-label="`Copy prompt by ${item.author}`"
+            title="Copy prompt"
+            @click="handleCopyPrompt"
+          >
+            <font-awesome-icon :icon="faCopy" class="tw-text-eyebrow" aria-hidden="true" />
+            Copy
+          </button>
+          <button
+            type="button"
+            data-testid="community-remix-button"
+            class="tw-inline-flex tw-h-8 tw-shrink-0 tw-items-center tw-justify-center tw-gap-1 tw-rounded-full tw-bg-accent tw-px-3 tw-text-eyebrow tw-font-semibold tw-text-canvas hover:tw-brightness-110 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
+            :class="[interactiveTransition, pressable]"
+            :aria-label="`Remix prompt by ${item.author}`"
+            :title="item.modelName || undefined"
+            @click="handleRemix"
+          >
+            <font-awesome-icon
+              :icon="faWandMagicSparkles"
+              class="tw-text-eyebrow"
+              aria-hidden="true"
+            />
+            Remix
+          </button>
+        </div>
       </div>
     </div>
   </article>

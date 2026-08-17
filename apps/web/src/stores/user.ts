@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
 
 import type { IImageObject, IPayment, IUser } from '@/types';
 
 import { useAuthStore } from '@/stores/auth';
 import { useFetch } from '@/composables/useFetch';
+import { canAffordGeneration } from '@/utils/generationCredits';
 import { createLogger } from '@/utils/logger';
 
 const log = createLogger('user');
@@ -23,6 +25,13 @@ export const useUserStore = defineStore('user', () => {
   function setCredits(value: number) {
     credits.value = value;
   }
+
+  /** Whether balance covers the cost for the given output count. */
+  function canAffordOutputs(noOfOutputs: number): boolean {
+    return canAffordGeneration(credits.value, noOfOutputs);
+  }
+
+  const hasCredits = computed(() => credits.value > 0);
   async function getUserDetails() {
     if (!userId.value) return;
 
@@ -118,6 +127,8 @@ export const useUserStore = defineStore('user', () => {
     hasJustSubscribed,
     isUpdatingName,
     isUpdatingUsername,
+    hasCredits,
+    canAffordOutputs,
     setCredits,
     syncFromClerk,
     getUserDetails,

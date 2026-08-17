@@ -2,8 +2,11 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
-import BeforeAfter from '@/components/Landing/BeforeAfter.vue';
+import { FeatureType } from '@/types';
 import type { Model } from '@/types/model';
+
+import BeforeAfter from '@/components/Landing/BeforeAfter.vue';
+import { APP_SURFACE } from '@/utils/dashboardRoutes';
 import { getProviderDisplayName } from '@/utils/models';
 
 interface Props {
@@ -17,210 +20,215 @@ const router = useRouter();
 
 const displayedProvider = computed(() => getProviderDisplayName(props.model.provider));
 
-/**
- * Deep-link to the dashboard with this model preselected
- */
-const handleSelectModel = () => {
+/** Hide provider when it just repeats the model title (e.g. "Pruna" / "Pruna"). */
+const showProvider = computed(() => {
+  return displayedProvider.value.toLowerCase() !== props.model.title.toLowerCase();
+});
+
+function handleSelectModel() {
   router.push({
-    name: 'dashboard',
-    query: { tool: 'upscale', model: props.model.id },
+    name: APP_SURFACE.CREATE,
+    params: { feature: FeatureType.UPSCALE },
+    query: { model: props.model.id },
   });
-};
+}
 </script>
 
 <template>
-  <div class="comparison-card">
-    <!-- Header -->
-    <div class="comparison-card__header">
-      <div class="comparison-card__info">
-        <h3 class="comparison-card__title">{{ model.title }}</h3>
-        <p class="comparison-card__provider">{{ displayedProvider }}</p>
-      </div>
-
-      <!-- Tier badge -->
-      <div class="comparison-card__badge" :data-tier="model.tier">
-        {{ model.tier }}
-      </div>
-    </div>
-
-    <!-- Description -->
-    <p class="comparison-card__description">{{ model.description }}</p>
-
-    <!-- Best at -->
-    <p v-if="model.bestAt" class="comparison-card__best-at">
-      <span class="comparison-card__best-at-label">Best at:</span>
-      {{ model.bestAt }}
-    </p>
-
-    <!-- Before/After slider -->
-    <div class="comparison-card__slider">
+  <article class="comparison-card">
+    <!-- Media first: photos are the hero; tops align naturally across the grid -->
+    <div class="comparison-card__media">
       <BeforeAfter
+        fill
         :before="source"
         :after="upscaled"
-        :before-label="`Original`"
-        :after-label="`Upscaled (${model.title})`"
+        before-label="Original"
+        :after-label="model.title"
       />
     </div>
 
-    <!-- CTA -->
-    <button class="comparison-card__cta" @click="handleSelectModel">
-      <span>Try {{ model.title }}</span>
-      <svg
-        class="comparison-card__cta-icon"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path d="M5 12h14M12 5l7 7-7 7" />
-      </svg>
-    </button>
-  </div>
+    <div class="comparison-card__body">
+      <header class="comparison-card__meta">
+        <div class="comparison-card__heading">
+          <div class="comparison-card__title-row">
+            <h3 class="comparison-card__title">{{ model.title }}</h3>
+            <span class="comparison-card__badge" :data-tier="model.tier">{{ model.tier }}</span>
+          </div>
+          <p v-if="showProvider" class="comparison-card__provider">{{ displayedProvider }}</p>
+        </div>
+        <p class="comparison-card__description">{{ model.description }}</p>
+      </header>
+
+      <button type="button" class="comparison-card__cta" @click="handleSelectModel">
+        Try {{ model.title }}
+        <svg
+          class="comparison-card__cta-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  </article>
 </template>
 
 <style scoped lang="scss">
 .comparison-card {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, #1a1410 0%, #2d2318 100%);
-  border: 1px solid rgba(201, 138, 90, 0.2);
-  border-radius: 16px;
+  height: 100%;
   overflow: hidden;
-  transition: all 0.3s ease;
-
-  &:hover {
-    border-color: rgba(201, 138, 90, 0.4);
-    box-shadow: 0 8px 32px rgba(201, 138, 90, 0.1);
-  }
+  background: rgb(var(--tw-surface-1));
+  border: 1px solid rgb(var(--tw-hairline) / 0.9);
+  border-radius: 12px;
 }
 
-.comparison-card__header {
+/* Full-bleed hero — no chrome padding around the comparison */
+.comparison-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: rgb(var(--tw-canvas));
+}
+
+.comparison-card__body {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
+  flex-direction: column;
+  flex: 1;
+  gap: 1.25rem;
+  padding: 1.25rem 1.25rem 1.25rem;
 }
 
-.comparison-card__info {
-  flex: 1;
+/* Tight cluster: title → provider → description */
+.comparison-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.comparison-card__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.comparison-card__title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
 }
 
 .comparison-card__title {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: rgb(var(--tw-ink-primary));
+  margin: 0;
+  min-width: 0;
   font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: rgb(var(--tw-ink-primary));
 }
 
 .comparison-card__provider {
   margin: 0;
-  font-size: 0.875rem;
-  color: #c98a5a;
+  font-size: 0.75rem;
+  line-height: 1.3;
   font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgb(var(--tw-accent));
 }
 
 .comparison-card__badge {
-  padding: 0.375rem 0.875rem;
-  font-size: 0.75rem;
-  font-weight: 600;
+  flex-shrink: 0;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 650;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-radius: 9999px;
-  white-space: nowrap;
+  letter-spacing: 0.08em;
+  border-radius: 4px;
+  border: 1px solid transparent;
 
+  /* Warm palette only — no green/blue SaaS chips */
   &[data-tier='budget'] {
-    background: rgba(76, 175, 80, 0.2);
-    color: #7cb342;
+    color: rgb(var(--tw-ink-muted));
+    border-color: rgb(var(--tw-hairline));
+    background: transparent;
   }
 
   &[data-tier='standard'] {
-    background: rgba(33, 150, 243, 0.2);
-    color: #42a5f5;
+    color: rgb(var(--tw-accent));
+    border-color: rgb(var(--tw-accent) / 0.35);
+    background: rgb(var(--tw-accent) / 0.08);
   }
 
   &[data-tier='premium'] {
-    background: rgba(255, 193, 7, 0.2);
-    color: #ffa726;
+    color: rgb(201 168 76);
+    border-color: rgb(201 168 76 / 0.4);
+    background: rgb(201 168 76 / 0.1);
   }
 }
 
 .comparison-card__description {
   margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: rgb(var(--tw-ink-primary) / 0.9);
-}
-
-.comparison-card__best-at {
-  margin: 0;
   font-size: 0.875rem;
-  color: rgb(var(--tw-ink-primary) / 0.75);
-  font-style: italic;
-}
-
-.comparison-card__best-at-label {
-  color: #c98a5a;
-  font-weight: 600;
-  font-style: normal;
-}
-
-.comparison-card__slider {
-  min-height: 400px;
-  overflow: hidden;
-  border-radius: 12px;
+  line-height: 1.45;
+  color: rgb(var(--tw-ink-muted));
 }
 
 .comparison-card__cta {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, #c98a5a 0%, #a0723a 100%);
-  color: #1a1410;
+  gap: 0.5rem;
+  margin-top: auto;
+  width: 100%;
+  padding: 0.75rem 1rem;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  background: rgb(var(--tw-accent));
+  color: rgb(var(--tw-canvas));
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Source Sans 3', system-ui, sans-serif;
+  transition:
+    background 150ms ease,
+    transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(201, 138, 90, 0.3);
+    background: rgb(217 153 106);
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgb(var(--tw-accent));
+    outline-offset: 3px;
   }
 }
 
 .comparison-card__cta-icon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 @media (max-width: 640px) {
-  .comparison-card {
-    padding: 1.5rem;
+  .comparison-card__body {
+    padding: 1rem;
     gap: 1rem;
   }
 
-  .comparison-card__title {
-    font-size: 1.25rem;
-  }
-
-  .comparison-card__header {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .comparison-card__slider {
-    min-height: 280px;
+  .comparison-card__media {
+    aspect-ratio: 4 / 3;
   }
 }
 </style>

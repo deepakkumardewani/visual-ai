@@ -8,7 +8,9 @@ import { useGenerateStore } from '@/stores/generate';
 import PromptAiMenu from '@/components/Dashboard/ModelPicker/PromptAiMenu.vue';
 
 const PLACEHOLDER = 'Describe your image';
-const MAX_HEIGHT = 200; // pixels
+const MAX_HEIGHT = 200;
+const FOCUSED_MIN_HEIGHT = 72;
+const CHAR_COUNT_THRESHOLD = 300;
 
 const props = defineProps<{
   embedded?: boolean;
@@ -27,33 +29,51 @@ const { typingPrompt } = storeToRefs(asideStore);
 const { promptText } = storeToRefs(generateStore);
 
 const isAiLoading = ref(false);
+const isFocused = ref(false);
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
 
 const isReadonly = computed(() => isAiLoading.value || Boolean(props.aiLoading));
 const showAiLoadingBar = computed(() => isAiLoading.value || Boolean(props.aiLoading));
+const charCount = computed(() => typingPrompt.value.length);
+const showCharCount = computed(() => charCount.value > CHAR_COUNT_THRESHOLD);
 
 function focusTextarea() {
   textareaRef.value?.focus();
 }
 
-function emitMultilineState() {
-  const el = textareaRef.value;
-  if (!props.embedded || !el) return;
-
+function getSingleLineMax(el: HTMLTextAreaElement) {
   const style = window.getComputedStyle(el);
   const lineHeight = Number.parseFloat(style.lineHeight) || 20;
   const padding = Number.parseFloat(style.paddingTop) + Number.parseFloat(style.paddingBottom);
-  const singleLineMax = lineHeight + padding;
+  return lineHeight + padding;
+}
 
-  emit('multiline-change', el.scrollHeight > singleLineMax + 2);
+function hasLongContent(el: HTMLTextAreaElement) {
+  return el.scrollHeight > getSingleLineMax(el) + 2;
+}
+
+function emitMultilineState(expanded: boolean) {
+  if (!props.embedded) return;
+  emit('multiline-change', expanded);
 }
 
 function adjustHeight() {
   const el = textareaRef.value;
   if (!el) return;
+
   el.style.height = 'auto';
-  el.style.height = `${Math.min(el.scrollHeight, MAX_HEIGHT)}px`;
-  emitMultilineState();
+  const contentHeight = el.scrollHeight;
+  const contentIsLong = hasLongContent(el) || typingPrompt.value.includes('\n');
+  const shouldExpand = isFocused.value || contentIsLong;
+
+  if (shouldExpand) {
+    const minHeight = isFocused.value ? FOCUSED_MIN_HEIGHT : 0;
+    el.style.height = `${Math.min(Math.max(contentHeight, minHeight), MAX_HEIGHT)}px`;
+  } else {
+    el.style.height = `${Math.min(contentHeight, getSingleLineMax(el))}px`;
+  }
+
+  emitMultilineState(shouldExpand || contentHeight > getSingleLineMax(el) + 2);
 }
 
 function applyPrompt(text: string) {
@@ -73,13 +93,28 @@ function handleInput() {
   adjustHeight();
 }
 
+function handleFocus() {
+  isFocused.value = true;
+  nextTick(adjustHeight);
+}
+
+function handleBlur() {
+  isFocused.value = false;
+  nextTick(adjustHeight);
+}
+
 watch(typingPrompt, (value) => {
   promptText.value = value;
   nextTick(adjustHeight);
 });
 
 onMounted(() => {
-  typingPrompt.value = promptText.value ?? '';
+  // Prefer aside prompt (may already be restored from localStorage)
+  if (typingPrompt.value) {
+    promptText.value = typingPrompt.value;
+  } else {
+    typingPrompt.value = promptText.value ?? '';
+  }
   nextTick(adjustHeight);
 });
 </script>
@@ -94,18 +129,19 @@ onMounted(() => {
       :placeholder="PLACEHOLDER"
       :readonly="isReadonly"
       :class="[
-        'tw-w-full tw-resize-none tw-border-0 tw-bg-transparent tw-text-body-base tw-leading-normal tw-text-ink tw-placeholder-ink-muted focus-visible:tw-outline-none disabled:tw-cursor-not-allowed disabled:tw-opacity-70',
+        'tw-w-full tw-resize-none tw-border-0 tw-bg-transparent tw-text-body-base tw-leading-normal tw-text-ink tw-placeholder-ink-muted tw-transition-[height] tw-duration-fast tw-ease-soft focus-visible:tw-outline-none disabled:tw-cursor-not-allowed disabled:tw-opacity-70 motion-reduce:tw-transition-none',
         embedded
           ? 'tw-rounded-none tw-px-0 tw-py-1.5 tw-pr-8'
           : 'tw-rounded-md tw-px-1 tw-py-1 tw-pr-9',
+        showCharCount ? 'tw-pb-5' : '',
       ]"
-      :aria-busy="isAiLoading"
+      :aria-busy="showAiLoadingBar"
       @input="handleInput"
+      @focus="handleFocus"
+      @blur="handleBlur"
     />
 
-    <div
-      class="tw-absolute tw-right-0 tw-top-1/2 tw-flex -tw-translate-y-1/2 tw-items-center tw-gap-1"
-    >
+    <div class="tw-absolute tw-right-0 tw-top-1.5 tw-flex tw-items-center tw-gap-1">
       <button
         v-if="typingPrompt && !isReadonly"
         type="button"
@@ -126,15 +162,45 @@ onMounted(() => {
       />
     </div>
 
+    <span
+      v-if="showCharCount"
+      data-testid="composer-textarea-char-count"
+      class="tw-pointer-events-none tw-absolute tw-bottom-0.5 tw-right-1 tw-text-eyebrow tw-tabular-nums tw-text-ink-faint"
+      aria-live="polite"
+    >
+      {{ charCount }}
+    </span>
+
     <div
       v-if="showAiLoadingBar"
       data-testid="composer-textarea-ai-loading"
-      class="tw-pointer-events-none tw-absolute tw-inset-x-0 tw-bottom-0 tw-h-0.5 tw-overflow-hidden"
+      class="tw-pointer-events-none tw-absolute tw-inset-x-0 tw-bottom-0 tw-h-0.5 tw-overflow-hidden tw-rounded-full tw-bg-accent/15"
       aria-hidden="true"
     >
-      <div
-        class="tw-h-full tw-w-1/3 tw-animate-pulse tw-bg-accent/60 motion-reduce:tw-animate-none"
-      />
+      <div class="prompt-ai-indeterminate tw-h-full tw-w-1/3 tw-rounded-full tw-bg-accent" />
     </div>
   </div>
 </template>
+
+<style scoped>
+@keyframes prompt-ai-indeterminate {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+.prompt-ai-indeterminate {
+  animation: prompt-ai-indeterminate 1.1s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prompt-ai-indeterminate {
+    animation: none;
+    width: 100%;
+    opacity: 0.7;
+  }
+}
+</style>

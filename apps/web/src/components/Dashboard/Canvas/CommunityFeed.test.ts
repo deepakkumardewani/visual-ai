@@ -3,10 +3,8 @@ import { mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import CommunityFeed from '@/components/Dashboard/Canvas/CommunityFeed.vue';
-import { useAppStore } from '@/stores/app';
 import { useAsideStore } from '@/stores/aside';
 import { useExploreStore } from '@/stores/explore';
-import { FeatureType } from '@/types';
 import { COMMUNITY_FEED } from '@/utils/communityMock';
 
 const push = vi.fn();
@@ -47,18 +45,18 @@ describe('CommunityFeed', () => {
     expect(asideStore.typingPrompt).toBe(target.prompt);
   });
 
-  it('switches to Create tab when switchToCreateOnRemix is set', async () => {
+  it('navigates to Create when switchToCreateOnRemix is set', async () => {
     const wrapper = mount(CommunityFeed, {
       props: { switchToCreateOnRemix: true },
     });
-    const appStore = useAppStore();
-    appStore.tab = 2;
-    appStore.feature = FeatureType.UPSCALE;
 
     await wrapper.findAll('[data-testid="community-remix-button"]')[0].trigger('click');
 
-    expect(appStore.tab).toBe(1);
-    expect(appStore.feature).toBe(FeatureType.IMAGE);
+    expect(push).toHaveBeenCalledWith({
+      name: 'create',
+      params: {},
+      query: {},
+    });
   });
 
   it('navigates to explore viewer when a card is opened', async () => {

@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import { useAppStore } from '@/stores/app';
+import { useAsideStore } from '@/stores/aside';
+
+import { ACCEPTED_IMAGE_ACCEPT, useImageDrop } from '@/composables/useImageDrop';
 
 const appStore = useAppStore();
+const asideStore = useAsideStore();
 const { feature } = storeToRefs(appStore);
+const { pendingFeatureImage } = storeToRefs(asideStore);
 
 const image = ref<File | null>(null);
 const width = ref(0);
 const height = ref(0);
 const imgSource = ref('');
-const isDragging = ref(false);
 const uploadInput = ref<HTMLInputElement | null>(null);
-
-const MAX_BYTES = 5 * 1024 * 1024;
 const errorMsg = ref('');
 
 const fileSize = computed(() => (image.value ? formatFileSize(image.value.size) : ''));
@@ -35,39 +37,8 @@ function resetImage() {
   if (uploadInput.value) uploadInput.value.value = '';
 }
 
-function handleDragLeave() {
-  isDragging.value = false;
-}
-
-function handleDragOver(e: DragEvent) {
-  e.preventDefault();
-  isDragging.value = true;
-}
-
-function handleDrop(e: DragEvent) {
-  e.preventDefault();
-  isDragging.value = false;
-  const file = e.dataTransfer?.files[0];
-  if (file) handleFileUpload(file);
-}
-
-function handleFileChange(e: Event) {
-  const target = e.target as HTMLInputElement;
-  const file = target.files?.[0];
-  if (file) handleFileUpload(file);
-}
-
-function handleFileUpload(file: File) {
+function applyImageFile(file: File) {
   errorMsg.value = '';
-  if (!file.type.startsWith('image/')) {
-    errorMsg.value = 'Please upload a JPG, PNG, or WEBP image.';
-    return;
-  }
-  if (file.size > MAX_BYTES) {
-    errorMsg.value = 'Image must be 5MB or smaller.';
-    return;
-  }
-
   image.value = file;
   const reader = new FileReader();
   reader.onload = (event) => {
@@ -86,8 +57,29 @@ function handleFileUpload(file: File) {
   reader.readAsDataURL(file);
 }
 
-onMounted(() => {
-  // Keep empty dropzone ready on mount
+const { isDragging, acceptFile, handleDragOver, handleDragLeave, handleDrop } = useImageDrop({
+  listenPaste: true,
+  onImage: applyImageFile,
+  onError: (message) => {
+    errorMsg.value = message;
+  },
+});
+
+function handleFileChange(e: Event) {
+  const target = e.target as HTMLInputElement;
+  const file = target.files?.[0];
+  if (file) acceptFile(file);
+}
+
+function applyPendingFeatureImage() {
+  const pending = asideStore.consumePendingFeatureImage();
+  if (pending) applyImageFile(pending);
+}
+
+onMounted(applyPendingFeatureImage);
+
+watch(pendingFeatureImage, (file) => {
+  if (file) applyPendingFeatureImage();
 });
 
 defineExpose({
@@ -114,7 +106,7 @@ defineExpose({
         id="feature-image-upload"
         ref="uploadInput"
         type="file"
-        accept="image/jpeg,image/png,image/webp"
+        :accept="ACCEPTED_IMAGE_ACCEPT"
         class="tw-sr-only"
         data-testid="image-upload-input"
         @change="handleFileChange"

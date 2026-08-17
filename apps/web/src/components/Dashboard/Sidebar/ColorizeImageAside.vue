@@ -3,10 +3,14 @@ import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref } from 'vue';
 import { useUser } from 'vue-clerk';
 
+import { FeatureType } from '@/types';
+
 import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
+
+import { useFeatureSubmit } from '@/composables/useFeatureSubmit';
 
 import ImageUpload from '@/components/Dashboard/Sidebar/ImageUpload.vue';
 
@@ -45,6 +49,11 @@ async function colorizeImage() {
   localStorage.setItem('colorizeInProgress', 'true');
   colorizeInProgress.value = true;
 }
+
+useFeatureSubmit(FeatureType.COLORIZE, {
+  canSubmit: () => canSubmit.value,
+  submit: () => colorizeImage(),
+});
 
 onMounted(() => {
   const raw = localStorage.getItem('colorizeInProgress');

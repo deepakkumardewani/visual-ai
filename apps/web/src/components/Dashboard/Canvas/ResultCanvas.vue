@@ -7,7 +7,7 @@ import { FeatureType } from '@/types';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
 
-import CommunityFeed from '@/components/Dashboard/Canvas/CommunityFeed.vue';
+import StarterPromptsGrid from '@/components/Dashboard/Canvas/StarterPromptsGrid.vue';
 import UserGenerationsGrid from '@/components/Dashboard/Feed/UserGenerationsGrid.vue';
 
 const generateStore = useGenerateStore();
@@ -20,9 +20,8 @@ const hasSavedGenerations = computed(() =>
 );
 
 // Wait for user history sync before choosing empty-state vs creations —
-// otherwise the community "inspiration" feed flashes for users who already
-// have generations.
-const showCommunityFeed = computed(
+// otherwise the starter grid flashes for users who already have generations.
+const showStarterPrompts = computed(
   () => isUserReady.value && !isLoading.value && !hasSavedGenerations.value,
 );
 </script>
@@ -53,7 +52,7 @@ const showCommunityFeed = computed(
         </div>
       </div>
     </div>
-    <CommunityFeed v-else-if="showCommunityFeed" />
+    <StarterPromptsGrid v-else-if="showStarterPrompts" />
     <UserGenerationsGrid v-else />
   </div>
 </template>

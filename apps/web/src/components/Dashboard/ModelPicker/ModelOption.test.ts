@@ -2,15 +2,21 @@ import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
 import ModelOption from '@/components/Dashboard/ModelPicker/ModelOption.vue';
-import { FLUX_MODES } from '@/utils/models';
+import { getTierCreditLabel } from '@/utils/generationCredits';
+import { FLUX_MODES, getModelBestForHint, getModelSpeedHint } from '@/utils/models';
 
 describe('ModelOption', () => {
-  it('renders model name and description without tier badge', () => {
+  it('renders model name, best-for hint, and cost badge without tier badge', () => {
     const model = FLUX_MODES[2];
     const wrapper = mount(ModelOption, { props: { model } });
 
     expect(wrapper.text()).toContain(model.title);
-    expect(wrapper.text()).toContain(model.description);
+    expect(wrapper.text()).toContain(`Best for ${getModelBestForHint(model)}`);
+    expect(wrapper.text()).toContain(getTierCreditLabel(model.tier));
+    const speedHint = getModelSpeedHint(model.id);
+    if (speedHint) {
+      expect(wrapper.text()).toContain(speedHint);
+    }
     expect(wrapper.text()).not.toContain('Premium');
   });
 

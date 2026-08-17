@@ -1,5 +1,6 @@
+import { createPinia, setActivePinia } from 'pinia';
 import { mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import CommunityCard from '@/components/Dashboard/Canvas/CommunityCard.vue';
 import type { ExploreFeedItem } from '@/types';
@@ -16,10 +17,21 @@ const sampleItem: ExploreFeedItem = {
 };
 
 describe('CommunityCard', () => {
-  it('mounts with image, author, prompt, and remix button', () => {
-    const wrapper = mount(CommunityCard, {
+  beforeEach(() => {
+    setActivePinia(createPinia());
+  });
+
+  const mountCard = () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    return mount(CommunityCard, {
       props: { item: sampleItem },
+      global: { plugins: [pinia] },
     });
+  };
+
+  it('mounts with image, author, prompt, and remix button', () => {
+    const wrapper = mountCard();
 
     const card = wrapper.get('[data-testid="community-card"]');
     const image = card.get('img');
@@ -29,6 +41,7 @@ describe('CommunityCard', () => {
     expect(image.attributes('alt')).toContain(sampleItem.author);
     expect(card.text()).toContain(sampleItem.author);
     expect(card.text()).toContain(sampleItem.prompt);
+    expect(wrapper.find('[data-testid="community-copy-prompt-button"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="community-remix-button"]').text()).toContain('Remix');
     expect(wrapper.get('[data-testid="community-remix-button"]').attributes('aria-label')).toBe(
       'Remix prompt by test_artist',
@@ -36,9 +49,7 @@ describe('CommunityCard', () => {
   });
 
   it('emits remix with the item prompt', async () => {
-    const wrapper = mount(CommunityCard, {
-      props: { item: sampleItem },
-    });
+    const wrapper = mountCard();
 
     await wrapper.get('[data-testid="community-remix-button"]').trigger('click');
 
@@ -46,9 +57,7 @@ describe('CommunityCard', () => {
   });
 
   it('emits open with the item id when the card is clicked', async () => {
-    const wrapper = mount(CommunityCard, {
-      props: { item: sampleItem },
-    });
+    const wrapper = mountCard();
 
     await wrapper.get('[data-testid="community-card"]').trigger('click');
 

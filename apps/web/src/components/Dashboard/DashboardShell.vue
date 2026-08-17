@@ -1,7 +1,8 @@
 <script setup lang="ts">
  /**
  * Two-column dashboard layout: control rail (left) + result canvas (right).
- * Responsive: stacks rail above canvas on viewports below `sm`.
+ * Below `sm` (640px) the rail is hidden from flow — Create mounts settings in a
+ * mobile bottom sheet instead so the composer stays reachable.
  */
 </script>
 
@@ -13,7 +14,7 @@
     <div class="dashboard-shell__grid tw-grid tw-h-full tw-min-h-0">
       <aside
         data-testid="dashboard-rail"
-        class="dashboard-shell__rail tw-min-h-0 tw-h-full tw-overflow-y-auto tw-overscroll-contain tw-border-b tw-border-hairline tw-bg-surface-1/60 sm:tw-border-b-0 sm:tw-border-r no-scrollbar"
+        class="dashboard-shell__rail tw-min-h-0 tw-h-full tw-overflow-y-auto tw-overscroll-contain tw-border-hairline tw-bg-surface-1/60 sm:tw-border-r no-scrollbar"
       >
         <slot name="rail" />
       </aside>
@@ -31,13 +32,21 @@
 <style scoped lang="scss">
 .dashboard-shell__grid {
   grid-template-columns: 1fr;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.dashboard-shell__rail {
+  display: none;
 }
 
 @media (min-width: 640px) {
   .dashboard-shell__grid {
     grid-template-columns: minmax(0, 16.5rem) minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
+  }
+
+  .dashboard-shell__rail {
+    display: block;
   }
 }
 </style>

@@ -5,7 +5,6 @@ import { computed, watch } from 'vue';
 import { SignedIn, SignedOut, useAuth } from 'vue-clerk';
 import { useRoute } from 'vue-router';
 
-import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
@@ -21,16 +20,17 @@ import ReferralOffer from '@/components/Header/ReferralOffer.vue';
 import ThemeButton from '@/components/Header/ThemeButton.vue';
 import UserMenu from '@/components/Header/UserMenu.vue';
 
+import { APP_SURFACE, isAppShellRoute } from '@/utils/dashboardRoutes';
+
 const smAndUp = useMediaQuery('(min-width: 600px)');
 const { isLoaded: isAuthLoaded } = useAuth();
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
 const route = useRoute();
 const { isPro, isReady: isUserReady } = storeToRefs(userStore);
-const appStore = useAppStore();
-const { tab } = storeToRefs(appStore);
 
-const isDashboard = computed(() => route.path === '/dashboard');
+const isDashboard = computed(() => isAppShellRoute(route));
+const isCreateSurface = computed(() => route.name === APP_SURFACE.CREATE);
 
 const isThemeButtonVisible = computed(() => {
   return route.path !== '/privacy' && route.path !== '/terms' && route.path !== '/refund';
@@ -84,7 +84,7 @@ watch(isPro, (newValue) => {
         >
           <Logo />
           <div
-            v-if="isDashboard && tab === 1"
+            v-if="isCreateSurface"
             class="tw-relative tw-hidden tw-min-w-0 tw-flex-1 md:tw-block lg:tw-flex-none"
           >
             <FeatureSelect />

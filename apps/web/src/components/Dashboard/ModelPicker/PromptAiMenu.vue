@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref, shallowRef } from 'vue';
 
 import { useDashboardMotion } from '@/composables/useDashboardMotion';
+import { useAppStore } from '@/stores/app';
 import { useAsideStore } from '@/stores/aside';
 
+import PromptAiMenuItem from '@/components/Dashboard/ModelPicker/PromptAiMenuItem.vue';
+import SavedPromptsPanel from '@/components/Dashboard/ModelPicker/SavedPromptsPanel.vue';
 import Popover from '@/components/primitives/Popover.vue';
 
-import { describeImage, improvePrompt, pickRandomPrompt } from '@/utils/promptAi';
+import { describeImage, generateRandomPrompt, improvePrompt } from '@/utils/promptAi';
 
 const props = defineProps<{
   currentPrompt: string;
@@ -21,13 +24,54 @@ const emit = defineEmits<{
 
 const asideStore = useAsideStore();
 const { mode } = storeToRefs(asideStore);
+const appStore = useAppStore();
+const { snackbar, snackbarText } = storeToRefs(appStore);
 const { interactiveTransition, pressable } = useDashboardMotion();
 
 const isOpen = ref(false);
+const menuView = ref<'actions' | 'saved'>('actions');
+const savedInitialView = shallowRef<'save' | 'list'>('list');
 const activeAction = ref<'improve' | 'random' | 'describe' | null>(null);
 const fileInputRef = ref<HTMLInputElement | null>(null);
 
+const canSaveCurrent = computed(() => props.currentPrompt.trim().length > 0);
+
 const isLoading = () => activeAction.value !== null;
+
+function onOpenUpdate(value: boolean) {
+  // Keep the panel visible while an AI action is in flight (especially describe,
+  // where the OS file dialog often dismisses the popover).
+  if (!value && activeAction.value !== null) return;
+  isOpen.value = value;
+  if (!value) {
+    menuView.value = 'actions';
+    savedInitialView.value = 'list';
+  }
+}
+
+function openSaveCurrentPrompt() {
+  if (props.disabled || isLoading() || !canSaveCurrent.value) return;
+  savedInitialView.value = 'save';
+  menuView.value = 'saved';
+}
+
+function openSavedPrompts() {
+  if (props.disabled || isLoading()) return;
+  savedInitialView.value = 'list';
+  menuView.value = 'saved';
+}
+
+function closeSavedView() {
+  menuView.value = 'actions';
+  savedInitialView.value = 'list';
+}
+
+function handleApplySavedPrompt(text: string) {
+  emit('apply-prompt', text);
+  isOpen.value = false;
+  menuView.value = 'actions';
+  savedInitialView.value = 'list';
+}
 
 async function runAction(action: 'improve' | 'random' | 'describe', runner: () => Promise<string>) {
   if (props.disabled || isLoading()) return;
@@ -39,6 +83,10 @@ async function runAction(action: 'improve' | 'random' | 'describe', runner: () =
     const text = await runner();
     emit('apply-prompt', text);
     isOpen.value = false;
+  } catch (error) {
+    snackbarText.value =
+      error instanceof Error ? error.message : 'Something went wrong. Please try again.';
+    snackbar.value = true;
   } finally {
     activeAction.value = null;
     emit('loading', false);
@@ -54,13 +102,15 @@ async function handleImprove() {
 
 async function handleRandom() {
   await runAction('random', async () => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    return pickRandomPrompt(mode.value.id);
+    return generateRandomPrompt(mode.value.id);
   });
 }
 
 function handleDescribeClick() {
   if (props.disabled || isLoading()) return;
+  // Keep the menu open while the OS file picker is up so loading can
+  // show on the describe row as soon as a file is chosen.
+  isOpen.value = true;
   fileInputRef.value?.click();
 }
 
@@ -71,6 +121,10 @@ async function handleFileChange(event: Event) {
 
   if (!file) return;
 
+  // File dialog often dismisses the popover — reopen so the describe
+  // row spinner is visible for the full request.
+  isOpen.value = true;
+
   await runAction('describe', async () => {
     const result = await describeImage(file);
     return result.text;
@@ -79,7 +133,7 @@ async function handleFileChange(event: Event) {
 </script>
 
 <template>
-  <div data-testid="prompt-ai-menu" class="tw-relative">
+  <div data-testid="prompt-ai-menu" class="tw-relative tw-flex tw-items-center tw-gap-1">
     <input
       ref="fileInputRef"
       type="file"
@@ -90,94 +144,104 @@ async function handleFileChange(event: Event) {
       @change="handleFileChange"
     />
 
-    <Popover v-model:open="isOpen" placement="bottom-end">
+    <Popover :open="isOpen" placement="bottom-end" @update:open="onOpenUpdate">
       <template #trigger="{ open }">
         <span
           data-testid="prompt-ai-trigger"
           :class="[
-            'tw-inline-flex tw-min-h-[36px] tw-min-w-[36px] tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2 tw-text-ink-muted hover:tw-border-accent/40 hover:tw-text-accent focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
+            'tw-inline-flex tw-min-h-9 tw-min-w-9 tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2 tw-text-ink-muted hover:tw-border-accent/40 hover:tw-text-accent focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
             interactiveTransition,
-            open ? 'tw-border-accent/50 tw-text-accent' : '',
-            isLoading() ? 'tw-opacity-60' : '',
+            open || activeAction === 'describe' ? 'tw-border-accent/50 tw-text-accent' : '',
           ]"
-          :aria-busy="isLoading()"
+          :aria-busy="activeAction === 'describe'"
         >
+          <span
+            v-if="activeAction === 'describe'"
+            data-testid="prompt-ai-trigger-loading"
+            class="tw-inline-block tw-h-3.5 tw-w-3.5 tw-animate-spin tw-rounded-full tw-border-2 tw-border-accent/25 tw-border-t-accent motion-reduce:tw-animate-none"
+            aria-hidden="true"
+          />
           <font-awesome-icon
+            v-else
             icon="wand-magic-sparkles"
             class="tw-h-3.5 tw-w-3.5"
             aria-hidden="true"
           />
-          <span class="tw-sr-only">AI prompt actions</span>
+          <span class="tw-sr-only">
+            {{ activeAction === 'describe' ? 'Describing image' : 'More AI prompt actions' }}
+          </span>
         </span>
       </template>
 
       <div
         role="menu"
-        aria-label="AI prompt actions"
-        class="tw-flex tw-min-w-[12rem] tw-flex-col tw-gap-0.5"
+        :aria-label="menuView === 'saved' ? 'Saved prompts' : 'AI prompt actions'"
+        :class="['tw-flex tw-flex-col tw-gap-px', menuView === 'saved' ? 'tw-w-72' : 'tw-w-64']"
         data-testid="prompt-ai-panel"
       >
-        <button
-          type="button"
-          role="menuitem"
-          data-testid="prompt-ai-improve"
-          class="tw-flex tw-w-full tw-min-h-[44px] tw-items-center tw-gap-2 tw-rounded-md tw-px-3 tw-py-2 tw-text-left tw-text-body-sm tw-text-ink hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[-2px] disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
-          :class="[interactiveTransition, pressable]"
-          :disabled="disabled || isLoading()"
-          @click="handleImprove"
-        >
-          <span>Improve Prompt</span>
-          <span
-            v-if="activeAction === 'improve'"
-            data-testid="prompt-ai-loading-improve"
-            class="tw-ml-auto tw-text-eyebrow tw-text-ink-muted"
-            aria-hidden="true"
-          >
-            …
-          </span>
-        </button>
-
-        <button
-          type="button"
-          role="menuitem"
-          data-testid="prompt-ai-random"
-          class="tw-flex tw-w-full tw-min-h-[44px] tw-items-center tw-gap-2 tw-rounded-md tw-px-3 tw-py-2 tw-text-left tw-text-body-sm tw-text-ink hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[-2px] disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
-          :class="[interactiveTransition, pressable]"
-          :disabled="disabled || isLoading()"
-          @click="handleRandom"
-        >
-          <span>New Random Prompt</span>
-          <span
-            v-if="activeAction === 'random'"
-            data-testid="prompt-ai-loading-random"
-            class="tw-ml-auto tw-text-eyebrow tw-text-ink-muted"
-            aria-hidden="true"
-          >
-            …
-          </span>
-        </button>
-
-        <div class="tw-my-1 tw-h-px tw-bg-border" aria-hidden="true" />
-
-        <button
-          type="button"
-          role="menuitem"
-          data-testid="prompt-ai-describe"
-          class="tw-flex tw-w-full tw-min-h-[44px] tw-items-center tw-gap-2 tw-rounded-md tw-px-3 tw-py-2 tw-text-left tw-text-body-sm tw-text-ink hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[-2px] disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
-          :class="[interactiveTransition, pressable]"
-          :disabled="disabled || isLoading()"
-          @click="handleDescribeClick"
-        >
-          <span>Describe with image</span>
-          <span
-            v-if="activeAction === 'describe'"
-            data-testid="prompt-ai-loading-describe"
-            class="tw-ml-auto tw-text-eyebrow tw-text-ink-muted"
-            aria-hidden="true"
-          >
-            …
-          </span>
-        </button>
+        <template v-if="menuView === 'actions'">
+          <PromptAiMenuItem
+            icon="wand-magic-sparkles"
+            title="Improve"
+            description="Rewrite your prompt for stronger results."
+            test-id="prompt-ai-improve"
+            loading-test-id="prompt-ai-loading-improve"
+            :loading="activeAction === 'improve'"
+            :disabled="disabled || isLoading()"
+            :class="[interactiveTransition, pressable]"
+            @click="handleImprove"
+          />
+          <PromptAiMenuItem
+            icon="dice"
+            title="Random"
+            description="Fill in a new prompt idea."
+            test-id="prompt-ai-random"
+            loading-test-id="prompt-ai-loading-random"
+            :loading="activeAction === 'random'"
+            :disabled="disabled || isLoading()"
+            :class="[interactiveTransition, pressable]"
+            @click="handleRandom"
+          />
+          <PromptAiMenuItem
+            icon="images"
+            title="Describe With AI"
+            description="Upload an image and generate its description."
+            test-id="prompt-ai-describe"
+            loading-test-id="prompt-ai-loading-describe"
+            :loading="activeAction === 'describe'"
+            :disabled="disabled || isLoading()"
+            :class="[interactiveTransition, pressable]"
+            @click="handleDescribeClick"
+          />
+          <PromptAiMenuItem
+            icon="plus"
+            title="Save current prompt"
+            description="Name and keep this prompt for later."
+            test-id="prompt-ai-save-current"
+            :disabled="disabled || isLoading() || !canSaveCurrent"
+            :class="[interactiveTransition, pressable]"
+            @click="openSaveCurrentPrompt"
+          />
+          <PromptAiMenuItem
+            icon="tag"
+            title="Saved prompts"
+            description="Reuse prompts you've named and kept."
+            test-id="prompt-ai-saved"
+            :disabled="disabled || isLoading()"
+            :class="[interactiveTransition, pressable]"
+            @click="openSavedPrompts"
+          />
+        </template>
+        <SavedPromptsPanel
+          v-else
+          :key="savedInitialView"
+          :current-prompt="currentPrompt"
+          :model-id="mode.id"
+          :disabled="disabled"
+          :initial-view="savedInitialView"
+          @apply-prompt="handleApplySavedPrompt"
+          @back="closeSavedView"
+        />
       </div>
     </Popover>
   </div>

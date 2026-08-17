@@ -14,6 +14,9 @@ export const KNOWN_PROVIDERS: readonly ModelProvider[] = [
   'xai',
   'pruna',
   'zimage',
+  'community',
+  'recraft',
+  'topaz',
 ] as const;
 
 /**
@@ -37,6 +40,9 @@ const PROVIDER_LABELS: Record<ModelProvider, string> = {
   xai: 'xAI',
   pruna: 'Pruna',
   zimage: 'Z-Image',
+  community: 'Community',
+  recraft: 'Recraft',
+  topaz: 'Topaz',
 };
 
 export function isKnownProvider(provider: string): provider is ModelProvider {

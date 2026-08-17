@@ -5,11 +5,13 @@ import { storeToRefs } from 'pinia';
 
 import type { GroupedObject, IImage, IImageObject } from '@/types';
 
+import { useCollectionsStore } from '@/stores/collections';
 import { useDialogStore } from '@/stores/dialog';
 import { useHistoryStore } from '@/stores/history';
 import { useUserStore } from '@/stores/user';
 
 import ImageDialog from '@/components/Dialogs/ImageDialog.vue';
+import CollectionsStrip from '@/components/History/CollectionsStrip.vue';
 import FeatureIcon from '@/components/History/FeatureIcon.vue';
 import Filter from '@/components/History/Filter.vue';
 import ImageActionButtons from '@/components/History/ImageActionButtons.vue';
@@ -23,6 +25,7 @@ const props = withDefaults(defineProps<{ isFavorites?: boolean }>(), {
 });
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
+const collectionsStore = useCollectionsStore();
 
 const {
   isBulkDeleting,
@@ -32,6 +35,7 @@ const {
   selectedFeatureTypes,
   searchQuery,
 } = storeToRefs(useHistoryStore());
+const { selectedCollectionId, collections } = storeToRefs(collectionsStore);
 const { history } = storeToRefs(userStore);
 
 const groupedHistory = ref<GroupedObject[]>([]);
@@ -99,7 +103,7 @@ const toggleGroupSelection = (groupData: IImageObject[]) => {
 };
 
 watch(
-  [history, selectedFeatureTypes, searchQuery],
+  [history, selectedFeatureTypes, searchQuery, selectedCollectionId, collections],
   ([newHistory, newFeatureTypes, query]) => {
     if (newHistory) {
       let filteredHistory = newHistory;
@@ -122,6 +126,15 @@ watch(
       // Favorites filter
       if (props.isFavorites) {
         filteredHistory = filteredHistory.filter((item: IImageObject) => item.isFavorite);
+      }
+
+      // Collection filter (client-side over loaded history)
+      if (selectedCollectionId.value) {
+        const active = collections.value.find((c) => c.id === selectedCollectionId.value);
+        const ids = new Set(active?.imageIds ?? []);
+        filteredHistory = filteredHistory.filter(
+          (item: IImageObject) => item._id != null && ids.has(item._id),
+        );
       }
 
       groupedHistory.value = groupByDate(filteredHistory);
@@ -181,6 +194,8 @@ watch(
         </div>
       </div>
     </div>
+
+    <CollectionsStrip v-if="history.length > 0 && !props.isFavorites" />
 
     <div class="history-scroll tw-flex-1 tw-overflow-y-auto tw-pb-16 tw-pt-6 no-scrollbar">
       <NoResults :isFavorites="props.isFavorites" :groupedHistory="groupedHistory" />

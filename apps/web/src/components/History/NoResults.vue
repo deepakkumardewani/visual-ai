@@ -1,25 +1,31 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { GroupedObject } from '@/types';
+import type { GroupedObject } from '@/types';
 
-import { useAppStore } from '@/stores/app';
+import { useCollectionsStore } from '@/stores/collections';
 import { useUserStore } from '@/stores/user';
 
-const props = defineProps<{
+import { APP_SURFACE } from '@/utils/dashboardRoutes';
+
+defineProps<{
   isFavorites?: boolean;
   groupedHistory?: GroupedObject[];
 }>();
 const router = useRouter();
 const { history } = storeToRefs(useUserStore());
-const { tab } = storeToRefs(useAppStore());
+const { selectedCollectionId, collections } = storeToRefs(useCollectionsStore());
+
+const selectedCollectionName = computed(
+  () =>
+    collections.value.find((item) => item.id === selectedCollectionId.value)?.name ??
+    'this collection',
+);
 
 function create() {
-  if (props.isFavorites) {
-    router.push('/dashboard');
-  }
-  tab.value = 1;
+  void router.push({ name: APP_SURFACE.CREATE });
 }
 </script>
 <template>
@@ -47,7 +53,13 @@ function create() {
     v-if="!isFavorites && history.length !== 0 && groupedHistory?.length === 0"
     class="tw-flex tw-h-full tw-items-center tw-justify-center tw-px-6"
   >
-    <p class="tw-text-sm tw-text-ink-muted">No results match your filters.</p>
+    <div v-if="selectedCollectionId" class="tw-max-w-sm tw-text-center">
+      <p class="tw-text-sm tw-font-medium tw-text-ink">{{ selectedCollectionName }} is empty</p>
+      <p class="tw-mt-1 tw-text-sm tw-text-ink-muted">
+        Switch to All, select images, then use Add to collection.
+      </p>
+    </div>
+    <p v-else class="tw-text-sm tw-text-ink-muted">No results match your filters.</p>
   </div>
 
   <div

@@ -3,6 +3,8 @@ import { useMediaQuery } from '@vueuse/core';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import { isAppShellRoute } from '@/utils/dashboardRoutes';
+
 const props = withDefaults(
   defineProps<{
     /** Show mark + wordmark. Landing can hide the mark for a text-only brand. */
@@ -20,7 +22,8 @@ const route = useRoute();
 const router = useRouter();
 const isMobile = useMediaQuery('(max-width: 600px)');
 
-const showWordmark = computed(() => props.forceWordmark || route.path !== '/dashboard');
+const onAppShell = computed(() => isAppShellRoute(route));
+const showWordmark = computed(() => props.forceWordmark || !onAppShell.value);
 
 function goHome() {
   router.push('/');
@@ -31,7 +34,7 @@ function goHome() {
   <button
     type="button"
     class="logo tw-group tw-flex tw-items-center tw-gap-2.5 tw-border-0 tw-bg-transparent tw-p-0 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-4 focus-visible:tw-outline-accent"
-    :aria-label="route.path === '/dashboard' ? 'Visual AI home' : 'Visual AI'"
+    :aria-label="onAppShell ? 'Visual AI home' : 'Visual AI'"
     @click="goHome"
   >
     <LogoMark

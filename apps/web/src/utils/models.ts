@@ -220,6 +220,63 @@ export function getFeaturedModels(models: Model[] = MODELS): Model[] {
   return models.filter((m) => m.featured);
 }
 
+export const UPSCALER_MODELS: Model[] = [
+  fromRegistry('UPSCALE_IMAGE', {
+    title: 'Clarity Upscaler',
+    provider: 'community',
+    description: 'Balanced everyday upscale.',
+    bestAt: 'General photos',
+    iconUrl: 'community.png',
+    companyName: 'Community',
+  }),
+  fromRegistry('UPSCALE_REAL_ESRGAN', {
+    title: 'Real-ESRGAN',
+    provider: 'community',
+    description: 'Fast 2×–4× for photos and scans.',
+    bestAt: 'Speed',
+    iconUrl: 'community.png',
+    companyName: 'Community',
+  }),
+  fromRegistry('UPSCALE_PRUNA', {
+    title: 'Pruna',
+    provider: 'pruna',
+    description: 'Modes for photos, art, and text.',
+    bestAt: 'Flexible subjects',
+    iconUrl: 'prunaai.png',
+    companyName: 'Pruna',
+  }),
+  fromRegistry('UPSCALE_RECRAFT', {
+    title: 'Recraft',
+    provider: 'recraft',
+    description: 'Keeps edges sharp on logos and UI.',
+    bestAt: 'Graphics',
+    companyName: 'Recraft',
+  }),
+  fromRegistry('UPSCALE_GOOGLE', {
+    title: 'Google Upscaler',
+    provider: 'google',
+    description: 'Holds fine detail without oversharpening.',
+    bestAt: 'Detail',
+    iconUrl: 'google.png',
+    companyName: 'Google',
+  }),
+  fromRegistry('UPSCALE_CLARITY_PRO', {
+    title: 'Clarity Pro',
+    provider: 'community',
+    description: 'Higher fidelity with more control.',
+    bestAt: 'Quality',
+    iconUrl: 'community.png',
+    companyName: 'Community',
+  }),
+  fromRegistry('UPSCALE_TOPAZ', {
+    title: 'Topaz',
+    provider: 'topaz',
+    description: 'Studio-grade recovery for tough shots.',
+    bestAt: 'Hard cases',
+    companyName: 'Topaz Labs',
+  }),
+];
+
 const PROVIDER_DISPLAY_NAMES: Record<string, string> = {
   bfl: 'Black Forest Labs',
   openai: 'OpenAI',
@@ -228,6 +285,9 @@ const PROVIDER_DISPLAY_NAMES: Record<string, string> = {
   xai: 'xAI',
   pruna: 'Pruna',
   zimage: 'Z-Image',
+  community: 'Community',
+  recraft: 'Recraft',
+  topaz: 'Topaz Labs',
 };
 
 export function getProviderDisplayName(provider: string): string {
@@ -280,4 +340,48 @@ export function formatPrice(price?: number): string | null {
   if (price === undefined) return null;
   if (price < 0.1) return `$${price.toFixed(3)}`;
   return `$${price.toFixed(2)}`;
+}
+
+/** Relative generation speed for picker badges (presentation-only; not in registry). */
+export type ModelSpeedHint = 'Fast' | 'Balanced' | 'Quality';
+
+const MODEL_SPEED_HINTS: Record<string, ModelSpeedHint> = {
+  FLUX_BASIC: 'Fast',
+  FLUX_QUICK: 'Fast',
+  FLUX_FAST: 'Fast',
+  P_IMAGE: 'Fast',
+  Z_IMAGE_TURBO: 'Fast',
+  GROK_IMAGINE: 'Fast',
+  UPSCALE_REAL_ESRGAN: 'Fast',
+  UPSCALE_PRUNA: 'Fast',
+
+  FLUX_1_1_PRO: 'Balanced',
+  GROK_IMAGINE_QUALITY: 'Balanced',
+  SEEDREAM_4: 'Balanced',
+  FLUX_2_DEV: 'Balanced',
+  FLUX_KONTEXT_PRO: 'Balanced',
+  NANO_BANANA_2: 'Balanced',
+  UPSCALE_IMAGE: 'Balanced',
+  UPSCALE_RECRAFT: 'Balanced',
+  UPSCALE_GOOGLE: 'Balanced',
+
+  FLUX_PRO: 'Quality',
+  FLUX_REALISM: 'Quality',
+  FLUX_2_PRO: 'Quality',
+  FLUX_2_MAX: 'Quality',
+  FLUX_KONTEXT_MAX: 'Quality',
+  NANO_BANANA_PRO: 'Quality',
+  IMAGEN_4_ULTRA: 'Quality',
+  GPT_IMAGE_2: 'Quality',
+  UPSCALE_CLARITY_PRO: 'Quality',
+  UPSCALE_TOPAZ: 'Quality',
+};
+
+export function getModelSpeedHint(modelId: string): ModelSpeedHint | undefined {
+  return MODEL_SPEED_HINTS[modelId];
+}
+
+/** One-line “best for” copy — prefers curated `bestAt`, falls back to description. */
+export function getModelBestForHint(model: Model): string {
+  return model.bestAt?.trim() || model.description;
 }

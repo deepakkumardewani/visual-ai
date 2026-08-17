@@ -51,7 +51,8 @@ function buyCredits() {
     <button
       type="button"
       data-testid="credits-chip"
-      aria-label="View credits"
+      aria-label="View credits. Free credits refresh daily"
+      title="Free credits refresh daily"
       aria-haspopup="dialog"
       :aria-expanded="isOpen"
       class="credits-chip__trigger tw-inline-flex tw-min-h-11 tw-items-center tw-gap-1.5 tw-rounded-full tw-border tw-border-border/60 tw-bg-surface-1/50 tw-px-3 tw-py-1 tw-text-sm tw-font-semibold tw-text-ink-primary tw-transition-colors tw-duration-fast hover:tw-border-accent/40 hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
@@ -83,7 +84,7 @@ function buyCredits() {
             >credits left</span
           >
         </div>
-        <p class="tw-mt-1 tw-text-xs tw-text-ink-muted">Resets tomorrow.</p>
+        <p class="tw-mt-1 tw-text-xs tw-text-ink-muted">Free credits refresh daily.</p>
 
         <div class="credits-chip__actions tw-mt-3 tw-flex tw-flex-col tw-gap-2">
           <template v-if="!isPro">

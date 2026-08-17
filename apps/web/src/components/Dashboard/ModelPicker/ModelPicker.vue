@@ -5,7 +5,6 @@ import { useRouter } from 'vue-router';
 
 import type { Model } from '@/types/model';
 
-import { useAsideStore } from '@/stores/aside';
 import { useUserStore } from '@/stores/user';
 
 import Heading from '@/components/Dashboard/ModelPicker/Heading.vue';
@@ -14,36 +13,33 @@ import ModelPickerPanel from '@/components/Dashboard/ModelPicker/ModelPickerPane
 import ModelPickerTrigger from '@/components/Dashboard/ModelPicker/ModelPickerTrigger.vue';
 import Popover from '@/components/primitives/Popover.vue';
 
-const { chip = false } = defineProps<{
+const props = defineProps<{
   chip?: boolean;
+  models: Model[];
+  selected: Model;
+  fallback: Model;
 }>();
 
-import { MODEL_IDS } from '@visual-ai/shared';
-import { FLUX_MODES, MODELS } from '@/utils/models';
+const emit = defineEmits<{
+  'update:selected': [model: Model];
+}>();
 
 const router = useRouter();
-const asideStore = useAsideStore();
 const userStore = useUserStore();
 
 const { isPro } = storeToRefs(userStore);
-const { mode, noOfOutputs } = storeToRefs(asideStore);
 
 const isOpen = ref(false);
 
 function handleSelect(model: Model) {
   if (!isPro.value && model.isPro) {
-    mode.value = FLUX_MODES[1];
+    emit('update:selected', props.fallback);
     isOpen.value = false;
     router.push('/pricing');
     return;
   }
 
-  mode.value = model;
-
-  if (model.id === MODEL_IDS.FLUX_PRO || model.id === MODEL_IDS.FLUX_1_1_PRO) {
-    noOfOutputs.value = 1;
-  }
-
+  emit('update:selected', model);
   isOpen.value = false;
 }
 </script>
@@ -54,11 +50,15 @@ function handleSelect(model: Model) {
 
     <Popover v-model:open="isOpen" placement="bottom-start">
       <template #trigger="{ open }">
-        <ModelChip v-if="chip" :model="mode" :open="open" />
-        <ModelPickerTrigger v-else :model="mode" :open="open" />
+        <ModelChip v-if="chip" :model="props.selected" :open="open" />
+        <ModelPickerTrigger v-else :model="props.selected" :open="open" />
       </template>
 
-      <ModelPickerPanel :models="MODELS" :selected-model="mode" @select-model="handleSelect" />
+      <ModelPickerPanel
+        :models="props.models"
+        :selected-model="props.selected"
+        @select-model="handleSelect"
+      />
     </Popover>
   </div>
 </template>

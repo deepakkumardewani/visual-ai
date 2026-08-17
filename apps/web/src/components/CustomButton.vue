@@ -13,7 +13,7 @@ defineProps<{
     type="button"
     class="dash-btn"
     data-testid="header-dashboard-btn"
-    @click="router.push('/dashboard')"
+    @click="router.push('/create')"
   >
     <span class="dash-btn__label">{{ title }}</span>
   </button>

@@ -3,21 +3,20 @@ import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
-import { useAppStore } from '@/stores/app';
 import { useExploreStore } from '@/stores/explore';
 import { useUserStore } from '@/stores/user';
 
 import ImageViewer from '@/components/Explore/ImageViewer.vue';
 
+import { APP_SURFACE } from '@/utils/dashboardRoutes';
+
 const route = useRoute();
 const router = useRouter();
 const exploreStore = useExploreStore();
 const userStore = useUserStore();
-const appStore = useAppStore();
 
 const { activeItem, isLoading, isLoadingItem, error } = storeToRefs(exploreStore);
 const { userId } = storeToRefs(userStore);
-const { tab } = storeToRefs(appStore);
 
 const routeId = computed(() => String(route.params.id ?? ''));
 
@@ -36,8 +35,7 @@ watch(
 );
 
 function goBackToExplore() {
-  tab.value = 2;
-  void router.push({ name: 'dashboard' });
+  void router.push({ name: APP_SURFACE.EXPLORE });
 }
 </script>
 

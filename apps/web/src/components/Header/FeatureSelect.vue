@@ -1,22 +1,25 @@
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
-import { computed, nextTick, onMounted, ref } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import type { FeatureSelect } from '@/types';
+import { FeatureType, type FeatureSelect } from '@/types';
 
 import { useAppStore } from '@/stores/app';
+import { useAsideStore } from '@/stores/aside';
 
 import { FEATURES } from '@/utils/constants';
+import { createFeatureLocation, resolveCreateFeature } from '@/utils/dashboardRoutes';
+import { UPSCALER_MODELS } from '@/utils/models';
 import { faChevronDown } from '@/plugins/icons';
 
 import iconRegistry from '@/components/icons';
 
 const route = useRoute();
 const router = useRouter();
-const appStore = useAppStore();
-const { isDark } = storeToRefs(appStore);
+const asideStore = useAsideStore();
+const { isDark } = storeToRefs(useAppStore());
 
 const features = ref<FeatureSelect[]>(FEATURES);
 const feature = ref<FeatureSelect>(features.value[0]);
@@ -39,25 +42,30 @@ function resolveIcon(iconKey: string) {
   return (iconRegistry as Record<string, unknown>)[lookup] ?? iconRegistry[base];
 }
 
+function applyFeatureId(featureId: string) {
+  const selectedFeature = features.value.find((f) => f.id === featureId) ?? features.value[0];
+  feature.value = selectedFeature;
+}
+
+function applyUpscaleModelFromQuery() {
+  const modelId = typeof route.query.model === 'string' ? route.query.model : undefined;
+  if (!modelId || feature.value.id !== FeatureType.UPSCALE) return;
+  const match = UPSCALER_MODELS.find((m) => m.id === modelId);
+  if (match) asideStore.upscaleModel = match;
+}
+
 onClickOutside(rootRef, () => {
   isOpen.value = false;
 });
 
-onMounted(() => {
-  if (route.path === '/dashboard') {
-    const featureId = route.query.feature as string;
-    if (featureId) {
-      const selectedFeature = features.value.find((f) => f.id === featureId);
-      if (selectedFeature) {
-        feature.value = selectedFeature;
-        appStore.setFeature(selectedFeature.id);
-      }
-    } else {
-      appStore.setFeature(feature.value.id);
-      router.replace({ query: { ...route.query, feature: feature.value.id } });
-    }
-  }
-});
+watch(
+  () => [route.name, route.params.feature, route.query.model] as const,
+  () => {
+    applyFeatureId(resolveCreateFeature(route.params.feature));
+    applyUpscaleModelFromQuery();
+  },
+  { immediate: true },
+);
 
 function toggle() {
   isOpen.value = !isOpen.value;
@@ -68,8 +76,17 @@ function toggle() {
 
 function handleSelected(item: FeatureSelect) {
   feature.value = item;
-  appStore.setFeature(item.id);
-  router.replace({ query: { ...route.query, feature: item.id } });
+  const nextQuery = { ...route.query };
+  delete nextQuery.feature;
+  delete nextQuery.tool;
+  if (item.id === FeatureType.UPSCALE) {
+    const modelId =
+      typeof route.query.model === 'string' ? route.query.model : asideStore.upscaleModel.id;
+    nextQuery.model = modelId;
+  } else {
+    delete nextQuery.model;
+  }
+  void router.push(createFeatureLocation(item.id, nextQuery));
   isOpen.value = false;
   triggerRef.value?.focus();
 }

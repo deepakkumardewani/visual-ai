@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 
 import { FeatureType } from '@/types';
@@ -9,6 +9,7 @@ import type { IImage } from '@/types';
 import { useAppStore } from '@/stores/app';
 import { useGenerateStore } from '@/stores/generate';
 
+import GenerationErrorBanner from '@/components/Dashboard/Canvas/GenerationErrorBanner.vue';
 import SideBySide from '@/components/SideBySide.vue';
 
 import { downloadImage } from '@/utils/helpers';
@@ -29,6 +30,8 @@ const {
 const { feature } = storeToRefs(appStore);
 const snackbar = ref(false);
 const snackbarTimeout = ref(2000);
+
+const activeErrMsg = computed(() => errMsg.value[feature.value] ?? '');
 
 const getAIImageUrl = (image: IImage): string => {
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
@@ -180,13 +183,14 @@ const gridClass = computed(() => {
   return 'tw-flex tw-flex-wrap tw-gap-4 tw-justify-center'; // default flex layout
 });
 
-watch(errMsg, (newVal) => {
+watch(activeErrMsg, (newVal) => {
   if (newVal !== '') {
     snackbar.value = true;
   }
 });
 </script>
 <template>
+  <GenerationErrorBanner :feature="feature" />
   <v-alert
     :model-value="showAlert"
     class="my-4"
@@ -310,7 +314,7 @@ watch(errMsg, (newVal) => {
     </div>
   </div>
   <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" location="bottom right" color="#C9A84C">
-    {{ errMsg }}
+    {{ activeErrMsg }}
   </v-snackbar>
 </template>
 

@@ -1,45 +1,89 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
-import { useRoute } from 'vue-router';
-
-import { useAppStore } from '@/stores/app';
-
 import Copyright from '@/components/Copyright.vue';
 
 import { FOOTER_LINKS } from '@/utils/constants';
-
-const route = useRoute();
-const appStore = useAppStore();
-const { isDark } = storeToRefs(appStore);
 </script>
 
 <template>
-  <v-footer
-    :color="route.path === '/' ? 'transparent' : isDark ? '#170220' : '#efebf3'"
-    class="tw-w-full"
-  >
-    <div class="tw-w-full tw-max-w-7xl tw-mx-auto tw-px-4">
-      <div class="tw-flex tw-flex-col md:tw-flex-row tw-items-center tw-justify-between tw-w-full">
-        <div class="tw-w-full md:tw-w-[30%] tw-flex tw-justify-center md:tw-justify-start">
-          <Copyright />
-        </div>
+  <footer class="app-footer">
+    <div class="app-footer__inner">
+      <Copyright />
 
-        <div class="tw-w-full md:tw-w-[70%]">
-          <div class="tw-flex tw-flex-wrap tw-justify-center md:tw-justify-end tw-gap-2">
-            <v-btn
-              v-for="(link, index) in FOOTER_LINKS"
-              :key="index"
-              :to="link.path"
-              variant="text"
-              class="tw-text-black dark:tw-text-gray-400 tw-text-sm tw-px-3"
-              size="small"
-            >
-              <font-awesome-icon :icon="link.icon" size="small" class="tw-mr-2" />
-              {{ link.text }}
-            </v-btn>
-          </div>
-        </div>
-      </div>
+      <nav class="app-footer__nav" aria-label="Footer">
+        <router-link
+          v-for="(link, index) in FOOTER_LINKS"
+          :key="index"
+          :to="link.path"
+          class="app-footer__link"
+        >
+          <font-awesome-icon :icon="link.icon" size="sm" class="app-footer__icon" />
+          {{ link.text }}
+        </router-link>
+      </nav>
     </div>
-  </v-footer>
+  </footer>
 </template>
+
+<style scoped lang="scss">
+.app-footer {
+  width: 100%;
+  background: rgb(var(--tw-canvas));
+  border-top: 1px solid rgb(var(--tw-hairline));
+  color: rgb(var(--tw-ink-muted));
+}
+
+.app-footer__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 1.5rem;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    padding: 1.5rem 1.5rem 1.75rem;
+  }
+}
+
+.app-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 0.25rem;
+
+  @media (min-width: 768px) {
+    justify-content: flex-end;
+    max-width: 70%;
+  }
+}
+
+.app-footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  color: rgb(var(--tw-ink-primary));
+  font-size: 0.875rem;
+  line-height: 1.25;
+  text-decoration: none;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: rgb(var(--tw-accent));
+  }
+}
+
+.app-footer__icon {
+  color: rgb(var(--tw-ink-muted));
+}
+
+.app-footer__link:hover .app-footer__icon {
+  color: rgb(var(--tw-accent));
+}
+</style>

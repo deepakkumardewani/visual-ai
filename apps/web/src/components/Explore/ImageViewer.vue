@@ -6,7 +6,6 @@ import { storeToRefs } from 'pinia';
 import type { ExploreFeedItem } from '@/types';
 import { FeatureType } from '@/types';
 
-import { useAppStore } from '@/stores/app';
 import { useAsideStore } from '@/stores/aside';
 import { useExploreStore } from '@/stores/explore';
 
@@ -16,11 +15,12 @@ import ViewerFilmstrip from '@/components/Explore/ViewerFilmstrip.vue';
 import ViewerStage from '@/components/Explore/ViewerStage.vue';
 import { prefetchImageUrls, useExploreViewerNav } from '@/composables/useExploreViewerNav';
 import { useDashboardMotion } from '@/composables/useDashboardMotion';
+import { useImageChainActions } from '@/composables/useImageChainActions';
+import { useShareActions } from '@/composables/useShareActions';
 import { useViewerTransform } from '@/composables/useViewerTransform';
 import { faChevronLeft, faLink } from '@/plugins/icons';
-import { MODEL_REGISTRY, type ModelKey } from '@visual-ai/shared';
 import { detectMonochrome } from '@/utils/detectMonochrome';
-import { MODELS } from '@/utils/models';
+import { APP_SURFACE, createFeatureLocation } from '@/utils/dashboardRoutes';
 import { downloadImage } from '@/utils/helpers';
 import { createLogger } from '@/utils/logger';
 
@@ -32,12 +32,12 @@ const log = createLogger('explore-viewer');
 const router = useRouter();
 const exploreStore = useExploreStore();
 const asideStore = useAsideStore();
-const appStore = useAppStore();
 
 const { activeIndex, activeId, items, hasMore } = storeToRefs(exploreStore);
-const { snackbar, snackbarText, tab, feature } = storeToRefs(appStore);
-const { typingPrompt, supportsImageInput, mode } = storeToRefs(asideStore);
+const { typingPrompt } = storeToRefs(asideStore);
 const { interactiveTransition, pressable } = useDashboardMotion();
+const { showToast, shareLink, copyPrompt } = useShareActions();
+const { useAsReference, sendToUpscale, sendToRemoveBg } = useImageChainActions();
 
 const detailsPanelRef = ref<HTMLElement | null>(null);
 const detailsOpen = ref(false);
@@ -72,11 +72,6 @@ const stageImageUrl = computed(() =>
   hasResult.value && resultUrl.value ? resultUrl.value : props.item.imageUrl,
 );
 
-function showToast(message: string) {
-  snackbarText.value = message;
-  snackbar.value = true;
-}
-
 async function navigateToId(id: string | null) {
   if (!id) return;
   await router.replace({ name: 'explore-image', params: { id } });
@@ -106,29 +101,20 @@ async function handleSelect(id: string) {
 }
 
 function leaveViewer() {
-  tab.value = 2;
   if (window.history.length > 1) {
     router.back();
     return;
   }
-  void router.push({ name: 'dashboard' });
+  void router.push({ name: APP_SURFACE.EXPLORE });
 }
 
 async function handleCopyPrompt() {
-  try {
-    await navigator.clipboard.writeText(props.item.prompt);
-    showToast('Prompt copied');
-  } catch (err) {
-    log.error('copy prompt failed', { error: err });
-    showToast('Could not copy prompt');
-  }
+  await copyPrompt(props.item.prompt);
 }
 
 function handleRemix() {
   typingPrompt.value = props.item.prompt;
-  feature.value = FeatureType.IMAGE;
-  tab.value = 1;
-  void router.push({ name: 'dashboard' });
+  void router.push(createFeatureLocation(FeatureType.IMAGE));
 }
 
 async function handleDownload(event?: Event) {
@@ -145,59 +131,19 @@ async function handleDownload(event?: Event) {
   showToast('Could not download image');
 }
 
-function pickReferenceCapableModel() {
-  if (supportsImageInput.value) return;
-  const preferredKeys: ModelKey[] = ['NANO_BANANA_2', 'SEEDREAM_4', 'GPT_IMAGE_2', 'GROK_IMAGINE'];
-  for (const key of preferredKeys) {
-    const model = MODELS.find((m) => m.id === key);
-    if (model && MODEL_REGISTRY[key]?.fields?.imageInput) {
-      mode.value = model;
-      return;
-    }
-  }
-  const fallback = MODELS.find((m) => MODEL_REGISTRY[m.id as ModelKey]?.fields?.imageInput);
-  if (fallback) mode.value = fallback;
-}
-
 async function handleUseAsReference() {
-  try {
-    const response = await fetch(props.item.imageUrl);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const blob = await response.blob();
-    const extension = blob.type.split('/')[1] || 'png';
-    const file = new File([blob], `explore-reference-${props.item.id}.${extension}`, {
-      type: blob.type || 'image/png',
-    });
-    pickReferenceCapableModel();
-    asideStore.setReferenceImage(file);
-    feature.value = FeatureType.IMAGE;
-    tab.value = 1;
-    showToast('Reference image added');
-    void router.push({ name: 'dashboard' });
-  } catch (err) {
-    log.error('use as reference failed', { error: err });
-    showToast('Could not use as reference');
-  }
+  await useAsReference(props.item.imageUrl, {
+    fileName: `explore-reference-${props.item.id}`,
+    navigateToDashboard: true,
+  });
 }
 
 async function handleShare() {
-  const url = window.location.href;
-  try {
-    if (navigator.share) {
-      await navigator.share({ title: 'Explore creation', url });
-      return;
-    }
-    await navigator.clipboard.writeText(url);
-    showToast('Link copied');
-  } catch (err) {
-    if ((err as Error)?.name === 'AbortError') return;
-    log.error('share failed', { error: err });
-    showToast('Could not share link');
-  }
+  await shareLink({ title: 'Explore creation', url: window.location.href });
 }
 
 async function handleUpscale() {
-  await startAction('upscale');
+  await sendToUpscale(props.item.imageUrl, { navigateToDashboard: true });
 }
 
 async function handleColorize() {
@@ -217,7 +163,7 @@ async function handleColorize() {
 }
 
 async function handleRemoveBg() {
-  await startAction('remove_bg');
+  await sendToRemoveBg(props.item.imageUrl, { navigateToDashboard: true });
 }
 
 useExploreViewerNav(

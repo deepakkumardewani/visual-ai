@@ -38,7 +38,6 @@ export const useAppStore = defineStore('app', () => {
     removeBgInProgress,
     images,
     imageData,
-    errMsg,
   } = storeToRefs(generateStore);
   const feature = ref<string>('');
   const tab = ref(1);
@@ -94,6 +93,8 @@ export const useAppStore = defineStore('app', () => {
   } = useEventSource(progressUrl, [], eventSourceOptions.value);
 
   function handleEventSourceData(feature: string, data: JobStatus) {
+    generateStore.updateJobProgress(data);
+
     if (data.status === 'processing') {
       localStorage.setItem(`${feature}InProgress`, 'true');
       if (feature === 'upscale') upscaleInProgress.value = true;
@@ -108,6 +109,7 @@ export const useAppStore = defineStore('app', () => {
         if (feature === FeatureType.COLORIZE) colorizeInProgress.value = false;
         if (feature === FeatureType.REVIVE) reviveInProgress.value = false;
         if (feature === FeatureType.REMOVE_BG) removeBgInProgress.value = false;
+        generateStore.clearJobProgress();
 
         images.value = data.image.images;
         imageData.value = data.image;
@@ -120,6 +122,7 @@ export const useAppStore = defineStore('app', () => {
 
     if (data.status === 'completed') {
       closeEventSource(feature);
+      generateStore.clearJobProgress();
 
       if (data.image) {
         const historyIndex = history.value.findIndex((img) => img._id === data.image?._id);
@@ -144,8 +147,10 @@ export const useAppStore = defineStore('app', () => {
       if (feature === FeatureType.COLORIZE) colorizeInProgress.value = false;
       if (feature === FeatureType.REVIVE) reviveInProgress.value = false;
       if (feature === FeatureType.REMOVE_BG) removeBgInProgress.value = false;
-      errMsg.value =
-        data.message ?? 'Sorry, there was an error processing your request. Please try again.';
+      generateStore.setFeatureError(
+        feature,
+        data.message ?? 'Sorry, there was an error processing your request. Please try again.',
+      );
     }
   }
 

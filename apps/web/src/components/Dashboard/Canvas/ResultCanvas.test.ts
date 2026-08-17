@@ -6,11 +6,12 @@ import { ref } from 'vue';
 const isLoadingRef = ref(false);
 const imagesRef = ref<{ aiImageUrl?: string }[]>([]);
 const historyRef = ref<{ featureType: string }[]>([]);
+const isReadyRef = ref(true);
 
-vi.mock('@/components/Dashboard/Canvas/CommunityFeed.vue', () => ({
+vi.mock('@/components/Dashboard/Canvas/StarterPromptsGrid.vue', () => ({
   default: {
-    name: 'CommunityFeed',
-    template: '<div data-testid="community-feed-stub">Feed</div>',
+    name: 'StarterPromptsGrid',
+    template: '<div data-testid="starter-prompts-stub">Starters</div>',
   },
 }));
 
@@ -31,6 +32,7 @@ vi.mock('@/stores/generate', () => ({
 vi.mock('@/stores/user', () => ({
   useUserStore: () => ({
     history: historyRef,
+    isReady: isReadyRef,
   }),
 }));
 
@@ -42,13 +44,14 @@ describe('ResultCanvas', () => {
     isLoadingRef.value = false;
     imagesRef.value = [];
     historyRef.value = [];
+    isReadyRef.value = true;
   });
 
-  it('shows community feed when idle with no saved generations', () => {
+  it('shows starter prompts when idle with no saved generations', () => {
     const wrapper = mount(ResultCanvas);
 
     expect(wrapper.find('[data-testid="result-canvas"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="community-feed-stub"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="starter-prompts-stub"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="user-generations-stub"]').exists()).toBe(false);
   });
 
@@ -58,7 +61,7 @@ describe('ResultCanvas', () => {
     const wrapper = mount(ResultCanvas);
 
     expect(wrapper.find('[data-testid="user-generations-stub"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="community-feed-stub"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="starter-prompts-stub"]').exists()).toBe(false);
   });
 
   it('keeps the generations feed mounted while loading so results stream in place', () => {
@@ -67,16 +70,16 @@ describe('ResultCanvas', () => {
     const wrapper = mount(ResultCanvas);
 
     expect(wrapper.find('[data-testid="user-generations-stub"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="community-feed-stub"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="starter-prompts-stub"]').exists()).toBe(false);
   });
 
-  it('keeps the generations feed visible regardless of the selected header feature', async () => {
-    const { useAppStore } = await import('@/stores/app');
-    useAppStore().setFeature('upscale');
-    historyRef.value = [{ featureType: 'image' }];
+  it('shows a loading skeleton until user history is ready', () => {
+    isReadyRef.value = false;
 
     const wrapper = mount(ResultCanvas);
 
-    expect(wrapper.find('[data-testid="user-generations-stub"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="result-canvas-loading"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="starter-prompts-stub"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="user-generations-stub"]').exists()).toBe(false);
   });
 });

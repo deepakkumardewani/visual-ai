@@ -20,7 +20,6 @@ vi.mock('vue-router', () => ({
 }));
 
 import ModelPicker from '@/components/Dashboard/ModelPicker/ModelPicker.vue';
-import { useAsideStore } from '@/stores/aside';
 import { useUserStore } from '@/stores/user';
 import { MODEL_IDS } from '@visual-ai/shared';
 import { FLUX_MODES, getFeaturedModels, MODELS } from '@/utils/models';
@@ -49,13 +48,27 @@ describe('ModelPicker', () => {
     document.body.innerHTML = '';
   });
 
-  const mountPicker = (options: { attachTo?: HTMLElement } = {}) => {
-    const pinia = createPinia();
-    setActivePinia(pinia);
+  const mountPicker = (
+    options: {
+      attachTo?: HTMLElement;
+      models?: typeof MODELS;
+      selected?: (typeof MODELS)[0];
+      fallback?: (typeof MODELS)[0];
+      pinia?: any;
+    } = {},
+  ) => {
+    const pinia = options.pinia ?? createPinia();
+    if (!options.pinia) {
+      setActivePinia(pinia);
+    }
+    const models = options.models ?? MODELS;
+    const selected = options.selected ?? MODELS[0];
+    const fallback = options.fallback ?? FLUX_MODES[1];
+
     const wrapper = mount(ModelPicker, {
+      props: { models, selected, fallback },
       global: { plugins: [pinia] },
       attachTo: document.body,
-      ...options,
     });
     activeWrapper = wrapper;
     return { wrapper, pinia };
@@ -97,11 +110,7 @@ describe('ModelPicker', () => {
     const userStore = useUserStore();
     userStore.isPro = false;
 
-    const asideStore = useAsideStore();
-    asideStore.mode = FLUX_MODES[0];
-
-    const wrapper = mount(ModelPicker, { global: { plugins: [pinia] }, attachTo: document.body });
-    activeWrapper = wrapper;
+    const { wrapper } = mountPicker({ pinia });
     await wrapper.get('button').trigger('click');
 
     const fluxPro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_PRO)!;
@@ -114,21 +123,19 @@ describe('ModelPicker', () => {
     await proOption.trigger('click');
 
     expect(pushMock).toHaveBeenCalledWith('/pricing');
-    expect(asideStore.mode.title).toBe(FLUX_MODES[1].title);
+    expect(wrapper.emitted('update:selected')).toBeTruthy();
+    const emittedModel = (wrapper.emitted('update:selected')?.[0]?.[0] as any)?.title;
+    expect(emittedModel).toBe(FLUX_MODES[1].title);
   });
 
-  it('sets noOfOutputs to 1 when selecting FLUX_PRO', async () => {
+  it('emits FLUX_PRO model when selected by pro user', async () => {
     const pinia = createPinia();
     setActivePinia(pinia);
 
     const userStore = useUserStore();
     userStore.isPro = true;
 
-    const asideStore = useAsideStore();
-    asideStore.noOfOutputs = 4;
-
-    const wrapper = mount(ModelPicker, { global: { plugins: [pinia] }, attachTo: document.body });
-    activeWrapper = wrapper;
+    const { wrapper } = mountPicker({ pinia });
     await wrapper.get('button').trigger('click');
 
     const fluxPro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_PRO)!;
@@ -140,22 +147,19 @@ describe('ModelPicker', () => {
 
     await proOption.trigger('click');
 
-    expect(asideStore.mode.id).toBe(MODEL_IDS.FLUX_PRO);
-    expect(asideStore.noOfOutputs).toBe(1);
+    expect(wrapper.emitted('update:selected')).toBeTruthy();
+    const emittedModel = wrapper.emitted('update:selected')?.[0]?.[0] as any;
+    expect(emittedModel?.id).toBe(MODEL_IDS.FLUX_PRO);
   });
 
-  it('sets noOfOutputs to 1 when selecting FLUX_1_1_PRO', async () => {
+  it('emits FLUX_1_1_PRO model when selected by pro user', async () => {
     const pinia = createPinia();
     setActivePinia(pinia);
 
     const userStore = useUserStore();
     userStore.isPro = true;
 
-    const asideStore = useAsideStore();
-    asideStore.noOfOutputs = 3;
-
-    const wrapper = mount(ModelPicker, { global: { plugins: [pinia] }, attachTo: document.body });
-    activeWrapper = wrapper;
+    const { wrapper } = mountPicker({ pinia });
     await wrapper.get('button').trigger('click');
 
     const flux11Pro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_1_1_PRO)!;
@@ -167,7 +171,22 @@ describe('ModelPicker', () => {
 
     await proOption.trigger('click');
 
-    expect(asideStore.mode.id).toBe(MODEL_IDS.FLUX_1_1_PRO);
-    expect(asideStore.noOfOutputs).toBe(1);
+    expect(wrapper.emitted('update:selected')).toBeTruthy();
+    const emittedModel = wrapper.emitted('update:selected')?.[0]?.[0] as any;
+    expect(emittedModel?.id).toBe(MODEL_IDS.FLUX_1_1_PRO);
+  });
+
+  it('accepts and uses different model lists', () => {
+    // Verify the component can be mounted with different model lists
+    const alternateModels = MODELS.slice(0, 3);
+    const { wrapper } = mountPicker({
+      models: alternateModels,
+      selected: alternateModels[0],
+      fallback: alternateModels[2],
+    });
+
+    expect(wrapper.text()).toContain('Model');
+    expect(wrapper.find('[data-testid="model-picker-trigger"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="model-picker"]').exists()).toBe(true);
   });
 });

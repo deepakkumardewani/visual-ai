@@ -3,10 +3,14 @@ import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref } from 'vue';
 import { useUser } from 'vue-clerk';
 
+import { FeatureType } from '@/types';
+
 import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
+
+import { useFeatureSubmit } from '@/composables/useFeatureSubmit';
 
 import ImageUpload from '@/components/Dashboard/Sidebar/ImageUpload.vue';
 
@@ -42,6 +46,11 @@ async function reviveImage() {
   localStorage.setItem('reviveInProgress', 'true');
   reviveInProgress.value = true;
 }
+
+useFeatureSubmit(FeatureType.REVIVE, {
+  canSubmit: () => canSubmit.value,
+  submit: () => reviveImage(),
+});
 
 onMounted(() => {
   const raw = localStorage.getItem('reviveInProgress');

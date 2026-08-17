@@ -5,12 +5,13 @@ import { useRouter } from 'vue-router';
 
 import { FeatureType } from '@/types';
 
-import { useAppStore } from '@/stores/app';
 import { useAsideStore } from '@/stores/aside';
 import { useExploreStore } from '@/stores/explore';
 import { useUserStore } from '@/stores/user';
 
 import CommunityCard from '@/components/Dashboard/Canvas/CommunityCard.vue';
+
+import { createFeatureLocation } from '@/utils/dashboardRoutes';
 
 const props = withDefaults(
   defineProps<{
@@ -34,13 +35,11 @@ const props = withDefaults(
 const router = useRouter();
 const exploreStore = useExploreStore();
 const asideStore = useAsideStore();
-const appStore = useAppStore();
 const userStore = useUserStore();
 
 const { items, isLoading, isLoadingMore, error, isEmpty, hasMore, hasFetched } =
   storeToRefs(exploreStore);
 const { typingPrompt } = storeToRefs(asideStore);
-const { tab, feature } = storeToRefs(appStore);
 const { userId } = storeToRefs(userStore);
 
 watch(
@@ -55,8 +54,7 @@ watch(
 function handleRemix(prompt: string) {
   typingPrompt.value = prompt;
   if (props.switchToCreateOnRemix) {
-    feature.value = FeatureType.IMAGE;
-    tab.value = 1;
+    void router.push(createFeatureLocation(FeatureType.IMAGE));
   }
 }
 
@@ -166,12 +164,8 @@ function handleOpen(id: string) {
 
 <style scoped lang="scss">
 .community-feed-grid {
-  column-count: 1;
+  column-count: 2;
   column-gap: 0.75rem;
-
-  @media (min-width: 640px) {
-    column-count: 2;
-  }
 
   @media (min-width: 1024px) {
     column-count: 3;

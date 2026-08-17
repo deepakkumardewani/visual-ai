@@ -1,8 +1,14 @@
 // src/router/index.js
 import { useUser } from 'vue-clerk';
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 
 import Landing from '@/pages/Landing.vue';
+
+import {
+  APP_SURFACE,
+  dashboardRedirectLocation,
+  isValidFeatureParam,
+} from '@/utils/dashboardRoutes';
 
 const Compare = () => import('@/pages/Compare.vue');
 const Contact = () => import('@/pages/Contact.vue');
@@ -19,16 +25,37 @@ const Signin = () => import('@/pages/Signin.vue');
 const Signup = () => import('@/pages/Signup.vue');
 const Terms = () => import('@/pages/Terms.vue');
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'landing',
     component: Landing,
   },
   {
+    path: '/create/:feature?',
+    name: APP_SURFACE.CREATE,
+    component: Dashboard,
+    beforeEnter(to) {
+      const feature = to.params.feature;
+      if (feature && !isValidFeatureParam(feature)) {
+        return { path: '/create', query: to.query, hash: to.hash };
+      }
+    },
+  },
+  {
+    path: '/explore',
+    name: APP_SURFACE.EXPLORE,
+    component: Dashboard,
+  },
+  {
+    path: '/assets',
+    name: APP_SURFACE.ASSETS,
+    component: Dashboard,
+  },
+  {
     path: '/dashboard',
     name: 'dashboard',
-    component: Dashboard,
+    redirect: (to) => dashboardRedirectLocation(to),
   },
   {
     path: '/explore/:id',

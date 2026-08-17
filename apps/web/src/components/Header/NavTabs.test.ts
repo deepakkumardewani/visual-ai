@@ -1,56 +1,67 @@
 import { createPinia, setActivePinia } from 'pinia';
 import { mount } from '@vue/test-utils';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
+
+const routeName = ref('create');
+const push = vi.fn();
+
+vi.mock('vue-router', () => ({
+  useRoute: () => ({ name: routeName.value, query: {}, params: {} }),
+  useRouter: () => ({ push }),
+}));
 
 vi.mock('vue-clerk', () => ({
   useUser: () => ({ user: ref(null) }),
 }));
 
-vi.mock('vuetify', () => ({
-  useTheme: () => ({
-    global: { name: { value: 'dark' } },
-  }),
-}));
+vi.mock('vuetify', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('vuetify')>();
+  return {
+    ...actual,
+    useTheme: () => ({
+      global: { name: { value: 'dark' } },
+    }),
+  };
+});
 
 import NavTabs from '@/components/Header/NavTabs.vue';
-import { useAppStore } from '@/stores/app';
+import { APP_SURFACE } from '@/utils/dashboardRoutes';
 
 describe('NavTabs', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
+    routeName.value = 'create';
+    push.mockReset();
   });
 
   const mountNavTabs = () => {
     const pinia = createPinia();
     setActivePinia(pinia);
-    return {
-      wrapper: mount(NavTabs, { global: { plugins: [pinia] } }),
-      store: useAppStore(),
-    };
+    return mount(NavTabs, { global: { plugins: [pinia] } });
   };
 
   it('renders Create, Explore, and Assets tabs', () => {
-    const { wrapper } = mountNavTabs();
+    const wrapper = mountNavTabs();
 
     expect(wrapper.get('[data-testid="nav-tab-create"]').text()).toBe('Create');
     expect(wrapper.get('[data-testid="nav-tab-explore"]').text()).toBe('Explore');
     expect(wrapper.get('[data-testid="nav-tab-assets"]').text()).toBe('Assets');
   });
 
-  it('writes selected tab to appStore on click', async () => {
-    const { wrapper, store } = mountNavTabs();
+  it('navigates via router on click', async () => {
+    const wrapper = mountNavTabs();
 
     await wrapper.get('[data-testid="nav-tab-explore"]').trigger('click');
-    expect(store.tab).toBe(2);
+    expect(push).toHaveBeenCalledWith({ name: APP_SURFACE.EXPLORE });
 
     await wrapper.get('[data-testid="nav-tab-assets"]').trigger('click');
-    expect(store.tab).toBe(3);
+    expect(push).toHaveBeenCalledWith({ name: APP_SURFACE.ASSETS });
   });
 
   it('marks the active tab with aria-selected', async () => {
-    const { wrapper, store } = mountNavTabs();
-    store.tab = 2;
+    routeName.value = 'explore';
+    const wrapper = mountNavTabs();
     await wrapper.vm.$nextTick();
 
     expect(wrapper.get('[data-testid="nav-tab-explore"]').attributes('aria-selected')).toBe('true');
@@ -58,7 +69,7 @@ describe('NavTabs', () => {
   });
 
   it('uses 44px minimum touch targets', () => {
-    const { wrapper } = mountNavTabs();
+    const wrapper = mountNavTabs();
     const buttons = wrapper.findAll('[role="tab"]');
 
     buttons.forEach((button) => {
@@ -67,13 +78,13 @@ describe('NavTabs', () => {
   });
 
   it('supports keyboard navigation between tabs', async () => {
-    const { wrapper, store } = mountNavTabs();
-    store.tab = 1;
+    routeName.value = 'create';
+    const wrapper = mountNavTabs();
     await wrapper.vm.$nextTick();
 
     const createTab = wrapper.get('[data-testid="nav-tab-create"]');
     await createTab.trigger('keydown', { key: 'ArrowRight' });
 
-    expect(store.tab).toBe(2);
+    expect(push).toHaveBeenCalledWith({ name: APP_SURFACE.EXPLORE });
   });
 });
