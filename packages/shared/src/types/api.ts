@@ -35,6 +35,8 @@ export interface Body {
   userId: string;
   jobId: string;
   modelId?: string;
+  /** Model key for upscaler (e.g. 'UPSCALE_REAL_ESRGAN') — utility only */
+  model?: string;
   filePath?: string;
   name?: string;
   aiImagePublicId?: string;
@@ -65,4 +67,37 @@ export interface Props {
   body: Body;
   filePath: string;
   fileName: string;
+}
+
+/** Collection (album) of user generation history item ids. */
+export interface CollectionDto {
+  id: string;
+  userId: string;
+  name: string;
+  imageIds: string[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/** List payload with count + cover thumbnails (up to 4 image ids). */
+export interface CollectionListItem extends CollectionDto {
+  count: number;
+  coverImageIds: string[];
+}
+
+/** Saved prompt library entry returned by `/saved-prompts` APIs. */
+export interface SavedPrompt {
+  id: string;
+  name: string;
+  prompt: string;
+  modelId?: string;
+  createdAt: string;
+}
+
+export interface SavedPromptListResponse {
+  prompts: SavedPrompt[];
+}
+
+export interface SavedPromptCreateResponse {
+  prompt: SavedPrompt;
 }

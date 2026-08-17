@@ -13,6 +13,7 @@ export type GenerateRequest = z.infer<typeof GenerateRequestSchema>;
 
 export const UpscaleRequestSchema = z.object({
   image: z.string().min(1, 'Image URL is required'),
+  model: z.string().optional(),
   prompt: z.string().optional(),
   creativity: z.number().min(0).max(10).optional().default(5),
   scale_factor: z.number().min(1).max(4).optional().default(2),

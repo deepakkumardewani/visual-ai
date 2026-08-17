@@ -38,7 +38,13 @@ export type CatalogModelKey =
   | 'NANO_BANANA_2'
   | 'IMAGEN_4_ULTRA'
   | 'NANO_BANANA_PRO'
-  | 'GPT_IMAGE_2';
+  | 'GPT_IMAGE_2'
+  | 'UPSCALE_REAL_ESRGAN'
+  | 'UPSCALE_PRUNA'
+  | 'UPSCALE_RECRAFT'
+  | 'UPSCALE_GOOGLE'
+  | 'UPSCALE_CLARITY_PRO'
+  | 'UPSCALE_TOPAZ';
 
 export type ModelKey = LegacyModelKey | CatalogModelKey;
 
@@ -51,7 +57,7 @@ export interface ModelDefinition {
   /** true if this is a utility model (upscale, colorize, revive, etc.) not a generation model */
   utility?: boolean;
   fields: {
-    prompt: true;
+    prompt?: true;
     aspectRatio?: { values: string[] };
     /** OpenAPI may use `jpeg` (GPT Image 2) or `jpg` — store the API value as-is */
     outputFormat?: { values: Array<'png' | 'jpg' | 'webp' | 'jpeg'> };
@@ -71,6 +77,12 @@ export interface ModelDefinition {
     imageInput?: {
       inputKey: 'image' | 'image_input' | 'input_image' | 'input_images';
       max?: number;
+    };
+    /** Scale/upscale factor with model-specific param name and value mapping */
+    scale?: {
+      inputKey: string;
+      values: Record<number, string | number>;
+      extraInput?: Record<string, unknown>;
     };
     /** Native prompt enhancement hook — when present, skips local enhancement */
     promptEnhance?: { inputKey: string };

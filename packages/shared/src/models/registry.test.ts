@@ -35,6 +35,12 @@ const UTILITY_KEYS: ModelKey[] = [
   'REVIVE',
   'OLD_PHOTOS',
   'BACKGROUND_REMOVER',
+  'UPSCALE_REAL_ESRGAN',
+  'UPSCALE_PRUNA',
+  'UPSCALE_RECRAFT',
+  'UPSCALE_GOOGLE',
+  'UPSCALE_CLARITY_PRO',
+  'UPSCALE_TOPAZ',
 ];
 
 const ALL_KEYS: ModelKey[] = [...LEGACY_GENERATION_KEYS, ...CATALOG_KEYS, ...UTILITY_KEYS];
@@ -54,7 +60,10 @@ describe('MODEL_REGISTRY', () => {
       expect(typeof entry.replicateId).toBe('string');
       expect(entry.replicateId).toMatch(/^[^/]+\/[^/]+/);
       expect(['budget', 'standard', 'premium']).toContain(entry.tier);
-      expect(entry.fields.prompt).toBe(true);
+      // prompt is optional for utility models
+      if (entry.fields.prompt !== undefined) {
+        expect(entry.fields.prompt).toBe(true);
+      }
     }
   });
 
@@ -106,6 +115,12 @@ describe('isPro — tier→isPro mapping', () => {
     REVIVE: false,
     OLD_PHOTOS: false,
     BACKGROUND_REMOVER: false,
+    UPSCALE_REAL_ESRGAN: false,
+    UPSCALE_PRUNA: false,
+    UPSCALE_RECRAFT: false,
+    UPSCALE_GOOGLE: false,
+    UPSCALE_CLARITY_PRO: true,
+    UPSCALE_TOPAZ: true,
   };
 
   for (const key of ALL_KEYS) {

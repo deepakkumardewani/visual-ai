@@ -21,4 +21,9 @@ export type {
   ReviveInput,
   Body,
   Props,
+  CollectionDto,
+  CollectionListItem,
+  SavedPrompt,
+  SavedPromptListResponse,
+  SavedPromptCreateResponse,
 } from './api';

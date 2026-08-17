@@ -478,6 +478,120 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       imageInput: { inputKey: 'image' },
     },
   },
+
+  // ── Upscaler models (6-model expansion) ────────────────────────────────────
+
+  UPSCALE_REAL_ESRGAN: {
+    key: 'UPSCALE_REAL_ESRGAN',
+    replicateId:
+      'nightmareai/real-esrgan:b3ef194191d13140337468c916c2c5b96dd0cb06dffc032a022a31807f6a5ea8',
+    label: 'Real-ESRGAN',
+    tier: 'budget',
+    utility: true,
+    fields: {
+      imageInput: { inputKey: 'image' },
+      scale: {
+        inputKey: 'scale',
+        values: {
+          2: 2,
+          4: 4,
+        },
+      },
+    },
+  },
+
+  UPSCALE_PRUNA: {
+    key: 'UPSCALE_PRUNA',
+    replicateId:
+      'prunaai/p-image-upscale:b998e77850c393ccddb1a4c32e5c298c91f89f2af9d9fc72bb85e1949fd80ae3',
+    label: 'Pruna',
+    tier: 'budget',
+    utility: true,
+    fields: {
+      imageInput: { inputKey: 'image' },
+      outputFormat: { values: ['png', 'jpg', 'webp'] },
+      scale: {
+        inputKey: 'factor',
+        values: {
+          2: 2,
+          4: 4,
+          8: 8,
+        },
+        extraInput: { upscale_mode: 'factor' },
+      },
+    },
+  },
+
+  UPSCALE_RECRAFT: {
+    key: 'UPSCALE_RECRAFT',
+    replicateId: 'recraft-ai/recraft-crisp-upscale',
+    label: 'Recraft',
+    tier: 'budget',
+    utility: true,
+    fields: {
+      imageInput: { inputKey: 'image' },
+    },
+  },
+
+  UPSCALE_GOOGLE: {
+    key: 'UPSCALE_GOOGLE',
+    replicateId: 'google/upscaler',
+    label: 'Google Upscaler',
+    tier: 'standard',
+    utility: true,
+    fields: {
+      imageInput: { inputKey: 'image' },
+      scale: {
+        inputKey: 'upscale_factor',
+        values: {
+          2: 'x2',
+          4: 'x4',
+        },
+      },
+    },
+  },
+
+  UPSCALE_CLARITY_PRO: {
+    key: 'UPSCALE_CLARITY_PRO',
+    replicateId:
+      'philz1337x/clarity-pro-upscaler:8e33eb474936d75d3ceaa787f3e66f5ba16f35db0853a7697a4ca4e5fc14b6cd',
+    label: 'Clarity Pro',
+    tier: 'premium',
+    utility: true,
+    fields: {
+      imageInput: { inputKey: 'image' },
+      outputFormat: { values: ['png', 'jpg'] },
+      scale: {
+        inputKey: 'scale_factor',
+        values: {
+          2: 2,
+          4: 4,
+          8: 8,
+          16: 16,
+        },
+      },
+    },
+  },
+
+  UPSCALE_TOPAZ: {
+    key: 'UPSCALE_TOPAZ',
+    replicateId: 'topazlabs/image-upscale',
+    label: 'Topaz',
+    tier: 'premium',
+    utility: true,
+    fields: {
+      imageInput: { inputKey: 'image' },
+      outputFormat: { values: ['jpg', 'png'] },
+      scale: {
+        inputKey: 'upscale_factor',
+        values: {
+          2: '2x',
+          4: '4x',
+          6: '6x',
+        },
+      },
+    },
+  },
 };
 
 /** Derive isPro from tier — single source of truth for premium gating */
