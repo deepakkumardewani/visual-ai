@@ -24,3 +24,17 @@ const storage = new CloudinaryStorage({
 /* eslint-disable no-unused-vars */
 
 export const upload = multer({ storage: storage })
+
+const MAX_MEMORY_UPLOAD_BYTES = 10 * 1024 * 1024 // 10MB
+
+export const memoryUpload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: MAX_MEMORY_UPLOAD_BYTES },
+    fileFilter: (_req, file, cb) => {
+        if (!file.mimetype.startsWith("image/")) {
+            cb(new Error("Only image files are allowed"))
+            return
+        }
+        cb(null, true)
+    },
+})

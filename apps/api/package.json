@@ -15,11 +15,13 @@
         "test": "vitest run"
     },
     "dependencies": {
+        "@ai-sdk/anthropic": "^4.0.37",
         "@ai-sdk/deepseek": "^3.0.19",
         "@clerk/clerk-sdk-node": "^5.0.33",
         "@visual-ai/shared": "workspace:*",
         "ai": "^7.0.0",
         "body-parser": "^1.18.2",
+        "bullmq": "^6.1.0",
         "cloudinary": "^2.4.0",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",

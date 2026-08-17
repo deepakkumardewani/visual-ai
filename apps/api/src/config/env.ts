@@ -28,6 +28,11 @@ const envSchema = z.object({
         .transform((v) => parseInt(v, 10))
         .pipe(z.number().positive())
         .default("6379"),
+    GENERATION_CONCURRENCY: z
+        .string()
+        .transform((v) => parseInt(v, 10))
+        .pipe(z.number().positive())
+        .default("10"),
 
     // Cloudinary
     CLOUDINARY_CLOUD_NAME: z.string().min(1, "CLOUDINARY_CLOUD_NAME is required"),
@@ -56,6 +61,10 @@ const envSchema = z.object({
     // Prompt enhancement (DeepSeek)
     DEEPSEEK_API_KEY: z.string().min(1, "DEEPSEEK_API_KEY is required"),
     ENHANCE_MODEL: z.string().default("deepseek-chat"),
+
+    // Prompt describe (Anthropic / Claude vision)
+    ANTHROPIC_API_KEY: z.string().min(1, "ANTHROPIC_API_KEY is required"),
+    DESCRIBE_MODEL: z.string().default("claude-sonnet-4-5"),
 })
 
 /**

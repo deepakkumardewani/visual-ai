@@ -1,4 +1,4 @@
-import IORedis from "ioredis"
+import IORedis, { type RedisOptions } from "ioredis"
 
 import { env } from "./env.js"
 import { createLogger } from "../lib/logger.js"
@@ -15,8 +15,8 @@ const redisConfig: RedisConfig = {
     port: env.REDIS_PORT,
 }
 
-export const createRedisClient = (): IORedis => {
-    const redis = new IORedis(redisConfig)
+export const createRedisClient = (overrides?: Partial<RedisOptions>): IORedis => {
+    const redis = new IORedis({ ...redisConfig, ...overrides })
 
     redis.on("error", (err: Error) => {
         logger.error({ err }, "Redis client error")

@@ -4,13 +4,7 @@ import { Request, Response } from "express"
 import { asyncHandler } from "../lib/async-handler.js"
 import { BadRequestError } from "../lib/errors.js"
 import { createLogger } from "../lib/logger.js"
-import {
-    processColorize,
-    processImage,
-    processRemoveBg,
-    processRevive,
-    processUpscale,
-} from "../services/generation-service.js"
+import { enqueueGeneration } from "../queue/generation-queue.js"
 import { ClerkExpressRequireAuth } from "../middlewares/clerk.js"
 import { upload } from "../middlewares/multer.js"
 import { RedisService } from "../services/redis-service.js"
@@ -87,7 +81,7 @@ generateRoute.post(
     // @ts-ignore
     ClerkExpressRequireAuth({}),
     asyncHandler(async (req: Request, res: Response) => {
-        void processImage(req.body)
+        await enqueueGeneration({ kind: "image", body: req.body })
         acceptResponse(res)
     }),
 )
@@ -108,7 +102,7 @@ generateRoute.post(
             filePath: req.file.path,
             fileName: req.file.filename,
         }
-        void processUpscale(props)
+        await enqueueGeneration({ kind: "upscale", props })
         acceptResponse(res)
     }),
 )
@@ -129,7 +123,7 @@ generateRoute.post(
             filePath: req.file.path,
             fileName: req.file.filename,
         }
-        void processRevive(props)
+        await enqueueGeneration({ kind: "revive", props })
         acceptResponse(res)
     }),
 )
@@ -150,7 +144,7 @@ generateRoute.post(
             filePath: req.file.path,
             fileName: req.file.filename,
         }
-        void processColorize(props)
+        await enqueueGeneration({ kind: "colorize", props })
         acceptResponse(res)
     }),
 )
@@ -171,7 +165,7 @@ generateRoute.post(
             filePath: req.file.path,
             fileName: req.file.filename,
         }
-        void processRemoveBg(props)
+        await enqueueGeneration({ kind: "remove-bg", props })
         acceptResponse(res)
     }),
 )

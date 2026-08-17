@@ -35,6 +35,39 @@ describe("calculateCreditCost", () => {
     ])("%s (isPro=%s) costs %i credits", (feature, isPro, expected) => {
         expect(calculateCreditCost(feature, isPro)).toBe(expected)
     })
+
+    describe("tier-aware pricing with modelKey", () => {
+        it("UPSCALE_REAL_ESRGAN (budget) free: 1/2 = 0.5 credits", () => {
+            expect(calculateCreditCost(FeatureType.UPSCALE, false, "UPSCALE_REAL_ESRGAN")).toBe(0.5)
+        })
+
+        it("UPSCALE_REAL_ESRGAN (budget) pro: 1 credit", () => {
+            expect(calculateCreditCost(FeatureType.UPSCALE, true, "UPSCALE_REAL_ESRGAN")).toBe(1)
+        })
+
+        it("UPSCALE_GOOGLE (standard) free: 1/3 credits", () => {
+            const cost = calculateCreditCost(FeatureType.UPSCALE, false, "UPSCALE_GOOGLE")
+            expect(cost).toBeCloseTo(1 / 3)
+        })
+
+        it("UPSCALE_GOOGLE (standard) pro: 1 credit", () => {
+            expect(calculateCreditCost(FeatureType.UPSCALE, true, "UPSCALE_GOOGLE")).toBe(1)
+        })
+
+        it("UPSCALE_CLARITY_PRO (premium) free: 1/6 credits", () => {
+            const cost = calculateCreditCost(FeatureType.UPSCALE, false, "UPSCALE_CLARITY_PRO")
+            expect(cost).toBeCloseTo(1 / 6)
+        })
+
+        it("UPSCALE_CLARITY_PRO (premium) pro: 2 credits", () => {
+            expect(calculateCreditCost(FeatureType.UPSCALE, true, "UPSCALE_CLARITY_PRO")).toBe(2)
+        })
+
+        it("unknown modelKey falls back to legacy cost", () => {
+            expect(calculateCreditCost(FeatureType.UPSCALE, false, "UNKNOWN_MODEL" as any)).toBe(3)
+            expect(calculateCreditCost(FeatureType.UPSCALE, true, "UNKNOWN_MODEL" as any)).toBe(1)
+        })
+    })
 })
 
 describe("job-status transitions", () => {

@@ -14,6 +14,10 @@ export interface UserGenerationParams {
     styleId?: string
     /** Enhancement mode — t2i only */
     enhanceMode?: string
+    /** Image URL for upscaling or image-to-image tasks */
+    imageUrl?: string
+    /** Scale/upscale factor (model-specific semantics) */
+    scale?: number
 }
 
 /**
@@ -84,6 +88,20 @@ export function validateModelParams(modelKey: ModelKey, userParams: UserGenerati
             )
         }
     }
+
+    // Validate scale if provided
+    if (userParams.scale !== undefined) {
+        if (!fields.scale) {
+            throw new BadRequestError(
+                `Model "${modelKey}" does not support scale. Remove this parameter from the request.`,
+            )
+        }
+        if (!Object.prototype.hasOwnProperty.call(fields.scale.values, userParams.scale)) {
+            throw new BadRequestError(
+                `Model "${modelKey}" does not support scale value ${userParams.scale}. Allowed: ${Object.keys(fields.scale.values).join(", ")}.`,
+            )
+        }
+    }
 }
 
 /**
@@ -119,6 +137,19 @@ export function buildModelInput(
     if (fields.numOutputs) {
         // Map to the model-specific input key (num_outputs / max_images / number_of_images)
         input[fields.numOutputs.inputKey] = userParams.numOfOutputs ?? 1
+    }
+
+    if (fields.imageInput && userParams.imageUrl) {
+        input[fields.imageInput.inputKey] = userParams.imageUrl
+    }
+
+    if (fields.scale && userParams.scale !== undefined) {
+        // Map the canonical scale value (2, 4, etc.) to the model-native value
+        input[fields.scale.inputKey] = fields.scale.values[userParams.scale]
+        // Apply any extra inputs (e.g. Pruna's upscale_mode: 'factor')
+        if (fields.scale.extraInput) {
+            Object.assign(input, fields.scale.extraInput)
+        }
     }
 
     return input

@@ -5,6 +5,7 @@ import { env } from "./config/env.js"
 import { redisClient } from "./config/redis.js"
 import { isHttpError } from "./lib/errors.js"
 import { logger } from "./lib/logger.js"
+import { startGenerationWorker } from "./queue/generation-worker.js"
 
 // Central error-handler middleware with correct status codes
 // eslint-disable-next-line no-unused-vars
@@ -31,11 +32,18 @@ app.use((_: Request, res: Response) => {
     })
 })
 
-/* Graceful shutdown — close Redis before the process exits */
-process.on("SIGTERM", async () => {
-    logger.info("SIGTERM signal received")
+const generationWorker = startGenerationWorker()
+
+/* Graceful shutdown — close worker (wait for active jobs), then Redis */
+async function shutdown(signal: string) {
+    logger.info(`${signal} signal received`)
+    await generationWorker.close()
     await redisClient.quit()
-})
+    process.exit(0)
+}
+
+process.on("SIGTERM", () => void shutdown("SIGTERM"))
+process.on("SIGINT", () => void shutdown("SIGINT"))
 
 app.listen(env.APP_PORT, () => {
     logger.info(`API running at ${env.APP_SERVER}:${env.APP_PORT}`)

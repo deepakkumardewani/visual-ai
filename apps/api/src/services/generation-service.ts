@@ -1,9 +1,11 @@
 import type { Prediction } from "replicate"
 
 import type { ModelKey } from "@visual-ai/shared"
+import { MODEL_REGISTRY } from "@visual-ai/shared"
 
 import { createLogger, shortId } from "../lib/logger.js"
 import { buildModelInput, getModelReplicateId, validateModelParams } from "../lib/model-input.js"
+import { BadRequestError } from "../lib/errors.js"
 import { preparePrompt } from "../lib/prompt-pipeline.js"
 import { isContentSafetyError, PromptModerationError } from "../lib/prompt-moderation.js"
 import { replicate } from "../lib/replicate.js"
@@ -19,7 +21,6 @@ import {
     type Props,
     type RemoveBgInput,
     type ReviveInput,
-    type UpscaleInput,
 } from "../types/index.js"
 import { getImageDetails, uploadToCloudinary } from "../utils/cloudinary.js"
 import { calculateCreditCost } from "../utils/credit-calculator.js"
@@ -248,10 +249,7 @@ async function runGenerationJob(
 // Feature definitions — thin wrappers over runGenerationJob
 // ---------------------------------------------------------------------------
 
-const DEFAULT_UPSCALE_PROMPT =
-    "masterpiece, best quality, highres, <lora:more_details:0.5> <lora:SDXLrender_v2.0:1>"
-const DEFAULT_NEGATIVE_PROMPT =
-    "(worst quality, low quality, normal quality:2) JuggernautNegative-neg"
+const DEFAULT_UPSCALE_MODEL: ModelKey = "UPSCALE_IMAGE"
 
 export async function processImage(body: Body): Promise<void> {
     const {
@@ -353,29 +351,42 @@ export async function processImage(body: Body): Promise<void> {
 
 export async function processUpscale(props: Props): Promise<void> {
     const { body, filePath, fileName } = props
-    const { userId, jobId, prompt, creativity, scale, negativePrompt, outputFormat } = body
+    const { userId, jobId, model, outputFormat, scale } = body
 
-    const user = await User.findOne({ userId })
-    const creditCost = calculateCreditCost(FeatureType.UPSCALE, user?.isPro ?? false)
+    // Resolve model key with fallback to default
+    const modelKey = (model as ModelKey | undefined) ?? DEFAULT_UPSCALE_MODEL
+    const modelEntry = MODEL_REGISTRY[modelKey]
 
-    const input: UpscaleInput = {
-        image: filePath,
-        prompt: prompt !== "" ? (prompt ?? "") : DEFAULT_UPSCALE_PROMPT,
-        creativity: Number(creativity),
-        scale_factor: Number(scale),
-        negative_prompt: negativePrompt !== "" ? (negativePrompt ?? "") : DEFAULT_NEGATIVE_PROMPT,
-        output_format: outputFormat ?? "",
+    // Validate model exists and is utility
+    if (!modelEntry) {
+        throw new BadRequestError(`Unknown model key: "${modelKey}"`)
+    }
+    if (!modelEntry.utility) {
+        throw new BadRequestError(`Model "${modelKey}" is not a utility model`)
     }
 
+    // Validate that unsupported params aren't sent
+    const userParams = {
+        imageUrl: filePath,
+        outputFormat: outputFormat ?? "",
+        scale: scale !== undefined ? Number(scale) : undefined,
+    }
+    validateModelParams(modelKey, userParams)
+
+    const user = await User.findOne({ userId })
+    const creditCost = calculateCreditCost(FeatureType.UPSCALE, user?.isPro ?? false, modelKey)
+
+    // Build payload using registry-driven data
+    const input = buildModelInput(modelKey, userParams)
+
     return runGenerationJob({
-        model: getModelReplicateId("UPSCALE_IMAGE") as ModelType,
+        model: getModelReplicateId(modelKey) as ModelType,
         input,
         jobId,
         userId: userId ?? "",
         featureType: FeatureType.UPSCALE,
         filePath,
         fileName,
-        prompt,
         creditCost,
         buildCloudinaryPayload: (output, imageId) => ({
             type: FeatureType.UPSCALE,
@@ -383,7 +394,7 @@ export async function processUpscale(props: Props): Promise<void> {
             imageUrl: Array.isArray(output) ? output[0] : output,
             originalPublicId: fileName,
             userId,
-            prompt,
+            prompt: "",
             imageId,
         }),
     })
