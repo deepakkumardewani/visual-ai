@@ -3,8 +3,7 @@ import { mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
 
-const xsRef = ref(false);
-const widthRef = ref(1024);
+const smAndUpRef = ref(true);
 const routeName = ref('create');
 const routeParams = ref<Record<string, string>>({});
 
@@ -17,14 +16,11 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn() }),
 }));
 
-vi.mock('vuetify', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('vuetify')>();
+vi.mock('@vueuse/core', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@vueuse/core')>();
   return {
     ...actual,
-    useDisplay: () => ({ xs: xsRef, width: widthRef }),
-    useTheme: () => ({
-      global: { name: { value: 'dark' } },
-    }),
+    useMediaQuery: () => smAndUpRef,
   };
 });
 
@@ -88,8 +84,7 @@ import { useAppStore } from '@/stores/app';
 describe('Dashboard', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
-    xsRef.value = false;
-    widthRef.value = 1024;
+    smAndUpRef.value = true;
     routeName.value = 'create';
     routeParams.value = {};
   });
@@ -124,8 +119,7 @@ describe('Dashboard', () => {
   });
 
   it('shows mobile nav tab strip only on xs viewports on app shell routes', async () => {
-    xsRef.value = true;
-    widthRef.value = 390;
+    smAndUpRef.value = false;
     routeName.value = 'create';
 
     const wrapper = mount(Dashboard);

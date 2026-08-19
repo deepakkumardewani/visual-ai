@@ -16,7 +16,7 @@ function collectVueFiles(dir: string): string[] {
 }
 
 describe('Dashboard polish audit', () => {
-  it('uses no Vuetify presentational components in Dashboard subtree', () => {
+  it('uses no leftover v-* presentational tags in Dashboard subtree', () => {
     const files = collectVueFiles(dashboardRoot);
 
     for (const file of files) {

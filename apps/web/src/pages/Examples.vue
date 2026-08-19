@@ -11,6 +11,12 @@ const { isDark } = storeToRefs(appStore);
 const baseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
 const tab = ref(1);
 
+const tabOptions = [
+  { label: 'Upscale', value: 1 },
+  { label: 'Colorize', value: 2 },
+  { label: 'Revive', value: 3 },
+] as const;
+
 const upscaleExamples = [
   {
     original: `${baseUrl}/examples/upscale/upscale-1.jpg`,
@@ -75,39 +81,42 @@ const reviveExamples = [
   },
 ];
 </script>
-<template>
-  <v-tabs
-    v-model="tab"
-    align-tabs="center"
-    color="#C9A84C"
-    :class="isDark ? 'tw-bg-black' : 'tw-bg-white'"
-  >
-    <v-tab :value="1">Upscale</v-tab>
-    <v-tab :value="2">Colorize</v-tab>
-    <v-tab :value="3">Revive</v-tab>
-  </v-tabs>
 
-  <v-tabs-window
-    v-model="tab"
-    class="tw-h-[calc(100vh-60px)] tw-overflow-y-auto"
-    :class="isDark ? 'tw-bg-black' : 'tw-bg-white'"
-  >
-    <v-tabs-window-item :value="1">
-      <v-container fluid class="tw-max-w-5xl tw-mx-auto tw-py-12">
+<template>
+  <div :class="isDark ? 'tw-bg-black' : 'tw-bg-white'">
+    <div class="tw-flex tw-w-full tw-justify-center" role="tablist" aria-label="Example categories">
+      <button
+        v-for="option in tabOptions"
+        :key="option.value"
+        type="button"
+        role="tab"
+        class="tw-border-x-0 tw-border-t-0 tw-border-b-2 tw-bg-transparent tw-px-6 tw-py-3 tw-font-body tw-text-sm"
+        :class="
+          tab === option.value
+            ? 'tw-border-[#C9A84C] tw-text-[#C9A84C]'
+            : 'tw-border-transparent tw-text-ink-muted'
+        "
+        :aria-selected="tab === option.value"
+        @click="tab = option.value"
+      >
+        {{ option.label }}
+      </button>
+    </div>
+
+    <div class="tw-h-[calc(100vh-60px)] tw-overflow-y-auto">
+      <div v-if="tab === 1" class="tw-mx-auto tw-max-w-5xl tw-px-4 tw-py-12">
         <div class="tw-flex tw-flex-col tw-items-center tw-gap-16">
           <div
             v-for="(example, index) in upscaleExamples"
             :key="index"
-            class="tw-w-full tw-max-w-4xl tw-rounded-lg tw-overflow-hidden"
+            class="tw-w-full tw-max-w-4xl tw-overflow-hidden tw-rounded-lg"
           >
             <SideBySide :original-image="example.original" :enhanced-image="example.upscaled" />
           </div>
         </div>
-      </v-container>
-    </v-tabs-window-item>
+      </div>
 
-    <v-tabs-window-item :value="2">
-      <v-container fluid class="tw-max-w-5xl tw-mx-auto tw-py-12">
+      <div v-else-if="tab === 2" class="tw-mx-auto tw-max-w-5xl tw-px-4 tw-py-12">
         <div class="tw-flex tw-flex-col tw-items-center tw-gap-16">
           <div
             v-for="(example, index) in colorizeExamples"
@@ -117,22 +126,19 @@ const reviveExamples = [
             <SideBySide :original-image="example.original" :enhanced-image="example.colorized" />
           </div>
         </div>
-      </v-container>
-    </v-tabs-window-item>
+      </div>
 
-    <v-tabs-window-item :value="3">
-      <v-container class="tw-max-w-5xl tw-mx-auto tw-py-12">
+      <div v-else class="tw-mx-auto tw-max-w-5xl tw-px-4 tw-py-12">
         <div class="tw-flex tw-flex-col tw-items-center tw-gap-16">
           <div
             v-for="(example, index) in reviveExamples"
             :key="index"
-            class="tw-w-full tw-max-w-4xl tw-flex tw-items-center tw-justify-center"
+            class="tw-flex tw-w-full tw-max-w-4xl tw-items-center tw-justify-center"
           >
             <SideBySide :original-image="example.original" :enhanced-image="example.revived" />
           </div>
         </div>
-      </v-container>
-    </v-tabs-window-item>
-  </v-tabs-window>
+      </div>
+    </div>
+  </div>
 </template>
-<style scoped lang="scss"></style>

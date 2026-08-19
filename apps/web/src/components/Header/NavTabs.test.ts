@@ -15,16 +15,6 @@ vi.mock('vue-clerk', () => ({
   useUser: () => ({ user: ref(null) }),
 }));
 
-vi.mock('vuetify', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('vuetify')>();
-  return {
-    ...actual,
-    useTheme: () => ({
-      global: { name: { value: 'dark' } },
-    }),
-  };
-});
-
 import NavTabs from '@/components/Header/NavTabs.vue';
 import { APP_SURFACE } from '@/utils/dashboardRoutes';
 

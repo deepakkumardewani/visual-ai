@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
 
 import { type Plan } from '@/stores/app';
 import { useAppStore } from '@/stores/app';
 import { useUserStore } from '@/stores/user';
+
+import Tooltip from '@/components/primitives/Tooltip.vue';
 
 import { RAZORPAY_PRODUCTS } from '@/utils/constants';
 import { initiatePayment } from '@/utils/payment';
@@ -21,11 +24,26 @@ const cardBackground = computed(() => {
   if (!props.plan.isFree) {
     return isDark.value ? 'tw-bg-[#2A2119]' : 'tw-bg-[#F5E6D3]';
   }
-  return '';
+  return 'tw-bg-surface-1';
 });
 
 const priceColor = computed(() => {
   return isDark.value ? 'tw-text-[#D4B577]' : 'tw-text-[#9E7D35]';
+});
+
+const isCtaDisabled = computed(() => props.plan.isFree || isPro.value || isLoading.value);
+
+const ctaLabel = computed(() => {
+  if (props.plan.isFree) return 'Current Plan';
+  if (isPro.value) return 'Subscribed';
+  return 'Upgrade Now';
+});
+
+const ctaClass = computed(() => {
+  if (props.plan.isFree) {
+    return 'tw-border tw-border-ink-faint tw-bg-transparent tw-text-ink-muted';
+  }
+  return 'tw-bg-gold tw-text-[#18120e] tw-shadow-card';
 });
 
 async function handleUpgrade() {
@@ -44,77 +62,75 @@ async function handleUpgrade() {
 </script>
 
 <template>
-  <v-card
-    :class="['mx-auto my-4 rounded-lg transition-shadow hover:elevation-24', cardBackground]"
-    elevation="8"
-    min-height="450"
-    max-width="360"
+  <article
+    :class="[
+      'tw-mx-auto tw-my-4 tw-min-h-[450px] tw-max-w-[360px] tw-rounded-[8px] tw-shadow-card tw-transition-shadow hover:tw-shadow-elevated',
+      cardBackground,
+    ]"
   >
-    <v-card-item class="text-center pt-6">
-      <v-card-title class="text-h4 font-weight-bold">
+    <div class="tw-px-4 tw-pt-6 tw-text-center">
+      <h2 class="tw-font-display tw-text-[2.125rem] tw-font-bold tw-leading-tight tw-text-ink">
         {{ plan.title }}
-      </v-card-title>
+      </h2>
 
-      <v-card-subtitle>
-        <div class="d-flex my-2 align-center justify-center">
-          <span :class="['text-h3 font-weight-bold', priceColor]">₹{{ plan.price }}</span>
-          <span class="text-subtitle-1 ml-1 mt-4">/month</span>
+      <div>
+        <div class="tw-my-2 tw-flex tw-items-center tw-justify-center">
+          <span
+            :class="['tw-font-display tw-text-[3rem] tw-font-bold tw-leading-tight', priceColor]"
+            >₹{{ plan.price }}</span
+          >
+          <span class="tw-ml-1 tw-mt-4 tw-font-body tw-text-body-base tw-text-ink-muted"
+            >/month</span
+          >
         </div>
-        <p class="text-body-1">{{ plan.description }}</p>
-      </v-card-subtitle>
-    </v-card-item>
+        <p class="tw-font-body tw-text-body-base tw-text-ink">{{ plan.description }}</p>
+      </div>
+    </div>
 
-    <v-card-text>
-      <div class="my-2">
-        <v-btn
+    <div class="tw-px-4 tw-pb-4">
+      <div class="tw-my-2">
+        <button
+          type="button"
+          class="tw-flex tw-h-11 tw-w-full tw-items-center tw-justify-center tw-rounded tw-px-6 tw-font-body tw-text-body-base tw-font-medium tw-transition-transform hover:tw-scale-[1.02] disabled:tw-cursor-not-allowed disabled:tw-opacity-60"
+          :class="ctaClass"
+          :disabled="isCtaDisabled"
+          :aria-busy="isLoading"
           @click="handleUpgrade"
-          :loading="isLoading"
-          :disabled="plan.isFree || isPro || isLoading"
-          :color="plan.isFree ? 'grey' : '#C9A84C'"
-          :variant="plan.isFree ? 'outlined' : 'elevated'"
-          size="large"
-          block
-          class="transition-transform hover:scale-102"
         >
-          {{ plan.isFree ? 'Current Plan' : isPro ? 'Subscribed' : 'Upgrade Now' }}
-        </v-btn>
+          <span
+            v-if="isLoading"
+            class="tw-mr-2 tw-inline-block tw-h-4 tw-w-4 tw-animate-spin tw-rounded-full tw-border-2 tw-border-[#18120e]/25 tw-border-t-[#18120e] motion-reduce:tw-animate-none"
+            aria-hidden="true"
+          />
+          {{ ctaLabel }}
+        </button>
       </div>
 
-      <v-divider class="my-4"></v-divider>
+      <hr class="tw-my-4 tw-border-0 tw-border-t tw-border-hairline" />
 
-      <div class="my-4">
-        <div class="text-h6 mb-4 font-weight-medium">Features:</div>
+      <div class="tw-my-4">
+        <div class="tw-mb-4 tw-font-display tw-text-[1.25rem] tw-font-medium tw-text-ink">
+          Features:
+        </div>
         <div
-          class="d-flex my-3 align-center"
           v-for="(feature, index) in plan.features"
           :key="index"
+          class="tw-my-3 tw-flex tw-items-center"
         >
-          <v-icon
-            :icon="feature.available ? 'fas fa-check' : 'fas fa-times'"
-            :color="feature.available ? 'success' : 'error'"
-            class="mr-2"
+          <font-awesome-icon
+            :icon="feature.available ? ['fas', 'check'] : ['fas', 'times']"
+            :class="feature.available ? 'tw-text-[#4CAF50]' : 'tw-text-[#FF5252]'"
+            class="tw-mr-2"
           />
-          <p class="text-body-1">{{ feature.title }}</p>
-          <v-tooltip v-if="feature.tooltip" location="top">
-            <template #activator="{ props }">
-              <v-icon
-                size="small"
-                v-bind="props"
-                :icon="feature.tooltip ? 'fa:far fa-circle-question' : ''"
-                class="ml-2"
-                color="grey"
-              />
-            </template>
-            <span>{{ feature.tooltip }}</span>
-          </v-tooltip>
+          <p class="tw-font-body tw-text-body-base tw-text-ink">{{ feature.title }}</p>
+          <Tooltip v-if="feature.tooltip" :text="feature.tooltip" placement="top">
+            <font-awesome-icon
+              :icon="['fas', 'circle-question']"
+              class="tw-ml-2 tw-text-sm tw-text-ink-muted"
+            />
+          </Tooltip>
         </div>
       </div>
-    </v-card-text>
-  </v-card>
+    </div>
+  </article>
 </template>
-
-<style scoped>
-.scale-102 {
-  transform: scale(1.02);
-}
-</style>

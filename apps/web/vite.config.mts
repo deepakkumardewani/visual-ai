@@ -2,12 +2,10 @@
 import path from 'node:path';
 import { URL, fileURLToPath } from 'node:url';
 import AutoImport from 'unplugin-auto-import/vite';
-// import Fonts from 'unplugin-fonts/vite'
 import Components from 'unplugin-vue-components/vite';
 // Utilities
 /// <reference types="vitest" />
 import { defineConfig } from 'vite-plus';
-import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 
 import Vue from '@vitejs/plugin-vue';
 import autoprefixer from 'autoprefixer';
@@ -50,9 +48,6 @@ export default defineConfig({
           ) {
             return 'vue-vendor';
           }
-          if (id.includes('node_modules/vuetify')) {
-            return 'vuetify';
-          }
         },
         // Optimize chunk names
         chunkFileNames: 'assets/js/[name]-[hash].js',
@@ -78,26 +73,7 @@ export default defineConfig({
     Components({
       dts: 'src/components.d.ts',
     }),
-    Vue({
-      template: { transformAssetUrls },
-    }),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
-    Vuetify({
-      autoImport: true,
-      styles: {
-        configFile: 'src/styles/settings.scss',
-      },
-    }),
-    // Fonts({
-    //   google: {
-    //     families: [
-    //       {
-    //         name: 'Roboto',
-    //         styles: 'wght@100;300;400;500;700;900'
-    //       }
-    //     ]
-    //   }
-    // })
+    Vue(),
   ],
   define: { 'process.env': {} },
   resolve: {

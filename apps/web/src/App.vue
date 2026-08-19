@@ -10,6 +10,7 @@ import { useUserStore } from '@/stores/user';
 import AppFooter from '@/components/AppFooter.vue';
 import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue';
 import AppHeader from '@/components/Header/AppHeader.vue';
+import Toast from '@/components/primitives/Toast.vue';
 
 import { APP_SURFACE, isAppShellRoute } from '@/utils/dashboardRoutes';
 
@@ -28,7 +29,7 @@ watch(
   { immediate: true },
 );
 // The landing page ships its own immersive nav and footer, so the
-// global Vuetify chrome is suppressed on '/'.
+// global chrome is suppressed on '/'.
 const isLanding = computed(() => route.path === '/');
 const isExploreViewer = computed(() => route.name === 'explore-image');
 const isHeaderVisible = computed(() => {
@@ -55,9 +56,10 @@ const isFooterVisible = computed(() => {
 });
 </script>
 <template>
-  <v-app class="tw-bg-canvas">
+  <div class="tw-flex tw-min-h-dvh tw-flex-col tw-bg-canvas tw-font-body">
     <AppHeader v-if="isHeaderVisible" />
-    <v-main
+    <div
+      class="tw-flex-1"
       :class="{
         'tw-h-[98vh] tw-overflow-y-hidden': overflowHidden && !isExploreViewer,
         'tw-h-[100dvh] tw-overflow-hidden': isExploreViewer,
@@ -67,16 +69,9 @@ const isFooterVisible = computed(() => {
     >
       <router-view />
       <ReferralDialog />
-    </v-main>
+    </div>
     <AppFooter v-if="isFooterVisible" />
 
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="snackbarTimeout"
-      location="bottom right"
-      color="#C9A84C"
-    >
-      {{ snackbarText }}
-    </v-snackbar>
-  </v-app>
+    <Toast v-model="snackbar" :timeout="snackbarTimeout" :text="snackbarText" />
+  </div>
 </template>

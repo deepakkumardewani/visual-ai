@@ -6,7 +6,6 @@ import { computed, ref, watch } from 'vue';
 import type { JobStatus } from '@/types';
 import { FeatureType } from '@/types';
 
-import vuetify from '@/plugins/vuetify';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
 import { createLogger } from '@/utils/logger';
@@ -255,7 +254,6 @@ export const useAppStore = defineStore('app', () => {
     isDark,
     (newVal) => {
       document.documentElement.classList.toggle('tw-dark', newVal);
-      vuetify.theme.global.name.value = newVal ? 'dark' : 'light';
     },
     { immediate: true },
   );

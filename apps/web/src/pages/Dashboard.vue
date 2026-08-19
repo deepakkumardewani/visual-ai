@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { useMediaQuery } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
-import { useDisplay } from 'vuetify';
 
 import { FeatureType } from '@/types';
 
@@ -32,19 +32,18 @@ import {
   tabFromRouteName,
 } from '@/utils/dashboardRoutes';
 
-/** Match DashboardShell / Tailwind `sm` (640px), not Vuetify’s 600px `xs`. */
+/** Match DashboardShell / Tailwind `sm` (640px). */
 const CREATE_SM_UP = 640;
 
 const appStore = useAppStore();
 const { tab, feature } = storeToRefs(appStore);
 const route = useRoute();
-const { xs, width } = useDisplay();
+const isSmUp = useMediaQuery(`(min-width: ${CREATE_SM_UP}px)`);
 
 useComposerPersistence();
 useGlobalShortcuts();
 
 const isImageFeature = computed(() => !feature.value || feature.value === FeatureType.IMAGE);
-const isSmUp = computed(() => width.value >= CREATE_SM_UP);
 const settingsOpen = ref(false);
 
 watch(isSmUp, (up) => {
@@ -74,7 +73,7 @@ watch(
 
 <template>
   <div
-    v-if="isAppShellRoute(route) && xs"
+    v-if="isAppShellRoute(route) && !isSmUp"
     data-testid="dashboard-mobile-tabs"
     class="tw-mt-1 tw-bg-surface-1"
   >

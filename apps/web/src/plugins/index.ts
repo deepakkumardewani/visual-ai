@@ -8,7 +8,6 @@ import { clerkAppearance } from '@/utils/clerkAppearance';
 import { vReveal } from '../directives/reveal';
 import router from '../router';
 import pinia from '../stores';
-import vuetify from './vuetify';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 const AFTER_SIGN_IN_URL = import.meta.env.VITE_CLERK_SIGN_IN_FORCE_REDIRECT_URL;
@@ -31,5 +30,5 @@ export function registerPlugins(app: App) {
   });
   app.use(MotionPlugin);
   app.directive('reveal', vReveal);
-  app.use(vuetify).use(router).use(pinia);
+  app.use(router).use(pinia);
 }

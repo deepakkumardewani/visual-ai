@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * Mobile-only bottom sheet for Create feature settings (DashboardSidebar).
- * Custom sheet (not Vuetify) to match Dashboard polish tokens and avoid
+ * Custom sheet to match Dashboard polish tokens and avoid
  * duplicate aside mounts with the desktop rail.
  */
 import { onKeyStroke } from '@vueuse/core';

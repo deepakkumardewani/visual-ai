@@ -13,17 +13,6 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ push: vi.fn() }),
 }));
 
-vi.mock('vuetify', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('vuetify')>();
-  return {
-    ...actual,
-    useDisplay: () => ({ smAndUp: smAndUpRef }),
-    useTheme: () => ({
-      global: { name: { value: 'dark' } },
-    }),
-  };
-});
-
 vi.mock('@vueuse/core', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@vueuse/core')>();
   return {

@@ -1,7 +1,7 @@
 /**
  * main.ts
  *
- * Bootstraps Vuetify and other plugins then mounts the App`
+ * Bootstraps plugins then mounts the App`
  */
 // Composables
 // Plugins
@@ -20,12 +20,12 @@ const app = createApp(App);
 
 registerPlugins(app);
 
-// Eagerly init the app store so theme class + Vuetify sync run before first paint.
+// Eagerly init the app store so the theme class runs before first paint.
 useAppStore();
 
 // Wait for the router to resolve the initial route before mounting, so route-derived
 // layout classes (e.g. header padding) are correct on first paint instead of toggling
-// in a moment after mount — which otherwise animates via Vuetify's v-main transition.
+// in a moment after mount.
 void router.isReady().then(() => {
   app.mount('#app');
 });

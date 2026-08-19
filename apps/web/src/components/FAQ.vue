@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { PropType } from 'vue';
+
 import Accordion from '@/components/Accordion.vue';
 
 defineProps({
@@ -8,22 +10,23 @@ defineProps({
   },
 });
 </script>
-<template>
-  <div class="tw-text-center tw-text-2xl sm:tw-text-4xl tw-my-8">Frequently Asked Questions</div>
 
-  <v-row justify="center">
-    <v-col cols="10" sm="8">
+<template>
+  <div class="tw-my-8 tw-text-center tw-font-display tw-text-2xl sm:tw-text-4xl">
+    Frequently Asked Questions
+  </div>
+
+  <div class="tw-flex tw-justify-center">
+    <div class="tw-w-10/12 tw-px-3 sm:tw-w-8/12">
       <Accordion
         v-for="(faq, index) in faqs"
+        :id="`faqs-${index}`"
         :key="index"
         :title="faq.question"
-        :id="`faqs-${index}`"
         :active="faq.active"
       >
         <div v-html="faq.answer"></div>
       </Accordion>
-    </v-col>
-  </v-row>
+    </div>
+  </div>
 </template>
-
-<style scoped></style>
