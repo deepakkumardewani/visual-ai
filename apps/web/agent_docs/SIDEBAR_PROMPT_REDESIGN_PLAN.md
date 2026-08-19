@@ -6,7 +6,7 @@ The redesign spans four key areas:
 
 1. **Sidebar container** (Aside.vue, ControlRail.vue): Layout refactor for compact, floating aesthetic with gaps.
 2. **Model picker** (ModelPicker.vue + new ModelPickerPanel.vue): Restructure current popover to support Featured section, company grouping, and hover-reveal submenus.
-3. **Model logos** (assets + Model type): Copy custom logos; add `iconUrl` field to Model; retire Vuetify icon strings.
+3. **Model logos** (assets + Model type): Copy custom logos; add `iconUrl` field to Model; retire leftover icon strings.
 4. **Prompt bar** (PromptBox.vue + PromptAiMenu.vue): Redesign for compact start, grow-with-text, and button reflow below long text.
 
 ## Phase-Level Breakdown
@@ -91,8 +91,8 @@ The redesign spans four key areas:
 
 **Old code to remove:**
 
-- Mode.vue: Likely used old v-select; can deprecate if ModelPicker fully replaces it.
-- Any hard-coded Vuetify icon references for models.
+- Mode.vue: Likely used an old select; can deprecate if ModelPicker fully replaces it.
+- Any hard-coded icon-string references for models.
 
 **Testing:** Verify logos load correctly; check alignment and sizing in both light and dark modes.
 
@@ -173,7 +173,7 @@ The redesign spans four key areas:
 
 ## Rollback Plan
 
-- Revert logo references back to Vuetify icon strings (keep dual-path logic in ModelOption).
+- Revert logo references back to icon strings (keep dual-path logic in ModelOption).
 - Revert PromptBox layout to fixed rows, static positioning for buttons.
 - Revert Aside spacing to full-height, flush layout.
 - All changes are isolated to components; no database or API changes needed.

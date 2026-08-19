@@ -7,8 +7,8 @@
 ```
 ┌─────────────────────────┐        ┌──────────────────────────┐
 │  apps/web (Vue 3 SPA)   │  HTTP  │  apps/api (Express)      │
-│  Vite + Vuetify +       │ ─────► │  tsx runtime, ESM        │
-│  Tailwind + Pinia       │        │                          │
+│  Vite + Tailwind +      │ ─────► │  tsx runtime, ESM        │
+│  Pinia                  │        │                          │
 │  Auth: vue-clerk        │        │  Auth: Clerk middleware  │
 └─────────────────────────┘        └────────┬─────────────────┘
                                             │
@@ -26,7 +26,7 @@ Monorepo: Bun workspaces (`apps/*`), no turbo/nx. Tooling via **vite-plus** (`vp
 
 ### apps/web — Vue 3 SPA (`@visual-ai/web`)
 
-- **Stack**: Vue 3 (Composition API, `<script setup>`), Vite 7 (vite-plus), Vuetify 3 + Tailwind 3 (hybrid), Pinia, vue-router 4, GSAP + Lenis + @vueuse/motion (animation), Vitest + happy-dom.
+- **Stack**: Vue 3 (Composition API, `<script setup>`), Vite 7 (vite-plus), Tailwind 3, Pinia, vue-router 4, GSAP + Lenis + @vueuse/motion (animation), Vitest + happy-dom.
 - **Auto-imports**: `unplugin-auto-import` (Vue APIs like `ref`/`computed` are global) and `unplugin-vue-components` (components auto-registered — see `auto-imports.d.ts` / `components.d.ts`).
 - **Auth**: Clerk via `vue-clerk`; router guard in [router/index.ts](apps/web/src/router/index.ts) protects `profile`.
 - **Analytics**: TelemetryDeck (`appStore.sendSignal(...)`).

@@ -4,8 +4,8 @@
 
 The current sidebar and prompt interaction are functional but lack modern design polish and optimal usability:
 
-1. **Sidebar** (Aside.vue + ControlRail.vue): Takes full height with no breathing room; model picker opens _inside_ the sidebar (v-select dropdown), crowding the interface and reducing visibility of model options.
-2. **Model logos**: Currently use Vuetify icon strings; need to be replaced with custom brand/model logos.
+1. **Sidebar** (Aside.vue + ControlRail.vue): Takes full height with no breathing room; model picker opens _inside_ the sidebar (dropdown), crowding the interface and reducing visibility of model options.
+2. **Model logos**: Currently use icon strings; need to be replaced with custom brand/model logos.
 3. **Model metadata**: "Budget" and "tag" chips clutter the model card UI.
 4. **Prompt bar** (PromptBox.vue): Uses fixed textarea rows; placeholder has typewriter animation; buttons (AI prompt wand, Generate) stay on the right side even when text is long, pushing text awkwardly.
 5. **Button styling**: Existing buttons are functional but not refined; need rounded, modern appearance while respecting existing design tokens.

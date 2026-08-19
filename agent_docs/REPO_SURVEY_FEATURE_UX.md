@@ -10,7 +10,7 @@
 
 ### Architecture (high level)
 
-- Bun monorepo: `apps/web` (Vue 3 + Vite + Vuetify + Tailwind + Pinia + vue-clerk), `apps/api` (Express + tsx + Mongoose + Redis + Replicate + Cloudinary + Razorpay + Clerk), `packages/shared` (model registry, Zod schemas, credits).
+- Bun monorepo: `apps/web` (Vue 3 + Vite + Tailwind + Pinia + vue-clerk), `apps/api` (Express + tsx + Mongoose + Redis + Replicate + Cloudinary + Razorpay + Clerk), `packages/shared` (model registry, Zod schemas, credits).
 - Docs: `docs/ARCHITECTURE.md` (present), `.impeccable.md` (atelier aesthetic: warm/refined/quiet).
 
 ### Pages (`apps/web/src/pages` + `apps/web/src/router/index.ts`)

@@ -347,10 +347,10 @@
 **Do:**
 
 - Open ModelOption.vue.
-- Find where the model icon is currently rendered (likely using Vuetify icon string).
+- Find where the model icon is currently rendered (likely an icon string).
 - Replace with:
   - `<img :src="require(`@/assets/models/${model.iconUrl}`)" v-if="model.iconUrl" ... />`
-  - Fallback to old icon string if `iconUrl` is not set: `<v-icon v-else :icon="model.icon" ... />`
+  - Fallback to the old icon string if `iconUrl` is not set.
 - Set a fixed size for logos (e.g., 24px × 24px or 32px × 32px).
 - Ensure image is properly aligned and doesn't break layout.
 
@@ -419,7 +419,7 @@
 
 **Do:**
 
-- Search the codebase for hard-coded Vuetify icon references for models (e.g., `$fluxFast`, `$fluxPro`).
+- Search the codebase for hard-coded icon-string references for models (e.g., `$fluxFast`, `$fluxPro`).
 - Remove or comment out old logo files if any exist in public/assets.
 - Ensure no dangling references to old logo paths.
 

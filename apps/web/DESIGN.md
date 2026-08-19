@@ -89,8 +89,7 @@
 | **Display / Headlines** | `Young Serif`   | 400, 700      | Warm editorial serif — craft, memory, restoration without template clichés |
 | **Body / UI**           | `Source Sans 3` | 400, 500, 600 | Clean humanist sans — readable at all sizes                                |
 
-Both served via Google Fonts through `unplugin-fonts`; `font-display: swap`; preloaded.  
-**No Roboto** on the landing page.
+Both served via Google Fonts in `index.html` (`font-display: swap`; preconnected).
 
 ### Type Scale (Tailwind `fontSize`)
 
@@ -190,7 +189,7 @@ Shadows are warm-tinted (no cold grey).
 
 ## 8. Component Conventions
 
-- **No Vuetify presentational chrome** inside landing sections (`v-btn`, `v-card`, `v-chip`).
+- Native HTML + Tailwind in landing sections — no leftover `v-*` presentational tags.
 - All interactive elements: visible focus ring using `outline: 2px solid #C98A5A` + `outline-offset: 3px`.
 - Minimum touch target: 44×44px.
 - AA contrast minimum: 4.5:1 for body, 3:1 for large text (both themes).

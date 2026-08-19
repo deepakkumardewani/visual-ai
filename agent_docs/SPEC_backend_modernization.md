@@ -30,7 +30,7 @@ Modernize `apps/api` and bridge it with `apps/web` after the repo merge. Five th
 
 - **Runtime:** Bun 1.3.6 (workspaces, package manager). API dev currently `tsx watch`.
 - **API:** Express 4 (candidate: Hono 4), Mongoose 8, ioredis, Clerk (`@clerk/clerk-sdk-node`), Multer + multer-storage-cloudinary, Cloudinary v2, Razorpay, Svix (Clerk webhooks), Replicate SDK, node-cron, nodemailer, sharp.
-- **Web:** Vue 3 + Vuetify 3 + Pinia 2, vite-plus, vue-clerk.
+- **Web:** Vue 3 + Tailwind + Pinia 2, vite-plus, vue-clerk.
 - **New deps (T1/T2/T5):** `zod`, `pino`, `pino-http` (or `hono/logger` + pino if migrating), `pino-pretty` (dev only).
 
 ## Commands
