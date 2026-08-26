@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { MODEL_REGISTRY, MODEL_IDS, isPro, findModelByReplicateId } from './registry.js';
+import { MODEL_REGISTRY, MODEL_IDS, findModelByReplicateId } from './registry.js';
 import type { ModelDefinition, ModelKey } from './types.js';
 
 const LEGACY_GENERATION_KEYS: ModelKey[] = [
@@ -85,49 +85,6 @@ describe('MODEL_REGISTRY', () => {
     expect(findModelByReplicateId('google/nano-banana-2')?.key).toBe('NANO_BANANA_2');
     expect(findModelByReplicateId('openai/gpt-image-2')?.key).toBe('GPT_IMAGE_2');
   });
-});
-
-describe('isPro — tier→isPro mapping', () => {
-  const expectedIsPro: Record<ModelKey, boolean> = {
-    FLUX_QUICK: false,
-    FLUX_BASIC: false,
-    FLUX_PRO: true,
-    FLUX_1_1_PRO: true,
-    FLUX_REALISM: true,
-    FLUX_FAST: false,
-    P_IMAGE: false,
-    Z_IMAGE_TURBO: false,
-    GROK_IMAGINE: false,
-    GROK_IMAGINE_QUALITY: false,
-    SEEDREAM_4: false,
-    FLUX_2_DEV: false,
-    FLUX_2_PRO: false,
-    FLUX_KONTEXT_PRO: false,
-    FLUX_2_MAX: true,
-    FLUX_KONTEXT_MAX: true,
-    NANO_BANANA_2: false,
-    IMAGEN_4_ULTRA: false,
-    NANO_BANANA_PRO: true,
-    GPT_IMAGE_2: true,
-    UPSCALE_IMAGE: false,
-    COLORIZE_BASIC: false,
-    COLORIZE_ADVANCED: false,
-    REVIVE: false,
-    OLD_PHOTOS: false,
-    BACKGROUND_REMOVER: false,
-    UPSCALE_REAL_ESRGAN: false,
-    UPSCALE_PRUNA: false,
-    UPSCALE_RECRAFT: false,
-    UPSCALE_GOOGLE: false,
-    UPSCALE_CLARITY_PRO: true,
-    UPSCALE_TOPAZ: true,
-  };
-
-  for (const key of ALL_KEYS) {
-    it(`isPro(${key}) === ${expectedIsPro[key]}`, () => {
-      expect(isPro(MODEL_REGISTRY[key])).toBe(expectedIsPro[key]);
-    });
-  }
 });
 
 describe('catalog field specs (MODELS_COMPARISON §4)', () => {

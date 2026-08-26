@@ -98,14 +98,10 @@ export interface IUser {
   lastName: string;
   fullName: string;
   email: string;
-  plan: string;
-  subscriptionId: string;
   credits: number;
-  monthlyCredits: number;
-  isPro: boolean;
+  dailyCredits: number;
   referralCode: string;
   referrals: IReferral[];
-  subscriptionEnd: Date;
   payments: IPayment[];
   history: IImageObject[];
   favorites: IImageObject[];

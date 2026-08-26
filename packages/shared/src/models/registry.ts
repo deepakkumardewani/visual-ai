@@ -594,11 +594,6 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
   },
 };
 
-/** Derive isPro from tier — single source of truth for premium gating */
-export function isPro(model: ModelDefinition): boolean {
-  return model.tier === 'premium';
-}
-
 /**
  * Typed constant map of every registry key to itself.
  * Replaces the web-local `utils/modelIds.ts` — import from `@visual-ai/shared` instead.
