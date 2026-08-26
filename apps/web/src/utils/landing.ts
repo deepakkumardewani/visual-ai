@@ -1,4 +1,4 @@
-import { FLUX_MODES } from '@/utils/models';
+import { MODELS as CATALOG_MODELS, getFeaturedModels } from '@/utils/models';
 import galleryData from '@/utils/gallery.json';
 
 const BASE_URL = import.meta.env.VITE_CLOUDINARY_BASE_URL;
@@ -32,11 +32,19 @@ export interface Faq {
   answer: string;
 }
 
-export const STATS: Stat[] = [
-  { value: '500+', label: 'Creators on board' },
-  { value: 'Thousands', label: 'Images rendered' },
-  { value: '5', label: 'Flux models' },
-];
+const STILL_IMAGE_MODEL_COUNT = CATALOG_MODELS.filter(
+  (model) => !model.id.startsWith('UPSCALE_'),
+).length;
+
+export function getLandingStats(): Stat[] {
+  return [
+    { value: '500+', label: 'Creators on board' },
+    { value: 'Thousands', label: 'Images rendered' },
+    { value: String(STILL_IMAGE_MODEL_COUNT), label: 'Still-image models' },
+  ];
+}
+
+export const STATS: Stat[] = getLandingStats();
 
 const galleryItems = galleryData as GalleryItem[];
 
@@ -48,14 +56,14 @@ export const TOOLS: ToolChapter[] = [
     id: 'generate',
     eyebrow: 'Text to image',
     title: 'Words in. Images out.',
-    body: 'Type a prompt and Flux renders it — photoreal, painterly, or conceptual. Prompt adherence tight enough that your first try is usually your last.',
+    body: 'Type a prompt and pick a model for drafts or fidelity — Google, OpenAI, xAI, ByteDance, and Black Forest Labs. Prompt adherence tight enough that your first try is usually your last.',
     points: [
-      'Flux Lightning through Flux 1.1 Pro',
+      'Fast drafts through studio-quality models, across labs',
       'Seven aspect ratios — square to cinematic 21:9',
       'Up to four variations per prompt',
     ],
     ctaLabel: 'Start generating',
-    ctaTo: '/signup',
+    ctaTo: '/text-to-image',
     media: {
       kind: 'gallery',
       images: galleryItems.slice(0, 3).map((item) => item.url),
@@ -72,7 +80,7 @@ export const TOOLS: ToolChapter[] = [
       'Export as JPG, PNG, or WebP',
     ],
     ctaLabel: 'Try the upscaler',
-    ctaTo: '/signup',
+    ctaTo: '/image-upscaler',
     media: {
       kind: 'compare',
       before: `${BASE_URL}/examples/upscale/upscale-1.jpg`,
@@ -90,7 +98,7 @@ export const TOOLS: ToolChapter[] = [
       'Basic and advanced modes',
     ],
     ctaLabel: 'Colorize a photo',
-    ctaTo: '/signup',
+    ctaTo: '/colorize-photo',
     media: {
       kind: 'compare',
       before: `${BASE_URL}/examples/colorize/colorize-1.webp`,
@@ -108,43 +116,69 @@ export const TOOLS: ToolChapter[] = [
       'Built for irreplaceable originals',
     ],
     ctaLabel: 'Revive a photo',
-    ctaTo: '/signup',
+    ctaTo: '/photo-restorer',
     media: {
       kind: 'compare',
       before: `${BASE_URL}/examples/revive/revive-1.png`,
       after: `${BASE_URL}/examples/revive/revive-1.1.png`,
     },
   },
+  {
+    id: 'remove-bg',
+    eyebrow: 'Background',
+    title: 'Subject in. Backdrop out.',
+    body: 'Isolate a person or product for listings and composites. Download a transparent PNG without a desktop cutout tool.',
+    points: [
+      'Transparent PNG export',
+      '2 credits per image',
+      'Same studio as generate and restore',
+    ],
+    ctaLabel: 'Remove a background',
+    ctaTo: '/remove-background',
+    media: {
+      kind: 'gallery',
+      images: galleryItems.slice(3, 6).map((item) => item.url),
+    },
+  },
 ];
 
-/** Reused from the app's single source of truth so the model line never drifts. */
-export const MODELS = FLUX_MODES;
+export function toolBySeoPath(path: string): ToolChapter | undefined {
+  return TOOLS.find((tool) => tool.ctaTo === path);
+}
+
+/** Featured still-image models for marketing — not the full catalog. */
+export const MODELS = getFeaturedModels();
+export { getFeaturedModels };
 
 export const FAQS: Faq[] = [
   {
     question: 'Is there really a free plan?',
     answer:
-      'Yes. Every account gets 20 credits a day, refreshed daily, with access to generation, upscaling, colorizing, and reviving — no card required to start.',
+      'Yes. Every new account gets 50 persistent credits plus 30 daily credits (unused daily credits reset). Generate, upscale, colorize, restore, and remove backgrounds — no card and no subscription required to start.',
   },
   {
     question: 'How do credits work?',
     answer:
-      'Each generation or edit spends credits. Free accounts get 20 a day that reset every 24 hours; Pro accounts get 1,000 a month with unused credits rolling over up to a 2,000 cap.',
+      'Each generation or edit spends credits. You get 50 persistent credits that stay on the account, plus 30 daily credits that reset unused at the end of the day. Purchased credits never expire.',
   },
   {
     question: 'Which models can I use?',
     answer:
-      'The full Flux family — from Flux Lightning for speed to Flux 1.1 Pro and Flux Realism for top-tier quality and prompt adherence.',
+      'Still-image models from Google, OpenAI, xAI, ByteDance, and Black Forest Labs, plus upscalers and utilities like colorize, restore, and background removal. See per-model costs on /pricing#model-costs.',
   },
   {
     question: 'What formats can I download?',
     answer:
-      'JPG on the free plan, with PNG and WebP added on Pro — alongside higher quality, more variations, and the full set of aspect ratios.',
+      'All accounts can download in JPG, PNG, and WebP. Choose the format that works best for your needs.',
   },
   {
     question: 'Can I restore old or black-and-white photos?',
     answer:
       'Yes. Colorize adds believable color to monochrome images, and Revive repairs scratches, fading, and creases on damaged prints.',
+  },
+  {
+    question: 'Do I need a subscription?',
+    answer: 'No. Visual AI is credits only — there are no paid subscription tiers.',
   },
 ];
 

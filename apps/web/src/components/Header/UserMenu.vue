@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import {
   faChevronDown,
-  faCrown,
+  faCreditCard,
   faLink,
   faMoon,
   faSignOutAlt,
   faSun,
   faUser,
   faUsers,
+  fasHeart,
 } from '@/plugins/icons';
 import { onClickOutside } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
@@ -26,7 +27,7 @@ const router = useRouter();
 const dialogStore = useDialogStore();
 const appStore = useAppStore();
 const userStore = useUserStore();
-const { userDetails, isPro } = storeToRefs(userStore);
+const { userDetails } = storeToRefs(userStore);
 const { isDark } = storeToRefs(appStore);
 const { signOut } = useClerk();
 
@@ -38,8 +39,6 @@ const menu = ref(false);
 const triggerRef = ref<HTMLButtonElement | null>(null);
 const rootRef = ref<HTMLElement | null>(null);
 const itemRefs = ref<(HTMLButtonElement | null)[]>([]);
-
-const subscriptionStatus = computed(() => (isPro.value ? 'Pro' : 'Free'));
 
 function getUserInitials() {
   const first = userDetails.value?.firstName ?? '';
@@ -65,13 +64,8 @@ onClickOutside(rootRef, () => {
 
 const menuItems = computed(() => [
   { id: 'profile', label: 'View Profile', icon: faUser, action: goToProfile },
-  {
-    id: 'subscription',
-    label: 'My Subscription',
-    icon: faCrown,
-    action: goToSubscription,
-    badge: subscriptionStatus.value,
-  },
+  { id: 'favorites', label: 'Favorites', icon: fasHeart, action: goToFavorites },
+  { id: 'payments', label: 'Payments', icon: faCreditCard, action: goToPayments },
   { id: 'use-referral', label: 'Use Referral Code', icon: faUsers, action: showReferralDialog },
   { id: 'refer-earn', label: 'Refer & Earn Credits', icon: faLink, action: copyReferralCode },
 ]);
@@ -124,9 +118,14 @@ function goToProfile() {
   router.push({ name: 'profile' });
 }
 
-function goToSubscription() {
+function goToFavorites() {
   closeMenu();
-  router.push({ name: 'profile', query: { tab: 'subscription' } });
+  router.push({ name: 'profile', query: { tab: 'favorites' } });
+}
+
+function goToPayments() {
+  closeMenu();
+  router.push({ name: 'profile', query: { tab: 'payments' } });
 }
 
 function showReferralDialog() {

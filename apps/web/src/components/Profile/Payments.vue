@@ -1,22 +1,16 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { computed, ref, watch } from 'vue';
+import { computed } from 'vue';
 
+import LandingButton from '@/components/Landing/LandingButton.vue';
+import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
-const { payments } = storeToRefs(userStore);
+const dialogStore = useDialogStore();
+const { payments, isReady } = storeToRefs(userStore);
 
-const loading = ref(true);
-
-watch(
-  payments,
-  () => {
-    loading.value = false;
-  },
-  { immediate: true },
-);
-
+const loading = computed(() => !isReady.value);
 const hasPayments = computed(() => (payments.value?.length ?? 0) > 0);
 
 function statusClass(status: string) {
@@ -33,10 +27,7 @@ function statusClass(status: string) {
 
 <template>
   <div class="payments">
-    <div class="payments__header">
-      <h2 class="payments__title">Payment history</h2>
-      <p class="payments__subtitle">Past charges and subscription renewals.</p>
-    </div>
+    <h2 class="payments__title">Receipts</h2>
 
     <div v-if="loading" class="payments__loading" role="status" aria-live="polite">
       <div class="payments__skeleton" />
@@ -45,11 +36,11 @@ function statusClass(status: string) {
     </div>
 
     <div v-else-if="!hasPayments" class="payments__empty">
-      <p class="payments__empty-title">No payments yet</p>
-      <p class="payments__empty-copy">
-        When you upgrade or buy credits, your receipts will show up here.
-      </p>
-      <router-link to="/pricing" class="payments__cta">View plans</router-link>
+      <p class="payments__empty-title">No receipts yet</p>
+      <p class="payments__empty-copy">Credit purchases will appear here.</p>
+      <LandingButton type="button" class="payments__cta" @click="dialogStore.showBuyCredits()">
+        Buy credits
+      </LandingButton>
     </div>
 
     <div v-else class="payments__table-wrap">
@@ -70,7 +61,7 @@ function statusClass(status: string) {
             <td data-label="Status">
               <span :class="statusClass(item.status)">{{ item.status }}</span>
             </td>
-            <td data-label="Method">{{ item.paymentMethod }}</td>
+            <td data-label="Method">{{ item.paymentMethod || '—' }}</td>
             <td data-label="Description">{{ item.description }}</td>
           </tr>
         </tbody>
@@ -89,34 +80,21 @@ function statusClass(status: string) {
 .payments__title {
   margin: 0;
   font-family: 'Young Serif', Georgia, serif;
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 400;
   color: rgb(var(--tw-ink-primary));
-}
-
-.payments__subtitle {
-  margin: 0.35rem 0 0;
-  font-size: 0.9rem;
-  color: rgb(var(--tw-ink-muted));
 }
 
 .payments__loading {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.5rem;
 }
 
 .payments__skeleton {
-  height: 3rem;
-  border-radius: 10px;
-  background: linear-gradient(
-    90deg,
-    rgb(var(--tw-surface-2)) 0%,
-    rgb(var(--tw-surface-3)) 50%,
-    rgb(var(--tw-surface-2)) 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.2s ease-in-out infinite;
+  height: 2.75rem;
+  border-radius: 0.5rem;
+  background: rgb(var(--tw-surface-2));
 }
 
 .payments__empty {
@@ -124,10 +102,7 @@ function statusClass(status: string) {
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5rem;
-  padding: 1.5rem;
-  border: 1px dashed rgb(var(--tw-border));
-  border-radius: 12px;
-  background: rgb(var(--tw-surface-2) / 0.35);
+  max-width: 28rem;
 }
 
 .payments__empty-title {
@@ -141,36 +116,14 @@ function statusClass(status: string) {
   margin: 0;
   font-size: 0.9rem;
   color: rgb(var(--tw-ink-muted));
-  max-width: 28rem;
 }
 
 .payments__cta {
-  display: inline-flex;
-  align-items: center;
-  min-height: 40px;
-  margin-top: 0.35rem;
-  padding: 0.4rem 1rem;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #e8c96b 0%, #c9a84c 45%, #9e7d35 100%);
-  color: #fff;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-decoration: none;
-
-  &:hover {
-    opacity: 0.92;
-  }
-
-  &:focus-visible {
-    outline: 2px solid #c9a84c;
-    outline-offset: 2px;
-  }
+  margin-top: 0.5rem;
 }
 
 .payments__table-wrap {
   overflow-x: auto;
-  border: 1px solid rgb(var(--tw-border) / 0.7);
-  border-radius: 12px;
 }
 
 .payments__table {
@@ -192,14 +145,13 @@ function statusClass(status: string) {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgb(var(--tw-ink-muted));
-  background: rgb(var(--tw-surface-2) / 0.55);
-  border-bottom: 1px solid rgb(var(--tw-border) / 0.7);
+  border-bottom: 1px solid rgb(var(--tw-hairline));
   white-space: nowrap;
 }
 
 .payments__table td {
   color: rgb(var(--tw-ink-primary));
-  border-bottom: 1px solid rgb(var(--tw-border) / 0.45);
+  border-bottom: 1px solid rgb(var(--tw-hairline));
 }
 
 .payments__table tbody tr:last-child td {
@@ -238,15 +190,6 @@ function statusClass(status: string) {
   color: #e08585;
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
 @media (max-width: 720px) {
   .payments__table thead {
     display: none;
@@ -280,12 +223,6 @@ function statusClass(status: string) {
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: rgb(var(--tw-ink-muted));
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .payments__skeleton {
-    animation: none;
   }
 }
 </style>

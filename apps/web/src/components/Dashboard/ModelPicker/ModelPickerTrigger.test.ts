@@ -11,7 +11,7 @@ describe('ModelPickerTrigger', () => {
     });
 
     expect(wrapper.get('[data-testid="model-picker-trigger"]').text()).toContain('Flux Lightning');
-    expect(wrapper.find('[role="img"]').exists()).toBe(true);
+    expect(wrapper.get('img').attributes('alt')).toContain('Flux Lightning');
   });
 
   it('shows premium tier badge for premium models', () => {

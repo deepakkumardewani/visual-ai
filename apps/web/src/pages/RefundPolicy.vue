@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import LandingFooter from '@/components/Landing/LandingFooter.vue';
+import { usePageSeo } from '@/composables/usePageSeo';
+
+usePageSeo({
+  title: 'Refund Policy – Visual AI credits',
+  description:
+    'Visual AI credit purchases are final. Read the refund policy before you buy credits for text-to-image, upscale, colorize, or restore.',
+  path: '/refund',
+});
+</script>
+
 <template>
   <div class="tw-max-w-4xl tw-mx-auto tw-p-8 tw-shadow-lg tw-rounded-lg tw-m-4">
     <h1 class="tw-text-4xl tw-font-bold tw-text-center tw-mb-8">Refund Policy</h1>
@@ -43,4 +55,5 @@
       </ul>
     </section>
   </div>
+  <LandingFooter />
 </template>

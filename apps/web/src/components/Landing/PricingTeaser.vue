@@ -8,27 +8,26 @@ const plans = [
     cadence: 'forever',
     featured: false,
     points: [
-      '20 credits, every day',
-      'All four tools included',
-      'Standard quality, JPG export',
-      'Two variations per prompt',
+      '50 persistent credits at signup',
+      '30 daily credits (unused reset)',
+      'Access to all models',
+      'Everyday models cost 1 credit',
     ],
     cta: 'Start free',
-    to: '/signup',
+    to: '/signin',
   },
   {
-    name: 'Pro',
-    price: '₹299',
-    cadence: 'per month',
+    name: 'Buy Credits',
+    price: 'From ₹99',
+    cadence: 'one-time',
     featured: true,
     points: [
-      '1,000 credits a month, with rollover',
-      'High-quality output, lower credit cost',
-      'PNG & WebP, all seven ratios',
-      'Up to four variations per prompt',
+      'Purchased credits never expire',
+      'Combine with daily allowance',
+      'Larger packs save up to 31%',
     ],
-    cta: 'Go Pro',
-    to: '/pricing',
+    cta: 'See packs',
+    to: '/pricing#packs',
   },
 ] as const;
 </script>
@@ -38,10 +37,11 @@ const plans = [
     <div class="pricing__head">
       <p v-reveal class="eyebrow">Pricing</p>
       <h2 v-reveal="{ delay: 0.05 }" class="pricing__title">
-        Start free. Upgrade when it earns it.
+        Free forever. Pay only for what you create.
       </h2>
       <p v-reveal="{ delay: 0.1 }" class="pricing__sub">
-        No card to begin. Move to Pro when you want more credits, higher quality, and every format.
+        Start with 50 persistent credits and 30 daily. Unused daily credits reset; purchased credits
+        never expire.
       </p>
     </div>
 
@@ -68,7 +68,9 @@ const plans = [
     </div>
 
     <p v-reveal class="pricing__foot">
-      <router-link to="/pricing" class="pricing__link">Compare every plan detail →</router-link>
+      <router-link to="/pricing" class="pricing__link"
+        >See all models and their costs →</router-link
+      >
     </p>
   </section>
 </template>

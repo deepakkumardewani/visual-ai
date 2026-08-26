@@ -2,7 +2,6 @@
 import { MODEL_REGISTRY } from '@visual-ai/shared';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, watch } from 'vue';
-import { useRouter } from 'vue-router';
 
 import { useAsideStore } from '@/stores/aside';
 import { useUserStore } from '@/stores/user';
@@ -23,12 +22,10 @@ import { MODEL_IDS } from '@visual-ai/shared';
 
 type FormatOption = (typeof IMAGE_FORMATS)[number];
 
-const router = useRouter();
 const asideStore = useAsideStore();
 const userStore = useUserStore();
 const generateStore = useGenerateStore();
 
-const { isPro } = storeToRefs(userStore);
 const { aspectRatio, imageFormat, outputQuality, noOfOutputs, mode } = storeToRefs(asideStore);
 const { styleId, enhanceMode } = storeToRefs(generateStore);
 
@@ -79,47 +76,17 @@ function segmentClass(active: boolean) {
   ];
 }
 
-function isProLocked(optionIsPro: boolean) {
-  return optionIsPro && !isPro.value;
-}
-
-function onAspectProRequired() {
-  aspectRatio.value = ASPECT_RATIOS[0];
-  router.push('/pricing');
-}
-
 function selectFormat(format: FormatOption) {
-  if (!isPro.value && format.isPro) {
-    imageFormat.value = IMAGE_FORMATS[0];
-    router.push('/pricing');
-    return;
-  }
   imageFormat.value = format;
 }
 
 function selectCount(count: number) {
-  if (count === 4 && !isPro.value) {
-    router.push('/pricing');
-    return;
-  }
   noOfOutputs.value = count;
 }
 
 function selectQuality(value: 0 | 1) {
-  if (!isPro.value && value === 1) {
-    outputQuality.value = 0;
-    router.push('/pricing');
-    return;
-  }
   outputQuality.value = value;
 }
-
-watch(outputQuality, (newVal) => {
-  if (!isPro.value && newVal === 1) {
-    outputQuality.value = 0;
-    router.push('/pricing');
-  }
-});
 
 watch(showNumOutputs, (supported) => {
   if (!supported) noOfOutputs.value = 1;
@@ -181,12 +148,7 @@ onMounted(() => {
     <AsideDisclosure title="Output settings" :storage-key="OUTPUT_SETTINGS_STORAGE_KEY">
       <section v-if="showAspectRatio" class="tw-flex tw-flex-col tw-gap-1.5">
         <span class="tw-text-eyebrow tw-font-semibold tw-text-ink-faint"> Size </span>
-        <AspectRatioPicker
-          v-model="aspectRatio"
-          :options="allAspectRatioOptions"
-          :is-pro="isPro"
-          @pro-required="onAspectProRequired"
-        />
+        <AspectRatioPicker v-model="aspectRatio" :options="allAspectRatioOptions" />
       </section>
 
       <section v-if="showOutputQuality" class="tw-flex tw-flex-col tw-gap-1.5">
@@ -198,8 +160,8 @@ onMounted(() => {
         >
           <button
             v-for="option in [
-              { label: 'SD', value: 0 as const, isPro: false },
-              { label: 'HD', value: 1 as const, isPro: true },
+              { label: 'SD', value: 0 as const },
+              { label: 'HD', value: 1 as const },
             ]"
             :key="option.label"
             type="button"
@@ -208,12 +170,6 @@ onMounted(() => {
             @click="selectQuality(option.value)"
           >
             {{ option.label }}
-            <span
-              v-if="isProLocked(option.isPro)"
-              class="tw-absolute tw-right-1 tw-top-1 tw-h-1 tw-w-1 tw-rounded-full tw-bg-gold"
-              aria-hidden="true"
-            />
-            <span v-if="isProLocked(option.isPro)" class="tw-sr-only">(Pro)</span>
           </button>
         </div>
       </section>
@@ -234,12 +190,6 @@ onMounted(() => {
             @click="selectCount(count)"
           >
             {{ count }}
-            <span
-              v-if="isProLocked(count === 4)"
-              class="tw-absolute tw-right-1 tw-top-1 tw-h-1 tw-w-1 tw-rounded-full tw-bg-gold"
-              aria-hidden="true"
-            />
-            <span v-if="isProLocked(count === 4)" class="tw-sr-only">(Pro)</span>
           </button>
         </div>
       </section>
@@ -261,12 +211,6 @@ onMounted(() => {
             @click="selectFormat(format)"
           >
             {{ format.title }}
-            <span
-              v-if="isProLocked(format.isPro)"
-              class="tw-absolute tw-right-1 tw-top-1 tw-h-1 tw-w-1 tw-rounded-full tw-bg-gold"
-              aria-hidden="true"
-            />
-            <span v-if="isProLocked(format.isPro)" class="tw-sr-only">(Pro)</span>
           </button>
         </div>
       </section>

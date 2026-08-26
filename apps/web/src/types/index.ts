@@ -31,13 +31,6 @@ export interface Plan {
 }
 
 export type { Model } from './model';
-export interface Mode {
-  title: string;
-  id: string;
-  description: string;
-  icon: string;
-  isPro: boolean;
-}
 
 export type ImageBody = {
   jobId: string;

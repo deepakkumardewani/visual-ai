@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMediaQuery } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import { SignedIn, SignedOut, useAuth } from 'vue-clerk';
 import { useRoute } from 'vue-router';
 
@@ -10,7 +10,6 @@ import { useUserStore } from '@/stores/user';
 
 import CustomButton from '@/components/CustomButton.vue';
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue';
-import ProUpgradeDialog from '@/components/Dialogs/ProUpgradeDialog.vue';
 import ReferralOfferDialog from '@/components/Dialogs/ReferralOfferDialog.vue';
 import CreditsChip from '@/components/Header/CreditsChip.vue';
 import FeatureSelect from '@/components/Header/FeatureSelect.vue';
@@ -27,7 +26,7 @@ const { isLoaded: isAuthLoaded } = useAuth();
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
 const route = useRoute();
-const { isPro, isReady: isUserReady } = storeToRefs(userStore);
+const { isReady: isUserReady } = storeToRefs(userStore);
 
 const isDashboard = computed(() => isAppShellRoute(route));
 const isCreateSurface = computed(() => route.name === APP_SURFACE.CREATE);
@@ -49,21 +48,6 @@ const showEndSkeleton = computed(() => {
   if (!isAuthLoaded.value) return true;
   if (isDashboard.value && !isUserReady.value) return true;
   return false;
-});
-
-function hasProDialogBeenShown() {
-  return localStorage.getItem('proUpgradeShown') === 'true';
-}
-
-function markProDialogAsShown() {
-  localStorage.setItem('proUpgradeShown', 'true');
-}
-
-watch(isPro, (newValue) => {
-  if (newValue && !hasProDialogBeenShown()) {
-    dialogStore.showProUpgrade();
-    markProDialogAsShown();
-  }
 });
 </script>
 
@@ -145,14 +129,6 @@ watch(isPro, (newValue) => {
             <SignedIn>
               <ReferralOffer v-if="smAndUp && isDashboard" />
               <CreditsChip v-if="isDashboard" />
-              <router-link
-                v-if="isDashboard && !isPro"
-                to="/pricing"
-                data-testid="header-upgrade-btn"
-                class="tw-inline-flex tw-min-h-9 tw-items-center tw-justify-center tw-rounded-chip tw-bg-gradient-gold tw-px-3 tw-py-1 tw-text-sm tw-font-semibold tw-text-canvas tw-transition-opacity tw-duration-fast hover:tw-opacity-90 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-gold"
-              >
-                Upgrade
-              </router-link>
               <CustomButton v-if="!isDashboard" title="Dashboard" />
               <UserMenu />
             </SignedIn>
@@ -162,7 +138,6 @@ watch(isPro, (newValue) => {
     </header>
     <BuyMoreCreditsDialog />
     <ReferralOfferDialog />
-    <ProUpgradeDialog />
   </div>
 </template>
 

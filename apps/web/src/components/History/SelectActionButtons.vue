@@ -23,6 +23,8 @@ const props = defineProps<{
 const pickerOpen = ref(false);
 const createMode = ref(false);
 const newName = ref('');
+/** TODO(collections): restore New collection / Create & add when we ship albums. */
+const ENABLE_COLLECTION_CREATE = false;
 const pickerRoot = ref<HTMLElement | null>(null);
 
 onClickOutside(pickerRoot, () => {
@@ -118,32 +120,34 @@ async function createAndAdd() {
           No collections yet
         </p>
 
-        <div class="picker__divider" />
+        <template v-if="ENABLE_COLLECTION_CREATE">
+          <div class="picker__divider" />
 
-        <button
-          v-if="!createMode"
-          type="button"
-          class="picker__item picker__item--muted"
-          role="menuitem"
-          @click="createMode = true"
-        >
-          <font-awesome-icon :icon="faPlus" class="tw-h-3 tw-w-3" aria-hidden="true" />
-          New collection
-        </button>
-
-        <form v-else class="picker__create" @submit.prevent="createAndAdd">
-          <input
-            v-model="newName"
-            type="text"
-            maxlength="60"
-            placeholder="Collection name"
-            class="picker__input"
-            autocomplete="off"
-          />
-          <button type="submit" class="picker__create-btn" :disabled="!newName.trim() || isBusy">
-            Create & add
+          <button
+            v-if="!createMode"
+            type="button"
+            class="picker__item picker__item--muted"
+            role="menuitem"
+            @click="createMode = true"
+          >
+            <font-awesome-icon :icon="faPlus" class="tw-h-3 tw-w-3" aria-hidden="true" />
+            New collection
           </button>
-        </form>
+
+          <form v-else class="picker__create" @submit.prevent="createAndAdd">
+            <input
+              v-model="newName"
+              type="text"
+              maxlength="60"
+              placeholder="Collection name"
+              class="picker__input"
+              autocomplete="off"
+            />
+            <button type="submit" class="picker__create-btn" :disabled="!newName.trim() || isBusy">
+              Create & add
+            </button>
+          </form>
+        </template>
       </div>
     </div>
 

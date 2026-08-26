@@ -5,15 +5,21 @@ const columns = [
   {
     heading: 'Product',
     links: [
-      { label: 'Gallery', to: '/gallery' },
-      { label: 'Examples', to: '/examples' },
-      { label: 'Pricing', to: '/pricing' },
+      { label: 'Text to image', to: '/text-to-image' },
+      { label: 'Image upscaler', to: '/image-upscaler' },
+      { label: 'Colorize photo', to: '/colorize-photo' },
+      { label: 'Photo restorer', to: '/photo-restorer' },
+      { label: 'Remove background', to: '/remove-background' },
     ],
   },
   {
     heading: 'Resources',
     links: [
+      { label: 'Pricing', to: '/pricing' },
       { label: 'FAQ', to: '/faqs' },
+      { label: 'Examples', to: '/examples' },
+      { label: 'Compare upscalers', to: '/compare' },
+      { label: 'Gallery', to: '/gallery' },
       { label: 'Contact', to: '/contact' },
     ],
   },
@@ -34,7 +40,7 @@ const columns = [
       <div class="footer__brand">
         <router-link to="/" class="footer__wordmark">Visual<span>AI</span></router-link>
         <p class="footer__tagline">
-          One studio to generate, upscale, colorize, and revive images — powered by the Flux models.
+          One studio to generate, upscale, colorize, restore, and cut backgrounds.
         </p>
       </div>
 

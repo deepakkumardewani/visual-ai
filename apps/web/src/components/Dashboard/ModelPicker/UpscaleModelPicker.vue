@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 import type { Model } from '@/types/model';
-
-import { useUserStore } from '@/stores/user';
 
 import ModelOption from '@/components/Dashboard/ModelPicker/ModelOption.vue';
 import ModelPickerTrigger from '@/components/Dashboard/ModelPicker/ModelPickerTrigger.vue';
@@ -21,20 +17,9 @@ const emit = defineEmits<{
   'update:selected': [model: Model];
 }>();
 
-const router = useRouter();
-const userStore = useUserStore();
-const { isPro } = storeToRefs(userStore);
-
 const isOpen = ref(false);
 
 function handleSelect(model: Model) {
-  if (!isPro.value && model.isPro) {
-    emit('update:selected', props.fallback);
-    isOpen.value = false;
-    router.push('/pricing');
-    return;
-  }
-
   emit('update:selected', model);
   isOpen.value = false;
 }
@@ -50,7 +35,7 @@ function handleSelect(model: Model) {
       <div
         role="listbox"
         aria-label="Upscale models"
-        class="tw-flex tw-max-h-80 tw-w-[min(22rem,calc(100vw-2rem))] tw-flex-col tw-gap-0.5 tw-overflow-y-auto"
+        class="tw-flex tw-max-h-80 tw-w-[min(26rem,calc(100vw-2rem))] tw-flex-col tw-gap-0.5 tw-overflow-y-auto"
       >
         <ModelOption
           v-for="model in props.models"

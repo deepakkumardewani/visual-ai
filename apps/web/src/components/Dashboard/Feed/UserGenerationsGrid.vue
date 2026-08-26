@@ -298,6 +298,11 @@ function handleRemix(prompt: string) {
   gap: 0;
 }
 
+/* Keep the pending skeleton from sitting flush against the date heading */
+.creations-stack > .generation-row {
+  margin-bottom: 1.75rem;
+}
+
 .date-group {
   padding-bottom: 0.5rem;
 }

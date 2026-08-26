@@ -1,14 +1,14 @@
 import type { Model } from '@/types/model';
 
-import { MODEL_IDS, MODEL_REGISTRY, isPro as isProFromRegistry } from '@visual-ai/shared';
+import { MODEL_IDS, MODEL_REGISTRY, getCreditCost } from '@visual-ai/shared';
 
 /**
  * Derive Model fields from the shared registry entry.
- * tier / pricePerImage / isPro / id come from the single source of truth.
+ * tier / pricePerImage / creditCost / id come from the single source of truth.
  */
 function fromRegistry(
   key: keyof typeof MODEL_REGISTRY,
-  overrides: Omit<Model, 'id' | 'tier' | 'pricePerImage' | 'isPro'>,
+  overrides: Omit<Model, 'id' | 'tier' | 'pricePerImage' | 'creditCost'>,
 ): Model {
   const entry = MODEL_REGISTRY[key];
   return {
@@ -16,7 +16,7 @@ function fromRegistry(
     id: MODEL_IDS[key],
     tier: entry.tier,
     pricePerImage: entry.pricePerImage,
-    isPro: isProFromRegistry(entry),
+    creditCost: getCreditCost(key),
   };
 }
 
@@ -226,7 +226,7 @@ export const UPSCALER_MODELS: Model[] = [
     provider: 'community',
     description: 'Balanced everyday upscale.',
     bestAt: 'General photos',
-    iconUrl: 'community.png',
+    iconUrl: 'clarity-upscaler.jpg',
     companyName: 'Community',
   }),
   fromRegistry('UPSCALE_REAL_ESRGAN', {
@@ -234,7 +234,7 @@ export const UPSCALER_MODELS: Model[] = [
     provider: 'community',
     description: 'Fast 2×–4× for photos and scans.',
     bestAt: 'Speed',
-    iconUrl: 'community.png',
+    iconUrl: 'real-esrgan.png',
     companyName: 'Community',
   }),
   fromRegistry('UPSCALE_PRUNA', {
@@ -250,6 +250,7 @@ export const UPSCALER_MODELS: Model[] = [
     provider: 'recraft',
     description: 'Keeps edges sharp on logos and UI.',
     bestAt: 'Graphics',
+    iconUrl: 'recraft.png',
     companyName: 'Recraft',
   }),
   fromRegistry('UPSCALE_GOOGLE', {
@@ -265,7 +266,7 @@ export const UPSCALER_MODELS: Model[] = [
     provider: 'community',
     description: 'Higher fidelity with more control.',
     bestAt: 'Quality',
-    iconUrl: 'community.png',
+    iconUrl: 'clarity-upscaler.jpg',
     companyName: 'Community',
   }),
   fromRegistry('UPSCALE_TOPAZ', {
@@ -273,6 +274,7 @@ export const UPSCALER_MODELS: Model[] = [
     provider: 'topaz',
     description: 'Studio-grade recovery for tough shots.',
     bestAt: 'Hard cases',
+    iconUrl: 'topaz.png',
     companyName: 'Topaz Labs',
   }),
 ];

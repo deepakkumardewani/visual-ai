@@ -10,12 +10,10 @@ type AspectOption = (typeof ASPECT_RATIOS)[number];
 const props = defineProps<{
   options: AspectOption[];
   modelValue: AspectOption;
-  isPro: boolean;
 }>();
 
 const emit = defineEmits<{
   'update:modelValue': [value: AspectOption];
-  'pro-required': [];
 }>();
 
 const expanded = ref(false);
@@ -51,15 +49,7 @@ function aspectIconSize(title: string, maxPx: number) {
   return { width: Math.max(6, Math.round(w * scale)), height: Math.max(6, Math.round(h * scale)) };
 }
 
-function isProLocked(optionIsPro: boolean) {
-  return optionIsPro && !props.isPro;
-}
-
 function select(ratio: AspectOption) {
-  if (!props.isPro && ratio.isPro) {
-    emit('pro-required');
-    return;
-  }
   emit('update:modelValue', ratio);
   if (primaryOptions.value.some((r) => r.title === ratio.title)) {
     expanded.value = false;
@@ -105,12 +95,6 @@ function toggleExpanded() {
           />
         </span>
         <span class="tw-leading-none">{{ ratio.title }}</span>
-        <span
-          v-if="isProLocked(ratio.isPro)"
-          class="tw-absolute tw-right-1 tw-top-1 tw-h-1 tw-w-1 tw-rounded-full tw-bg-gold"
-          aria-hidden="true"
-        />
-        <span v-if="isProLocked(ratio.isPro)" class="tw-sr-only">(Pro)</span>
       </button>
     </div>
 
@@ -189,11 +173,6 @@ function toggleExpanded() {
                 />
               </span>
               <span class="tw-leading-none">{{ ratio.title }}</span>
-              <span
-                v-if="isProLocked(ratio.isPro)"
-                class="tw-absolute tw-right-1 tw-top-1 tw-h-1 tw-w-1 tw-rounded-full tw-bg-gold"
-                aria-hidden="true"
-              />
             </button>
           </div>
         </div>

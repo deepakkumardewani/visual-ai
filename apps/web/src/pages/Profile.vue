@@ -1,44 +1,35 @@
 <script setup lang="ts">
-import { faCreditCard, faCrown, fasHeart, faUser } from '@/plugins/icons';
+import { faCreditCard, fasHeart, faUser } from '@/plugins/icons';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import History from '@/components/History/History.vue';
 import Payments from '@/components/Profile/Payments.vue';
-import Subscription from '@/components/Profile/Subscription.vue';
 import UserDetails from '@/components/Profile/UserDetails.vue';
 
-type ProfileTab = 'user' | 'favorites' | 'payments' | 'subscription';
+type ProfileTab = 'user' | 'favorites' | 'payments';
 
-const TAB_IDS: ProfileTab[] = ['user', 'favorites', 'payments', 'subscription'];
+const TAB_IDS: ProfileTab[] = ['user', 'favorites', 'payments'];
+const TAB_COUNT = TAB_IDS.length;
+const PANEL_ID = 'profile-panel';
 
 const NAV_ITEMS = [
-  { id: 'user' as const, label: 'Profile', description: 'Name, email, account', icon: faUser },
-  {
-    id: 'favorites' as const,
-    label: 'Favorites',
-    description: 'Saved generations',
-    icon: fasHeart,
-  },
-  {
-    id: 'payments' as const,
-    label: 'Payments',
-    description: 'Billing history',
-    icon: faCreditCard,
-  },
-  {
-    id: 'subscription' as const,
-    label: 'Subscription',
-    description: 'Plan and credits',
-    icon: faCrown,
-  },
+  { id: 'user' as const, label: 'Profile', icon: faUser },
+  { id: 'favorites' as const, label: 'Favorites', icon: fasHeart },
+  { id: 'payments' as const, label: 'Payments', icon: faCreditCard },
 ];
 
 const route = useRoute();
 const router = useRouter();
 const activeTab = ref<ProfileTab>('user');
+const tabRefs = ref<(HTMLButtonElement | null)[]>([]);
 
-const activeNav = computed(() => NAV_ITEMS.find((item) => item.id === activeTab.value));
+const activeTabIndex = computed(() => TAB_IDS.indexOf(activeTab.value));
+
+const sliderStyle = computed(() => ({
+  transform: `translateX(${activeTabIndex.value * 100}%)`,
+  width: `calc(${100 / TAB_COUNT}% - 0.25rem)`,
+}));
 
 function isValidTab(value: unknown): value is ProfileTab {
   return typeof value === 'string' && TAB_IDS.includes(value as ProfileTab);
@@ -47,12 +38,37 @@ function isValidTab(value: unknown): value is ProfileTab {
 function setTab(tab: ProfileTab) {
   if (activeTab.value === tab) return;
   activeTab.value = tab;
-  router.replace({
+  void router.replace({
     query: {
       ...route.query,
       tab,
     },
   });
+}
+
+function focusTab(index: number) {
+  tabRefs.value[index]?.focus();
+}
+
+function onKeydown(event: KeyboardEvent, index: number) {
+  const lastIndex = TAB_COUNT - 1;
+  let nextIndex: number | null = null;
+
+  if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+    nextIndex = index === lastIndex ? 0 : index + 1;
+  } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+    nextIndex = index === 0 ? lastIndex : index - 1;
+  } else if (event.key === 'Home') {
+    nextIndex = 0;
+  } else if (event.key === 'End') {
+    nextIndex = lastIndex;
+  }
+
+  if (nextIndex === null) return;
+
+  event.preventDefault();
+  setTab(TAB_IDS[nextIndex]);
+  focusTab(nextIndex);
 }
 
 function syncTabFromRoute() {
@@ -70,39 +86,41 @@ watch(() => route.query.tab, syncTabFromRoute);
 
     <div class="profile__shell">
       <header class="profile__intro">
-        <p class="profile__eyebrow">Account</p>
-        <h1 class="profile__title">{{ activeNav?.label ?? 'Profile' }}</h1>
-        <p class="profile__subtitle">{{ activeNav?.description }}</p>
+        <h1 class="profile__title">Account</h1>
       </header>
 
       <div class="profile__layout">
         <nav class="profile__nav" aria-label="Account sections">
-          <button
-            v-for="item in NAV_ITEMS"
-            :key="item.id"
-            type="button"
-            class="profile__nav-item"
-            :class="{ 'profile__nav-item--active': activeTab === item.id }"
-            :aria-current="activeTab === item.id ? 'page' : undefined"
-            @click="setTab(item.id)"
-          >
-            <font-awesome-icon :icon="item.icon" class="profile__nav-icon" aria-hidden="true" />
-            <span class="profile__nav-copy">
+          <div class="profile__nav-track" role="tablist">
+            <button
+              v-for="(item, index) in NAV_ITEMS"
+              :key="item.id"
+              :ref="(el) => (tabRefs[index] = el as HTMLButtonElement | null)"
+              type="button"
+              role="tab"
+              class="profile__nav-item"
+              :class="{ 'profile__nav-item--active': activeTab === item.id }"
+              :aria-selected="activeTab === item.id"
+              :aria-controls="PANEL_ID"
+              :tabindex="activeTab === item.id ? 0 : -1"
+              @click="setTab(item.id)"
+              @keydown="onKeydown($event, index)"
+            >
+              <font-awesome-icon :icon="item.icon" class="profile__nav-icon" aria-hidden="true" />
               <span class="profile__nav-label">{{ item.label }}</span>
-              <span class="profile__nav-desc">{{ item.description }}</span>
-            </span>
-          </button>
+            </button>
+            <div aria-hidden="true" class="profile__nav-slider" :style="sliderStyle" />
+          </div>
         </nav>
 
         <main
+          :id="PANEL_ID"
           class="profile__panel"
           :class="{ 'profile__panel--flush': activeTab === 'favorites' }"
-          tabindex="-1"
         >
           <UserDetails v-if="activeTab === 'user'" />
-          <History v-else-if="activeTab === 'favorites'" :is-favorites="true" />
+          <History v-else-if="activeTab === 'favorites'" :is-favorites="true" embedded />
           <Payments v-else-if="activeTab === 'payments'" />
-          <Subscription v-else-if="activeTab === 'subscription'" />
         </main>
       </div>
     </div>
@@ -113,7 +131,7 @@ watch(() => route.query.tab, syncTabFromRoute);
 .profile {
   position: relative;
   min-height: calc(100dvh - 3.5rem);
-  overflow: hidden;
+  overflow-x: hidden;
   background: rgb(var(--tw-canvas));
   color: rgb(var(--tw-ink-primary));
 }
@@ -123,8 +141,8 @@ watch(() => route.query.tab, syncTabFromRoute);
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 40% at 10% 0%, rgba(201, 168, 76, 0.08), transparent 55%),
-    radial-gradient(ellipse 50% 35% at 90% 10%, rgba(201, 138, 90, 0.06), transparent 50%);
+    radial-gradient(ellipse 60% 40% at 10% 0%, rgb(var(--tw-accent) / 0.08), transparent 55%),
+    radial-gradient(ellipse 50% 35% at 90% 10%, rgb(var(--tw-accent) / 0.06), transparent 50%);
 }
 
 .profile__shell {
@@ -136,101 +154,86 @@ watch(() => route.query.tab, syncTabFromRoute);
 }
 
 .profile__intro {
-  margin-bottom: 1.5rem;
-}
-
-.profile__eyebrow {
-  margin: 0 0 0.35rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #d29467;
+  margin-bottom: 2rem;
 }
 
 .profile__title {
   margin: 0;
   font-family: 'Young Serif', Georgia, serif;
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-size: 2rem;
   font-weight: 400;
   letter-spacing: -0.02em;
   color: rgb(var(--tw-ink-primary));
 }
 
-.profile__subtitle {
-  margin: 0.4rem 0 0;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: rgb(var(--tw-ink-muted));
-}
-
 .profile__layout {
   display: grid;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
 .profile__nav {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  padding-bottom: 0.25rem;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  min-width: 0;
+}
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+.profile__nav-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  padding: 0.25rem;
+  border: 1px solid rgb(var(--tw-hairline));
+  border-radius: 999px;
+  background: rgb(var(--tw-surface-1));
 }
 
 .profile__nav-item {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
+  justify-content: center;
+  gap: 0.5rem;
   min-height: 44px;
-  flex-shrink: 0;
-  padding: 0.65rem 0.9rem;
-  border: 1px solid rgb(var(--tw-border) / 0.7);
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  border: 0;
   border-radius: 999px;
-  background: rgb(var(--tw-surface-1) / 0.7);
+  background: transparent;
   color: rgb(var(--tw-ink-muted));
   cursor: pointer;
   transition:
-    background-color 180ms ease,
-    border-color 180ms ease,
-    color 180ms ease,
-    box-shadow 180ms ease;
+    color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
-    border-color: rgba(201, 168, 76, 0.35);
-    background: rgb(var(--tw-surface-2));
     color: rgb(var(--tw-ink-primary));
   }
 
   &:focus-visible {
-    outline: 2px solid #c9a84c;
+    outline: 2px solid rgb(var(--tw-accent));
     outline-offset: 2px;
   }
 }
 
 .profile__nav-item--active {
-  border-color: rgba(201, 168, 76, 0.55);
-  background: rgba(201, 168, 76, 0.12);
   color: rgb(var(--tw-ink-primary));
-  box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.15);
+}
+
+.profile__nav-slider {
+  pointer-events: none;
+  position: absolute;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  border-radius: 999px;
+  background: rgb(var(--tw-surface-3));
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .profile__nav-icon {
-  width: 0.85rem;
+  width: 0.8rem;
   flex-shrink: 0;
   color: inherit;
-}
-
-.profile__nav-copy {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.1rem;
-  text-align: left;
 }
 
 .profile__nav-label {
@@ -239,26 +242,12 @@ watch(() => route.query.tab, syncTabFromRoute);
   line-height: 1.2;
 }
 
-.profile__nav-desc {
-  display: none;
-  font-size: 0.75rem;
-  line-height: 1.3;
-  color: rgb(var(--tw-ink-muted));
-  font-weight: 400;
-}
-
 .profile__panel {
   min-width: 0;
-  border: 1px solid rgb(var(--tw-border) / 0.65);
-  border-radius: 16px;
-  background: rgb(var(--tw-surface-1) / 0.72);
-  backdrop-filter: blur(10px);
-  padding: 1.25rem;
 }
 
 .profile__panel--flush {
-  padding: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 @media (min-width: 900px) {
@@ -267,50 +256,54 @@ watch(() => route.query.tab, syncTabFromRoute);
   }
 
   .profile__layout {
-    grid-template-columns: 240px minmax(0, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: 10.5rem minmax(0, 1fr);
+    gap: 3rem;
     align-items: start;
   }
 
   .profile__nav {
-    flex-direction: column;
-    overflow: visible;
     position: sticky;
     top: 5rem;
-    gap: 0.4rem;
+  }
+
+  .profile__nav-track {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.125rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .profile__nav-slider {
+    display: none;
   }
 
   .profile__nav-item {
     width: 100%;
-    border-radius: 12px;
-    padding: 0.85rem 1rem;
+    justify-content: flex-start;
+    min-height: 2.5rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 0.5rem;
+    background: transparent;
+
+    &:hover {
+      background: rgb(var(--tw-surface-2) / 0.6);
+    }
   }
 
-  .profile__nav-desc {
-    display: block;
-  }
-
-  .profile__nav-item--active .profile__nav-desc {
-    color: rgb(var(--tw-ink-muted));
-  }
-
-  .profile__panel {
-    padding: 1.75rem;
-    min-height: 28rem;
-  }
-
-  .profile__panel--flush {
-    padding: 0;
+  .profile__nav-item--active {
+    background: rgb(var(--tw-surface-2));
+    color: rgb(var(--tw-ink-primary));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .profile__nav-item {
+  .profile__nav-item,
+  .profile__nav-slider {
     transition: none;
-  }
-
-  .profile__panel {
-    backdrop-filter: none;
   }
 }
 </style>

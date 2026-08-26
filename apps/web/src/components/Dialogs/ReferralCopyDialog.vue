@@ -43,8 +43,8 @@ const { credits } = storeToRefs(userStore);
         Credits are used to generate AI images and access other features.
       </p>
       <p class="ref-copy__copy">
-        AI image generation costs 1 credit on both free and pro plans. Other features like upscaling
-        and colorization cost 1 credit on Pro and 3 credits on Free.
+        Each generation costs a small number of credits, shown on every model. You get 30 free
+        credits daily, plus any credits you buy or earn that never expire.
       </p>
 
       <h3 class="ref-copy__section">Earn more credits</h3>

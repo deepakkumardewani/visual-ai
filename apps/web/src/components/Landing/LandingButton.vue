@@ -12,16 +12,15 @@ const props = withDefaults(
 );
 
 const tag = computed(() => (props.to ? 'router-link' : props.href ? 'a' : 'button'));
+const linkAttrs = computed(() => {
+  if (props.to) return { to: props.to };
+  if (props.href) return { href: props.href };
+  return {};
+});
 </script>
 
 <template>
-  <component
-    :is="tag"
-    :to="to"
-    :href="href"
-    class="btn"
-    :class="[`btn--${variant}`, `btn--${size}`]"
-  >
+  <component :is="tag" v-bind="linkAttrs" class="btn" :class="[`btn--${variant}`, `btn--${size}`]">
     <span class="btn__label"><slot /></span>
   </component>
 </template>

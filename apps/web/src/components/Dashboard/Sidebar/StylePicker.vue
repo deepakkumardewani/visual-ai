@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 
 import { STYLE_PRESETS, type StyleId } from '@visual-ai/shared';
 
 import ChevronCaret from '@/components/primitives/ChevronCaret.vue';
 import Popover from '@/components/primitives/Popover.vue';
+
+const STYLE_PREVIEW_HOVER_MS = 3000;
+const STYLE_PREVIEW_SIZE_PX = 400;
 
 const props = defineProps<{
   modelValue: StyleId;
@@ -15,6 +18,8 @@ const emit = defineEmits<{
 }>();
 
 const isOpen = ref(false);
+const preview = ref<{ id: StyleId; label: string; left: number; top: number } | null>(null);
+let previewTimer: ReturnType<typeof setTimeout> | null = null;
 
 /** Warm atelier gradients — fallback when a style thumbnail fails to load. */
 const STYLE_TILE_GRADIENTS: Record<string, string> = {
@@ -51,10 +56,40 @@ function hideBrokenThumb(event: Event) {
   img.hidden = true;
 }
 
+function clearStylePreview() {
+  if (previewTimer) {
+    clearTimeout(previewTimer);
+    previewTimer = null;
+  }
+  preview.value = null;
+}
+
+function onStyleEnter(event: MouseEvent, preset: { id: StyleId; label: string }) {
+  clearStylePreview();
+  if (preset.id === 'none') return;
+  const target = event.currentTarget as HTMLElement;
+  previewTimer = setTimeout(() => {
+    const rect = target.getBoundingClientRect();
+    preview.value = {
+      id: preset.id,
+      label: preset.label,
+      left: rect.left + rect.width / 2,
+      top: rect.top + rect.height / 2,
+    };
+  }, STYLE_PREVIEW_HOVER_MS);
+}
+
 function select(styleId: StyleId) {
+  clearStylePreview();
   emit('update:modelValue', styleId);
   isOpen.value = false;
 }
+
+watch(isOpen, (open) => {
+  if (!open) clearStylePreview();
+});
+
+onBeforeUnmount(clearStylePreview);
 </script>
 
 <template>
@@ -107,6 +142,8 @@ function select(styleId: StyleId) {
             class="tw-group tw-flex tw-flex-col tw-gap-1.5 tw-rounded-sm tw-p-1 tw-text-left tw-transition-[background-color,box-shadow] tw-duration-fast hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
             :class="modelValue === preset.id ? 'tw-bg-surface-2 tw-ring-1 tw-ring-accent/40' : ''"
             @click="select(preset.id)"
+            @mouseenter="onStyleEnter($event, preset)"
+            @mouseleave="clearStylePreview"
           >
             <span
               class="tw-relative tw-flex tw-aspect-[4/3] tw-w-full tw-overflow-hidden tw-rounded-[3px] tw-ring-1 tw-ring-inset tw-ring-hairline"
@@ -135,10 +172,97 @@ function select(styleId: StyleId) {
         </div>
       </div>
     </Popover>
+
+    <Teleport to="body">
+      <Transition name="style-preview">
+        <div
+          v-if="preview"
+          class="style-hover-preview"
+          :style="{
+            left: `${preview.left}px`,
+            top: `${preview.top}px`,
+            width: `${STYLE_PREVIEW_SIZE_PX}px`,
+          }"
+          aria-hidden="true"
+        >
+          <span
+            class="style-hover-preview__frame"
+            :style="{ background: tileGradient(preview.id) }"
+          >
+            <img
+              :src="`/styles/${preview.id}.webp`"
+              alt=""
+              class="style-hover-preview__img"
+              @error="hideBrokenThumb"
+            />
+          </span>
+          <span class="style-hover-preview__label">{{ preview.label }}</span>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <style scoped>
+.style-hover-preview {
+  position: fixed;
+  z-index: 60;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgb(var(--tw-hairline));
+  background: rgb(var(--tw-surface-1));
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
+}
+
+.style-preview-enter-active,
+.style-preview-leave-active {
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.style-preview-enter-from,
+.style-preview-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.92);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .style-preview-enter-active,
+  .style-preview-leave-active {
+    transition-duration: 0.01ms;
+  }
+}
+
+.style-hover-preview__frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 0.25rem;
+}
+
+.style-hover-preview__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.style-hover-preview__label {
+  padding: 0 0.2rem 0.2rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--tw-ink));
+}
+
 :deep(.tw-relative.tw-inline-block) {
   display: block;
   width: 100%;

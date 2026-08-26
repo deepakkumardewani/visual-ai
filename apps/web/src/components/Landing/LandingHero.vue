@@ -10,7 +10,7 @@ import LandingButton from '@/components/Landing/LandingButton.vue';
 
 import { SHOWCASE, STATS } from '@/utils/landing';
 
-const HEADLINE_WORDS = ['Studio-grade', 'images,', 'from', 'a', 'sentence', 'or', 'a', 'scan.'];
+const HEADLINE_WORDS = ['One', 'studio', 'for', 'every', 'image', 'you', 'still', 'need.'];
 const feature = SHOWCASE[0];
 const reduced = useReducedMotion();
 const root = ref<HTMLElement | null>(null);
@@ -55,12 +55,13 @@ onBeforeUnmount(() => ctx?.revert());
       </h1>
 
       <p class="hero__sub">
-        Generate, upscale to 4K, colorize, and restore — one tool for every image problem.
+        Generate from a prompt, then upscale to 4K, colorize, restore, or cut the background —
+        without switching apps.
       </p>
 
       <div class="hero__ctas">
-        <LandingButton class="hero__cta" :to="auth.isSignedIn ? '/dashboard' : '/signup'" size="lg">
-          {{ auth.isSignedIn ? 'Open Dashboard' : 'Start free — 20 credits daily' }}
+        <LandingButton class="hero__cta" :to="auth.isSignedIn ? '/create' : '/signin'" size="lg">
+          {{ auth.isSignedIn ? 'Open studio' : 'Start free' }}
         </LandingButton>
         <LandingButton
           class="hero__cta"
@@ -69,7 +70,7 @@ onBeforeUnmount(() => ctx?.revert());
           href="#showcase"
           @click.prevent="scrollToSection('#showcase')"
         >
-          Explore the showcase
+          See the work
         </LandingButton>
       </div>
 

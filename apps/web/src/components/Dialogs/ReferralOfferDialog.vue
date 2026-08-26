@@ -26,15 +26,12 @@ const { referralOfferDialog } = storeToRefs(dialogStore);
     </template>
 
     <div class="offer">
-      <p class="offer__lead">
-        Refer a friend and get <strong>1 month of Pro access</strong> for free.
-      </p>
-      <p class="offer__meta">Limited time offer</p>
+      <p class="offer__lead">Refer a friend — you both get <strong>50 free credits</strong>.</p>
 
       <div class="offer__box">
         <p class="offer__box-copy">
-          Share your unique referral code. After they sign up and use your code, you'll be upgraded
-          to Pro for a month.
+          Share your unique referral code. When they sign up and use your code, you'll both receive
+          50 bonus credits instantly.
         </p>
         <ReferralCode />
       </div>
@@ -75,13 +72,6 @@ const { referralOfferDialog } = storeToRefs(dialogStore);
   text-align: center;
   font-size: 1rem;
   color: rgb(var(--tw-ink-primary));
-}
-
-.offer__meta {
-  margin: 0 0 0.75rem;
-  text-align: center;
-  font-size: 0.8rem;
-  color: rgb(var(--tw-ink-muted));
 }
 
 .offer__box {

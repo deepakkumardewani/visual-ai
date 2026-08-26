@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/auth';
+
 import LandingButton from '@/components/Landing/LandingButton.vue';
 
 import { SHOWCASE } from '@/utils/landing';
 
 const THUMBS = SHOWCASE.slice(0, 3);
+const auth = useAuthStore();
 </script>
 
 <template>
@@ -23,10 +26,13 @@ const THUMBS = SHOWCASE.slice(0, 3);
       </div>
       <h2 v-reveal="{ delay: 0.06 }" class="cta__title">Your next image is one prompt away.</h2>
       <p v-reveal="{ delay: 0.12 }" class="cta__sub">
-        Generate, upscale, colorize, and revive — start with 20 free credits today.
+        Generate, upscale, colorize, and revive — 50 persistent credits at signup and 30 more every
+        day.
       </p>
       <div v-reveal="{ delay: 0.18 }" class="cta__actions">
-        <LandingButton to="/signup" size="lg">Start free</LandingButton>
+        <LandingButton :to="auth.isSignedIn ? '/create' : '/signin'" size="lg">
+          {{ auth.isSignedIn ? 'Open studio' : 'Start free' }}
+        </LandingButton>
         <LandingButton to="/pricing" variant="ghost" size="lg">See pricing</LandingButton>
       </div>
     </div>

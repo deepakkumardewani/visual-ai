@@ -8,6 +8,7 @@ import { useUserStore } from '@/stores/user';
 
 import ImageViewer from '@/components/Explore/ImageViewer.vue';
 
+import { usePageSeo } from '@/composables/usePageSeo';
 import { APP_SURFACE } from '@/utils/dashboardRoutes';
 
 const route = useRoute();
@@ -19,6 +20,13 @@ const { activeItem, isLoading, isLoadingItem, error } = storeToRefs(exploreStore
 const { userId } = storeToRefs(userStore);
 
 const routeId = computed(() => String(route.params.id ?? ''));
+
+usePageSeo({
+  title: 'Explore image – Visual AI',
+  description: 'View a Visual AI creation in the studio image viewer.',
+  path: '/explore',
+  robots: 'noindex, follow',
+});
 
 watch(
   [routeId, userId],

@@ -1,11 +1,13 @@
-import { TIER_CREDIT_COST, MODEL_REGISTRY } from '@visual-ai/shared';
-import type { ModelKey, Tier } from '@visual-ai/shared';
+import type { Tier } from '@visual-ai/shared';
 
 /** Flat per-image base cost for text-to-image generation. */
 const GENERATION_BASE_COST_PER_IMAGE = 1;
 
 /** Default quality multiplier when quality does not change pricing. */
 const DEFAULT_QUALITY_MULTIPLIER = 1;
+
+/** Credit cost for utility models (upscale, colorize, revive, remove-bg) */
+const TRANSFORM_CREDIT_COST = 2;
 
 export type GenerationCreditBreakdown = {
   baseCostPerImage: number;
@@ -20,9 +22,9 @@ export type GenerationCreditBreakdown = {
  */
 export function getGenerationCreditBreakdown(
   noOfOutputs: number,
-  options?: { qualityMultiplier?: number },
+  options?: { qualityMultiplier?: number; baseCostPerImage?: number },
 ): GenerationCreditBreakdown {
-  const baseCostPerImage = GENERATION_BASE_COST_PER_IMAGE;
+  const baseCostPerImage = options?.baseCostPerImage ?? GENERATION_BASE_COST_PER_IMAGE;
   const imageCount = Math.max(1, noOfOutputs);
   const qualityMultiplier = options?.qualityMultiplier ?? DEFAULT_QUALITY_MULTIPLIER;
   const total = Math.max(1, Math.ceil(baseCostPerImage * imageCount * qualityMultiplier));
@@ -30,44 +32,38 @@ export function getGenerationCreditBreakdown(
   return { baseCostPerImage, imageCount, qualityMultiplier, total };
 }
 
-/** Credits consumed per generated image (1 credit each). */
-export function getGenerationCreditCost(noOfOutputs: number): number {
-  return getGenerationCreditBreakdown(noOfOutputs).total;
+/** Credits consumed for a generation run (model cost × image count). */
+export function getGenerationCreditCost(
+  noOfOutputs: number,
+  baseCostPerImage = GENERATION_BASE_COST_PER_IMAGE,
+): number {
+  return getGenerationCreditBreakdown(noOfOutputs, { baseCostPerImage }).total;
 }
 
 /** True when the user's balance covers the configured generation cost. */
-export function canAffordGeneration(balance: number, noOfOutputs: number): boolean {
-  return balance >= getGenerationCreditCost(noOfOutputs);
+export function canAffordGeneration(
+  balance: number,
+  noOfOutputs: number,
+  baseCostPerImage = GENERATION_BASE_COST_PER_IMAGE,
+): boolean {
+  return balance >= getGenerationCreditCost(noOfOutputs, baseCostPerImage);
 }
 
 /**
  * Credits for upscale / colorize / revive / remove-bg transforms.
- * When modelKey is provided, uses tier-based pricing from the registry.
- * When modelKey is omitted, returns the legacy flat cost for backward compatibility.
+ * Returns the flat utility model cost (2 credits).
  */
-export function getTransformCreditCost(isPro: boolean, modelKey?: ModelKey): number {
-  // If no model key, use legacy flat cost (backward compatibility)
-  if (!modelKey) {
-    return isPro ? 1 : 3;
-  }
-
-  // Tier-based pricing for utility models
-  const model = MODEL_REGISTRY[modelKey];
-  if (!model) {
-    // Fallback to legacy cost if model not found
-    return isPro ? 1 : 3;
-  }
-
-  const plan = isPro ? 'pro' : 'free';
-  return TIER_CREDIT_COST[model.tier][plan];
+export function getTransformCreditCost(): number {
+  return TRANSFORM_CREDIT_COST;
 }
 
-/** Published credit cost for picker badges (pro-plan rate — integer, easy to scan). */
-export function getTierCreditCost(tier: Tier): number {
-  return TIER_CREDIT_COST[tier].pro;
-}
-
-/** Compact cost badge label derived from tier credit table. */
+/** Get the credit cost label for a tier (e.g., "1 cr", "4 cr", "5 cr"). */
 export function getTierCreditLabel(tier: Tier): string {
-  return `${getTierCreditCost(tier)} cr`;
+  // Map tiers to their minimum credit cost for display
+  const tierCosts: Record<Tier, number> = {
+    budget: 1,
+    standard: 1,
+    premium: 4,
+  };
+  return `${tierCosts[tier]} cr`;
 }

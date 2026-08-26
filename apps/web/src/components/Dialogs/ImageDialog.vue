@@ -36,7 +36,7 @@ const isMobile = useMediaQuery('(max-width: 600px)');
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
 const { history } = storeToRefs(userStore);
-const { showImageDialog, activeImageId } = storeToRefs(dialogStore);
+const { showImageDialog, activeImageId, showChainActionDialog } = storeToRefs(dialogStore);
 const generateStore = useGenerateStore();
 const { isDeleting, isFavoriting } = storeToRefs(generateStore);
 const { shareLink, copyPrompt } = useShareActions();
@@ -103,6 +103,20 @@ function downloadAtIndex(event: Event, index: number) {
   void downloadImage(event, getDownloadImageUrl(image));
 }
 
+const canDownload = computed(() => {
+  if (isImageFeature.value) return Boolean(primaryImage.value);
+  return Boolean(enhanceDownloadUrl.value);
+});
+
+function handleToolbarDownload(event: Event) {
+  if (isImageFeature.value) {
+    downloadAtIndex(event, 0);
+    return;
+  }
+  if (!enhanceDownloadUrl.value) return;
+  void downloadImage(event, enhanceDownloadUrl.value);
+}
+
 const originalImageUrl = computed(() => {
   const image = primaryImage.value;
   if (!image) return '';
@@ -138,6 +152,7 @@ const enhancedImageUrl = computed(() => {
 const isTransparentEnhance = computed(() => props.item?.featureType === FeatureType.REMOVE_BG);
 
 function openDeleteConfirm() {
+  chainMenuOpen.value = false;
   showDeleteConfirm.value = true;
 }
 
@@ -158,6 +173,11 @@ function closeImageDialog() {
 
 async function handleShare() {
   await shareLink({ title: 'Visual AI creation', url: shareUrl.value });
+}
+
+async function handleMenuShare() {
+  chainMenuOpen.value = false;
+  await handleShare();
 }
 
 async function handleCopyPrompt() {
@@ -214,8 +234,8 @@ watch(isThisDialogOpen, (open) => {
     :fullscreen="isMobile"
     max-width="min(96vw, 88rem)"
     :show-close="false"
-    :close-on-escape="!showDeleteConfirm"
-    :close-on-overlay="!showDeleteConfirm"
+    :close-on-escape="!showDeleteConfirm && !showChainActionDialog"
+    :close-on-overlay="!showDeleteConfirm && !showChainActionDialog"
     labelled-by="image-dialog-title"
     @close="closeImageDialog"
   >
@@ -230,16 +250,6 @@ watch(isThisDialogOpen, (open) => {
 
         <div class="image-dialog__actions">
           <button
-            type="button"
-            class="icon-btn"
-            title="Share"
-            aria-label="Share"
-            :disabled="!shareUrl"
-            @click="handleShare"
-          >
-            <font-awesome-icon :icon="faLink" aria-hidden="true" />
-          </button>
-          <button
             v-if="hasPrompt"
             type="button"
             class="icon-btn"
@@ -248,6 +258,16 @@ watch(isThisDialogOpen, (open) => {
             @click="handleCopyPrompt"
           >
             <font-awesome-icon :icon="faCopy" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            class="icon-btn"
+            title="Download"
+            aria-label="Download"
+            :disabled="!canDownload"
+            @click="handleToolbarDownload"
+          >
+            <font-awesome-icon :icon="faDownload" aria-hidden="true" />
           </button>
           <button
             type="button"
@@ -262,17 +282,6 @@ watch(isThisDialogOpen, (open) => {
               :class="{ 'icon-btn__fav--active': isFavorite }"
               aria-hidden="true"
             />
-          </button>
-          <button
-            v-if="!isImageFeature"
-            type="button"
-            class="icon-btn"
-            title="Download"
-            aria-label="Download"
-            :disabled="!enhanceDownloadUrl"
-            @click="downloadImage($event, enhanceDownloadUrl)"
-          >
-            <font-awesome-icon :icon="faDownload" aria-hidden="true" />
           </button>
 
           <div ref="chainMenuRoot" class="chain-menu">
@@ -291,7 +300,7 @@ watch(isThisDialogOpen, (open) => {
               v-if="chainMenuOpen"
               class="chain-menu__panel"
               role="menu"
-              aria-label="Image chaining actions"
+              aria-label="More image actions"
               @click.stop
             >
               <button
@@ -334,19 +343,34 @@ watch(isThisDialogOpen, (open) => {
                 <font-awesome-icon :icon="faDice" aria-hidden="true" />
                 More like this
               </button>
+
+              <div class="chain-menu__separator" role="separator" />
+
+              <button
+                type="button"
+                role="menuitem"
+                class="chain-menu__item"
+                :disabled="!shareUrl"
+                @click="handleMenuShare"
+              >
+                <font-awesome-icon :icon="faLink" aria-hidden="true" />
+                Copy link
+              </button>
+
+              <div class="chain-menu__separator" role="separator" />
+
+              <button
+                type="button"
+                role="menuitem"
+                class="chain-menu__item chain-menu__item--danger"
+                :disabled="isDeleting"
+                @click="openDeleteConfirm"
+              >
+                <font-awesome-icon :icon="faTrashAlt" aria-hidden="true" />
+                Delete
+              </button>
             </div>
           </div>
-
-          <button
-            type="button"
-            class="icon-btn icon-btn--danger"
-            title="Delete"
-            :disabled="isDeleting"
-            aria-label="Delete"
-            @click="openDeleteConfirm"
-          >
-            <font-awesome-icon :icon="faTrashAlt" aria-hidden="true" />
-          </button>
         </div>
       </header>
 
@@ -363,17 +387,6 @@ watch(isThisDialogOpen, (open) => {
               class="image-dialog__img"
               draggable="false"
             />
-            <div class="image-dialog__overlay">
-              <div class="image-dialog__overlay-fade" aria-hidden="true" />
-              <button
-                type="button"
-                class="tile-download"
-                :aria-label="`Download image ${index + 1}`"
-                @click="downloadAtIndex($event, index)"
-              >
-                <font-awesome-icon :icon="faDownload" class="tw-h-3 tw-w-3" aria-hidden="true" />
-              </button>
-            </div>
           </figure>
         </div>
 
@@ -483,6 +496,21 @@ watch(isThisDialogOpen, (open) => {
   }
 }
 
+.chain-menu__item--danger {
+  color: rgb(248 113 113);
+
+  &:hover:not(:disabled) {
+    background: rgba(248, 113, 113, 0.12);
+    color: rgb(252 165 165);
+  }
+}
+
+.chain-menu__separator {
+  height: 1px;
+  margin: 0.25rem 0.15rem;
+  background: rgb(var(--tw-hairline) / 0.9);
+}
+
 .image-dialog__stage {
   display: flex;
   align-items: center;
@@ -534,11 +562,6 @@ watch(isThisDialogOpen, (open) => {
   overflow: hidden;
   background: rgb(var(--tw-surface-2));
   box-shadow: inset 0 0 0 1px rgb(var(--tw-hairline) / 0.5);
-
-  &:hover .image-dialog__overlay,
-  &:focus-within .image-dialog__overlay {
-    opacity: 1;
-  }
 }
 
 .image-dialog__img {
@@ -555,70 +578,18 @@ watch(isThisDialogOpen, (open) => {
   max-height: min(70dvh, 42rem);
 }
 
-.image-dialog__overlay {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.image-dialog__overlay-fade {
-  position: absolute;
-  inset-inline: 0;
-  top: 0;
-  height: 3.5rem;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent);
-}
-
-.tile-download {
-  pointer-events: auto;
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 1.75rem;
-  width: 1.75rem;
-  border: 0;
-  border-radius: 9999px;
-  background: rgba(0, 0, 0, 0.55);
-  color: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(4px);
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.8);
-  }
-
-  &:focus-visible {
-    outline: 2px solid #c9a84c;
-    outline-offset: 2px;
-  }
-}
-
-@media (hover: none) {
-  .image-dialog__overlay {
-    opacity: 1;
-  }
-}
-
 .image-dialog__footer {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 0.65rem 1rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.65rem;
   padding-top: 0.15rem;
 }
 
 .image-dialog__prompt {
   margin: 0;
-  flex: 1 1 16rem;
+  width: 100%;
   min-width: 0;
-  max-width: 48rem;
   font-size: 0.875rem;
   line-height: 1.5;
   color: rgb(var(--tw-ink-muted));
@@ -630,8 +601,6 @@ watch(isThisDialogOpen, (open) => {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
-  justify-content: flex-end;
-  margin-left: auto;
 }
 
 .chip {
@@ -680,14 +649,7 @@ watch(isThisDialogOpen, (open) => {
   color: #c98a5a;
 }
 
-.icon-btn--danger:hover:not(:disabled) {
-  background: rgba(176, 60, 60, 0.18);
-  color: #e08585;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .image-dialog__overlay,
-  .tile-download,
   .icon-btn {
     transition: none;
   }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import LandingButton from '@/components/Landing/LandingButton.vue';
-import BeforeAfter from '@/components/Landing/BeforeAfter.vue';
+import LandingToolMedia from '@/components/Landing/LandingToolMedia.vue';
 
 import type { ToolChapter } from '@/utils/landing';
 
@@ -32,23 +32,7 @@ defineProps<{ tool: ToolChapter; index: number }>();
     </div>
 
     <div v-reveal="{ y: 40 }" class="chapter__media">
-      <BeforeAfter
-        v-if="tool.media.kind === 'compare'"
-        :before="tool.media.before"
-        :after="tool.media.after"
-      />
-      <div v-else class="cluster">
-        <img
-          v-for="(src, i) in tool.media.images"
-          :key="src"
-          :src="src"
-          :alt="`${tool.eyebrow} example ${i + 1}`"
-          class="cluster__img"
-          :class="`cluster__img--${i}`"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
+      <LandingToolMedia :media="tool.media" :label="tool.eyebrow" />
     </div>
   </article>
 </template>
@@ -137,24 +121,5 @@ defineProps<{ tool: ToolChapter; index: number }>();
 
 .chapter__cta {
   margin-top: 2.25rem;
-}
-
-.cluster {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  grid-template-rows: repeat(2, 1fr);
-  gap: 0.85rem;
-  height: 100%;
-}
-.cluster__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 14px;
-  border: 1px solid #3a2e22;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
-}
-.cluster__img--0 {
-  grid-row: span 2;
 }
 </style>

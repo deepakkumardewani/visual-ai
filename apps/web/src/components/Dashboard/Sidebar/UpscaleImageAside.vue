@@ -3,7 +3,6 @@ import { storeToRefs } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
 import { computed, onMounted, ref } from 'vue';
 import { useUser } from 'vue-clerk';
-import { useRouter } from 'vue-router';
 
 import { FeatureType } from '@/types';
 
@@ -16,6 +15,7 @@ import { useUserStore } from '@/stores/user';
 import { useFeatureSubmit } from '@/composables/useFeatureSubmit';
 import { useLocal } from '@/composables/local';
 
+import FeatureCta from '@/components/Dashboard/FeatureCta.vue';
 import ImageUpload from '@/components/Dashboard/Sidebar/ImageUpload.vue';
 import UpscaleModelPicker from '@/components/Dashboard/ModelPicker/UpscaleModelPicker.vue';
 
@@ -27,12 +27,11 @@ const dialogStore = useDialogStore();
 const localStore = useLocal();
 const appStore = useAppStore();
 const asideStore = useAsideStore();
-const router = useRouter();
 const generateStore = useGenerateStore();
 
 const { isSignedIn } = useUser();
 const { progressUrl } = storeToRefs(appStore);
-const { isPro, credits } = storeToRefs(userStore);
+const { credits } = storeToRefs(userStore);
 const { upscaleInProgress } = storeToRefs(generateStore);
 const { imageFormat, upscaleModel, selectedUpscaleModelFields } = storeToRefs(asideStore);
 
@@ -53,6 +52,8 @@ function segmentClass(active: boolean) {
 
 const hasImage = computed(() => Boolean(imageUpload.value?.image));
 const canSubmit = computed(() => hasImage.value && !upscaleInProgress.value);
+const creditCost = computed(() => upscaleModel.value.creditCost ?? 2);
+const isPremium = computed(() => upscaleModel.value.tier === 'premium');
 
 const showScale = computed(() => Boolean(selectedUpscaleModelFields.value?.scale));
 const scaleOptions = computed(() => {
@@ -87,16 +88,7 @@ const outputDimensions = computed(() => {
 });
 
 function selectFormat(format: (typeof IMAGE_FORMATS)[number]) {
-  if (!isPro.value && format.isPro) {
-    imageFormat.value = IMAGE_FORMATS[0];
-    router.push('/pricing');
-    return;
-  }
   imageFormat.value = format;
-}
-
-function isProLocked(optionIsPro: boolean) {
-  return optionIsPro && !isPro.value;
 }
 
 async function upscaleImage() {
@@ -104,7 +96,7 @@ async function upscaleImage() {
     dialogStore.showSignup();
     return;
   }
-  if ((!isPro.value && credits.value < 3) || (isPro.value && credits.value === 0)) {
+  if (credits.value < creditCost.value) {
     dialogStore.showLowCredits();
     return;
   }
@@ -167,6 +159,13 @@ onMounted(() => {
         v-model:selected="upscaleModel"
         :fallback="UPSCALER_MODELS[0]"
       />
+      <router-link
+        to="/compare"
+        data-testid="upscale-compare-link"
+        class="tw-text-eyebrow tw-text-ink-faint tw-underline-offset-2 hover:tw-text-ink hover:tw-underline focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
+      >
+        Compare model samples
+      </router-link>
     </section>
 
     <section v-if="showScale" class="tw-flex tw-flex-col tw-gap-2">
@@ -218,30 +217,19 @@ onMounted(() => {
           @click="selectFormat(format)"
         >
           {{ format.title }}
-          <span
-            v-if="isProLocked(format.isPro)"
-            class="tw-absolute tw-right-1 tw-top-1 tw-h-1 tw-w-1 tw-rounded-full tw-bg-gold"
-            aria-hidden="true"
-          />
-          <span v-if="isProLocked(format.isPro)" class="tw-sr-only">(Pro)</span>
         </button>
       </div>
     </section>
 
-    <button
-      type="button"
-      data-testid="upscale-cta"
-      class="tw-flex tw-h-11 tw-w-full tw-items-center tw-justify-center tw-rounded-lg tw-bg-accent tw-text-body-sm tw-font-semibold tw-uppercase tw-tracking-wide tw-text-canvas tw-shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.35)] tw-transition-[filter] tw-duration-fast hover:tw-brightness-110 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40"
+    <FeatureCta
+      label="Upscale"
+      test-id="upscale-cta"
+      :cost="creditCost"
+      :loading="upscaleInProgress"
       :disabled="!canSubmit"
-      :aria-busy="upscaleInProgress"
+      :premium="isPremium"
+      full-width
       @click="upscaleImage"
-    >
-      <span
-        v-if="upscaleInProgress"
-        class="tw-inline-block tw-h-4 tw-w-4 tw-animate-spin tw-rounded-full tw-border-2 tw-border-canvas/30 tw-border-t-canvas"
-        aria-hidden="true"
-      />
-      <span v-else>Upscale</span>
-    </button>
+    />
   </div>
 </template>

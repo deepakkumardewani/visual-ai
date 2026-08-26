@@ -30,7 +30,7 @@ function create() {
 </script>
 <template>
   <div
-    v-if="history.length === 0"
+    v-if="!isFavorites && history.length === 0"
     class="tw-flex tw-h-full tw-items-center tw-justify-center tw-px-6"
   >
     <div class="tw-text-center">
@@ -63,10 +63,17 @@ function create() {
   </div>
 
   <div
-    v-if="isFavorites && history.length !== 0 && groupedHistory?.length === 0"
+    v-if="isFavorites && history.length === 0"
     class="tw-flex tw-h-full tw-items-center tw-justify-center tw-px-6"
   >
     <p class="tw-text-sm tw-text-ink-muted">You have not added any favorites yet.</p>
+  </div>
+
+  <div
+    v-else-if="isFavorites && groupedHistory?.length === 0"
+    class="tw-flex tw-h-full tw-items-center tw-justify-center tw-px-6"
+  >
+    <p class="tw-text-sm tw-text-ink-muted">No favorites match your filters.</p>
   </div>
 </template>
 <style scoped lang="scss"></style>

@@ -130,7 +130,17 @@ onClickOutside(
 
 useFocusTrap(panelRef, isOpen);
 
-const floatingStyle = ref<{ top: string; left: string; width?: string; maxWidth?: string }>({
+const VIEWPORT_MARGIN_PX = 16;
+const PANEL_GAP_PX = 8;
+const MIN_PANEL_HEIGHT_PX = 120;
+
+const floatingStyle = ref<{
+  top: string;
+  left: string;
+  width?: string;
+  maxWidth?: string;
+  maxHeight?: string;
+}>({
   top: '-9999px',
   left: '-9999px',
 });
@@ -141,24 +151,33 @@ function updatePosition() {
   if (!trigger || !panel) return;
 
   const triggerRect = trigger.getBoundingClientRect();
-  const panelRect = panel.getBoundingClientRect();
-  const gap = 8;
+  const content = panel.firstElementChild as HTMLElement | null;
+  const panelHeight = content?.scrollHeight ?? panel.scrollHeight;
+  const panelWidth = panel.offsetWidth || triggerRect.width;
 
-  const top =
-    props.placement === 'top-start'
-      ? triggerRect.top - panelRect.height - gap
-      : triggerRect.bottom + gap;
+  const spaceBelow = window.innerHeight - triggerRect.bottom - PANEL_GAP_PX - VIEWPORT_MARGIN_PX;
+  const spaceAbove = triggerRect.top - PANEL_GAP_PX - VIEWPORT_MARGIN_PX;
+  const preferTop = props.placement === 'top-start';
+  const openUp = preferTop || (panelHeight > spaceBelow && spaceAbove > spaceBelow);
+  const available = Math.max(MIN_PANEL_HEIGHT_PX, openUp ? spaceAbove : spaceBelow);
+  const usedHeight = Math.min(panelHeight, available);
 
-  const left =
-    props.placement === 'bottom-end' ? triggerRect.right - panelRect.width : triggerRect.left;
+  let top = openUp
+    ? triggerRect.top - usedHeight - PANEL_GAP_PX
+    : triggerRect.bottom + PANEL_GAP_PX;
+  if (top < VIEWPORT_MARGIN_PX) top = VIEWPORT_MARGIN_PX;
 
-  const viewportMargin = 16;
-  const maxWidth = window.innerWidth - left - viewportMargin;
+  let left = props.placement === 'bottom-end' ? triggerRect.right - panelWidth : triggerRect.left;
+  left = Math.min(
+    Math.max(VIEWPORT_MARGIN_PX, left),
+    window.innerWidth - panelWidth - VIEWPORT_MARGIN_PX,
+  );
 
   floatingStyle.value = {
     top: `${top}px`,
     left: `${left}px`,
-    maxWidth: `${maxWidth}px`,
+    maxWidth: `${window.innerWidth - left - VIEWPORT_MARGIN_PX}px`,
+    maxHeight: `${available}px`,
     width: props.matchTriggerWidth ? `${triggerRect.width}px` : undefined,
   };
 }
@@ -209,7 +228,7 @@ onBeforeUnmount(() => {
         ref="panelRef"
         role="dialog"
         tabindex="-1"
-        class="tw-fixed tw-z-50 tw-min-w-[12rem]"
+        class="tw-fixed tw-z-50 tw-min-w-[12rem] tw-overflow-y-auto"
         :style="floatingStyle"
         @keydown="onPanelKeydown"
       >

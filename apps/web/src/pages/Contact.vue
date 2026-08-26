@@ -3,10 +3,19 @@ import { faPaperPlane } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
 import { computed, reactive, ref, watch } from 'vue';
 
+import LandingFooter from '@/components/Landing/LandingFooter.vue';
+import { usePageSeo } from '@/composables/usePageSeo';
 import { useAppStore } from '@/stores/app';
 import { useUserStore } from '@/stores/user';
 
 import { contactForm } from '@/utils/helpers';
+
+usePageSeo({
+  title: 'Contact Visual AI – support and questions',
+  description:
+    'Questions about Visual AI credits, generation, or your account? Send a message and the team will get back to you with help on studio tools.',
+  path: '/contact',
+});
 
 interface FormData {
   firstName: string;
@@ -224,6 +233,7 @@ watch(userDetails, () => {
       </div>
     </div>
   </div>
+  <LandingFooter />
 </template>
 
 <style scoped>

@@ -2,8 +2,10 @@
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
+import { usePageSeo } from '@/composables/usePageSeo';
 import { useAppStore } from '@/stores/app';
 
+import LandingFooter from '@/components/Landing/LandingFooter.vue';
 import SideBySide from '@/components/SideBySide.vue';
 
 const appStore = useAppStore();
@@ -16,6 +18,13 @@ const tabOptions = [
   { label: 'Colorize', value: 2 },
   { label: 'Revive', value: 3 },
 ] as const;
+
+usePageSeo({
+  title: 'Before and after examples – Visual AI',
+  description:
+    'See Visual AI upscale, colorize, and restore results side by side. Compare originals with enhanced photos, then try the same tools with credits.',
+  path: '/examples',
+});
 
 const upscaleExamples = [
   {
@@ -84,6 +93,26 @@ const reviveExamples = [
 
 <template>
   <div :class="isDark ? 'tw-bg-black' : 'tw-bg-white'">
+    <h1 class="tw-px-4 tw-pt-6 tw-text-center tw-font-display tw-text-3xl tw-font-bold tw-text-ink">
+      Before and after examples
+    </h1>
+    <nav
+      class="tw-flex tw-flex-wrap tw-justify-center tw-gap-x-4 tw-gap-y-2 tw-px-4 tw-pb-2 tw-text-sm"
+      aria-label="Feature landings"
+    >
+      <router-link class="tw-text-[#C9A84C] tw-underline" to="/image-upscaler"
+        >Image upscaler</router-link
+      >
+      <router-link class="tw-text-[#C9A84C] tw-underline" to="/colorize-photo"
+        >Colorize photo</router-link
+      >
+      <router-link class="tw-text-[#C9A84C] tw-underline" to="/photo-restorer"
+        >Photo restorer</router-link
+      >
+      <router-link class="tw-text-[#C9A84C] tw-underline" to="/text-to-image"
+        >Text to image</router-link
+      >
+    </nav>
     <div class="tw-flex tw-w-full tw-justify-center" role="tablist" aria-label="Example categories">
       <button
         v-for="option in tabOptions"
@@ -141,4 +170,5 @@ const reviveExamples = [
       </div>
     </div>
   </div>
+  <LandingFooter />
 </template>

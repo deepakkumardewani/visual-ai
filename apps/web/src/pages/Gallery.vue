@@ -4,9 +4,11 @@ import { onMounted, ref } from 'vue';
 
 import type { GalleryImage } from '@/types';
 
+import { usePageSeo } from '@/composables/usePageSeo';
 import { useAppStore } from '@/stores/app';
 
 import AppModal from '@/components/AppModal.vue';
+import LandingFooter from '@/components/Landing/LandingFooter.vue';
 
 import gallery from '@/utils/gallery.json';
 
@@ -16,6 +18,13 @@ const images = ref<GalleryImage[]>([]);
 const dialog = ref(false);
 const selectedImage = ref<GalleryImage | null>(null);
 const loadedUrls = ref<Set<string>>(new Set());
+
+usePageSeo({
+  title: 'Image gallery – Visual AI creations',
+  description:
+    'Browse Visual AI generations from the community. See text-to-image, upscale, and restore results, then create your own with free daily credits.',
+  path: '/gallery',
+});
 
 onMounted(() => {
   images.value = gallery;
@@ -35,6 +44,7 @@ const markLoaded = (url: string) => {
 
 <template>
   <div class="tw-w-full" :class="isDark ? 'tw-bg-black' : 'tw-bg-white'">
+    <h1 class="tw-px-4 tw-pt-6 tw-font-display tw-text-3xl tw-font-bold tw-text-ink">Gallery</h1>
     <div
       class="tw-w-full tw-columns-2 tw-gap-2 tw-px-4 tw-py-4 sm:tw-gap-4 lg:tw-columns-3 xl:tw-columns-4"
     >
@@ -90,6 +100,7 @@ const markLoaded = (url: string) => {
       </div>
     </AppModal>
   </div>
+  <LandingFooter />
 </template>
 
 <style scoped>

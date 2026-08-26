@@ -1,9 +1,25 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
+export type ChainConfirmAction = 'upscale' | 'remove-bg' | 'colorize' | 'more-like-this';
+
+export const CHAIN_ACTION_LABELS: Record<ChainConfirmAction, string> = {
+  upscale: 'Upscale',
+  'remove-bg': 'Remove background',
+  colorize: 'Colorize',
+  'more-like-this': 'More like this',
+};
+
+export type ConfirmChainActionOptions = {
+  action: ChainConfirmAction;
+  creditCost: number;
+  extraCopy?: string;
+};
+
+let settleChainConfirm: ((confirmed: boolean) => void) | null = null;
+
 export const useDialogStore = defineStore('dialog', () => {
   const showPricingDialog = ref(false);
-  const showPremiumDialog = ref(false);
   const showLowCreditsDialog = ref(false);
   const showImageDialog = ref(false);
   const activeImageId = ref<string | null>(null);
@@ -11,8 +27,6 @@ export const useDialogStore = defineStore('dialog', () => {
   const showCopyReferralDialog = ref(false);
   const showDeleteDialog = ref(false);
   const showBuyCreditsDialog = ref(false);
-  const showCancelSubscriptionDialog = ref(false);
-  const showProUpgradeDialog = ref(false);
   const imageUrl = ref('');
   const prompt = ref('');
   const originalImage = ref('');
@@ -20,11 +34,27 @@ export const useDialogStore = defineStore('dialog', () => {
   const lowCreditsDialog = ref(false);
   const signupDialog = ref(false);
   const referralOfferDialog = ref(false);
-  function showPremium() {
-    showPremiumDialog.value = true;
+  const showChainActionDialog = ref(false);
+  const chainAction = ref<ChainConfirmAction>('upscale');
+  const chainActionCreditCost = ref(2);
+  const chainActionExtraCopy = ref('');
+
+  function confirmChainAction(options: ConfirmChainActionOptions): Promise<boolean> {
+    settleChainConfirm?.(false);
+    chainAction.value = options.action;
+    chainActionCreditCost.value = options.creditCost;
+    chainActionExtraCopy.value = options.extraCopy ?? '';
+    showChainActionDialog.value = true;
+    return new Promise((resolve) => {
+      settleChainConfirm = resolve;
+    });
   }
-  function hidePremium() {
-    showPremiumDialog.value = false;
+
+  function resolveChainAction(confirmed: boolean) {
+    showChainActionDialog.value = false;
+    const settle = settleChainConfirm;
+    settleChainConfirm = null;
+    settle?.(confirmed);
   }
   function showLowCredits() {
     showLowCreditsDialog.value = true;
@@ -76,28 +106,15 @@ export const useDialogStore = defineStore('dialog', () => {
   function hideSignup() {
     signupDialog.value = false;
   }
-  function showCancelSubscription() {
-    showCancelSubscriptionDialog.value = true;
-  }
-  function hideCancelSubscription() {
-    showCancelSubscriptionDialog.value = false;
-  }
   function showReferralOffer() {
     referralOfferDialog.value = true;
   }
   function hideReferralOffer() {
     referralOfferDialog.value = false;
   }
-  function showProUpgrade() {
-    showProUpgradeDialog.value = true;
-  }
-  function hideProUpgrade() {
-    showProUpgradeDialog.value = false;
-  }
 
   return {
     showPricingDialog,
-    showPremiumDialog,
     showImageDialog,
     activeImageId,
     showReferralDialog,
@@ -105,7 +122,6 @@ export const useDialogStore = defineStore('dialog', () => {
     showLowCreditsDialog,
     showBuyCreditsDialog,
     showDeleteDialog,
-    showProUpgradeDialog,
     imageUrl,
     originalImage,
     enhancedImage,
@@ -113,9 +129,6 @@ export const useDialogStore = defineStore('dialog', () => {
     signupDialog,
     lowCreditsDialog,
     referralOfferDialog,
-    showCancelSubscriptionDialog,
-    showPremium,
-    hidePremium,
     showPricing,
     hidePricing,
     showLowCredits,
@@ -130,13 +143,15 @@ export const useDialogStore = defineStore('dialog', () => {
     hideBuyCredits,
     showCopyReferral,
     hideCopyReferral,
-    showCancelSubscription,
-    hideCancelSubscription,
     showSignup,
     hideSignup,
     showReferralOffer,
     hideReferralOffer,
-    showProUpgrade,
-    hideProUpgrade,
+    showChainActionDialog,
+    chainAction,
+    chainActionCreditCost,
+    chainActionExtraCopy,
+    confirmChainAction,
+    resolveChainAction,
   };
 });

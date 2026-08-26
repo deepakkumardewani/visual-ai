@@ -1,6 +1,6 @@
 import { storeToRefs } from 'pinia';
 
-import { RazorpayOrder, RazorpayProduct, RazorpaySubscription } from '@/types';
+import { RazorpayOrder, RazorpayProduct } from '@/types';
 
 import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
@@ -25,81 +25,49 @@ function loadRazorpay(): Promise<void> {
   });
 }
 
-export async function initiatePayment(product: RazorpayProduct, subscribe: boolean = false) {
+export async function initiatePayment(product: RazorpayProduct) {
   try {
     await loadRazorpay();
 
     const userStore = useUserStore();
-    const { userDetails, isPro } = storeToRefs(userStore);
+    const { userDetails } = storeToRefs(userStore);
 
-    if (subscribe) {
-      const subscription = await createSubscription();
-      if (subscription) {
-        const subscriptionId = 'sub_Ps8RzYsAxA5QfQ';
-        log.debug('subscription created', { subscription });
-        const options = {
-          key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-          name: 'Visual AI',
-          subscription_id: subscriptionId,
-          description: product.description,
-          notes: {
-            userId: userDetails.value?.userId,
-            credits: product.credits,
-            subscribe,
-            subscriptionId,
-          },
-          handler: function (response: any) {
-            // TODO: Handle update button in card
-            isPro.value = true;
-            log.info('subscription payment succeeded', { response });
-          },
-        };
-        // @ts-ignore
-        const rzp = new Razorpay(options);
-        rzp.on('payment.failed', function (response: any) {
-          log.error('subscription payment failed', { response });
-        });
-        rzp.open();
-      }
-    } else {
-      const order = await createOrder(product);
-      if (order) {
-        const { amount, currency, id } = order;
-        const options = {
-          key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-          name: 'Visual AI',
-          currency,
-          description: product.description,
-          order_id: id,
-          amount,
-          prefill: {
-            name: userDetails.value?.fullName,
-            email: userDetails.value?.email,
-          },
-          notes: {
-            userId: userDetails.value?.userId,
-            credits: product.credits,
-            subscribe,
-          },
-          theme: {
-            color: '#C9A84C',
-          },
-          handler: async function (response: any) {
-            const success = await verifyPayment(response);
-            if (success) {
-              successHandler(product.credits);
-            } else {
-              failureHandler(response);
-            }
-          },
-        };
-        // @ts-ignore
-        const rzp = new Razorpay(options);
-        rzp.on('payment.failed', function (response: any) {
-          log.error('payment failed', { response });
-        });
-        rzp.open();
-      }
+    const order = await createOrder(product);
+    if (order) {
+      const { amount, currency, id } = order;
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        name: 'Visual AI',
+        currency,
+        description: product.description,
+        order_id: id,
+        amount,
+        prefill: {
+          name: userDetails.value?.fullName,
+          email: userDetails.value?.email,
+        },
+        notes: {
+          userId: userDetails.value?.userId,
+          credits: product.credits,
+        },
+        theme: {
+          color: '#C9A84C',
+        },
+        handler: async function (response: any) {
+          const success = await verifyPayment(response);
+          if (success) {
+            successHandler(product.credits);
+          } else {
+            failureHandler(response);
+          }
+        },
+      };
+      // @ts-ignore
+      const rzp = new Razorpay(options);
+      rzp.on('payment.failed', function (response: any) {
+        log.error('payment failed', { response });
+      });
+      rzp.open();
     }
   } catch (error) {
     log.error('initiatePayment failed', { error });
@@ -169,50 +137,4 @@ async function createOrder(product: RazorpayProduct) {
     return undefined;
   }
   return order.value;
-}
-async function createSubscription() {
-  const url = '/payments/subscription/create';
-  const { error, data } = await useFetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      planId: import.meta.env.VITE_RAZORPAY_PLAN_ID,
-    }),
-  }).json<RazorpaySubscription>();
-  if (error.value) {
-    log.error('createSubscription failed', { error: error.value });
-    return undefined;
-  }
-
-  return data.value;
-}
-
-export async function cancelSubscription(): Promise<void> {
-  try {
-    const userStore = useUserStore();
-    const { userDetails } = storeToRefs(userStore);
-
-    const url = '/payments/subscription/cancel';
-    const { error, data } = await useFetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        mode: 'cors',
-      },
-      body: JSON.stringify({
-        userId: userDetails.value?.userId,
-      }),
-    }).json();
-
-    if (error.value) {
-      log.error('cancelSubscription failed', { error: error.value });
-      return;
-    }
-    if (data.value) {
-      log.debug('cancelSubscription response', { data: data.value });
-    }
-  } catch (error) {
-    log.error('cancelSubscription threw', { error });
-    throw error;
-  }
 }

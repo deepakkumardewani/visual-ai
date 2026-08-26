@@ -37,7 +37,6 @@ vi.mock('@/components/Dashboard/Sidebar/PromptEnhancePicker.vue', () => ({
 
 import ImageGenerateAside from '@/components/Dashboard/Sidebar/ImageGenerateAside.vue';
 import { useAsideStore } from '@/stores/aside';
-import { useUserStore } from '@/stores/user';
 import { MODELS } from '@/utils/models';
 
 const findByModelKey = (id: string) => MODELS.find((m) => m.id === id)!;
@@ -45,14 +44,11 @@ const findByModelKey = (id: string) => MODELS.find((m) => m.id === id)!;
 describe('ImageGenerateAside section visibility', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
-    // isPro = true so pro-gating doesn't interfere with visibility checks
-    useUserStore().isPro = true;
   });
 
   const mount_ = () => {
     const pinia = createPinia();
     setActivePinia(pinia);
-    useUserStore().isPro = true;
     return { wrapper: mount(ImageGenerateAside, { global: { plugins: [pinia] } }), pinia };
   };
 

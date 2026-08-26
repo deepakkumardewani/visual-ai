@@ -1,36 +1,86 @@
 <script setup lang="ts">
-import { MODELS } from '@/utils/landing';
+import CapabilitiesFeaturedRow from '@/components/Landing/CapabilitiesFeaturedRow.vue';
+import CapabilitiesFinishTools from '@/components/Landing/CapabilitiesFinishTools.vue';
+import type { FinishToolTile } from '@/components/Landing/CapabilitiesFinishTools.vue';
+import CapabilitiesStudioLabs from '@/components/Landing/CapabilitiesStudioLabs.vue';
+import type { StudioLabChip } from '@/components/Landing/CapabilitiesStudioLabs.vue';
+import { getTransformCreditCost } from '@/utils/generationCredits';
+import { getFeaturedModels, MODELS, UPSCALER_MODELS } from '@/utils/models';
+
+/** Compact studio chips — generation catalog labs, preferred order. */
+const STUDIO_LAB_ORDER = [
+  'Black Forest Labs',
+  'Google',
+  'OpenAI',
+  'xAI',
+  'ByteDance',
+  'Z-Image',
+] as const;
+
+const featuredModels = getFeaturedModels(MODELS);
+
+const studioLabs: StudioLabChip[] = (() => {
+  const counts = new Map<string, number>();
+  for (const model of MODELS) {
+    const name = model.companyName;
+    if (!name) continue;
+    counts.set(name, (counts.get(name) ?? 0) + 1);
+  }
+
+  return STUDIO_LAB_ORDER.filter((name) => counts.has(name)).map((name) => ({
+    name,
+    count: counts.get(name) ?? 0,
+  }));
+})();
+
+function upscalerCredit(title: string): number {
+  return (
+    UPSCALER_MODELS.find((model) => model.title === title)?.creditCost ?? getTransformCreditCost()
+  );
+}
+
+const finishTools: FinishToolTile[] = (() => {
+  const utilityCost = getTransformCreditCost();
+  const clarityCost = upscalerCredit('Clarity Upscaler');
+  const topazCost = upscalerCredit('Topaz');
+  const upscaleCosts = [...new Set([clarityCost, topazCost])];
+
+  return [
+    {
+      title: 'Upscale',
+      description: 'Clarity through Topaz — everyday sharpening to studio recovery.',
+      to: '/image-upscaler',
+      costs: upscaleCosts,
+    },
+    {
+      title: 'Colorize / Restore',
+      description: 'Bring faded stills back in color, or repair old photographs.',
+      to: '/colorize-photo',
+      costs: [utilityCost],
+    },
+    {
+      title: 'Remove background',
+      description: 'Cut the subject clean for composites, listings, and layouts.',
+      to: '/remove-background',
+      costs: [utilityCost],
+    },
+  ];
+})();
 </script>
 
 <template>
   <section id="models" class="caps">
     <div class="caps__head">
       <p v-reveal class="eyebrow">Under the hood</p>
-      <h2 v-reveal="{ delay: 0.05 }" class="caps__title">Serious models. Sensible controls.</h2>
+      <h2 v-reveal="{ delay: 0.05 }" class="caps__title">The models, not a single engine.</h2>
       <p v-reveal="{ delay: 0.1 }" class="caps__sub">
-        Speed for drafts, fidelity for finals — pick the model that fits the job and move on.
+        Labs across the roster — pick speed for drafts, fidelity for finals.
       </p>
     </div>
 
-    <div class="caps__models">
-      <article
-        v-for="(model, i) in MODELS"
-        :key="model.title"
-        v-reveal="{ delay: i * 0.06 }"
-        class="model"
-      >
-        <div class="model__top">
-          <h3 class="model__name">{{ model.title }}</h3>
-          <span v-if="model.isPro" class="model__pro">Pro</span>
-        </div>
-        <p class="model__desc">{{ model.description }}</p>
-        <dl v-if="model.bestAt" class="model__meta">
-          <dt class="model__meta-label">Best at</dt>
-          <dd class="model__meta-value">{{ model.bestAt }}</dd>
-          <dd class="model__tier">{{ model.tier }}</dd>
-        </dl>
-      </article>
-    </div>
+    <CapabilitiesFeaturedRow :models="featuredModels" />
+    <CapabilitiesStudioLabs :labs="studioLabs" />
+    <CapabilitiesFinishTools :tools="finishTools" />
   </section>
 </template>
 
@@ -47,6 +97,7 @@ import { MODELS } from '@/utils/landing';
   max-width: 42rem;
   margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
 }
+
 .caps__title {
   font-family: 'Young Serif', Georgia, serif;
   font-weight: 400;
@@ -56,101 +107,11 @@ import { MODELS } from '@/utils/landing';
   color: rgb(var(--tw-ink-primary));
   margin: 1rem 0 0;
 }
+
 .caps__sub {
   margin: 1rem 0 0;
   font-size: 1.1rem;
   line-height: 1.65;
   color: rgb(var(--tw-ink-muted));
-}
-
-.caps__models {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-}
-.model {
-  padding: 1.5rem;
-  background: #221a14;
-  border: 1px solid #2d2319;
-  border-radius: 16px;
-  transition:
-    border-color 0.25s ease,
-    transform 0.25s ease,
-    background-color 0.25s ease;
-
-  &:hover {
-    border-color: #6b5e51;
-    background: #2d2319;
-    transform: translateY(-3px);
-  }
-}
-.model__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 0.6rem;
-}
-.model__name {
-  font-family: 'Young Serif', Georgia, serif;
-  font-weight: 400;
-  font-size: 1.2rem;
-  color: rgb(var(--tw-ink-primary));
-  margin: 0;
-}
-.model__pro {
-  flex-shrink: 0;
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #c98a5a;
-  padding: 0.2rem 0.55rem;
-  border: 1px solid rgba(201, 138, 90, 0.4);
-  border-radius: 9999px;
-}
-.model__desc {
-  margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.6;
-  color: rgb(var(--tw-ink-muted));
-}
-
-.model__meta {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  margin: 1.1rem 0 0;
-  padding-top: 1rem;
-  border-top: 1px solid #2d2319;
-}
-.model__meta-label {
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #d29467;
-}
-.model__meta-value {
-  margin: 0;
-  font-size: 0.85rem;
-  color: rgb(var(--tw-ink-primary));
-}
-.model__tier {
-  margin: 0 0 0 auto;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: capitalize;
-  color: rgb(var(--tw-ink-muted));
-  padding: 0.15rem 0.5rem;
-  border: 1px solid #3a2e22;
-  border-radius: 9999px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .model:hover {
-    transform: none;
-  }
 }
 </style>

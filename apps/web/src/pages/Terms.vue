@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import LandingFooter from '@/components/Landing/LandingFooter.vue';
+import { usePageSeo } from '@/composables/usePageSeo';
+
+usePageSeo({
+  title: 'Terms of Service – Visual AI',
+  description:
+    'Read the Visual AI terms of service for the image studio, credits, and account use. These terms govern how you use visual-ai.app.',
+  path: '/terms',
+});
+</script>
+
 <template>
   <div class="tw-max-w-5xl tw-mx-auto tw-p-8 tw-shadow-lg tw-rounded-lg tw-m-4">
     <h1 class="tw-text-4xl tw-font-bold tw-text-center tw-mb-8">Terms of Service</h1>
@@ -138,4 +150,5 @@
       </ul>
     </section>
   </div>
+  <LandingFooter />
 </template>

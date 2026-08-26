@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import ComparisonCard from '@/components/Compare/ComparisonCard.vue';
+import LandingFooter from '@/components/Landing/LandingFooter.vue';
 import { FeatureType } from '@/types';
 import { APP_SURFACE } from '@/utils/dashboardRoutes';
+import { usePageSeo } from '@/composables/usePageSeo';
 import { UPSCALER_SHOWCASE } from '@/utils/upscalerShowcase';
 import { UPSCALER_MODELS } from '@/utils/models';
+import { itemListJsonLd } from '@/utils/seo';
 
 const comparisonCards = UPSCALER_SHOWCASE.map((entry) => {
   const model = UPSCALER_MODELS.find((m) => m.id === entry.modelKey);
@@ -22,6 +25,22 @@ const createUpscaleTo = {
   name: APP_SURFACE.CREATE,
   params: { feature: FeatureType.UPSCALE },
 };
+
+usePageSeo({
+  title: 'Compare upscale models – Visual AI',
+  description:
+    'Side-by-side before and after samples for Visual AI upscalers. Drag the slider to compare models, then upscale your own image with credits.',
+  path: '/compare',
+  jsonLd: itemListJsonLd({
+    name: 'Visual AI upscale models',
+    description: 'Compare Visual AI upscalers with before-and-after samples.',
+    items: comparisonCards.map((card) => ({
+      name: card.model.title,
+      path: '/compare',
+      description: card.model.description,
+    })),
+  }),
+});
 </script>
 
 <template>
@@ -73,6 +92,7 @@ const createUpscaleTo = {
       </div>
     </section>
   </div>
+  <LandingFooter />
 </template>
 
 <style scoped lang="scss">

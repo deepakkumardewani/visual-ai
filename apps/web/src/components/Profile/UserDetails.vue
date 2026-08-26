@@ -8,6 +8,9 @@ import { useUserStore } from '@/stores/user';
 
 import Avatar from '@/components/Avatar.vue';
 import DeleteDialog from '@/components/Dialogs/DeleteDialog.vue';
+import ProfileCreditsCard from '@/components/Profile/ProfileCreditsCard.vue';
+
+const SAVE_ERROR_MESSAGE = 'Couldn’t save. Try again.';
 
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
@@ -21,6 +24,8 @@ const isEditingName = ref(false);
 const isEditingUsername = ref(false);
 const showNameCheckmark = ref(false);
 const showUsernameCheckmark = ref(false);
+const nameSaveError = ref('');
+const usernameSaveError = ref('');
 
 const hasNameChanged = computed(() => {
   return (
@@ -34,39 +39,53 @@ const hasUsernameChanged = computed(() => {
 });
 
 async function updateName() {
-  try {
-    await userStore.updateName(firstName.value, lastName.value);
-    isEditingName.value = false;
-    showNameCheckmark.value = true;
-    setTimeout(() => {
-      showNameCheckmark.value = false;
-    }, 2000);
-  } catch (error) {
-    console.error('Failed to update name:', error);
+  nameSaveError.value = '';
+  const saved = await userStore.updateName(firstName.value, lastName.value);
+  if (!saved) {
+    nameSaveError.value = SAVE_ERROR_MESSAGE;
+    return;
   }
+  isEditingName.value = false;
+  showNameCheckmark.value = true;
+  setTimeout(() => {
+    showNameCheckmark.value = false;
+  }, 2000);
 }
 
 async function updateUsername() {
-  try {
-    await userStore.updateUsername(username.value);
-    isEditingUsername.value = false;
-    showUsernameCheckmark.value = true;
-    setTimeout(() => {
-      showUsernameCheckmark.value = false;
-    }, 2000);
-  } catch (error) {
-    console.error('Failed to update username:', error);
+  usernameSaveError.value = '';
+  const saved = await userStore.updateUsername(username.value);
+  if (!saved) {
+    usernameSaveError.value = SAVE_ERROR_MESSAGE;
+    return;
   }
+  isEditingUsername.value = false;
+  showUsernameCheckmark.value = true;
+  setTimeout(() => {
+    showUsernameCheckmark.value = false;
+  }, 2000);
+}
+
+function startNameEdit() {
+  nameSaveError.value = '';
+  isEditingName.value = true;
+}
+
+function startUsernameEdit() {
+  usernameSaveError.value = '';
+  isEditingUsername.value = true;
 }
 
 function cancelNameUpdate() {
   isEditingName.value = false;
+  nameSaveError.value = '';
   firstName.value = userDetails.value?.firstName ?? '';
   lastName.value = userDetails.value?.lastName ?? '';
 }
 
 function cancelUsernameUpdate() {
   isEditingUsername.value = false;
+  usernameSaveError.value = '';
   username.value = userDetails.value?.userName ?? '';
 }
 
@@ -84,19 +103,53 @@ watch(
 
 <template>
   <div class="user-details">
-    <div class="user-details__hero">
-      <Avatar size="x-large" />
-      <div class="user-details__identity">
-        <h2 class="user-details__name">
-          {{ userDetails?.fullName || 'Your profile' }}
-        </h2>
-        <p class="user-details__email">{{ email || 'Add your details below' }}</p>
+    <div class="user-details__masthead">
+      <div class="user-details__hero">
+        <Avatar size="x-large" />
+        <div class="user-details__identity">
+          <h2 class="user-details__name">
+            {{ userDetails?.fullName || 'Your profile' }}
+          </h2>
+          <p v-if="email" class="user-details__email">{{ email }}</p>
+        </div>
       </div>
+      <ProfileCreditsCard />
     </div>
 
     <div class="user-details__form">
       <fieldset class="user-details__fieldset">
-        <legend class="user-details__legend">Name</legend>
+        <legend class="user-details__legend">
+          <span>Name</span>
+          <span class="user-details__actions">
+            <button
+              v-if="!isEditingName"
+              type="button"
+              class="btn btn--ghost"
+              @click="startNameEdit"
+            >
+              Edit
+            </button>
+            <template v-else>
+              <button
+                type="button"
+                class="btn btn--primary"
+                :disabled="!hasNameChanged || isUpdatingName"
+                @click="updateName"
+              >
+                {{ isUpdatingName ? 'Saving…' : 'Save' }}
+              </button>
+              <button type="button" class="btn btn--ghost" @click="cancelNameUpdate">Cancel</button>
+            </template>
+            <Transition name="check">
+              <font-awesome-icon
+                v-if="showNameCheckmark"
+                :icon="faCircleCheck"
+                class="user-details__check"
+                aria-label="Name saved"
+              />
+            </Transition>
+          </span>
+        </legend>
         <div class="user-details__row">
           <label class="field">
             <span class="field__label">First name</span>
@@ -121,39 +174,44 @@ watch(
             />
           </label>
         </div>
-        <div class="user-details__actions">
-          <button
-            v-if="!isEditingName"
-            type="button"
-            class="btn btn--ghost"
-            @click="isEditingName = true"
-          >
-            Edit
-          </button>
-          <template v-else>
-            <button
-              type="button"
-              class="btn btn--primary"
-              :disabled="!hasNameChanged || isUpdatingName"
-              @click="updateName"
-            >
-              {{ isUpdatingName ? 'Saving…' : 'Update' }}
-            </button>
-            <button type="button" class="btn btn--ghost" @click="cancelNameUpdate">Cancel</button>
-          </template>
-          <Transition name="check">
-            <font-awesome-icon
-              v-if="showNameCheckmark"
-              :icon="faCircleCheck"
-              class="user-details__check"
-              aria-label="Name saved"
-            />
-          </Transition>
-        </div>
+        <p v-if="nameSaveError" class="user-details__error" role="alert">{{ nameSaveError }}</p>
       </fieldset>
 
       <fieldset class="user-details__fieldset">
-        <legend class="user-details__legend">Username</legend>
+        <legend class="user-details__legend">
+          <span>Username</span>
+          <span class="user-details__actions">
+            <button
+              v-if="!isEditingUsername"
+              type="button"
+              class="btn btn--ghost"
+              @click="startUsernameEdit"
+            >
+              Edit
+            </button>
+            <template v-else>
+              <button
+                type="button"
+                class="btn btn--primary"
+                :disabled="!hasUsernameChanged || isUpdatingUsername"
+                @click="updateUsername"
+              >
+                {{ isUpdatingUsername ? 'Saving…' : 'Save' }}
+              </button>
+              <button type="button" class="btn btn--ghost" @click="cancelUsernameUpdate">
+                Cancel
+              </button>
+            </template>
+            <Transition name="check">
+              <font-awesome-icon
+                v-if="showUsernameCheckmark"
+                :icon="faCircleCheck"
+                class="user-details__check"
+                aria-label="Username saved"
+              />
+            </Transition>
+          </span>
+        </legend>
         <div class="user-details__row user-details__row--single">
           <label class="field">
             <span class="field__label">Username</span>
@@ -167,37 +225,9 @@ watch(
             />
           </label>
         </div>
-        <div class="user-details__actions">
-          <button
-            v-if="!isEditingUsername"
-            type="button"
-            class="btn btn--ghost"
-            @click="isEditingUsername = true"
-          >
-            Edit
-          </button>
-          <template v-else>
-            <button
-              type="button"
-              class="btn btn--primary"
-              :disabled="!hasUsernameChanged || isUpdatingUsername"
-              @click="updateUsername"
-            >
-              {{ isUpdatingUsername ? 'Saving…' : 'Update' }}
-            </button>
-            <button type="button" class="btn btn--ghost" @click="cancelUsernameUpdate">
-              Cancel
-            </button>
-          </template>
-          <Transition name="check">
-            <font-awesome-icon
-              v-if="showUsernameCheckmark"
-              :icon="faCircleCheck"
-              class="user-details__check"
-              aria-label="Username saved"
-            />
-          </Transition>
-        </div>
+        <p v-if="usernameSaveError" class="user-details__error" role="alert">
+          {{ usernameSaveError }}
+        </p>
       </fieldset>
 
       <fieldset class="user-details__fieldset">
@@ -225,14 +255,23 @@ watch(
 .user-details {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 2.5rem;
   max-width: 40rem;
+}
+
+.user-details__masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem 2rem;
 }
 
 .user-details__hero {
   display: flex;
   align-items: center;
   gap: 1rem;
+  min-width: 0;
 }
 
 .user-details__name {
@@ -252,7 +291,7 @@ watch(
 .user-details__form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .user-details__fieldset {
@@ -263,9 +302,14 @@ watch(
 }
 
 .user-details__legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
   padding: 0;
   margin-bottom: 0.75rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -313,8 +357,8 @@ watch(
 
   &:focus {
     outline: none;
-    border-color: rgba(201, 168, 76, 0.55);
-    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+    border-color: rgb(var(--tw-accent) / 0.55);
+    box-shadow: 0 0 0 3px rgb(var(--tw-accent) / 0.15);
   }
 
   &:read-only,
@@ -325,12 +369,12 @@ watch(
 }
 
 .user-details__actions {
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 0.75rem;
-  position: relative;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .user-details__hint {
@@ -339,14 +383,24 @@ watch(
   color: rgb(var(--tw-ink-muted));
 }
 
+.user-details__error {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: #e08585;
+}
+
+:global(html:not(.tw-dark)) .user-details__error {
+  color: #b03c3c;
+}
+
 .user-details__check {
   color: #6faf7a;
   font-size: 1.1rem;
 }
 
 .user-details__danger {
-  padding-top: 1.25rem;
-  border-top: 1px solid rgb(var(--tw-border) / 0.7);
+  padding-top: 2rem;
+  border-top: 1px solid rgb(var(--tw-hairline));
 }
 
 .user-details__danger-title {
@@ -360,12 +414,14 @@ watch(
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
-  padding: 0.45rem 1rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 999px;
   border: 1px solid transparent;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
   cursor: pointer;
   transition:
     background-color 150ms ease,
@@ -379,7 +435,7 @@ watch(
   }
 
   &:focus-visible {
-    outline: 2px solid #c9a84c;
+    outline: 2px solid rgb(var(--tw-accent));
     outline-offset: 2px;
   }
 }
@@ -395,8 +451,8 @@ watch(
 }
 
 .btn--primary {
-  background: linear-gradient(135deg, #e8c96b 0%, #c9a84c 45%, #9e7d35 100%);
-  color: #fff;
+  background: rgb(var(--tw-accent));
+  color: rgb(var(--tw-canvas));
 
   &:hover:not(:disabled) {
     opacity: 0.92;

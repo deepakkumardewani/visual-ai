@@ -9,6 +9,7 @@ import { useAppStore } from '@/stores/app';
 
 import { useComposerPersistence } from '@/composables/useComposerPersistence';
 import { useGlobalShortcuts } from '@/composables/useGlobalShortcuts';
+import { usePageSeo } from '@/composables/usePageSeo';
 
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue';
 import LowCreditsDialog from '@/components/Dialogs/LowCreditsDialog.vue';
@@ -69,6 +70,13 @@ watch(
   },
   { immediate: true },
 );
+
+usePageSeo(() => ({
+  title: 'Create with Visual AI',
+  description: 'Generate, upscale, colorize, and restore images in the Visual AI studio.',
+  path: route.path,
+  robots: 'noindex, follow',
+}));
 </script>
 
 <template>

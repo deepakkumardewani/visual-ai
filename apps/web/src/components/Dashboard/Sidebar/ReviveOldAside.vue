@@ -12,7 +12,10 @@ import { useUserStore } from '@/stores/user';
 
 import { useFeatureSubmit } from '@/composables/useFeatureSubmit';
 
+import FeatureCta from '@/components/Dashboard/FeatureCta.vue';
 import ImageUpload from '@/components/Dashboard/Sidebar/ImageUpload.vue';
+
+import { getTransformCreditCost } from '@/utils/generationCredits';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
@@ -21,18 +24,19 @@ const appStore = useAppStore();
 
 const { isSignedIn } = useUser();
 const { progressUrl } = storeToRefs(appStore);
-const { isPro, credits, userId } = storeToRefs(userStore);
+const { credits, userId } = storeToRefs(userStore);
 const { reviveInProgress } = storeToRefs(generateStore);
 
 const imageUpload = ref<InstanceType<typeof ImageUpload> | null>(null);
 const canSubmit = computed(() => Boolean(imageUpload.value?.image) && !reviveInProgress.value);
+const creditCost = getTransformCreditCost();
 
 async function reviveImage() {
   if (!isSignedIn.value) {
     dialogStore.showSignup();
     return;
   }
-  if ((!isPro.value && credits.value < 3) || (isPro.value && credits.value === 0)) {
+  if (credits.value < creditCost) {
     dialogStore.showLowCredits();
     return;
   }
@@ -74,20 +78,14 @@ onMounted(() => {
   >
     <ImageUpload ref="imageUpload" />
 
-    <button
-      type="button"
-      data-testid="revive-cta"
-      class="tw-flex tw-h-11 tw-w-full tw-items-center tw-justify-center tw-rounded-lg tw-bg-accent tw-text-body-sm tw-font-semibold tw-uppercase tw-tracking-wide tw-text-canvas tw-shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.35)] tw-transition-[filter] tw-duration-fast hover:tw-brightness-110 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40"
+    <FeatureCta
+      label="Revive"
+      test-id="revive-cta"
+      :cost="creditCost"
+      :loading="reviveInProgress"
       :disabled="!canSubmit"
-      :aria-busy="reviveInProgress"
+      full-width
       @click="reviveImage"
-    >
-      <span
-        v-if="reviveInProgress"
-        class="tw-inline-block tw-h-4 tw-w-4 tw-animate-spin tw-rounded-full tw-border-2 tw-border-canvas/30 tw-border-t-canvas"
-        aria-hidden="true"
-      />
-      <span v-else>Revive</span>
-    </button>
+    />
   </div>
 </template>

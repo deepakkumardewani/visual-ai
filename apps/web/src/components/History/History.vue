@@ -20,8 +20,9 @@ import SelectActionButtons from '@/components/History/SelectActionButtons.vue';
 
 import { SIZE_CLASSES } from '@/utils/constants';
 
-const props = withDefaults(defineProps<{ isFavorites?: boolean }>(), {
+const props = withDefaults(defineProps<{ isFavorites?: boolean; embedded?: boolean }>(), {
   isFavorites: false,
+  embedded: false,
 });
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
@@ -166,7 +167,7 @@ watch(
         :aria-hidden="isSelecting"
         :inert="isSelecting"
       >
-        <h2 class="history-toolbar__title">
+        <h2 v-if="!props.embedded" class="history-toolbar__title">
           {{ props.isFavorites ? 'Favorites' : 'Assets' }}
         </h2>
         <div class="tw-ml-auto tw-flex tw-min-w-0 tw-flex-1 tw-justify-end sm:tw-flex-none">

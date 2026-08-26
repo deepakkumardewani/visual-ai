@@ -15,6 +15,7 @@ const Contact = () => import('@/pages/Contact.vue');
 const Dashboard = () => import('@/pages/Dashboard.vue');
 const ExploreImage = () => import('@/pages/ExploreImage.vue');
 const Examples = () => import('@/pages/Examples.vue');
+const FeatureLanding = () => import('@/pages/FeatureLanding.vue');
 const Faqs = () => import('@/pages/Frequent.vue');
 const Gallery = () => import('@/pages/Gallery.vue');
 const Pricing = () => import('@/pages/Pricing.vue');
@@ -30,6 +31,31 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'landing',
     component: Landing,
+  },
+  {
+    path: '/text-to-image',
+    name: 'seo-text-to-image',
+    component: FeatureLanding,
+  },
+  {
+    path: '/image-upscaler',
+    name: 'seo-image-upscaler',
+    component: FeatureLanding,
+  },
+  {
+    path: '/colorize-photo',
+    name: 'seo-colorize-photo',
+    component: FeatureLanding,
+  },
+  {
+    path: '/photo-restorer',
+    name: 'seo-photo-restorer',
+    component: FeatureLanding,
+  },
+  {
+    path: '/remove-background',
+    name: 'seo-remove-background',
+    component: FeatureLanding,
   },
   {
     path: '/create/:feature?',

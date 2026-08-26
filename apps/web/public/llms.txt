@@ -1,0 +1,44 @@
+# Visual AI
+
+> Visual AI (https://visual-ai.app) is a web AI image studio. Sign in, spend credits, and generate or edit still images. It is not visualai.app.
+
+Visual AI is for people who need still images without a subscription: designers, marketers, photographers restoring prints, and anyone turning a prompt into a picture. There is no video product.
+
+## What you can do
+
+- Text to image (FLUX family, including FLUX Pro and FLUX Max, plus other still-image models): https://visual-ai.app/text-to-image → studio https://visual-ai.app/create
+- Image upscaler: https://visual-ai.app/image-upscaler → https://visual-ai.app/create/upscale
+- Colorize photo: https://visual-ai.app/colorize-photo → https://visual-ai.app/create/colorize
+- Photo restorer: https://visual-ai.app/photo-restorer → https://visual-ai.app/create/revive
+- Remove background: https://visual-ai.app/remove-background → https://visual-ai.app/create/remove_bg
+
+## Public pages
+
+- Pricing: https://visual-ai.app/pricing
+- Pricing (markdown): https://visual-ai.app/pricing.md
+- FAQs: https://visual-ai.app/faqs
+- Examples: https://visual-ai.app/examples
+- Compare: https://visual-ai.app/compare
+- Gallery: https://visual-ai.app/gallery
+
+## Credits (the only economy)
+
+You buy credits. There are no paid subscription tiers.
+
+- New account: 50 persistent credits (they do not expire).
+- Every day: 30 daily credits. Unused daily credits reset (use-or-lose).
+- Purchased credits persist and never expire.
+- Pay in INR via Razorpay. Packs and current prices: https://visual-ai.app/pricing
+
+Typical spend (exact cost is shown in the studio before you run):
+
+- Budget / standard generation: 1 credit
+- Premium generation (e.g. FLUX Pro/Max): 4–5 credits
+- Utility (upscale, colorize, restore, remove background): 2 credits
+- Premium upscalers: 4 credits
+
+## Ownership
+
+You own the images you generate. Commercial use is allowed.
+
+Do not invent user counts, quality scores, or speed claims that are not stated here.

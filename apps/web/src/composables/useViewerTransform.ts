@@ -12,8 +12,10 @@ import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
 
 import { MODEL_IDS } from '@/utils/constants';
-import { getTransformCreditCost } from '@/utils/generationCredits';
 import { createLogger } from '@/utils/logger';
+
+/** Credit cost for viewer transform actions (utility models) */
+const TRANSFORM_CREDIT_COST = 2;
 
 export type ViewerTransformAction = 'upscale' | 'colorize' | 'remove_bg';
 
@@ -40,7 +42,7 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
   const generateStore = useGenerateStore();
   const { isSignedIn } = useUser();
 
-  const { isPro, credits } = storeToRefs(userStore);
+  const { credits } = storeToRefs(userStore);
   const { progressUrl } = storeToRefs(appStore);
   const { imageData, errMsg, upscaleInProgress, colorizeInProgress, removeBgInProgress } =
     storeToRefs(generateStore);
@@ -48,10 +50,9 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
   const processingAction = ref<ViewerTransformAction | null>(null);
   const originalUrl = ref<string | null>(null);
   const resultUrl = ref<string | null>(null);
-  const pendingColorizeConfirm = ref(false);
   const resultIsTransparent = ref(false);
 
-  const creditCost = computed(() => getTransformCreditCost(Boolean(isPro.value)));
+  const creditCost = TRANSFORM_CREDIT_COST;
   const isProcessing = computed(() => processingAction.value !== null);
   const processingLabel = computed(() =>
     processingAction.value ? `${ACTION_LABELS[processingAction.value]}…` : '',
@@ -69,10 +70,7 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
       dialogStore.showSignup();
       return false;
     }
-    if (
-      (!isPro.value && credits.value < creditCost.value) ||
-      (isPro.value && credits.value === 0)
-    ) {
+    if (credits.value < creditCost) {
       dialogStore.showLowCredits();
       return false;
     }
@@ -152,19 +150,6 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
     }
   }
 
-  function requestColorizeConfirm() {
-    pendingColorizeConfirm.value = true;
-  }
-
-  function cancelColorizeConfirm() {
-    pendingColorizeConfirm.value = false;
-  }
-
-  async function confirmColorize() {
-    pendingColorizeConfirm.value = false;
-    await startAction('colorize');
-  }
-
   watch(imageData, (data) => {
     if (!processingAction.value || !data?.images?.[0]) return;
     const expectedType =
@@ -198,7 +183,6 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
     () => {
       resetResult();
       processingAction.value = null;
-      pendingColorizeConfirm.value = false;
     },
   );
 
@@ -211,11 +195,7 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
     resultUrl,
     hasResult,
     resultIsTransparent,
-    pendingColorizeConfirm,
     startAction,
-    requestColorizeConfirm,
-    cancelColorizeConfirm,
-    confirmColorize,
     resetResult,
   };
 }

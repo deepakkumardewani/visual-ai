@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, shallowRef } from 'vue';
 
-const accordionOpen = ref<boolean>(false);
+const accordionOpen = shallowRef(false);
 
 const props = defineProps<{
   title: string;
@@ -10,16 +10,16 @@ const props = defineProps<{
 }>();
 
 onMounted(() => {
-  accordionOpen.value = props.active;
+  accordionOpen.value = Boolean(props.active);
 });
 </script>
 
 <template>
-  <div class="py-2 border-b tw-border-white">
+  <div class="py-2 border-b tw-border-[rgb(var(--tw-hairline))]">
     <h2>
       <button
         :id="`accordion-title-${id}`"
-        class="tw-flex tw-items-center tw-justify-between tw-w-full tw-text-left tw-font-semibold tw-py-2"
+        class="tw-flex tw-items-center tw-justify-between tw-w-full tw-text-left tw-font-semibold tw-py-2 tw-text-[rgb(var(--tw-ink-primary))]"
         @click.prevent="accordionOpen = !accordionOpen"
         :aria-expanded="accordionOpen"
         :aria-controls="`accordion-text-${id}`"
@@ -54,7 +54,7 @@ onMounted(() => {
       :id="`accordion-text-${id}`"
       role="region"
       :aria-labelledby="`accordion-title-${id}`"
-      class="tw-grid tw-text-sm tw-text-[#9094a6] tw-overflow-hidden tw-transition-all tw-duration-300 tw-ease-in-out"
+      class="tw-grid tw-text-sm tw-text-[rgb(var(--tw-ink-secondary))] tw-overflow-hidden tw-transition-all tw-duration-300 tw-ease-in-out"
       :class="
         accordionOpen ? 'tw-grid-rows-[1fr] tw-opacity-100' : 'tw-grid-rows-[0fr] tw-opacity-0'
       "

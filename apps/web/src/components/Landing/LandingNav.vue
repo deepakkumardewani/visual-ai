@@ -48,8 +48,8 @@ function scrollToTop() {
 
       <div class="nav__actions">
         <ThemeButton class="nav__theme-btn" />
-        <LandingButton :to="auth.isSignedIn ? '/dashboard' : '/signup'">
-          {{ auth.isSignedIn ? 'Open Dashboard' : 'Start free' }}
+        <LandingButton :to="auth.isSignedIn ? '/create' : '/signin'">
+          {{ auth.isSignedIn ? 'Open studio' : 'Start free' }}
         </LandingButton>
       </div>
 
@@ -77,11 +77,11 @@ function scrollToTop() {
         <div class="nav__sheet-actions">
           <ThemeButton class="nav__sheet-theme-btn" />
           <LandingButton
-            :to="auth.isSignedIn ? '/dashboard' : '/signup'"
+            :to="auth.isSignedIn ? '/create' : '/signin'"
             size="lg"
             class="nav__sheet-cta"
           >
-            {{ auth.isSignedIn ? 'Open Dashboard' : 'Start free' }}
+            {{ auth.isSignedIn ? 'Open studio' : 'Start free' }}
           </LandingButton>
         </div>
       </div>

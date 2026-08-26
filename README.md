@@ -6,10 +6,10 @@ AI image generation studio: type a prompt, pick a model (FLUX family via [Replic
 
 Bun-workspaces monorepo with two apps:
 
-| App                    | Package          | Stack                                                                                                                                    |
-| ---------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| App                    | Package          | Stack                                                                                                                        |
+| ---------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | [`apps/web`](apps/web) | `@visual-ai/web` | Vue 3 (Composition API), Vite 7 via [vite-plus](https://www.npmjs.com/package/vite-plus), Tailwind, Pinia, Clerk (vue-clerk) |
-| [`apps/api`](apps/api) | `@visual-ai/api` | Express 4 (ESM, tsx), MongoDB (Mongoose), Redis (ioredis), Replicate SDK, Cloudinary, Razorpay, Clerk                                    |
+| [`apps/api`](apps/api) | `@visual-ai/api` | Express 4 (ESM, tsx), MongoDB (Mongoose), Redis (ioredis), Replicate SDK, Cloudinary, Razorpay, Clerk                        |
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full system design, [docs/PRD.md](docs/PRD.md) for product requirements, and [docs/MODEL_ONBOARDING.md](docs/MODEL_ONBOARDING.md) for adding new models to the catalog.
 

@@ -23,6 +23,13 @@ const { snackbar, snackbarText } = storeToRefs(appStore);
 
 const createOpen = ref(false);
 const newName = ref('');
+/** TODO(collections): restore All chip + New-collection chip + form when we ship albums. */
+const ENABLE_COLLECTION_ALL = false;
+const ENABLE_COLLECTION_CREATE = false;
+
+const showStrip = computed(
+  () => ENABLE_COLLECTION_CREATE || ENABLE_COLLECTION_ALL || collections.value.length > 0,
+);
 
 const historyById = computed(() => {
   const map = new Map<string, IImageObject>();
@@ -61,7 +68,7 @@ function selectAll() {
 }
 
 function selectCollection(id: string) {
-  collectionsStore.selectCollection(id);
+  collectionsStore.selectCollection(selectedCollectionId.value === id ? null : id);
 }
 
 async function submitCreate() {
@@ -78,8 +85,9 @@ async function submitCreate() {
 </script>
 
 <template>
-  <div class="collections-strip" data-testid="collections-strip">
+  <div v-if="showStrip" class="collections-strip" data-testid="collections-strip">
     <button
+      v-if="ENABLE_COLLECTION_ALL"
       type="button"
       class="collection-chip"
       :class="{ 'collection-chip--active': selectedCollectionId === null }"
@@ -123,7 +131,12 @@ async function submitCreate() {
       </span>
     </button>
 
-    <Popover v-model:open="createOpen" placement="bottom-start" unstyled-trigger>
+    <Popover
+      v-if="ENABLE_COLLECTION_CREATE"
+      v-model:open="createOpen"
+      placement="bottom-start"
+      unstyled-trigger
+    >
       <template #trigger="{ triggerProps }">
         <Tooltip text="Create a collection">
           <button

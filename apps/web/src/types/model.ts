@@ -9,7 +9,7 @@ export interface Model {
   tier: ModelTier;
   pricePerImage?: number;
   iconUrl?: string;
-  isPro: boolean;
+  creditCost?: number;
   featured?: boolean;
   companyName?: string;
 }

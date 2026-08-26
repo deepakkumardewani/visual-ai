@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { faCoins, faCreditCard, faCrown } from '@/plugins/icons';
+import { faCoins, faCreditCard } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
-import { useRouter } from 'vue-router';
 
 import { FeatureType } from '@/types';
 
@@ -12,7 +11,6 @@ import { useUserStore } from '@/stores/user';
 
 import AppModal from '@/components/AppModal.vue';
 
-const router = useRouter();
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
 const appStore = useAppStore();
@@ -22,21 +20,25 @@ function closeDialog() {
   dialogStore.showLowCreditsDialog = false;
 }
 
-function handleNavigateToPricing() {
-  closeDialog();
-  router.push('/pricing');
-}
-
 function handleBuyCredits() {
   closeDialog();
   dialogStore.showBuyCredits();
 }
 
-const isCritical = computed(() => userStore.credits <= 5);
+const isCritical = computed(() => (userStore.dailyCredits || 0) + (userStore.credits || 0) <= 5);
 
 const creditRequirement = computed(() => {
+  // Unified cost for all users (no Pro distinction)
   if (feature.value === FeatureType.IMAGE) return 1;
-  return userStore.isPro ? 1 : 3;
+  if (
+    feature.value === FeatureType.UPSCALE ||
+    feature.value === FeatureType.COLORIZE ||
+    feature.value === FeatureType.REVIVE ||
+    feature.value === FeatureType.REMOVE_BG
+  ) {
+    return 2; // Utility models cost 2 credits
+  }
+  return 1;
 });
 
 const featureText = computed(() => {
@@ -84,27 +86,19 @@ const featureText = computed(() => {
       <p class="low__copy">
         You are running low on credits. To {{ featureText }},
         {{ creditRequirement }}
-        {{ creditRequirement === 1 ? 'credit is' : 'credits are' }} required. Add more credits or
-        subscribe to Pro
-        <template v-if="!userStore.isPro && feature !== 'generate'">
-          to reduce usage to 1 credit per operation</template
-        >.
+        {{ creditRequirement === 1 ? 'credit is' : 'credits are' }} required.
       </p>
 
       <div class="low__chip" :class="{ 'low__chip--critical': isCritical }">
         <font-awesome-icon :icon="faCoins" aria-hidden="true" />
-        {{ userStore.credits }} credits remaining
+        {{ (userStore.dailyCredits || 0) + (userStore.credits || 0) }} credits available
       </div>
     </div>
 
     <template #actions>
-      <button type="button" class="modal-btn modal-btn--primary" @click="handleNavigateToPricing">
-        <font-awesome-icon :icon="faCrown" aria-hidden="true" />
-        Upgrade plan
-      </button>
-      <button type="button" class="modal-btn modal-btn--ghost" @click="handleBuyCredits">
+      <button type="button" class="modal-btn modal-btn--primary" @click="handleBuyCredits">
         <font-awesome-icon :icon="faCreditCard" aria-hidden="true" />
-        Buy credits
+        Buy Credits
       </button>
     </template>
   </AppModal>

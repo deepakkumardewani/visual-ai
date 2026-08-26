@@ -1,10 +1,22 @@
 [
   {
-    "question": "Can I use Visual AI for free? What benefits do I get from a paid subscription?",
-    "answer": "Absolutely! Visual AI offers a free tier that includes a daily quota of tokens. These can be used for your creative projects within our platform. This free offering doesn't come with an expiry date, so you can use it for as long as you like.<br><br>Our paid subscriptions come with extra benefits: an increased token allowance, faster image generation, and access to premium features. To find out more about our subscription plans, check the pricing page."
+    "question": "Can I use Visual AI for free?",
+    "answer": "Yes. Every new account gets 50 persistent credits that never expire, plus 30 daily credits that reset each day (unused daily credits do not roll over). You can generate, upscale, colorize, restore, and remove backgrounds with those credits — no card and no subscription required to start.<br><br>When you need more, buy credit packs on the pricing page. Purchased credits persist and never expire. There are no paid subscription tiers."
   },
   {
-    "question": "How quickly can I generate assets using Visual AI?",
-    "answer": "Visual AI is designed for high-speed asset generation. The duration may vary depending on several factors such as:<br><br><b>Image generation parameters:</b> The settings and parameters chosen for an image, including resolution, can impact generation times. For instance, higher resolution images may take slightly longer.<br><br><b>Number of images:</b> Generating multiple images simultaneously might affect the speed of individual asset generation.<br><br><b>User tier:</b> Our tiered structure means priority is given to paid users, which can lead to faster asset generation times for these users.<br><br><b>Despite these variables, we consistently strive to optimise our processes and infrastructure to ensure efficient and rapid asset production for all our users."
+    "question": "How quickly can I generate images?",
+    "answer": "Generation time depends on the model and settings you choose. Higher-resolution or premium models can take longer than everyday models. Visual AI is a still-image studio (no video). We keep the pipeline as fast as we reasonably can for every account."
+  },
+  {
+    "question": "How do credits work?",
+    "answer": "Each generation or edit spends credits. You get 50 persistent credits that stay on the account, plus 30 daily credits that reset unused at the end of the day. Purchased credits never expire."
+  },
+  {
+    "question": "Which models can I use?",
+    "answer": "Still-image models from Google, OpenAI, xAI, ByteDance, and Black Forest Labs, plus upscalers and utilities like colorize, restore, and background removal. See per-model costs on <a href=\"/pricing#model-costs\">/pricing#model-costs</a>."
+  },
+  {
+    "question": "Do I need a subscription?",
+    "answer": "No. Visual AI is credits only — there are no paid subscription tiers."
   }
 ]

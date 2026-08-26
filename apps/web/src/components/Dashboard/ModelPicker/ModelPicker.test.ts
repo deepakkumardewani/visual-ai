@@ -20,7 +20,6 @@ vi.mock('vue-router', () => ({
 }));
 
 import ModelPicker from '@/components/Dashboard/ModelPicker/ModelPicker.vue';
-import { useUserStore } from '@/stores/user';
 import { MODEL_IDS } from '@visual-ai/shared';
 import { FLUX_MODES, getFeaturedModels, MODELS } from '@/utils/models';
 
@@ -103,37 +102,9 @@ describe('ModelPicker', () => {
     expect(document.activeElement).toBe(second);
   });
 
-  it('redirects non-pro users selecting premium model to pricing', async () => {
+  it('emits selected model regardless of tier', async () => {
     const pinia = createPinia();
     setActivePinia(pinia);
-
-    const userStore = useUserStore();
-    userStore.isPro = false;
-
-    const { wrapper } = mountPicker({ pinia });
-    await wrapper.get('button').trigger('click');
-
-    const fluxPro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_PRO)!;
-    openCompanySubmenu(fluxPro.companyName!);
-    await wrapper.vm.$nextTick();
-    const proOption = body()
-      .findAll('[data-testid="model-option"]')
-      .find((el) => el.text().includes(fluxPro.title))!;
-
-    await proOption.trigger('click');
-
-    expect(pushMock).toHaveBeenCalledWith('/pricing');
-    expect(wrapper.emitted('update:selected')).toBeTruthy();
-    const emittedModel = (wrapper.emitted('update:selected')?.[0]?.[0] as any)?.title;
-    expect(emittedModel).toBe(FLUX_MODES[1].title);
-  });
-
-  it('emits FLUX_PRO model when selected by pro user', async () => {
-    const pinia = createPinia();
-    setActivePinia(pinia);
-
-    const userStore = useUserStore();
-    userStore.isPro = true;
 
     const { wrapper } = mountPicker({ pinia });
     await wrapper.get('button').trigger('click');
@@ -152,12 +123,9 @@ describe('ModelPicker', () => {
     expect(emittedModel?.id).toBe(MODEL_IDS.FLUX_PRO);
   });
 
-  it('emits FLUX_1_1_PRO model when selected by pro user', async () => {
+  it('allows selection of FLUX_1_1_PRO model', async () => {
     const pinia = createPinia();
     setActivePinia(pinia);
-
-    const userStore = useUserStore();
-    userStore.isPro = true;
 
     const { wrapper } = mountPicker({ pinia });
     await wrapper.get('button').trigger('click');

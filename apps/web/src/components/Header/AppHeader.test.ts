@@ -6,7 +6,6 @@ import { ref } from 'vue';
 const routePathRef = ref('/create');
 const routeNameRef = ref('create');
 const smAndUpRef = ref(true);
-const isProRef = ref(false);
 
 vi.mock('vue-router', () => ({
   useRoute: () => ({ path: routePathRef.value, name: routeNameRef.value }),
@@ -68,10 +67,6 @@ vi.mock('@/components/Dialogs/ReferralOfferDialog.vue', () => ({
   default: { template: '<div />' },
 }));
 
-vi.mock('@/components/Dialogs/ProUpgradeDialog.vue', () => ({
-  default: { template: '<div />' },
-}));
-
 import AppHeader from '@/components/Header/AppHeader.vue';
 import { useUserStore } from '@/stores/user';
 
@@ -81,7 +76,6 @@ describe('AppHeader', () => {
     routePathRef.value = '/create';
     routeNameRef.value = 'create';
     smAndUpRef.value = true;
-    isProRef.value = false;
     localStorage.clear();
   });
 
@@ -89,7 +83,6 @@ describe('AppHeader', () => {
     const pinia = createPinia();
     setActivePinia(pinia);
     const userStore = useUserStore();
-    userStore.isPro = isProRef.value;
     userStore.isReady = true;
 
     return mount(AppHeader, {
@@ -113,15 +106,7 @@ describe('AppHeader', () => {
 
     expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="credits-chip-stub"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="header-upgrade-btn"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="feature-select-stub"]').exists()).toBe(true);
-  });
-
-  it('hides upgrade button for pro users', () => {
-    isProRef.value = true;
-    const wrapper = mountHeader();
-
-    expect(wrapper.find('[data-testid="header-upgrade-btn"]').exists()).toBe(false);
   });
 
   it('shows sign-in affordance for signed-out dashboard users', () => {

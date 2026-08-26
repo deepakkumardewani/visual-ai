@@ -1,9 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, shallowRef } from 'vue';
 
-import { FAQS } from '@/utils/landing';
+import { FAQS, type Faq } from '@/utils/landing';
 
-const open = ref<number | null>(0);
+const props = withDefaults(
+  defineProps<{
+    faqs?: Faq[];
+    heading?: string;
+  }>(),
+  {
+    heading: 'Good to know.',
+  },
+);
+
+const items = computed(() => props.faqs ?? FAQS);
+const open = shallowRef<number | null>(0);
 
 function toggle(i: number) {
   open.value = open.value === i ? null : i;
@@ -14,12 +25,12 @@ function toggle(i: number) {
   <section id="faq" class="faq">
     <div class="faq__head">
       <p v-reveal class="eyebrow">Questions</p>
-      <h2 v-reveal="{ delay: 0.05 }" class="faq__title">Good to know.</h2>
+      <h2 v-reveal="{ delay: 0.05 }" class="faq__title">{{ heading }}</h2>
     </div>
 
     <ul class="faq__list">
       <li
-        v-for="(item, i) in FAQS"
+        v-for="(item, i) in items"
         :key="item.question"
         v-reveal="{ delay: i * 0.05 }"
         class="faq__item"

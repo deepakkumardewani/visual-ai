@@ -8,13 +8,20 @@ defineProps({
     type: Array as PropType<{ question: string; answer: string; active?: boolean }[]>,
     required: true,
   },
+  headingTag: {
+    type: String as PropType<'h1' | 'h2'>,
+    default: 'h2',
+  },
 });
 </script>
 
 <template>
-  <div class="tw-my-8 tw-text-center tw-font-display tw-text-2xl sm:tw-text-4xl">
+  <component
+    :is="headingTag"
+    class="tw-my-8 tw-text-center tw-font-display tw-text-2xl tw-text-[rgb(var(--tw-ink-primary))] sm:tw-text-4xl"
+  >
     Frequently Asked Questions
-  </div>
+  </component>
 
   <div class="tw-flex tw-justify-center">
     <div class="tw-w-10/12 tw-px-3 sm:tw-w-8/12">

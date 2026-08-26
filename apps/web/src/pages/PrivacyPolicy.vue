@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import LandingFooter from '@/components/Landing/LandingFooter.vue';
+import { usePageSeo } from '@/composables/usePageSeo';
+
+usePageSeo({
+  title: 'Privacy Policy – Visual AI',
+  description:
+    'How Visual AI collects, uses, and protects your information when you generate images, buy credits, or contact support.',
+  path: '/privacy',
+});
+</script>
+
 <template>
   <div class="page">
     <!-- <div class="header">
@@ -231,6 +243,7 @@
       </div>
     </div>
   </div>
+  <LandingFooter />
 </template>
 
 <style scoped>

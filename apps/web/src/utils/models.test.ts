@@ -21,7 +21,8 @@ describe('models catalog', () => {
       expect(model.provider).toBeTruthy();
       expect(model.description).toBeTruthy();
       expect(['budget', 'standard', 'premium']).toContain(model.tier);
-      expect(typeof model.isPro).toBe('boolean');
+      expect(typeof model.creditCost).toBe('number');
+      expect(model.creditCost).toBeGreaterThan(0);
     }
   });
 
@@ -37,11 +38,13 @@ describe('models catalog', () => {
     expect(ids).toContain(MODEL_IDS.FLUX_REALISM);
   });
 
-  it('derives isPro from premium tier for new catalog models', () => {
+  it('assigns credit costs based on tier', () => {
     const premium = MODELS.filter((m) => m.tier === 'premium');
+
     expect(premium.length).toBeGreaterThan(0);
+    // Premium models should have higher credit costs than budget/standard
     for (const model of premium) {
-      expect(model.isPro).toBe(true);
+      expect(model.creditCost).toBeGreaterThanOrEqual(4);
     }
   });
 
@@ -109,15 +112,16 @@ describe('upscaler models', () => {
       expect(model.provider).toBeTruthy();
       expect(model.description).toBeTruthy();
       expect(['budget', 'standard', 'premium']).toContain(model.tier);
-      expect(typeof model.isPro).toBe('boolean');
+      expect(typeof model.creditCost).toBe('number');
+      expect(model.creditCost).toBeGreaterThan(0);
     }
   });
 
-  it('maps premium tier models to isPro === true', () => {
+  it('assigns higher credit costs to premium upscalers', () => {
     const premiumUpscalers = UPSCALER_MODELS.filter((m) => m.tier === 'premium');
     expect(premiumUpscalers.length).toBe(2); // Clarity Pro and Topaz
     for (const model of premiumUpscalers) {
-      expect(model.isPro).toBe(true);
+      expect(model.creditCost).toBe(4);
     }
   });
 

@@ -9,17 +9,20 @@ import { FeatureType } from '@/types';
 import { useAsideStore } from '@/stores/aside';
 import { useExploreStore } from '@/stores/explore';
 
-import ConfirmColorizeDialog from '@/components/Dialogs/ConfirmColorizeDialog.vue';
 import ViewerDetails from '@/components/Explore/ViewerDetails.vue';
 import ViewerFilmstrip from '@/components/Explore/ViewerFilmstrip.vue';
 import ViewerStage from '@/components/Explore/ViewerStage.vue';
 import { prefetchImageUrls, useExploreViewerNav } from '@/composables/useExploreViewerNav';
 import { useDashboardMotion } from '@/composables/useDashboardMotion';
-import { useImageChainActions } from '@/composables/useImageChainActions';
+import {
+  useImageChainActions,
+  COLORIZE_ALREADY_COLORED_COPY,
+} from '@/composables/useImageChainActions';
 import { useShareActions } from '@/composables/useShareActions';
 import { useViewerTransform } from '@/composables/useViewerTransform';
 import { faChevronLeft, faLink } from '@/plugins/icons';
 import { detectMonochrome } from '@/utils/detectMonochrome';
+import { getTransformCreditCost } from '@/utils/generationCredits';
 import { APP_SURFACE, createFeatureLocation } from '@/utils/dashboardRoutes';
 import { downloadImage } from '@/utils/helpers';
 import { createLogger } from '@/utils/logger';
@@ -37,7 +40,8 @@ const { activeIndex, activeId, items, hasMore } = storeToRefs(exploreStore);
 const { typingPrompt } = storeToRefs(asideStore);
 const { interactiveTransition, pressable } = useDashboardMotion();
 const { showToast, shareLink, copyPrompt } = useShareActions();
-const { useAsReference, sendToUpscale, sendToRemoveBg } = useImageChainActions();
+const { useAsReference, sendToUpscale, sendToRemoveBg, confirmChainAction } =
+  useImageChainActions();
 
 const detailsPanelRef = ref<HTMLElement | null>(null);
 const detailsOpen = ref(false);
@@ -50,11 +54,7 @@ const {
   resultUrl,
   hasResult,
   resultIsTransparent,
-  pendingColorizeConfirm,
   startAction,
-  requestColorizeConfirm,
-  cancelColorizeConfirm,
-  confirmColorize,
 } = useViewerTransform(itemRef);
 
 const navEnabled = computed(() => !isProcessing.value);
@@ -147,18 +147,20 @@ async function handleUpscale() {
 }
 
 async function handleColorize() {
+  let alreadyLooksColored = false;
   try {
-    const isMono = await detectMonochrome(props.item.imageUrl);
-    if (!isMono) {
-      requestColorizeConfirm();
-      return;
-    }
+    alreadyLooksColored = !(await detectMonochrome(props.item.imageUrl));
   } catch (err) {
     log.error('monochrome detection failed', { error: err });
-    // Fail open — ask before spending credits on uncertain color images.
-    requestColorizeConfirm();
-    return;
+    alreadyLooksColored = true;
   }
+
+  const confirmed = await confirmChainAction({
+    action: 'colorize',
+    creditCost: getTransformCreditCost(),
+    extraCopy: alreadyLooksColored ? COLORIZE_ALREADY_COLORED_COPY : undefined,
+  });
+  if (!confirmed) return;
   await startAction('colorize');
 }
 
@@ -258,11 +260,5 @@ watch(
         />
       </div>
     </div>
-
-    <ConfirmColorizeDialog
-      :open="pendingColorizeConfirm"
-      @close="cancelColorizeConfirm"
-      @confirm="confirmColorize"
-    />
   </div>
 </template>

@@ -9,13 +9,14 @@ import { FeatureType } from '@/types';
 
 import { useAppStore } from '@/stores/app';
 import { useAsideStore } from '@/stores/aside';
-import { useDialogStore } from '@/stores/dialog';
+import { useDialogStore, type ConfirmChainActionOptions } from '@/stores/dialog';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
 
 import { useShareActions } from '@/composables/useShareActions';
 import { ASPECT_RATIOS } from '@/utils/constants';
 import { createFeatureLocation } from '@/utils/dashboardRoutes';
+import { getGenerationCreditCost, getTransformCreditCost } from '@/utils/generationCredits';
 import { getDownloadImageUrl } from '@/utils/helpers';
 import { createLogger } from '@/utils/logger';
 import { MODELS } from '@/utils/models';
@@ -42,6 +43,9 @@ export interface ChainNavigateOptions {
   /** Push dashboard Create tab after applying the action (Explore → Create). */
   navigateToDashboard?: boolean;
 }
+
+export const COLORIZE_ALREADY_COLORED_COPY =
+  'This image already looks colored. Colorize anyway? It still uses credits.';
 
 /**
  * Shared image chaining: use-as-reference, Upscale/Remove BG preload, and
@@ -104,12 +108,26 @@ export function useImageChainActions() {
     void router.push(createFeatureLocation(FeatureType.IMAGE));
   }
 
-  function applyModelFromName(modelName?: string) {
-    if (!modelName?.trim()) return;
-    const match = MODELS.find(
+  function findModelByName(modelName?: string) {
+    if (!modelName?.trim()) return undefined;
+    return MODELS.find(
       (m) => m.title.toLowerCase() === modelName.trim().toLowerCase() || m.id === modelName,
     );
+  }
+
+  function applyModelFromName(modelName?: string) {
+    const match = findModelByName(modelName);
     if (match) mode.value = match;
+  }
+
+  function moreLikeThisCreditCost(item: GenerationSettingsSource | IImageObject) {
+    const sourceCost = findModelByName(item.modelName)?.creditCost;
+    const baseCostPerImage = sourceCost ?? mode.value.creditCost ?? 1;
+    return getGenerationCreditCost(noOfOutputs.value, baseCostPerImage);
+  }
+
+  function confirmChainAction(options: ConfirmChainActionOptions): Promise<boolean> {
+    return dialogStore.confirmChainAction(options);
   }
 
   function applyAspectFromItem(item: GenerationSettingsSource) {
@@ -167,6 +185,11 @@ export function useImageChainActions() {
       showToast('Nothing to send');
       return false;
     }
+    const confirmed = await confirmChainAction({
+      action: 'upscale',
+      creditCost: getTransformCreditCost(),
+    });
+    if (!confirmed) return false;
     const ok = await asideStore.sendToFeature(source, FeatureType.UPSCALE);
     if (!ok) {
       showToast('Could not open Upscale');
@@ -183,6 +206,11 @@ export function useImageChainActions() {
       showToast('Nothing to send');
       return false;
     }
+    const confirmed = await confirmChainAction({
+      action: 'remove-bg',
+      creditCost: getTransformCreditCost(),
+    });
+    if (!confirmed) return false;
     const ok = await asideStore.sendToFeature(source, FeatureType.REMOVE_BG);
     if (!ok) {
       showToast('Could not open Remove background');
@@ -204,6 +232,12 @@ export function useImageChainActions() {
       return false;
     }
 
+    const confirmed = await confirmChainAction({
+      action: 'more-like-this',
+      creditCost: moreLikeThisCreditCost(item),
+    });
+    if (!confirmed) return false;
+
     applyGenerationSettings(item);
     goToCreateFeature(options);
 
@@ -223,7 +257,7 @@ export function useImageChainActions() {
       return false;
     }
 
-    if (!userStore.canAffordOutputs(noOfOutputs.value)) {
+    if (!userStore.canAffordOutputs(noOfOutputs.value, mode.value.creditCost ?? 1)) {
       dialogStore.showLowCredits();
       return false;
     }
@@ -258,5 +292,6 @@ export function useImageChainActions() {
     sendToRemoveBg,
     applyGenerationSettings,
     moreLikeThis,
+    confirmChainAction,
   };
 }

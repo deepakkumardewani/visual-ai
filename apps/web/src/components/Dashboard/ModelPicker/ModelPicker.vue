@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 import type { Model } from '@/types/model';
-
-import { useUserStore } from '@/stores/user';
 
 import Heading from '@/components/Dashboard/ModelPicker/Heading.vue';
 import ModelChip from '@/components/Dashboard/Composer/ModelChip.vue';
@@ -24,21 +20,9 @@ const emit = defineEmits<{
   'update:selected': [model: Model];
 }>();
 
-const router = useRouter();
-const userStore = useUserStore();
-
-const { isPro } = storeToRefs(userStore);
-
 const isOpen = ref(false);
 
 function handleSelect(model: Model) {
-  if (!isPro.value && model.isPro) {
-    emit('update:selected', props.fallback);
-    isOpen.value = false;
-    router.push('/pricing');
-    return;
-  }
-
   emit('update:selected', model);
   isOpen.value = false;
 }

@@ -14,6 +14,7 @@ import { useUserStore } from '@/stores/user';
 import { useFeatureSubmit } from '@/composables/useFeatureSubmit';
 import { useLocal } from '@/composables/local';
 
+import FeatureCta from '@/components/Dashboard/FeatureCta.vue';
 import ImageUpload from '@/components/Dashboard/Sidebar/ImageUpload.vue';
 
 import { getTransformCreditCost } from '@/utils/generationCredits';
@@ -25,20 +26,20 @@ const generateStore = useGenerateStore();
 const localStore = useLocal();
 
 const { isSignedIn } = useUser();
-const { isPro, credits } = storeToRefs(userStore);
+const { credits } = storeToRefs(userStore);
 const { progressUrl } = storeToRefs(appStore);
 const { removeBgInProgress } = storeToRefs(generateStore);
 
 const imageUpload = ref<InstanceType<typeof ImageUpload> | null>(null);
 const canSubmit = computed(() => Boolean(imageUpload.value?.image) && !removeBgInProgress.value);
-const creditCost = computed(() => getTransformCreditCost(Boolean(isPro.value)));
+const creditCost = getTransformCreditCost();
 
 async function removeBackground() {
   if (!isSignedIn.value) {
     dialogStore.showSignup();
     return;
   }
-  if ((!isPro.value && credits.value < creditCost.value) || (isPro.value && credits.value === 0)) {
+  if (credits.value < creditCost) {
     dialogStore.showLowCredits();
     return;
   }
@@ -88,25 +89,14 @@ onMounted(() => {
   >
     <ImageUpload ref="imageUpload" />
 
-    <button
-      type="button"
-      data-testid="remove-bg-cta"
-      class="tw-flex tw-h-11 tw-w-full tw-items-center tw-justify-center tw-gap-2 tw-rounded-lg tw-bg-accent tw-px-4 tw-text-body-sm tw-font-semibold tw-uppercase tw-tracking-wide tw-text-canvas tw-shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.35)] tw-transition-[filter] tw-duration-fast hover:tw-brightness-110 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-40"
+    <FeatureCta
+      label="Remove background"
+      test-id="remove-bg-cta"
+      :cost="creditCost"
+      :loading="removeBgInProgress"
       :disabled="!canSubmit"
-      :aria-busy="removeBgInProgress"
+      full-width
       @click="removeBackground"
-    >
-      <span
-        v-if="removeBgInProgress"
-        class="tw-inline-block tw-h-4 tw-w-4 tw-animate-spin tw-rounded-full tw-border-2 tw-border-canvas/30 tw-border-t-canvas"
-        aria-hidden="true"
-      />
-      <template v-else>
-        <span>Remove background</span>
-        <span class="tw-font-medium tw-normal-case tw-tracking-normal tw-opacity-80"
-          >· {{ creditCost }} {{ creditCost === 1 ? 'credit' : 'credits' }}</span
-        >
-      </template>
-    </button>
+    />
   </div>
 </template>

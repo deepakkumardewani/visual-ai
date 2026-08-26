@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { createHead } from '@unhead/vue/client';
 import { MotionPlugin } from '@vueuse/motion';
 import type { App } from 'vue';
 import { clerkPlugin } from 'vue-clerk';
@@ -29,6 +30,7 @@ export function registerPlugins(app: App) {
     appearance: clerkAppearance,
   });
   app.use(MotionPlugin);
+  app.use(createHead());
   app.directive('reveal', vReveal);
   app.use(router).use(pinia);
 }

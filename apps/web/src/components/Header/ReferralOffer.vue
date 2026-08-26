@@ -10,7 +10,6 @@ import { useUserStore } from '@/stores/user';
 const dialogStore = useDialogStore();
 const isMobile = useMediaQuery('(max-width: 600px)');
 const userStore = useUserStore();
-const { isPro } = storeToRefs(userStore);
 
 const isUserDataLoaded = ref(false);
 
@@ -24,7 +23,7 @@ watch(
 </script>
 
 <template>
-  <template v-if="isUserDataLoaded && !isPro">
+  <template v-if="isUserDataLoaded">
     <button
       v-if="isMobile"
       type="button"
@@ -33,7 +32,7 @@ watch(
       @click="dialogStore.showReferralOffer()"
     >
       <font-awesome-icon :icon="faGift" class="tw-text-xs" aria-hidden="true" />
-      Refer a friend and get Free Pro
+      Refer a friend and earn credits
     </button>
 
     <button
@@ -44,7 +43,7 @@ watch(
       @click="dialogStore.showReferralOffer()"
     >
       <font-awesome-icon :icon="faGift" class="tw-text-xs" aria-hidden="true" />
-      Free Pro
+      Earn credits
     </button>
   </template>
 </template>

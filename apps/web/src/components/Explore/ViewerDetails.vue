@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { storeToRefs } from 'pinia';
 
 import type { ExploreFeedItem } from '@/types';
-
-import { useUserStore } from '@/stores/user';
 
 import { useDashboardMotion } from '@/composables/useDashboardMotion';
 import {
@@ -39,11 +36,8 @@ const emit = defineEmits<{
 }>();
 
 const { interactiveTransition, pressable } = useDashboardMotion();
-const { isPro } = storeToRefs(useUserStore());
-const creditCost = computed(() => getTransformCreditCost(Boolean(isPro.value)));
-const creditLabel = computed(
-  () => `${creditCost.value} ${creditCost.value === 1 ? 'credit' : 'credits'}`,
-);
+const creditCost = getTransformCreditCost();
+const creditLabel = `${creditCost} credit${creditCost === 1 ? '' : 's'}`;
 
 const authorInitials = computed(() => {
   const parts = props.item.author.trim().split(/\s+/).filter(Boolean);
@@ -162,6 +156,9 @@ const downloadLabel = computed(() => (props.hasResult ? 'Download result' : 'Dow
           >
             Enhance
           </h2>
+          <p class="tw-mt-1 tw-text-xs tw-leading-snug tw-text-ink-muted">
+            Colorize runs here. Upscale and remove background open the studio.
+          </p>
           <div class="viewer-details__enhance-list tw-mt-2">
             <button
               type="button"
@@ -175,6 +172,7 @@ const downloadLabel = computed(() => (props.hasResult ? 'Download result' : 'Dow
                 <font-awesome-icon :icon="faExpand" aria-hidden="true" />
                 Upscale this
               </span>
+              <span class="viewer-details__credit">{{ creditLabel }}</span>
             </button>
             <button
               type="button"
@@ -202,6 +200,7 @@ const downloadLabel = computed(() => (props.hasResult ? 'Download result' : 'Dow
                 <font-awesome-icon :icon="faObjectUngroup" aria-hidden="true" />
                 Remove background
               </span>
+              <span class="viewer-details__credit">{{ creditLabel }}</span>
             </button>
           </div>
         </section>
@@ -383,7 +382,7 @@ const downloadLabel = computed(() => (props.hasResult ? 'Download result' : 'Dow
 
 .viewer-details__enhance {
   display: inline-flex;
-  min-height: 2.5rem;
+  min-height: 2.75rem;
   width: 100%;
   align-items: center;
   justify-content: space-between;
@@ -395,6 +394,7 @@ const downloadLabel = computed(() => (props.hasResult ? 'Download result' : 'Dow
   font-size: 0.8125rem;
   font-weight: 600;
   color: rgb(var(--tw-ink));
+  text-align: left;
 
   &:last-child {
     border-bottom: none;
@@ -420,6 +420,7 @@ const downloadLabel = computed(() => (props.hasResult ? 'Download result' : 'Dow
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
   color: rgb(var(--tw-ink-muted));
 }
 

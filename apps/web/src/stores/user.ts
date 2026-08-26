@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', () => {
   const payments = ref<IPayment[]>([]);
   const userId = ref('');
   const credits = ref(0);
-  const isPro = ref(false);
+  const dailyCredits = ref(0);
   /** True after the first getUserDetails attempt finishes (success or failure). */
   const isReady = ref(false);
   const hasJustSubscribed = ref(false);
@@ -26,9 +26,9 @@ export const useUserStore = defineStore('user', () => {
     credits.value = value;
   }
 
-  /** Whether balance covers the cost for the given output count. */
-  function canAffordOutputs(noOfOutputs: number): boolean {
-    return canAffordGeneration(credits.value, noOfOutputs);
+  /** Whether balance covers the cost for the given output count and model. */
+  function canAffordOutputs(noOfOutputs: number, baseCostPerImage = 1): boolean {
+    return canAffordGeneration(credits.value, noOfOutputs, baseCostPerImage);
   }
 
   const hasCredits = computed(() => credits.value > 0);
@@ -59,7 +59,6 @@ export const useUserStore = defineStore('user', () => {
       userDetails.value = userData;
       history.value = userData.history ?? [];
       payments.value = userData.payments ?? [];
-      isPro.value = userData.isPro;
       const dataToStoreInLocalStorage = {
         userId: userData.userId,
       };
@@ -67,6 +66,7 @@ export const useUserStore = defineStore('user', () => {
         localStorage.setItem('userDetails', JSON.stringify(dataToStoreInLocalStorage));
       }
       credits.value = userData.credits;
+      dailyCredits.value = userData.dailyCredits ?? 0;
     } catch (error) {
       log.error('getUserDetails failed', { error, userId: userId.value });
     } finally {
@@ -74,40 +74,54 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  async function updateName(firstName: string, lastName: string) {
+  async function updateName(firstName: string, lastName: string): Promise<boolean> {
     const url = `/users/fullname`;
     isUpdatingName.value = true;
-    const { error } = await useFetch(url, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        mode: 'cors',
-      },
-      body: JSON.stringify({ firstName, lastName, userId: userId.value }),
-    }).json();
-    isUpdatingName.value = false;
+    try {
+      const { error } = await useFetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          mode: 'cors',
+        },
+        body: JSON.stringify({ firstName, lastName, userId: userId.value }),
+      }).json();
 
-    if (error.value) {
-      log.error('updateName failed', { error: error.value, userId: userId.value });
-      return;
+      if (error.value) {
+        log.error('updateName failed', { error: error.value, userId: userId.value });
+        return false;
+      }
+      return true;
+    } catch (error) {
+      log.error('updateName failed', { error, userId: userId.value });
+      return false;
+    } finally {
+      isUpdatingName.value = false;
     }
   }
 
-  async function updateUsername(username: string) {
+  async function updateUsername(username: string): Promise<boolean> {
     const url = `/users/username`;
     isUpdatingUsername.value = true;
-    const { error } = await useFetch(url, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        mode: 'cors',
-      },
-      body: JSON.stringify({ userName: username, userId: userId.value }),
-    }).json();
-    isUpdatingUsername.value = false;
-    if (error.value) {
-      log.error('updateUsername failed', { error: error.value, userId: userId.value });
-      return;
+    try {
+      const { error } = await useFetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          mode: 'cors',
+        },
+        body: JSON.stringify({ userName: username, userId: userId.value }),
+      }).json();
+      if (error.value) {
+        log.error('updateUsername failed', { error: error.value, userId: userId.value });
+        return false;
+      }
+      return true;
+    } catch (error) {
+      log.error('updateUsername failed', { error, userId: userId.value });
+      return false;
+    } finally {
+      isUpdatingUsername.value = false;
     }
   }
   async function syncFromClerk(clerkUserId: string) {
@@ -119,9 +133,9 @@ export const useUserStore = defineStore('user', () => {
   return {
     userId,
     credits,
+    dailyCredits,
     userDetails,
     history,
-    isPro,
     isReady,
     payments,
     hasJustSubscribed,

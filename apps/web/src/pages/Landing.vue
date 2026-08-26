@@ -13,9 +13,19 @@ import PricingTeaser from '@/components/Landing/PricingTeaser.vue';
 import ShowcaseGallery from '@/components/Landing/ShowcaseGallery.vue';
 import ToolChapter from '@/components/Landing/ToolChapter.vue';
 
-import { TOOLS } from '@/utils/landing';
+import { usePageSeo } from '@/composables/usePageSeo';
+import { FAQS, TOOLS } from '@/utils/landing';
+import { faqPageJsonLd, organizationJsonLd, webApplicationJsonLd } from '@/utils/seo';
 
 useLenis();
+
+usePageSeo({
+  title: 'Visual AI – AI image generator',
+  description:
+    'Generate images from text, then upscale, colorize, restore old photos, and remove backgrounds in one Visual AI studio. Start free, then buy credits.',
+  path: '/',
+  jsonLd: [webApplicationJsonLd(), organizationJsonLd(), faqPageJsonLd(FAQS)],
+});
 </script>
 
 <template>
@@ -30,7 +40,7 @@ useLenis();
       <section id="tools" class="tools">
         <header class="tools__head">
           <p v-reveal class="eyebrow">What's inside</p>
-          <h2 v-reveal="{ delay: 0.05 }" class="tools__title">Four tools, one studio.</h2>
+          <h2 v-reveal="{ delay: 0.05 }" class="tools__title">Five tools, one studio.</h2>
           <p v-reveal="{ delay: 0.1 }" class="tools__sub">
             Everything you need to make, sharpen, and rescue an image — without juggling five
             different apps.
