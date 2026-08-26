@@ -8,6 +8,10 @@ buildcache/
 .env.local
 .env.*.local
 .env.production
+.env.staging
+
+# Node compile cache
+node-compile-cache/
 
 # Log files
 npm-debug.log*
