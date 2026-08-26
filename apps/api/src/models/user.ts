@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import { v4 as uuidv4 } from "uuid"
+import { SIGNUP_CREDITS, DAILY_CREDITS } from "@visual-ai/shared"
 
 import { ImageObjectSchema } from "./image.js"
 import { PaymentSchema } from "./payment.js"
@@ -20,15 +21,8 @@ const UserSchema = new Schema(
         lastName: { type: String, required: false, default: "" },
         fullName: { type: String, required: false, default: "" },
         email: { type: String, required: false, unique: true, default: "" },
-        plan: { type: String, enum: ["free", "pro"], default: "free" },
-        subscriptionId: { type: String, required: false, default: "" },
-        subscriptionStatus: {
-            type: String,
-            enum: ["active", "inactive"],
-            default: "inactive",
-        },
-        credits: { type: Number, default: 20 },
-        monthlyCredits: { type: Number, default: 1000 },
+        credits: { type: Number, default: SIGNUP_CREDITS },
+        dailyCredits: { type: Number, default: DAILY_CREDITS },
         referralCode: {
             type: String,
             unique: true,
@@ -40,8 +34,6 @@ const UserSchema = new Schema(
             default: [],
         },
 
-        isPro: { type: Boolean, default: false },
-        subscriptionEnd: { type: Date },
         payments: { type: [PaymentSchema], required: false, default: [] },
         history: { type: [ImageObjectSchema], required: true, default: [] },
         activities: [

@@ -79,7 +79,7 @@ webhookRouter.post("/webhooks/razorpay", express.json(), async (req, res) => {
     if (event === "payment.captured") {
         const { payment } = req.body.payload
 
-        const { userId, subscribe, credits } = payment.entity.notes
+        const { userId, credits } = payment.entity.notes
         const amount = payment.entity.amount / 100
         const paymentMethod = payment?.entity?.card?.entity ?? ""
         const description = payment?.entity?.description ?? ""
@@ -99,13 +99,6 @@ webhookRouter.post("/webhooks/razorpay", express.json(), async (req, res) => {
                 {
                     $push: { payments: paymentObject },
                     $inc: { credits },
-                    ...(subscribe === "true" && {
-                        $set: {
-                            isPro: true,
-                            plan: "pro",
-                            subscriptionId: payment.entity.notes.subscriptionId,
-                        },
-                    }),
                 },
                 { new: true },
             )

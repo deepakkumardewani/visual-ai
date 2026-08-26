@@ -2,6 +2,7 @@ import cloudinary from "cloudinary"
 import probe from "probe-image-size"
 import sharp from "sharp"
 
+import { env } from "../config/env.js"
 import { createLogger } from "../lib/logger.js"
 import { UserModel as User } from "../models/user.js"
 import type { IImage, IImageObject } from "../types/index.js"
@@ -46,7 +47,7 @@ export async function uploadToCloudinary(data: any) {
             aspectRatio = "",
             originalPublicId = "",
         } = data
-        const basePath = `private/development/uploads/${userId}`
+        const basePath = `${env.CLOUDINARY_BASE_PATH}/${userId}`
         let image: IImageObject
 
         if (Array.isArray(imageUrl) && imageUrl.length > 1) {

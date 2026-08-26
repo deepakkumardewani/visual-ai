@@ -3,6 +3,8 @@ import multer from "multer"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
 import { v1 as uuidv1 } from "uuid"
 
+import { env } from "../config/env.js"
+
 /* eslint-disable no-unused-vars */
 
 const storage = new CloudinaryStorage({
@@ -10,7 +12,7 @@ const storage = new CloudinaryStorage({
     params: async (req, _) => {
         const body = await req.body
         const fileName = `original-${uuidv1()}`
-        const basePath = `private/development/uploads/${body.userId}`
+        const basePath = `${env.CLOUDINARY_BASE_PATH}/${body.userId}`
 
         return {
             folder: `${basePath}/${body.feature}`,

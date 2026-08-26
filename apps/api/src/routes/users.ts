@@ -155,6 +155,11 @@ userRoutes.post(
             throw new BadRequestError("Invalid referral code.")
         }
 
+        // Prevent self-referral
+        if (referrerUser.userId === userId) {
+            throw new BadRequestError("You cannot use your own referral code.")
+        }
+
         // Update current user's credits and add referral code to their list
         const updatedUser = await User.findOneAndUpdate(
             { userId },
@@ -169,13 +174,12 @@ userRoutes.post(
             userEmail,
             userName,
         }
-        // Update referrer's credits
+        // Update referrer's credits (credits only, no Pro upgrade)
         await User.findOneAndUpdate(
             { referralCode },
             {
                 $inc: { credits: 50 },
                 $push: { referrals: referral },
-                $set: { plan: "pro", isPro: true },
             },
             { new: true },
         )

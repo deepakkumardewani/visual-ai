@@ -121,16 +121,69 @@ async function storeImageInDB(image: IImageObject, userId: string): Promise<IIma
     return newImage.toObject() as IImageObject
 }
 
+/**
+ * Atomically deduct credits from two buckets (daily first, then persistent).
+ * Uses a single findOneAndUpdate with aggregation pipeline to ensure no partial deductions.
+ *
+ * @throws Error if user not found or insufficient combined credits
+ */
 async function updateAndGetUserCredits(userId: string, amount: number): Promise<number> {
     const user = await User.findOneAndUpdate(
-        { userId },
-        { $inc: { credits: -amount } },
+        {
+            userId,
+            // Verify sufficient combined credits before deduction
+            $expr: {
+                $gte: [
+                    { $add: [{ $ifNull: ["$dailyCredits", 0] }, { $ifNull: ["$credits", 0] }] },
+                    amount,
+                ],
+            },
+        },
+        [
+            {
+                $set: {
+                    // Deduct from daily first, then from persistent
+                    dailyCredits: {
+                        $max: [0, { $subtract: [{ $ifNull: ["$dailyCredits", 0] }, amount] }],
+                    },
+                    // Deduct overflow from persistent credits
+                    credits: {
+                        $cond: [
+                            { $gte: [{ $ifNull: ["$dailyCredits", 0] }, amount] },
+                            // Daily covers full amount
+                            "$credits",
+                            // Daily doesn't cover, deduct overflow from persistent
+                            {
+                                $subtract: [
+                                    "$credits",
+                                    { $subtract: [amount, { $ifNull: ["$dailyCredits", 0] }] },
+                                ],
+                            },
+                        ],
+                    },
+                },
+            },
+        ],
         { new: true },
     )
-    const credits = user?.credits ?? 0
-    logger.debug({ userId, credits }, "User credits after deduction")
-    if (!user) logger.error({ userId }, "User not found when updating credits")
-    return credits
+
+    if (!user) {
+        logger.error({ userId, amount }, "Insufficient credits for deduction")
+        throw new Error("Insufficient credits")
+    }
+
+    const totalRemaining = (user.dailyCredits ?? 0) + (user.credits ?? 0)
+    logger.debug(
+        {
+            userId,
+            amount,
+            daily: user.dailyCredits,
+            persistent: user.credits,
+            total: totalRemaining,
+        },
+        "Credits deducted",
+    )
+    return totalRemaining
 }
 
 async function finalizeJob(
@@ -326,7 +379,7 @@ export async function processImage(body: Body): Promise<void> {
         aspectRatio,
         prompt: finalPrompt,
         imageType,
-        creditCost: calculateCreditCost(FeatureType.IMAGE, false),
+        creditCost: calculateCreditCost(FeatureType.IMAGE, modelKey as ModelKey),
         buildCloudinaryPayload: (output, imageId) => {
             // Multiple outputs → pass array; single → unwrap
             const imageUrl =
@@ -373,8 +426,7 @@ export async function processUpscale(props: Props): Promise<void> {
     }
     validateModelParams(modelKey, userParams)
 
-    const user = await User.findOne({ userId })
-    const creditCost = calculateCreditCost(FeatureType.UPSCALE, user?.isPro ?? false, modelKey)
+    const creditCost = calculateCreditCost(FeatureType.UPSCALE, modelKey)
 
     // Build payload using registry-driven data
     const input = buildModelInput(modelKey, userParams)
@@ -404,8 +456,7 @@ export async function processRevive(props: Props): Promise<void> {
     const { body, filePath, fileName } = props
     const { userId, jobId } = body
 
-    const user = await User.findOne({ userId })
-    const creditCost = calculateCreditCost(FeatureType.REVIVE, user?.isPro ?? false)
+    const creditCost = calculateCreditCost(FeatureType.REVIVE, "REVIVE" as ModelKey)
 
     const input: ReviveInput = { img: filePath }
 
@@ -434,8 +485,7 @@ export async function processColorize(props: Props): Promise<void> {
     const { body, filePath, fileName } = props
     const { userId, jobId, modelId } = body
 
-    const user = await User.findOne({ userId })
-    const creditCost = calculateCreditCost(FeatureType.COLORIZE, user?.isPro ?? false)
+    const creditCost = calculateCreditCost(FeatureType.COLORIZE, modelId as ModelKey)
 
     const model = getModelReplicateId(modelId as ModelKey) as ModelType
     const input: ColorizeInput = { image: filePath }
@@ -465,8 +515,7 @@ export async function processRemoveBg(props: Props): Promise<void> {
     const { body, filePath, fileName } = props
     const { userId, jobId } = body
 
-    const user = await User.findOne({ userId })
-    const creditCost = calculateCreditCost(FeatureType.REMOVE_BG, user?.isPro ?? false)
+    const creditCost = calculateCreditCost(FeatureType.REMOVE_BG, "BACKGROUND_REMOVER" as ModelKey)
 
     const input: RemoveBgInput = {
         image: filePath,

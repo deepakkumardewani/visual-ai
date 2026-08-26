@@ -24,6 +24,10 @@ const envSchema = z.object({
     CLOUDINARY_CLOUD_NAME: z.string().min(1, "CLOUDINARY_CLOUD_NAME is required"),
     CLOUDINARY_API_KEY: z.string().min(1, "CLOUDINARY_API_KEY is required"),
     CLOUDINARY_API_SECRET: z.string().min(1, "CLOUDINARY_API_SECRET is required"),
+    CLOUDINARY_BASE_PATH: z
+        .string()
+        .min(1, "CLOUDINARY_BASE_PATH is required")
+        .transform((v) => v.replace(/\/+$/, "")),
     CLERK_SECRET_KEY: z.string().min(1, "CLERK_SECRET_KEY is required"),
     CLERK_PUBLISHABLE_KEY: z.string().min(1, "CLERK_PUBLISHABLE_KEY is required"),
     CLERK_JWT_KEY: z.string().min(1, "CLERK_JWT_KEY is required"),
@@ -41,6 +45,7 @@ const VALID_ENV: Record<string, string> = {
     CLOUDINARY_CLOUD_NAME: "test-cloud",
     CLOUDINARY_API_KEY: "test-key",
     CLOUDINARY_API_SECRET: "test-secret",
+    CLOUDINARY_BASE_PATH: "private/development/uploads",
     CLERK_SECRET_KEY: "clerk-secret",
     CLERK_PUBLISHABLE_KEY: "clerk-pub",
     CLERK_JWT_KEY: "clerk-jwt",
