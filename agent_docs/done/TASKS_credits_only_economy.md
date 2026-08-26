@@ -12,12 +12,12 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] Every model in the registry resolves an integer creditCost; no free/pro cost variants remain in shared
-- [ ] Constants exported from packages/shared and importable by both apps
+- [x] ✅ Every model in the registry resolves an integer creditCost; no free/pro cost variants remain in shared
+- [x] ✅ Constants exported from packages/shared and importable by both apps
 
 **Verification:**
 
-- [ ] `npm test -w packages/shared` (or api tests covering registry) + typecheck pass
+- [x] ✅ `npm test -w packages/shared` (or api tests covering registry) + typecheck pass
 
 **Dependencies:** None
 **Files:** `packages/shared/src/models/credits.ts`, `packages/shared/src/models/registry.ts`, shared constants file
@@ -31,12 +31,12 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] New user doc: `credits: 50`, `dailyCredits: 30`, no Pro/subscription fields
-- [ ] User API response includes `credits` and `dailyCredits`
+- [x] ✅ New user doc: `credits: 50`, `dailyCredits: 30`, no Pro/subscription fields
+- [x] ✅ User API response includes `credits` and `dailyCredits`
 
 **Verification:**
 
-- [ ] API unit tests for signup handler pass; typecheck passes
+- [x] ✅ API unit tests for signup handler pass; typecheck passes
 
 **Dependencies:** Task 1
 **Files:** `apps/api/src/models/user.ts`, `apps/api/src/services/user-service.ts`, user routes/serializers
@@ -50,13 +50,13 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] Cost ≤ daily → daily only; cost > daily → split; combined < cost → rejected, no partial deduction
-- [ ] Concurrent deductions cannot drive either bucket negative
-- [ ] No isPro references remain in generation path
+- [x] ✅ Cost ≤ daily → daily only; cost > daily → split; combined < cost → rejected, no partial deduction
+- [x] ✅ Concurrent deductions cannot drive either bucket negative
+- [x] ✅ No isPro references remain in generation path
 
 **Verification:**
 
-- [ ] New vitest cases: daily-only, split, insufficient, race simulation; `npm test -w apps/api` passes
+- [x] ✅ New vitest cases: daily-only, split, insufficient, race simulation; `npm test -w apps/api` passes
 
 **Dependencies:** Tasks 1–2
 **Files:** `apps/api/src/utils/credit-calculator.ts`, `apps/api/src/services/generation-service.ts`, `generation-service.test.ts`
@@ -70,12 +70,12 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] Daily job resets dailyCredits to exactly 30 for every user; persistent credits untouched
-- [ ] Monthly job gone
+- [x] ✅ Daily job resets dailyCredits to exactly 30 for every user; persistent credits untouched
+- [x] ✅ Monthly job gone
 
 **Verification:**
 
-- [ ] Unit test on cron handler function; typecheck passes
+- [x] ✅ Unit test on cron handler function; typecheck passes
 
 **Dependencies:** Task 2
 **Files:** `apps/api/src/utils/cronJobs.ts`
@@ -83,7 +83,7 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 ## Checkpoint 1
 
-- [ ] `npm test -w apps/api` + typecheck clean; review deduction tests with user
+- [x] ✅ `npm test -w apps/api` + typecheck clean; review deduction tests with user
 
 ---
 
@@ -95,12 +95,12 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] Applying a valid code: +50 persistent to both users, no plan change
-- [ ] Reapplying / self-referral rejected
+- [x] ✅ Applying a valid code: +50 persistent to both users, no plan change
+- [x] ✅ Reapplying / self-referral rejected
 
 **Verification:**
 
-- [ ] Unit tests for the referral route pass
+- [x] ✅ Unit tests for the referral route pass
 
 **Dependencies:** Task 2
 **Files:** `apps/api/src/routes/users.ts`, tests
@@ -114,12 +114,12 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] Subscription endpoints return 404; order creation + capture → persistent credits still works
-- [ ] Webhook never sets Pro flags
+- [x] ✅ Subscription endpoints return 404; order creation + capture → persistent credits still works
+- [x] ✅ Webhook never sets Pro flags
 
 **Verification:**
 
-- [ ] API tests pass; grep for `subscription` in apps/api shows no live logic
+- [x] ✅ API tests pass; grep for `subscription` in apps/api shows no live logic
 
 **Dependencies:** Task 2
 **Files:** `apps/api/src/routes/payments.ts`, `apps/api/src/webhook/index.ts`
@@ -127,7 +127,7 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 ## Checkpoint 2
 
-- [ ] `grep -ri "isPro" apps/api packages` → no live logic; all API tests pass
+- [x] ✅ `grep -ri "isPro" apps/api packages` → no live logic; all API tests pass
 
 ---
 
@@ -139,12 +139,12 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] No isPro references in apps/web src; deleted dialogs unreferenced; app compiles
-- [ ] User store exposes credits + dailyCredits
+- [x] ✅ No isPro references in apps/web src; deleted dialogs unreferenced; app compiles
+- [x] ✅ User store exposes credits + dailyCredits
 
 **Verification:**
 
-- [ ] `npm test -w apps/web` + typecheck pass
+- [x] ✅ `npm test -w apps/web` + typecheck pass
 
 **Dependencies:** Task 1 (shared costs)
 **Files:** stores, types, utils, composables, dialog components (~8 files — removal sweep, mostly deletions)
@@ -158,11 +158,11 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] Chip shows dailyCredits + credits combined with breakdown tooltip; no Pro CTA anywhere
+- [x] ✅ Chip shows dailyCredits + credits combined with breakdown tooltip; no Pro CTA anywhere
 
 **Verification:**
 
-- [ ] Component tests updated + pass; visual check via agent-browser
+- [x] ✅ Component tests updated + pass; visual check via agent-browser
 
 **Dependencies:** Task 7
 **Files:** `components/Header/CreditsChip.vue`, `components/Dialogs/LowCreditsDialog.vue`, tests
@@ -176,11 +176,11 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] Every model shows its integer cost; no locks/Pro badges; selection ungated
+- [x] ✅ Every model shows its integer cost; no locks/Pro badges; selection ungated
 
 **Verification:**
 
-- [ ] `ModelOption.test.ts` / `ModelPicker.test.ts` updated + pass; visual check
+- [x] ✅ `ModelOption.test.ts` / `ModelPicker.test.ts` updated + pass; visual check
 
 **Dependencies:** Tasks 1, 7
 **Files:** `components/Dashboard/ModelPicker/*`, `utils/models.ts`, tests
@@ -188,7 +188,7 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 ## Checkpoint 3
 
-- [ ] Web tests + typecheck clean; generate/upscale flows work in browser with correct deduction
+- [x] ✅ Web tests + typecheck clean; generate/upscale flows work in browser with correct deduction
 
 ---
 
@@ -200,11 +200,11 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] No Pro mentions in referral UI; copy reflects +50 both sides
+- [x] ✅ No Pro mentions in referral UI; copy reflects +50 both sides
 
 **Verification:**
 
-- [ ] Visual check; apply-code flow grants credits end-to-end (dev)
+- [x] ✅ Visual check; apply-code flow grants credits end-to-end (dev)
 
 **Dependencies:** Tasks 5, 7
 **Files:** 3 dialog/header components
@@ -220,11 +220,11 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] All four packs purchasable; balance shown; value framing present; success state animates new balance
+- [x] ✅ All four packs purchasable; balance shown; value framing present; success state animates new balance
 
 **Verification:**
 
-- [ ] Visual review via agent-browser; component tests pass
+- [x] ✅ Visual review via agent-browser; component tests pass
 
 **Dependencies:** Tasks 7–8
 **Files:** `components/Dialogs/BuyMoreCreditsDialog.vue` (+ extracted subcomponents), tests
@@ -242,11 +242,11 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] No plan comparison/Pro mentions; costs sourced from registry (not hardcoded); copy reads human
+- [x] ✅ No plan comparison/Pro mentions; costs sourced from registry (not hardcoded); copy reads human
 
 **Verification:**
 
-- [ ] Visual review via agent-browser; typecheck + tests pass
+- [x] ✅ Visual review via agent-browser; typecheck + tests pass
 
 **Dependencies:** Tasks 1, 7
 **Files:** `pages/Pricing.vue`, `components/PricingCard.vue` (delete), `utils/constants.ts`, `components/Landing/PricingTeaser.vue`, `utils/landing.ts`
@@ -270,11 +270,11 @@ Spec: `agent_docs/SPEC_credits_only_economy.md` · Plan: `agent_docs/PLAN_credit
 
 **Acceptance criteria:**
 
-- [ ] Grep clean of live Pro logic; all tests/typecheck/lint pass; success criteria checklist done
+- [x] ✅ Grep clean of live Pro logic; all tests/typecheck/lint pass; success criteria checklist done
 
 **Verification:**
 
-- [ ] `npm test` all workspaces; `npm run lint`; manual criteria walkthrough with user
+- [x] ✅ `npm test` all workspaces; `npm run lint`; manual criteria walkthrough with user
 
 **Dependencies:** All prior
 **Files:** misc
