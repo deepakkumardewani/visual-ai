@@ -1,5 +1,5 @@
 // Export both types and values
-export { FeatureType } from './domain';
+export { FeatureType } from './domain.js';
 
 export type {
   IImage,
@@ -11,7 +11,7 @@ export type {
   IPayment,
   IReferral,
   IUser,
-} from './domain';
+} from './domain.js';
 
 export type {
   AIImageInput,
@@ -26,4 +26,4 @@ export type {
   SavedPrompt,
   SavedPromptListResponse,
   SavedPromptCreateResponse,
-} from './api';
+} from './api.js';

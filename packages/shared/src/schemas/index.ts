@@ -4,7 +4,7 @@ export {
   ColorizeRequestSchema,
   ReviveRequestSchema,
   RemoveBgRequestSchema,
-} from './generate';
+} from './generate.js';
 
 export type {
   GenerateRequest,
@@ -12,7 +12,7 @@ export type {
   ColorizeRequest,
   ReviveRequest,
   RemoveBgRequest,
-} from './generate';
+} from './generate.js';
 
 export {
   CreateCollectionSchema,
@@ -20,7 +20,7 @@ export {
   CollectionMembershipSchema,
   ListCollectionsQuerySchema,
   DeleteCollectionSchema,
-} from './collections';
+} from './collections.js';
 
 export type {
   CreateCollectionRequest,
@@ -28,7 +28,7 @@ export type {
   CollectionMembershipRequest,
   ListCollectionsQuery,
   DeleteCollectionRequest,
-} from './collections';
+} from './collections.js';
 
-export { CreateSavedPromptSchema } from './saved-prompt';
-export type { CreateSavedPrompt } from './saved-prompt';
+export { CreateSavedPromptSchema } from './saved-prompt.js';
+export type { CreateSavedPrompt } from './saved-prompt.js';
