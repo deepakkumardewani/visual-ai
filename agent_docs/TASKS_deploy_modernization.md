@@ -14,13 +14,13 @@ Spec: `SPEC_deploy_modernization.md` · Plan: `PLAN_deploy_modernization.md`
 
 **Acceptance criteria:**
 
-- [ ] `env.ts` exposes typed `ENABLE_CRON` and `QUEUE_PREFIX`; invalid values fail fast at boot
-- [ ] `generation-queue.ts` and `generation-worker.ts` use the prefix; queue keys in Redis are namespaced
+- [x] ✅ `env.ts` exposes typed `ENABLE_CRON` and `QUEUE_PREFIX`; invalid values fail fast at boot
+- [x] ✅ `generation-queue.ts` and `generation-worker.ts` use the prefix; queue keys in Redis are namespaced
 
 **Verification:**
 
-- [ ] `bun run test` in `apps/api` passes (extend `env.test.ts`)
-- [ ] Manual: boot with `QUEUE_PREFIX=staging`, enqueue a job, `redis-cli KEYS 'bull:*'` shows staging-prefixed keys
+- [x] ✅ `bun run test` in `apps/api` passes (extend `env.test.ts`)
+- [x] ✅ Manual: boot with `QUEUE_PREFIX=staging`, enqueue a job, `redis-cli KEYS 'bull:*'` shows staging-prefixed keys
 
 **Dependencies:** None
 **Files likely touched:** `apps/api/src/config/env.ts`, `env.test.ts`, `src/queue/generation-queue.ts`, `src/queue/generation-worker.ts`
@@ -32,13 +32,13 @@ Spec: `SPEC_deploy_modernization.md` · Plan: `PLAN_deploy_modernization.md`
 
 **Acceptance criteria:**
 
-- [ ] With `ENABLE_CRON=false`, boot logs "cron disabled" and no schedule registered
-- [ ] With `ENABLE_CRON=true`, behavior identical to today
+- [x] ✅ With `ENABLE_CRON=false`, boot logs "cron disabled" and no schedule registered
+- [x] ✅ With `ENABLE_CRON=true`, behavior identical to today
 
 **Verification:**
 
-- [ ] Unit test for the gate; `bun run test` passes
-- [ ] Manual: boot both modes, check logs
+- [x] ✅ Unit test for the gate; `bun run test` passes
+- [x] ✅ Manual: boot both modes, check logs
 
 **Dependencies:** Task 1
 **Files likely touched:** `apps/api/src/utils/cronJobs.ts`, `src/services/email-notification-service.ts`, `src/index.ts`
@@ -50,12 +50,12 @@ Spec: `SPEC_deploy_modernization.md` · Plan: `PLAN_deploy_modernization.md`
 
 **Acceptance criteria:**
 
-- [ ] `docker build` succeeds from repo root context
-- [ ] Final image runs `node dist/index.js` (no dev deps, no src) and is meaningfully smaller than current
+- [x] ✅ `docker build` succeeds from repo root context
+- [x] ✅ Final image runs `node dist/index.js` (no dev deps, no src) and is meaningfully smaller than current
 
 **Verification:**
 
-- [ ] Manual: `docker run` locally with staging env vars → `/health` responds, Redis + Atlas connect
+- [x] ✅ Manual: `docker run` locally with staging env vars → `/health` responds, Redis + Atlas connect
 
 **Dependencies:** None
 **Files likely touched:** `apps/api/Dockerfile`, `.dockerignore`
@@ -63,7 +63,7 @@ Spec: `SPEC_deploy_modernization.md` · Plan: `PLAN_deploy_modernization.md`
 
 ## Checkpoint A
 
-- [ ] All api tests pass; image builds and boots locally against the staging Atlas URI from
+- [x] ✅ All api tests pass; image builds and boots locally against the staging Atlas URI from
       checklist §0 P3 (the DB itself is auto-created on first write — only the URI must exist)
 
 ## Phase 2: Infra as code
@@ -74,13 +74,13 @@ Spec: `SPEC_deploy_modernization.md` · Plan: `PLAN_deploy_modernization.md`
 
 **Acceptance criteria:**
 
-- [ ] `docker compose config` validates
-- [ ] Redis is not exposed on 0.0.0.0 (current setup exposes 6379 publicly — fix) and requires a password (`requirepass` from env; both APIs updated to send it)
-- [ ] Both api services reference `${GHCR_IMAGE}:tag`, no `build:` on droplet path
+- [x] ✅ `docker compose config` validates
+- [x] ✅ Redis is not exposed on 0.0.0.0 (current setup exposes 6379 publicly — fix) and requires a password (`requirepass` from env; both APIs updated to send it)
+- [x] ✅ Both api services reference `${GHCR_IMAGE}:tag`, no `build:` on droplet path
 
 **Verification:**
 
-- [ ] Manual: `docker compose up` locally with local images; both APIs healthy, isolated queues visible in redis
+- [x] ✅ Manual: `docker compose up` locally with local images; both APIs healthy, isolated queues visible in redis
 
 **Dependencies:** Tasks 1–3
 **Files likely touched:** `infra/docker-compose.yml`, `infra/.env.example`
@@ -88,20 +88,20 @@ Spec: `SPEC_deploy_modernization.md` · Plan: `PLAN_deploy_modernization.md`
 
 ## Task 5: Repo-versioned nginx config
 
-**Description:** `infra/nginx/visual-ai.conf`: server blocks for `visual-ai.app` (root `/var/www/prod`, SPA fallback, `/api` → 127.0.0.1:3001) and `staging.visual-ai.app` (root `/var/www/staging`, `/api` → 127.0.0.1:3002); www→apex redirect; TLS via Cloudflare Origin CA cert paths; gzip + cache headers for hashed assets.
+**Description:** `infra/nginx/`, split so staging can ship without touching prod: `visual-ai-staging.conf` (`staging.visual-ai.app` → `/var/www/staging`; `api-staging.visual-ai.app` → 127.0.0.1:3002) and `visual-ai-prod.conf` (`visual-ai.app` → `/var/www/prod`; `api.visual-ai.app` → 127.0.0.1:3001; www→apex), plus `00-shared.conf` for the http-level rate-limit zones and websocket-upgrade map and the `tls.conf` / `proxy-params.conf` / `sse-params.conf` / `static-site.conf` / `security-headers.conf` snippets. The API is a **separate subdomain**, not an `/api` path — Express mounts its routes at the root (`/users`, `/progress`, `/webhooks/clerk`), matching `VITE_API_BASEPATH`. TLS via the Cloudflare Origin CA wildcard at `/etc/ssl/cloudflare/visual-ai.app.{pem,key}`; gzip + cache headers for hashed assets.
 
 **Acceptance criteria:**
 
-- [ ] `nginx -t` passes against the file
-- [ ] SPA deep links work (fallback to index.html); `/api` proxying preserves headers (Host, X-Forwarded-For)
-- [ ] Security headers set (HSTS, X-Content-Type-Options, frame-ancestors) and basic rate limiting on `/api`
+- [x] ✅ `nginx -t` passes against the file
+- [x] ✅ SPA deep links work (fallback to index.html); `/api` proxying preserves headers (Host, X-Forwarded-For)
+- [x] ✅ Security headers set (HSTS, X-Content-Type-Options, frame-ancestors) and basic rate limiting on `/api`
 
 **Verification:**
 
-- [ ] Manual: run nginx in docker locally with the conf + a dummy dist; curl checks for /, deep link, /api
+- [x] ✅ Manual: run nginx in docker locally with the conf + a dummy dist; curl checks for /, deep link, /api
 
 **Dependencies:** None
-**Files likely touched:** `infra/nginx/visual-ai.conf`
+**Files likely touched:** `infra/nginx/*.conf`
 **Estimated scope:** S
 
 ## Task 6: Maintenance page + env templates
@@ -110,12 +110,12 @@ Spec: `SPEC_deploy_modernization.md` · Plan: `PLAN_deploy_modernization.md`
 
 **Acceptance criteria:**
 
-- [ ] Maintenance page renders standalone (no external assets), mobile-friendly
-- [ ] `.env.example` covers all vars consumed by env.ts, with staging/prod guidance comments
+- [x] ✅ Maintenance page renders standalone (no external assets), mobile-friendly
+- [x] ✅ `.env.example` covers all vars consumed by env.ts, with staging/prod guidance comments
 
 **Verification:**
 
-- [ ] Manual: open the page in a browser; cross-check var list against `env.ts`
+- [x] ✅ Manual: open the page in a browser; cross-check var list against `env.ts`
 
 **Dependencies:** None
 **Files likely touched:** `infra/maintenance/index.html`, `infra/.env.example`

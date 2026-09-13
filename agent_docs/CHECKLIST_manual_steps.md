@@ -42,88 +42,109 @@ Legend: 🔑 = needs credentials only you have · ⚠️ = touches live prod, do
 
 ## B. Droplet preparation (Task 7) — SSH: `ssh root@159.89.45.226`
 
-- [ ] **B1. Snapshot current state** (before touching anything):
+- [x] **B1. Snapshot current state** (before touching anything):
   ```bash
   tar czf /root/pre-migration-$(date +%F).tar.gz /etc/nginx /root/.env* 2>/dev/null
   docker ps -a > /root/pre-migration-containers.txt
   ```
   Then from your laptop: `scp root@159.89.45.226:/root/pre-migration-*.tar.gz ~/backups/`
-- [ ] **B2. Create 2GB swap:**
+- [x] **B2. Create 2GB swap:**
   ```bash
   fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
   echo '/swapfile none swap sw 0 0' >> /etc/fstab
   free -h   # verify Swap: 2.0Gi
   ```
-- [ ] **B3. Close the open Redis port (do this today, independent of the project):**
+- [x] **B3. Close the open Redis port (do this today, independent of the project):**
   ```bash
   ufw deny 6379
   ```
-- [ ] **B4. Create directories:**
+- [x] **B4. Create directories:**
   ```bash
   mkdir -p /var/www/prod /var/www/staging /opt/visual-ai
   ```
-- [ ] **B5. 🔑 Create env files** `/opt/visual-ai/.env.prod` and `/opt/visual-ai/.env.staging`
+- [x] **B5. 🔑 Create env files** `/opt/visual-ai/.env.prod` and `/opt/visual-ai/.env.staging`
       (template: `infra/.env.example`). Staging uses: staging Atlas URI, `QUEUE_PREFIX=staging`,
       `ENABLE_CRON=false`, Razorpay **test** keys, Clerk **dev** keys, staging `VITE`-irrelevant vars omitted.
   ```bash
   chmod 600 /opt/visual-ai/.env.*
   ```
-- [ ] **B6. 🔑 GHCR login** (GitHub PAT with `read:packages`):
+- [x] **B6. 🔑 GHCR login** (GitHub PAT with `read:packages`):
   ```bash
   docker login ghcr.io -u <github-username>
   ```
 
 ## C. Dashboards — Cloudflare / Hostinger / Atlas (Task 8)
 
-- [ ] **C1. 🔑 MongoDB Atlas:** create staging database. Easiest: same cluster, new DB name
+- [x] **C1. 🔑 MongoDB Atlas:** create staging database. Easiest: same cluster, new DB name
       `visual-ai-staging` (just use that name in the staging `MONGO_URI`; created on first write).
       Optionally a separate free M0 cluster for harder isolation.
       While there: check **Network Access** — the IP allowlist should contain only the droplet IP
       (and optionally yours), not `0.0.0.0/0`.
-- [ ] **C2. 🔑 Cloudflare — add site** `visual-ai.app` (Free plan). Let it import DNS records;
+- [x] **C2. 🔑 Cloudflare — add site** `visual-ai.app` (Free plan). Let it import DNS records;
       verify every existing record was imported (compare against Hostinger's DNS panel).
-- [ ] **C3. Add A record:** `staging` → `159.89.45.226`, proxied (orange cloud). Ensure apex + www
-      are also proxied.
-- [ ] **C4. Origin CA cert:** Cloudflare → SSL/TLS → Origin Server → Create Certificate
+- [x] **C3. Add A records:** `staging` → `159.89.45.226` and `api-staging` → `159.89.45.226`, both
+      proxied (orange cloud). Ensure apex, `www` and `api` are also proxied.
+- [x] **C4. Origin CA cert:** Cloudflare → SSL/TLS → Origin Server → Create Certificate
       (hosts: `visual-ai.app`, `*.visual-ai.app`, 15 years). Save both PEMs on the droplet:
   ```bash
   # paste into these files:
   /etc/ssl/cloudflare/visual-ai.app.pem
   /etc/ssl/cloudflare/visual-ai.app.key   # chmod 600
   ```
-- [ ] **C5. SSL mode:** Cloudflare → SSL/TLS → set **Full (strict)**. ⚠️ Only after C4 files exist
+  The wildcard covers all four hosts (`visual-ai.app`, `staging.`, `api.`, `api-staging.`);
+  `infra/nginx/tls.conf` points at exactly these two paths.
+- [x] **C5. SSL mode:** Cloudflare → SSL/TLS → set **Full (strict)**. ⚠️ Only after C4 files exist
       AND the new nginx config (which references them) is live for staging; prod stays on its
       Let's Encrypt certs untouched until cutover.
-- [ ] **C6. Maintenance toggle:** create a **disabled** Redirect Rule named `maintenance`
+- [x] **C6. Maintenance toggle:** create a **disabled** Redirect Rule named `maintenance`
       (all hostnames → maintenance page URL, 302), plus a bypass for your home IP
       (Security → WAF skip rule or IP Access "Allow"). Host the page from `infra/maintenance/index.html`
       via a tiny Cloudflare Worker (dashboard → Workers → paste the runbook-provided worker).
-- [ ] **C7. 🔑 Hostinger — switch nameservers** to the two Cloudflare gives you. ⚠️ Do this last in
+- [x] **C7. 🔑 Hostinger — switch nameservers** to the two Cloudflare gives you. ⚠️ Do this last in
       this section; propagation is usually minutes but can take hours. Prod keeps working throughout
       because records are identical.
-- [ ] **C8. Verify:** `dig visual-ai.app` and `dig staging.visual-ai.app` return Cloudflare IPs;
+- [x] **C8. Verify:** `dig visual-ai.app` and `dig staging.visual-ai.app` return Cloudflare IPs;
       prod site loads normally.
 
 ## D. Staging bring-up (Task 9) — mix of laptop + SSH
 
-- [ ] **D1. Verify prod works** (baseline before changes): browse the live site, note everything OK.
-- [ ] **D2. 🔑 Razorpay test mode + Clerk dev instance:** create/locate test credentials; register
-      webhook endpoints against `https://staging.visual-ai.app/api/...` (exact paths in runbook).
-      Put keys in `.env.staging` (B5).
-- [ ] **D3. First image push (laptop):**
+- [x] **D1. Verify prod works** (baseline before changes): browse the live site, note everything OK.
+- [x] **D2. 🔑 Razorpay test mode + Clerk dev instance:** create/locate test credentials; register
+      the Clerk **dev** webhook endpoint at `https://api-staging.visual-ai.app/webhooks/clerk`
+      (prod stays `https://api.visual-ai.app/webhooks/clerk`). Put its signing secret in
+      `.env.staging` as `WEBHOOK_SECRET`, alongside the test Razorpay + dev Clerk keys, and set
+      `ALLOWED_ORIGINS=https://staging.visual-ai.app`.
+      Also fix `apps/web/.env.staging`: the `VITE_CLERK_SIGN_*` URLs still point at
+      `http://localhost:3005` — they must be `https://staging.visual-ai.app/...`.
+- [x] **D3. First image push (laptop):**
   ```bash
   docker build -t ghcr.io/<user>/visual-ai-api:staging -f apps/api/Dockerfile .
   docker push ghcr.io/<user>/visual-ai-api:staging
   ```
 - [ ] **D4. Copy infra to droplet + start staging (laptop → SSH):**
+
   ```bash
   scp infra/docker-compose.yml root@159.89.45.226:/opt/visual-ai/
-  scp infra/nginx/visual-ai.conf root@159.89.45.226:/etc/nginx/conf.d/
-  ssh root@159.89.45.226 'nginx -t && nginx -s reload'   # staging block live; prod blocks untouched
-  ssh root@159.89.45.226 'cd /opt/visual-ai && docker compose up -d api-staging redis'
+
+  # Shared snippets (TLS, proxy params, SPA behaviour, security headers).
+  ssh root@159.89.45.226 'mkdir -p /etc/nginx/snippets'
+  scp infra/nginx/{tls,proxy-params,sse-params,static-site,security-headers}.conf \
+      root@159.89.45.226:/etc/nginx/snippets/
+
+  # Rate-limit zones + the STAGING site only. visual-ai-prod.conf is deliberately
+  # NOT copied yet — it declares the same hostnames as the live certbot config
+  # and would collide. It ships at F4.
+  scp infra/nginx/00-shared.conf infra/nginx/visual-ai-staging.conf \
+      root@159.89.45.226:/etc/nginx/conf.d/
+
+  ssh root@159.89.45.226 'nginx -t && nginx -s reload'
+  ssh root@159.89.45.226 'cd /opt/visual-ai && docker compose pull api-staging && docker compose up -d api-staging redis'
   ```
-  ⚠️ Note: the repo nginx conf must coexist with the current prod conf files at this stage —
-  the staging server block is additive. Prod blocks are replaced only in section F.
+
+  If `nginx -t` fails on a missing cert, C4's PEMs aren't at the paths in
+  `infra/nginx/tls.conf` (`/etc/ssl/cloudflare/visual-ai.app.{pem,key}`). Prod is
+  untouched either way — a failed `nginx -t` means no reload happened.
+
 - [ ] **D5. Upload staging FE (laptop):** build with staging env, then
       `rsync -az --delete apps/web/dist/ root@159.89.45.226:/var/www/staging/`
       (or run `./scripts/deploy.sh web staging` once Task 10 exists).
@@ -147,8 +168,14 @@ Legend: 🔑 = needs credentials only you have · ⚠️ = touches live prod, do
   docker stop backend            # old container, frees port 3001
   cd /opt/visual-ai && docker compose up -d api-prod
   ```
-- [ ] **F4. Switch nginx fully to repo config:** remove old prod conf files from
-      `/etc/nginx/conf.d/` (they're in the B1 snapshot), `nginx -t && nginx -s reload`.
+- [ ] **F4. Switch nginx fully to repo config:** remove the old certbot-managed prod conf
+      (it's in the B1 snapshot), then ship the prod site file — in that order, or the duplicate
+      hostnames collide:
+  ```bash
+  ssh root@159.89.45.226 'rm /etc/nginx/conf.d/vue-app.conf'   # confirm the real filename first
+  scp infra/nginx/visual-ai-prod.conf root@159.89.45.226:/etc/nginx/conf.d/
+  ssh root@159.89.45.226 'nginx -t && nginx -s reload'
+  ```
 - [ ] **F5. Verify prod** (with your bypassed IP): login, generate, Razorpay live webhook test event.
 - [ ] **F6. Disable maintenance.** Monitor for 30 min.
 - [ ] **F7. Cleanup (only after a day of stability):**

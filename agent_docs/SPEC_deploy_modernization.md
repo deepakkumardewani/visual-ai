@@ -89,7 +89,7 @@ Atlas DBs, and queue prefixes are all disjoint.
 | Path                                                               | Purpose                                                                       |
 | ------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
 | `infra/docker-compose.yml`                                         | api-prod, api-staging, redis; mem limits; GHCR images                         |
-| `infra/nginx/visual-ai.conf`                                       | prod + staging server blocks, versioned                                       |
+| `infra/nginx/*.conf`                                               | prod + staging server blocks (split files) + shared snippets, versioned       |
 | `infra/maintenance/index.html`                                     | branded maintenance page (used by Cloudflare rule)                            |
 | `infra/README.md`                                                  | runbook: droplet setup, swap file, maintenance toggle, rollback, resize       |
 | `scripts/deploy.sh`                                                | shared deploy logic (build FE / pull BE image / compose up) callable manually |
