@@ -35,3 +35,5 @@ pnpm-debug.log*
 copyEnv.sh
 
 scripts/
+infra/.env.prod
+infra/.env.staging
