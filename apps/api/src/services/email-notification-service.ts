@@ -5,6 +5,9 @@ import { createLogger } from "../lib/logger.js"
 
 const logger = createLogger("email-notification")
 
+// Flag to check if outbound email is enabled (only send in production)
+const isEmailEnabled = env.ENABLE_CRON
+
 interface HealthStatus {
     status: "healthy" | "unhealthy"
     timestamp: Date
@@ -78,6 +81,11 @@ export class EmailNotificationService {
     }
 
     public async sendHealthCheckFailureNotification(healthStatus: HealthStatus): Promise<void> {
+        if (!isEmailEnabled) {
+            logger.info("Outbound email disabled - skipping health check notification")
+            return
+        }
+
         try {
             const mailOptions = {
                 from: env.EMAIL_USER,

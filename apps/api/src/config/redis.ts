@@ -8,11 +8,13 @@ const logger = createLogger("redis")
 interface RedisConfig {
     host: string
     port: number
+    password?: string
 }
 
 const redisConfig: RedisConfig = {
     host: env.REDIS_HOST,
     port: env.REDIS_PORT,
+    ...(env.REDIS_PASSWORD ? { password: env.REDIS_PASSWORD } : {}),
 }
 
 export const createRedisClient = (overrides?: Partial<RedisOptions>): IORedis => {

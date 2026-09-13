@@ -6,7 +6,7 @@ import { z } from "zod"
  * Mirrors the schema in env.ts
  */
 const envSchema = z.object({
-    NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+    NODE_ENV: z.enum(["development", "production", "staging", "test"]).default("development"),
     LOG_LEVEL: z.string().default("info"),
     APP_PORT: z
         .string()
@@ -37,6 +37,12 @@ const envSchema = z.object({
     EMAIL_USER: z.string().email("EMAIL_USER must be a valid email"),
     EMAIL_PASSWORD: z.string().min(1, "EMAIL_PASSWORD is required"),
     WEBHOOK_SECRET: z.string().min(1, "WEBHOOK_SECRET is required"),
+    ENABLE_CRON: z
+        .string()
+        .transform((v) => v.toLowerCase() === "true")
+        .pipe(z.boolean())
+        .default("false"),
+    QUEUE_PREFIX: z.string().default("prod"),
 })
 
 const VALID_ENV: Record<string, string> = {
@@ -118,6 +124,40 @@ describe("environment validation schema", () => {
         if (result.success) {
             expect(result.data.APP_PORT).toBe(3000)
             expect(result.data.REDIS_PORT).toBe(6380)
+        }
+    })
+
+    it("parses ENABLE_CRON as boolean from string", () => {
+        const testEnv = { ...VALID_ENV, ENABLE_CRON: "true" }
+        const result = envSchema.safeParse(testEnv)
+        expect(result.success).toBe(true)
+        if (result.success) {
+            expect(result.data.ENABLE_CRON).toBe(true)
+        }
+    })
+
+    it("defaults ENABLE_CRON to false", () => {
+        const result = envSchema.safeParse(VALID_ENV)
+        expect(result.success).toBe(true)
+        if (result.success) {
+            expect(result.data.ENABLE_CRON).toBe(false)
+        }
+    })
+
+    it("defaults QUEUE_PREFIX to prod", () => {
+        const result = envSchema.safeParse(VALID_ENV)
+        expect(result.success).toBe(true)
+        if (result.success) {
+            expect(result.data.QUEUE_PREFIX).toBe("prod")
+        }
+    })
+
+    it("parses custom QUEUE_PREFIX", () => {
+        const testEnv = { ...VALID_ENV, QUEUE_PREFIX: "staging" }
+        const result = envSchema.safeParse(testEnv)
+        expect(result.success).toBe(true)
+        if (result.success) {
+            expect(result.data.QUEUE_PREFIX).toBe("staging")
         }
     })
 })

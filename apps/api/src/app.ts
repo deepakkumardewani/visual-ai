@@ -18,14 +18,16 @@ import { webhookRouter } from "./webhook/index.js"
 
 const app: Application = express()
 
-const allowedOrigins = [
+const LOCAL_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3005",
     "http://localhost:8080",
     "http://127.0.0.1:8080",
-    "https://visual-ai.app",
-    "https://www.visual-ai.app",
 ]
+
+// Deployed origins differ per environment (prod apex vs. staging subdomain),
+// so they come from ALLOWED_ORIGINS in the environment's .env file.
+const allowedOrigins = [...LOCAL_ORIGINS, ...env.ALLOWED_ORIGINS]
 
 const corsOptions = {
     origin: function (origin: any, callback: any) {

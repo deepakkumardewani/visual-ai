@@ -7,7 +7,7 @@ import { z } from "zod"
  */
 const envSchema = z.object({
     // Node environment
-    NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+    NODE_ENV: z.enum(["development", "production", "staging", "test"]).default("development"),
     LOG_LEVEL: z.string().default("info"),
 
     // Server
@@ -28,6 +28,7 @@ const envSchema = z.object({
         .transform((v) => parseInt(v, 10))
         .pipe(z.number().positive())
         .default("6379"),
+    REDIS_PASSWORD: z.string().optional(),
     GENERATION_CONCURRENCY: z
         .string()
         .transform((v) => parseInt(v, 10))
@@ -69,6 +70,26 @@ const envSchema = z.object({
     // Prompt describe (Anthropic / Claude vision)
     ANTHROPIC_API_KEY: z.string().min(1, "ANTHROPIC_API_KEY is required"),
     DESCRIBE_MODEL: z.string().default("claude-sonnet-4-5"),
+
+    // Environment isolation
+    ENABLE_CRON: z
+        .string()
+        .transform((v) => v.toLowerCase() === "true")
+        .pipe(z.boolean())
+        .default("false"),
+    QUEUE_PREFIX: z.string().default("prod"),
+
+    // Comma-separated browser origins allowed to call this API (CORS).
+    // Prod lists the apex + www; staging lists staging.visual-ai.app.
+    ALLOWED_ORIGINS: z
+        .string()
+        .default("")
+        .transform((v) =>
+            v
+                .split(",")
+                .map((origin) => origin.trim())
+                .filter(Boolean),
+        ),
 })
 
 /**

@@ -1,5 +1,6 @@
 import { Queue } from "bullmq"
 
+import { env } from "../config/env.js"
 import { createRedisClient } from "../config/redis.js"
 import { BadRequestError } from "../lib/errors.js"
 import { createLogger } from "../lib/logger.js"
@@ -12,7 +13,7 @@ export type GenerationJobData =
     | { kind: "image"; body: Body }
     | { kind: "upscale" | "revive" | "colorize" | "remove-bg"; props: Props }
 
-export const GENERATION_QUEUE_NAME = "generation"
+export const GENERATION_QUEUE_NAME = `${env.QUEUE_PREFIX}-generation`
 
 export const queueConnection = createRedisClient({ maxRetriesPerRequest: null })
 

@@ -35,5 +35,5 @@
         "noUnusedParameters": false // Report errors on unused parameters in functions
     },
     "include": ["./src/**/*.ts"],
-    "exclude": ["node_modules/**/*", "vitest.config.ts"]
+    "exclude": ["node_modules/**/*", "vitest.config.ts", "**/*.test.ts", "**/*.spec.ts"]
 }
