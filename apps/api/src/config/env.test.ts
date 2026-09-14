@@ -1,53 +1,7 @@
-import { describe, expect, it } from "vitest"
-import { z } from "zod"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-/**
- * Environment variable schema for testing
- * Mirrors the schema in env.ts
- */
-const envSchema = z.object({
-    NODE_ENV: z.enum(["development", "production", "staging", "test"]).default("development"),
-    LOG_LEVEL: z.string().default("info"),
-    APP_PORT: z
-        .string()
-        .transform((v) => parseInt(v, 10))
-        .pipe(z.number().positive())
-        .default("8080"),
-    APP_SERVER: z.string().default("http://localhost"),
-    MONGO_URI: z.string().url("MONGO_URI must be a valid MongoDB URI"),
-    REDIS_HOST: z.string().default("redis"),
-    REDIS_PORT: z
-        .string()
-        .transform((v) => parseInt(v, 10))
-        .pipe(z.number().positive())
-        .default("6379"),
-    CLOUDINARY_CLOUD_NAME: z.string().min(1, "CLOUDINARY_CLOUD_NAME is required"),
-    CLOUDINARY_API_KEY: z.string().min(1, "CLOUDINARY_API_KEY is required"),
-    CLOUDINARY_API_SECRET: z.string().min(1, "CLOUDINARY_API_SECRET is required"),
-    CLOUDINARY_BASE_PATH: z
-        .string()
-        .min(1, "CLOUDINARY_BASE_PATH is required")
-        .transform((v) => v.replace(/\/+$/, "")),
-    CLERK_SECRET_KEY: z.string().min(1, "CLERK_SECRET_KEY is required"),
-    CLERK_PUBLISHABLE_KEY: z.string().min(1, "CLERK_PUBLISHABLE_KEY is required"),
-    CLERK_JWT_KEY: z.string().min(1, "CLERK_JWT_KEY is required"),
-    REPLICATE_API_TOKEN: z.string().min(1, "REPLICATE_API_TOKEN is required"),
-    RAZORPAY_KEY_ID: z.string().min(1, "RAZORPAY_KEY_ID is required"),
-    RAZORPAY_KEY_SECRET: z.string().min(1, "RAZORPAY_KEY_SECRET is required"),
-    EMAIL_USER: z.string().email("EMAIL_USER must be a valid email"),
-    EMAIL_PASSWORD: z.string().min(1, "EMAIL_PASSWORD is required"),
-    WEBHOOK_SECRET: z.string().min(1, "WEBHOOK_SECRET is required"),
-    ENABLE_CRON: z
-        .string()
-        .transform((v) => v.toLowerCase() === "true")
-        .pipe(z.boolean())
-        .default("false"),
-    QUEUE_PREFIX: z.string().default("prod"),
-})
-
-const VALID_ENV: Record<string, string> = {
+const REQUIRED_ENV: Record<string, string> = {
     MONGO_URI: "mongodb://localhost/test",
-    REPLICATE_API_TOKEN: "test-token",
     CLOUDINARY_CLOUD_NAME: "test-cloud",
     CLOUDINARY_API_KEY: "test-key",
     CLOUDINARY_API_SECRET: "test-secret",
@@ -55,109 +9,164 @@ const VALID_ENV: Record<string, string> = {
     CLERK_SECRET_KEY: "clerk-secret",
     CLERK_PUBLISHABLE_KEY: "clerk-pub",
     CLERK_JWT_KEY: "clerk-jwt",
+    REPLICATE_API_TOKEN: "test-token",
     RAZORPAY_KEY_ID: "razorpay-id",
     RAZORPAY_KEY_SECRET: "razorpay-secret",
     EMAIL_USER: "test@example.com",
     EMAIL_PASSWORD: "password",
     WEBHOOK_SECRET: "webhook-secret",
+    DEEPSEEK_API_KEY: "deepseek-key",
+    ANTHROPIC_API_KEY: "anthropic-key",
 }
 
-describe("environment validation schema", () => {
-    it("rejects a missing REPLICATE_API_TOKEN", () => {
-        const { REPLICATE_API_TOKEN: _omit, ...testEnv } = VALID_ENV
-        const result = envSchema.safeParse(testEnv)
-        expect(result.success).toBe(false)
-        if (!result.success) {
-            const errorPaths = result.error.issues.map((i) => i.path.join("."))
-            expect(errorPaths).toContain("REPLICATE_API_TOKEN")
+const MANAGED_KEYS = [
+    ...Object.keys(REQUIRED_ENV),
+    "NODE_ENV",
+    "LOG_LEVEL",
+    "APP_PORT",
+    "APP_SERVER",
+    "REDIS_HOST",
+    "REDIS_PORT",
+    "REDIS_PASSWORD",
+    "GENERATION_CONCURRENCY",
+    "ENHANCE_MODEL",
+    "DESCRIBE_MODEL",
+    "ENABLE_CRON",
+    "QUEUE_PREFIX",
+    "ALLOWED_ORIGINS",
+]
+
+let snapshot: NodeJS.ProcessEnv
+
+function applyEnv(overrides: Record<string, string | undefined> = {}) {
+    for (const key of MANAGED_KEYS) {
+        delete process.env[key]
+    }
+    Object.assign(process.env, REQUIRED_ENV)
+    for (const [key, value] of Object.entries(overrides)) {
+        if (value === undefined) {
+            delete process.env[key]
+        } else {
+            process.env[key] = value
         }
+    }
+}
+
+async function importEnv() {
+    return import("./env.js")
+}
+
+describe("env parse", () => {
+    beforeEach(() => {
+        snapshot = { ...process.env }
+        vi.resetModules()
     })
 
-    it("rejects a missing MONGO_URI", () => {
-        const { MONGO_URI: _omit, ...testEnv } = VALID_ENV
-        const result = envSchema.safeParse(testEnv)
-        expect(result.success).toBe(false)
-        if (!result.success) {
-            const errorPaths = result.error.issues.map((i) => i.path.join("."))
-            expect(errorPaths).toContain("MONGO_URI")
-        }
+    afterEach(() => {
+        process.env = { ...snapshot }
+        vi.restoreAllMocks()
     })
 
-    it("rejects an invalid MONGO_URI format", () => {
-        const testEnv = { ...VALID_ENV, MONGO_URI: "not-a-valid-uri" }
-        const result = envSchema.safeParse(testEnv)
-        expect(result.success).toBe(false)
+    it("parses a complete environment and applies defaults", async () => {
+        applyEnv()
+        const { env } = await importEnv()
+
+        expect(env.NODE_ENV).toBe("development")
+        expect(env.LOG_LEVEL).toBe("info")
+        expect(env.APP_PORT).toBe(8080)
+        expect(env.APP_SERVER).toBe("http://localhost")
+        expect(env.REDIS_HOST).toBe("redis")
+        expect(env.REDIS_PORT).toBe(6379)
+        expect(env.REDIS_PASSWORD).toBeUndefined()
+        expect(env.GENERATION_CONCURRENCY).toBe(10)
+        expect(env.ENHANCE_MODEL).toBe("deepseek-chat")
+        expect(env.DESCRIBE_MODEL).toBe("claude-sonnet-4-5")
+        expect(env.ENABLE_CRON).toBe(false)
+        expect(env.QUEUE_PREFIX).toBe("prod")
+        expect(env.ALLOWED_ORIGINS).toEqual([])
+        expect(env.CLOUDINARY_BASE_PATH).toBe("private/development/uploads")
     })
 
-    it("rejects an invalid EMAIL_USER format", () => {
-        const testEnv = { ...VALID_ENV, EMAIL_USER: "not-an-email" }
-        const result = envSchema.safeParse(testEnv)
-        expect(result.success).toBe(false)
-        if (!result.success) {
-            const errorMessages = result.error.issues.map((i) => i.message)
-            expect(errorMessages.some((msg) => msg.includes("email"))).toBe(true)
-        }
+    it.each(["development", "production", "staging", "test"] as const)(
+        "accepts NODE_ENV=%s",
+        async (nodeEnv) => {
+            applyEnv({ NODE_ENV: nodeEnv })
+            const { env } = await importEnv()
+            expect(env.NODE_ENV).toBe(nodeEnv)
+        },
+    )
+
+    it("transforms numeric strings and optional redis password", async () => {
+        applyEnv({
+            APP_PORT: "3000",
+            REDIS_PORT: "6380",
+            GENERATION_CONCURRENCY: "4",
+            REDIS_PASSWORD: "s3cret",
+            LOG_LEVEL: "debug",
+            APP_SERVER: "https://api.example.com",
+            REDIS_HOST: "cache",
+            ENHANCE_MODEL: "deepseek-reasoner",
+            DESCRIBE_MODEL: "claude-opus",
+            QUEUE_PREFIX: "staging",
+        })
+        const { env } = await importEnv()
+        expect(env.APP_PORT).toBe(3000)
+        expect(env.REDIS_PORT).toBe(6380)
+        expect(env.GENERATION_CONCURRENCY).toBe(4)
+        expect(env.REDIS_PASSWORD).toBe("s3cret")
+        expect(env.LOG_LEVEL).toBe("debug")
+        expect(env.ENHANCE_MODEL).toBe("deepseek-reasoner")
+        expect(env.DESCRIBE_MODEL).toBe("claude-opus")
+        expect(env.QUEUE_PREFIX).toBe("staging")
     })
 
-    it("accepts a valid environment", () => {
-        const result = envSchema.safeParse(VALID_ENV)
-        expect(result.success).toBe(true)
+    it("strips trailing slashes from CLOUDINARY_BASE_PATH", async () => {
+        applyEnv({ CLOUDINARY_BASE_PATH: "private/uploads///" })
+        const { env } = await importEnv()
+        expect(env.CLOUDINARY_BASE_PATH).toBe("private/uploads")
     })
 
-    it("provides default values", () => {
-        const result = envSchema.safeParse(VALID_ENV)
-        expect(result.success).toBe(true)
-        if (result.success) {
-            expect(result.data.NODE_ENV).toBe("development")
-            expect(result.data.LOG_LEVEL).toBe("info")
-            expect(result.data.APP_PORT).toBe(8080)
-            expect(result.data.APP_SERVER).toBe("http://localhost")
-            expect(result.data.REDIS_HOST).toBe("redis")
-            expect(result.data.REDIS_PORT).toBe(6379)
-        }
+    it("parses ENABLE_CRON true/false case-insensitively", async () => {
+        applyEnv({ ENABLE_CRON: "TRUE" })
+        expect((await importEnv()).env.ENABLE_CRON).toBe(true)
+
+        vi.resetModules()
+        applyEnv({ ENABLE_CRON: "false" })
+        expect((await importEnv()).env.ENABLE_CRON).toBe(false)
     })
 
-    it("transforms port strings to numbers", () => {
-        const testEnv = { ...VALID_ENV, APP_PORT: "3000", REDIS_PORT: "6380" }
-        const result = envSchema.safeParse(testEnv)
-        expect(result.success).toBe(true)
-        if (result.success) {
-            expect(result.data.APP_PORT).toBe(3000)
-            expect(result.data.REDIS_PORT).toBe(6380)
-        }
+    it("splits, trims, and drops empty ALLOWED_ORIGINS", async () => {
+        applyEnv({ ALLOWED_ORIGINS: " https://visual-ai.app, ,https://www.visual-ai.app " })
+        const { env } = await importEnv()
+        expect(env.ALLOWED_ORIGINS).toEqual(["https://visual-ai.app", "https://www.visual-ai.app"])
     })
 
-    it("parses ENABLE_CRON as boolean from string", () => {
-        const testEnv = { ...VALID_ENV, ENABLE_CRON: "true" }
-        const result = envSchema.safeParse(testEnv)
-        expect(result.success).toBe(true)
-        if (result.success) {
-            expect(result.data.ENABLE_CRON).toBe(true)
-        }
-    })
+    it("exits with a listed error when required vars are missing or invalid", async () => {
+        const exit = vi.spyOn(process, "exit").mockImplementation(((code?: number) => {
+            throw new Error(`process.exit:${code}`)
+        }) as typeof process.exit)
+        const error = vi.spyOn(console, "error").mockImplementation(() => {})
 
-    it("defaults ENABLE_CRON to false", () => {
-        const result = envSchema.safeParse(VALID_ENV)
-        expect(result.success).toBe(true)
-        if (result.success) {
-            expect(result.data.ENABLE_CRON).toBe(false)
-        }
-    })
+        applyEnv({
+            MONGO_URI: "not-a-valid-uri",
+            EMAIL_USER: "not-an-email",
+            APP_PORT: "0",
+            REDIS_PORT: "-1",
+            GENERATION_CONCURRENCY: "abc",
+            NODE_ENV: "qa",
+            REPLICATE_API_TOKEN: undefined,
+            DEEPSEEK_API_KEY: undefined,
+            ANTHROPIC_API_KEY: undefined,
+            CLOUDINARY_CLOUD_NAME: "",
+        })
 
-    it("defaults QUEUE_PREFIX to prod", () => {
-        const result = envSchema.safeParse(VALID_ENV)
-        expect(result.success).toBe(true)
-        if (result.success) {
-            expect(result.data.QUEUE_PREFIX).toBe("prod")
-        }
-    })
-
-    it("parses custom QUEUE_PREFIX", () => {
-        const testEnv = { ...VALID_ENV, QUEUE_PREFIX: "staging" }
-        const result = envSchema.safeParse(testEnv)
-        expect(result.success).toBe(true)
-        if (result.success) {
-            expect(result.data.QUEUE_PREFIX).toBe("staging")
-        }
+        await expect(importEnv()).rejects.toThrow("process.exit:1")
+        expect(exit).toHaveBeenCalledWith(1)
+        expect(error).toHaveBeenCalledWith(
+            "Environment validation failed. Missing or invalid variables:",
+        )
+        expect(error.mock.calls.some((call) => String(call[0]).includes("Missing vars:"))).toBe(
+            true,
+        )
     })
 })

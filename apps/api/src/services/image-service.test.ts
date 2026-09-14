@@ -1,63 +1,151 @@
-/**
- * Unit tests for image-service
- *
- * Verifies that service functions throw NotFoundError (→ 404 via error handler)
- * when the user/image is absent, and that the correct error types are used.
- */
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { describe, expect, it } from "vitest"
+const User = vi.hoisted(() => ({
+    findOne: vi.fn(),
+    findOneAndUpdate: vi.fn(),
+}))
 
-import { isHttpError, NotFoundError, BadRequestError } from "../lib/errors.js"
+const cloudinary = vi.hoisted(() => ({
+    deleteImageByObject: vi.fn(),
+    deleteImagesByPublicIds: vi.fn(),
+}))
 
-/** Simulates what the central error handler (index.ts) returns for a given error */
-function simulateErrorHandler(err: unknown): { status: number; body: Record<string, unknown> } {
-    if (isHttpError(err)) {
-        return { status: err.statusCode, body: { message: err.message, status: err.statusCode } }
+vi.mock("../lib/logger.js", () => ({
+    createLogger: () => ({
+        debug: vi.fn(),
+        info: vi.fn(),
+        warn: vi.fn(),
+        error: vi.fn(),
+    }),
+}))
+
+vi.mock("../models/user.js", () => ({
+    UserModel: User,
+}))
+
+vi.mock("./cloudinary-service.js", () => cloudinary)
+
+const { toggleImageFavorite, deleteUserImage, deleteBulkUserImages } =
+    await import("./image-service.js")
+
+const USER_ID = "user_1"
+const IMAGE_ID = "img_1"
+
+function userWithHistory(isFavorite = false) {
+    return {
+        userId: USER_ID,
+        history: [
+            { _id: { toString: () => IMAGE_ID }, isFavorite, publicId: "pub_1" },
+            { _id: undefined, isFavorite: false },
+        ],
     }
-    return { status: 500, body: { message: "Internal server error", status: 500 } }
 }
 
-describe("error types", () => {
-    it("NotFoundError maps to 404 and carries the provided message", () => {
-        const err = new NotFoundError("User not found")
-        expect(err.statusCode).toBe(404)
-        expect(err.message).toBe("User not found")
+describe("image-service", () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
     })
 
-    it("BadRequestError maps to 400", () => {
-        const err = new BadRequestError("No image file provided")
-        expect(err.statusCode).toBe(400)
+    describe("toggleImageFavorite", () => {
+        it("throws when the user does not exist", async () => {
+            User.findOne.mockResolvedValue(null)
+
+            await expect(toggleImageFavorite(USER_ID, IMAGE_ID)).rejects.toMatchObject({
+                statusCode: 404,
+                message: "User not found",
+            })
+        })
+
+        it("throws when the image is not in history", async () => {
+            User.findOne.mockResolvedValue({ history: [] })
+
+            await expect(toggleImageFavorite(USER_ID, IMAGE_ID)).rejects.toMatchObject({
+                statusCode: 404,
+                message: "Image not found",
+            })
+        })
+
+        it("flips isFavorite from false to true", async () => {
+            User.findOne.mockResolvedValue(userWithHistory(false))
+            User.findOneAndUpdate.mockResolvedValue({})
+
+            const result = await toggleImageFavorite(USER_ID, IMAGE_ID)
+
+            expect(User.findOneAndUpdate).toHaveBeenCalledWith(
+                { userId: USER_ID },
+                { $set: { "history.0.isFavorite": true } },
+                { new: true },
+            )
+            expect(result).toEqual({ isFavorite: true })
+        })
+
+        it("flips isFavorite from true to false", async () => {
+            User.findOne.mockResolvedValue(userWithHistory(true))
+            User.findOneAndUpdate.mockResolvedValue({})
+
+            const result = await toggleImageFavorite(USER_ID, IMAGE_ID)
+
+            expect(result).toEqual({ isFavorite: false })
+        })
     })
 
-    it("isHttpError detects NotFoundError", () => {
-        expect(isHttpError(new NotFoundError("Image not found"))).toBe(true)
+    describe("deleteUserImage", () => {
+        it("throws when the user does not exist", async () => {
+            User.findOne.mockResolvedValue(null)
+
+            await expect(deleteUserImage(USER_ID, IMAGE_ID)).rejects.toMatchObject({
+                statusCode: 404,
+                message: "User not found",
+            })
+        })
+
+        it("throws when the image is missing", async () => {
+            User.findOne.mockResolvedValue({ history: [] })
+
+            await expect(deleteUserImage(USER_ID, IMAGE_ID)).rejects.toMatchObject({
+                statusCode: 404,
+                message: "Image not found",
+            })
+        })
+
+        it("deletes from Cloudinary and pulls the history entry", async () => {
+            const user = userWithHistory()
+            User.findOne.mockResolvedValue(user)
+            User.findOneAndUpdate.mockResolvedValue({})
+
+            await deleteUserImage(USER_ID, IMAGE_ID)
+
+            expect(cloudinary.deleteImageByObject).toHaveBeenCalledWith(user.history[0])
+            expect(User.findOneAndUpdate).toHaveBeenCalledWith(
+                { userId: USER_ID },
+                { $pull: { history: { _id: IMAGE_ID } } },
+                { new: true },
+            )
+        })
     })
 
-    it("isHttpError does not detect a generic Error", () => {
-        expect(isHttpError(new Error("Some unexpected failure"))).toBe(false)
-    })
-})
+    describe("deleteBulkUserImages", () => {
+        it("throws when the user does not exist", async () => {
+            User.findOne.mockResolvedValue(null)
 
-// Routes use asyncHandler → next(err) → central error handler.
-// We verify the mapping logic without spinning up Express.
-describe("error handler status-code mapping", () => {
-    it("maps a missing user to 404", () => {
-        const response = simulateErrorHandler(new NotFoundError("User not found"))
-        expect(response.status).toBe(404)
-    })
+            await expect(deleteBulkUserImages(USER_ID, ["p1"], [IMAGE_ID])).rejects.toMatchObject({
+                statusCode: 404,
+                message: "User not found",
+            })
+        })
 
-    it("maps a missing image to 404", () => {
-        const response = simulateErrorHandler(new NotFoundError("Image not found"))
-        expect(response.status).toBe(404)
-    })
+        it("bulk-deletes public ids and history entries", async () => {
+            User.findOne.mockResolvedValue(userWithHistory())
+            User.findOneAndUpdate.mockResolvedValue({})
 
-    it("maps an unexpected error to 500", () => {
-        const response = simulateErrorHandler(new Error("Database connection lost"))
-        expect(response.status).toBe(500)
-    })
+            await deleteBulkUserImages(USER_ID, ["p1", "p2"], [IMAGE_ID, "img_2"])
 
-    it("maps a bad request to 400", () => {
-        const response = simulateErrorHandler(new BadRequestError("No image file provided"))
-        expect(response.status).toBe(400)
+            expect(cloudinary.deleteImagesByPublicIds).toHaveBeenCalledWith(["p1", "p2"])
+            expect(User.findOneAndUpdate).toHaveBeenCalledWith(
+                { userId: USER_ID },
+                { $pull: { history: { _id: { $in: [IMAGE_ID, "img_2"] } } } },
+                { new: true },
+            )
+        })
     })
 })

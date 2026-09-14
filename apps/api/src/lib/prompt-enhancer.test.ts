@@ -131,6 +131,35 @@ describe("prompt-enhancer", () => {
             expect(call.system).not.toContain("Style requirement")
         })
 
+        it("should use the base system prompt when style has no promptSuffix", async () => {
+            mockGenerateText.mockResolvedValueOnce({
+                text: "a cat",
+                finishReason: "stop",
+                usage: { totalTokens: 10 },
+            } as never)
+
+            await enhancePrompt("cat", {
+                id: "none",
+                label: "None",
+                promptSuffix: "",
+                styleDescription: "",
+            })
+
+            const call = mockGenerateText.mock.calls[0]?.[0] as { system: string }
+            expect(call.system).not.toContain("Style requirement")
+        })
+
+        it("should reject when the LLM call exceeds the timeout", async () => {
+            vi.useFakeTimers()
+            mockGenerateText.mockImplementation(() => new Promise(() => {}))
+
+            const pending = enhancePrompt("cat")
+            const assertion = expect(pending).rejects.toThrow("Prompt enhancement timeout")
+            await vi.advanceTimersByTimeAsync(8000)
+            await assertion
+            vi.useRealTimers()
+        })
+
         it("should log diagnostics and return empty string when completion is empty", async () => {
             const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
             mockGenerateText.mockResolvedValueOnce({

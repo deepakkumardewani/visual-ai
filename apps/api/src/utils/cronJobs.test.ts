@@ -1,73 +1,71 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
-// Global mock setup for cronJobs tests
-vi.mock("node-cron")
-vi.mock("../lib/logger.js")
-vi.mock("../models/user.js")
+import { DAILY_CREDITS } from "@visual-ai/shared"
 
-describe("cronJobs gate behavior", () => {
+const mocks = vi.hoisted(() => ({
+    schedule: vi.fn(),
+    updateMany: vi.fn(),
+    logger: { info: vi.fn(), error: vi.fn(), warn: vi.fn(), debug: vi.fn() },
+    env: { ENABLE_CRON: true },
+}))
+
+vi.mock("node-cron", () => ({
+    default: { schedule: mocks.schedule },
+}))
+
+vi.mock("../lib/logger.js", () => ({
+    createLogger: () => mocks.logger,
+}))
+
+vi.mock("../models/user.js", () => ({
+    UserModel: { updateMany: mocks.updateMany },
+}))
+
+vi.mock("../config/env.js", () => ({
+    env: mocks.env,
+}))
+
+describe("cronJobs", () => {
     beforeEach(() => {
         vi.clearAllMocks()
         vi.resetModules()
+        mocks.env.ENABLE_CRON = true
     })
 
-    it("should schedule cron job when ENABLE_CRON is true", async () => {
-        // Mock env with ENABLE_CRON=true BEFORE importing cronJobs
-        vi.doMock("../config/env.js", () => ({
-            env: { ENABLE_CRON: true },
-        }))
+    it("schedules the midnight job and resets daily credits", async () => {
+        mocks.updateMany.mockResolvedValue({ modifiedCount: 3 })
 
-        // Mock logger to capture log calls
-        const mockLogger = {
-            info: vi.fn(),
-            error: vi.fn(),
-        }
-        vi.doMock("../lib/logger.js", () => ({
-            createLogger: () => mockLogger,
-        }))
+        await import("./cronJobs.js")
 
-        // Mock cron.schedule
-        const mockSchedule = vi.fn()
-        vi.doMock("node-cron", () => ({
-            default: {
-                schedule: mockSchedule,
-            },
-        }))
+        expect(mocks.schedule).toHaveBeenCalledWith("0 0 * * *", expect.any(Function))
+        expect(mocks.logger.info).toHaveBeenCalledWith("Cron jobs enabled")
 
-        // Now import cronJobs which will use the mocks
-        await import("../utils/cronJobs.js")
+        const job = mocks.schedule.mock.calls[0]?.[1] as () => Promise<void>
+        await job()
 
-        // Verify schedule was called for the cron job registration
-        expect(mockSchedule).toHaveBeenCalledWith("0 0 * * *", expect.any(Function))
+        expect(mocks.updateMany).toHaveBeenCalledWith({}, { $set: { dailyCredits: DAILY_CREDITS } })
+        expect(mocks.logger.info).toHaveBeenCalledWith("Daily credits successfully reset")
     })
 
-    it("should not schedule cron job when ENABLE_CRON is false", async () => {
-        // Mock env with ENABLE_CRON=false BEFORE importing cronJobs
-        vi.doMock("../config/env.js", () => ({
-            env: { ENABLE_CRON: false },
-        }))
+    it("logs when the scheduled reset fails", async () => {
+        mocks.updateMany.mockRejectedValue(new Error("mongo unavailable"))
 
-        // Mock logger to capture log calls
-        const mockLogger = {
-            info: vi.fn(),
-            error: vi.fn(),
-        }
-        vi.doMock("../lib/logger.js", () => ({
-            createLogger: () => mockLogger,
-        }))
+        await import("./cronJobs.js")
+        const job = mocks.schedule.mock.calls[0]?.[1] as () => Promise<void>
+        await job()
 
-        // Mock cron.schedule
-        const mockSchedule = vi.fn()
-        vi.doMock("node-cron", () => ({
-            default: {
-                schedule: mockSchedule,
-            },
-        }))
+        expect(mocks.logger.error).toHaveBeenCalledWith(
+            { err: expect.any(Error) },
+            "Error resetting daily credits",
+        )
+    })
 
-        // Now import cronJobs which will use the mocks
-        await import("../utils/cronJobs.js")
+    it("does not schedule jobs when ENABLE_CRON is false", async () => {
+        mocks.env.ENABLE_CRON = false
 
-        // Verify schedule was NOT called
-        expect(mockSchedule).not.toHaveBeenCalled()
+        await import("./cronJobs.js")
+
+        expect(mocks.schedule).not.toHaveBeenCalled()
+        expect(mocks.logger.info).toHaveBeenCalledWith("Cron disabled - no scheduled jobs will run")
     })
 })

@@ -29,6 +29,12 @@ describe("prompt-moderation", () => {
             expect(mockGenerateText).not.toHaveBeenCalled()
         })
 
+        it("should return safe: true for whitespace-only prompts", async () => {
+            const result = await checkPromptSafety("   \n\t")
+            expect(result).toEqual({ safe: true })
+            expect(mockGenerateText).not.toHaveBeenCalled()
+        })
+
         it("should return the model's classification when safe", async () => {
             mockGenerateText.mockResolvedValueOnce({
                 output: { safe: true },
@@ -54,6 +60,35 @@ describe("prompt-moderation", () => {
             const result = await checkPromptSafety("a cat")
             expect(result).toEqual({ safe: true })
             expect(errorSpy).toHaveBeenCalled()
+            errorSpy.mockRestore()
+        })
+
+        it("should fail open when the classifier times out", async () => {
+            vi.useFakeTimers()
+            const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+            mockGenerateText.mockImplementation(() => new Promise(() => {}))
+
+            const pending = checkPromptSafety("a quiet forest")
+            const assertion = pending.then((result) => {
+                expect(result).toEqual({ safe: true })
+            })
+            await vi.advanceTimersByTimeAsync(5000)
+            await assertion
+            expect(errorSpy).toHaveBeenCalled()
+            errorSpy.mockRestore()
+            vi.useRealTimers()
+        })
+
+        it("should stringify non-Error failures when failing open", async () => {
+            const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+            mockGenerateText.mockRejectedValueOnce("upstream-down")
+
+            const result = await checkPromptSafety("a cat")
+            expect(result).toEqual({ safe: true })
+            expect(errorSpy).toHaveBeenCalledWith(
+                "[prompt-moderation] Classification failed, failing open",
+                { error: "upstream-down" },
+            )
             errorSpy.mockRestore()
         })
 

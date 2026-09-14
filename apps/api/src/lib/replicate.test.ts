@@ -1,11 +1,22 @@
-/**
- * Unit tests for buildModelInput and getModelReplicateId
- * Each model's input is asserted against expected registry-driven behavior.
- */
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { describe, expect, it } from "vitest"
+const replicateState = vi.hoisted(() => {
+    const run = vi.fn().mockResolvedValue(["https://out.png"])
+    const constructed: Array<{ auth?: string }> = []
+    class Replicate {
+        run = run
+        constructor(options: { auth?: string }) {
+            constructed.push(options)
+        }
+    }
+    return { run, constructed, Replicate }
+})
 
-import { buildModelInput, getModelReplicateId } from "./model-input.js"
+vi.mock("replicate", () => ({
+    default: replicateState.Replicate,
+}))
+
+const { replicate, buildModelInput, getModelReplicateId } = await import("./replicate.js")
 
 const BASE_PARAMS = {
     prompt: "a photo of a cat",
@@ -15,7 +26,30 @@ const BASE_PARAMS = {
     numOfOutputs: 2,
 }
 
-describe("buildModelInput", () => {
+describe("replicate client wrapper", () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+    })
+
+    it("constructs the SDK client with the Replicate API token", () => {
+        expect(replicateState.constructed).toHaveLength(1)
+        expect(replicateState.constructed[0]?.auth).toEqual(expect.any(String))
+        expect(replicateState.constructed[0]?.auth?.length).toBeGreaterThan(0)
+    })
+
+    it("exposes a runnable client instance", async () => {
+        await expect(
+            replicate.run("owner/model" as never, { input: { prompt: "x" } }),
+        ).resolves.toEqual(["https://out.png"])
+        expect(replicateState.run).toHaveBeenCalled()
+    })
+})
+
+describe("buildModelInput re-export", () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+    })
+
     it("FLUX_QUICK includes prompt/format/quality/num_outputs but excludes aspect_ratio", () => {
         const input = buildModelInput("FLUX_QUICK", BASE_PARAMS)
         expect(input.prompt).toBe("a photo of a cat")
@@ -66,7 +100,11 @@ describe("buildModelInput", () => {
     })
 })
 
-describe("getModelReplicateId", () => {
+describe("getModelReplicateId re-export", () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+    })
+
     it("returns the FLUX_BASIC replicateId", () => {
         expect(getModelReplicateId("FLUX_BASIC")).toBe("black-forest-labs/flux-dev")
     })

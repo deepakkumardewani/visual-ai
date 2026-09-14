@@ -110,6 +110,14 @@ describe("prompt-pipeline", () => {
             expect(mockEnhancePrompt).not.toHaveBeenCalled()
         })
 
+        it("should use a default moderation reason when none is provided", async () => {
+            mockCheckPromptSafety.mockResolvedValueOnce({ safe: false })
+
+            await expect(
+                preparePrompt({ prompt: "a cat", modelKey: "FLUX_BASIC" }),
+            ).rejects.toThrow("This prompt may violate our content guidelines.")
+        })
+
         it("should proceed normally when prompt is classified safe", async () => {
             const result = await preparePrompt({
                 prompt: "a cat",
@@ -288,8 +296,30 @@ describe("prompt-pipeline", () => {
             expect(result).toBe("cat")
         })
 
+        it("should stringify non-Error style lookup failures", async () => {
+            const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+            mockGetStylePreset.mockImplementationOnce(() => {
+                throw "style-store-down"
+            })
+
+            const result = await preparePrompt({
+                prompt: "cat",
+                styleId: "dynamic",
+                modelKey: "FLUX_BASIC",
+            })
+
+            expect(result).toBe("cat")
+            expect(errorSpy).toHaveBeenCalledWith(
+                expect.stringContaining("Style lookup failed"),
+                expect.objectContaining({ error: "style-store-down" }),
+            )
+            errorSpy.mockRestore()
+        })
+
         it("should handle missing modelKey gracefully", async () => {
-            mockGetModelDefinition.mockRejectedValueOnce(new Error("Unknown model"))
+            mockGetModelDefinition.mockImplementationOnce(() => {
+                throw new Error("Unknown model")
+            })
 
             const result = await preparePrompt({
                 prompt: "cat",
@@ -299,6 +329,24 @@ describe("prompt-pipeline", () => {
             })
             // Should still apply style even if model lookup fails
             expect(result).toBe("cat. Style: dynamic composition, energetic.")
+        })
+
+        it("should stringify non-Error enhancement failures", async () => {
+            const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+            mockEnhancePrompt.mockRejectedValueOnce("llm-timeout")
+
+            const result = await preparePrompt({
+                prompt: "cat",
+                enhanceMode: "on",
+                modelKey: "FLUX_BASIC",
+            })
+
+            expect(result).toBe("cat")
+            expect(errorSpy).toHaveBeenCalledWith(
+                expect.stringContaining("Enhancement failed"),
+                expect.objectContaining({ error: "llm-timeout" }),
+            )
+            errorSpy.mockRestore()
         })
 
         it("should trim whitespace from final result", async () => {

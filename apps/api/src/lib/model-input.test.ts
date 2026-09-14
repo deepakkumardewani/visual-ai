@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { buildModelInput, validateModelParams } from "./model-input.js"
+import { STYLE_PRESETS } from "@visual-ai/shared"
+import { buildModelInput, getModelReplicateId, validateModelParams } from "./model-input.js"
 import type { UserGenerationParams } from "./model-input.js"
 
 describe("buildModelInput — per-model payload assertions", () => {
@@ -101,6 +102,91 @@ describe("buildModelInput — per-model payload assertions", () => {
             expect(payload.prompt).toBe("enhance quality")
             expect(payload.image).toBe("https://example.com/image.jpg")
         })
+
+        it("maps GPT Image 2 jpg to jpeg and number_of_images", () => {
+            const payload = buildModelInput("GPT_IMAGE_2", {
+                prompt: "a fox",
+                aspectRatio: "1:1",
+                outputFormat: "jpg",
+                numOfOutputs: 2,
+                imageUrl: "https://example.com/ref.png",
+            })
+            expect(payload.output_format).toBe("jpeg")
+            expect(payload.number_of_images).toBe(2)
+            expect(payload.input_images).toBe("https://example.com/ref.png")
+        })
+
+        it("maps jpeg to jpg when the model only allows jpg", () => {
+            const payload = buildModelInput("NANO_BANANA_PRO", {
+                prompt: "studio",
+                aspectRatio: "1:1",
+                outputFormat: "jpeg",
+            })
+            expect(payload.output_format).toBe("jpg")
+        })
+
+        it("keeps an unknown format string and applies field defaults", () => {
+            const payload = buildModelInput("FLUX_QUICK", {
+                outputFormat: "tiff",
+            })
+            expect(payload.prompt).toBe("")
+            expect(payload.output_format).toBe("tiff")
+            expect(payload.output_quality).toBe(0)
+            expect(payload.num_outputs).toBe(1)
+        })
+
+        it("defaults aspect ratio and empty output format", () => {
+            const payload = buildModelInput("FLUX_BASIC", { prompt: "fox" })
+            expect(payload.aspect_ratio).toBe("")
+            expect(payload.output_format).toBe("")
+        })
+
+        it("uses max_images for Seedream and leaves image input off without a URL", () => {
+            const payload = buildModelInput("SEEDREAM_4", {
+                prompt: "city",
+                aspectRatio: "16:9",
+            })
+            expect(payload.max_images).toBe(1)
+            expect(payload.image_input).toBeUndefined()
+        })
+
+        it("maps colorize/revive/remove-bg image keys", () => {
+            expect(
+                buildModelInput("COLORIZE_BASIC", { prompt: "color", imageUrl: "https://i/a.png" })
+                    .input_image,
+            ).toBe("https://i/a.png")
+            expect(
+                buildModelInput("COLORIZE_ADVANCED", {
+                    prompt: "color",
+                    imageUrl: "https://i/a.png",
+                }).image,
+            ).toBe("https://i/a.png")
+            expect(
+                buildModelInput("REVIVE", { prompt: "fix", imageUrl: "https://i/a.png" }).image,
+            ).toBe("https://i/a.png")
+            expect(
+                buildModelInput("BACKGROUND_REMOVER", {
+                    prompt: "cut",
+                    imageUrl: "https://i/a.png",
+                }).image,
+            ).toBe("https://i/a.png")
+        })
+
+        it("throws for an unknown model key", () => {
+            expect(() => buildModelInput("NOT_A_MODEL" as any, { prompt: "x" })).toThrow(
+                /unknown model key/,
+            )
+        })
+    })
+})
+
+describe("getModelReplicateId", () => {
+    it("returns the registry replicate id", () => {
+        expect(getModelReplicateId("FLUX_BASIC")).toBe("black-forest-labs/flux-dev")
+    })
+
+    it("throws for an unknown model key", () => {
+        expect(() => getModelReplicateId("MISSING" as any)).toThrow(/unknown model key/)
     })
 })
 
@@ -203,5 +289,56 @@ describe("validateModelParams — scale validation", () => {
             }
             expect(() => validateModelParams("UPSCALE_RECRAFT", params)).not.toThrow()
         })
+    })
+
+    it("throws for an unknown model key", () => {
+        expect(() => validateModelParams("NOPE" as any, {})).toThrow(/Unknown model key/)
+    })
+
+    it("rejects aspectRatio on models that do not support it", () => {
+        expect(() => validateModelParams("FLUX_QUICK", { aspectRatio: "16:9" })).toThrow(
+            /does not support aspectRatio/,
+        )
+    })
+
+    it("rejects an aspect ratio not listed for the model", () => {
+        expect(() => validateModelParams("FLUX_BASIC", { aspectRatio: "32:9" })).toThrow(
+            /does not support aspect ratio "32:9"/,
+        )
+    })
+
+    it("rejects outputQuality on models that do not support it", () => {
+        expect(() => validateModelParams("GPT_IMAGE_2", { outputQuality: 80 })).toThrow(
+            /does not support outputQuality/,
+        )
+    })
+
+    it("rejects multiple outputs when the model has no numOutputs field", () => {
+        expect(() => validateModelParams("COLORIZE_BASIC", { numOfOutputs: 2 })).toThrow(
+            /does not support multiple outputs/,
+        )
+    })
+
+    it("allows a single output even when numOutputs is unsupported", () => {
+        expect(() => validateModelParams("COLORIZE_BASIC", { numOfOutputs: 1 })).not.toThrow()
+    })
+
+    it("rejects unknown styleId and enhanceMode, and ignores empty values", () => {
+        expect(() => validateModelParams("FLUX_BASIC", { styleId: "not-a-style" })).toThrow(
+            /Unknown styleId/,
+        )
+        expect(() => validateModelParams("FLUX_BASIC", { enhanceMode: "turbo" })).toThrow(
+            /Unknown enhanceMode/,
+        )
+        expect(() =>
+            validateModelParams("FLUX_BASIC", { styleId: "", enhanceMode: "" }),
+        ).not.toThrow()
+        expect(() =>
+            validateModelParams("FLUX_BASIC", {
+                styleId: STYLE_PRESETS[1].id,
+                enhanceMode: "auto",
+                aspectRatio: "16:9",
+            }),
+        ).not.toThrow()
     })
 })
