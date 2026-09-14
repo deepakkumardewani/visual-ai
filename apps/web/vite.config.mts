@@ -75,6 +75,28 @@ export default defineConfig(({ mode }) => ({
     globals: true,
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
     setupFiles: ['src/test/setup.ts'],
+    coverage: {
+      provider: 'istanbul',
+      reporter: ['text', 'json-summary', 'html'],
+      include: ['src/**/*.{ts,vue}'],
+      exclude: [
+        'src/**/*.{test,spec}.ts',
+        'src/**/*.d.ts',
+        'src/main.ts',
+        'src/App.vue',
+        'src/test/**',
+        'src/plugins/**',
+        'src/components/icons/**',
+        'src/types/**',
+        'src/auto-imports.d.ts',
+      ],
+      thresholds: {
+        lines: 90,
+        functions: 90,
+        statements: 90,
+        branches: 90,
+      },
+    },
   },
   build: {
     minify: 'terser', // Use terser for better minification

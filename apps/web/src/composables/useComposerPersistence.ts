@@ -21,6 +21,11 @@ interface PersistedComposerState {
 
 let initialized = false;
 
+/** Test-only: allow remounting the singleton persistence watcher. */
+export function resetComposerPersistenceForTests() {
+  initialized = false;
+}
+
 function readPersisted(): PersistedComposerState | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
