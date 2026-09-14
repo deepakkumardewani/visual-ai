@@ -10,6 +10,7 @@ import { useCollectionsStore } from '@/stores/collections';
 import { useGenerateStore } from '@/stores/generate';
 
 import { bulkDelete, bulkDownload, bulkFavorite } from '@/utils/helpers';
+import { ENABLE_COLLECTION_CREATE } from '@/utils/history-collection-ui';
 
 const generateStore = useGenerateStore();
 const collectionsStore = useCollectionsStore();
@@ -23,8 +24,6 @@ const props = defineProps<{
 const pickerOpen = ref(false);
 const createMode = ref(false);
 const newName = ref('');
-/** TODO(collections): restore New collection / Create & add when we ship albums. */
-const ENABLE_COLLECTION_CREATE = false;
 const pickerRoot = ref<HTMLElement | null>(null);
 
 onClickOutside(pickerRoot, () => {

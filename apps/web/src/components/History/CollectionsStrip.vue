@@ -13,6 +13,8 @@ import { useUserStore } from '@/stores/user';
 import Popover from '@/components/primitives/Popover.vue';
 import Tooltip from '@/components/primitives/Tooltip.vue';
 
+import { ENABLE_COLLECTION_ALL, ENABLE_COLLECTION_CREATE } from '@/utils/history-collection-ui';
+
 const collectionsStore = useCollectionsStore();
 const userStore = useUserStore();
 const appStore = useAppStore();
@@ -23,9 +25,6 @@ const { snackbar, snackbarText } = storeToRefs(appStore);
 
 const createOpen = ref(false);
 const newName = ref('');
-/** TODO(collections): restore All chip + New-collection chip + form when we ship albums. */
-const ENABLE_COLLECTION_ALL = false;
-const ENABLE_COLLECTION_CREATE = false;
 
 const showStrip = computed(
   () => ENABLE_COLLECTION_CREATE || ENABLE_COLLECTION_ALL || collections.value.length > 0,
