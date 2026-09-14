@@ -28,6 +28,10 @@ vi.mock('vue-clerk', () => ({
   useUser: () => ({ user: ref(null) }),
 }));
 
+vi.mock('@/composables/usePageSeo', () => ({
+  usePageSeo: () => undefined,
+}));
+
 vi.mock('@/components/Dashboard/DashboardShell.vue', () => ({
   default: {
     template:

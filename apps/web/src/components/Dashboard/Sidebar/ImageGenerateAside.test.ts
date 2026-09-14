@@ -101,4 +101,64 @@ describe('ImageGenerateAside section visibility', () => {
     expect(wrapper.find('[data-testid="style-picker-stub"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="prompt-enhance-picker-stub"]').exists()).toBe(true);
   });
+
+  it('updates quality, count, and format from the segmented controls', async () => {
+    const { wrapper, pinia } = mount_();
+    setActivePinia(pinia);
+    const aside = useAsideStore();
+    aside.mode = findByModelKey('FLUX_BASIC');
+    await wrapper.vm.$nextTick();
+
+    const quality = wrapper.get('[aria-label="Output quality"]').findAll('button');
+    await quality[0].trigger('click');
+    expect(aside.outputQuality).toBe(0);
+    await quality[1].trigger('click');
+    expect(aside.outputQuality).toBe(1);
+
+    const counts = wrapper.get('[aria-label="Number of images"]').findAll('button');
+    await counts[2].trigger('click');
+    expect(aside.noOfOutputs).toBe(3);
+
+    const formats = wrapper.get('[aria-label="Output format"]').findAll('button');
+    await formats[1].trigger('click');
+    expect(aside.imageFormat.title).toBe(formats[1].text());
+  });
+
+  it('forces a single output for FLUX Pro variants and when count is unsupported', async () => {
+    const { wrapper, pinia } = mount_();
+    setActivePinia(pinia);
+    const aside = useAsideStore();
+    aside.noOfOutputs = 4;
+    aside.mode = findByModelKey('FLUX_BASIC');
+    await wrapper.vm.$nextTick();
+
+    aside.mode = findByModelKey('FLUX_PRO');
+    await wrapper.vm.$nextTick();
+    expect(aside.noOfOutputs).toBe(1);
+
+    const flux11 = MODELS.find(
+      (model) => String(model.id).includes('1_1') || String(model.id).includes('1.1'),
+    );
+    if (flux11) {
+      aside.noOfOutputs = 3;
+      aside.mode = flux11;
+      await wrapper.vm.$nextTick();
+      expect(aside.noOfOutputs).toBe(1);
+    }
+  });
+
+  it('resets aspect ratio and format when the new model no longer supports them', async () => {
+    const { wrapper, pinia } = mount_();
+    setActivePinia(pinia);
+    const aside = useAsideStore();
+    aside.mode = findByModelKey('FLUX_BASIC');
+    await wrapper.vm.$nextTick();
+    aside.aspectRatio = { ...aside.aspectRatio, title: 'not-a-ratio' };
+    aside.imageFormat = { title: 'TIFF' };
+
+    aside.mode = findByModelKey('FLUX_PRO');
+    await wrapper.vm.$nextTick();
+    expect(aside.aspectRatio.title).not.toBe('not-a-ratio');
+    expect(aside.imageFormat.title).not.toBe('TIFF');
+  });
 });

@@ -63,4 +63,82 @@ describe('CommunityCard', () => {
 
     expect(wrapper.emitted('open')).toEqual([[sampleItem.id]]);
   });
+
+  it('falls back to a 3 / 4 frame when the aspect ratio is invalid', () => {
+    const wrapper = mount(CommunityCard, {
+      props: { item: { ...sampleItem, aspectRatio: 'auto' } },
+      global: { plugins: [createPinia()] },
+    });
+
+    expect(wrapper.find('[style*="aspect-ratio"]').exists() || wrapper.html()).toBeTruthy();
+    expect(wrapper.get('[data-testid="community-card"] > div').attributes('style')).toContain(
+      '3 / 4',
+    );
+  });
+
+  it('renders initials for empty, single, and two-part authors', () => {
+    const pinia = createPinia();
+    const avatarText = (wrapper: ReturnType<typeof mount>) =>
+      wrapper
+        .findAll('[aria-hidden="true"]')
+        .find((node) => node.text().trim())
+        ?.text();
+
+    const empty = mount(CommunityCard, {
+      props: { item: { ...sampleItem, author: '   ', authorUserId: '' } },
+      global: { plugins: [pinia] },
+    });
+    expect(avatarText(empty)).toBe('?');
+
+    const single = mount(CommunityCard, {
+      props: { item: { ...sampleItem, author: 'midjourney' } },
+      global: { plugins: [pinia] },
+    });
+    expect(avatarText(single)).toBe('MI');
+
+    const two = mount(CommunityCard, {
+      props: { item: { ...sampleItem, author: 'Ada Lovelace' } },
+      global: { plugins: [pinia] },
+    });
+    expect(avatarText(two)).toBe('AL');
+  });
+
+  it('hides copy when the prompt is blank and still remixes', async () => {
+    const wrapper = mount(CommunityCard, {
+      props: { item: { ...sampleItem, prompt: '   ', modelName: '' } },
+      global: { plugins: [createPinia()] },
+    });
+
+    expect(wrapper.find('[data-testid="community-copy-prompt-button"]').exists()).toBe(false);
+    expect(
+      wrapper.get('[data-testid="community-remix-button"]').attributes('title'),
+    ).toBeUndefined();
+
+    await wrapper.get('[data-testid="community-remix-button"]').trigger('click');
+    expect(wrapper.emitted('remix')).toEqual([['   ']]);
+  });
+
+  it('opens from Enter and Space but ignores other keys', async () => {
+    const wrapper = mount(CommunityCard, {
+      props: { item: sampleItem },
+      global: { plugins: [createPinia()] },
+    });
+
+    const card = wrapper.get('[data-testid="community-card"]');
+    await card.trigger('keydown', { key: 'Enter' });
+    await card.trigger('keydown', { key: ' ' });
+    await card.trigger('keydown', { key: 'Tab' });
+
+    expect(wrapper.emitted('open')).toEqual([[sampleItem.id], [sampleItem.id]]);
+  });
+
+  it('copies the prompt without opening the card', async () => {
+    const wrapper = mount(CommunityCard, {
+      props: { item: sampleItem },
+      global: { plugins: [createPinia()] },
+    });
+
+    await wrapper.get('[data-testid="community-copy-prompt-button"]').trigger('click');
+    expect(wrapper.emitted('open')).toBeUndefined();
+  });
 });

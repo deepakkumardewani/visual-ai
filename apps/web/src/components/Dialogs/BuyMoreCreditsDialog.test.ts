@@ -5,13 +5,22 @@ import { describe, expect, it, beforeEach, vi } from 'vitest';
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue';
 import { useUserStore } from '@/stores/user';
 
+import { initiatePayment } from '@/utils/payment';
+import { useDialogStore } from '@/stores/dialog';
+
 vi.mock('@/utils/payment', () => ({
   initiatePayment: vi.fn(),
 }));
 
+const modalStub = {
+  template: `<div><slot /><slot name="actions" /></div>`,
+  props: ['open'],
+};
+
 describe('BuyMoreCreditsDialog', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
+    vi.mocked(initiatePayment).mockReset();
   });
 
   it('renders dialog with current balance display', () => {
@@ -22,10 +31,8 @@ describe('BuyMoreCreditsDialog', () => {
     const wrapper = mount(BuyMoreCreditsDialog, {
       global: {
         stubs: {
-          AppModal: {
-            template: `<div><slot /></div>`,
-            props: ['open'],
-          },
+          AppModal: modalStub,
+          'font-awesome-icon': true,
         },
       },
     });
@@ -43,10 +50,8 @@ describe('BuyMoreCreditsDialog', () => {
     const wrapper = mount(BuyMoreCreditsDialog, {
       global: {
         stubs: {
-          AppModal: {
-            template: `<div><slot /></div>`,
-            props: ['open'],
-          },
+          AppModal: modalStub,
+          'font-awesome-icon': true,
         },
       },
     });
@@ -63,10 +68,8 @@ describe('BuyMoreCreditsDialog', () => {
     const wrapper = mount(BuyMoreCreditsDialog, {
       global: {
         stubs: {
-          AppModal: {
-            template: `<div><slot /></div>`,
-            props: ['open'],
-          },
+          AppModal: modalStub,
+          'font-awesome-icon': true,
         },
       },
     });
@@ -93,10 +96,8 @@ describe('BuyMoreCreditsDialog', () => {
     const wrapper = mount(BuyMoreCreditsDialog, {
       global: {
         stubs: {
-          AppModal: {
-            template: `<div><slot /></div>`,
-            props: ['open'],
-          },
+          AppModal: modalStub,
+          'font-awesome-icon': true,
         },
       },
     });
@@ -114,10 +115,8 @@ describe('BuyMoreCreditsDialog', () => {
     const wrapper = mount(BuyMoreCreditsDialog, {
       global: {
         stubs: {
-          AppModal: {
-            template: `<div><slot /></div>`,
-            props: ['open'],
-          },
+          AppModal: modalStub,
+          'font-awesome-icon': true,
         },
       },
     });
@@ -135,10 +134,8 @@ describe('BuyMoreCreditsDialog', () => {
     const wrapper = mount(BuyMoreCreditsDialog, {
       global: {
         stubs: {
-          AppModal: {
-            template: `<div><slot /></div>`,
-            props: ['open'],
-          },
+          AppModal: modalStub,
+          'font-awesome-icon': true,
         },
       },
     });
@@ -159,15 +156,54 @@ describe('BuyMoreCreditsDialog', () => {
     const wrapper = mount(BuyMoreCreditsDialog, {
       global: {
         stubs: {
-          AppModal: {
-            template: `<div><slot /></div>`,
-            props: ['open'],
-          },
+          AppModal: modalStub,
+          'font-awesome-icon': true,
         },
       },
     });
 
     expect(wrapper.text()).toContain('Secure payment');
     expect(wrapper.text()).toContain('Razorpay');
+  });
+
+  it('shows a success balance after purchase and hides the dialog', async () => {
+    vi.useFakeTimers();
+    vi.mocked(initiatePayment).mockResolvedValueOnce(undefined);
+    const userStore = useUserStore();
+    userStore.credits = 50;
+    userStore.dailyCredits = 10;
+    const dialogStore = useDialogStore();
+    dialogStore.showBuyCredits();
+
+    const wrapper = mount(BuyMoreCreditsDialog, {
+      global: { stubs: { AppModal: modalStub, 'font-awesome-icon': true } },
+    });
+
+    await wrapper.get('.modal-btn--primary').trigger('click');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.text()).toContain('Purchase successful');
+    expect(wrapper.text()).toContain('180');
+
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(dialogStore.showBuyCreditsDialog).toBe(false);
+    vi.useRealTimers();
+  });
+
+  it('keeps the pack list when purchase fails', async () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.mocked(initiatePayment).mockRejectedValueOnce(new Error('gateway down'));
+    const userStore = useUserStore();
+    userStore.credits = 50;
+    userStore.dailyCredits = 10;
+
+    const wrapper = mount(BuyMoreCreditsDialog, {
+      global: { stubs: { AppModal: modalStub, 'font-awesome-icon': true } },
+    });
+
+    await wrapper.get('.modal-btn--primary').trigger('click');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.text()).toContain('Secure payment');
+    expect(wrapper.text()).not.toContain('Purchase successful');
+    errorSpy.mockRestore();
   });
 });

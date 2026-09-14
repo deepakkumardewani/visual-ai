@@ -12,6 +12,6 @@ describe('TokenScratch', () => {
     expect(root.classes().join(' ')).toContain('tw-text-ink-primary');
     expect(wrapper.text()).toContain('Surface 1');
     expect(wrapper.text()).toContain('Gold');
-    expect(wrapper.text()).toContain('Light canvas');
+    expect(wrapper.text()).toContain('Gold muted');
   });
 });

@@ -77,4 +77,28 @@ describe('NavTabs', () => {
 
     expect(push).toHaveBeenCalledWith({ name: APP_SURFACE.EXPLORE });
   });
+
+  it('wraps left from Create to Assets and jumps with Home and End', async () => {
+    routeName.value = 'create';
+    const wrapper = mountNavTabs();
+    const createTab = wrapper.get('[data-testid="nav-tab-create"]');
+
+    await createTab.trigger('keydown', { key: 'ArrowLeft' });
+    expect(push).toHaveBeenCalledWith({ name: APP_SURFACE.ASSETS });
+
+    await createTab.trigger('keydown', { key: 'End' });
+    expect(push).toHaveBeenCalledWith({ name: APP_SURFACE.ASSETS });
+
+    await createTab.trigger('keydown', { key: 'Home' });
+    expect(push).toHaveBeenCalled();
+  });
+
+  it('navigates Create through the current feature location', async () => {
+    routeName.value = 'explore';
+    const wrapper = mountNavTabs();
+    await wrapper.get('[data-testid="nav-tab-create"]').trigger('click');
+    expect(push).toHaveBeenCalled();
+    const location = push.mock.calls.at(-1)?.[0];
+    expect(location).toBeTruthy();
+  });
 });

@@ -18,6 +18,7 @@ vi.mock('@/utils/promptAi', () => ({
 
 import PromptAiMenu from '@/components/Dashboard/ModelPicker/PromptAiMenu.vue';
 import { useAsideStore } from '@/stores/aside';
+import { useSavedPromptsStore } from '@/stores/savedPrompts';
 import { describeImage, generateRandomPrompt, improvePrompt } from '@/utils/promptAi';
 import { FLUX_MODES } from '@/utils/models';
 
@@ -49,6 +50,7 @@ describe('PromptAiMenu', () => {
     setActivePinia(pinia);
     const asideStore = useAsideStore();
     asideStore.mode = FLUX_MODES[0];
+    vi.spyOn(useSavedPromptsStore(), 'fetchPrompts').mockResolvedValue(undefined);
 
     const wrapper = mount(PromptAiMenu, {
       props: { currentPrompt },
@@ -149,5 +151,100 @@ describe('PromptAiMenu', () => {
 
     expect(describeImage).toHaveBeenCalledWith(file);
     expect(wrapper.emitted('apply-prompt')?.[0]).toEqual(['described photo.jpg']);
+  });
+
+  it('shows a snackbar when Improve Prompt fails', async () => {
+    vi.mocked(improvePrompt).mockRejectedValueOnce(new Error('API error'));
+    const { wrapper } = mountMenu('Sunset');
+    const { useAppStore } = await import('@/stores/app');
+
+    await openMenu(wrapper);
+    getByTestId('prompt-ai-improve')?.click();
+    await vi.runAllTimersAsync();
+
+    expect(useAppStore().snackbar).toBe(true);
+    expect(useAppStore().snackbarText).toBe('API error');
+    expect(wrapper.emitted('apply-prompt')).toBeUndefined();
+  });
+
+  it('does not start Improve when the menu is disabled', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const wrapper = mount(PromptAiMenu, {
+      props: { currentPrompt: 'Sunset', disabled: true },
+      global: { plugins: [pinia] },
+      attachTo: document.body,
+    });
+    activeWrapper = wrapper;
+
+    await openMenu(wrapper);
+    getByTestId('prompt-ai-improve')?.click();
+    await vi.runAllTimersAsync();
+    expect(improvePrompt).not.toHaveBeenCalled();
+  });
+
+  it('opens the file picker from Describe With AI', async () => {
+    const { wrapper } = mountMenu();
+    await openMenu(wrapper);
+    const input = wrapper.get('input[type="file"]').element as HTMLInputElement;
+    const click = vi.spyOn(input, 'click').mockImplementation(() => {});
+    getByTestId('prompt-ai-describe')?.click();
+    expect(click).toHaveBeenCalled();
+  });
+
+  it('ignores a describe change with no file', async () => {
+    const { wrapper } = mountMenu();
+    const input = wrapper.get('input[type="file"]');
+    Object.defineProperty(input.element, 'files', { value: [], configurable: true });
+    await input.trigger('change');
+    expect(describeImage).not.toHaveBeenCalled();
+  });
+
+  it('opens saved prompts and applies one', async () => {
+    const { wrapper } = mountMenu('A forest scene');
+    await openMenu(wrapper);
+    getByTestId('prompt-ai-saved')?.click();
+    await wrapper.vm.$nextTick();
+
+    expect(getPanel()?.getAttribute('aria-label')).toBe('Saved prompts');
+
+    const panel = wrapper.getComponent({ name: 'SavedPromptsPanel' });
+    panel.vm.$emit('apply-prompt', 'Kept prompt');
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.emitted('apply-prompt')?.[0]).toEqual(['Kept prompt']);
+    expect(getPanel()).toBeNull();
+  });
+
+  it('opens save-current view then returns to actions', async () => {
+    const { wrapper } = mountMenu('A forest scene');
+    await openMenu(wrapper);
+    getByTestId('prompt-ai-save-current')?.click();
+    await wrapper.vm.$nextTick();
+
+    expect(getPanel()?.getAttribute('aria-label')).toBe('Saved prompts');
+    wrapper.getComponent({ name: 'SavedPromptsPanel' }).vm.$emit('back');
+    await wrapper.vm.$nextTick();
+    expect(getPanel()?.getAttribute('aria-label')).toBe('AI prompt actions');
+  });
+
+  it('does not save an empty current prompt', async () => {
+    const { wrapper } = mountMenu('   ');
+    await openMenu(wrapper);
+    getByTestId('prompt-ai-save-current')?.click();
+    await wrapper.vm.$nextTick();
+    expect(getPanel()?.getAttribute('aria-label')).toBe('AI prompt actions');
+  });
+
+  it('resets the panel when the popover closes', async () => {
+    const { wrapper } = mountMenu();
+    await openMenu(wrapper);
+    getByTestId('prompt-ai-saved')?.click();
+    await wrapper.vm.$nextTick();
+    expect(getPanel()?.getAttribute('aria-label')).toBe('Saved prompts');
+
+    await wrapper.getComponent({ name: 'Popover' }).vm.$emit('update:open', false);
+    await wrapper.vm.$nextTick();
+    expect(getPanel()).toBeNull();
   });
 });

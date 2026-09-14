@@ -6,6 +6,7 @@ import { ref } from 'vue';
 const routePathRef = ref('/create');
 const routeNameRef = ref('create');
 const smAndUpRef = ref(true);
+const isAuthLoaded = ref(true);
 
 vi.mock('vue-router', () => ({
   useRoute: () => ({ path: routePathRef.value, name: routeNameRef.value }),
@@ -24,7 +25,7 @@ vi.mock('vue-clerk', () => ({
   SignedIn: { template: "<div data-testid='signed-in'><slot /></div>" },
   SignedOut: { template: "<div data-testid='signed-out'><slot /></div>" },
   useUser: () => ({ user: ref(null) }),
-  useAuth: () => ({ isLoaded: ref(true) }),
+  useAuth: () => ({ isLoaded: isAuthLoaded }),
 }));
 
 vi.mock('@/components/Header/Logo.vue', () => ({
@@ -48,11 +49,11 @@ vi.mock('@/components/Header/FeatureSelect.vue', () => ({
 }));
 
 vi.mock('@/components/Header/ReferralOffer.vue', () => ({
-  default: { template: '<div />' },
+  default: { template: '<div data-testid="referral-offer-stub" />' },
 }));
 
 vi.mock('@/components/Header/ThemeButton.vue', () => ({
-  default: { template: '<div />' },
+  default: { template: '<div data-testid="theme-button-stub" />' },
 }));
 
 vi.mock('@/components/CustomButton.vue', () => ({
@@ -76,6 +77,7 @@ describe('AppHeader', () => {
     routePathRef.value = '/create';
     routeNameRef.value = 'create';
     smAndUpRef.value = true;
+    isAuthLoaded.value = true;
     localStorage.clear();
   });
 
@@ -88,6 +90,7 @@ describe('AppHeader', () => {
     return mount(AppHeader, {
       global: {
         plugins: [pinia],
+        stubs: { 'router-link': { template: '<a><slot /></a>' } },
       },
     });
   };
@@ -122,5 +125,67 @@ describe('AppHeader', () => {
 
     expect(wrapper.find('[data-testid="logo-stub"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="feature-select-stub"]').exists()).toBe(false);
+    expect(wrapper.text()).toContain('Dashboard');
+  });
+
+  it('uses the mobile dashboard header and referral slot', () => {
+    smAndUpRef.value = false;
+    const wrapper = mountHeader();
+    const shell = wrapper.get('[data-testid="app-header-v2"]').find('header');
+
+    expect(shell.classes()).toContain('header-v2--dashboard-mobile');
+    expect(wrapper.find('[data-testid="referral-offer-stub"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(false);
+  });
+
+  it('shows a nav skeleton until Clerk finishes loading', () => {
+    isAuthLoaded.value = false;
+    const wrapper = mountHeader();
+
+    expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="header-end-skeleton"]').exists()).toBe(true);
+  });
+
+  it('keeps the end skeleton on dashboard until user details are ready', () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    useUserStore().isReady = false;
+
+    const wrapper = mount(AppHeader, {
+      global: {
+        plugins: [pinia],
+        stubs: { 'router-link': { template: '<a><slot /></a>' } },
+      },
+    });
+    expect(wrapper.find('[data-testid="header-end-skeleton"]').exists()).toBe(true);
+  });
+
+  it('hides the theme button on legal pages and shows Try it now on the landing path', () => {
+    routePathRef.value = '/privacy';
+    routeNameRef.value = 'privacy';
+    const legal = mountHeader();
+    expect(legal.find('[data-testid="theme-button-stub"]').exists()).toBe(false);
+
+    routePathRef.value = '/terms';
+    const terms = mountHeader();
+    expect(terms.find('[data-testid="theme-button-stub"]').exists()).toBe(false);
+
+    routePathRef.value = '/refund';
+    const refund = mountHeader();
+    expect(refund.find('[data-testid="theme-button-stub"]').exists()).toBe(false);
+
+    routePathRef.value = '/';
+    routeNameRef.value = 'landing';
+    const landing = mountHeader();
+    expect(landing.find('[data-testid="theme-button-stub"]').exists()).toBe(true);
+    expect(landing.text()).toContain('Try it now');
+  });
+
+  it('does not keep an end skeleton on ready marketing pages', () => {
+    routePathRef.value = '/pricing';
+    routeNameRef.value = 'pricing';
+    const wrapper = mountHeader();
+    expect(wrapper.find('[data-testid="header-end-skeleton"]').exists()).toBe(false);
   });
 });

@@ -12,7 +12,7 @@
  */
 
 import { DOMWrapper, mount } from '@vue/test-utils';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { STYLE_PRESETS } from '@visual-ai/shared';
 
 import StylePicker from '@/components/Dashboard/Sidebar/StylePicker.vue';
@@ -86,5 +86,45 @@ describe('StylePicker', () => {
     await openPicker(wrapper);
 
     expect(body().find('[role="listbox"]').attributes('aria-label')).toBe('Style preset');
+  });
+
+  it('shows a hover preview after the delay and hides it on leave', async () => {
+    vi.useFakeTimers();
+    const wrapper = mountPicker('dynamic');
+    await openPicker(wrapper);
+
+    const portrait = body().find('[data-testid="style-portrait"]');
+    await portrait.trigger('mouseenter');
+    await vi.advanceTimersByTimeAsync(3000);
+
+    expect(document.body.querySelector('.style-hover-preview')?.textContent).toContain('Portrait');
+
+    await portrait.trigger('mouseleave');
+    expect(document.body.querySelector('.style-hover-preview')).toBeNull();
+    vi.useRealTimers();
+  });
+
+  it('does not preview the none style', async () => {
+    vi.useFakeTimers();
+    const wrapper = mountPicker('dynamic');
+    await openPicker(wrapper);
+
+    await body().find('[data-testid="style-none"]').trigger('mouseenter');
+    await vi.advanceTimersByTimeAsync(3000);
+    expect(document.body.querySelector('.style-hover-preview')).toBeNull();
+    vi.useRealTimers();
+  });
+
+  it('hides a broken thumbnail on error', async () => {
+    const wrapper = mountPicker('photography');
+    const thumb = wrapper.get('img');
+    expect(thumb.element.hidden).toBe(false);
+    await thumb.trigger('error');
+    expect(thumb.element.hidden).toBe(true);
+  });
+
+  it('falls back to an empty trigger label for an unknown style', () => {
+    const wrapper = mountPicker('not-a-style' as 'dynamic');
+    expect(wrapper.find('[data-testid="style-picker"]').text().trim()).toBe('');
   });
 });
