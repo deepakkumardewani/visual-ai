@@ -104,12 +104,13 @@ const routes: RouteRecordRaw[] = [
     component: Pricing,
   },
   {
-    path: '/signin',
+    // Wildcard: Clerk's path routing returns to sub-paths like /signin/sso-callback
+    path: '/signin/:pathMatch(.*)*',
     name: 'signin',
     component: Signin,
   },
   {
-    path: '/signup',
+    path: '/signup/:pathMatch(.*)*',
     name: 'signup',
     component: Signup,
   },
