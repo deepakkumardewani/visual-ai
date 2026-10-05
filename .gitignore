@@ -43,3 +43,7 @@ copyEnv.sh
 scripts/
 infra/.env.prod
 infra/.env.staging
+# Playwright
+apps/web/playwright/.auth/
+apps/web/test-results/
+apps/web/playwright-report/
