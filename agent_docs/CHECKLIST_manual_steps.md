@@ -121,7 +121,7 @@ Legend: 🔑 = needs credentials only you have · ⚠️ = touches live prod, do
   docker build -t ghcr.io/<user>/visual-ai-api:staging -f apps/api/Dockerfile .
   docker push ghcr.io/<user>/visual-ai-api:staging
   ```
-- [ ] **D4. Copy infra to droplet + start staging (laptop → SSH):**
+- [x] **D4. Copy infra to droplet + start staging (laptop → SSH):**
 
   ```bash
   scp infra/docker-compose.yml root@159.89.45.226:/opt/visual-ai/
@@ -145,10 +145,10 @@ Legend: 🔑 = needs credentials only you have · ⚠️ = touches live prod, do
   `infra/nginx/tls.conf` (`/etc/ssl/cloudflare/visual-ai.app.{pem,key}`). Prod is
   untouched either way — a failed `nginx -t` means no reload happened.
 
-- [ ] **D5. Upload staging FE (laptop):** build with staging env, then
+- [x] **D5. Upload staging FE (laptop):** build with staging env, then
       `rsync -az --delete apps/web/dist/ root@159.89.45.226:/var/www/staging/`
       (or run `./scripts/deploy.sh web staging` once Task 10 exists).
-- [ ] **D6. Test staging end-to-end** (Checkpoint B list in TASKS file).
+- [x] **D6. Test staging end-to-end** (Checkpoint B list in TASKS file).
 
 ## E. GitHub (Task 11)
 

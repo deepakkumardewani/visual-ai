@@ -129,12 +129,12 @@ Spec: `SPEC_deploy_modernization.md` · Plan: `PLAN_deploy_modernization.md`
 
 **Acceptance criteria:**
 
-- [ ] Snapshot tarball exists locally before any modification
-- [ ] `free -h` shows swap active; dirs exist; GHCR pull works
+- [x] ✅ Snapshot tarball exists locally before any modification
+- [x] ✅ `free -h` shows swap active; dirs exist; GHCR pull works
 
 **Verification:**
 
-- [ ] Manual over SSH; record commands in `infra/README.md` as they're run
+- [x] ✅ Manual over SSH; record commands in `infra/README.md` as they're run
 
 **Dependencies:** None (can precede Phase 2)
 **Files likely touched:** droplet only + notes into `infra/README.md`
@@ -146,13 +146,13 @@ Spec: `SPEC_deploy_modernization.md` · Plan: `PLAN_deploy_modernization.md`
 
 **Acceptance criteria:**
 
-- [ ] Site resolves through Cloudflare (proxied), TLS Full (strict), no cert warnings
-- [ ] Maintenance rule exists, disabled, tested once on staging hostname
-- [ ] `staging.visual-ai.app` resolves
+- [x] ✅ Site resolves through Cloudflare (proxied), TLS Full (strict), no cert warnings
+- [x] ✅ Maintenance rule exists, disabled, tested once on staging hostname
+- [x] ✅ `staging.visual-ai.app` resolves
 
 **Verification:**
 
-- [ ] Manual: `dig`, browser checks, toggle drill on staging
+- [x] ✅ Manual: `dig`, browser checks, toggle drill on staging
 
 **Dependencies:** Task 7
 **Files likely touched:** Cloudflare dashboard + `infra/README.md` runbook section
@@ -164,14 +164,14 @@ Spec: `SPEC_deploy_modernization.md` · Plan: `PLAN_deploy_modernization.md`
 
 **Acceptance criteria:**
 
-- [ ] `https://staging.visual-ai.app` serves this branch end-to-end: Clerk login, generation queue, collections/saved-prompts, Razorpay test payment
-- [ ] Prod (`visual-ai.app`) unaffected — verified before and after
-- [ ] Staging writes land only in staging Atlas DB and "staging"-prefixed Redis keys
-- [ ] Cron disabled in staging (log line present); memory <80% with old prod stack (`backend`, `vue-app`) and new staging stack (`api-staging`, `redis`) all running concurrently
+- [x] ✅ `https://staging.visual-ai.app` serves this branch end-to-end: Clerk login, generation queue, collections/saved-prompts, Razorpay test payment
+- [x] ✅ Prod (`visual-ai.app`) unaffected — verified before and after
+- [x] ✅ Staging writes land only in staging Atlas DB and "staging"-prefixed Redis keys
+- [x] ✅ Cron disabled in staging (log line present); memory <80% with old prod stack (`backend`, `vue-app`) and new staging stack (`api-staging`, `redis`) all running concurrently
 
 **Verification:**
 
-- [ ] Manual checklist in `infra/README.md`, executed live
+- [x] ✅ Manual checklist in `infra/README.md`, executed live
 
 **Dependencies:** Tasks 4–8
 **Files likely touched:** droplet + `infra/README.md`

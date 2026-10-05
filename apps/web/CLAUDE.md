@@ -89,3 +89,14 @@ When spawning subagents (Agent/Task tool), the routing block is automatically in
 | `ctx stats`   | Call the `ctx_stats` MCP tool and display the full output verbatim                    |
 | `ctx doctor`  | Call the `ctx_doctor` MCP tool, run the returned shell command, display as checklist  |
 | `ctx upgrade` | Call the `ctx_upgrade` MCP tool, run the returned shell command, display as checklist |
+
+## Authenticated testing (Playwright E2E + agent-browser)
+
+The dashboard needs a Clerk session. Playwright signs in as the existing Google-signed-up E2E user via a Clerk sign-in token (no OAuth, no password) and saves the session to `playwright/.auth/user.json` (gitignored).
+
+- One-time setup: copy `.env.e2e.example` to `.env.e2e.local` (gitignored) and fill `CLERK_SECRET_KEY` (must be `sk_test_`), `E2E_CLERK_USER_ID`, `E2E_CLERK_USER_EMAIL`. Ensure the user has a Mongo doc: `cd apps/api && bun run seed:e2e-user` (insert-only, safe to re-run).
+- Save/refresh the session: `bun run auth:state` (from `apps/web`).
+- Run specs: `bun run test:e2e` (generation is stubbed; other API calls hit the real local API, so this is a real account).
+- agent-browser: `agent-browser --state playwright/.auth/user.json open http://localhost:3005/create/image`
+- If you land on `/signin`, the Clerk session expired: re-run `bun run auth:state`.
+- The Vue dev server is on `http://localhost:3005` (override with `E2E_WEB_URL`). Use `localhost`, not `127.0.0.1`. Servers are never started by the tests.
