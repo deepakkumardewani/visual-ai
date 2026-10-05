@@ -38,11 +38,10 @@ describe('router', () => {
     expect(router.currentRoute.value.query.redirect).toBe('/profile');
   });
 
-  it('redirects explore-image when auth is still unknown', async () => {
+  it('stays on explore-image while auth is still unknown', async () => {
     isSignedIn.value = undefined;
     await router.push('/explore/abc');
-    expect(router.currentRoute.value.name).toBe('signin');
-    expect(router.currentRoute.value.query.redirect).toBe('/explore/abc');
+    expect(router.currentRoute.value.name).toBe('explore-image');
   });
 
   it('allows protected routes when signed in', async () => {

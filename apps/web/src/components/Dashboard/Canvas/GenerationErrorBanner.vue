@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+import { FeatureType } from '@/types';
+
 import { useGenerateStore } from '@/stores/generate';
 
 const props = defineProps<{
@@ -10,14 +12,17 @@ const props = defineProps<{
 const generateStore = useGenerateStore();
 
 const message = computed(() => generateStore.errMsg[props.feature] ?? '');
-const canRetry = computed(() => Boolean(generateStore.retryByFeature[props.feature]));
+const canRetry = computed(() => {
+  if (generateStore.retryByFeature[props.feature]) return true;
+  return props.feature === FeatureType.IMAGE && Boolean(message.value);
+});
 
 function dismiss() {
   generateStore.clearFeatureError(props.feature);
 }
 
 async function retry() {
-  await generateStore.retryFailed(props.feature);
+  await generateStore.retryFailed(String(props.feature));
 }
 </script>
 

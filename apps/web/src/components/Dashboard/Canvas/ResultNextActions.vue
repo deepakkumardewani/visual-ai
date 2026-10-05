@@ -51,14 +51,20 @@ async function handleUseAsReference(event: Event) {
   await useAsReference(targetImage.value);
 }
 
+function chainImageSource(): string | undefined {
+  const img = targetImage.value;
+  if (!img) return undefined;
+  return img.aiImageUrl ?? getDownloadImageUrl(img) ?? undefined;
+}
+
 async function handleUpscale(event: Event) {
   event.stopPropagation();
-  await sendToUpscale(targetImage.value);
+  await sendToUpscale(chainImageSource() ?? targetImage.value);
 }
 
 async function handleRemoveBg(event: Event) {
   event.stopPropagation();
-  await sendToRemoveBg(targetImage.value);
+  await sendToRemoveBg(chainImageSource() ?? targetImage.value);
 }
 
 async function handleMoreLikeThis(event: Event) {

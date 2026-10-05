@@ -190,7 +190,13 @@ export function useImageChainActions() {
       creditCost: getTransformCreditCost(),
     });
     if (!confirmed) return false;
-    const ok = await asideStore.sendToFeature(source, FeatureType.UPSCALE);
+    const url = resolveImageUrl(source);
+    if (!url) {
+      showToast('Nothing to send');
+      return false;
+    }
+    await router.push(createFeatureLocation(FeatureType.UPSCALE));
+    const ok = await asideStore.stagePendingFeatureImageFromUrl(url);
     if (!ok) {
       showToast('Could not open Upscale');
       return false;
@@ -211,7 +217,13 @@ export function useImageChainActions() {
       creditCost: getTransformCreditCost(),
     });
     if (!confirmed) return false;
-    const ok = await asideStore.sendToFeature(source, FeatureType.REMOVE_BG);
+    const url = resolveImageUrl(source);
+    if (!url) {
+      showToast('Nothing to send');
+      return false;
+    }
+    await router.push(createFeatureLocation(FeatureType.REMOVE_BG));
+    const ok = await asideStore.stagePendingFeatureImageFromUrl(url);
     if (!ok) {
       showToast('Could not open Remove background');
       return false;

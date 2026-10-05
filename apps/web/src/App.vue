@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia';
 import { computed, watch } from 'vue';
 import { useUser } from 'vue-clerk';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import { useAppStore } from '@/stores/app';
 import { useDialogStore, CHAIN_ACTION_LABELS } from '@/stores/dialog';
@@ -24,12 +24,22 @@ const { snackbar, snackbarTimeout, snackbarText } = storeToRefs(appStore);
 const { showChainActionDialog, chainAction, chainActionCreditCost, chainActionExtraCopy } =
   storeToRefs(dialogStore);
 const route = useRoute();
+const router = useRouter();
 const chainActionName = computed(() => CHAIN_ACTION_LABELS[chainAction.value]);
 
 watch(
   [user, isLoaded],
   ([currentUser, loaded]) => {
-    if (!loaded || !currentUser) return;
+    if (!loaded) return;
+    if (!currentUser) {
+      // Signed-out visitors never fetch a profile; the header waits on this flag.
+      userStore.isReady = true;
+      const protectedRoute = route.name === 'profile' || route.name === 'explore-image';
+      if (protectedRoute) {
+        void router.replace({ name: 'signin', query: { redirect: route.fullPath } });
+      }
+      return;
+    }
     void userStore.syncFromClerk(currentUser.id);
   },
   { immediate: true },

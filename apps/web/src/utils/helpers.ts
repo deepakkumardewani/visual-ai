@@ -302,8 +302,9 @@ export function getPublicIds(images: IImageObject[]): string[] {
 
 export const getDownloadImageUrl = (image: IImage) => {
   const publicId = image.aiImagePublicId ? image.aiImagePublicId : image.enhancedPublicId;
-  const format = image.format;
-  const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
-  // const optimizedUrl = `${cloudinaryBaseUrl}/q_auto,f_auto/${publicId}.${format}`
-  return `${cloudinaryBaseUrl}/${publicId}.${format}`;
+  if (publicId) {
+    const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
+    return `${cloudinaryBaseUrl}/${publicId}.${image.format}`;
+  }
+  return image.aiImageUrl ?? image.enhancedImageUrl ?? image.originalImageUrl ?? '';
 };

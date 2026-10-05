@@ -89,6 +89,40 @@ export const useAsideStore = defineStore('aside', () => {
     return file;
   }
 
+  function resolveFeatureImageUrl(image: IImage | string): string {
+    if (typeof image === 'string') return image;
+    return (
+      image.aiImageUrl ??
+      getDownloadImageUrl(image as IImage) ??
+      image.enhancedImageUrl ??
+      image.originalImageUrl ??
+      ''
+    );
+  }
+
+  /** Fetch a result/history image URL and stage it for ImageUpload on the current feature. */
+  async function stagePendingFeatureImageFromUrl(url: string): Promise<boolean> {
+    if (!url) return false;
+
+    try {
+      const fetchUrl = url.startsWith('/') ? `${window.location.origin}${url}` : url;
+      const response = await fetch(fetchUrl, { cache: 'no-store', credentials: 'same-origin' });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image (${response.status})`);
+      }
+      const blob = await response.blob();
+      const ext = blob.type.split('/')[1]?.split('+')[0] || 'jpg';
+      pendingFeatureImage.value = new File([blob], `from-result.${ext}`, {
+        type: blob.type || 'image/jpeg',
+      });
+      await nextTick();
+      return true;
+    } catch (error) {
+      log.error('stagePendingFeatureImageFromUrl failed', { error, url });
+      return false;
+    }
+  }
+
   /**
    * Switch to Upscale / Remove BG and preload the generated image into ImageUpload.
    * ImageUpload consumes `pendingFeatureImage` on mount / watch.
@@ -103,32 +137,15 @@ export const useAsideStore = defineStore('aside', () => {
     }
 
     const router = useRouter();
-    const url = typeof image === 'string' ? image : getDownloadImageUrl(image);
+    const url = resolveFeatureImageUrl(image);
     if (!url) {
       log.error('sendToFeature: missing image url', { featureId });
       return false;
     }
 
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image (${response.status})`);
-      }
-      const blob = await response.blob();
-      const ext = blob.type.split('/')[1]?.split('+')[0] || 'jpg';
-      const file = new File([blob], `from-result.${ext}`, {
-        type: blob.type || 'image/jpeg',
-      });
-
-      await router.push(createFeatureLocation(featureId));
-      // Wait for the feature aside + ImageUpload to mount before staging the file.
-      await nextTick();
-      pendingFeatureImage.value = file;
-      return true;
-    } catch (error) {
-      log.error('sendToFeature failed', { featureId, error });
-      return false;
-    }
+    await router.push(createFeatureLocation(featureId));
+    await nextTick();
+    return stagePendingFeatureImageFromUrl(url);
   }
 
   // Drop unused reference when switching to a model that can't consume it
@@ -155,5 +172,7 @@ export const useAsideStore = defineStore('aside', () => {
     clearPendingFeatureImage,
     consumePendingFeatureImage,
     sendToFeature,
+    stagePendingFeatureImageFromUrl,
+    resolveFeatureImageUrl,
   };
 });

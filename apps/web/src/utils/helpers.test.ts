@@ -136,9 +136,14 @@ describe('getDownloadImageUrl', () => {
     expect(url).toBe(`${import.meta.env.VITE_CLOUDINARY_BASE_URL}/folder/enh.png`);
   });
 
-  it('builds a url even when only the format is present', () => {
-    const url = getDownloadImageUrl({ name: 'a', resolution: '1k', format: 'webp' } as IImage);
-    expect(url).toBe(`${import.meta.env.VITE_CLOUDINARY_BASE_URL}/undefined.webp`);
+  it('falls back to direct image urls when no public id exists', () => {
+    const url = getDownloadImageUrl({
+      name: 'a',
+      resolution: '1k',
+      format: 'webp',
+      aiImageUrl: 'https://cdn.example/direct.webp',
+    } as IImage);
+    expect(url).toBe('https://cdn.example/direct.webp');
   });
 });
 

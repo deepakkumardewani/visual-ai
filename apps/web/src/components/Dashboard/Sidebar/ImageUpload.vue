@@ -51,8 +51,8 @@ function applyImageFile(file: File) {
     img.src = imgSource.value;
   };
   reader.onerror = () => {
-    errorMsg.value = 'Could not read that file. Try another image.';
     resetImage();
+    errorMsg.value = 'Could not read that file. Try another image.';
   };
   reader.readAsDataURL(file);
 }

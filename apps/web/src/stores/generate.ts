@@ -1,4 +1,5 @@
 import { isEmpty } from 'lodash-es';
+import { v4 as uuidv4 } from 'uuid';
 import { defineStore, storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { useStorage } from '@vueuse/core';
@@ -6,6 +7,7 @@ import { useStorage } from '@vueuse/core';
 import type { IGenerateResponse, IImage, IImageObject, ImageBody } from '@/types';
 import { FeatureType } from '@/types';
 
+import { useAsideStore } from '@/stores/aside';
 import { useUserStore } from '@/stores/user';
 
 import { useLocal } from '@/composables/local';
@@ -75,7 +77,13 @@ export const useGenerateStore = defineStore('generate', () => {
   function rememberRetry(feature: string, action: RetryAction, payload: unknown) {
     retryByFeature.value = {
       ...retryByFeature.value,
-      [feature]: { action, payload },
+      [feature]: {
+        action,
+        payload:
+          payload && typeof payload === 'object'
+            ? { ...(payload as Record<string, unknown>) }
+            : payload,
+      },
     };
   }
 
@@ -93,17 +101,52 @@ export const useGenerateStore = defineStore('generate', () => {
     }
   }
 
+  function buildImageGenerateBody(promptOverride?: string): ImageBody {
+    const asideStore = useAsideStore();
+    const { aspectRatio, noOfOutputs, outputQuality, imageFormat, mode, typingPrompt } =
+      storeToRefs(asideStore);
+    const jobId = uuidv4();
+    const supportsOutputQuality = Boolean(
+      MODEL_REGISTRY[mode.value.id as keyof typeof MODEL_REGISTRY]?.fields.outputQuality,
+    );
+    const prompt = promptOverride ?? typingPrompt.value;
+    return {
+      jobId,
+      modelId: mode.value.id,
+      imageType: aspectRatio.value.type,
+      modelName: mode.value.title,
+      prompt,
+      noOfOutputs: noOfOutputs.value,
+      ...(supportsOutputQuality ? { outputQuality: outputQuality.value === 0 ? 70 : 100 } : {}),
+      aspectRatio: aspectRatio.value.title,
+      outputFormat: imageFormat.value.title.toLowerCase(),
+    };
+  }
+
   async function retryFailed(feature: string) {
-    const entry = retryByFeature.value[feature];
+    let entry = retryByFeature.value[feature];
+    if (!entry && feature === FeatureType.IMAGE) {
+      const prompt = activePrompt.value || promptText.value;
+      if (prompt.trim()) {
+        entry = { action: 'generate', payload: buildImageGenerateBody(prompt) };
+      }
+    }
     if (!entry) {
       log.error('retryFailed: no retry payload', { feature });
       return;
     }
     clearFeatureError(feature);
     switch (entry.action) {
-      case 'generate':
-        await generateImage(entry.payload as ImageBody);
+      case 'generate': {
+        const payload = entry.payload as ImageBody;
+        const jobId = uuidv4();
+        const retryPayload = { ...payload, jobId };
+        // Match GenerateCTA: open SSE as soon as the retry POST starts, not after it finishes.
+        void generateImage(retryPayload);
+        appStore.progressUrl = `${import.meta.env.VITE_API_BASEPATH}/progress?jobId=${jobId}`;
+        appStore.imageOpen();
         break;
+      }
       case 'upscale':
         await upscaleImage(entry.payload);
         break;

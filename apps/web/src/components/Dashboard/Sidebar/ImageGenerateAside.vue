@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { MODEL_REGISTRY } from '@visual-ai/shared';
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, watch } from 'vue';
+import { computed, watch } from 'vue';
 
 import { useAsideStore } from '@/stores/aside';
 import { useUserStore } from '@/stores/user';
@@ -113,11 +113,6 @@ watch(
   },
 );
 
-onMounted(() => {
-  aspectRatio.value = ASPECT_RATIOS[0];
-  imageFormat.value = IMAGE_FORMATS[0];
-  noOfOutputs.value = 1;
-});
 </script>
 
 <template>

@@ -176,10 +176,8 @@ router.beforeEach((to) => {
   // List of routes that require authentication
   const authRequiredRoutes = ['profile', 'explore-image'];
 
-  if (
-    authRequiredRoutes.includes(to.name as string) &&
-    (isSignedIn.value === undefined || isSignedIn.value === false)
-  ) {
+  // undefined means Clerk has not loaded yet. Redirecting then bounces a signed-in session through /signin.
+  if (authRequiredRoutes.includes(to.name as string) && isSignedIn.value === false) {
     // Redirect to signin page if trying to access protected route while not authenticated
     return { name: 'signin', query: { redirect: to.fullPath } };
   }
