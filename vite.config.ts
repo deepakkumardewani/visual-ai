@@ -22,6 +22,7 @@ export default defineConfig({
       '**/dist/**',
       '**/node_modules/**',
       'apps/web/tailwind.config.test.ts',
+      'apps/web/e2e/**',
     ],
     environmentOptions: {
       env: {
