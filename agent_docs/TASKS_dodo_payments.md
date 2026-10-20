@@ -95,7 +95,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 
 **Try in UI:** No UI in this phase. Open the Dodo dashboard in test mode and see the four products and the webhook endpoint ; Check the env example files for the recorded product ids and webhook placeholder
 
-### ☐ T1.1 Create four test-mode products via Dodo API MCP
+### ✅ T1.1 Create four test-mode products via Dodo API MCP
 - **Kind:** implementation
 - **Files:** `agent_docs/PLAN_dodo_payments.md`
 - **Depends on:** T0.4
@@ -105,7 +105,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Each product is one-time (not subscription) and in test mode, with the correct INR price.
 - **Verify:** `grep -c '^T1.1-product:' agent_docs/PLAN_dodo_payments.md` prints 4; `grep '^T1.1-product:' agent_docs/PLAN_dodo_payments.md` shows `pack_200|450|960|2000`, INR 130/290/500/900 in minor units, a one-time type and `test_mode` on each line.
 
-### ☐ T1.2 Create webhook endpoint in Dodo test mode
+### ✅ T1.2 Create webhook endpoint in Dodo test mode
 - **Kind:** implementation
 - **Files:** `agent_docs/PLAN_dodo_payments.md`
 - **Manual (untracked, never staged):** `apps/api/.env`. This task is pre-approved to write only the `DODO_PAYMENTS_WEBHOOK_KEY` line of this gitignored file; never pass it to `task_built --files` and never print its value.
@@ -116,7 +116,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] The secret is in the gitignored `apps/api/.env` only; never printed to output, evidence or a tracked file.
 - **Verify:** `grep -n '^T1.2-endpoint:' agent_docs/PLAN_dodo_payments.md` prints one line ending in `/webhooks/payments` for the URL field and listing both events; `git check-ignore apps/api/.env` succeeds; `grep -c '^DODO_PAYMENTS_WEBHOOK_KEY=.' apps/api/.env` prints 1 (count only, never the value); `grep -c whsec_ agent_docs/PLAN_dodo_payments.md` prints 0; `git grep -n whsec_ -- ':!agent_docs/*dodo_payments.md' ':!apps/api/src/webhook/index.test.ts' ':!infra/.env.example'` returns nothing (the excluded files hold only prose or the pre-existing Clerk placeholders `whsec_test_secret` / `whsec_your-webhook-secret`).
 
-### ☐ T1.3 Record IDs and placeholders in env files
+### ✅ T1.3 Record IDs and placeholders in env files
 - **Kind:** implementation
 - **Files:** `apps/api/.env.example`, `apps/web/.env.example`, `apps/web/.env.e2e.example`
 - **Manual (untracked, never staged):** `apps/api/.env`, `apps/web/.env.e2e.local`. This task is pre-approved to write these two gitignored files; never pass them to `task_built --files` (the orchestrator `git add`s that list and would fail on ignored paths) and never print their values.

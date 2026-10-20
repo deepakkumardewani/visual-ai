@@ -327,3 +327,9 @@ T0.3-item6: Test cards (Indian-issued): Visa success 4576238912771450, declined 
 T0.4-gate: PASS - INR is supported as product base currency (T0.3-item1): "Your base currency is whatever you priced the product or add-on in — it can be any currency Dodo Payments can charge, not just USD." (https://docs.dodopayments.com/features/adaptive-currency). No products created in Phase 0 (T0.2-products: 0); no create calls made.
 
 ### Checkpoint 1 notes
+
+T1.1-product: pack_200 | 200 credits | pdt_0Nq8kJOKsz8HkOMA1c4W8 | 13000 INR | one_time_price | test_mode | created
+T1.1-product: pack_450 | 450 credits | pdt_0Nq8kJQnTzvtrAhn3eQmg | 29000 INR | one_time_price | test_mode | created
+T1.1-product: pack_960 | 960 credits | pdt_0Nq8kJRvk0XVhagsLjbk9 | 50000 INR | one_time_price | test_mode | created
+T1.1-product: pack_2000 | 2000 credits | pdt_0Nq8kJT0DphjbFE2obFPF | 90000 INR | one_time_price | test_mode | created
+T1.2-endpoint: ep_3KxCY74VR8TTHSRLnFwndSW7Ksi | https://9741-103-163-67-159.ngrok-free.app/webhooks/payments | payment.succeeded, payment.failed | test_mode | reused
