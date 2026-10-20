@@ -28,7 +28,7 @@ You buy credits. There are no paid subscription tiers.
 - New account: 50 persistent credits (they do not expire).
 - Every day: 30 daily credits. Unused daily credits reset (use-or-lose).
 - Purchased credits persist and never expire.
-- Pay in INR via Razorpay. Packs and current prices: https://visual-ai.app/pricing
+- Pay in INR via Dodo Payments (card or UPI where available). Packs and prices: https://visual-ai.app/pricing
 
 Typical spend (exact cost is shown in the studio before you run):
 

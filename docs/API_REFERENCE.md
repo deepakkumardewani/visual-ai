@@ -38,18 +38,16 @@ Express API in [apps/api/src](../apps/api/src). All routes mounted in [routes/in
 | DELETE `/image/delete` | Delete one |
 | DELETE `/image/delete/bulk` | Bulk delete |
 
-## Payments — [routes/payments.ts](../apps/api/src/routes/payments.ts)
+## Payments — [payments/router.ts](../apps/api/src/payments/router.ts) (Clerk auth required)
 
-| POST `/payments/subscription/create` | Razorpay subscription |
-| POST `/payments/subscription/cancel` | Cancel (resets to free) |
-| POST `/payments/order/create` | One-time credit order |
-| POST `/payments/verify-payment` | Signature verification |
-| POST `/payments` / GET `/payments/:id` | Record / fetch payment |
+| POST `/payments/checkout` | Start Dodo checkout for `{ packId }`; returns checkout URL / session id |
+| GET `/payments` | List the caller's payment records (newest first) |
+| GET `/payments/checkout/:sessionId/status` | Poll checkout status for a session owned by the caller |
 
-## Webhooks — [webhook/index.ts](../apps/api/src/webhook/index.ts)
+## Webhooks
 
-| POST `/webhooks/...` (svix) | Clerk user lifecycle |
-| POST `/webhooks/razorpay` | Payment/subscription events (+1000 credits monthly; reset to 10 on cancel) |
+| POST `/webhooks/clerk` ([webhook/index.ts](../apps/api/src/webhook/index.ts), svix) | Clerk user lifecycle |
+| POST `/webhooks/payments` ([payments/webhookRouter.ts](../apps/api/src/payments/webhookRouter.ts), raw body) | Dodo `payment.succeeded` / `payment.failed`; idempotent credit grant |
 
 ## Health
 

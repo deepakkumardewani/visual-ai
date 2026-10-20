@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 
 const verify = vi.fn()
 const signUpHandler = vi.fn()
-const findOneAndUpdate = vi.fn()
 
 vi.mock("svix", () => ({
     Webhook: class {
@@ -24,18 +23,6 @@ vi.mock("../lib/logger.js", () => ({
 
 vi.mock("../services/user-service.js", () => ({
     signUpHandler,
-}))
-
-vi.mock("../models/payment.js", () => ({
-    PaymentModel: class {
-        constructor(doc: Record<string, unknown>) {
-            Object.assign(this, doc)
-        }
-    },
-}))
-
-vi.mock("../models/user.js", () => ({
-    UserModel: { findOneAndUpdate },
 }))
 
 function mockRes() {
@@ -129,128 +116,5 @@ describe("webhookRouter clerk", () => {
             success: true,
             message: "Webhook received",
         })
-    })
-})
-
-describe("webhookRouter razorpay", () => {
-    beforeEach(() => {
-        vi.clearAllMocks()
-    })
-
-    it("ignores events that are not payment.captured", async () => {
-        const res = mockRes()
-        const handler = routeHandler(webhookRouter, "/webhooks/razorpay")
-        const result = await handler({ body: { event: "payment.failed" } }, res)
-
-        expect(result).toBeUndefined()
-        expect(findOneAndUpdate).not.toHaveBeenCalled()
-        expect(res.status).not.toHaveBeenCalled()
-    })
-
-    it("returns 404 when the paying user is missing", async () => {
-        findOneAndUpdate.mockResolvedValue(null)
-
-        const res = mockRes()
-        const handler = routeHandler(webhookRouter, "/webhooks/razorpay")
-        await handler(
-            {
-                body: {
-                    event: "payment.captured",
-                    payload: {
-                        payment: {
-                            entity: {
-                                id: "pay_1",
-                                amount: 50000,
-                                status: "captured",
-                                notes: { userId: "user_missing", credits: 20 },
-                            },
-                        },
-                    },
-                },
-            },
-            res,
-        )
-
-        expect(res.status).toHaveBeenCalledWith(404)
-        expect(res.json).toHaveBeenCalledWith({ message: "User not found" })
-    })
-
-    it("increments credits and stores the payment on capture", async () => {
-        const user = { userId: "user_1", credits: 70 }
-        findOneAndUpdate.mockResolvedValue(user)
-
-        const res = mockRes()
-        const handler = routeHandler(webhookRouter, "/webhooks/razorpay")
-        await handler(
-            {
-                body: {
-                    event: "payment.captured",
-                    payload: {
-                        payment: {
-                            entity: {
-                                id: "pay_99",
-                                amount: 9900,
-                                status: "captured",
-                                description: "Starter pack",
-                                card: { entity: "credit_card" },
-                                notes: { userId: "user_1", credits: 20 },
-                            },
-                        },
-                    },
-                },
-            },
-            res,
-        )
-
-        expect(findOneAndUpdate).toHaveBeenCalledWith(
-            { userId: "user_1" },
-            {
-                $push: {
-                    payments: expect.objectContaining({
-                        amount: 99,
-                        paymentMethod: "credit_card",
-                        transactionId: "pay_99",
-                        description: "Starter pack",
-                        status: "captured",
-                    }),
-                },
-                $inc: { credits: 20 },
-            },
-            { new: true },
-        )
-        expect(res.status).toHaveBeenCalledWith(200)
-        expect(res.json).toHaveBeenCalledWith({
-            success: true,
-            message: "Payment successful",
-            user,
-        })
-    })
-
-    it("returns 500 when updating the user fails", async () => {
-        findOneAndUpdate.mockRejectedValue(new Error("mongo down"))
-
-        const res = mockRes()
-        const handler = routeHandler(webhookRouter, "/webhooks/razorpay")
-        await handler(
-            {
-                body: {
-                    event: "payment.captured",
-                    payload: {
-                        payment: {
-                            entity: {
-                                id: "pay_err",
-                                amount: 100,
-                                status: "captured",
-                                notes: { userId: "user_1", credits: 1 },
-                            },
-                        },
-                    },
-                },
-            },
-            res,
-        )
-
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(res.json).toHaveBeenCalledWith({ message: "Internal server error" })
     })
 })

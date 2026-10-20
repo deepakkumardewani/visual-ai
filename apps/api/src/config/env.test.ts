@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
+const LEGACY_RAZORPAY_ENV_PREFIX = "RAZORPAY_"
+
 const REQUIRED_ENV: Record<string, string> = {
     MONGO_URI: "mongodb://localhost/test",
     CLOUDINARY_CLOUD_NAME: "test-cloud",
@@ -10,8 +12,6 @@ const REQUIRED_ENV: Record<string, string> = {
     CLERK_PUBLISHABLE_KEY: "clerk-pub",
     CLERK_JWT_KEY: "clerk-jwt",
     REPLICATE_API_TOKEN: "test-token",
-    RAZORPAY_KEY_ID: "razorpay-id",
-    RAZORPAY_KEY_SECRET: "razorpay-secret",
     PAYMENT_PROVIDER: "dodo",
     PAYMENT_RETURN_URL: "https://visual-ai.app/checkout/return",
     DODO_PAYMENTS_API_KEY: "dodo-api-key",
@@ -159,16 +159,13 @@ describe("env parse", () => {
         expect(env.ALLOWED_ORIGINS).toEqual(["https://visual-ai.app", "https://www.visual-ai.app"])
     })
 
-    it("defaults PAYMENT_PROVIDER to razorpay when unset in test NODE_ENV", async () => {
+    it("defaults PAYMENT_PROVIDER to dodo when unset", async () => {
         applyEnv({ PAYMENT_PROVIDER: undefined, NODE_ENV: "test" })
-        const { env } = await importEnv()
-        expect(env.PAYMENT_PROVIDER).toBe("razorpay")
-    })
+        expect((await importEnv()).env.PAYMENT_PROVIDER).toBe("dodo")
 
-    it("defaults PAYMENT_PROVIDER to dodo outside test when unset", async () => {
+        vi.resetModules()
         applyEnv({ PAYMENT_PROVIDER: undefined, NODE_ENV: "development" })
-        const { env } = await importEnv()
-        expect(env.PAYMENT_PROVIDER).toBe("dodo")
+        expect((await importEnv()).env.PAYMENT_PROVIDER).toBe("dodo")
     })
 
     it.each([
@@ -189,6 +186,17 @@ describe("env parse", () => {
 
         await expect(importEnv()).rejects.toThrow("process.exit:1")
         expect(exit).toHaveBeenCalledWith(1)
+    })
+
+    it("does not expose removed payment env keys on the parsed env object", async () => {
+        applyEnv({
+            [`${LEGACY_RAZORPAY_ENV_PREFIX}KEY_ID`]: "stale-id",
+            [`${LEGACY_RAZORPAY_ENV_PREFIX}KEY_SECRET`]: "stale-secret",
+        })
+        const { env } = await importEnv()
+        expect(
+            Object.keys(env).filter((key) => key.startsWith(LEGACY_RAZORPAY_ENV_PREFIX)),
+        ).toEqual([])
     })
 
     it("exits with a listed error when required vars are missing or invalid", async () => {

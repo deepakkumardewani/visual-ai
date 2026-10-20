@@ -7,7 +7,6 @@ export type {
     ExploreFeedItem,
     ExploreFeedResponse,
     JobStatus,
-    RazorpayProduct,
     IPayment,
     IReferral,
     IUser,

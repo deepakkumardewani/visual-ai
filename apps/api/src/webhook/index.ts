@@ -5,8 +5,6 @@ import { Webhook } from "svix"
 import { env } from "../config/env.js"
 import { createLogger } from "../lib/logger.js"
 import { signUpHandler } from "../services/user-service.js"
-import { PaymentModel as Payment } from "../models/payment.js"
-import { UserModel as User } from "../models/user.js"
 
 const logger = createLogger("webhook")
 
@@ -72,52 +70,3 @@ webhookRouter.post(
         })
     },
 )
-
-webhookRouter.post("/webhooks/razorpay", express.json(), async (req, res) => {
-    const { event } = req.body
-    logger.debug({ event }, "Razorpay webhook received")
-    if (event === "payment.captured") {
-        const { payment } = req.body.payload
-
-        const { userId, credits } = payment.entity.notes
-        const amount = payment.entity.amount / 100
-        const paymentMethod = payment?.entity?.card?.entity ?? ""
-        const description = payment?.entity?.description ?? ""
-        const humanReadableDate = new Date().toLocaleDateString()
-        const paymentObject = new Payment({
-            amount,
-            paymentMethod,
-            transactionId: payment.entity.id,
-            description,
-            status: payment.entity.status,
-            humanReadableDate,
-        })
-
-        try {
-            const user = await User.findOneAndUpdate(
-                { userId },
-                {
-                    $push: { payments: paymentObject },
-                    $inc: { credits },
-                },
-                { new: true },
-            )
-
-            if (!user) {
-                logger.error({ userId }, "User not found")
-                return res.status(404).json({ message: "User not found" })
-            }
-
-            return res.status(200).json({
-                success: true,
-                message: "Payment successful",
-                user,
-            })
-        } catch (error) {
-            logger.error({ err: error }, "Error updating user payments and credits")
-            return res.status(500).json({ message: "Internal server error" })
-        }
-    } else {
-        return
-    }
-})

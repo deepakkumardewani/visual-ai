@@ -53,15 +53,8 @@ const envSchema = z
         // Replicate
         REPLICATE_API_TOKEN: z.string().min(1, "REPLICATE_API_TOKEN is required"),
 
-        // Razorpay (optional until legacy routes are removed)
-        RAZORPAY_KEY_ID: z.string().optional(),
-        RAZORPAY_KEY_SECRET: z.string().optional(),
-
         // Payments provider
-        PAYMENT_PROVIDER: z.preprocess(
-            (value) => value ?? (process.env.NODE_ENV === "test" ? "razorpay" : "dodo"),
-            z.enum(["dodo", "razorpay"]),
-        ),
+        PAYMENT_PROVIDER: z.enum(["dodo"]).default("dodo"),
         PAYMENT_RETURN_URL: z.string().url("PAYMENT_RETURN_URL must be a valid URL").optional(),
 
         // Dodo Payments (required when PAYMENT_PROVIDER=dodo)

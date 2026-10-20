@@ -16,14 +16,14 @@ Daily credits do not roll over. Bought credits stack on top and stay until you s
 
 ## Credit packs (INR)
 
-From current Razorpay products:
+Checkout via Dodo Payments (merchant of record). Card and UPI are supported where Dodo offers them for INR.
 
-| Credits | Price                            |
-| ------- | -------------------------------- |
-| 120     | ₹99                              |
-| 250     | ₹199 (about 11% vs the 120 pack) |
-| 380     | ₹299 (about 22% vs the 120 pack) |
-| 500     | ₹399 (about 31% vs the 120 pack) |
+| Credits | Price |
+| ------- | ----- |
+| 200     | ₹130  |
+| 450     | ₹290  |
+| 960     | ₹500  |
+| 2000    | ₹900  |
 
 Packs are one-time purchases. Credits you buy do not expire.
 

@@ -8,7 +8,7 @@ import {
   faTag,
 } from '@/plugins/icons';
 
-import { type FeatureSelect, FeatureType, type RazorpayProduct } from '@/types';
+import { type FeatureSelect, FeatureType } from '@/types';
 
 import generalFAQ from './generalFAQ.json';
 import pricingFAQ from './pricingFAQ.json';
@@ -252,42 +252,4 @@ export const FOOTER_LINKS = [
   { text: 'Refund Policy', path: '/refund', icon: faHandHolding },
   { text: 'Pricing', path: '/pricing', icon: faTag },
   { text: 'FAQ', path: '/faqs', icon: faQuestionCircle },
-];
-export const RAZORPAY_PRODUCTS: RazorpayProduct[] = [
-  { id: 1, type: 'single', credits: 120, price: 99, description: '120 credits', currency: 'INR' },
-  {
-    id: 2,
-    type: 'single',
-    credits: 250,
-    price: 199,
-    savings: '11%',
-    description: '250 credits',
-    currency: 'INR',
-  },
-  {
-    id: 3,
-    type: 'single',
-    credits: 380,
-    price: 299,
-    savings: '22%',
-    description: '380 credits',
-    currency: 'INR',
-  },
-  {
-    id: 4,
-    type: 'single',
-    credits: 500,
-    price: 399,
-    savings: '31%',
-    description: '500 credits',
-    currency: 'INR',
-  },
-  {
-    id: 5,
-    type: 'monthly',
-    credits: 1000,
-    price: 299,
-    description: '1000 credits',
-    currency: 'INR',
-  },
 ];

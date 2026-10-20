@@ -14,9 +14,9 @@
                                             │
               ┌───────────────┬─────────────┼───────────────┬──────────────┐
               ▼               ▼             ▼               ▼              ▼
-         MongoDB          Redis        Replicate       Cloudinary      Razorpay
-        (mongoose)     (ioredis,     (image models)   (image CDN /    (payments /
-         users/images   progress/                      storage)        subscriptions)
+         MongoDB          Redis        Replicate       Cloudinary      Dodo Payments
+        (mongoose)     (ioredis,     (image models)   (image CDN /    (checkout +
+         users/images   progress/                      storage)        webhooks)
          /payments      caching)
 ```
 
@@ -48,7 +48,7 @@ Key directories under [apps/web/src](apps/web/src):
 
 ### apps/api — Express API (`@visual-ai/api`)
 
-- **Stack**: Express 4 (ESM, `tsx watch`), Mongoose 8 (MongoDB), ioredis, Replicate SDK, Cloudinary (storage via multer-storage-cloudinary), Razorpay, Clerk backend SDK, svix (webhook verification), node-cron, nodemailer, sharp/probe-image-size.
+- **Stack**: Express 4 (ESM, `tsx watch`), Mongoose 8 (MongoDB), ioredis, Replicate SDK, Cloudinary (storage via multer-storage-cloudinary), Dodo Payments SDK, Clerk backend SDK, svix (webhook verification), node-cron, nodemailer, sharp/probe-image-size.
 
 Layout under [apps/api/src](apps/api/src):
 
@@ -60,8 +60,9 @@ Layout under [apps/api/src](apps/api/src):
 | `routes/users.ts`                 | Profile, history, username/fullname update, referral, contact                                                                                             |
 | `routes/credits.ts`               | Balance lookup, daily free-credit top-up                                                                                                                  |
 | `routes/image.ts`                 | Favorite, delete, bulk delete                                                                                                                             |
-| `routes/payments.ts`              | Razorpay order/subscription create, verify, cancel                                                                                                        |
-| `webhook/index.ts`                | Clerk (svix) user webhooks + Razorpay payment webhooks                                                                                                    |
+| `payments/router.ts`              | Dodo checkout create, payment list, checkout session status (Clerk auth)                                                                                  |
+| `payments/webhookRouter.ts`       | Dodo payment webhooks (`/webhooks/payments`, raw body + signature)                                                                                        |
+| `webhook/index.ts`                | Clerk (svix) user webhooks only                                                                                                                           |
 | `helpers/generateRouteHelpers.ts` | `processAIImage` — builds Replicate input `{ prompt, output_quality, aspect_ratio, output_format, num_outputs* }` (\*omitted for FLUX_PRO / FLUX_1_1_PRO) |
 | `models/`                         | Mongoose schemas (see §4)                                                                                                                                 |
 | `utils/constants.ts`              | `MODEL_IDS` — canonical model catalog (backend source of truth)                                                                                           |
@@ -90,15 +91,15 @@ Note: history is embedded in the User document (not a separate collection querie
 
 - **Auth**: Clerk end-to-end. Frontend session via vue-clerk; API validates with `ClerkExpressRequireAuth`; user lifecycle synced through svix-verified Clerk webhooks (`/webhooks/*`).
 - **Credits**: generation decrements credits; free plan refilled to 20 daily, pro +500/month capped at 2000 (cron in `utils/cronJobs.ts`). Subscription webhook adds 1000 monthly / resets to 10 on cancel.
-- **Payments**: Razorpay orders + subscriptions, signature verification at `/payments/verify-payment`, webhook reconciliation.
+- **Payments**: Dodo checkout sessions, status polling, webhook-driven idempotent credit grants (`/webhooks/payments`).
 - **Progress tracking**: Replicate generation progress cached in Redis, polled by the frontend at `/progress?jobId=...`.
 - **Media**: outputs uploaded to Cloudinary; frontend builds URLs from `VITE_CLOUDINARY_BASE_URL`.
 
 ## 6. Environment Variables
 
-**API**: `APP_PORT`, `APP_SERVER`, `CLERK_SECRET_KEY`, `CLERK_PUBLISHABLE_KEY`, `CLERK_JWT_KEY`, `REPLICATE_API_TOKEN`, `REDIS_HOST`, `REDIS_PORT`, `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `EMAIL_USER`, `EMAIL_PASSWORD` (+ Mongo URI, Cloudinary creds via config).
+**API**: `APP_PORT`, `APP_SERVER`, `CLERK_*`, `REPLICATE_API_TOKEN`, `REDIS_*`, `PAYMENT_PROVIDER=dodo`, `DODO_PAYMENTS_*`, `DODO_PRODUCT_ID_PACK_*`, `PAYMENT_RETURN_URL`, `EMAIL_*`, `WEBHOOK_SECRET` (+ Mongo URI, Cloudinary creds via config).
 
-**Web** (`VITE_*`): `API_BASEPATH`, `CLERK_PUBLISHABLE_KEY`, `CLERK_SIGN_IN/UP_FORCE_REDIRECT_URL`, `CLOUDINARY_BASE_URL`, `CLOUDINARY_ASSETS_URL`, `RAZORPAY_KEY_ID`, `RAZORPAY_PLAN_ID`, `TELEMETRYDECK_APP_ID`, `TELEMETRYDECK_DEBUG`, `LOG_LEVEL`.
+**Web** (`VITE_*`): `API_BASEPATH`, `CLERK_*`, `CLOUDINARY_*`, `VITE_DODO_CHECKOUT_MODE`, `TELEMETRYDECK_*`, `LOG_LEVEL`.
 
 ## 7. Commands
 

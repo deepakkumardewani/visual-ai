@@ -40,7 +40,7 @@ And I can open the buy-credits dialog from that empty state
 When I open the profile page
 And I choose to buy credits from the credits card
 Then the buy-credits dialog lists credit packs in rupees
-And it states that payment is via Razorpay
+And it states that checkout is via Dodo Payments
 
 ---
 

@@ -86,16 +86,6 @@ export interface PaymentRecord {
   currency?: string;
 }
 
-export interface RazorpayProduct {
-  id: number;
-  type: string;
-  credits: number;
-  price: number;
-  savings?: string;
-  description: string;
-  currency: string;
-}
-
 export interface IPayment {
   transactionId: string;
   amount: number;

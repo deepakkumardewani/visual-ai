@@ -12,7 +12,6 @@ vi.mock("../routes/explore.js", () => ({ exploreRoutes: "exploreRoutes" }))
 vi.mock("../routes/generate.js", () => ({ generateRoute: "generateRoute" }))
 vi.mock("../routes/image.js", () => ({ imageRoutes: "imageRoutes" }))
 vi.mock("../payments/router.js", () => ({ paymentsApiRouter: "paymentsApiRouter" }))
-vi.mock("../routes/payments.js", () => ({ paymentsRoute: "paymentsRoute" }))
 vi.mock("../routes/prompt.js", () => ({ promptRoutes: "promptRoutes" }))
 vi.mock("../routes/saved-prompts.js", () => ({ savedPromptsRoutes: "savedPromptsRoutes" }))
 vi.mock("../routes/users.js", () => ({ userRoutes: "userRoutes" }))
@@ -53,7 +52,7 @@ describe("api router index", () => {
         expect(mounted).toContainEqual(["creditsRoute", "clerk-auth"])
         expect(mounted).toContainEqual(["imageRoutes", "clerk-auth"])
         expect(mounted).toContainEqual(["collectionRoutes", "clerk-auth"])
-        expect(mounted).toContainEqual(["clerk-auth", "paymentsApiRouter", "paymentsRoute"])
+        expect(mounted).toContainEqual(["clerk-auth", "paymentsApiRouter"])
     })
 
     it("registers every application router exactly once", async () => {
@@ -71,7 +70,6 @@ describe("api router index", () => {
             "imageRoutes",
             "collectionRoutes",
             "paymentsApiRouter",
-            "paymentsRoute",
         ])
     })
 })

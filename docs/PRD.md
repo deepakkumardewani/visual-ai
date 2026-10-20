@@ -2,7 +2,7 @@
 
 ## 1. Product Summary
 
-Visual AI is a web-based AI image studio. Users type a prompt, pick a model, and generate images (Flux family via Replicate); they can also upscale, colorize, and restore old photos. Monetization is a freemium credit system with a Pro subscription (Razorpay).
+Visual AI is a web-based AI image studio. Users type a prompt, pick a model, and generate images (Flux family via Replicate); they can also upscale, colorize, and restore old photos. Monetization is a freemium credit system with one-time INR credit packs (Dodo Payments).
 
 - **Target users**: creators, marketers, and hobbyists who want fast, affordable AI images without running models themselves; secondary segment: people restoring/colorizing family photos.
 - **Platform**: responsive web app (Vue 3 SPA) at a single dashboard-centric surface.
@@ -55,8 +55,7 @@ Non-goals (current scope): video generation, mobile native apps, team/workspace 
 ### 4.5 Monetization
 
 - **Free**: 20 credits, daily refill to 20, base models only.
-- **Pro**: Razorpay subscription; +500 credits monthly (cap 2000); premium models unlocked; cancel flow resets to free tier.
-- One-time credit purchases via Razorpay orders with signature verification.
+- **Purchases**: one-time credit packs in INR via Dodo checkout; webhook confirms payment and grants credits.
 - Referral program: apply-referral endpoint grants credits; referral records stored on user.
 
 ### 4.6 Marketing site
@@ -66,7 +65,7 @@ Non-goals (current scope): video generation, mobile native apps, team/workspace 
 ## 5. User Flows (happy paths)
 
 1. **Generate**: Sign in → Dashboard → type prompt → pick model → Generate → watch progress → view/download/favorite result → appears in history.
-2. **Upgrade**: Free user clicks Pro model → redirected to Pricing → Razorpay checkout → webhook confirms → plan=pro, credits granted → model unlocked.
+2. **Buy credits**: User opens Pricing → Dodo checkout → webhook confirms → credits granted → generation unblocked.
 3. **Restore**: Upload old photo → choose colorize/revive → processed image with before/after slider → save to history.
 
 ## 6. Success Metrics
@@ -88,4 +87,4 @@ Non-goals (current scope): video generation, mobile native apps, team/workspace 
 - Replicate model input schemas differ; the uniform request contract must be refactored before catalog expansion.
 - Credit refill/webhook logic has multiple sources of truth (cron, webhook, daily endpoint) — reconcile to avoid double-grants.
 - Embedded history in the User document will degrade with heavy users; pagination strategy needed.
-- Razorpay is India-centric; international payments may need an additional provider.
+- Dodo checkout is INR-first; international buyers may see converted pricing via adaptive currency.

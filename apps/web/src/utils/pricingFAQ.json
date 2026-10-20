@@ -17,6 +17,6 @@
   },
   {
     "question": "How do I pay for the service?",
-    "answer": "Buy credit packs in INR on the pricing page (Razorpay). Current packs include 120 credits for ₹99, 250 for ₹199, 380 for ₹299, and 500 for ₹399. Purchased credits never expire."
+    "answer": "Buy credit packs in INR on the pricing page. Checkout is handled by Dodo Payments (merchant of record); you can pay by card or UPI where available. Current packs: 200 credits for ₹130, 450 for ₹290, 960 for ₹500, and 2000 for ₹900. Purchased credits never expire."
   }
 ]

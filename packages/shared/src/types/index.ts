@@ -10,7 +10,6 @@ export type {
   PaymentProviderName,
   PaymentStatus,
   PaymentRecord,
-  RazorpayProduct,
   IPayment,
   IReferral,
   IUser,

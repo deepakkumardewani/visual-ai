@@ -1,6 +1,6 @@
 # Visual AI
 
-AI image generation studio: type a prompt, pick a model (FLUX family via [Replicate](https://replicate.com)), and generate images — plus photo utilities to upscale, colorize, and restore old photos. Monetized with a freemium credit system and a Pro subscription (Razorpay).
+AI image generation studio: type a prompt, pick a model (FLUX family via [Replicate](https://replicate.com)), and generate images — plus photo utilities to upscale, colorize, and restore old photos. Monetized with a freemium credit system and one-time INR credit packs (Dodo Payments).
 
 ## Overview
 
@@ -9,7 +9,7 @@ Bun-workspaces monorepo with two apps:
 | App                    | Package          | Stack                                                                                                                        |
 | ---------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | [`apps/web`](apps/web) | `@visual-ai/web` | Vue 3 (Composition API), Vite 7 via [vite-plus](https://www.npmjs.com/package/vite-plus), Tailwind, Pinia, Clerk (vue-clerk) |
-| [`apps/api`](apps/api) | `@visual-ai/api` | Express 4 (ESM, tsx), MongoDB (Mongoose), Redis (ioredis), Replicate SDK, Cloudinary, Razorpay, Clerk                        |
+| [`apps/api`](apps/api) | `@visual-ai/api` | Express 4 (ESM, tsx), MongoDB (Mongoose), Redis (ioredis), Replicate SDK, Cloudinary, Dodo Payments, Clerk                   |
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full system design, [docs/PRD.md](docs/PRD.md) for product requirements, and [docs/MODEL_ONBOARDING.md](docs/MODEL_ONBOARDING.md) for adding new models to the catalog.
 
@@ -19,14 +19,14 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full system design, [do
 - **Photo utilities** — upscale (clarity-upscaler), colorize (deoldify/ddcolor), restore old photos (gfpgan)
 - **Live progress** — Redis-backed generation progress polling
 - **History & gallery** — per-user history with favorites and bulk actions, plus a public community feed
-- **Credits & billing** — daily free-credit refill, Pro subscription and one-time purchases via Razorpay
+- **Credits & billing** — daily free-credit refill and one-time credit packs via Dodo Payments
 - **Auth** — Clerk end-to-end with webhook-synced user lifecycle
 
 ## Prerequisites
 
 - [Bun](https://bun.sh) ≥ 1.3
 - MongoDB and Redis instances (local or hosted)
-- Accounts/keys for: [Replicate](https://replicate.com), [Clerk](https://clerk.com), [Cloudinary](https://cloudinary.com), [Razorpay](https://razorpay.com)
+- Accounts/keys for: [Replicate](https://replicate.com), [Clerk](https://clerk.com), [Cloudinary](https://cloudinary.com), [Dodo Payments](https://dodopayments.com) (test mode for development)
 
 ## Getting started
 

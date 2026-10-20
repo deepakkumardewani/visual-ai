@@ -504,7 +504,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 
 **Try in UI:** Open the Pricing page and FAQ: no Razorpay wording remains ; Open the Buy dialog: still works with Dodo ; Run git grep -il razorpay and see only legacy-labelled mentions ; Check docs/API_REFERENCE.md lists the new payment endpoints
 
-### ☐ T6.1 Remove Razorpay routes and webhook from API
+### ✅ T6.1 Remove Razorpay routes and webhook from API
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/payments.ts`, `apps/api/src/routes/payments.test.ts`, `apps/api/src/webhook/index.ts`, `apps/api/src/webhook/index.test.ts`, `apps/api/src/routes/index.ts`
@@ -515,7 +515,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] `PaymentModel` is still exported from `models/payment.ts` (legacy records) and `models/payment.test.ts` passes.
 - **Verify:** `git grep -il razorpay -- apps/api/src/routes apps/api/src/webhook` returns nothing; `git grep -c "export const PaymentModel" -- apps/api/src/models/payment.ts` prints 1; `cd apps/api && bunx vitest run`; `bun run verify`.
 
-### ☐ T6.2 Remove Razorpay constants, types and dependency from API
+### ✅ T6.2 Remove Razorpay constants, types and dependency from API
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/utils/constants.ts`, `apps/api/src/utils/constants.test.ts`, `apps/api/src/types/index.ts`, `apps/api/package.json`, `bun.lock`
@@ -525,7 +525,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] `bun.lock` has no `razorpay` entry.
 - **Verify:** `git grep -nE "RAZORPAY_PRODUCTS|Razorpay(Product|Subscription|Order)|new Razorpay|from ['\"]razorpay['\"]|require\(['\"]razorpay['\"]\)" -- apps/api/src` returns nothing; `git grep -ni razorpay -- apps/api/src apps/api/package.json ':!apps/api/src/config' ':!apps/api/src/models/payment.ts' ':!apps/api/src/models/payment.test.ts' ':!apps/api/src/payments' | grep -vi legacy | grep -vE "[\"']razorpay[\"']"` returns nothing (same filters as T6.6; the excluded paths hold the env vars removed in T6.4 and the legacy provider literal; the quoted-literal filter would hide a `"razorpay":` dependency line, so the next check covers it); `grep -ci razorpay apps/api/package.json` prints 0; `grep -c razorpay bun.lock` prints 0; `cd apps/api && bunx vitest run`; `bun run verify`.
 
-### ☐ T6.3 Remove Razorpay from web
+### ✅ T6.3 Remove Razorpay from web
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/payment.ts`, `apps/web/src/utils/payment.test.ts`, `apps/web/src/utils/constants.ts`, `apps/web/src/types/index.ts`
@@ -535,7 +535,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Web build and tests pass.
 - **Verify:** `git grep -nE "RAZORPAY_PRODUCTS|Razorpay(Product|Subscription|Order)|utils/payment|checkout\.razorpay\.com|new Razorpay|from ['\"]razorpay['\"]" -- apps/web/src` returns nothing; `git grep -ni razorpay -- apps/web/src ':!apps/web/src/utils/pricingFAQ.json' ':!apps/web/src/components/Profile/Payments.test.ts' | grep -vi legacy | grep -vE "[\"']razorpay[\"']"` returns nothing (a quoted provider literal or a legacy-labelled comment is allowed, the same filters as T6.6); `bun run test`; `bun run verify`.
 
-### ☐ T6.3.1 Remove `RazorpayProduct` from packages/shared
+### ✅ T6.3.1 Remove `RazorpayProduct` from packages/shared
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/types/domain.ts`, `packages/shared/src/types/index.ts`
@@ -547,7 +547,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] API and web still type-check; tests green.
 - **Verify:** `git grep -n RazorpayProduct -- apps packages` returns nothing; `git grep -ni razorpay -- packages/shared/src | grep -vi legacy | grep -vE "[\"']razorpay[\"']"` returns nothing (same filters as T6.6); `bun run test`; `bun run verify`.
 
-### ☐ T6.4 Env cleanup: config and compose
+### ✅ T6.4 Env cleanup: config and compose
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/config/env.ts`, `apps/api/src/config/env.test.ts`, `apps/api/docker-compose.yml`
@@ -556,7 +556,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] No Razorpay env var or comment in `env.ts` or `docker-compose.yml`; `env.test.ts` asserts the absence via `LEGACY_RAZORPAY_ENV_PREFIX`.
 - **Verify:** `cd apps/api && bunx vitest run config/env.test.ts`; `git grep -ni razorpay -- apps/api/src/config/env.ts apps/api/docker-compose.yml` returns nothing; `git grep -ni razorpay -- apps/api/src/config/env.test.ts | grep -v LEGACY_RAZORPAY_ENV_PREFIX` returns nothing (only the marker constant and its uses mention the removed names).
 
-### ☐ T6.4.1 Env cleanup: tracked example files
+### ✅ T6.4.1 Env cleanup: tracked example files
 
 - **Kind:** implementation
 - **Files:** `apps/api/.env.example`, `apps/web/.env.example`, `infra/.env.example`
@@ -567,7 +567,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Untracked env files unchanged; the manual edit list is in the task result under DECISIONS.
 - **Verify:** `git grep -inE "razorpay" -- '*.env*' '*.yml' ':!apps/web/coverage'` returns nothing tracked; `git status --short -- 'apps/*/.env*' 'infra/.env*'` shows only the three tracked example files.
 
-### ☐ T6.5 User-facing copy and product docs
+### ✅ T6.5 User-facing copy and product docs
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/pricingFAQ.json`, `apps/web/public/pricing.md`, `apps/web/public/llms.txt`, `README.md`, `docs/PRD.md`
@@ -576,7 +576,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] No Razorpay mention in these files; payment method claims match T0.3.
 - **Verify:** `git grep -il razorpay -- apps/web/src/utils/pricingFAQ.json apps/web/public README.md docs/PRD.md` returns nothing; `bun run verify`.
 
-### ☐ T6.6 Technical docs, checklist, and scenarios
+### ✅ T6.6 Technical docs, checklist, and scenarios
 
 - **Kind:** implementation
 - **Files:** `docs/ARCHITECTURE.md`, `docs/API_REFERENCE.md`, `agent_docs/CHECKLIST_manual_steps.md`, `agent_docs/e2e-scenarios/profile-billing.feature.md`

@@ -22,21 +22,21 @@ Legend: 🔑 = needs credentials only you have · ⚠️ = touches live prod, do
 - [x] **P4. Local tooling check:** Docker Desktop running (`docker info`), `bun` works,
       SSH to droplet works (`ssh root@159.89.45.226 true`).
 - [x] **P5. 🔑 Accounts exist:** Cloudflare account (free), access to Hostinger DNS panel,
-      Razorpay dashboard (test mode available), Clerk dashboard (dev instance available).
+      Dodo Payments dashboard (test mode available), Clerk dashboard (dev instance available).
 - [x] **P6. Backups dir on laptop:** `mkdir -p ~/backups` (used by B1).
 
 ## A. What is automatic vs. manual (reference)
 
-| Thing                                                   | Created by                                                          | You do                                  |
-| ------------------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------- |
-| Redis container + volume                                | `docker compose up`                                                 | Nothing                                 |
-| api-staging / api-prod containers                       | `docker compose up` (images pulled from GHCR)                       | Nothing after first bring-up            |
-| Backend images                                          | GitHub Actions → GHCR                                               | Nothing (first push is manual, step D3) |
-| FE files in `/var/www/{prod,staging}`                   | deploy script / Actions (rsync)                                     | Create the empty dirs once (B4)         |
-| Mongo collections & indexes                             | Mongoose, on first use                                              | Nothing                                 |
-| nginx config                                            | Copied by you once (D4); later changes rare, redeployed via runbook | First copy + `nginx -s reload`          |
-| `.env.prod` / `.env.staging` on droplet                 | **Never automated** (secrets)                                       | Create + maintain by hand (B5)          |
-| Cloudflare / Atlas / Razorpay / Clerk / GitHub settings | —                                                                   | All manual (sections C, E)              |
+| Thing                                                        | Created by                                                          | You do                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------------- | --------------------------------------- |
+| Redis container + volume                                     | `docker compose up`                                                 | Nothing                                 |
+| api-staging / api-prod containers                            | `docker compose up` (images pulled from GHCR)                       | Nothing after first bring-up            |
+| Backend images                                               | GitHub Actions → GHCR                                               | Nothing (first push is manual, step D3) |
+| FE files in `/var/www/{prod,staging}`                        | deploy script / Actions (rsync)                                     | Create the empty dirs once (B4)         |
+| Mongo collections & indexes                                  | Mongoose, on first use                                              | Nothing                                 |
+| nginx config                                                 | Copied by you once (D4); later changes rare, redeployed via runbook | First copy + `nginx -s reload`          |
+| `.env.prod` / `.env.staging` on droplet                      | **Never automated** (secrets)                                       | Create + maintain by hand (B5)          |
+| Cloudflare / Atlas / Dodo Payments / Clerk / GitHub settings | —                                                                   | All manual (sections C, E, H)           |
 
 ---
 
@@ -64,7 +64,7 @@ Legend: 🔑 = needs credentials only you have · ⚠️ = touches live prod, do
   ```
 - [x] **B5. 🔑 Create env files** `/opt/visual-ai/.env.prod` and `/opt/visual-ai/.env.staging`
       (template: `infra/.env.example`). Staging uses: staging Atlas URI, `QUEUE_PREFIX=staging`,
-      `ENABLE_CRON=false`, Razorpay **test** keys, Clerk **dev** keys, staging `VITE`-irrelevant vars omitted.
+      `ENABLE_CRON=false`, Dodo **test** keys, Clerk **dev** keys, staging `VITE`-irrelevant vars omitted.
   ```bash
   chmod 600 /opt/visual-ai/.env.*
   ```
@@ -109,10 +109,10 @@ Legend: 🔑 = needs credentials only you have · ⚠️ = touches live prod, do
 ## D. Staging bring-up (Task 9) — mix of laptop + SSH
 
 - [x] **D1. Verify prod works** (baseline before changes): browse the live site, note everything OK.
-- [x] **D2. 🔑 Razorpay test mode + Clerk dev instance:** create/locate test credentials; register
+- [x] **D2. 🔑 Dodo test mode + Clerk dev instance:** create/locate test credentials; register
       the Clerk **dev** webhook endpoint at `https://api-staging.visual-ai.app/webhooks/clerk`
       (prod stays `https://api.visual-ai.app/webhooks/clerk`). Put its signing secret in
-      `.env.staging` as `WEBHOOK_SECRET`, alongside the test Razorpay + dev Clerk keys, and set
+      `.env.staging` as `WEBHOOK_SECRET`, alongside Dodo test + dev Clerk keys, and set
       `ALLOWED_ORIGINS=https://staging.visual-ai.app`.
       Also fix `apps/web/.env.staging`: the `VITE_CLERK_SIGN_*` URLs still point at
       `http://localhost:3005` — they must be `https://staging.visual-ai.app/...`.
@@ -176,7 +176,7 @@ Legend: 🔑 = needs credentials only you have · ⚠️ = touches live prod, do
   scp infra/nginx/visual-ai-prod.conf root@159.89.45.226:/etc/nginx/conf.d/
   ssh root@159.89.45.226 'nginx -t && nginx -s reload'
   ```
-- [ ] **F5. Verify prod** (with your bypassed IP): login, generate, Razorpay live webhook test event.
+- [ ] **F5. Verify prod** (with your bypassed IP): login, generate, Dodo live webhook test event.
 - [ ] **F6. Disable maintenance.** Monitor for 30 min.
 - [ ] **F7. Cleanup (only after a day of stability):**
   ```bash
@@ -200,3 +200,27 @@ Legend: 🔑 = needs credentials only you have · ⚠️ = touches live prod, do
 | nginx config change | Edit in repo → scp + `nginx -t && nginx -s reload` (runbook) | Rare                |
 | OS updates          | `apt update && apt upgrade` over SSH                         | Monthly             |
 | Droplet resize      | DO dashboard, inside a maintenance toggle                    | When metrics say so |
+
+---
+
+## H. Dodo Payments — env cleanup & live cutover (Phase 6)
+
+Tracked `.env.example` files already list Dodo placeholders. **Untracked** env files are still yours to edit locally and on the droplet — remove legacy payment keys and add Dodo values from `agent_docs/SPEC_dodo_payments.md` §5.7 (never commit secrets).
+
+### H1. Local untracked API env files
+
+- [ ] **`apps/api/.env`:** Remove the legacy `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` lines. Set `PAYMENT_PROVIDER=dodo`, `DODO_PAYMENTS_API_KEY`, `DODO_PAYMENTS_ENVIRONMENT=test_mode`, `DODO_PAYMENTS_WEBHOOK_KEY`, the four `DODO_PRODUCT_ID_PACK_*` ids, and `PAYMENT_RETURN_URL`.
+- [ ] **`apps/api/.env.staging` / `apps/api/.env.production`:** Same legacy `RAZORPAY_*` removal; use staging/production Dodo keys and product ids per environment.
+
+### H2. Local untracked web env files
+
+- [ ] **`apps/web/.env.local` / `.env.staging` / `.env.production`:** Remove legacy `VITE_RAZORPAY_KEY_ID` and `VITE_RAZORPAY_PLAN_ID`. Set `VITE_DODO_CHECKOUT_MODE=test` (or `live` for production).
+
+### H3. Droplet / infra untracked env
+
+- [ ] **`infra/.env.staging` / `infra/.env.prod` and `/opt/visual-ai/.env.*` on the droplet:** Remove legacy `RAZORPAY_*` lines; add the Dodo API variables from H1 for each environment.
+
+### H4. Dodo dashboard (test → live)
+
+- [ ] **Test mode:** Confirm four INR one-time products (200/450/960/2000 credits) and a webhook at `https://<api-host>/webhooks/payments` subscribed to `payment.succeeded` and `payment.failed`.
+- [ ] **Live cutover:** Create live-mode products with the same catalog, rotate `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_WEBHOOK_KEY`, set `DODO_PAYMENTS_ENVIRONMENT=live_mode`, update the live webhook URL, and set `VITE_DODO_CHECKOUT_MODE=live` in the production web build env before deploy.
