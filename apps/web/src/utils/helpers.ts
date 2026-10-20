@@ -258,6 +258,10 @@ export const contactForm = async (formData: any) => {
     log.error('contactForm failed', { error: error.value });
     throw new Error('Something went wrong');
   }
+  if (response.value && !response.value.ok) {
+    log.error('contactForm failed', { status: response.value.status });
+    throw new Error('Something went wrong');
+  }
   if (data.value) {
     log.debug('contactForm submitted', { data: data.value });
   }

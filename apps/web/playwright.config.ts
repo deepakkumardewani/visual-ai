@@ -25,7 +25,8 @@ export default defineConfig({
     },
     {
       name: 'chromium-billing',
-      testMatch: /billing-purchase\.spec\.ts/,
+      // Single Clerk user + real API: keep all billing QA specs in one serial project.
+      testMatch: /billing-(purchase|history)\.spec\.ts/,
       workers: 1,
       fullyParallel: false,
       dependencies: ['setup'],
@@ -33,9 +34,12 @@ export default defineConfig({
     },
     {
       name: 'chromium',
-      testIgnore: [/auth\.setup\.ts/, /billing-purchase\.spec\.ts/],
+      testIgnore: [/auth\.setup\.ts/, /billing-(purchase|history)\.spec\.ts/],
       grepInvert: /@guest/,
       dependencies: ['setup'],
+      // Real local API + one Clerk user: parallel signed-in specs race on /users/user_*.
+      workers: 1,
+      fullyParallel: false,
       use: { ...devices['Desktop Chrome'], storageState: AUTH_STATE_PATH },
     },
   ],

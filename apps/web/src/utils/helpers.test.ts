@@ -29,7 +29,9 @@ import {
 type FetchResult = {
   data: { value: unknown };
   error: { value: unknown };
-  response?: { value: { status?: number; json?: () => Promise<{ message: string }> } | null };
+  response?: {
+    value: { status?: number; ok?: boolean; json?: () => Promise<{ message: string }> } | null;
+  };
 };
 
 function mockFetchJson(result: FetchResult) {
@@ -417,10 +419,25 @@ describe('store-backed helpers', () => {
   });
 
   it('contactForm resolves when the API accepts the message', async () => {
-    mockFetchJson({ data: { value: { ok: true } }, error: { value: null } });
+    mockFetchJson({
+      data: { value: { ok: true } },
+      error: { value: null },
+      response: { value: { ok: true } },
+    });
     await expect(
       contactForm({ name: 'A', email: 'a@b.co', subject: 'Hi', message: 'Hello' }),
     ).resolves.toBeUndefined();
+  });
+
+  it('contactForm throws when the response is not ok without a fetch error', async () => {
+    mockFetchJson({
+      data: { value: { message: 'Server error' } },
+      error: { value: null },
+      response: { value: { ok: false, status: 500 } },
+    });
+    await expect(
+      contactForm({ name: 'A', email: 'a@b.co', subject: 'Hi', message: 'Hello' }),
+    ).rejects.toThrow('Something went wrong');
   });
 });
 

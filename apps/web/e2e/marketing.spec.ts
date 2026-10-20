@@ -2,7 +2,7 @@ import type { Page, Route } from '@playwright/test';
 
 import { expect, test } from '@playwright/test';
 
-import { WEB_URL } from './support/env';
+import { API_URL, WEB_URL } from './support/env';
 
 const USER_PROFILE_URL = /\/users\/user_/;
 const SHOWCASE_FIRST_PROMPT =
@@ -27,7 +27,8 @@ async function gotoSignedIn(page: Page, path: string) {
 }
 
 async function stubContactPost(page: Page, handler: (route: Route) => Promise<void>) {
-  await page.route(/\/users\/contact\/?$/, async (route) => {
+  const contactUrl = `${API_URL}/users/contact`;
+  await page.route(contactUrl, async (route) => {
     if (route.request().method() === 'OPTIONS') {
       return route.fulfill({ status: 204, headers: API_CORS });
     }

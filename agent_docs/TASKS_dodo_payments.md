@@ -601,7 +601,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 
 Numbering starts at T7.2: there is no T7.1 (the PLAN's e2e spec task became the Phase 5 `E2E:` tasks T5.8/T5.9; ids were kept stable rather than renumbered).
 
-### ☐ T7.2 GATE: automated suites green
+### ✅ T7.2 GATE: automated suites green
 
 - **Kind:** gate
 - **Files:** none
@@ -611,7 +611,7 @@ Numbering starts at T7.2: there is no T7.1 (the PLAN's e2e spec task became the 
   - [ ] Spec section 12 criteria 4, 6, 7 and the automated part of 5 satisfied by the outputs below (the manual run in 5 is T7.3).
 - **Verify:** `bun run test`; `bun run verify`; `cd apps/api && bunx vitest run`; `cd apps/web && bunx playwright test e2e/qa/billing-purchase.spec.ts e2e/qa/billing-history.spec.ts --repeat-each=3`; `cd apps/web && bun run test:e2e` (full e2e suite). Evidence is command output only; `agent-browser` is not evidence.
 
-### ☐ T7.3 WALKTHROUGH: real test-mode run
+### ✅ T7.3 WALKTHROUGH: real test-mode run
 
 - **Kind:** walkthrough
 - **Files:** `agent_docs/CHECKLIST_manual_steps.md`
@@ -622,7 +622,7 @@ Numbering starts at T7.2: there is no T7.1 (the PLAN's e2e spec task became the 
   - [ ] Results and date recorded in the checklist.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/billing-purchase.spec.ts e2e/qa/billing-history.spec.ts --repeat-each=3` still green after the run, plus `cd apps/api && bunx vitest run`; the manual observations are recorded in the checklist. Browser tooling is not used as evidence.
 
-### ☐ T7.4 DEFINITION OF DONE: audit and summary
+### ✅ T7.4 DEFINITION OF DONE: audit and summary
 
 - **Kind:** dod
 - **Files:** none
