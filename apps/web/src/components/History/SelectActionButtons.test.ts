@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import SelectActionButtons from '@/components/History/SelectActionButtons.vue';
 import { useCollectionsStore } from '@/stores/collections';
 import { useGenerateStore } from '@/stores/generate';
+import { FeatureType } from '@visual-ai/shared';
 import type { IImageObject } from '@/types';
 import { bulkDelete, bulkDownload, bulkFavorite } from '@/utils/helpers';
 
@@ -20,7 +21,7 @@ function selected(ids: Array<string | undefined> = ['1', '2']): IImageObject[] {
   return ids.map((id, index) => ({
     _id: id,
     prompt: `Prompt ${index}`,
-    featureType: 'image',
+    featureType: FeatureType.IMAGE,
   })) as IImageObject[];
 }
 

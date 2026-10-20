@@ -61,7 +61,7 @@ describe('ImageUpload', () => {
   it('renders the empty upload trigger', () => {
     const { wrapper } = mountUpload();
 
-    expect(wrapper.get('[data-testid="image-upload"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="image-upload"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="image-upload-trigger"]').text()).toContain('Upload Image');
     expect(wrapper.get('[data-testid="image-upload-input"]').attributes('type')).toBe('file');
   });
@@ -69,7 +69,7 @@ describe('ImageUpload', () => {
   it('opens the hidden file input from the trigger', async () => {
     const { wrapper } = mountUpload();
     const input = wrapper.get('[data-testid="image-upload-input"]').element as HTMLInputElement;
-    const click = vi.spyOn(input, 'click').mockImplementation(() => {});
+    const click = vi.spyOn(input, 'click').mockImplementation(async () => {});
 
     await wrapper.get('[data-testid="image-upload-trigger"]').trigger('click');
     expect(click).toHaveBeenCalled();
@@ -175,7 +175,7 @@ describe('ImageUpload', () => {
     });
     await flushPromises();
 
-    expect(wrapper.get('img[alt="Upload preview"]').exists()).toBe(true);
+    expect(wrapper.find('img[alt="Upload preview"]').exists()).toBe(true);
     expect(useAsideStore(pinia).pendingFeatureImage).toBeNull();
   });
 
@@ -185,7 +185,7 @@ describe('ImageUpload', () => {
       type: 'image/png',
     });
     await flushPromises();
-    expect(wrapper.get('img[alt="Upload preview"]').exists()).toBe(true);
+    expect(wrapper.find('img[alt="Upload preview"]').exists()).toBe(true);
   });
 
   it('shows a read error when FileReader fails', async () => {
@@ -198,9 +198,8 @@ describe('ImageUpload', () => {
     await input.trigger('change');
     await flushPromises();
 
-    // resetImage() clears the message after the read failure
     expect(wrapper.find('[data-testid="image-upload-trigger"]').exists()).toBe(true);
-    expect(wrapper.find('[role="alert"]').exists()).toBe(false);
+    expect(wrapper.get('[role="alert"]').text()).toContain('Could not read');
   });
 
   it('toggles the dragging class on dragover and dragleave', async () => {

@@ -1,3 +1,4 @@
+import { FeatureType } from '@visual-ai/shared';
 import { createPinia, setActivePinia } from 'pinia';
 import { mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -56,7 +57,7 @@ describe('ResultCanvas', () => {
   });
 
   it('shows user generations when history has image items', () => {
-    historyRef.value = [{ featureType: 'image' }];
+    historyRef.value = [{ featureType: FeatureType.IMAGE }];
 
     const wrapper = mount(ResultCanvas);
 

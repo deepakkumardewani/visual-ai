@@ -297,7 +297,7 @@ describe("prompt-pipeline", () => {
         })
 
         it("should stringify non-Error style lookup failures", async () => {
-            const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+            const errorSpy = vi.spyOn(console, "error").mockImplementation(async () => {})
             mockGetStylePreset.mockImplementationOnce(() => {
                 throw "style-store-down"
             })
@@ -332,7 +332,7 @@ describe("prompt-pipeline", () => {
         })
 
         it("should stringify non-Error enhancement failures", async () => {
-            const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+            const errorSpy = vi.spyOn(console, "error").mockImplementation(async () => {})
             mockEnhancePrompt.mockRejectedValueOnce("llm-timeout")
 
             const result = await preparePrompt({

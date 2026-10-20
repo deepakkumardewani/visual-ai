@@ -45,7 +45,7 @@ describe('useFetch', () => {
 
   it('attaches a bearer token and logs the request', async () => {
     getToken.mockResolvedValue('tok_abc');
-    const config = fetchConfig.current;
+    const config = fetchConfig.current!;
     const options: Record<string | symbol, unknown> = {
       method: 'POST',
       headers: { 'X-Trace': '1' },
@@ -63,7 +63,7 @@ describe('useFetch', () => {
   });
 
   it('logs successful responses', () => {
-    const config = fetchConfig.current;
+    const config = fetchConfig.current!;
     const response = { status: 200, url: 'https://api.example/v1/me' };
     const out = config.options.afterFetch({ data: { ok: true }, response });
     expect(out.data).toEqual({ ok: true });
@@ -71,7 +71,7 @@ describe('useFetch', () => {
   });
 
   it('skips abort errors and logs real failures', () => {
-    const config = fetchConfig.current;
+    const config = fetchConfig.current!;
     const aborted = { error: { code: CANCELLED_REQUEST }, options: {} };
     expect(config.options.onFetchError(aborted)).toBe(aborted);
     expect(apiLogger.error).not.toHaveBeenCalled();

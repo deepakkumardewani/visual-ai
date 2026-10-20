@@ -64,6 +64,28 @@ export interface JobStatus {
   message?: string;
 }
 
+export type PaymentProviderName = 'razorpay' | 'dodo';
+
+export type PaymentStatus = 'pending' | 'completed' | 'failed';
+
+/** Provider-agnostic payment row for API responses and the user profile store. */
+export interface PaymentRecord {
+  transactionId: string;
+  amount: number;
+  description: string;
+  status: PaymentStatus;
+  paymentMethod: string;
+  createdAt: Date | string;
+  humanReadableDate: string;
+  /** Omitted on legacy Razorpay rows embedded before provider tagging. */
+  provider?: PaymentProviderName;
+  providerPaymentId?: string;
+  providerSessionId?: string;
+  packId?: string;
+  credits?: number;
+  currency?: string;
+}
+
 export interface RazorpayProduct {
   id: number;
   type: string;

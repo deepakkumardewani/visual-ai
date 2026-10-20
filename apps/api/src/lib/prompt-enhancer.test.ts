@@ -161,7 +161,7 @@ describe("prompt-enhancer", () => {
         })
 
         it("should log diagnostics and return empty string when completion is empty", async () => {
-            const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+            const errorSpy = vi.spyOn(console, "error").mockImplementation(async () => {})
             mockGenerateText.mockResolvedValueOnce({
                 text: "",
                 finishReason: "length",

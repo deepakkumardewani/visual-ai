@@ -22,7 +22,7 @@ vi.mock('@/composables/useImageChainActions', () => ({
 }));
 
 vi.mock('@/utils/helpers', () => ({
-  downloadImage: (...args: unknown[]) => downloadImage(...args),
+  downloadImage: (...args: any[]) => Reflect.apply(downloadImage, undefined, args),
   getDownloadImageUrl: (image: { aiImageUrl?: string }) => image.aiImageUrl ?? '',
 }));
 
@@ -116,10 +116,10 @@ describe('ResultNextActions', () => {
     expect(copyPrompt).toHaveBeenCalledWith(item.prompt);
 
     await clickNamed(wrapper, 'Upscale this');
-    expect(sendToUpscale).toHaveBeenCalledWith(item.images[0]);
+    expect(sendToUpscale).toHaveBeenCalledWith('https://cdn.example.com/frame.jpg');
 
     await clickNamed(wrapper, 'Remove background');
-    expect(sendToRemoveBg).toHaveBeenCalledWith(item.images[0]);
+    expect(sendToRemoveBg).toHaveBeenCalledWith('https://cdn.example.com/frame.jpg');
   });
 
   it('toasts when there is nothing to download', async () => {

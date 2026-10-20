@@ -74,6 +74,7 @@ export interface FeatureSelect {
 export interface GroupedObject {
   title: string;
   data: IImageObject[];
+  isDeleting: boolean;
 }
 
 export interface RazorpaySubscription {

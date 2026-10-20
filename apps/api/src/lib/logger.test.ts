@@ -5,7 +5,7 @@ const mockTransport = vi.fn(() => ({ destination: "pretty" }))
 const mockPino = vi.fn(() => ({ child: mockChild }))
 
 vi.mock("pino", () => {
-    const pino = (...args: unknown[]) => mockPino(...args)
+    const pino = (...args: any[]) => Reflect.apply(mockPino, undefined, args)
     pino.transport = mockTransport
     return { default: pino }
 })

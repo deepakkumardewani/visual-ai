@@ -26,7 +26,7 @@ function buildResultImage(prompt: string): IImageObject {
     userId: process.env.E2E_CLERK_USER_ID ?? '',
     prompt,
     featureType: 'image' as IImageObject['featureType'],
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(),
     modelName: 'E2E Stub',
     imageType: 'horizontal',
     images: [
@@ -56,7 +56,9 @@ function processingJobWithCredits(prompt: string, userCreditsRemaining: number):
 function progressSseBody(prompt: string, userCreditsRemaining: number | null): string {
   const chunks: string[] = [];
   if (userCreditsRemaining !== null) {
-    chunks.push(`data: ${JSON.stringify(processingJobWithCredits(prompt, userCreditsRemaining))}\n\n`);
+    chunks.push(
+      `data: ${JSON.stringify(processingJobWithCredits(prompt, userCreditsRemaining))}\n\n`,
+    );
   }
   chunks.push(`data: ${JSON.stringify(completedJob(prompt, null))}\n\n`);
   return chunks.join('');

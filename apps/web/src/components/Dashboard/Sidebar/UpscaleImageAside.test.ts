@@ -65,7 +65,7 @@ describe('UpscaleImageAside', () => {
   it('renders model picker, compare link, and disabled Upscale CTA', () => {
     const { wrapper } = mountAside();
 
-    expect(wrapper.get('[data-testid="upscale-aside"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="upscale-aside"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="upscale-model-picker-stub"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="upscale-compare-link"]').text()).toContain(
       'Compare model samples',
@@ -94,7 +94,9 @@ describe('UpscaleImageAside', () => {
     isSignedIn.value = true;
     const { wrapper, pinia } = mountAside({ image: null });
     useUserStore(pinia).credits = 20;
-    const upscale = vi.spyOn(useGenerateStore(pinia), 'upscaleImage').mockImplementation(() => {});
+    const upscale = vi
+      .spyOn(useGenerateStore(pinia), 'upscaleImage')
+      .mockImplementation(async () => {});
 
     await wrapper.getComponent(FeatureCta).vm.$emit('click');
     expect(upscale).not.toHaveBeenCalled();
@@ -105,8 +107,8 @@ describe('UpscaleImageAside', () => {
     const { wrapper, pinia } = mountAside();
     useUserStore(pinia).credits = 20;
     const generate = useGenerateStore(pinia);
-    const upscale = vi.spyOn(generate, 'upscaleImage').mockImplementation(() => {});
-    vi.spyOn(useAppStore(pinia), 'upscaleOpen').mockImplementation(() => {});
+    const upscale = vi.spyOn(generate, 'upscaleImage').mockImplementation(async () => {});
+    vi.spyOn(useAppStore(pinia), 'upscaleOpen').mockImplementation(async () => {});
 
     await wrapper.getComponent(FeatureCta).vm.$emit('click');
 
@@ -130,8 +132,8 @@ describe('UpscaleImageAside', () => {
 
     const { wrapper } = mountAside({ pinia });
 
-    expect(wrapper.get('[aria-label="Upscale factor"]').exists()).toBe(true);
-    expect(wrapper.get('[aria-label="Output format"]').exists()).toBe(true);
+    expect(wrapper.find('[aria-label="Upscale factor"]').exists()).toBe(true);
+    expect(wrapper.find('[aria-label="Output format"]').exists()).toBe(true);
     expect(wrapper.text()).toContain('2x');
     expect(wrapper.text()).toContain('8x');
 
@@ -159,7 +161,7 @@ describe('UpscaleImageAside', () => {
     localStorage.setItem('upscaleJobId', JSON.stringify('job-restore'));
     const pinia = createPinia();
     setActivePinia(pinia);
-    vi.spyOn(useAppStore(pinia), 'upscaleOpen').mockImplementation(() => {});
+    vi.spyOn(useAppStore(pinia), 'upscaleOpen').mockImplementation(async () => {});
 
     mountAside({ pinia });
 
@@ -178,8 +180,10 @@ describe('UpscaleImageAside', () => {
     isSignedIn.value = true;
     const { pinia } = mountAside();
     useUserStore(pinia).credits = 20;
-    const upscale = vi.spyOn(useGenerateStore(pinia), 'upscaleImage').mockImplementation(() => {});
-    vi.spyOn(useAppStore(pinia), 'upscaleOpen').mockImplementation(() => {});
+    const upscale = vi
+      .spyOn(useGenerateStore(pinia), 'upscaleImage')
+      .mockImplementation(async () => {});
+    vi.spyOn(useAppStore(pinia), 'upscaleOpen').mockImplementation(async () => {});
 
     expect(trySubmitFeature(FeatureType.UPSCALE)).toBe(true);
     expect(upscale).toHaveBeenCalled();
@@ -195,7 +199,7 @@ describe('UpscaleImageAside', () => {
     localStorage.setItem('upscaleInProgress', 'true');
     const pinia = createPinia();
     setActivePinia(pinia);
-    const open = vi.spyOn(useAppStore(pinia), 'upscaleOpen').mockImplementation(() => {});
+    const open = vi.spyOn(useAppStore(pinia), 'upscaleOpen').mockImplementation(async () => {});
     mountAside({ pinia });
     expect(useGenerateStore(pinia).upscaleInProgress).toBe(true);
     expect(open).not.toHaveBeenCalled();
@@ -214,13 +218,13 @@ describe('UpscaleImageAside', () => {
     );
     if (!hasScale) {
       // Crystal / other models may still expose scale via registry — assert the CTA still mounts.
-      expect(wrapper.get('[data-testid="upscale-cta"]').exists()).toBe(true);
+      expect(wrapper.find('[data-testid="upscale-cta"]').exists()).toBe(true);
     }
   });
 
   it('keeps the Upscale CTA available when the upload has no pixel size', () => {
     const { wrapper } = mountAside({ image: null });
-    expect(wrapper.get('[data-testid="upscale-cta"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="upscale-cta"]').exists()).toBe(true);
     expect(wrapper.text()).not.toContain('Output ');
   });
 });

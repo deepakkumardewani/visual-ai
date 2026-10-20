@@ -8,15 +8,15 @@ const { generateText, deepseek, anthropic, mockLogger } = vi.hoisted(() => ({
 }))
 
 vi.mock("ai", () => ({
-    generateText: (...args: unknown[]) => generateText(...args),
+    generateText: (...args: any[]) => Reflect.apply(generateText, undefined, args),
 }))
 
 vi.mock("@ai-sdk/deepseek", () => ({
-    deepseek: (...args: unknown[]) => deepseek(...args),
+    deepseek: (...args: any[]) => Reflect.apply(deepseek, undefined, args),
 }))
 
 vi.mock("@ai-sdk/anthropic", () => ({
-    anthropic: (...args: unknown[]) => anthropic(...args),
+    anthropic: (...args: any[]) => Reflect.apply(anthropic, undefined, args),
 }))
 
 vi.mock("../config/env.js", () => ({

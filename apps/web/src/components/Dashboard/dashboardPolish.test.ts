@@ -1,10 +1,13 @@
 /// <reference types="node" />
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-const dashboardRoot = join(process.cwd(), 'src/components/Dashboard');
+const dashboardRoot = [
+  join(process.cwd(), 'apps/web/src/components/Dashboard'),
+  join(process.cwd(), 'src/components/Dashboard'),
+].find((dir) => existsSync(dir))!;
 
 function collectVueFiles(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry: any) => {

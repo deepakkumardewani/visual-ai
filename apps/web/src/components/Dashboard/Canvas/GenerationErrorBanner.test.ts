@@ -33,7 +33,7 @@ describe('GenerationErrorBanner', () => {
     });
 
     expect(wrapper.get('[data-testid="generation-error"]').text()).toContain('Generation failed');
-    expect(wrapper.find('[data-testid="generation-error-retry"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="generation-error-retry"]').exists()).toBe(true);
 
     await wrapper.get('[aria-label="Dismiss error"]').trigger('click');
     expect(generateStore.errMsg.image).toBeUndefined();

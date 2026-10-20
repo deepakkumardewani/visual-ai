@@ -111,12 +111,12 @@ describe("startGenerationWorker", () => {
     })
 
     it("ignores failed events without a job", async () => {
-        await handlers.failed(undefined, new Error("gone"))
+        await (handlers.failed as any)(undefined, new Error("gone"))
         expect(setStatus).not.toHaveBeenCalled()
     })
 
     it("does not write an error status before the final attempt", async () => {
-        await handlers.failed(
+        await (handlers.failed as any)(
             {
                 opts: { attempts: 2 },
                 attemptsMade: 1,
@@ -128,7 +128,7 @@ describe("startGenerationWorker", () => {
     })
 
     it("writes an error status after the final image attempt", async () => {
-        await handlers.failed(
+        await (handlers.failed as any)(
             {
                 opts: { attempts: 2 },
                 attemptsMade: 2,
@@ -145,7 +145,7 @@ describe("startGenerationWorker", () => {
     })
 
     it("reads jobId from props.body for transform failures", async () => {
-        await handlers.failed(
+        await (handlers.failed as any)(
             {
                 opts: {},
                 attemptsMade: 1,
@@ -164,7 +164,7 @@ describe("startGenerationWorker", () => {
         setStatus.mockRejectedValueOnce(new Error("redis down"))
 
         await expect(
-            handlers.failed(
+            (handlers.failed as any)(
                 {
                     opts: { attempts: 1 },
                     attemptsMade: 1,
@@ -177,6 +177,6 @@ describe("startGenerationWorker", () => {
 
     it("registers an error listener", () => {
         expect(typeof handlers.error).toBe("function")
-        expect(() => handlers.error(new Error("worker boom"))).not.toThrow()
+        expect(() => (handlers.error as any)(new Error("worker boom"))).not.toThrow()
     })
 })

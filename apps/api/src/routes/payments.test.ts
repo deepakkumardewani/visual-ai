@@ -46,14 +46,20 @@ function mockRes() {
 }
 
 async function dispatch(method: string, path: string, req: object, res: object) {
-    const layer = paymentsRoute.stack.find(
-        (entry: { route?: { path: string; methods: Record<string, boolean> } }) =>
-            entry.route?.path === path && entry.route.methods[method],
+    const layer = (
+        paymentsRoute.stack as Array<{
+            route?: { path: string; methods: Record<string, boolean> }
+        }>
+    ).find(
+        (entry) =>
+            entry.route?.path === path && Boolean(entry.route?.methods[method.toLowerCase()]),
     )
     if (!layer) {
         throw new Error(`Missing route ${method.toUpperCase()} ${path}`)
     }
-    const handles = layer.route.stack.map((item: { handle: Function }) => item.handle)
+    const handles = (layer.route as unknown as { stack: Array<{ handle: Function }> }).stack.map(
+        (item) => item.handle,
+    )
     let index = 0
     let rejected: unknown
     const next = async (err?: unknown) => {

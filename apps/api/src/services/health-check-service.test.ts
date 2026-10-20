@@ -19,7 +19,7 @@ vi.mock("mongoose", () => ({
         connection: {
             db: {
                 admin: () => ({
-                    ping: (...args: unknown[]) => pingMongo(...args),
+                    ping: (...args: any[]) => Reflect.apply(pingMongo, undefined, args),
                 }),
             },
         },

@@ -32,7 +32,7 @@ describe('DashboardSidebar', () => {
       global: { plugins: [createPinia()], stubs: childStubs },
     });
 
-    expect(wrapper.get('[data-testid="dashboard-sidebar"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="dashboard-sidebar"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="image-generate-aside-stub"]').exists()).toBe(true);
   });
 

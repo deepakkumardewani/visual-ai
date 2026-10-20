@@ -51,7 +51,7 @@ describe('PromptBar', () => {
       global: { plugins: [createPinia()], stubs },
     });
 
-    expect(wrapper.get('[data-testid="prompt-bar"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="prompt-bar"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="reference-control-stub"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="composer-stub"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="prompt-ai-menu-stub"]').exists()).toBe(true);
@@ -72,7 +72,7 @@ describe('PromptBar', () => {
       global: { plugins: [pinia], stubs },
     });
 
-    expect(wrapper.get('[data-testid="reference-image-preview"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="reference-image-preview"]').exists()).toBe(true);
     expect(wrapper.text()).toContain('Image reference');
 
     await wrapper.get('[data-testid="reference-image-remove"]').trigger('click');
@@ -138,7 +138,7 @@ describe('PromptBar', () => {
     await wrapper.get('[data-testid="prompt-bar"]').trigger('drop', { dataTransfer });
 
     expect(useAsideStore(pinia).referenceImage?.name).toBe('ref.png');
-    expect(wrapper.get('[data-testid="reference-image-preview"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="reference-image-preview"]').exists()).toBe(true);
   });
 
   it('highlights the bar while dragging a file', async () => {

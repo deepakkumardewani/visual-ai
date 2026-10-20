@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from "vitest"
-
 import { FeatureType } from "@visual-ai/shared"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { PromptModerationError } from "../lib/prompt-moderation.js"
 
@@ -85,7 +84,12 @@ function jobStatus() {
     return { setStatus: vi.fn().mockResolvedValue(undefined) }
 }
 
-function setupHappyPersist(credits = { dailyCredits: 4, credits: 6 }) {
+function setupHappyPersist(
+    credits: { dailyCredits: number; credits?: number } = {
+        dailyCredits: 4,
+        credits: 6,
+    },
+) {
     getImageDetails.mockResolvedValue({ width: 1024, height: 768, format: "png", bytes: 12 })
     User.findOneAndUpdate.mockResolvedValueOnce({ history: [] }).mockResolvedValueOnce(credits)
     User.findOne.mockResolvedValue({
@@ -158,7 +162,7 @@ describe("runGenerationJob", () => {
                 aspectRatio: "1:1",
                 prompt: "cat",
                 creditCost: 1,
-                buildCloudinaryPayload: (output, imageId) => ({ output, imageId }),
+                buildCloudinaryPayload: (output: unknown, imageId: string) => ({ output, imageId }),
             } as never,
             services,
         )
@@ -179,7 +183,7 @@ describe("runGenerationJob", () => {
 
     it("builds enhanced-image fields for non-IMAGE features and array output", async () => {
         replicateRun.mockResolvedValue(["https://a.png", "https://b.png"])
-        setupHappyPersist({ dailyCredits: 1, credits: undefined })
+        setupHappyPersist({ dailyCredits: 1 })
         const services = { jobStatus: jobStatus() }
 
         await runGenerationJob(
@@ -191,7 +195,7 @@ describe("runGenerationJob", () => {
                 featureType: FeatureType.UPSCALE,
                 filePath: "local.png",
                 creditCost: 2,
-                buildCloudinaryPayload: (output) => ({ output }),
+                buildCloudinaryPayload: (output: unknown) => ({ output }),
             } as never,
             services,
         )

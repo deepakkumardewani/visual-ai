@@ -6,6 +6,7 @@ import { ref } from 'vue';
 import ImageViewer from '@/components/Explore/ImageViewer.vue';
 import { useAsideStore } from '@/stores/aside';
 import { useExploreStore } from '@/stores/explore';
+import { FeatureType } from '@visual-ai/shared';
 import type { ExploreFeedItem } from '@/types';
 
 const router = vi.hoisted(() => ({
@@ -64,7 +65,7 @@ vi.mock('@/composables/useDashboardMotion', () => ({
 }));
 
 vi.mock('@/composables/useExploreViewerNav', () => ({
-  prefetchImageUrls: (...args: unknown[]) => prefetchImageUrls(...args),
+  prefetchImageUrls: (...args: any[]) => Reflect.apply(prefetchImageUrls, undefined, args),
   useExploreViewerNav: (handlers: (typeof navHandlers)['current']) => {
     navHandlers.current = handlers;
   },
@@ -92,32 +93,32 @@ vi.mock('@/composables/useViewerTransform', () => ({
 }));
 
 vi.mock('@/utils/helpers', () => ({
-  downloadImage: (...args: unknown[]) => downloadImage(...args),
+  downloadImage: (...args: any[]) => Reflect.apply(downloadImage, undefined, args),
 }));
 
 vi.mock('@/utils/detectMonochrome', () => ({
-  detectMonochrome: (...args: unknown[]) => detectMonochrome(...args),
+  detectMonochrome: (...args: any[]) => Reflect.apply(detectMonochrome, undefined, args),
 }));
 
 const item = {
   id: 'img-1',
   prompt: 'Neon alley at night',
   imageUrl: 'https://cdn.example.com/neon.jpg',
-  featureType: 'image',
+  featureType: FeatureType.IMAGE,
   author: 'Ada Lovelace',
-} as ExploreFeedItem;
+} as unknown as ExploreFeedItem;
 
 const itemTwo = {
   ...item,
   id: 'img-2',
   imageUrl: 'https://cdn.example.com/two.jpg',
-} as ExploreFeedItem;
+} as unknown as ExploreFeedItem;
 
 const itemThree = {
   ...item,
   id: 'img-3',
   imageUrl: 'https://cdn.example.com/three.jpg',
-} as ExploreFeedItem;
+} as unknown as ExploreFeedItem;
 
 const stubs = {
   ViewerDetails: {
@@ -169,7 +170,7 @@ function mountViewer(
   explore.items = feed as never;
   explore.setActiveId(activeId);
   return mount(ImageViewer, {
-    props: { item: { ...item, ...extra } as ExploreFeedItem },
+    props: { item: { ...item, ...extra } as unknown as ExploreFeedItem },
     global: { stubs },
   });
 }
@@ -274,7 +275,7 @@ describe('ImageViewer', () => {
 
   it('toasts when there is nothing to download', async () => {
     const wrapper = mount(ImageViewer, {
-      props: { item: { ...item, imageUrl: '' } as ExploreFeedItem },
+      props: { item: { ...item, imageUrl: '' } as unknown as ExploreFeedItem },
       global: { stubs },
     });
     await wrapper.get('[data-testid="download"]').trigger('click');

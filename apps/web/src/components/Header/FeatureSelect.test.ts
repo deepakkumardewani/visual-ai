@@ -107,7 +107,7 @@ describe('FeatureSelect', () => {
     const appStore = useAppStore();
     appStore.isDark = true;
     const wrapper = mount(FeatureSelect, { global: { stubs } });
-    expect(wrapper.get('[data-testid="feature-select-trigger"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="feature-select-trigger"]').exists()).toBe(true);
   });
 
   it('falls back to the image feature for unknown route params', () => {

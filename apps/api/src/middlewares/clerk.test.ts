@@ -13,8 +13,9 @@ const { verifyToken, createClerkClient, createClerkExpressRequireAuth, mockLogge
 )
 
 vi.mock("@clerk/clerk-sdk-node", () => ({
-    createClerkClient: (...args: unknown[]) => createClerkClient(...args),
-    createClerkExpressRequireAuth: (...args: unknown[]) => createClerkExpressRequireAuth(...args),
+    createClerkClient: (...args: any[]) => Reflect.apply(createClerkClient, undefined, args),
+    createClerkExpressRequireAuth: (...args: any[]) =>
+        Reflect.apply(createClerkExpressRequireAuth, undefined, args),
 }))
 
 vi.mock("../config/env.js", () => ({

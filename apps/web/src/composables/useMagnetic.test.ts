@@ -10,7 +10,10 @@ vi.mock('@/composables/useReducedMotion', () => ({
 
 import { useMagnetic } from '@/composables/useMagnetic';
 
-function mountMagnetic(el: ReturnType<typeof ref<HTMLElement | null>>, strength?: number) {
+function mountMagnetic(
+  el: ReturnType<typeof ref<HTMLElement | null | undefined>>,
+  strength?: number,
+) {
   return mount({
     setup() {
       useMagnetic(el, strength);

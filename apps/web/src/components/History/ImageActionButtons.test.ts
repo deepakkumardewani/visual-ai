@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ImageActionButtons from '@/components/History/ImageActionButtons.vue';
 import { useGenerateStore } from '@/stores/generate';
+import { makeImageObject as makeItem } from '@/test/imageFixtures';
 import type { IImageObject } from '@/types';
 import { deleteImage, downloadImage, favoriteImage, getDownloadImageUrl } from '@/utils/helpers';
 
@@ -47,17 +48,6 @@ const deleteDialogStub = {
   `,
 };
 
-function makeItem(overrides: Partial<IImageObject> = {}): IImageObject {
-  return {
-    _id: 'img-1',
-    prompt: 'A fox in neon rain',
-    isFavorite: false,
-    featureType: 'image',
-    images: [{ aiImageUrl: 'https://cdn.example.com/fox.jpg' }],
-    ...overrides,
-  } as IImageObject;
-}
-
 function mountActions(item: IImageObject, imageIndex?: number) {
   return mount(ImageActionButtons, {
     props: imageIndex === undefined ? { item } : { item, imageIndex },
@@ -80,7 +70,7 @@ describe('ImageActionButtons', () => {
   });
 
   it('copies the prompt, downloads, and favorites an image', async () => {
-    const item = makeItem();
+    const item = makeItem({ _id: 'img-1' });
     const wrapper = mountActions(item);
 
     await wrapper.get('[aria-label="Copy prompt"]').trigger('click');
@@ -140,7 +130,7 @@ describe('ImageActionButtons', () => {
 
   it('shows unfavorite label when the image is already favorited', () => {
     const wrapper = mountActions(makeItem({ isFavorite: true }));
-    expect(wrapper.get('[aria-label="Remove from favorites"]').exists()).toBe(true);
+    expect(wrapper.find('[aria-label="Remove from favorites"]').exists()).toBe(true);
     wrapper.unmount();
   });
 
@@ -229,7 +219,7 @@ describe('ImageActionButtons', () => {
   it('disables delete while this image is deleting and uses share fallback without a target', async () => {
     const generate = useGenerateStore();
     generate.deletingImageIds = ['img-1'];
-    const wrapper = mountActions(makeItem({ images: [] }));
+    const wrapper = mountActions(makeItem({ _id: 'img-1', images: [] }));
 
     await wrapper.get('[aria-label="More actions"]').trigger('click');
     await flushPromises();

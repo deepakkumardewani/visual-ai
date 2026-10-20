@@ -10,6 +10,8 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ push: vi.fn() }),
 }));
 
+import type { IImage } from '@visual-ai/shared';
+
 import UserGenerationsGrid from '@/components/Dashboard/Feed/UserGenerationsGrid.vue';
 import { useAsideStore } from '@/stores/aside';
 import { useDialogStore } from '@/stores/dialog';
@@ -172,7 +174,7 @@ describe('UserGenerationsGrid', () => {
       global: { plugins: [pinia], stubs },
     });
 
-    expect(wrapper.get('[aria-label="42% complete"]').exists()).toBe(true);
+    expect(wrapper.find('[aria-label="42% complete"]').exists()).toBe(true);
     expect(wrapper.text()).toContain('42%');
 
     useGenerateStore().jobProgress = null;
@@ -309,8 +311,13 @@ describe('UserGenerationsGrid', () => {
       {
         ...sample,
         images: [
-          { ...sample.images[0], _id: 'img-1', name: '' },
-          { ...sample.images[0], _id: undefined as unknown as string, name: '', aiImageUrl: '' },
+          { ...sample.images[0], _id: 'img-1', name: '' } as IImage & { _id?: string },
+          {
+            ...sample.images[0],
+            _id: undefined as unknown as string,
+            name: '',
+            aiImageUrl: '',
+          } as IImage & { _id?: string },
         ],
       },
     ];

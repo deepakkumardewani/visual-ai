@@ -36,7 +36,7 @@ describe('PromptAiMenuItem', () => {
       global: { stubs },
     });
 
-    expect(wrapper.get('[data-testid="enhance-loading"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="enhance-loading"]').exists()).toBe(true);
     expect(wrapper.text()).toContain('Working…');
     expect(wrapper.get('button').attributes('disabled')).toBeDefined();
   });

@@ -54,7 +54,7 @@ describe("prompt-moderation", () => {
         })
 
         it("should fail open (safe: true) when the classification call throws", async () => {
-            const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+            const errorSpy = vi.spyOn(console, "error").mockImplementation(async () => {})
             mockGenerateText.mockRejectedValueOnce(new Error("network error"))
 
             const result = await checkPromptSafety("a cat")
@@ -65,7 +65,7 @@ describe("prompt-moderation", () => {
 
         it("should fail open when the classifier times out", async () => {
             vi.useFakeTimers()
-            const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+            const errorSpy = vi.spyOn(console, "error").mockImplementation(async () => {})
             mockGenerateText.mockImplementation(() => new Promise(() => {}))
 
             const pending = checkPromptSafety("a quiet forest")
@@ -80,7 +80,7 @@ describe("prompt-moderation", () => {
         })
 
         it("should stringify non-Error failures when failing open", async () => {
-            const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+            const errorSpy = vi.spyOn(console, "error").mockImplementation(async () => {})
             mockGenerateText.mockRejectedValueOnce("upstream-down")
 
             const result = await checkPromptSafety("a cat")

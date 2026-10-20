@@ -35,7 +35,7 @@ async function dispatch(method: string, path: string, req: object, res: object) 
     if (!layer) {
         throw new Error(`Missing route ${method.toUpperCase()} ${path}`)
     }
-    const handles = layer.route.stack.map((item: any) => item.handle)
+    const handles = layer.route!.stack.map((item: any) => item.handle)
     let index = 0
     let rejected: unknown
     const next = async (err?: unknown) => {

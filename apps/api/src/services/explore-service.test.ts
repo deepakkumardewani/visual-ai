@@ -109,7 +109,7 @@ describe("getExploreFeed", () => {
                 prompt: "",
                 modelName: "",
                 author: "",
-                createdAt: "2024-01-01T00:00:00.000Z",
+                createdAt: new Date("2024-01-01T00:00:00.000Z"),
             }),
         ])
 
@@ -175,7 +175,7 @@ describe("getExploreFeed", () => {
 
         await getExploreFeed({ excludeUserId: "viewer_1", cursor })
 
-        const pipeline = vi.mocked(User.aggregate).mock.calls[0]?.[0] as Array<
+        const pipeline = vi.mocked(User.aggregate).mock.calls[0]?.[0] as unknown as Array<
             Record<string, unknown>
         >
         const matchStage = pipeline.find((stage) => "$match" in stage) as {

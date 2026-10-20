@@ -112,7 +112,6 @@ watch(
     }
   },
 );
-
 </script>
 
 <template>

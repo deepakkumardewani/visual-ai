@@ -45,8 +45,8 @@ describe('ReferenceImageControl', () => {
   it('shows a disabled trigger when the model does not support image input', () => {
     const wrapper = mountControl();
 
-    expect(wrapper.get('[data-testid="reference-image-control"]').exists()).toBe(true);
-    expect(wrapper.get('[data-testid="reference-image-disabled"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="reference-image-control"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="reference-image-disabled"]').exists()).toBe(true);
     expect(
       wrapper.get('[data-testid="reference-image-trigger"]').attributes('disabled'),
     ).toBeDefined();
@@ -126,7 +126,7 @@ describe('ReferenceImageControl', () => {
     const wrapper = mountControl(pinia);
 
     const input = wrapper.get('input[type="file"]').element as HTMLInputElement;
-    const click = vi.spyOn(input, 'click').mockImplementation(() => {});
+    const click = vi.spyOn(input, 'click').mockImplementation(async () => {});
     await wrapper.get('[data-testid="reference-image-add"]').trigger('click');
     expect(click).toHaveBeenCalled();
   });

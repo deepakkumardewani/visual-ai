@@ -8,7 +8,7 @@ const { connect, mockLogger } = vi.hoisted(() => ({
 vi.mock("mongoose", () => ({
     default: {
         Promise: undefined,
-        connect: (...args: unknown[]) => connect(...args),
+        connect: (...args: any[]) => Reflect.apply(connect, undefined, args),
     },
 }))
 

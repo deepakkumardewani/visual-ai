@@ -41,7 +41,7 @@ function feedItem(id = 'exp_1'): ExploreFeedItem {
   return {
     id,
     imageUrl: 'https://cdn.example/explore.jpg',
-  } as ExploreFeedItem;
+  } as unknown as ExploreFeedItem;
 }
 
 function setupViewer(item = ref(feedItem())) {

@@ -85,9 +85,12 @@ test.describe('App shell', () => {
       page.waitForURL(/\//, { timeout: 15_000 }),
       page.getByTestId('user-menu-item-logout').click(),
     ]);
-    await page.waitForFunction(() => !(window as unknown as { Clerk?: { user: unknown } }).Clerk?.user, {
-      timeout: 15_000,
-    });
+    await page.waitForFunction(
+      () => !(window as unknown as { Clerk?: { user: unknown } }).Clerk?.user,
+      {
+        timeout: 15_000,
+      },
+    );
     await page.goto('/create/image');
     await expect(page.getByRole('link', { name: 'Sign In' })).toBeVisible();
     await expect(page.getByTestId('composer-textarea-input')).toBeVisible();

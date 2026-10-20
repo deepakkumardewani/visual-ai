@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 
 import ViewerDetails from '@/components/Explore/ViewerDetails.vue';
+import { FeatureType } from '@visual-ai/shared';
 import type { ExploreFeedItem } from '@/types';
 
 vi.mock('@/composables/useDashboardMotion', () => ({
@@ -19,13 +20,13 @@ const item = {
   id: 'img-1',
   prompt: 'A lantern in the rain',
   imageUrl: 'https://cdn.example.com/lantern.jpg',
-  featureType: 'image',
+  featureType: FeatureType.IMAGE,
   author: 'Ada Lovelace',
   authorUserId: 'user-ada',
-  createdAt: '2024-04-23T12:00:00.000Z',
+  createdAt: new Date('2024-04-23T12:00:00.000Z'),
   modelName: 'Flux',
   aspectRatio: '16:9',
-} as ExploreFeedItem;
+} as unknown as ExploreFeedItem;
 
 const stubs = { 'font-awesome-icon': true };
 

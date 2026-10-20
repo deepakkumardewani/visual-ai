@@ -61,6 +61,8 @@ import { FeatureType } from '@/types';
 const resultImage = {
   _id: 'img_1',
   userId: 'user_1',
+  prompt: 'test output',
+  featureType: FeatureType.IMAGE,
   images: [
     {
       name: 'out.png',

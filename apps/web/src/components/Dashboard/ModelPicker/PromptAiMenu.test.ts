@@ -187,7 +187,7 @@ describe('PromptAiMenu', () => {
     const { wrapper } = mountMenu();
     await openMenu(wrapper);
     const input = wrapper.get('input[type="file"]').element as HTMLInputElement;
-    const click = vi.spyOn(input, 'click').mockImplementation(() => {});
+    const click = vi.spyOn(input, 'click').mockImplementation(async () => {});
     getByTestId('prompt-ai-describe')?.click();
     expect(click).toHaveBeenCalled();
   });

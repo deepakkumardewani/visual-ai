@@ -21,7 +21,7 @@ describe('Payments', () => {
 
   it('renders the loading skeleton before the store is ready', () => {
     const wrapper = mount(Payments);
-    expect(wrapper.get('[role="status"]').exists()).toBe(true);
+    expect(wrapper.find('[role="status"]').exists()).toBe(true);
   });
 
   it('shows an empty state and opens the buy-credits dialog', async () => {

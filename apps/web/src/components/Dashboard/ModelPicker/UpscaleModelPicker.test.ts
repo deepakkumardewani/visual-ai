@@ -29,7 +29,7 @@ describe('UpscaleModelPicker', () => {
       },
     });
 
-    expect(wrapper.get('[data-testid="upscale-model-picker"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="upscale-model-picker"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="upscale-trigger"]').text()).toContain(
       UPSCALER_MODELS[0].title,
     );

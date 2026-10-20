@@ -22,7 +22,7 @@ const models = [
     provider: 'replicate',
     tier: 'standard',
   },
-] as Model[];
+] as unknown as Model[];
 
 describe('CapabilitiesFeaturedRow', () => {
   function mountRow(list = models) {

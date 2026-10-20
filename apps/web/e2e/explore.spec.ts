@@ -161,7 +161,9 @@ test.describe('signed-in member', () => {
     await openExploreFeed(page);
     await expect(page.getByTestId('community-feed-empty')).toBeVisible();
     await expect(
-      page.getByText('No community creations yet. Be among the first to generate something inspiring.'),
+      page.getByText(
+        'No community creations yet. Be among the first to generate something inspiring.',
+      ),
     ).toBeVisible();
   });
 
@@ -175,7 +177,10 @@ test.describe('signed-in member', () => {
         fail = false;
         return fulfillJson(route, { message: 'fail' }, 500);
       }
-      return fulfillJson(route, { items: [feedItem('e2e-exp-retry', 'after retry')], nextCursor: null });
+      return fulfillJson(route, {
+        items: [feedItem('e2e-exp-retry', 'after retry')],
+        nextCursor: null,
+      });
     });
 
     await openExploreFeed(page);
@@ -237,7 +242,7 @@ test.describe('signed-in member', () => {
   test('share copies the creation page address', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     await page.addInitScript(() => {
-      delete (navigator as Navigator & { share?: unknown }).share;
+      Object.defineProperty(navigator, 'share', { value: undefined, configurable: true });
     });
     const item = feedItem('e2e-exp-share', 'share me');
     await stubExploreApi(page, {

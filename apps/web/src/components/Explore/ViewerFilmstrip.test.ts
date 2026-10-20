@@ -14,7 +14,7 @@ vi.mock('@/composables/useDashboardMotion', () => ({
 const items = [
   { id: 'a', imageUrl: 'https://cdn.example.com/a.jpg', prompt: 'Cat' },
   { id: 'b', imageUrl: 'https://cdn.example.com/b.jpg', prompt: 'Dog' },
-] as ExploreFeedItem[];
+] as unknown as ExploreFeedItem[];
 
 describe('ViewerFilmstrip', () => {
   it('emits select when a thumbnail is clicked', async () => {

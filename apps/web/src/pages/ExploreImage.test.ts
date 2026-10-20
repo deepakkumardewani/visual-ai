@@ -1,8 +1,6 @@
 import { flushPromises, mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ref } from 'vue';
-
 import ExploreImage from '@/pages/ExploreImage.vue';
 import { useExploreStore } from '@/stores/explore';
 import { useUserStore } from '@/stores/user';
@@ -71,7 +69,7 @@ describe('ExploreImage', () => {
     userStore.userId = 'user-1';
     const exploreStore = useExploreStore();
     exploreStore.isLoadingItem = true;
-    exploreStore.activeItem = null;
+    exploreStore.activeId = null;
 
     const wrapper = mount(ExploreImage, {
       global: {
@@ -88,7 +86,7 @@ describe('ExploreImage', () => {
     const exploreStore = useExploreStore();
     exploreStore.isLoading = false;
     exploreStore.isLoadingItem = false;
-    exploreStore.activeItem = null;
+    exploreStore.activeId = null;
     exploreStore.error = 'Could not load this image.';
     exploreStore.ensureItem = vi.fn().mockResolvedValue(undefined);
 

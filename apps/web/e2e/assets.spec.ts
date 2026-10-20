@@ -2,8 +2,8 @@ import type { Page, Route } from '@playwright/test';
 
 import { expect, test } from '@playwright/test';
 
-import type { CollectionListItem } from '@visual-ai/shared';
-import type { IImageObject } from '@visual-ai/shared';
+import type { CollectionListItem, IImage, IImageObject } from '@visual-ai/shared';
+import { FeatureType } from '@visual-ai/shared';
 
 import { WEB_URL } from './support/env';
 
@@ -29,14 +29,20 @@ function historyItem(
     _id: id,
     userId: E2E_USER_ID,
     prompt,
-    featureType: 'image',
+    featureType: FeatureType.IMAGE,
     isFavorite: false,
     createdAt: new Date('2026-01-15T12:00:00.000Z'),
     images: [
       {
+        name: 'e2e-fixture',
         aiImageUrl: FIXTURE_IMAGE_URL,
+        resolution: '1x1',
+        aspectRatio: '16:9',
+        width: 1,
+        height: 1,
         format: 'png',
-      },
+        bytes: 0,
+      } satisfies IImage,
     ],
     ...overrides,
   } as IImageObject;
@@ -190,11 +196,15 @@ async function hoverFirstTile(page: Page) {
 
 async function setStaleCollectionSelection(page: Page, collectionId: string) {
   await page.evaluate((id) => {
-    const root = document.querySelector('#app') as HTMLElement & { __vue_app__?: { _context: { provides: Record<symbol, unknown> } } };
+    const root = document.querySelector('#app') as HTMLElement & {
+      __vue_app__?: { _context: { provides: Record<symbol, unknown> } };
+    };
     const app = root.__vue_app__;
     if (!app) throw new Error('Vue app unavailable');
     for (const sym of Object.getOwnPropertySymbols(app._context.provides)) {
-      const candidate = app._context.provides[sym] as { _s?: Map<string, { selectedCollectionId: string | null; collections: unknown[] }> };
+      const candidate = app._context.provides[sym] as {
+        _s?: Map<string, { selectedCollectionId: string | null; collections: unknown[] }>;
+      };
       if (candidate?._s?.get) {
         const store = candidate._s.get('collections');
         if (store) {
@@ -261,10 +271,21 @@ test.describe('My assets', () => {
   test('type filter shows one tool’s results', async ({ page }) => {
     await stubAssetsApi(page, {
       history: [
-        historyItem('e2e-type-img', 'e2e text to image fox', { featureType: 'image' }),
+        historyItem('e2e-type-img', 'e2e text to image fox', { featureType: FeatureType.IMAGE }),
         historyItem('e2e-type-up', 'e2e upscale mountain', {
-          featureType: 'upscale',
-          images: [{ enhancedImageUrl: FIXTURE_IMAGE_URL, format: 'png' }],
+          featureType: FeatureType.UPSCALE,
+          images: [
+            {
+              name: 'e2e-upscale',
+              enhancedImageUrl: FIXTURE_IMAGE_URL,
+              resolution: '1x1',
+              aspectRatio: '16:9',
+              width: 1,
+              height: 1,
+              format: 'png',
+              bytes: 0,
+            } satisfies IImage,
+          ],
         }),
       ],
     });
@@ -322,7 +343,18 @@ test.describe('My assets', () => {
     await stubAssetsApi(page, {
       history: [
         historyItem('e2e-link-1', 'e2e copy link prompt', {
-          images: [{ aiImageUrl: FIXTURE_DOWNLOAD_URL, format: 'png' }],
+          images: [
+            {
+              name: 'e2e-link',
+              aiImageUrl: FIXTURE_DOWNLOAD_URL,
+              resolution: '1x1',
+              aspectRatio: '16:9',
+              width: 1,
+              height: 1,
+              format: 'png',
+              bytes: 0,
+            } satisfies IImage,
+          ],
         }),
       ],
     });
@@ -381,12 +413,9 @@ test.describe('My assets', () => {
     await expect(assetImage(page, /bulk delete beta/)).toHaveCount(0);
   });
 
-  test.fixme(
-    'create a collection and add an image to it',
-    async () => {
-      // Collection create/add UI is behind ENABLE_COLLECTION_CREATE (false in production build).
-    },
-  );
+  test.fixme('create a collection and add an image to it', async () => {
+    // Collection create/add UI is behind ENABLE_COLLECTION_CREATE (false in production build).
+  });
 
   test.fixme('rename a collection', async () => {
     // No rename control in the Assets collections strip UI.
@@ -404,7 +433,9 @@ test.describe('My assets', () => {
     await setStaleCollectionSelection(page, 'col_deleted');
 
     await expect(page.getByText('this collection is empty')).toBeVisible();
-    await expect(page.getByText('Switch to All, select images, then use Add to collection.')).toBeVisible();
+    await expect(
+      page.getByText('Switch to All, select images, then use Add to collection.'),
+    ).toBeVisible();
   });
 
   test('favorite marks an image', async ({ page }) => {

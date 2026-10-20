@@ -145,7 +145,7 @@ describe("env parse", () => {
         const exit = vi.spyOn(process, "exit").mockImplementation(((code?: number) => {
             throw new Error(`process.exit:${code}`)
         }) as typeof process.exit)
-        const error = vi.spyOn(console, "error").mockImplementation(() => {})
+        const error = vi.spyOn(console, "error").mockImplementation(async () => {})
 
         applyEnv({
             MONGO_URI: "not-a-valid-uri",

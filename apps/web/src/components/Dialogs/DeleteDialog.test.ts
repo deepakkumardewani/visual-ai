@@ -10,7 +10,7 @@ vi.mock('vue-router', () => ({
 }));
 
 vi.mock('@/composables/useFetch', () => ({
-  useFetch: (...args: unknown[]) => useFetch(...args),
+  useFetch: (...args: any[]) => Reflect.apply(useFetch, undefined, args),
 }));
 
 import DeleteDialog from '@/components/Dialogs/DeleteDialog.vue';
@@ -83,7 +83,7 @@ describe('DeleteDialog', () => {
   });
 
   it('stays open and logs when delete fails', async () => {
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(async () => {});
     useFetch.mockResolvedValue({ data: null, error: 'failed' });
     const dialogStore = useDialogStore();
     dialogStore.showDelete();

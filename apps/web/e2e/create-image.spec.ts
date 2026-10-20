@@ -22,7 +22,9 @@ async function gotoSignedIn(page: Page, path: string) {
   await Promise.all([page.waitForResponse(USER_PROFILE_URL), page.goto(path)]);
 }
 
-async function readCreditBreakdown(page: Page): Promise<{ daily: number; paid: number; total: number }> {
+async function readCreditBreakdown(
+  page: Page,
+): Promise<{ daily: number; paid: number; total: number }> {
   const title = (await page.getByTestId('credits-chip').getAttribute('title')) ?? '';
   const dailyMatch = title.match(/^(\d+)\s+daily/m);
   const paidMatch = title.match(/(\d+)\s+credits\s*$/m);
@@ -128,7 +130,10 @@ test.describe('create image scenarios', () => {
     await stubUserProfile(page, { credits: 500, dailyCredits: 30, history: [] });
   });
 
-  test('generate from prompt shows result and decreases credits', async ({ page, generationStub }) => {
+  test('generate from prompt shows result and decreases credits', async ({
+    page,
+    generationStub,
+  }) => {
     generationStub.setPrompt(PROMPT);
     await gotoSignedIn(page, CREATE_PATH);
 
@@ -219,8 +224,14 @@ test.describe('create image scenarios', () => {
     await page.getByTestId('composer-textarea-input').fill(PROMPT);
     await page.getByTestId('aspect-1:1').click();
     await page.getByRole('button', { name: 'HD', exact: true }).click();
-    await page.getByRole('group', { name: 'Number of images' }).getByRole('button', { name: '3' }).click();
-    await page.getByRole('group', { name: 'Output format' }).getByRole('button', { name: 'PNG' }).click();
+    await page
+      .getByRole('group', { name: 'Number of images' })
+      .getByRole('button', { name: '3' })
+      .click();
+    await page
+      .getByRole('group', { name: 'Output format' })
+      .getByRole('button', { name: 'PNG' })
+      .click();
 
     await page.reload();
     await page.waitForResponse(USER_PROFILE_URL);
@@ -228,7 +239,10 @@ test.describe('create image scenarios', () => {
     await expect(page.getByTestId('composer-textarea-input')).toHaveValue(PROMPT);
     await expect(page.getByTestId('model-picker')).toContainText('Flux');
     await expect(page.getByTestId('aspect-1:1')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.getByRole('button', { name: 'HD', exact: true })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('button', { name: 'HD', exact: true })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
     await expect(
       page.getByRole('group', { name: 'Number of images' }).getByRole('button', { name: '3' }),
     ).toHaveAttribute('aria-pressed', 'true');
@@ -288,7 +302,12 @@ test.describe('create image scenarios', () => {
           headers: { ...API_CORS, 'Content-Type': 'application/json' },
           json: {
             prompts: [
-              { id: SAVED_PROMPT_ID, name: 'E2E saved', prompt: SAVED_PROMPT_TEXT, modelId: 'FLUX_BASIC' },
+              {
+                id: SAVED_PROMPT_ID,
+                name: 'E2E saved',
+                prompt: SAVED_PROMPT_TEXT,
+                modelId: 'FLUX_BASIC',
+              },
             ],
           },
         });
@@ -316,7 +335,11 @@ test.describe('create image scenarios', () => {
     expect(download.suggestedFilename()).toMatch(/^image-\d+\.(png|jpg)$/);
   });
 
-  test('copy prompt copies result prompt to clipboard', async ({ page, generationStub, context }) => {
+  test('copy prompt copies result prompt to clipboard', async ({
+    page,
+    generationStub,
+    context,
+  }) => {
     generationStub.setPrompt(PROMPT);
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     await gotoSignedIn(page, CREATE_PATH);
@@ -325,9 +348,7 @@ test.describe('create image scenarios', () => {
 
     await resultActions(page).getByRole('button', { name: 'Copy prompt' }).dispatchEvent('click');
     await expect(page.getByRole('status')).toContainText('Prompt copied');
-    await expect
-      .poll(async () => page.evaluate(() => navigator.clipboard.readText()))
-      .toBe(PROMPT);
+    await expect.poll(async () => page.evaluate(() => navigator.clipboard.readText())).toBe(PROMPT);
   });
 
   test('more like this starts a related generation', async ({ page, generationStub }) => {
@@ -348,9 +369,10 @@ test.describe('create image scenarios', () => {
     await fillAndGenerate(page, PROMPT);
     await expectStubbedResult(page, PROMPT);
 
-    await expect(
-      page.getByAltText(PROMPT.slice(0, ALT_PREFIX_LENGTH)).first(),
-    ).toHaveAttribute('src', /e2e-fixture\.png/);
+    await expect(page.getByAltText(PROMPT.slice(0, ALT_PREFIX_LENGTH)).first()).toHaveAttribute(
+      'src',
+      /e2e-fixture\.png/,
+    );
 
     await clickChainAction(page, 'Upscale this');
     await confirmChainAction(page, 'Upscale');
@@ -359,7 +381,10 @@ test.describe('create image scenarios', () => {
     await expect(page.getByRole('img', { name: 'Upload preview' })).toBeVisible();
   });
 
-  test('remove background opens remove-bg with the result image', async ({ page, generationStub }) => {
+  test('remove background opens remove-bg with the result image', async ({
+    page,
+    generationStub,
+  }) => {
     generationStub.setPrompt(PROMPT);
     await gotoSignedIn(page, CREATE_PATH);
     await fillAndGenerate(page, PROMPT);

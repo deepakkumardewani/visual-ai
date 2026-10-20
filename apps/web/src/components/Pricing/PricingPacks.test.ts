@@ -19,7 +19,7 @@ vi.mock('vue-router', async (importOriginal) => {
 });
 
 vi.mock('@/utils/payment', () => ({
-  initiatePayment: (...args: unknown[]) => initiatePayment(...args),
+  initiatePayment: (...args: any[]) => Reflect.apply(initiatePayment, undefined, args),
 }));
 
 import PricingPacks from '@/components/Pricing/PricingPacks.vue';

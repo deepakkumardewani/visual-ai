@@ -52,7 +52,6 @@ import { useAsideStore } from '@/stores/aside';
 import { useDialogStore } from '@/stores/dialog';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
-import { FeatureType } from '@/types';
 import { MODELS } from '@/utils/models';
 
 function setupChain() {
@@ -118,12 +117,11 @@ describe('useImageChainActions', () => {
     const dialog = useDialogStore();
     const aside = useAsideStore();
     vi.spyOn(dialog, 'confirmChainAction').mockResolvedValue(true);
-    vi.spyOn(aside, 'sendToFeature').mockResolvedValue(true);
+    vi.spyOn(aside, 'stagePendingFeatureImageFromUrl').mockResolvedValue(true);
 
     await expect(chain.sendToUpscale('https://cdn.example/ref.jpg')).resolves.toBe(true);
-    expect(aside.sendToFeature).toHaveBeenCalledWith(
+    expect(aside.stagePendingFeatureImageFromUrl).toHaveBeenCalledWith(
       'https://cdn.example/ref.jpg',
-      FeatureType.UPSCALE,
     );
   });
 
@@ -237,7 +235,7 @@ describe('useImageChainActions', () => {
     const dialog = useDialogStore();
     const aside = useAsideStore();
     vi.spyOn(dialog, 'confirmChainAction').mockResolvedValue(true);
-    vi.spyOn(aside, 'sendToFeature').mockResolvedValue(false);
+    vi.spyOn(aside, 'stagePendingFeatureImageFromUrl').mockResolvedValue(false);
 
     await expect(chain.sendToUpscale(null)).resolves.toBe(false);
     expect(showToast).toHaveBeenCalledWith('Nothing to send');
@@ -254,12 +252,11 @@ describe('useImageChainActions', () => {
     const dialog = useDialogStore();
     const aside = useAsideStore();
     vi.spyOn(dialog, 'confirmChainAction').mockResolvedValue(true);
-    vi.spyOn(aside, 'sendToFeature').mockResolvedValue(true);
+    vi.spyOn(aside, 'stagePendingFeatureImageFromUrl').mockResolvedValue(true);
 
     await expect(chain.sendToRemoveBg('https://cdn.example/ref.jpg')).resolves.toBe(true);
-    expect(aside.sendToFeature).toHaveBeenCalledWith(
+    expect(aside.stagePendingFeatureImageFromUrl).toHaveBeenCalledWith(
       'https://cdn.example/ref.jpg',
-      FeatureType.REMOVE_BG,
     );
   });
 

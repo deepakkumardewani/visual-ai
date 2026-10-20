@@ -51,7 +51,7 @@ describe('CollectionsStrip album UI', () => {
       .mockResolvedValue({ id: 'n1', name: 'Product shots' } as never);
 
     const wrapper = mount(CollectionsStrip, { global: { stubs: stubs() } });
-    expect(wrapper.get('[aria-label="New collection"]').exists()).toBe(true);
+    expect(wrapper.find('[aria-label="New collection"]').exists()).toBe(true);
 
     await wrapper.get('#new-collection-name').setValue('Product shots');
     await wrapper.get('form.create-form').trigger('submit');

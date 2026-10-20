@@ -41,7 +41,7 @@ describe('SavedPromptsPanel', () => {
     });
     await flushPromises();
 
-    expect(wrapper.get('[data-testid="saved-prompts-panel"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="saved-prompts-panel"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="saved-prompt-save-current"]').text()).toContain(
       'Save current prompt',
     );

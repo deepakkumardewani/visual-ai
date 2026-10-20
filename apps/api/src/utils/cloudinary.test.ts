@@ -18,18 +18,18 @@ vi.mock("cloudinary", () => ({
     default: {
         v2: {
             uploader: {
-                upload: (...args: unknown[]) => upload(...args),
+                upload: (...args: any[]) => Reflect.apply(upload, undefined, args),
             },
         },
     },
 }))
 
 vi.mock("probe-image-size", () => ({
-    default: (...args: unknown[]) => probe(...args),
+    default: (...args: any[]) => Reflect.apply(probe, undefined, args),
 }))
 
 vi.mock("sharp", () => ({
-    default: (...args: unknown[]) => sharpFn(...args),
+    default: (...args: any[]) => Reflect.apply(sharpFn, undefined, args),
 }))
 
 vi.mock("../config/env.js", () => ({
@@ -44,7 +44,7 @@ vi.mock("../lib/logger.js", () => ({
 
 vi.mock("../models/user.js", () => ({
     UserModel: {
-        updateOne: (...args: unknown[]) => updateOne(...args),
+        updateOne: (...args: any[]) => Reflect.apply(updateOne, undefined, args),
     },
 }))
 

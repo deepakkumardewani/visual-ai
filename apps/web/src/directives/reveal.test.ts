@@ -45,7 +45,12 @@ describe('vReveal', () => {
       constructor(cb: IntersectionObserverCallback) {
         queueMicrotask(() => {
           cb(
-            [{ isIntersecting: true, target: document.body } as IntersectionObserverEntry],
+            [
+              {
+                isIntersecting: true,
+                target: document.body,
+              } as unknown as IntersectionObserverEntry,
+            ],
             this as unknown as IntersectionObserver,
           );
         });

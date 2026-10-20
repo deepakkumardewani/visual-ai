@@ -7,16 +7,18 @@ Global rules (every task): never commit yourself; the /build-phases orchestrator
 Task kinds: `implementation | unit | e2e | gate | walkthrough | dod`. Each phase that adds behaviour runs in this order: implementation tasks -> `Unit:` tasks (unit-test-engineer, scoped coverage, every file ≥80% required, >95% target) -> `E2E:` tasks (e2e-engineer, one per user flow, `--repeat-each=3`) -> 🔶 checkpoint. Implementation tasks do not create new spec files; they may update existing specs to keep them green. The only exception is the test-first money path (webhook signature, idempotent credit grant): T4.1 (`dodo/eventMapper.test.ts`, `dodo/verify.test.ts`), T4.2 (`applyEvent.test.ts`) and T4.3 (`webhookRouter.test.ts`) create exactly the specs they name. Every other new spec is created by a `Unit:` task (T2.3, T3.6, T3.7, T5.6, T5.7); the `Unit:`/`E2E:` tasks are the independent coverage gate and extend (never duplicate) existing spec files. The T2.0 harness template `_template.spec.ts` is setup, not a feature spec. Where an implementation task's Acceptance needs a spec that a later `Unit:` task creates, it says "proven by T<x>"; the phase verifier checks it after that Unit task has run.
 
 One-time manual PRE-FLIGHT (the user does this BEFORE running `/build-phases` on Phase 0; T0.1/T0.2 only check it and FAIL with these instructions if it is missing):
+
 1. `claude plugins marketplace add dodopayments/dodo-agent-plugin`, then `claude plugins install dodopayments@dodopayments --scope project` (run from the repo root).
 2. Restart the Claude Code session so the plugin, its skills and its MCPs load.
 3. Authenticate the `dodopayments-api` MCP (OAuth in the browser, test mode); `claude mcp list` must show it connected, along with `dodo-knowledge`.
-3a. Grant the build agent the Dodo MCP tools: subagents only get the tools in their `tools:` line and cannot spawn further subagents, so add the Dodo MCP tool names (as shown by `/mcp` in the restarted session) to `tools:` in `~/.claude/agents/phase-builder.md`.
+   3a. Grant the build agent the Dodo MCP tools: subagents only get the tools in their `tools:` line and cannot spawn further subagents, so add the Dodo MCP tool names (as shown by `/mcp` in the restarted session) to `tools:` in `~/.claude/agents/phase-builder.md`.
 4. Put the test-mode `DODO_PAYMENTS_API_KEY` in the gitignored `apps/api/.env`.
 5. Have a public HTTPS base URL (tunnel or staging) that reaches the running API, and pass it to `/build-phases` for Phase 1 as a note: `webhook-url=https://<host>`.
 6. Run permissions: to run Phases 0-1 unattended, the session needs allow rules for `claude plugins list`, `claude mcp list`, the Dodo MCP tools (the same names as step 3a), and writes to the two untracked env files `apps/api/.env` (T1.2 webhook key, T1.3 product ids) and `apps/web/.env.e2e.local` (T1.3); otherwise run those phases in bypass-permissions mode. Without this, subagents stall on permission prompts they cannot answer.
-Note: `.claude/settings.json` is gitignored (`.gitignore:27`), so the plugin enablement written by step 1 is a local-only manual step: there is nothing to commit, and the orchestrator never stages it.
+   Note: `.claude/settings.json` is gitignored (`.gitignore:27`), so the plugin enablement written by step 1 is a local-only manual step: there is nothing to commit, and the orchestrator never stages it.
 
 Pre-approved decisions (subagents act on these without asking):
+
 - Create in Dodo TEST mode exactly 4 one-time (non-subscription) INR products: "200 credits" INR 130, "450 credits" INR 290, "960 credits" INR 500, "2000 credits" INR 900 (minor units as Dodo requires). Reuse a product if one with the same name already exists with the same price and type; if a same-name product exists with a different price or type, the task FAILs (no change made). Never delete or overwrite any Dodo resource.
 - Create one test-mode webhook endpoint at `<webhook-url>/webhooks/payments`, subscribed to `payment.succeeded` and `payment.failed`. Reuse it if an endpoint with that URL exists; never delete or overwrite.
 - Dodo MCP calls are made by phase-builder directly with the Dodo MCP tools (pre-flight step 3a); results are recorded as text evidence the verifier can read without MCP access.
@@ -24,6 +26,7 @@ Pre-approved decisions (subagents act on these without asking):
 Checkpoint 0/1 notes, gate results and build evidence live in the "Gate results and build evidence" section at the end of `agent_docs/PLAN_dodo_payments.md`, as lines starting with the fixed labels defined there (no secrets, ever). T0.3 also writes the `Answer (T0.3):` lines into SPEC section 13. Every task that writes PLAN or SPEC lists that file in Files so the orchestrator stages it (T0.3 is the only task that stages SPEC). Commit the three planning files yourself before Phase 0: paths already dirty at the orchestrator's snapshot are never staged, so uncommitted planning files would keep the Phase 0 notes out of the phase commit.
 
 Confirmed decisions (not re-opened):
+
 - Legacy monthly product is dropped; only the 4 one-time INR packs (200/450/960/2000 credits at INR 130/290/500/900) are in scope.
 - INR gate: if Dodo cannot use INR as a product base currency, T0.4 FAILs (blocked) with the options written out, creates nothing, and the build stops. No automatic fallback.
 - The agent creates the 4 test-mode products through the Dodo API MCP, only after the gate passes.
@@ -39,9 +42,10 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 
 **Adds:** No product change. Checks the Dodo tooling is set up (plugin, MCPs, skills), researches the open payment questions, and decides whether Dodo supports INR as a base currency. If it does not, the build stops here.
 
-**Try in UI:** No UI in this phase. Run claude plugins list and claude mcp list and see both Dodo MCPs connected ; Open agent_docs/PLAN_dodo_payments.md and find the T0.1-plugin, T0.2-* and T0.4-gate lines (PASS or FAIL) ; Open SPEC section 13 and read the Answer (T0.3) lines
+**Try in UI:** No UI in this phase. Run claude plugins list and claude mcp list and see both Dodo MCPs connected ; Open agent_docs/PLAN_dodo_payments.md and find the T0.1-plugin, T0.2-\* and T0.4-gate lines (PASS or FAIL) ; Open SPEC section 13 and read the Answer (T0.3) lines
 
 ### ✅ T0.1 PRE-FLIGHT: Dodo plugin installed at project scope
+
 - **Kind:** implementation
 - **Files:** `agent_docs/PLAN_dodo_payments.md`
 - **Do:** Read-only check (kind implementation so the builder runs it before T0.3). Write only the `T0.1-plugin:` line of the PLAN evidence section. The plugin itself was installed in the pre-flight. Check, do not install. Run `claude plugins list` and read `.claude/settings.json`. If `dodopayments@dodopayments` is missing, user-scoped, or not enabled, FAIL with the unblock text: "Run pre-flight steps 1-2 at the top of TASKS_dodo_payments.md (`claude plugins marketplace add dodopayments/dodo-agent-plugin`; `claude plugins install dodopayments@dodopayments --scope project`; restart the session), then re-run /build-phases."
@@ -52,6 +56,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `claude plugins list`; `grep dodopayments .claude/settings.json`; `grep dodopayments ~/.claude/settings.json` returns nothing; `grep -n '^T0.1-plugin:' agent_docs/PLAN_dodo_payments.md` prints one line.
 
 ### ✅ T0.2 PRE-FLIGHT: MCPs authenticated and skills loaded
+
 - **Kind:** implementation
 - **Files:** `agent_docs/PLAN_dodo_payments.md`
 - **Depends on:** T0.1
@@ -63,6 +68,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `claude mcp list` shows both Dodo MCPs connected; `grep -nE '^T0\.2-(mcp-list|mcp-tools|skills|docs-query|products):' agent_docs/PLAN_dodo_payments.md` prints all five labels; `grep -n '^T0.2-skills:.*dodopayments' agent_docs/PLAN_dodo_payments.md` matches.
 
 ### ✅ T0.3 Research open questions (cited)
+
 - **Kind:** implementation
 - **Files:** `agent_docs/PLAN_dodo_payments.md`, `agent_docs/SPEC_dodo_payments.md`
 - **Depends on:** T0.2
@@ -74,6 +80,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `grep -cE '^T0\.3-item[1-6]:' agent_docs/PLAN_dodo_payments.md` prints 6, each with a source URL or "unverifiable"; `grep -cE '^[[:space:]]+Answer \(T0\.3\):' agent_docs/SPEC_dodo_payments.md` prints 11 (one per Q1-11; indented answer lines only, the section 13 preamble is not counted), and each of Q1-11 is followed by exactly one such line; `git diff agent_docs/SPEC_dodo_payments.md` touches only section 13.
 
 ### ✅ T0.4 INR base currency decision (blocks the build on NO)
+
 - **Kind:** implementation
 - **Files:** `agent_docs/PLAN_dodo_payments.md`
 - **Depends on:** T0.3
@@ -84,6 +91,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `grep -nE '^T0\.4-gate: (PASS|FAIL)' agent_docs/PLAN_dodo_payments.md` prints one line with a citation; `T0.2-products:` shows the pre-gate product count and no Phase 0 line records a create call. Evidence is the cited docs, not a browser check.
 
 ### 🔶 Checkpoint 0
+
 - [ ] Plugin is project scoped; MCPs reachable; skills loaded; gate outcome recorded (`T0.1-plugin:`, `T0.2-*`, `T0.4-gate:` lines present).
 - [ ] SPEC section 13 has 14 questions: Q1-11 each carry an `Answer (T0.3):` line with a source or "unverifiable" handling; Q12-14 keep their recorded defaults. No repo source files touched.
 
@@ -96,6 +104,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 **Try in UI:** No UI in this phase. Open the Dodo dashboard in test mode and see the four products and the webhook endpoint ; Check the env example files for the recorded product ids and webhook placeholder
 
 ### ✅ T1.1 Create four test-mode products via Dodo API MCP
+
 - **Kind:** implementation
 - **Files:** `agent_docs/PLAN_dodo_payments.md`
 - **Depends on:** T0.4
@@ -106,6 +115,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `grep -c '^T1.1-product:' agent_docs/PLAN_dodo_payments.md` prints 4; `grep '^T1.1-product:' agent_docs/PLAN_dodo_payments.md` shows `pack_200|450|960|2000`, INR 130/290/500/900 in minor units, a one-time type and `test_mode` on each line.
 
 ### ✅ T1.2 Create webhook endpoint in Dodo test mode
+
 - **Kind:** implementation
 - **Files:** `agent_docs/PLAN_dodo_payments.md`
 - **Manual (untracked, never staged):** `apps/api/.env`. This task is pre-approved to write only the `DODO_PAYMENTS_WEBHOOK_KEY` line of this gitignored file; never pass it to `task_built --files` and never print its value.
@@ -117,6 +127,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `grep -n '^T1.2-endpoint:' agent_docs/PLAN_dodo_payments.md` prints one line ending in `/webhooks/payments` for the URL field and listing both events; `git check-ignore apps/api/.env` succeeds; `grep -c '^DODO_PAYMENTS_WEBHOOK_KEY=.' apps/api/.env` prints 1 (count only, never the value); `grep -c whsec_ agent_docs/PLAN_dodo_payments.md` prints 0; `git grep -n whsec_ -- ':!agent_docs/*dodo_payments.md' ':!apps/api/src/webhook/index.test.ts' ':!infra/.env.example'` returns nothing (the excluded files hold only prose or the pre-existing Clerk placeholders `whsec_test_secret` / `whsec_your-webhook-secret`).
 
 ### ✅ T1.3 Record IDs and placeholders in env files
+
 - **Kind:** implementation
 - **Files:** `apps/api/.env.example`, `apps/web/.env.example`, `apps/web/.env.e2e.example`
 - **Manual (untracked, never staged):** `apps/api/.env`, `apps/web/.env.e2e.local`. This task is pre-approved to write these two gitignored files; never pass them to `task_built --files` (the orchestrator `git add`s that list and would fail on ignored paths) and never print their values.
@@ -129,6 +140,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `git diff -- apps/api/.env.example apps/web/.env.example apps/web/.env.e2e.example`; `git check-ignore apps/api/.env apps/web/.env.e2e.local`; `grep -c '^DODO_PRODUCT_ID_PACK_' apps/api/.env` prints 4 (count only, no values); `grep -c '^DODO_PAYMENTS_WEBHOOK_KEY=.' apps/api/.env apps/web/.env.e2e.local` prints 1 for each; each product id in the `T1.1-product:` lines appears in `apps/api/.env` (`grep -c '<id>' apps/api/.env` per id, ids are not secrets); `git grep -nE "(sk_|whsec_)" -- apps/api/.env.example apps/web/.env.example apps/web/.env.e2e.example` returns nothing (`infra/.env.example` has a pre-existing Clerk placeholder and is not touched here).
 
 ### 🔶 Checkpoint 1
+
 - [ ] 4 IDs in `apps/api/.env`; placeholders only in tracked files; webhook endpoint exists (T1.1-T1.3 ✅).
 
 ---
@@ -137,9 +149,10 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 
 **Adds:** No product change. Builds the e2e test harness and the shared credit-pack catalog (CREDIT_PACKS) with provider-agnostic payment types that the API and web will both use.
 
-**Try in UI:** No UI in this phase. Run bun run test and see the shared catalog tests pass ; Open packages/shared and read CREDIT_PACKS (4 packs) ; Check apps/web/e2e/README.md and apps/web/e2e/qa/_template.spec.ts exist
+**Try in UI:** No UI in this phase. Run bun run test and see the shared catalog tests pass ; Open packages/shared and read CREDIT_PACKS (4 packs) ; Check apps/web/e2e/README.md and apps/web/e2e/qa/\_template.spec.ts exist
 
-### ☐ T2.0 Setup: test harness
+### ✅ T2.0 Setup: test harness
+
 - **Kind:** implementation
 - **Files:** `apps/web/e2e/README.md`, `apps/web/e2e/fixtures/README.md`, `apps/web/e2e/qa/_template.spec.ts`, `apps/web/e2e/fixtures/qa.ts`
 - **Do:** Follow `~/.claude/commands/e2e.md` `setup`, skipping what exists (Playwright and `apps/web/playwright.config.ts` already exist; do not change the config). The e2e root is `apps/web`, not the repo root. `e2e/README.md` documents: run command (`cd apps/web && bunx playwright test <spec>`), base URL from `e2e/support/env.ts`; auth via the existing `auth.setup.ts` storage state (`AUTH_STATE_PATH`) and the seeded e2e Clerk user; no `webServer` (web and API are always running locally, never started by tests); env file `.env.e2e.local` (template `.env.e2e.example`); mocking with `page.route` (block third-party network) and `page.addInitScript` (stub browser SDKs); data is created through the real API, not a seed init script, and each test creates its own state; selector policy (`getByRole`/`getByLabel`/`getByTestId`, no CSS/nth-child, no `waitForTimeout`). `fixtures/README.md` documents the QA fixtures. `fixtures/qa.ts` extends the base test with the authenticated page, a console-error guard, and a `snap` screenshot helper. `_template.spec.ts` is a runnable smoke (authenticated home loads, console guard on) that new `e2e/qa/*.spec.ts` files copy.
@@ -148,7 +161,8 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Template passes against the running app.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/_template.spec.ts --repeat-each=3`; `bun run verify`.
 
-### ☐ T2.0.1 Setup: webhook signing helper
+### ✅ T2.0.1 Setup: webhook signing helper
+
 - **Kind:** implementation
 - **Files:** `apps/web/e2e/support/signWebhook.ts`, `apps/web/e2e/fixtures/qa.ts`, `apps/web/e2e/fixtures/README.md`
 - **Depends on:** T2.0
@@ -158,7 +172,8 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Missing key yields a clear error, never an unsigned request.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/_template.spec.ts`; `cd apps/web && bunx tsc -p e2e/tsconfig.json --noEmit`.
 
-### ☐ T2.1 `CREDIT_PACKS` in `packages/shared`
+### ✅ T2.1 `CREDIT_PACKS` in `packages/shared`
+
 - **Kind:** implementation
 - **Files:** `packages/shared/src/models/creditPacks.ts`, `packages/shared/src/models/index.ts`
 - **Do:** Export `CreditPack`, `CREDIT_PACK_CURRENCY`, `CREDIT_PACKS` (ids `pack_200|450|960|2000`, `priceMinor` 13000/29000/50000/90000, savings 0/10/20/30), `getCreditPack(id)`. Currency per gate result. No spec file here (not money path); `creditPacks.test.ts` is created by T2.3.
@@ -168,7 +183,8 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Exported from `models/index.ts` and reachable via the package root.
 - **Verify:** `bun run test`; `bun run verify`.
 
-### ☐ T2.2 Provider-agnostic payment types
+### ✅ T2.2 Provider-agnostic payment types
+
 - **Kind:** implementation
 - **Files:** `packages/shared/src/types/domain.ts`, `packages/shared/src/types/index.ts`
 - **Do:** Add `PaymentProviderName`, `PaymentStatus`, `PaymentRecord` (`provider` optional for legacy rows). Do not delete Razorpay types yet.
@@ -176,7 +192,8 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Types exported; API and web still type-check unchanged.
 - **Verify:** `bun run verify`; `bun run test`.
 
-### ☐ T2.3 Unit: shared catalog
+### ✅ T2.3 Unit: shared catalog
+
 - **Kind:** unit
 - **Files:** `packages/shared/src/models/creditPacks.ts`
 - **Depends on:** T2.1
@@ -187,6 +204,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `bunx vitest run packages/shared/src/models/creditPacks.test.ts --coverage --coverage.include=packages/shared/src/models/creditPacks.ts --coverage.reporter=text` (from repo root).
 
 ### 🔶 Checkpoint 2
+
 - [ ] `bun run test` and `bun run verify` green; web/API behavior unchanged.
 - [ ] QA harness template green (T2.0, T2.0.1); T2.3 coverage gate met.
 
@@ -199,6 +217,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 **Try in UI:** No UI in this phase. Run cd apps/api && bunx vitest run to see the payments router and adapter tests pass ; Read apps/api/src/payments/router.ts for POST /payments/checkout, GET /payments and the status endpoint ; Check an unauthenticated call returns 401 in the router tests
 
 ### ☐ T3.1 Fix Clerk auth mount order on payments routes (test first)
+
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/index.ts`, `apps/api/src/routes/payments.test.ts`
 - **Do:** Write failing supertest first: unauthenticated request to each existing payments route returns 401. Then register `ClerkExpressRequireAuth({})` before `paymentsRoute`. Do NOT change lines for users/explore/credits/image/collections (see Open questions).
@@ -209,6 +228,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/api && bunx vitest run routes/payments.test.ts`; `git diff apps/api/src/routes/index.ts`.
 
 ### ☐ T3.2 Payment port, constants, errors, service skeleton
+
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/types.ts`, `apps/api/src/payments/constants.ts`, `apps/api/src/payments/errors.ts`, `apps/api/src/payments/service.ts`
 - **Do:** Define `PaymentProvider` port and `NormalizedPaymentEvent` per spec 5.2; typed errors (`InvalidSignatureError`, `UnknownPackError`, `ProviderApiError`); named constants for provider names, statuses, event types, header names. `createCheckout(userId, packId)` resolves the pack from the shared catalog and passes only catalog values to the provider; its signature takes no price or credits. (`providerFactory.ts` is added in T3.3.) Checkout side, not money path: no spec file here; `service.test.ts` is created by T3.6.
@@ -218,6 +238,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `bun run verify`.
 
 ### ☐ T3.3 Dodo adapter: checkout creation and session status
+
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/dodo/client.ts`, `apps/api/src/payments/dodo/adapter.ts`, `apps/api/src/payments/dodo/productMap.ts`, `apps/api/src/payments/providerFactory.ts`, `apps/api/package.json`
 - **Do:** Add dependency `dodopayments` (plus `standardwebhooks` only if T0.3 chose it; list new deps in the report). `createCheckout` passes `product_cart` from env map, `metadata {userId, packId}`, `return_url`, email when available; fresh session per call. Provider errors map to `ProviderApiError` without secrets. Keep the SDK behind `client.ts` so tests can mock that boundary only. `config/env.ts` is changed in T3.4. Checkout side, not money path: no spec file here; `dodo/adapter.test.ts` (with the architecture guard) is created by T3.6.
@@ -228,6 +249,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `bun run verify`; `git grep -n "from 'dodopayments'" apps/api/src` lists only `payments/dodo/` files.
 
 ### ☐ T3.4 Env validation and payment model changes
+
 - **Kind:** implementation
 - **Files:** `apps/api/src/config/env.ts`, `apps/api/src/config/env.test.ts`, `apps/api/src/models/payment.ts`, `apps/api/src/models/payment.test.ts`
 - **Do:** Env: add Dodo vars, fail fast at boot when `PAYMENT_PROVIDER=dodo` and any is missing; make Razorpay vars optional for now. Model: add `provider` (razorpay|dodo, default razorpay), `providerPaymentId`, `providerSessionId`, `packId`, `credits`, `currency` (default INR); extend `paymentMethod` with `card|upi|other` keeping legacy values; new rows also set `transactionId` to the provider payment id so legacy readers work. Document that embedded arrays cannot carry a cross-document unique index, so atomicity relies on the conditional update. Stay within spec 5.4; if a schema change beyond it is needed, make no change and FAIL with the needed change under DECISIONS.
@@ -238,6 +260,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/api && bunx vitest run config/env.test.ts models/payment.test.ts`; `bun run verify`.
 
 ### ☐ T3.5 Authenticated payments router
+
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/router.ts`, `apps/api/src/routes/index.ts`, `apps/api/src/payments/service.ts`
 - **Do:** `POST /payments/checkout` (`{packId}` only), `GET /payments` (caller's rows, newest first), `GET /payments/checkout/:sessionId/status`. `userId` only from `req.auth.userId`. On checkout, write a pending record `{providerSessionId, userId, packId}` for ownership checks; status endpoint returns 403/404 for another user's session. Status is read from the caller's DB record for that session first (terminal `completed`/`failed` written by the webhook wins); provider `getSessionStatus` is only a fallback while the record is pending (see Open question 3). Mount behind the auth middleware from T3.1. Old Razorpay routes stay until Phase 6. No rate limiter (out of scope, Open question 2). Checkout side, not money path: no spec file here; `payments/router.test.ts` is created by T3.7. Keep the existing `routes/payments.test.ts` (T3.1) green.
@@ -250,6 +273,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/api && bunx vitest run routes/payments.test.ts`; `bun run test`; `bun run verify`.
 
 ### ☐ T3.6 Unit: payments core
+
 - **Kind:** unit
 - **Files:** `apps/api/src/payments/service.ts`, `apps/api/src/payments/dodo/adapter.ts`, `apps/api/src/payments/dodo/productMap.ts`, `apps/api/src/payments/providerFactory.ts`, `apps/api/src/payments/errors.ts`
 - **Depends on:** T3.2, T3.3, T3.5
@@ -262,6 +286,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/api && bunx vitest run payments/service.test.ts payments/dodo/ payments/providerFactory.test.ts payments/errors.test.ts --coverage --coverage.include=src/payments/service.ts --coverage.include=src/payments/dodo/adapter.ts --coverage.include=src/payments/dodo/productMap.ts --coverage.include=src/payments/providerFactory.ts --coverage.include=src/payments/errors.ts --coverage.reporter=text`.
 
 ### ☐ T3.7 Unit: payments API surface
+
 - **Kind:** unit
 - **Files:** `apps/api/src/payments/router.ts`, `apps/api/src/config/env.ts`, `apps/api/src/models/payment.ts`
 - **Depends on:** T3.4, T3.5
@@ -273,6 +298,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/api && bunx vitest run payments/router.test.ts config/env.test.ts models/payment.test.ts --coverage --coverage.include=src/payments/router.ts --coverage.include=src/config/env.ts --coverage.include=src/models/payment.ts --coverage.reporter=text`.
 
 ### 🔶 Checkpoint 3 (money path review)
+
 - [ ] `cd apps/api && bunx vitest run` and `bun run test` green; 401 test covers every payments route.
 - [ ] T3.6 and T3.7 coverage gates met.
 - [ ] Optional: with a Clerk token against the already running API, a real Dodo test session URL is returned (sandboxed HTTP tool; do not start the server).
@@ -287,6 +313,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 **Try in UI:** No UI in this phase. Run cd apps/api && bunx vitest run on the webhook tests: a duplicate delivery adds no credits and an invalid signature gets 401 ; Read apps/api/src/payments webhook router mounted at POST /webhooks/payments
 
 ### ☐ T4.1 Event mapper and signature verification
+
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/dodo/eventMapper.ts`, `apps/api/src/payments/dodo/constants.ts`, `apps/api/src/payments/dodo/adapter.ts`, `apps/api/src/payments/dodo/eventMapper.test.ts`, `apps/api/src/payments/dodo/verify.test.ts`
 - **Do:** Test-first money-path task (webhook signature): it is allowed to create the two specs in its Files. Test first, signing payloads for real (`{id}.{timestamp}.{body}` HMAC or the library). Implement `verifyAndParseWebhook` with the single path chosen in T0.3. Cases: valid; tampered body; wrong secret; missing headers; stale timestamp; unknown event type (returns null); metadata and amount extracted.
@@ -296,6 +323,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/api && bunx vitest run payments/dodo/`; `bun run verify`.
 
 ### ☐ T4.2 `applyEvent` with atomic idempotent grant
+
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/service.ts`, `apps/api/src/payments/applyEvent.test.ts`, `apps/api/src/models/user.ts`
 - **Do:** Test-first money-path task (idempotent credit grant): it is allowed to create `applyEvent.test.ts`. Test first. Resolve `userId` from signed metadata; pack from catalog; cross-check amount and currency (mismatch: record failed with reason, no credits, error log). Grant via one conditional `User.updateOne({clerkId, 'payments.providerPaymentId': {$ne}}, {$push, $inc})`. `payment.failed` records a failed row; a later success for the same payment id must still grant (guard blocks only an existing `completed`). Missing user or metadata: log with context, return 200. Transient DB error: throw so the router returns 500. `models/user.ts` only if the payments subdocument typing requires it.
@@ -309,6 +337,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/api && bunx vitest run payments/applyEvent.test.ts`; `bun run test`.
 
 ### ☐ T4.3 Webhook router and mount
+
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/webhookRouter.ts`, `apps/api/src/payments/webhookRouter.test.ts`, `apps/api/src/app.ts`
 - **Do:** Test-first money-path task (webhook signature and duplicate delivery): it is allowed to create `webhookRouter.test.ts`; write the failing supertest first. `POST /webhooks/payments` with `express.raw({type:'application/json', limit})`, mounted beside the Clerk `webhookRouter`, before `express.json`. Invalid signature: 401 with no DB access. Unknown event: 200. Duplicate: 200 no-op. Transient DB error: 500. Do not remove `/webhooks/razorpay` yet.
@@ -321,6 +350,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/api && bunx vitest run payments/webhookRouter.test.ts webhook/`; `bun run test`; `bun run verify`.
 
 ### ☐ T4.4 Unit: webhook
+
 - **Kind:** unit
 - **Files:** `apps/api/src/payments/dodo/eventMapper.ts`, `apps/api/src/payments/dodo/adapter.ts`, `apps/api/src/payments/webhookRouter.ts`, `apps/api/src/payments/service.ts`
 - **Depends on:** T4.1, T4.2, T4.3
@@ -332,6 +362,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/api && bunx vitest run payments/dodo/ payments/applyEvent.test.ts payments/webhookRouter.test.ts payments/service.test.ts --coverage --coverage.include=src/payments/dodo/eventMapper.ts --coverage.include=src/payments/dodo/adapter.ts --coverage.include=src/payments/webhookRouter.ts --coverage.include=src/payments/service.ts --coverage.reporter=text`.
 
 ### 🔶 Checkpoint 4 (money path audit)
+
 - [ ] API suite green including concurrent duplicate and real-signature tests; T4.4 coverage gate met.
 - [ ] Advisor audits the Phase 3-4 diff against Spec section 6; findings resolved or reported.
 - [ ] Real Dodo webhook delivery through a tunnel is deferred to T7.3; signed-webhook e2e is T5.8.
@@ -345,6 +376,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 **Try in UI:** Open the Buy more credits dialog and check the four packs and the Dodo trust line ; Pick a pack, complete a test payment in the overlay, and watch credits increase once ; Open Profile > Payments and see the new row (and an empty state if you have none) ; Close the overlay early: a processing message shows after the poll times out
 
 ### ☐ T5.1 Overlay wrapper and checkout client
+
 - **Kind:** implementation
 - **Files:** `apps/web/src/payments/dodoOverlay.ts`, `apps/web/src/payments/checkoutClient.ts`, `apps/web/package.json`, `apps/web/src/main.ts`
 - **Do:** Add the checkout SDK (package name per T0.3; verify on the registry before install). `Initialize` once at app load with mode from `VITE_DODO_CHECKOUT_MODE`. `dodoOverlay.ts` is the only file importing the SDK. `checkoutClient` calls `POST /payments/checkout` and `GET .../status`. Locate the correct init location in `main.ts` (or app setup) during build. Not money path: no spec file here; `checkoutClient.test.ts` and `dodoOverlay.test.ts` are created by T5.6.
@@ -355,6 +387,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `bun run verify`; `git grep -nE "dodopayments-checkout|@dodopayments/checkout" apps/web/src` lists only `src/payments/dodoOverlay.ts`.
 
 ### ☐ T5.2 `usePurchase` composable with status polling
+
 - **Kind:** implementation
 - **Files:** `apps/web/src/payments/usePurchase.ts`, `apps/web/src/payments/constants.ts`
 - **Do:** `start(packId)`: checkout, open overlay, on close or success event poll status every `PAYMENT_POLL_INTERVAL_MS` (2000) until `PAYMENT_POLL_TIMEOUT_MS` (60000), on `succeeded` refetch the user via the existing store fetch (this also refreshes payments), then toast. Never call `setCredits` with a computed value. Not money path (the client never grants credits): no spec file here; `usePurchase.test.ts` is created by T5.6.
@@ -365,6 +398,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `bun run verify`; `git grep -n setCredits apps/web/src/payments` returns nothing.
 
 ### ☐ T5.3 Pricing catalog and Pricing page use shared `CREDIT_PACKS`
+
 - **Kind:** implementation
 - **Files:** `apps/web/src/composables/usePricingCatalog.ts`, `apps/web/src/composables/usePricingCatalog.test.ts`, `apps/web/src/components/Pricing/PricingPacks.vue`, `apps/web/src/components/Pricing/PricingPacks.test.ts`
 - **Do:** Replace `RAZORPAY_PRODUCTS` usage (`usePricingCatalog.ts`) with `CREDIT_PACKS`; keep savings labels 10/20/30%. A pack click in `PricingPacks.vue` calls `usePurchase.start(pack.id)`; its `RazorpayProduct` prop type becomes `CreditPack`. Do not create new component files (they would fall outside Files, and T5.7 is already at 5 files and could not cover them); if the template grows past ~20 lines, note the extraction under DECISIONS as a follow-up.
@@ -375,6 +409,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/web && bunx vitest run src/composables/usePricingCatalog.test.ts src/components/Pricing/`; `bun run verify`.
 
 ### ☐ T5.4 Buy dialog and Profile payments
+
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dialogs/BuyMoreCreditsDialog.vue`, `apps/web/src/components/Dialogs/BuyMoreCreditsDialog.test.ts`, `apps/web/src/components/Profile/Payments.vue`, `apps/web/src/components/Profile/Payments.test.ts`
 - **Do:** Dialog lists `CREDIT_PACKS` and calls `usePurchase.start(pack.id)`; no `setCredits` with a computed value. Replace the dialog trust line (`BuyMoreCreditsDialog.vue` `<p class="trust-line">Secure payment via Razorpay. Credits apply instantly.</p>`, around line 143) with `Secure payment via Dodo Payments. Credits apply after payment confirmation.` (credits are granted by the webhook, not instantly), and rewrite the matching test in `BuyMoreCreditsDialog.test.ts` (the `displays trust line about Razorpay` case, around lines 151-166) to assert the new Dodo text (title and assertion must not name the old provider, so the Verify grep stays clean). `Payments.vue` keys rows by `providerPaymentId ?? transactionId` and uses provider-neutral labels; no endpoint change (it reads the Pinia store).
@@ -386,6 +421,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/web && bunx vitest run src/components/Dialogs/BuyMoreCreditsDialog.test.ts src/components/Profile/Payments.test.ts`; `git grep -ni razorpay -- apps/web/src/components/Dialogs/BuyMoreCreditsDialog.vue apps/web/src/components/Dialogs/BuyMoreCreditsDialog.test.ts` returns nothing; `bun run test`; `bun run verify`.
 
 ### ☐ T5.5 Return-URL handler (conditional)
+
 - **Kind:** implementation
 - **Files:** `apps/web/src/router/index.ts`, `apps/web/src/pages/PaymentReturn.vue`
 - **Do:** Only if T0.3 shows the overlay completes via `return_url` rather than an `onEvent` success. Route triggers the same polling and redirects to Profile -> Payments. If not needed, mark "N/A per gate" with the citation and skip. Not money path: no spec file here; `PaymentReturn.test.ts` is created by T5.7 when this task is implemented.
@@ -394,6 +430,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** the N/A citation in the task result, or `bun run verify` and `test -f apps/web/src/pages/PaymentReturn.vue`.
 
 ### ☐ T5.6 Unit: web purchase
+
 - **Kind:** unit
 - **Files:** `apps/web/src/payments/checkoutClient.ts`, `apps/web/src/payments/usePurchase.ts`, `apps/web/src/payments/dodoOverlay.ts`
 - **Depends on:** T5.1, T5.2
@@ -406,6 +443,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/web && bunx vitest run src/payments/ --coverage --coverage.include=src/payments/checkoutClient.ts --coverage.include=src/payments/usePurchase.ts --coverage.include=src/payments/dodoOverlay.ts --coverage.reporter=text`.
 
 ### ☐ T5.7 Unit: pricing UI
+
 - **Kind:** unit
 - **Files:** `apps/web/src/composables/usePricingCatalog.ts`, `apps/web/src/components/Pricing/PricingPacks.vue`, `apps/web/src/components/Dialogs/BuyMoreCreditsDialog.vue`, `apps/web/src/components/Profile/Payments.vue`, `apps/web/src/pages/PaymentReturn.vue`
 - **Depends on:** T5.3, T5.4, T5.5
@@ -417,6 +455,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** If T5.5 is N/A: `cd apps/web && bunx vitest run src/composables/usePricingCatalog.test.ts src/components/Pricing/PricingPacks.test.ts src/components/Dialogs/BuyMoreCreditsDialog.test.ts src/components/Profile/Payments.test.ts --coverage --coverage.include=src/composables/usePricingCatalog.ts --coverage.include=src/components/Pricing/PricingPacks.vue --coverage.include=src/components/Dialogs/BuyMoreCreditsDialog.vue --coverage.include=src/components/Profile/Payments.vue --coverage.reporter=text`. If T5.5 was implemented: the same command with `src/pages/PaymentReturn.test.ts` added to the spec list and `--coverage.include=src/pages/PaymentReturn.vue` added to the includes.
 
 ### ☐ T5.8 E2E: purchase credits
+
 - **Kind:** e2e
 - **Spec:** `apps/web/e2e/qa/billing-purchase.spec.ts` (scenario file `apps/web/e2e/scenarios/billing-purchase.feature.md`)
 - **Files:** none
@@ -436,6 +475,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/billing-purchase.spec.ts --repeat-each=3`.
 
 ### ☐ T5.9 E2E: payment history
+
 - **Kind:** e2e
 - **Spec:** `apps/web/e2e/qa/billing-history.spec.ts` (scenario file `apps/web/e2e/scenarios/billing-history.feature.md`)
 - **Files:** none
@@ -452,6 +492,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/billing-history.spec.ts --repeat-each=3`.
 
 ### 🔶 Checkpoint 5
+
 - [ ] `bun run test` and `bun run verify` green; Razorpay path still present (removed next phase).
 - [ ] T5.6/T5.7 coverage gates met; browser evidence is T5.8 and T5.9 green with `--repeat-each=3`.
 
@@ -464,6 +505,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 **Try in UI:** Open the Pricing page and FAQ: no Razorpay wording remains ; Open the Buy dialog: still works with Dodo ; Run git grep -il razorpay and see only legacy-labelled mentions ; Check docs/API_REFERENCE.md lists the new payment endpoints
 
 ### ☐ T6.1 Remove Razorpay routes and webhook from API
+
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/payments.ts`, `apps/api/src/routes/payments.test.ts`, `apps/api/src/webhook/index.ts`, `apps/api/src/webhook/index.test.ts`, `apps/api/src/routes/index.ts`
 - **Do:** Delete the Razorpay endpoints (`POST /payments`, `/order/create`, `/verify-payment`, `GET /payments/:id`), `new Razorpay`, and `/webhooks/razorpay` plus their tests. Delete `routes/payments.ts` and its test if empty and unmount it in `routes/index.ts`; the new `payments/router.ts` (T3.5) remains the only payments router and keeps the 401 coverage. Keep `PaymentModel` and `PaymentSchema` in `models/payment.ts` untouched (outside Files): the legacy "Payment" collection still holds historical Razorpay payments and `models/payment.test.ts` imports it. Removing or migrating it is out of scope.
@@ -474,6 +516,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `git grep -il razorpay -- apps/api/src/routes apps/api/src/webhook` returns nothing; `git grep -c "export const PaymentModel" -- apps/api/src/models/payment.ts` prints 1; `cd apps/api && bunx vitest run`; `bun run verify`.
 
 ### ☐ T6.2 Remove Razorpay constants, types and dependency from API
+
 - **Kind:** implementation
 - **Files:** `apps/api/src/utils/constants.ts`, `apps/api/src/utils/constants.test.ts`, `apps/api/src/types/index.ts`, `apps/api/package.json`, `bun.lock`
 - **Do:** Delete `RAZORPAY_PRODUCTS` and the related test cases, and remove the `RazorpayProduct` re-export line from `apps/api/src/types/index.ts` (plus `RazorpaySubscription`/`RazorpayOrder` if present there); remove the `razorpay` dependency and refresh `bun.lock` with bun. The `RazorpayProduct` definition in `packages/shared` is removed later by T6.3.1, once the web re-export is gone (T6.3). Keep the legacy `'razorpay'` provider literal wherever it legitimately lives (`models/payment.ts` and its test, `payments/constants.ts`, shared `PaymentProviderName`). `config/env.ts`/`env.test.ts` still hold the optional `RAZORPAY_*` env vars until T6.4.
@@ -483,6 +526,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `git grep -nE "RAZORPAY_PRODUCTS|Razorpay(Product|Subscription|Order)|new Razorpay|from ['\"]razorpay['\"]|require\(['\"]razorpay['\"]\)" -- apps/api/src` returns nothing; `git grep -ni razorpay -- apps/api/src apps/api/package.json ':!apps/api/src/config' ':!apps/api/src/models/payment.ts' ':!apps/api/src/models/payment.test.ts' ':!apps/api/src/payments' | grep -vi legacy | grep -vE "[\"']razorpay[\"']"` returns nothing (same filters as T6.6; the excluded paths hold the env vars removed in T6.4 and the legacy provider literal; the quoted-literal filter would hide a `"razorpay":` dependency line, so the next check covers it); `grep -ci razorpay apps/api/package.json` prints 0; `grep -c razorpay bun.lock` prints 0; `cd apps/api && bunx vitest run`; `bun run verify`.
 
 ### ☐ T6.3 Remove Razorpay from web
+
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/payment.ts`, `apps/web/src/utils/payment.test.ts`, `apps/web/src/utils/constants.ts`, `apps/web/src/types/index.ts`
 - **Do:** Delete the Razorpay loader/`successHandler` and test, the duplicate `RAZORPAY_PRODUCTS` (around line 256), the web `RazorpaySubscription`/`RazorpayOrder` types, and the `RazorpayProduct` re-export line in `apps/web/src/types/index.ts` (the shared definition goes in T6.3.1). Confirm no remaining importer first.
@@ -492,6 +536,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `git grep -nE "RAZORPAY_PRODUCTS|Razorpay(Product|Subscription|Order)|utils/payment|checkout\.razorpay\.com|new Razorpay|from ['\"]razorpay['\"]" -- apps/web/src` returns nothing; `git grep -ni razorpay -- apps/web/src ':!apps/web/src/utils/pricingFAQ.json' ':!apps/web/src/components/Profile/Payments.test.ts' | grep -vi legacy | grep -vE "[\"']razorpay[\"']"` returns nothing (a quoted provider literal or a legacy-labelled comment is allowed, the same filters as T6.6); `bun run test`; `bun run verify`.
 
 ### ☐ T6.3.1 Remove `RazorpayProduct` from packages/shared
+
 - **Kind:** implementation
 - **Files:** `packages/shared/src/types/domain.ts`, `packages/shared/src/types/index.ts`
 - **Depends on:** T6.2, T6.3
@@ -503,6 +548,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `git grep -n RazorpayProduct -- apps packages` returns nothing; `git grep -ni razorpay -- packages/shared/src | grep -vi legacy | grep -vE "[\"']razorpay[\"']"` returns nothing (same filters as T6.6); `bun run test`; `bun run verify`.
 
 ### ☐ T6.4 Env cleanup: config and compose
+
 - **Kind:** implementation
 - **Files:** `apps/api/src/config/env.ts`, `apps/api/src/config/env.test.ts`, `apps/api/docker-compose.yml`
 - **Do:** Remove `RAZORPAY_*` from env validation and compose (and the `// Razorpay` comment), drop them from the `env.test.ts` base fixture, and assert their absence in `env.test.ts`. The removed names appear in `env.test.ts` only through one short marker constant in the API style (double quotes, no semicolon), `const LEGACY_RAZORPAY_ENV_PREFIX = "RAZORPAY_"`, and the absence test asserts that no key of the parsed env starts with it (e.g. `expect(Object.keys(parsed).filter((key) => key.startsWith(LEGACY_RAZORPAY_ENV_PREFIX))).toEqual([])`). The test title and every other line avoid naming Razorpay, so each remaining mention contains the identifier. Never write real secrets.
@@ -511,6 +557,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `cd apps/api && bunx vitest run config/env.test.ts`; `git grep -ni razorpay -- apps/api/src/config/env.ts apps/api/docker-compose.yml` returns nothing; `git grep -ni razorpay -- apps/api/src/config/env.test.ts | grep -v LEGACY_RAZORPAY_ENV_PREFIX` returns nothing (only the marker constant and its uses mention the removed names).
 
 ### ☐ T6.4.1 Env cleanup: tracked example files
+
 - **Kind:** implementation
 - **Files:** `apps/api/.env.example`, `apps/web/.env.example`, `infra/.env.example`
 - **Depends on:** T6.4
@@ -521,6 +568,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `git grep -inE "razorpay" -- '*.env*' '*.yml' ':!apps/web/coverage'` returns nothing tracked; `git status --short -- 'apps/*/.env*' 'infra/.env*'` shows only the three tracked example files.
 
 ### ☐ T6.5 User-facing copy and product docs
+
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/pricingFAQ.json`, `apps/web/public/pricing.md`, `apps/web/public/llms.txt`, `README.md`, `docs/PRD.md`
 - **Do:** Replace Razorpay wording; mention Dodo as merchant of record accurately; remove UPI claims unless T0.3 confirmed support.
@@ -529,6 +577,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `git grep -il razorpay -- apps/web/src/utils/pricingFAQ.json apps/web/public README.md docs/PRD.md` returns nothing; `bun run verify`.
 
 ### ☐ T6.6 Technical docs, checklist, and scenarios
+
 - **Kind:** implementation
 - **Files:** `docs/ARCHITECTURE.md`, `docs/API_REFERENCE.md`, `agent_docs/CHECKLIST_manual_steps.md`, `agent_docs/e2e-scenarios/profile-billing.feature.md`
 - **Depends on:** T6.1, T6.3.1, T6.4.1, T6.5
@@ -539,6 +588,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 - **Verify:** `git grep -ni razorpay -- docs agent_docs/CHECKLIST_manual_steps.md agent_docs/e2e-scenarios | grep -vi legacy` returns nothing; final repo check `git grep -ni razorpay -- . ':!apps/web/coverage' ':!**/dist/**' ':!agent_docs/done' ':!agent_docs/*deploy_modernization*' ':!agent_docs/REVIEW_*' ':!agent_docs/web-frontend-review.md' ':!agent_docs/*dodo*' ':!apps/api/src/models/payment.ts' ':!apps/api/src/models/payment.test.ts' ':!apps/api/src/payments' ':!apps/web/src/components/Profile/Payments.test.ts' ':!apps/web/e2e/qa/billing-history.spec.ts' ':!apps/web/e2e/scenarios/billing-history.feature.md' | grep -vi legacy | grep -vE "[\"']razorpay[\"']"` returns nothing. Allowlist rationale: historical `agent_docs/` plans and reviews are records, not edited; the model, `payments/` and shared `PaymentProviderName` hold the legacy `'razorpay'` provider literal; the `LEGACY_RAZORPAY_ENV_PREFIX` absence marker in `env.test.ts` (T6.4) passes the `legacy` filter; because the quoted-literal filter would also hide an import or a dependency line, `git grep -nE "from ['\"]razorpay['\"]|\"razorpay\":" -- apps packages` must also return nothing; `Payments.test.ts` and the T5.9 spec/scenario carry the "legacy Razorpay-shaped row" fixtures and titles. `grep razorpay bun.lock` returns nothing.
 
 ### 🔶 Checkpoint 6
+
 - [ ] No Razorpay import, type, constant, route, env var or dependency left in `apps/` or `packages/` (`RazorpayProduct` gone from `packages/shared` via T6.3.1); the T6.6 repo-wide grep is clean apart from its allowlist (legacy `'razorpay'` provider literal, `LEGACY_RAZORPAY_ENV_PREFIX` marker, legacy-row test fixtures/titles, legacy-labelled manual steps); `bun.lock` clean; `bun run test` and `bun run verify` green.
 
 ---
@@ -552,6 +602,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 Numbering starts at T7.2: there is no T7.1 (the PLAN's e2e spec task became the Phase 5 `E2E:` tasks T5.8/T5.9; ids were kept stable rather than renumbered).
 
 ### ☐ T7.2 GATE: automated suites green
+
 - **Kind:** gate
 - **Files:** none
 - **Depends on:** T5.8, T5.9, T6.6
@@ -561,6 +612,7 @@ Numbering starts at T7.2: there is no T7.1 (the PLAN's e2e spec task became the 
 - **Verify:** `bun run test`; `bun run verify`; `cd apps/api && bunx vitest run`; `cd apps/web && bunx playwright test e2e/qa/billing-purchase.spec.ts e2e/qa/billing-history.spec.ts --repeat-each=3`; `cd apps/web && bun run test:e2e` (full e2e suite). Evidence is command output only; `agent-browser` is not evidence.
 
 ### ☐ T7.3 WALKTHROUGH: real test-mode run
+
 - **Kind:** walkthrough
 - **Files:** `agent_docs/CHECKLIST_manual_steps.md`
 - **Depends on:** T7.2
@@ -571,6 +623,7 @@ Numbering starts at T7.2: there is no T7.1 (the PLAN's e2e spec task became the 
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/billing-purchase.spec.ts e2e/qa/billing-history.spec.ts --repeat-each=3` still green after the run, plus `cd apps/api && bunx vitest run`; the manual observations are recorded in the checklist. Browser tooling is not used as evidence.
 
 ### ☐ T7.4 DEFINITION OF DONE: audit and summary
+
 - **Kind:** dod
 - **Files:** none
 - **Depends on:** T7.2, T7.3
@@ -582,6 +635,7 @@ Numbering starts at T7.2: there is no T7.1 (the PLAN's e2e spec task became the 
 - **Verify:** `git log --oneline master..feature/payments` shows one commit per completed phase (0-6), each matching a `commit` event in `.dashboard/tasks_dodo_payments/events.jsonl`, and no commit made by a build agent (user-made commits such as the planning files are allowed); `bun run test`; `bun run verify`; `cd apps/web && bunx playwright test e2e/qa/billing-purchase.spec.ts e2e/qa/billing-history.spec.ts --repeat-each=3`; `cd apps/web && bun run test:e2e`.
 
 ### 🔶 Checkpoint 7 (done)
+
 - [ ] All tasks ✅; implementation summary delivered; committed per phase by the orchestrator (one commit per phase).
 
 ---

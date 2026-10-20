@@ -59,7 +59,7 @@ describe('RemoveBgAside', () => {
 
   it('renders remove-background settings and CTA', () => {
     const { wrapper } = mountAside();
-    expect(wrapper.get('[data-testid="remove-bg-aside"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="remove-bg-aside"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="remove-bg-cta"]').text()).toContain('Remove background');
   });
 
@@ -83,7 +83,7 @@ describe('RemoveBgAside', () => {
     useUserStore(pinia).credits = 20;
     const removeBg = vi
       .spyOn(useGenerateStore(pinia), 'removeBgImage')
-      .mockImplementation(() => {});
+      .mockImplementation(async () => {});
     await wrapper.getComponent(FeatureCta).vm.$emit('click');
     expect(removeBg).not.toHaveBeenCalled();
   });
@@ -93,8 +93,8 @@ describe('RemoveBgAside', () => {
     const { wrapper, pinia } = mountAside();
     useUserStore(pinia).credits = 20;
     const generate = useGenerateStore(pinia);
-    const removeBg = vi.spyOn(generate, 'removeBgImage').mockImplementation(() => {});
-    vi.spyOn(useAppStore(pinia), 'removeBgOpen').mockImplementation(() => {});
+    const removeBg = vi.spyOn(generate, 'removeBgImage').mockImplementation(async () => {});
+    vi.spyOn(useAppStore(pinia), 'removeBgOpen').mockImplementation(async () => {});
 
     await wrapper.getComponent(FeatureCta).vm.$emit('click');
 
@@ -109,7 +109,7 @@ describe('RemoveBgAside', () => {
     localStorage.setItem('removeBgJobId', JSON.stringify('bg-job'));
     const pinia = createPinia();
     setActivePinia(pinia);
-    vi.spyOn(useAppStore(pinia), 'removeBgOpen').mockImplementation(() => {});
+    vi.spyOn(useAppStore(pinia), 'removeBgOpen').mockImplementation(async () => {});
     mount(RemoveBgAside, {
       global: {
         plugins: [pinia],

@@ -18,13 +18,21 @@ describe("PaymentSchema", () => {
 
     it("restricts status to pending, completed, and failed", () => {
         const status = PaymentSchema.path("status")
-        expect(status.enumValues).toEqual(["pending", "completed", "failed"])
+        expect((status as unknown as { enumValues: string[] }).enumValues).toEqual([
+            "pending",
+            "completed",
+            "failed",
+        ])
         expect(status.options.default).toBe("pending")
     })
 
     it("restricts paymentMethod to card, paypal, and stripe", () => {
         const paymentMethod = PaymentSchema.path("paymentMethod")
-        expect(paymentMethod.enumValues).toEqual(["credit_card", "paypal", "stripe"])
+        expect((paymentMethod as unknown as { enumValues: string[] }).enumValues).toEqual([
+            "credit_card",
+            "paypal",
+            "stripe",
+        ])
         expect(paymentMethod.isRequired).toBe(true)
         expect(paymentMethod.options.default).toBe("")
     })

@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import SelectActionButtons from '@/components/History/SelectActionButtons.vue';
 import { useCollectionsStore } from '@/stores/collections';
+import { FeatureType } from '@visual-ai/shared';
 import type { IImageObject } from '@/types';
 
 vi.mock('@/utils/helpers', () => ({
@@ -22,8 +23,8 @@ function mountButtons() {
   return mount(SelectActionButtons, {
     props: {
       selectedImages: [
-        { _id: '1', prompt: 'A', featureType: 'image' },
-        { _id: '2', prompt: 'B', featureType: 'image' },
+        { _id: '1', prompt: 'A', featureType: FeatureType.IMAGE },
+        { _id: '2', prompt: 'B', featureType: FeatureType.IMAGE },
       ] as IImageObject[],
     },
     global: { stubs: { 'font-awesome-icon': iconStub } },

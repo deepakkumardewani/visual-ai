@@ -7,7 +7,7 @@ import { useReducedMotion } from '@/composables/useReducedMotion';
  * cursor within its bounding box. Strength 0 disables the effect (no-op).
  * All motion is gated by `prefers-reduced-motion`.
  */
-export function useMagnetic(el: Ref<HTMLElement | null>, strength = 0.3) {
+export function useMagnetic(el: Ref<HTMLElement | null | undefined>, strength = 0.3) {
   const reduced = useReducedMotion();
 
   if (strength === 0) return;

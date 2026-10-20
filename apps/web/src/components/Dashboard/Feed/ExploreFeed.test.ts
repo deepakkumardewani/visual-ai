@@ -17,7 +17,7 @@ describe('ExploreFeed', () => {
       },
     });
 
-    expect(wrapper.get('[data-testid="explore-feed"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="explore-feed"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="community-feed-stub"]').text()).toContain(
       'Community Creations',
     );

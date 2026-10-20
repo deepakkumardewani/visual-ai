@@ -36,26 +36,27 @@ vi.mock("../config/env.js", () => ({
 
 vi.mock("../models/user.js", () => ({
     UserModel: {
-        find: (...args: unknown[]) => find(...args),
-        findOne: (...args: unknown[]) => findOne(...args),
-        findById: (...args: unknown[]) => findById(...args),
-        findOneAndUpdate: (...args: unknown[]) => findOneAndUpdate(...args),
-        deleteOne: (...args: unknown[]) => deleteOne(...args),
+        find: (...args: any[]) => Reflect.apply(find, undefined, args),
+        findOne: (...args: any[]) => Reflect.apply(findOne, undefined, args),
+        findById: (...args: any[]) => Reflect.apply(findById, undefined, args),
+        findOneAndUpdate: (...args: any[]) => Reflect.apply(findOneAndUpdate, undefined, args),
+        deleteOne: (...args: any[]) => Reflect.apply(deleteOne, undefined, args),
     },
 }))
 
 vi.mock("../services/user-service.js", () => ({
-    updateUserPlan: (...args: unknown[]) => updateUserPlan(...args),
-    deleteClerkUserData: (...args: unknown[]) => deleteClerkUserData(...args),
+    updateUserPlan: (...args: any[]) => Reflect.apply(updateUserPlan, undefined, args),
+    deleteClerkUserData: (...args: any[]) => Reflect.apply(deleteClerkUserData, undefined, args),
 }))
 
 vi.mock("../services/cloudinary-service.js", () => ({
-    deleteCloudinaryUserData: (...args: unknown[]) => deleteCloudinaryUserData(...args),
+    deleteCloudinaryUserData: (...args: any[]) =>
+        Reflect.apply(deleteCloudinaryUserData, undefined, args),
 }))
 
 vi.mock("nodemailer", () => ({
     default: {
-        createTransport: (...args: unknown[]) => createTransport(...args),
+        createTransport: (...args: any[]) => Reflect.apply(createTransport, undefined, args),
     },
 }))
 
@@ -68,7 +69,7 @@ function findHandler(path: string, method: string) {
     if (!layer) {
         throw new Error(`Missing ${method.toUpperCase()} ${path}`)
     }
-    return layer.route.stack[0].handle
+    return layer.route!.stack[0].handle
 }
 
 function mockRes() {

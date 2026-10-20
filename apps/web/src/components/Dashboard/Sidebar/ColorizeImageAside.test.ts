@@ -60,7 +60,7 @@ describe('ColorizeImageAside', () => {
 
   it('renders Colorize settings and CTA', () => {
     const { wrapper } = mountAside();
-    expect(wrapper.get('[data-testid="colorize-aside"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="colorize-aside"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="colorize-cta"]').text()).toContain('Colorize');
   });
 
@@ -84,7 +84,7 @@ describe('ColorizeImageAside', () => {
     useUserStore(pinia).credits = 20;
     const colorize = vi
       .spyOn(useGenerateStore(pinia), 'colorizeImage')
-      .mockImplementation(() => {});
+      .mockImplementation(async () => {});
     await wrapper.getComponent(FeatureCta).vm.$emit('click');
     expect(colorize).not.toHaveBeenCalled();
   });
@@ -95,8 +95,8 @@ describe('ColorizeImageAside', () => {
     useUserStore(pinia).credits = 20;
     useUserStore(pinia).userId = 'user-22';
     const generate = useGenerateStore(pinia);
-    const colorize = vi.spyOn(generate, 'colorizeImage').mockImplementation(() => {});
-    vi.spyOn(useAppStore(pinia), 'colorizeOpen').mockImplementation(() => {});
+    const colorize = vi.spyOn(generate, 'colorizeImage').mockImplementation(async () => {});
+    vi.spyOn(useAppStore(pinia), 'colorizeOpen').mockImplementation(async () => {});
 
     await wrapper.getComponent(FeatureCta).vm.$emit('click');
 
@@ -114,7 +114,7 @@ describe('ColorizeImageAside', () => {
     localStorage.setItem('colorizeInProgress', 'true');
     const pinia = createPinia();
     setActivePinia(pinia);
-    vi.spyOn(useAppStore(pinia), 'colorizeOpen').mockImplementation(() => {});
+    vi.spyOn(useAppStore(pinia), 'colorizeOpen').mockImplementation(async () => {});
     mount(ColorizeImageAside, {
       global: {
         plugins: [pinia],

@@ -190,7 +190,7 @@ describe('BuyMoreCreditsDialog', () => {
   });
 
   it('keeps the pack list when purchase fails', async () => {
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(async () => {});
     vi.mocked(initiatePayment).mockRejectedValueOnce(new Error('gateway down'));
     const userStore = useUserStore();
     userStore.credits = 50;

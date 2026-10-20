@@ -126,7 +126,7 @@ describe('router', () => {
 
   it('loads lazy route components', async () => {
     for (const route of router.getRoutes()) {
-      const raw = route.components?.default ?? route.component;
+      const raw = route.components?.default;
       if (typeof raw === 'function') {
         await Promise.resolve((raw as () => Promise<unknown>)()).catch(() => undefined);
       }

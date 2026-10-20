@@ -48,7 +48,7 @@ async function renderAt(path: string, name?: string) {
       { path: '/seo-landing', name: 'seo-portrait', component: { template: '<div />' } },
     ],
   });
-  await router.push({ path, name });
+  await router.push({ path, ...(name ? { name } : {}) });
   await router.isReady();
 
   const wrapper = mount(App, {

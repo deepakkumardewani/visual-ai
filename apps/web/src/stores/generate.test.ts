@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const sendSignal = vi.fn();
 const closeEventSource = vi.fn();
+const imageOpen = vi.fn();
 
 vi.mock('vue-clerk', () => ({
   useUser: () => ({ isLoaded: { value: true }, isSignedIn: { value: true } }),
@@ -17,7 +18,7 @@ vi.mock('@telemetrydeck/sdk', () => ({
 }));
 
 vi.mock('@/stores/app', () => ({
-  useAppStore: () => ({ sendSignal, closeEventSource }),
+  useAppStore: () => ({ sendSignal, closeEventSource, imageOpen, progressUrl: '' }),
 }));
 
 vi.mock('@/composables/useFetch', () => ({

@@ -139,7 +139,10 @@ async function readCreditTotal(page: Page) {
 }
 
 async function readCtaCost(page: Page, testId: string) {
-  const label = await page.getByTestId(testId).getByLabel(/credits/).getAttribute('aria-label');
+  const label = await page
+    .getByTestId(testId)
+    .getByLabel(/credits/)
+    .getAttribute('aria-label');
   const match = label?.match(/\d+/);
   if (!match) throw new Error(`Could not parse cost from ${testId}`);
   return Number.parseInt(match[0], 10);

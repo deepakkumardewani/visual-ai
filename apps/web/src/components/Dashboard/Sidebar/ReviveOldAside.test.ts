@@ -59,7 +59,7 @@ describe('ReviveOldAside', () => {
 
   it('renders Revive settings and CTA', () => {
     const { wrapper } = mountAside();
-    expect(wrapper.get('[data-testid="revive-aside"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="revive-aside"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="revive-cta"]').text()).toContain('Revive');
   });
 
@@ -81,7 +81,9 @@ describe('ReviveOldAside', () => {
     isSignedIn.value = true;
     const { wrapper, pinia } = mountAside(null);
     useUserStore(pinia).credits = 20;
-    const revive = vi.spyOn(useGenerateStore(pinia), 'reviveOldImage').mockImplementation(() => {});
+    const revive = vi
+      .spyOn(useGenerateStore(pinia), 'reviveOldImage')
+      .mockImplementation(async () => {});
     await wrapper.getComponent(FeatureCta).vm.$emit('click');
     expect(revive).not.toHaveBeenCalled();
   });
@@ -92,8 +94,8 @@ describe('ReviveOldAside', () => {
     useUserStore(pinia).credits = 20;
     useUserStore(pinia).userId = 'user-9';
     const generate = useGenerateStore(pinia);
-    const revive = vi.spyOn(generate, 'reviveOldImage').mockImplementation(() => {});
-    vi.spyOn(useAppStore(pinia), 'reviveOpen').mockImplementation(() => {});
+    const revive = vi.spyOn(generate, 'reviveOldImage').mockImplementation(async () => {});
+    vi.spyOn(useAppStore(pinia), 'reviveOpen').mockImplementation(async () => {});
 
     await wrapper.getComponent(FeatureCta).vm.$emit('click');
 
@@ -108,7 +110,7 @@ describe('ReviveOldAside', () => {
     localStorage.setItem('reviveInProgress', 'true');
     const pinia = createPinia();
     setActivePinia(pinia);
-    vi.spyOn(useAppStore(pinia), 'reviveOpen').mockImplementation(() => {});
+    vi.spyOn(useAppStore(pinia), 'reviveOpen').mockImplementation(async () => {});
     mount(ReviveOldAside, {
       global: {
         plugins: [pinia],

@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const applyReferralCode = vi.fn();
 
 vi.mock('@/utils/helpers', () => ({
-  applyReferralCode: (...args: unknown[]) => applyReferralCode(...args),
+  applyReferralCode: (...args: any[]) => Reflect.apply(applyReferralCode, undefined, args),
 }));
 
 import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue';
@@ -69,7 +69,7 @@ describe('ReferralDialog', () => {
 
   it('shows an error when apply fails', async () => {
     applyReferralCode.mockRejectedValue(new Error('Code already used'));
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(async () => {});
     const dialogStore = useDialogStore();
     dialogStore.showReferral();
     const wrapper = mount(ReferralDialog, { global: { stubs } });
@@ -82,7 +82,7 @@ describe('ReferralDialog', () => {
 
   it('shows a generic error for non-Error rejections and clears on close', async () => {
     applyReferralCode.mockRejectedValue('nope');
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(async () => {});
     const dialogStore = useDialogStore();
     dialogStore.showReferral();
     const wrapper = mount(ReferralDialog, {

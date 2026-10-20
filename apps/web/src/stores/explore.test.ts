@@ -17,7 +17,7 @@ import { useUserStore } from '@/stores/user';
 import type { ExploreFeedItem } from '@/types';
 
 function item(id: string): ExploreFeedItem {
-  return { id } as ExploreFeedItem;
+  return { id } as unknown as ExploreFeedItem;
 }
 
 type FetchResult<T> = {
@@ -176,7 +176,7 @@ describe('useExploreStore', () => {
   });
 
   it('ensureItem fetches a missing item and then loads the feed', async () => {
-    vi.mocked(useFetch).mockImplementation((url: string) => {
+    vi.mocked(useFetch).mockImplementation((url: unknown) => {
       if (String(url).includes('/explore/items/')) {
         return {
           json: async () => ({ data: { value: item('solo') }, error: { value: null } }),
@@ -197,7 +197,7 @@ describe('useExploreStore', () => {
   });
 
   it('ensureItem restores a deep-linked item dropped by the feed reload', async () => {
-    vi.mocked(useFetch).mockImplementation((url: string) => {
+    vi.mocked(useFetch).mockImplementation((url: unknown) => {
       if (String(url).includes('/explore/items/')) {
         return {
           json: async () => ({ data: { value: item('solo') }, error: { value: null } }),

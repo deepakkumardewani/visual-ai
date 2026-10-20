@@ -11,7 +11,7 @@ describe('AspectRatioPicker', () => {
       global: { stubs: { ChevronCaret: true } },
     });
 
-    expect(wrapper.get('[data-testid="aspect-ratio-picker"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="aspect-ratio-picker"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="aspect-1:1"]').attributes('aria-pressed')).toBe('true');
     expect(wrapper.get('[data-testid="aspect-more-trigger"]').text()).toContain('More sizes');
   });
@@ -109,7 +109,7 @@ describe('AspectRatioPicker', () => {
       global: { stubs: { ChevronCaret: true } },
     });
 
-    expect(wrapper.get('[data-testid="aspect-auto"]').exists()).toBe(true);
-    expect(wrapper.get('[data-testid="aspect-0:2"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="aspect-auto"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="aspect-0:2"]').exists()).toBe(true);
   });
 });

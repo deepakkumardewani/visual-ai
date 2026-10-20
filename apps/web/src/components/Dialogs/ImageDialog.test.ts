@@ -14,25 +14,25 @@ const moreLikeThis = vi.fn();
 const getDownloadImageUrl = vi.fn(() => 'https://cdn.example/dl.png');
 
 vi.mock('@/utils/helpers', () => ({
-  deleteImage: (...args: unknown[]) => deleteImage(...args),
-  downloadImage: (...args: unknown[]) => downloadImage(...args),
-  favoriteImage: (...args: unknown[]) => favoriteImage(...args),
-  getDownloadImageUrl: (...args: unknown[]) => getDownloadImageUrl(...args),
+  deleteImage: (...args: any[]) => Reflect.apply(deleteImage, undefined, args),
+  downloadImage: (...args: any[]) => Reflect.apply(downloadImage, undefined, args),
+  favoriteImage: (...args: any[]) => Reflect.apply(favoriteImage, undefined, args),
+  getDownloadImageUrl: (...args: any[]) => Reflect.apply(getDownloadImageUrl, undefined, args),
 }));
 
 vi.mock('@/composables/useShareActions', () => ({
   useShareActions: () => ({
-    shareLink: (...args: unknown[]) => shareLink(...args),
-    copyPrompt: (...args: unknown[]) => copyPrompt(...args),
+    shareLink: (...args: any[]) => Reflect.apply(shareLink, undefined, args),
+    copyPrompt: (...args: any[]) => Reflect.apply(copyPrompt, undefined, args),
   }),
 }));
 
 vi.mock('@/composables/useImageChainActions', () => ({
   useImageChainActions: () => ({
-    useAsReference: (...args: unknown[]) => useAsReference(...args),
-    sendToUpscale: (...args: unknown[]) => sendToUpscale(...args),
-    sendToRemoveBg: (...args: unknown[]) => sendToRemoveBg(...args),
-    moreLikeThis: (...args: unknown[]) => moreLikeThis(...args),
+    useAsReference: (...args: any[]) => Reflect.apply(useAsReference, undefined, args),
+    sendToUpscale: (...args: any[]) => Reflect.apply(sendToUpscale, undefined, args),
+    sendToRemoveBg: (...args: any[]) => Reflect.apply(sendToRemoveBg, undefined, args),
+    moreLikeThis: (...args: any[]) => Reflect.apply(moreLikeThis, undefined, args),
   }),
 }));
 
@@ -420,7 +420,7 @@ describe('ImageDialog', () => {
     const userStore = useUserStore();
     userStore.history = [{ ...sampleItem, isFavorite: true }] as never;
     const wrapper = openDialog();
-    expect(wrapper.get('[aria-label="Remove from favorites"]').exists()).toBe(true);
+    expect(wrapper.find('[aria-label="Remove from favorites"]').exists()).toBe(true);
 
     await wrapper.get('[aria-label="More actions"]').trigger('click');
     await wrapper.find('.chain-menu__item--danger').trigger('click');
@@ -428,7 +428,7 @@ describe('ImageDialog', () => {
 
     userStore.history = [{ ...sampleItem, isFavorite: false }] as never;
     await wrapper.vm.$nextTick();
-    expect(wrapper.get('[aria-label="Add to favorites"]').exists()).toBe(true);
+    expect(wrapper.find('[aria-label="Add to favorites"]').exists()).toBe(true);
 
     await wrapper.setProps({
       item: { ...sampleItem, _id: 'img-2', prompt: '  ', images: [] } as never,
@@ -473,6 +473,6 @@ describe('ImageDialog', () => {
     const userStore = useUserStore();
     userStore.history = [{ _id: 'img-1' }] as never;
     const wrapper = openDialog();
-    expect(wrapper.get('[aria-label="Add to favorites"]').exists()).toBe(true);
+    expect(wrapper.find('[aria-label="Add to favorites"]').exists()).toBe(true);
   });
 });

@@ -7,6 +7,8 @@ import { useCollectionsStore } from '@/stores/collections';
 import { useDialogStore } from '@/stores/dialog';
 import { useHistoryStore } from '@/stores/history';
 import { useUserStore } from '@/stores/user';
+import { makeImageObject as makeItem } from '@/test/imageFixtures';
+import { FeatureType } from '@visual-ai/shared';
 import type { IImageObject } from '@/types';
 
 vi.mock('vue-clerk', () => ({
@@ -35,18 +37,6 @@ function historyStubs() {
     ImageDialog: { template: '<div class="dialog-stub" />' },
     'font-awesome-icon': iconStub,
   };
-}
-
-function makeItem(overrides: Partial<IImageObject> = {}): IImageObject {
-  return {
-    _id: 'one',
-    prompt: 'A fox in neon rain',
-    featureType: 'image',
-    isFavorite: false,
-    createdAt: '2026-01-02T10:00:00.000Z',
-    images: [{ aiImagePublicId: 'pub/fox' }],
-    ...overrides,
-  } as IImageObject;
 }
 
 function seedHistory(items: IImageObject[]) {
@@ -92,15 +82,15 @@ describe('History', () => {
       makeItem({
         _id: 'fox',
         prompt: 'A fox in neon rain',
-        featureType: 'image',
+        featureType: FeatureType.IMAGE,
         isFavorite: true,
       }),
       makeItem({
         _id: 'cat',
         prompt: 'A cat on a windowsill',
-        featureType: 'upscale',
+        featureType: FeatureType.UPSCALE,
         isFavorite: false,
-        createdAt: '2026-01-01T10:00:00.000Z',
+        createdAt: new Date('2026-01-01T10:00:00.000Z'),
       }),
     ]);
     const history = useHistoryStore();
@@ -145,7 +135,7 @@ describe('History', () => {
   it('selects and deselects tiles, group-selects, and clears the selection', async () => {
     seedHistory([
       makeItem({ _id: 'a', prompt: 'First' }),
-      makeItem({ _id: 'b', prompt: 'Second', createdAt: '2026-01-02T11:00:00.000Z' }),
+      makeItem({ _id: 'b', prompt: 'Second', createdAt: new Date('2026-01-02T11:00:00.000Z') }),
     ]);
     const wrapper = mountHistory();
 
@@ -218,28 +208,28 @@ describe('History', () => {
       makeItem({
         _id: 'enhanced',
         prompt: undefined,
-        featureType: 'upscale',
-        createdAt: '2026-01-03T10:00:00.000Z',
+        featureType: FeatureType.UPSCALE,
+        createdAt: new Date('2026-01-03T10:00:00.000Z'),
         images: [{ enhancedPublicId: 'enh/old' }],
       }),
       makeItem({
         _id: 'raw',
-        createdAt: '2026-01-04T10:00:00.000Z',
+        createdAt: new Date('2026-01-04T10:00:00.000Z'),
         images: [{ aiImageUrl: 'https://cdn.example.com/raw.jpg' }],
       }),
       makeItem({
         _id: 'enhanced-url',
-        createdAt: '2026-01-05T10:00:00.000Z',
+        createdAt: new Date('2026-01-05T10:00:00.000Z'),
         images: [{ enhancedImageUrl: 'https://cdn.example.com/enh.jpg' }],
       }),
       makeItem({
         _id: 'empty',
-        createdAt: '2026-01-06T10:00:00.000Z',
+        createdAt: new Date('2026-01-06T10:00:00.000Z'),
         images: [{}],
       }),
       makeItem({
         _id: 'stack',
-        createdAt: '2026-01-07T10:00:00.000Z',
+        createdAt: new Date('2026-01-07T10:00:00.000Z'),
         images: [
           { aiImageUrl: 'https://cdn.example.com/1.jpg' },
           { aiImageUrl: 'https://cdn.example.com/2.jpg' },

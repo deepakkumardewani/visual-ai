@@ -32,7 +32,8 @@ describe("asyncHandler", () => {
         })
 
         const wrapped = asyncHandler(asyncFn)
-        await wrapped(req, res, next)
+        wrapped(req, res, next)
+        await Promise.resolve()
 
         expect(asyncFn).toHaveBeenCalledWith(req, res, next)
         expect(res.status).toHaveBeenCalledWith(200)
@@ -47,7 +48,8 @@ describe("asyncHandler", () => {
             throw error
         })
 
-        await wrapped({} as any, {} as any, next)
+        wrapped({} as any, {} as any, next)
+        await Promise.resolve()
 
         expect(next).toHaveBeenCalledWith(error)
     })
@@ -57,7 +59,8 @@ describe("asyncHandler", () => {
         const next = vi.fn()
         const wrapped = asyncHandler(() => Promise.reject(error) as any)
 
-        await wrapped({} as any, {} as any, next)
+        wrapped({} as any, {} as any, next)
+        await Promise.resolve()
 
         expect(next).toHaveBeenCalledWith(error)
     })

@@ -36,8 +36,12 @@ async function dispatch(req: object, res: object) {
     if (!layer) {
         throw new Error("Missing route GET /healthcheck")
     }
-    const handle = layer.route.stack[0].handle
-    await handle(req, res)
+    const handle = layer.route!.stack[0].handle
+    await (handle as (req: object, res: object, next: () => void) => Promise<void>)(
+        req,
+        res,
+        vi.fn(),
+    )
 }
 
 describe("healthCheckRoute", () => {

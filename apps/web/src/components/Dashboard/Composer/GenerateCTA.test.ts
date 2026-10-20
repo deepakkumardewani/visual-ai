@@ -37,7 +37,7 @@ describe('GenerateCTA', () => {
       global: { plugins: [pinia], stubs },
     });
 
-    expect(wrapper.get('[data-testid="generate-cta-wrap"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="generate-cta-wrap"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="generate-cta"]').attributes('disabled')).toBeDefined();
     expect(wrapper.get('[data-testid="generate-cta"]').text()).toContain('Generate');
   });
@@ -79,7 +79,9 @@ describe('GenerateCTA', () => {
     useAsideStore().typingPrompt = 'Coast at dusk';
     useUserStore().credits = 20;
     useGenerateStore().isLoading = true;
-    const generate = vi.spyOn(useGenerateStore(), 'generateImage').mockImplementation(() => {});
+    const generate = vi
+      .spyOn(useGenerateStore(), 'generateImage')
+      .mockImplementation(async () => {});
 
     const wrapper = mount(GenerateCTA, { global: { plugins: [pinia], stubs } });
     await wrapper.get('[data-testid="generate-cta"]').trigger('click');
@@ -94,7 +96,9 @@ describe('GenerateCTA', () => {
     aside.typingPrompt = 'Coast at dusk';
     aside.outputQuality = 1;
     useUserStore().credits = 40;
-    const generate = vi.spyOn(useGenerateStore(), 'generateImage').mockImplementation(() => {});
+    const generate = vi
+      .spyOn(useGenerateStore(), 'generateImage')
+      .mockImplementation(async () => {});
 
     const wrapper = mount(GenerateCTA, { global: { plugins: [pinia], stubs } });
     expect(wrapper.get('[data-testid="generate-cta"]').attributes('aria-label')).toBe(
@@ -117,7 +121,9 @@ describe('GenerateCTA', () => {
     aside.typingPrompt = 'Coast at dusk';
     aside.outputQuality = 0;
     useUserStore().credits = 40;
-    const generate = vi.spyOn(useGenerateStore(), 'generateImage').mockImplementation(() => {});
+    const generate = vi
+      .spyOn(useGenerateStore(), 'generateImage')
+      .mockImplementation(async () => {});
 
     const wrapper = mount(GenerateCTA, { global: { plugins: [pinia], stubs } });
     await wrapper.get('[data-testid="generate-cta"]').trigger('click');
@@ -134,7 +140,9 @@ describe('GenerateCTA', () => {
     const fluxPro = MODELS.find((model) => model.id === 'FLUX_PRO');
     if (fluxPro) aside.mode = fluxPro;
     useUserStore().credits = 40;
-    const generate = vi.spyOn(useGenerateStore(), 'generateImage').mockImplementation(() => {});
+    const generate = vi
+      .spyOn(useGenerateStore(), 'generateImage')
+      .mockImplementation(async () => {});
 
     const wrapper = mount(GenerateCTA, { global: { plugins: [pinia], stubs } });
     await wrapper.get('[data-testid="generate-cta"]').trigger('click');
