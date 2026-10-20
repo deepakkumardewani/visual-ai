@@ -375,7 +375,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 
 **Try in UI:** Open the Buy more credits dialog and check the four packs and the Dodo trust line ; Pick a pack, complete a test payment in the overlay, and watch credits increase once ; Open Profile > Payments and see the new row (and an empty state if you have none) ; Close the overlay early: a processing message shows after the poll times out
 
-### ☐ T5.1 Overlay wrapper and checkout client
+### ✅ T5.1 Overlay wrapper and checkout client
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/payments/dodoOverlay.ts`, `apps/web/src/payments/checkoutClient.ts`, `apps/web/package.json`, `apps/web/src/main.ts`
@@ -386,7 +386,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Open-with-URL and API-error behaviour (proven by T5.6).
 - **Verify:** `bun run verify`; `git grep -nE "dodopayments-checkout|@dodopayments/checkout" apps/web/src` lists only `src/payments/dodoOverlay.ts`.
 
-### ☐ T5.2 `usePurchase` composable with status polling
+### ✅ T5.2 `usePurchase` composable with status polling
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/payments/usePurchase.ts`, `apps/web/src/payments/constants.ts`
@@ -397,7 +397,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Poll constants are named, not inline numbers.
 - **Verify:** `bun run verify`; `git grep -n setCredits apps/web/src/payments` returns nothing.
 
-### ☐ T5.3 Pricing catalog and Pricing page use shared `CREDIT_PACKS`
+### ✅ T5.3 Pricing catalog and Pricing page use shared `CREDIT_PACKS`
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/composables/usePricingCatalog.ts`, `apps/web/src/composables/usePricingCatalog.test.ts`, `apps/web/src/components/Pricing/PricingPacks.vue`, `apps/web/src/components/Pricing/PricingPacks.test.ts`
@@ -408,7 +408,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] No Razorpay reference left in these 4 files.
 - **Verify:** `cd apps/web && bunx vitest run src/composables/usePricingCatalog.test.ts src/components/Pricing/`; `bun run verify`.
 
-### ☐ T5.4 Buy dialog and Profile payments
+### ✅ T5.4 Buy dialog and Profile payments
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dialogs/BuyMoreCreditsDialog.vue`, `apps/web/src/components/Dialogs/BuyMoreCreditsDialog.test.ts`, `apps/web/src/components/Profile/Payments.vue`, `apps/web/src/components/Profile/Payments.test.ts`
@@ -420,7 +420,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] The dialog trust line names Dodo Payments, and its test asserts the new text; neither dialog file mentions Razorpay in any form.
 - **Verify:** `cd apps/web && bunx vitest run src/components/Dialogs/BuyMoreCreditsDialog.test.ts src/components/Profile/Payments.test.ts`; `git grep -ni razorpay -- apps/web/src/components/Dialogs/BuyMoreCreditsDialog.vue apps/web/src/components/Dialogs/BuyMoreCreditsDialog.test.ts` returns nothing; `bun run test`; `bun run verify`.
 
-### ☐ T5.5 Return-URL handler (conditional)
+### ✅ T5.5 Return-URL handler (conditional)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/router/index.ts`, `apps/web/src/pages/PaymentReturn.vue`
@@ -429,7 +429,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Either N/A with citation, or the route polls status and refetches the user (proven by T5.7).
 - **Verify:** the N/A citation in the task result, or `bun run verify` and `test -f apps/web/src/pages/PaymentReturn.vue`.
 
-### ☐ T5.6 Unit: web purchase
+### ✅ T5.6 Unit: web purchase
 
 - **Kind:** unit
 - **Files:** `apps/web/src/payments/checkoutClient.ts`, `apps/web/src/payments/usePurchase.ts`, `apps/web/src/payments/dodoOverlay.ts`
@@ -442,7 +442,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] No `it.fails` unless the source has a real bug.
 - **Verify:** `cd apps/web && bunx vitest run src/payments/ --coverage --coverage.include=src/payments/checkoutClient.ts --coverage.include=src/payments/usePurchase.ts --coverage.include=src/payments/dodoOverlay.ts --coverage.reporter=text`.
 
-### ☐ T5.7 Unit: pricing UI
+### ✅ T5.7 Unit: pricing UI
 
 - **Kind:** unit
 - **Files:** `apps/web/src/composables/usePricingCatalog.ts`, `apps/web/src/components/Pricing/PricingPacks.vue`, `apps/web/src/components/Dialogs/BuyMoreCreditsDialog.vue`, `apps/web/src/components/Profile/Payments.vue`, `apps/web/src/pages/PaymentReturn.vue`
@@ -454,7 +454,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] No `it.fails` unless the source has a real bug.
 - **Verify:** If T5.5 is N/A: `cd apps/web && bunx vitest run src/composables/usePricingCatalog.test.ts src/components/Pricing/PricingPacks.test.ts src/components/Dialogs/BuyMoreCreditsDialog.test.ts src/components/Profile/Payments.test.ts --coverage --coverage.include=src/composables/usePricingCatalog.ts --coverage.include=src/components/Pricing/PricingPacks.vue --coverage.include=src/components/Dialogs/BuyMoreCreditsDialog.vue --coverage.include=src/components/Profile/Payments.vue --coverage.reporter=text`. If T5.5 was implemented: the same command with `src/pages/PaymentReturn.test.ts` added to the spec list and `--coverage.include=src/pages/PaymentReturn.vue` added to the includes.
 
-### ☐ T5.8 E2E: purchase credits
+### ✅ T5.8 E2E: purchase credits
 
 - **Kind:** e2e
 - **Spec:** `apps/web/e2e/qa/billing-purchase.spec.ts` (scenario file `apps/web/e2e/scenarios/billing-purchase.feature.md`)
@@ -474,7 +474,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] No `test.fail()`, `.skip` or `.fixme`.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/billing-purchase.spec.ts --repeat-each=3`.
 
-### ☐ T5.9 E2E: payment history
+### ✅ T5.9 E2E: payment history
 
 - **Kind:** e2e
 - **Spec:** `apps/web/e2e/qa/billing-history.spec.ts` (scenario file `apps/web/e2e/scenarios/billing-history.feature.md`)

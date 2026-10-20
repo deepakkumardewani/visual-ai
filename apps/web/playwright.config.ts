@@ -24,8 +24,16 @@ export default defineConfig({
       },
     },
     {
+      name: 'chromium-billing',
+      testMatch: /billing-purchase\.spec\.ts/,
+      workers: 1,
+      fullyParallel: false,
+      dependencies: ['setup'],
+      use: { ...devices['Desktop Chrome'], storageState: AUTH_STATE_PATH },
+    },
+    {
       name: 'chromium',
-      testIgnore: /auth\.setup\.ts/,
+      testIgnore: [/auth\.setup\.ts/, /billing-purchase\.spec\.ts/],
       grepInvert: /@guest/,
       dependencies: ['setup'],
       use: { ...devices['Desktop Chrome'], storageState: AUTH_STATE_PATH },

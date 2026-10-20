@@ -16,6 +16,10 @@ import App from './App.vue';
 
 import '@/style.scss';
 
+import { initDodoOverlay } from '@/payments/dodoOverlay';
+
+initDodoOverlay();
+
 const app = createApp(App);
 
 registerPlugins(app);

@@ -1,7 +1,6 @@
 import { computed } from 'vue';
 
-import { RAZORPAY_PRODUCTS } from '@/utils/constants';
-import { getCreditCost, MODEL_REGISTRY } from '@visual-ai/shared';
+import { CREDIT_PACKS, getCreditCost, MODEL_REGISTRY } from '@visual-ai/shared';
 import type { ModelKey } from '@visual-ai/shared';
 
 export type PricingModelRow = { key: ModelKey; label: string; cost: number };
@@ -175,9 +174,7 @@ export function usePricingCatalog() {
     ];
   });
 
-  const creditPacks = computed(() =>
-    RAZORPAY_PRODUCTS.filter((product) => product.type === 'single'),
-  );
+  const creditPacks = computed(() => [...CREDIT_PACKS]);
 
   return { modelsByCategory, pricingBoard, creditPacks };
 }

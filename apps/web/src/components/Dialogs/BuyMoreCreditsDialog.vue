@@ -3,13 +3,13 @@ import { faCheck } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
 import { computed, shallowRef } from 'vue';
 
+import { usePurchase } from '@/payments/usePurchase';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
 import AppModal from '@/components/AppModal.vue';
 
-import { RAZORPAY_PRODUCTS } from '@/utils/constants';
-import { initiatePayment } from '@/utils/payment';
+import { CREDIT_PACKS, type CreditPack } from '@visual-ai/shared';
 
 const BUDGET_IMAGE_CREDIT_COST = 1;
 
@@ -17,19 +17,18 @@ const dialogStore = useDialogStore();
 const userStore = useUserStore();
 const { showBuyCreditsDialog } = storeToRefs(dialogStore);
 const { credits, dailyCredits } = storeToRefs(userStore);
+const { start } = usePurchase();
 
 const loading = shallowRef(false);
 const successBalance = shallowRef<number | null>(null);
-const packages = RAZORPAY_PRODUCTS.filter((product) => product.type === 'single');
+const packages = [...CREDIT_PACKS];
 const selectedIndex = shallowRef(0);
 
 const currentPackage = computed(() => packages[selectedIndex.value]);
 
 const bestValueIndex = computed(() => {
   return packages.reduce((maxIdx, pkg, idx) => {
-    const savings = parseFloat(pkg.savings?.replace('%', '') || '0');
-    const currentSavings = parseFloat(packages[maxIdx].savings?.replace('%', '') || '0');
-    return savings > currentSavings ? idx : maxIdx;
+    return pkg.savingsPercent > packages[maxIdx].savingsPercent ? idx : maxIdx;
   }, 0);
 });
 
@@ -42,8 +41,16 @@ const mostPopularIndex = computed(() => {
 
 const totalCredits = computed(() => credits.value + dailyCredits.value);
 
-function perCreditRate(price: number, creditCount: number) {
-  return (price / creditCount).toFixed(2);
+function priceMajor(pack: CreditPack) {
+  return pack.priceMinor / 100;
+}
+
+function perCreditRate(pack: CreditPack) {
+  return (priceMajor(pack) / pack.credits).toFixed(2);
+}
+
+function savingsLabel(pack: CreditPack) {
+  return pack.savingsPercent > 0 ? `${pack.savingsPercent}%` : undefined;
 }
 
 function estimatedBudgetImages(creditCount: number) {
@@ -51,14 +58,19 @@ function estimatedBudgetImages(creditCount: number) {
 }
 
 async function handlePurchase() {
+  const pack = currentPackage.value;
+  if (!pack) return;
+
   loading.value = true;
   try {
-    await initiatePayment(currentPackage.value);
-    successBalance.value = totalCredits.value + currentPackage.value.credits;
-    setTimeout(() => {
-      successBalance.value = null;
-      dialogStore.hideBuyCredits();
-    }, 2000);
+    const outcome = await start(pack.id);
+    if (outcome === 'succeeded') {
+      successBalance.value = totalCredits.value;
+      setTimeout(() => {
+        successBalance.value = null;
+        dialogStore.hideBuyCredits();
+      }, 2000);
+    }
   } catch (error) {
     console.error('Purchase failed:', error);
   } finally {
@@ -110,7 +122,7 @@ async function handlePurchase() {
           <div class="buy__packages" role="radiogroup" aria-label="Credit packages">
             <button
               v-for="(pkg, index) in packages"
-              :key="pkg.credits"
+              :key="pkg.id"
               type="button"
               class="buy__pkg"
               :class="{
@@ -129,10 +141,10 @@ async function handlePurchase() {
 
               <span class="pkg-credits">{{ pkg.credits }}</span>
               <span class="pkg-credits-label">credits</span>
-              <span class="pkg-price">₹{{ pkg.price }}</span>
-              <span v-if="pkg.savings" class="pkg-savings">Save {{ pkg.savings }}</span>
+              <span class="pkg-price">₹{{ priceMajor(pkg) }}</span>
+              <span v-if="savingsLabel(pkg)" class="pkg-savings">Save {{ savingsLabel(pkg) }}</span>
               <span v-else class="pkg-savings pkg-savings--empty">&nbsp;</span>
-              <span class="pkg-meta"> ₹{{ perCreditRate(pkg.price, pkg.credits) }}/credit </span>
+              <span class="pkg-meta"> ₹{{ perCreditRate(pkg) }}/credit </span>
               <span class="pkg-estimate"
                 >≈ {{ estimatedBudgetImages(pkg.credits) }} budget images</span
               >
@@ -140,7 +152,9 @@ async function handlePurchase() {
           </div>
         </div>
 
-        <p class="trust-line">Secure payment via Razorpay. Credits apply instantly.</p>
+        <p class="trust-line">
+          Secure payment via Dodo Payments. Credits apply after payment confirmation.
+        </p>
       </div>
     </template>
 

@@ -4,23 +4,22 @@ import { computed, shallowRef } from 'vue';
 import { useRouter } from 'vue-router';
 
 import LandingButton from '@/components/Landing/LandingButton.vue';
+import { usePurchase } from '@/payments/usePurchase';
 import { useUserStore } from '@/stores/user';
-import type { RazorpayProduct } from '@/types';
-import { initiatePayment } from '@/utils/payment';
+import type { CreditPack } from '@visual-ai/shared';
 
 const props = defineProps<{
-  packs: RazorpayProduct[];
+  packs: CreditPack[];
 }>();
 
 const router = useRouter();
 const userStore = useUserStore();
-const buyingId = shallowRef<number | null>(null);
+const { start } = usePurchase();
+const buyingId = shallowRef<string | null>(null);
 
 const featuredId = computed(() => {
   return props.packs.reduce((best, pack) => {
-    const savings = Number.parseFloat(pack.savings?.replace('%', '') || '0');
-    const bestSavings = Number.parseFloat(best.savings?.replace('%', '') || '0');
-    return savings > bestSavings ? pack : best;
+    return pack.savingsPercent > best.savingsPercent ? pack : best;
   }, props.packs[0]).id;
 });
 
@@ -32,11 +31,19 @@ const orderedPacks = computed(() => {
   });
 });
 
-function perCredit(pack: RazorpayProduct) {
-  return (pack.price / pack.credits).toFixed(2);
+function priceMajor(pack: CreditPack) {
+  return pack.priceMinor / 100;
 }
 
-async function buyPack(pack: RazorpayProduct) {
+function perCredit(pack: CreditPack) {
+  return (priceMajor(pack) / pack.credits).toFixed(2);
+}
+
+function savingsLabel(pack: CreditPack) {
+  return pack.savingsPercent > 0 ? `${pack.savingsPercent}%` : undefined;
+}
+
+async function buyPack(pack: CreditPack) {
   if (!userStore.userDetails) {
     void router.push({ name: 'signin', query: { redirect: '/pricing' } });
     return;
@@ -44,7 +51,7 @@ async function buyPack(pack: RazorpayProduct) {
 
   buyingId.value = pack.id;
   try {
-    await initiatePayment(pack);
+    await start(pack.id);
   } finally {
     buyingId.value = null;
   }
@@ -69,9 +76,9 @@ async function buyPack(pack: RazorpayProduct) {
         class="pack"
         :class="{ 'pack--featured': pack.id === featuredId }"
       >
-        <p v-if="pack.savings" class="pack__save">Save {{ pack.savings }}</p>
+        <p v-if="savingsLabel(pack)" class="pack__save">Save {{ savingsLabel(pack) }}</p>
         <h3 class="pack__credits">{{ pack.credits }} credits</h3>
-        <p class="pack__price">₹{{ pack.price }}</p>
+        <p class="pack__price">₹{{ priceMajor(pack) }}</p>
         <p class="pack__unit">₹{{ perCredit(pack) }} per credit</p>
         <LandingButton
           class="pack__cta"

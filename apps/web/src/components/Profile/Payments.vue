@@ -5,6 +5,7 @@ import { computed } from 'vue';
 import LandingButton from '@/components/Landing/LandingButton.vue';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
+import type { PaymentRecord } from '@visual-ai/shared';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
@@ -12,6 +13,10 @@ const { payments, isReady } = storeToRefs(userStore);
 
 const loading = computed(() => !isReady.value);
 const hasPayments = computed(() => (payments.value?.length ?? 0) > 0);
+
+function paymentRowKey(item: PaymentRecord) {
+  return item.providerPaymentId ?? item.transactionId;
+}
 
 function statusClass(status: string) {
   const normalized = status?.toLowerCase() ?? '';
@@ -55,7 +60,7 @@ function statusClass(status: string) {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in payments" :key="item.transactionId">
+          <tr v-for="item in payments" :key="paymentRowKey(item as PaymentRecord)">
             <td data-label="Date">{{ item.humanReadableDate }}</td>
             <td data-label="Amount" class="payments__amount">₹{{ item.amount.toFixed(2) }}</td>
             <td data-label="Status">

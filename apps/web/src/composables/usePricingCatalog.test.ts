@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import * as shared from '@visual-ai/shared';
+import { CREDIT_PACKS } from '@visual-ai/shared';
 import type { ModelKey } from '@visual-ai/shared';
 
 import { usePricingCatalog } from '@/composables/usePricingCatalog';
-import { RAZORPAY_PRODUCTS } from '@/utils/constants';
 
 const realCost = shared.getCreditCost;
 
@@ -76,11 +76,51 @@ describe('usePricingCatalog', () => {
     expect(upscale.bands.some((band) => band.title === 'Standard upscale')).toBe(true);
   });
 
-  it('exposes one-time credit packs only', () => {
+  it('omits the premium generation band when every model costs one credit', () => {
+    vi.spyOn(shared, 'getCreditCost').mockImplementation((key: ModelKey) => {
+      const model = shared.MODEL_REGISTRY[key];
+      if (!model || model.utility) return realCost(key);
+      return 1;
+    });
+
+    const { pricingBoard } = usePricingCatalog();
+    const [generation] = pricingBoard.value;
+    expect(generation.bands.some((band) => band.title === 'Premium generation')).toBe(false);
+    expect(generation.bands.some((band) => band.title === 'Everyday generation')).toBe(true);
+  });
+
+  it('builds premium-only generation when no everyday models remain', () => {
+    vi.spyOn(shared, 'getCreditCost').mockImplementation((key: ModelKey) => {
+      const model = shared.MODEL_REGISTRY[key];
+      if (!model || model.utility) return realCost(key);
+      return 4;
+    });
+
+    const { pricingBoard } = usePricingCatalog();
+    const [generation] = pricingBoard.value;
+    expect(generation.bands.some((band) => band.title === 'Everyday generation')).toBe(false);
+    expect(generation.bands.some((band) => band.title === 'Premium generation')).toBe(true);
+  });
+
+  it('uses model labels for upscale rows without premium copy', () => {
+    vi.spyOn(shared, 'getCreditCost').mockImplementation((key: ModelKey) => {
+      if (String(key).includes('UPSCALE') && key !== 'UPSCALE_REAL_ESRGAN') return 4;
+      return realCost(key);
+    });
+
+    const { pricingBoard } = usePricingCatalog();
+    const upscale = pricingBoard.value[2];
+    const premium = upscale.bands.find((band) => band.title === 'Premium upscale');
+    expect(premium?.rows.some((row) => row.names.includes('Clarity Pro'))).toBe(true);
+    expect(
+      premium?.rows.some((row) => row.names === shared.MODEL_REGISTRY.UPSCALE_REAL_ESRGAN?.label),
+    ).toBe(false);
+  });
+
+  it('exposes the four shared credit packs (no subscription)', () => {
     const { creditPacks } = usePricingCatalog();
-    expect(creditPacks.value.every((pack) => pack.type === 'single')).toBe(true);
-    expect(creditPacks.value.length).toBe(
-      RAZORPAY_PRODUCTS.filter((product) => product.type === 'single').length,
-    );
+    expect(creditPacks.value).toHaveLength(4);
+    expect(creditPacks.value.map((pack) => pack.id)).toEqual(CREDIT_PACKS.map((pack) => pack.id));
+    expect(creditPacks.value.some((pack) => String(pack.id).includes('monthly'))).toBe(false);
   });
 });
