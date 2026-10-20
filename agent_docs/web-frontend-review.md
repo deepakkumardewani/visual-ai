@@ -1,13 +1,13 @@
 # Frontend Review — `apps/web` (production-readiness audit)
 
-| | |
-|---|---|
-| **Date** | 2026-10-01 |
-| **Branch** | `feature-enhancement` @ `06ad57a` |
-| **Scope** | `apps/web/src/**` (~29k lines, 157 components, 11 stores, 17 composables, 19 utils), `apps/web` build/deploy config. `apps/api` was read only to confirm API contracts. |
-| **Method** | 5 parallel Sonnet reviewers, each covering one area and using the five-axis `/review` checklist (correctness, readability, architecture, security, performance) plus a scan for half-baked code. Then 1 independent Sonnet verifier re-traced every Critical/High finding. Opus orchestrated, de-duplicated and merged. |
-| **Not done** | No e2e, Playwright or browser testing (by request). `vp build` was not run because it launches a Chromium prerender. |
-| **Status** | Read-only review. No source files were changed. |
+|              |                                                                                                                                                                                                                                                                                                                         |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Date**     | 2026-10-01                                                                                                                                                                                                                                                                                                              |
+| **Branch**   | `feature-enhancement` @ `06ad57a`                                                                                                                                                                                                                                                                                       |
+| **Scope**    | `apps/web/src/**` (~29k lines, 157 components, 11 stores, 17 composables, 19 utils), `apps/web` build/deploy config. `apps/api` was read only to confirm API contracts.                                                                                                                                                 |
+| **Method**   | 5 parallel Sonnet reviewers, each covering one area and using the five-axis `/review` checklist (correctness, readability, architecture, security, performance) plus a scan for half-baked code. Then 1 independent Sonnet verifier re-traced every Critical/High finding. Opus orchestrated, de-duplicated and merged. |
+| **Not done** | No e2e, Playwright or browser testing (by request). `vp build` was not run because it launches a Chromium prerender.                                                                                                                                                                                                    |
+| **Status**   | Read-only review. No source files were changed.                                                                                                                                                                                                                                                                         |
 
 ---
 
@@ -26,6 +26,7 @@
 - **Deploy.** The Dockerfile cannot build (FE-012). The quality gates (`vp check`, typecheck) are broken or missing, which is how 28 production type errors built up unnoticed (FE-026, FE-027).
 
 The good parts:
+
 - **Tests:** 1,003 unit tests pass and they are real tests, not stubs.
 - **Cleanup:** GSAP, Lenis, ScrollTrigger and observer cleanup is correct, and reduced motion is respected.
 - **Data:** model and credit data comes from `packages/shared`.
@@ -34,25 +35,25 @@ The good parts:
 
 ### 1.1 Scorecard
 
-| Severity | Count | Meaning |
-|---|---|---|
-| 🔴 Critical | 4 | Money or security loss, or a main feature 100% broken |
-| 🟠 High | 10 | A user-visible feature broken on a common path |
-| 🟡 Medium | 30 | An edge-case bug, a missing error/empty state, or significant duplication or maintainability debt |
-| ⚪ Low | 18 | Cleanup and polish |
-| **Total** | **62** | After merging 23 duplicate reports and dropping 19 suspected issues that did not survive verification (§8) |
+| Severity    | Count  | Meaning                                                                                                    |
+| ----------- | ------ | ---------------------------------------------------------------------------------------------------------- |
+| 🔴 Critical | 4      | Money or security loss, or a main feature 100% broken                                                      |
+| 🟠 High     | 10     | A user-visible feature broken on a common path                                                             |
+| 🟡 Medium   | 30     | An edge-case bug, a missing error/empty state, or significant duplication or maintainability debt          |
+| ⚪ Low      | 18     | Cleanup and polish                                                                                         |
+| **Total**   | **62** | After merging 23 duplicate reports and dropping 19 suspected issues that did not survive verification (§8) |
 
 ### 1.2 Tool results (from `apps/web`)
 
-| Check | Result |
-|---|---|
-| `vp test run` (unit) | ✅ 187 files / 1,003 tests pass |
-| `vp lint` (no `--fix`) | ⚠️ 95 errors / 9 warnings, **all in `*.test.ts`**; production source is clean |
-| `bunx vue-tsc --noEmit` | ❌ 122 errors: **28 in production source** (FE-026), ~94 in tests (FE-033) |
-| `vp check` | ❌ Aborts with "Formatting failed" while formatting `dist/*.html` (FE-027) |
-| `vp build` | Not run (Chromium prerender) |
-| `grep console.log / debugger` | ✅ none |
-| Committed secrets | ✅ none (`.env.*` untracked; only publishable keys) |
+| Check                         | Result                                                                        |
+| ----------------------------- | ----------------------------------------------------------------------------- |
+| `vp test run` (unit)          | ✅ 187 files / 1,003 tests pass                                               |
+| `vp lint` (no `--fix`)        | ⚠️ 95 errors / 9 warnings, **all in `*.test.ts`**; production source is clean |
+| `bunx vue-tsc --noEmit`       | ❌ 122 errors: **28 in production source** (FE-026), ~94 in tests (FE-033)    |
+| `vp check`                    | ❌ Aborts with "Formatting failed" while formatting `dist/*.html` (FE-027)    |
+| `vp build`                    | Not run (Chromium prerender)                                                  |
+| `grep console.log / debugger` | ✅ none                                                                       |
+| Committed secrets             | ✅ none (`.env.*` untracked; only publishable keys)                           |
 
 ### 1.3 Themes
 
@@ -68,6 +69,7 @@ The good parts:
 ## 2. How to read a finding
 
 Each item has these fields:
+
 - **Severity**, **Area**, and **Sources**: the original reviewer IDs, for traceability.
 - **Evidence**: `file:line` paths relative to `apps/web/src/` unless prefixed. **Line numbers drift.** Re-locate the code by symbol or grep before editing.
 - **Problem**: the concrete failure scenario.
@@ -84,6 +86,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 ### 🔴 Critical
 
 #### FE-001 — Credits can be minted: client sets price and credit grant; webhook is unsigned and not idempotent 🧩 API ❓ Decision
+
 - **Sources:** STATE-02, UI-03, XC-01 · **Category:** security
 - **Evidence:**
   - `utils/payment.ts:49-52` sends `notes: { userId, credits: product.credits }`, and `:128-130` sends `amount: product.price`.
@@ -105,6 +108,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** the credits granted always equal the catalog value of the paid product. Forged and replayed webhooks are no-ops.
 
 #### FE-002 — `/users*` API routes are unauthenticated; other routes trust a body `userId` (IDOR) 🧩 API
+
 - **Sources:** UI-18 (scope corrected by the verifier) · **Category:** security
 - **Evidence:** `apps/api/src/routes/index.ts:19-24` does `router.use(userRoutes, ClerkExpressRequireAuth({}))`. Express runs handlers in argument order, so a matching `/users*` route responds before the auth middleware runs. Other routers fall through to the middleware and are authenticated, but they read `userId` from the body or params rather than from `req.auth`.
 - **Problem:** without a session, anyone can list all users, change a plan, apply referrals and edit names through `/users*`. On authenticated routes, a signed-in user can act on another user's id.
@@ -116,6 +120,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** every non-public route returns 401 without a Clerk session, and no handler trusts a client-supplied user id.
 
 #### FE-003 — Every sidebar upscale fails: a `Ref` is sent as `scale`
+
 - **Sources:** DASH-01 · **Category:** bug
 - **Evidence:** `components/Dashboard/Sidebar/UpscaleImageAside.vue:~113` passes `scale` (`ref<number>(2)`) to `generateStore.upscaleImage`, and `stores/generate.ts` does `formData.append('scale', scale)`. FormData sends `"[object Object]"`. The API's `processUpscale` (`apps/api/src/services/generation-service.ts:~425`) computes `Number(scale)`, which is `NaN`, and `validateModelParams` rejects it.
 - **Problem:** upscale from the dashboard sidebar always fails.
@@ -124,6 +129,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** the request body has `scale=2` and the upscale completes.
 
 #### FE-004 — Buy-credits shows "success" when the Razorpay modal merely opens; purchase flow duplicated
+
 - **Sources:** UI-01, UI-19 · **Category:** bug, payments
 - **Evidence:**
   - `utils/payment.ts:59-72`: `initiatePayment` resolves right after `rzp.open()` and catches its own errors.
@@ -151,6 +157,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 ### 🟠 High
 
 #### FE-005 — Upscale / remove-bg / colorize / revive failures are swallowed (`isEmpty(Error) === true`)
+
 - **Sources:** STATE-01, DASH-02 · **Category:** bug
 - **Evidence:** `stores/generate.ts:196,228,258,287`: `if (typeof error.value === 'object' && !isEmpty(error.value))`. vueuse puts an `Error` in `error.value`, and lodash `isEmpty(new Error('x'))` is `true`. `generateImage` (`:161`) uses `if (error.value)` and works.
 - **Problem:** on any HTTP or network failure the four transform flows keep `*InProgress` and `isLoading` true, show no error or Retry, and the viewer spinner in `useViewerTransform.startAction` never stops.
@@ -158,11 +165,12 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
   - resets the persisted in-progress key, using the single key helper from FE-029;
   - resets the feature ref and `isLoading`;
   - calls `closeEventSource(feature)` and `setFeatureError(feature, GENERIC_ERROR)`.
-  Change all four conditions to `if (error.value)`, and remove the `isEmpty` import. This also removes the last `lodash-es` use (FE-050).
+    Change all four conditions to `if (error.value)`, and remove the `isEmpty` import. This also removes the last `lodash-es` use (FE-050).
 - **Test to add:** `stores/generate.test.ts`: mock `useFetch` to return `{ error: ref(new Error('Bad Request')) }` for each of the 4 actions; assert `errMsg[feature]` is set and the flags are false.
 - **Acceptance:** a failed transform shows an error with Retry, all flags clear, and the viewer spinner stops.
 
 #### FE-006 — Router guard sends signed-in users to `/signin` on hard reload; `redirect` query never used
+
 - **Sources:** STATE-03 · **Category:** bug
 - **Evidence:**
   - `router/index.ts:172-185` treats `isSignedIn.value === undefined` as signed out. vue-clerk reports `undefined` until loaded, and the router is installed right after `clerkPlugin` with no `isLoaded` wait.
@@ -180,6 +188,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** a signed-in reload stays on the page, and a signed-out deep link returns the user there after sign-in.
 
 #### FE-007 — "Send to Upscale / Remove BG" always fails: `useRouter()` inside a Pinia action after `await`
+
 - **Sources:** STATE-04 · **Category:** bug
 - **Evidence:** `stores/aside.ts:105` calls `const router = useRouter()` and `:123` calls `await router.push(...)`. Callers in `composables/useImageChainActions.ts:188-193,209-214` `await confirmChainAction(...)` first. Outside setup, `inject` returns `undefined`, so `push` throws a TypeError, which is caught at `:128` and makes the action return `false`.
 - **Problem:** the user sees "Could not open Upscale" or "Could not open Remove background" from the viewer, the result canvas and history.
@@ -192,6 +201,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** both chain actions navigate and pre-fill the image.
 
 #### FE-008 — Bulk-action busy flags stuck after success
+
 - **Sources:** STATE-05, UI-05 · **Category:** bug
 - **Evidence:**
   - `utils/helpers.ts:119-141`: `isBulkFavoriting = true`, reset only on error.
@@ -203,6 +213,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** the flags reset on every path.
 
 #### FE-009 — Client credit gate ignores daily credits
+
 - **Sources:** DASH-05, UI-07 · **Category:** bug
 - **Evidence:**
   - `stores/user.ts:30-34`: `canAffordOutputs` and `hasCredits` use `credits` only.
@@ -215,6 +226,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** client affordability matches the server rule everywhere.
 
 #### FE-010 — "Delete account" reports success and navigates home, but nothing is deleted 🧩 API
+
 - **Sources:** UI-10 · **Category:** bug
 - **Evidence:**
   - `components/Dialogs/DeleteDialog.vue:25-37`: `const { error, data } = await useFetch('/api/users/${userId}', { method: 'DELETE' })`, then `if (data) {...hide; router.push('/')}`. `data` and `error` are refs, so they are always truthy.
@@ -228,6 +240,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** the dialog closes only on a real deletion, and failures are visible.
 
 #### FE-011 — Payment failures only log; balance is computed client-side after a 700 ms timer
+
 - **Sources:** STATE-10, UI-02, XC-02 · **Category:** ux-state, payments
 - **Evidence:**
   - `utils/payment.ts:67-69`: `payment.failed` only logs.
@@ -245,6 +258,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** the displayed credits always come from the server, and every failure path is visible.
 
 #### FE-012 — `apps/web/Dockerfile` cannot build (yarn in a bun workspace)
+
 - **Sources:** XC-05 · **Category:** config
 - **Evidence:**
   - `Dockerfile:3-4` does `COPY package.json yarn.lock ./` and `RUN yarn install`. No `yarn.lock` exists (the repo uses root `bun.lock`), and `@visual-ai/shared` is `workspace:*`.
@@ -256,11 +270,12 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
   - Build from the repo root with `oven/bun` and `bun install --frozen-lockfile`, run the web build with prerender (Playwright Chromium in the build stage), then copy `apps/web/dist` and `nginx/conf/spa.conf`.
   - Extend `.dockerignore` with `coverage`, `.env.local` and `**/node_modules`.
   - Delete `.yarnrc.yml` and `.cursorrules`.
-  If it is not the live path, delete the Dockerfile and `docker-compose.yml` instead.
+    If it is not the live path, delete the Dockerfile and `docker-compose.yml` instead.
 - **Test to add:** n/a. Verify that `docker build -f apps/web/Dockerfile .` succeeds from the root.
 - **Acceptance:** the image builds and serves the prerendered landing page, and no yarn artefacts remain.
 
 #### FE-013 — Landing nav links are dead on all 5 feature landing pages
+
 - **Sources:** MKT-01 · **Category:** bug
 - **Evidence:** `utils/landing.ts:185-191` defines `NAV_LINKS` as `#tools #showcase #models #pricing #faq`. `pages/FeatureLanding.vue` renders `LandingNav`, but only has a `#faq` section. `LandingNav` uses `@click.prevent` plus `scrollToSection`, which does nothing when the element is missing.
 - **Problem:** on `/text-to-image`, `/image-upscaler` and the other feature pages, 4 of the 5 nav links do nothing.
@@ -269,6 +284,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** every nav link works on every page that renders `LandingNav`.
 
 #### FE-014 — Credit-pack "Save X%" figures are invented, and the featured pack is the wrong one
+
 - **Sources:** MKT-06 · **Category:** bug, trust
 - **Evidence:** `utils/constants.ts:256-292` hard-codes 11%, 22% and 31%. The real per-credit prices are 0.825, 0.796, 0.787 and 0.798, so the real savings against the base pack are about 3.5%, 4.6% and 3.3%. `components/Landing/PricingTeaser.vue:25` says "save up to 31%". The 500-credit pack is labelled "Save 31%" and featured, yet it costs **more** per credit than the 380 pack.
 - **Problem:** the pricing claims are misleading, which is a consumer-protection risk on a payments page.
@@ -279,6 +295,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 ### 🟡 Medium
 
 #### FE-015 — `deleteImage` keeps only the deleted id in `deletingImageIds` (inverted filter)
+
 - **Sources:** STATE-06, UI-04
 - **Evidence:** `utils/helpers.ts:48` `filter((id) => id === data.value.imageId)`; the error branch (`:42`) uses `!==`, and the resets run only when `data.value` is truthy.
 - **Problem:** concurrent deletes lose their spinners, the deleted id is never removed, and an empty response body leaves `isDeleting` stuck.
@@ -287,6 +304,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** only the finished id is removed, and `isDeleting` resets on every path.
 
 #### FE-016 — `bulkDownload` is fire-and-forget
+
 - **Sources:** STATE-11, UI-09
 - **Evidence:**
   - `utils/helpers.ts:175-199` uses `images.forEach(async ...)`.
@@ -299,6 +317,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** the busy flag reflects progress and every file is saved.
 
 #### FE-017 — Bulk delete has no confirmation and no error feedback
+
 - **Sources:** UI-06 (double-fire claim refuted) · **Category:** ux-state
 - **Evidence:** `components/History/SelectActionButtons.vue:41-42,157` calls `bulkDelete` directly. `utils/helpers.ts:143-172` only logs errors. Single delete uses `ConfirmDeleteImageDialog`.
 - **Problem:** one click permanently deletes all selected images, and a failure is invisible.
@@ -307,6 +326,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** confirmation is required and failures are visible.
 
 #### FE-018 — History "select all in group" pushes duplicates
+
 - **Sources:** UI-08
 - **Evidence:** `components/History/History.vue:83-103`: `groupData.forEach(item => selectedImages.value.push(item))`, called whenever a group is not fully selected.
 - **Problem:** the selected count is inflated and the bulk request carries duplicate ids.
@@ -315,6 +335,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** `selectedImages` never contains duplicates.
 
 #### FE-019 — Dashboard canvas has no error UI for upscale, remove-bg, colorize and revive
+
 - **Sources:** DASH-06 · **Category:** half-baked
 - **Evidence:** `components/Dashboard/Canvas/GenerationErrorBanner.vue` is mounted only for `FeatureType.IMAGE` (`Feed/UserGenerationsGrid.vue:143`). The other features' `errMsg` has no consumer in the dashboard canvas.
 - **Problem:** even after FE-005, transform errors started from the sidebar are invisible on the dashboard.
@@ -323,6 +344,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** errors are visible for all five features.
 
 #### FE-020 — Reference image can be attached but is never sent ❓ Decision
+
 - **Sources:** DASH-11 · **Category:** half-baked
 - **Evidence:** `stores/aside.ts` holds `referenceImage` and an unused `imageInputMax`. `components/Dashboard/Composer/ReferenceImageControl.vue` and the `PromptBar` thumbnail let the user attach an image. Neither `GenerateCTA` nor `stores/generate.ts:generateImage` reads it.
 - **Problem:** the user attaches a reference and it is silently ignored.
@@ -331,6 +353,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** the reference image is either used or not offered.
 
 #### FE-021 — Sidebar `onMounted` overwrites restored composer settings
+
 - **Sources:** DASH-04
 - **Evidence:** `components/Dashboard/Sidebar/ImageGenerateAside.vue` `onMounted` resets `aspectRatio`, `imageFormat` and `noOfOutputs`. `composables/useComposerPersistence.ts` restores them earlier, in `Dashboard.vue` setup, and its watcher then persists the defaults.
 - **Problem:** persistence is effectively dead. Settings also reset on a breakpoint change or a feature switch, because the aside remounts.
@@ -339,6 +362,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** a reload keeps the user's settings.
 
 #### FE-022 — Invalid reference or describe image is silently dropped; type validation is weak
+
 - **Sources:** DASH-10
 - **Evidence:** `components/Dashboard/Composer/ReferenceImageControl.vue` does `if (!result.ok) return;`. `composables/useImageDrop.ts` accepts any `image/*`, including svg and heic. The describe input in `ModelPicker/PromptAiMenu.vue` is not validated.
 - **Fix guide:** add a single `validateImageFile(file)` util with a jpeg/png/webp allow-list and the max-size constant. Show `result.error` through `notify()`, and reuse the validator in `PromptAiMenu`.
@@ -346,6 +370,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** every rejected file shows the reason.
 
 #### FE-023 — Explore viewer keyboard and wheel shortcuts fire behind open modals
+
 - **Sources:** UI-14
 - **Evidence:** `composables/useExploreViewerNav.ts:34-40` guards only against input and textarea targets. `components/Explore/ImageViewer.vue:60` sets `navEnabled = !isProcessing`.
 - **Problem:** with the low-credits or chain-confirm dialog open, pressing `r` remixes, Escape exits the viewer, and the arrow keys change the image behind the dialog.
@@ -354,6 +379,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** no shortcut fires while a modal is open.
 
 #### FE-024 — `app` ↔ `generate` store cycle; SSE handling copy-pasted per feature
+
 - **Sources:** STATE-08 · **Category:** architecture
 - **Evidence:**
   - `stores/app.ts:29-40` uses `useGenerateStore()` and `storeToRefs`, and `stores/generate.ts:57` uses `useAppStore()`.
@@ -370,6 +396,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** `generate.ts` does not import `app`, and one handler serves all features.
 
 #### FE-025 — `Authorization: Bearer null`, a junk `mode` request header, and a user store that bypasses `useFetch`
+
 - **Sources:** STATE-09
 - **Evidence:**
   - `composables/useFetch/index.ts:16-21` builds `Bearer ${token}` with no null check.
@@ -383,6 +410,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** `grep -rn "mode: 'cors'" src` returns 0 results and no request carries `Bearer null`.
 
 #### FE-026 — 28 `vue-tsc` errors in production source
+
 - **Sources:** XC-03 · **Category:** type-safety
 - **Evidence:** each entry is `file (line,col)` and the error.
   - `pages/Compare.vue`
@@ -414,11 +442,12 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
   - Delete the unused symbols.
   - Use `keyof typeof` for the icon-map key.
   - Annotate the `plugins/index.ts` expression.
-  Do not use `as any` or `@ts-ignore`.
+    Do not use `as any` or `@ts-ignore`.
 - **Test to add:** `Compare.test.ts`: a missing card renders the fallback.
 - **Acceptance:** `bunx vue-tsc --noEmit` reports 0 errors outside `*.test.ts`.
 
 #### FE-027 — Quality gates broken: `vp check` fails, and every script mutates files
+
 - **Sources:** XC-04 · **Category:** config
 - **Evidence:** `vp check` aborts while formatting `dist/*.html`. In `apps/web/package.json`, `lint` is `vp lint --fix` and `verify` is `vp lint --fix && vp check --fix`. There is no typecheck script.
 - **Fix guide:**
@@ -429,6 +458,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** all three scripts run with `dist/` present and write nothing.
 
 #### FE-028 — nginx serves no compression, cache headers or security headers
+
 - **Sources:** XC-06 · **Category:** performance, security
 - **Evidence:** `apps/web/nginx/conf/spa.conf` contains only `try_files`. `nginx/conf/default.conf:57` sets HSTS only.
 - **Fix guide:** in `spa.conf`:
@@ -441,6 +471,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** assets are served immutable and gzipped, HTML is no-cache, and the security headers are present.
 
 #### FE-029 — Transform-job plumbing duplicated across 5 asides, 7 progress-URL builders and divergent storage keys
+
 - **Sources:** XC-11, DASH-09, DASH-03 · **Category:** dry, root cause of bugs
 - **Evidence:**
   - The `ImageBody` build is duplicated: `components/Dashboard/Composer/GenerateCTA.vue:54-69` and `composables/useImageChainActions.ts:265-280` are identical apart from the prompt source, and include the magic `outputQuality === 0 ? 70 : 100`.
@@ -459,6 +490,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** `grep -rn "progress?jobId" src` returns 1 result, the asides contain no duplicated submit/resume code, and there is one key per feature.
 
 #### FE-030 — Oversized components with mixed responsibilities
+
 - **Sources:** DASH-16, UI-11 · **Category:** maintainability
 - **Evidence:**
   - `components/Dashboard/Feed/UserGenerationsGrid.vue` (524 lines) holds the pending row, the progress ring, the tile and a large SCSS block.
@@ -475,6 +507,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** each file is under about 300 lines, with one chain-menu implementation and one Cloudinary helper.
 
 #### FE-031 — Every history tile adds window scroll and resize listeners and its own confirm dialog
+
 - **Sources:** UI-12 · **Category:** performance
 - **Evidence:** `components/History/ImageActionButtons.vue:90-91` adds `window.addEventListener('scroll', …, { capture: true })` and a `resize` listener on mount. Each tile also mounts a `ConfirmDeleteImageDialog`. The `imageIndex` prop appears unused.
 - **Problem:** with hundreds of tiles, every scroll event runs hundreds of handlers.
@@ -483,6 +516,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** no listeners exist for closed menus.
 
 #### FE-032 — Dead, unwired and test-only code shipped in `src`
+
 - **Sources:** STATE-13, XC-10, MKT-16, MKT-17, DASH-14, DASH-21 · **Category:** dead-code
 - **Evidence:**
   - Never mounted: `components/Dialogs/PricingDialog.vue` (plus `stores/dialog.ts:97-102` `showPricing`/`hidePricing`), `components/Dialogs/ConfirmColorizeDialog.vue`, the empty stub `components/Credits.vue`, and `primitives/Stepper.vue` and `TokenScratch.vue`.
@@ -505,6 +539,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** no unreferenced modules, exports or assets remain, and there is no commented-out code.
 
 #### FE-033 — Test suite pins a bug, and its mocks have drifted (about 94 type errors in tests)
+
 - **Sources:** XC-15
 - **Evidence:**
   - `utils/payment.test.ts:~173` asserts "swallows SDK load failures", which pins FE-004/FE-011.
@@ -518,6 +553,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** `vue-tsc` and `vp lint` report 0 errors, including tests, and no test asserts a known bug.
 
 #### FE-034 — Prerender overwrites the SPA fallback shell (Likely)
+
 - **Sources:** MKT-02 (severity corrected by the verifier) · **Category:** seo, config
 - **Evidence:** `apps/web/scripts/prerender.mjs:112-115` writes the prerendered `/` page to `dist/index.html`, and `nginx/conf/spa.conf` falls back to it for `/create`, `/explore/*` and so on. Those routes therefore first serve the landing HTML, with the landing title, a `/` canonical, inline `opacity:0` from `v-reveal`, and the Lenis classes.
 - **Problem:** crawlers see the wrong meta on app routes, and users get a flash of the landing page before the client remounts.
@@ -526,6 +562,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** non-prerendered routes get the neutral shell.
 
 #### FE-035 — No catch-all route (soft 404)
+
 - **Sources:** MKT-03
 - **Evidence:** `router/index.ts` has no `/:pathMatch(.*)*` route.
 - **Problem:** unknown URLs render a blank app with HTTP 200.
@@ -534,6 +571,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** unknown paths show the 404 page.
 
 #### FE-036 — A trailing slash blanks the feature landing pages
+
 - **Sources:** MKT-04
 - **Evidence:** `utils/featureLandings.ts:212-214` `featureLandingByPath` compares paths strictly.
 - **Problem:** `/text-to-image/` renders blank and sets `noindex`.
@@ -542,6 +580,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** both forms render the page.
 
 #### FE-037 — `scrollBehavior` ignores `to.hash`
+
 - **Sources:** MKT-05
 - **Evidence:** `router/index.ts:166` always returns `{ top: 0 }`. The links `/pricing#packs` (`Landing/PricingTeaser.vue:30`) and `/pricing#model-costs` (`Landing/CapabilitiesStudioLabs.vue:22`) therefore land at the top.
 - **Fix guide:** `if (savedPosition) return savedPosition; if (to.hash) return { el: to.hash, behavior: 'smooth', top: HEADER_OFFSET }; return { top: 0 }`. Check the interaction with Lenis.
@@ -549,6 +588,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** hash links scroll to their section.
 
 #### FE-038 — Credit and pricing copy hard-coded and contradicting the source of truth
+
 - **Sources:** MKT-07, MKT-08, UI-15 · **Category:** dry, trust
 - **Evidence:**
   - `components/Pricing/PricingCreditStory.vue:15-16` says "1–8" and "4–8". The real maximum is 5 (`packages/shared/src/models/credits.ts`), and `pricingFAQ.json` says "4–5".
@@ -565,6 +605,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** `grep -rnE "\b(50|30) (free )?credits" src` returns 0 literal hits, and no copy contradicts the registry.
 
 #### FE-039 — Duplicate FAQ entry (also in the JSON-LD)
+
 - **Sources:** MKT-09
 - **Evidence:** `utils/constants.ts:21` `GENERAL_FAQS` contains "How do credits work?" twice with different answers, so it renders twice on `/faqs` and in the FAQPage JSON-LD (`pages/Frequent.vue:15`).
 - **Fix guide:** merge the two entries into one correct answer.
@@ -572,6 +613,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** each question appears once.
 
 #### FE-040 — Legal pages describe subscriptions; the product is credits-only ❓ Decision
+
 - **Sources:** MKT-11
 - **Evidence:**
   - `pages/Terms.vue:62-67` and `pages/RefundPolicy.vue:21-31` describe auto-renewing subscriptions.
@@ -581,6 +623,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** no subscription language remains, and there are no TODOs in legal pages.
 
 #### FE-041 — Images lack dimensions and Cloudinary transforms; Gallery `aspect-ratio` is invalid
+
 - **Sources:** MKT-12 (Likely, static analysis), UI-16 (Confirmed) · **Category:** performance
 - **Evidence:**
   - `pages/Gallery.vue:57,89` binds `aspectRatio: "16:9"`, which is invalid CSS, so the browser ignores it. Images load eagerly and there is no `@error` handler.
@@ -596,6 +639,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** every `<img>` has dimensions or an aspect ratio, and the Cloudinary images are transformed.
 
 #### FE-042 — Modals and overlays lack focus trap and restore; `useFocusTrap` has a cleanup bug
+
 - **Sources:** UI-13, DASH-18, MKT-13, STATE-15 (part) · **Category:** a11y
 - **Evidence:**
   - `components/AppModal.vue` has no trap and no focus restore, and every instance registers a global Escape handler, so stacked modals close together.
@@ -613,6 +657,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** Tab cycles inside every overlay, and focus returns to the trigger on close.
 
 #### FE-043 — Custom widgets are not keyboard- or ARIA-correct
+
 - **Sources:** DASH-13, DASH-15, MKT-14 · **Category:** a11y
 - **Evidence:**
   - `Dashboard/ModelPicker/ModelCompanyGroup.vue` and `ModelCompanySubmenu.vue` open their submenus only on hover, and contain an a11y TODO.
@@ -627,6 +672,7 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 - **Acceptance:** the model picker and tiles are fully usable from the keyboard.
 
 #### FE-044 — Marketing stats and badges cannot be verified ❓ Decision
+
 - **Sources:** MKT-10 (Likely)
 - **Evidence:** `utils/landing.ts:39-44` claims "500+ creators" and "Thousands of images". `Landing/PricingTeaser.vue:56` shows a "Most popular" badge.
 - **Fix guide:** ❓ The owner supplies the real numbers, or the claims are removed. Derive "Most popular" from data, or rename it "Best value" and compute it (FE-014).
@@ -634,26 +680,26 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 
 ### ⚪ Low
 
-| ID | Title | Sources | Evidence | Fix guide | Test / acceptance |
-|---|---|---|---|---|---|
-| FE-045 | Per-user state is not scoped and not reset across sessions | STATE-07 (downgraded: `signOut` does a full reload) | `useComposerPersistence` key `visual-ai-composer-state` is not scoped to the user. `getUserDetails` has no stale-response guard. | Scope the key by userId, and clear it on a `user → null` transition in `App.vue`. The guard is in FE-025. | `App.test.ts`: the composer state is cleared when the user becomes null. |
-| FE-046 | SSE `JSON.parse` unguarded; `page_view` only fires when the user changes | STATE-12 | `stores/app.ts:222-240`, `:217-220` | Add `parseJobStatus(raw)`, which returns null and logs on bad input. Send `page_view` from `router.afterEach`. | `'not json'` does not throw, and a page view is sent per route. |
-| FE-047 | Duplicate constants and enums, plus magic values | STATE-14 | `composables/useViewerTransform.ts:18` duplicates `TRANSFORM_CREDIT_COST` from `utils/generationCredits.ts:10`. `pages/utils/index.ts:3-9` redeclares `FeatureType`, which `Dialogs/ImageDialog.vue:2` imports. `stores/generate.ts:134,151,154` contains the literals `'Flux Lightning'` and `70`. | Import `FeatureType` from `@/types`, use `getTransformCreditCost()`, and add named constants. | Each value has one definition (grep). |
-| FE-048 | Composable cleanup leftovers | STATE-15 (rest) | `useExploreViewerNav.ts:98` sets `body.style.overflow = ''` instead of restoring the prior value. `useComposerPersistence.ts:50-52` calls `setItem` with no try/catch inside a watcher. | Use `useScrollLock` (FE-042), and wrap `setItem` with `log.warn`. | `useExploreViewerNav.test.ts`: overflow is restored. A quota error does not throw. |
-| FE-049 | Env vars are untyped and `.env.example` is out of sync | XC-07 | `vite-env.d.ts` has no `ImportMetaEnv`. `.env.example` lists 3 unused vars (`VITE_CLERK_SIGN_IN_URL`, `VITE_CLERK_SIGN_UP_URL`, `VITE_RAZORPAY_PLAN_ID`) and is missing `VITE_LOG_LEVEL`. | Add a typed `ImportMetaEnv`, and a `src/config/env.ts` single reader that throws on a missing required var. Sync `.env.example`. | `env.test.ts`: a missing var throws with its name. |
-| FE-050 | Unused or misplaced dependencies | XC-09 | Unused: `core-js`, `@vueuse/motion` (registered at `plugins/index.ts:3,32`, never used), `@fortawesome/free-brands-svg-icons`, `vite-plugin-vue-layouts`. `lodash-es` is used only by FE-005. `pinia` and `vue-router` are in devDependencies. `@vitejs/plugin-vue` is ^5 in web and ^6 in root. | Remove them with `bun remove`, move the runtime libraries to dependencies, and align the plugin-vue version. Keep `@clerk/clerk-js` (it is a peer dependency). | Tests and build pass, and the bundle is smaller. |
-| FE-051 | Shared UI helpers are bypassed (snackbar, clipboard, dates, logger) | DASH-20, XC-12 | `snackbarText.value = …; snackbar.value = true` is repeated about 12 times (`SavedPromptsPanel.vue` ×5, `PromptAiMenu.vue`, `useShareActions.ts`, `payment.ts`, `CollectionsStrip.vue`, `ReferralCode.vue`, `Contact.vue`). `ReferralCode.vue:16-21` bypasses `copyText` and gives no feedback on failure. Dates are formatted two ways: `en-GB` in `pages/utils/index.ts:36` and the default locale in `ViewerDetails.vue:55`. Raw `console.error` calls: `ReferralDialog.vue:51`, `BuyMoreCreditsDialog.vue:63`, `DeleteDialog.vue:37`. | Add `notify(message, tone?)` to the app store, use `copyText` with feedback in `ReferralCode`, add one `utils/date.ts`, and use `createLogger`. | `grep "snackbar.value = true"` returns only the store. There are no `console.` calls outside `logger.ts`. `ReferralCode.test.ts`: a failed copy shows an error. |
-| FE-052 | `any` and `@ts-ignore` in the payment and generate paths | XC-14 | `utils/payment.ts:56,65,67,95,99,107` (with an `@ts-ignore` on `new Razorpay`); `stores/generate.ts:169,206,268`; `stores/app.ts:176`; `utils/helpers.ts:235`; `types/index.ts:119`; `useFetch/index.ts:42` | Add a `types/razorpay.d.ts` (`Window.Razorpay`, `RazorpayPaymentResponse`), and type the payloads from the shared request types. | Zero `any` or `@ts-ignore` in these files. |
-| FE-053 | Chunk-reload handler uses `console` and `eslint-disable` (Likely) | XC-16 | `router/index.ts:165,187-198` | Use `createLogger('router')` and an `_to` parameter, and add or verify a once-per-session reload guard (`sessionStorage`). | A chunk error triggers exactly one reload. |
-| FE-054 | "Improve prompt" is enabled when the prompt is empty, and the API returns 400 | DASH-12 | `Dashboard/ModelPicker/PromptAiMenu.vue`, `utils/promptAi.ts` | Disable it when `prompt.trim()` is empty. | `PromptAiMenu.test.ts`: the disabled state. |
-| FE-055 | CreditsChip and UserMenu accessibility gaps and dead code | DASH-19 | `Header/CreditsChip.vue` has a static `aria-label` that hides the balance, an unlabeled panel and no Escape handling. In `Header/UserMenu.vue` the theme and logout items are missing from `itemRefs`, `item.badge` is dead, and 4 refs are synced by a watcher. | Use a dynamic `aria-label`, register every item, and remove the badge code. | Arrow keys reach Logout. |
-| FE-056 | Both referral-offer layouts render at exactly 600px | DASH-22 | `Header/AppHeader.vue` uses `(min-width: 600px)`, while `Header/ReferralOffer.vue` uses `(max-width: 600px)`. | Add one `BREAKPOINT_SM` constant and derive `isMobile = !smAndUp`. | At 600px exactly one layout renders. |
-| FE-057 | Favourites empty state shows the wrong copy, and History has no loading state | UI-17 | `History/NoResults.vue`; `History/History.vue:106-110` (a deep watch regroups everything) | Fix the copy, add a loading skeleton, and turn the watcher into a `computed`. | `NoResults.test.ts`: the favourites copy. |
-| FE-058 | Examples tabs are not an ARIA tablist, and the 3 panels are copy-pasted | UI-20 | `pages/Examples.vue:116-170`, plus a nested `100vh` scroller | Render one panel with `v-for`, set `role=tabpanel`, `aria-controls` and a roving tabindex with arrow keys, and drop the fixed-height scroller. | ArrowRight moves the selection. |
-| FE-059 | ViewerDetails repeats the enhance-button markup 3 times | UI-21 | `Explore/ViewerDetails.vue:163-204` | Use a `const enhanceActions = [...]` array with `v-for`. | The existing testids still pass. |
-| FE-060 | Accordion has invalid nesting and its collapsed panels are still tabbable | MKT-15 | `Accordion.vue:55-66` wraps the slot in a `<p>`, and `FAQ.vue` puts a `<div v-html>` inside it. | Use a `<div>` wrapper and set `inert` when collapsed. | Collapsed links cannot be reached with Tab. |
-| FE-061 | SEO duplication: two JSON-LD blocks on `/`, an ignored `image`, and route lists kept by hand (Likely) | MKT-18 | `index.html` has a static WebApplication JSON-LD and `Landing.vue` adds another. `composables/usePageSeo.ts:32` hard-codes `twitterImage`. Prerender routes, `sitemap.xml` and the router are 3 separate lists. | Keep one JSON-LD, set `twitterImage = image`, and add a drift test. | A drift test that compares the 3 lists. |
-| FE-062 | Contact form hides server errors and overwrites typing | MKT-19 | `pages/Contact.vue:100-122` always shows a generic error, even though `helpers.ts:250-259` throws the server message. Native `required` without `novalidate` suppresses the custom messages. `watch(userDetails)` overwrites what the user has typed. | Show `error.message`, add `novalidate`, and prefill only when the field is empty. | `Contact.test.ts`: a server 400 message is shown. |
+| ID     | Title                                                                                                 | Sources                                             | Evidence                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Fix guide                                                                                                                                                      | Test / acceptance                                                                                                                                               |
+| ------ | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| FE-045 | Per-user state is not scoped and not reset across sessions                                            | STATE-07 (downgraded: `signOut` does a full reload) | `useComposerPersistence` key `visual-ai-composer-state` is not scoped to the user. `getUserDetails` has no stale-response guard.                                                                                                                                                                                                                                                                                                                                                                                                          | Scope the key by userId, and clear it on a `user → null` transition in `App.vue`. The guard is in FE-025.                                                      | `App.test.ts`: the composer state is cleared when the user becomes null.                                                                                        |
+| FE-046 | SSE `JSON.parse` unguarded; `page_view` only fires when the user changes                              | STATE-12                                            | `stores/app.ts:222-240`, `:217-220`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Add `parseJobStatus(raw)`, which returns null and logs on bad input. Send `page_view` from `router.afterEach`.                                                 | `'not json'` does not throw, and a page view is sent per route.                                                                                                 |
+| FE-047 | Duplicate constants and enums, plus magic values                                                      | STATE-14                                            | `composables/useViewerTransform.ts:18` duplicates `TRANSFORM_CREDIT_COST` from `utils/generationCredits.ts:10`. `pages/utils/index.ts:3-9` redeclares `FeatureType`, which `Dialogs/ImageDialog.vue:2` imports. `stores/generate.ts:134,151,154` contains the literals `'Flux Lightning'` and `70`.                                                                                                                                                                                                                                       | Import `FeatureType` from `@/types`, use `getTransformCreditCost()`, and add named constants.                                                                  | Each value has one definition (grep).                                                                                                                           |
+| FE-048 | Composable cleanup leftovers                                                                          | STATE-15 (rest)                                     | `useExploreViewerNav.ts:98` sets `body.style.overflow = ''` instead of restoring the prior value. `useComposerPersistence.ts:50-52` calls `setItem` with no try/catch inside a watcher.                                                                                                                                                                                                                                                                                                                                                   | Use `useScrollLock` (FE-042), and wrap `setItem` with `log.warn`.                                                                                              | `useExploreViewerNav.test.ts`: overflow is restored. A quota error does not throw.                                                                              |
+| FE-049 | Env vars are untyped and `.env.example` is out of sync                                                | XC-07                                               | `vite-env.d.ts` has no `ImportMetaEnv`. `.env.example` lists 3 unused vars (`VITE_CLERK_SIGN_IN_URL`, `VITE_CLERK_SIGN_UP_URL`, `VITE_RAZORPAY_PLAN_ID`) and is missing `VITE_LOG_LEVEL`.                                                                                                                                                                                                                                                                                                                                                 | Add a typed `ImportMetaEnv`, and a `src/config/env.ts` single reader that throws on a missing required var. Sync `.env.example`.                               | `env.test.ts`: a missing var throws with its name.                                                                                                              |
+| FE-050 | Unused or misplaced dependencies                                                                      | XC-09                                               | Unused: `core-js`, `@vueuse/motion` (registered at `plugins/index.ts:3,32`, never used), `@fortawesome/free-brands-svg-icons`, `vite-plugin-vue-layouts`. `lodash-es` is used only by FE-005. `pinia` and `vue-router` are in devDependencies. `@vitejs/plugin-vue` is ^5 in web and ^6 in root.                                                                                                                                                                                                                                          | Remove them with `bun remove`, move the runtime libraries to dependencies, and align the plugin-vue version. Keep `@clerk/clerk-js` (it is a peer dependency). | Tests and build pass, and the bundle is smaller.                                                                                                                |
+| FE-051 | Shared UI helpers are bypassed (snackbar, clipboard, dates, logger)                                   | DASH-20, XC-12                                      | `snackbarText.value = …; snackbar.value = true` is repeated about 12 times (`SavedPromptsPanel.vue` ×5, `PromptAiMenu.vue`, `useShareActions.ts`, `payment.ts`, `CollectionsStrip.vue`, `ReferralCode.vue`, `Contact.vue`). `ReferralCode.vue:16-21` bypasses `copyText` and gives no feedback on failure. Dates are formatted two ways: `en-GB` in `pages/utils/index.ts:36` and the default locale in `ViewerDetails.vue:55`. Raw `console.error` calls: `ReferralDialog.vue:51`, `BuyMoreCreditsDialog.vue:63`, `DeleteDialog.vue:37`. | Add `notify(message, tone?)` to the app store, use `copyText` with feedback in `ReferralCode`, add one `utils/date.ts`, and use `createLogger`.                | `grep "snackbar.value = true"` returns only the store. There are no `console.` calls outside `logger.ts`. `ReferralCode.test.ts`: a failed copy shows an error. |
+| FE-052 | `any` and `@ts-ignore` in the payment and generate paths                                              | XC-14                                               | `utils/payment.ts:56,65,67,95,99,107` (with an `@ts-ignore` on `new Razorpay`); `stores/generate.ts:169,206,268`; `stores/app.ts:176`; `utils/helpers.ts:235`; `types/index.ts:119`; `useFetch/index.ts:42`                                                                                                                                                                                                                                                                                                                               | Add a `types/razorpay.d.ts` (`Window.Razorpay`, `RazorpayPaymentResponse`), and type the payloads from the shared request types.                               | Zero `any` or `@ts-ignore` in these files.                                                                                                                      |
+| FE-053 | Chunk-reload handler uses `console` and `eslint-disable` (Likely)                                     | XC-16                                               | `router/index.ts:165,187-198`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Use `createLogger('router')` and an `_to` parameter, and add or verify a once-per-session reload guard (`sessionStorage`).                                     | A chunk error triggers exactly one reload.                                                                                                                      |
+| FE-054 | "Improve prompt" is enabled when the prompt is empty, and the API returns 400                         | DASH-12                                             | `Dashboard/ModelPicker/PromptAiMenu.vue`, `utils/promptAi.ts`                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Disable it when `prompt.trim()` is empty.                                                                                                                      | `PromptAiMenu.test.ts`: the disabled state.                                                                                                                     |
+| FE-055 | CreditsChip and UserMenu accessibility gaps and dead code                                             | DASH-19                                             | `Header/CreditsChip.vue` has a static `aria-label` that hides the balance, an unlabeled panel and no Escape handling. In `Header/UserMenu.vue` the theme and logout items are missing from `itemRefs`, `item.badge` is dead, and 4 refs are synced by a watcher.                                                                                                                                                                                                                                                                          | Use a dynamic `aria-label`, register every item, and remove the badge code.                                                                                    | Arrow keys reach Logout.                                                                                                                                        |
+| FE-056 | Both referral-offer layouts render at exactly 600px                                                   | DASH-22                                             | `Header/AppHeader.vue` uses `(min-width: 600px)`, while `Header/ReferralOffer.vue` uses `(max-width: 600px)`.                                                                                                                                                                                                                                                                                                                                                                                                                             | Add one `BREAKPOINT_SM` constant and derive `isMobile = !smAndUp`.                                                                                             | At 600px exactly one layout renders.                                                                                                                            |
+| FE-057 | Favourites empty state shows the wrong copy, and History has no loading state                         | UI-17                                               | `History/NoResults.vue`; `History/History.vue:106-110` (a deep watch regroups everything)                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Fix the copy, add a loading skeleton, and turn the watcher into a `computed`.                                                                                  | `NoResults.test.ts`: the favourites copy.                                                                                                                       |
+| FE-058 | Examples tabs are not an ARIA tablist, and the 3 panels are copy-pasted                               | UI-20                                               | `pages/Examples.vue:116-170`, plus a nested `100vh` scroller                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Render one panel with `v-for`, set `role=tabpanel`, `aria-controls` and a roving tabindex with arrow keys, and drop the fixed-height scroller.                 | ArrowRight moves the selection.                                                                                                                                 |
+| FE-059 | ViewerDetails repeats the enhance-button markup 3 times                                               | UI-21                                               | `Explore/ViewerDetails.vue:163-204`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Use a `const enhanceActions = [...]` array with `v-for`.                                                                                                       | The existing testids still pass.                                                                                                                                |
+| FE-060 | Accordion has invalid nesting and its collapsed panels are still tabbable                             | MKT-15                                              | `Accordion.vue:55-66` wraps the slot in a `<p>`, and `FAQ.vue` puts a `<div v-html>` inside it.                                                                                                                                                                                                                                                                                                                                                                                                                                           | Use a `<div>` wrapper and set `inert` when collapsed.                                                                                                          | Collapsed links cannot be reached with Tab.                                                                                                                     |
+| FE-061 | SEO duplication: two JSON-LD blocks on `/`, an ignored `image`, and route lists kept by hand (Likely) | MKT-18                                              | `index.html` has a static WebApplication JSON-LD and `Landing.vue` adds another. `composables/usePageSeo.ts:32` hard-codes `twitterImage`. Prerender routes, `sitemap.xml` and the router are 3 separate lists.                                                                                                                                                                                                                                                                                                                           | Keep one JSON-LD, set `twitterImage = image`, and add a drift test.                                                                                            | A drift test that compares the 3 lists.                                                                                                                         |
+| FE-062 | Contact form hides server errors and overwrites typing                                                | MKT-19                                              | `pages/Contact.vue:100-122` always shows a generic error, even though `helpers.ts:250-259` throws the server message. Native `required` without `novalidate` suppresses the custom messages. `watch(userDetails)` overwrites what the user has typed.                                                                                                                                                                                                                                                                                     | Show `error.message`, add `novalidate`, and prefill only when the field is empty.                                                                              | `Contact.test.ts`: a server 400 message is shown.                                                                                                               |
 
 ---
 
@@ -662,10 +708,12 @@ Items marked 🧩 **API** need a change in `apps/api` as well. Items marked ❓ 
 Work in batches, and do not start a batch until the previous batch's gate is green (see the fix prompt). Items that share a file belong in the same work package.
 
 ### Batch 0: unblock the gates
+
 - [ ] **FE-027**: typecheck, `lint:ci` and `check:ci` scripts, and `vp check` ignoring `dist/`.
   - Until FE-026 and FE-033 land, the gate is **"no new errors vs the baseline"**: 122 tsc errors and 95 lint errors, all lint errors in tests.
 
 ### Batch 1: Critical and money/data correctness
+
 - [ ] **FE-001** 🧩❓ (web and API; needs the owner to confirm the API change)
 - [ ] **FE-002** 🧩
 - [ ] **FE-003**
@@ -677,6 +725,7 @@ Work in batches, and do not start a batch until the previous batch's gate is gre
 - [ ] **FE-010** 🧩 (after FE-002)
 
 ### Batch 2: High and Medium behaviour bugs
+
 - [ ] **FE-006**
 - [ ] **FE-012** ❓
 - [ ] **FE-013** (needs **FE-037** first or in the same package)
@@ -697,6 +746,7 @@ Work in batches, and do not start a batch until the previous batch's gate is gre
 - [ ] **FE-040** ❓
 
 ### Batch 3: structure and DRY
+
 - [ ] **FE-029** (after FE-003 and FE-005; creates `inProgressKey`, `getProgressUrl` and `buildImageBody`)
 - [ ] **FE-024** (after FE-029; uses `inProgressKey`; includes FE-046)
 - [ ] **FE-025**
@@ -709,6 +759,7 @@ Work in batches, and do not start a batch until the previous batch's gate is gre
 - [ ] **FE-051** (creates `notify()`; earlier packages may use a local call and get migrated here)
 
 ### Batch 4: cleanup and polish
+
 - [ ] **FE-032** (last structural step: delete dead code after the refactors)
 - [ ] **FE-033** (afterwards the gate becomes **zero** tsc and lint errors)
 - [ ] **FE-045**
@@ -732,36 +783,36 @@ Work in batches, and do not start a batch until the previous batch's gate is gre
 
 ## 5. Hot files (likely ownership conflicts)
 
-| File | Items |
-|---|---|
-| `utils/payment.ts` | FE-001, 004, 011, 052 |
-| `utils/helpers.ts` | FE-008, 015, 016, 017, 025, 032 |
-| `stores/generate.ts` | FE-003, 005, 024, 025, 029, 047, 052 |
-| `stores/app.ts` | FE-024, 046, 051 |
-| `stores/user.ts` | FE-009, 025, 032, 045 |
-| `stores/aside.ts` | FE-007, 020 |
-| `stores/dialog.ts` | FE-023, 032, 042 |
-| `router/index.ts` | FE-006, 035, 037, 053 |
-| `components/Dashboard/Sidebar/*Aside.vue` | FE-003, 021, 026, 029 |
-| `components/Dashboard/Composer/GenerateCTA.vue` | FE-009, 020, 029 |
-| `composables/useImageChainActions.ts` | FE-007, 029 |
-| `composables/useViewerTransform.ts` | FE-009, 029, 047 |
-| `components/History/History.vue`, `ImageActionButtons.vue`, `SelectActionButtons.vue` | FE-017, 018, 026, 030, 031, 057 |
-| `components/Dialogs/ImageDialog.vue` | FE-030, 047 |
-| `utils/constants.ts` | FE-014, 032, 038, 039 |
+| File                                                                                  | Items                                |
+| ------------------------------------------------------------------------------------- | ------------------------------------ |
+| `utils/payment.ts`                                                                    | FE-001, 004, 011, 052                |
+| `utils/helpers.ts`                                                                    | FE-008, 015, 016, 017, 025, 032      |
+| `stores/generate.ts`                                                                  | FE-003, 005, 024, 025, 029, 047, 052 |
+| `stores/app.ts`                                                                       | FE-024, 046, 051                     |
+| `stores/user.ts`                                                                      | FE-009, 025, 032, 045                |
+| `stores/aside.ts`                                                                     | FE-007, 020                          |
+| `stores/dialog.ts`                                                                    | FE-023, 032, 042                     |
+| `router/index.ts`                                                                     | FE-006, 035, 037, 053                |
+| `components/Dashboard/Sidebar/*Aside.vue`                                             | FE-003, 021, 026, 029                |
+| `components/Dashboard/Composer/GenerateCTA.vue`                                       | FE-009, 020, 029                     |
+| `composables/useImageChainActions.ts`                                                 | FE-007, 029                          |
+| `composables/useViewerTransform.ts`                                                   | FE-009, 029, 047                     |
+| `components/History/History.vue`, `ImageActionButtons.vue`, `SelectActionButtons.vue` | FE-017, 018, 026, 030, 031, 057      |
+| `components/Dialogs/ImageDialog.vue`                                                  | FE-030, 047                          |
+| `utils/constants.ts`                                                                  | FE-014, 032, 038, 039                |
 
 ---
 
 ## 6. Decisions needed before fixing (❓)
 
-| Item | Question |
-|---|---|
-| FE-001 | The API owner must accept moving the product catalog to `packages/shared` and changing `/order/create` to take `productId`. Is the webhook secret configured in each environment? |
-| FE-010 | Should account deletion also delete images and payment history, or anonymise them? |
-| FE-012 | Is `apps/web/Dockerfile` the live deploy path? If not, delete it rather than fixing it. |
-| FE-014 / FE-044 | With real savings at only about 3–5%, keep a savings badge or drop it? Are the "500+ creators" and "Most popular" claims real? |
-| FE-020 | Wire the reference image into generation (which models?) or hide the control? |
-| FE-040 | Who supplies the corrected Terms, Refund and Privacy copy? |
+| Item            | Question                                                                                                                                                                          |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| FE-001          | The API owner must accept moving the product catalog to `packages/shared` and changing `/order/create` to take `productId`. Is the webhook secret configured in each environment? |
+| FE-010          | Should account deletion also delete images and payment history, or anonymise them?                                                                                                |
+| FE-012          | Is `apps/web/Dockerfile` the live deploy path? If not, delete it rather than fixing it.                                                                                           |
+| FE-014 / FE-044 | With real savings at only about 3–5%, keep a savings badge or drop it? Are the "500+ creators" and "Most popular" claims real?                                                    |
+| FE-020          | Wire the reference image into generation (which models?) or hide the control?                                                                                                     |
+| FE-040          | Who supplies the corrected Terms, Refund and Privacy copy?                                                                                                                        |
 
 ---
 
@@ -780,27 +831,27 @@ Work in batches, and do not start a batch until the previous batch's gate is gre
 
 ## 8. Dropped after verification
 
-| Suspected issue | Why dropped |
-|---|---|
-| The 2-credit upscale confirm is wrong for premium upscalers | The model is chosen later in the aside, and the cost is re-checked there. |
-| `useEventSource` reopens on URL change | It uses `immediate: false`, so there is no watcher. |
-| Lenis, GSAP, ScrollTrigger, `vReveal`, `useMagnetic`, `useGlobalShortcuts`, `useImageDrop`, Popover and Tooltip leak listeners | Cleanup is correct in all of them. |
-| Model and credit data drift from `packages/shared` | `utils/models.ts` derives from the registry. |
-| Credit-cost drift between the CTA and Pricing (XC-13) | Both resolve to `getCreditCost`. |
-| `v-html` XSS (FAQ, JSON-LD) | Both render static in-repo data only. |
-| Committed secrets | `.env.*` files are untracked, and only publishable keys are used. |
-| `PrimitivesPlayground` exposed in production | It is gated by `import.meta.env.DEV`. |
-| Contact form not wired | It posts to `/users/contact`. |
-| Sitemap and prerender lists drifted | They currently match (FE-061 adds a guard). |
-| "Fresh row" marked on error (DASH-07) | The code no longer exists. |
-| Dynamic `tw-grid-cols-*` purged (DASH-08) | All three literals exist in source. |
-| Community feed blank and pagination missing (DASH-17) | It watches `userId` immediately and prefetches. |
-| Bulk actions can be double-fired (UI-06 part) | The selection clears and the bar hides while busy. |
-| `PricingPacks` crashes on empty packs | The constant is non-empty. |
-| SideBySide ready hang, the chain-confirm promise, ImageDialog Escape gating, AuthShell, ExploreImage, Avatar and share flow | Traced; no defects. |
-| Store state leaks across sign-out (STATE-07 core) | `signOut({ redirectUrl })` does a full page load. Only the persisted composer key remains (FE-045). |
-| Double credit deduction | The server spends daily credits first, correctly. |
-| Download URL revoke race | Browser-dependent; folded into FE-016 as a defensive fix only. |
+| Suspected issue                                                                                                                | Why dropped                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| The 2-credit upscale confirm is wrong for premium upscalers                                                                    | The model is chosen later in the aside, and the cost is re-checked there.                           |
+| `useEventSource` reopens on URL change                                                                                         | It uses `immediate: false`, so there is no watcher.                                                 |
+| Lenis, GSAP, ScrollTrigger, `vReveal`, `useMagnetic`, `useGlobalShortcuts`, `useImageDrop`, Popover and Tooltip leak listeners | Cleanup is correct in all of them.                                                                  |
+| Model and credit data drift from `packages/shared`                                                                             | `utils/models.ts` derives from the registry.                                                        |
+| Credit-cost drift between the CTA and Pricing (XC-13)                                                                          | Both resolve to `getCreditCost`.                                                                    |
+| `v-html` XSS (FAQ, JSON-LD)                                                                                                    | Both render static in-repo data only.                                                               |
+| Committed secrets                                                                                                              | `.env.*` files are untracked, and only publishable keys are used.                                   |
+| `PrimitivesPlayground` exposed in production                                                                                   | It is gated by `import.meta.env.DEV`.                                                               |
+| Contact form not wired                                                                                                         | It posts to `/users/contact`.                                                                       |
+| Sitemap and prerender lists drifted                                                                                            | They currently match (FE-061 adds a guard).                                                         |
+| "Fresh row" marked on error (DASH-07)                                                                                          | The code no longer exists.                                                                          |
+| Dynamic `tw-grid-cols-*` purged (DASH-08)                                                                                      | All three literals exist in source.                                                                 |
+| Community feed blank and pagination missing (DASH-17)                                                                          | It watches `userId` immediately and prefetches.                                                     |
+| Bulk actions can be double-fired (UI-06 part)                                                                                  | The selection clears and the bar hides while busy.                                                  |
+| `PricingPacks` crashes on empty packs                                                                                          | The constant is non-empty.                                                                          |
+| SideBySide ready hang, the chain-confirm promise, ImageDialog Escape gating, AuthShell, ExploreImage, Avatar and share flow    | Traced; no defects.                                                                                 |
+| Store state leaks across sign-out (STATE-07 core)                                                                              | `signOut({ redirectUrl })` does a full page load. Only the persisted composer key remains (FE-045). |
+| Double credit deduction                                                                                                        | The server spends daily credits first, correctly.                                                   |
+| Download URL revoke race                                                                                                       | Browser-dependent; folded into FE-016 as a defensive fix only.                                      |
 
 ---
 
