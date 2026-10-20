@@ -76,6 +76,13 @@ vi.mock("./utils/cronJobs.js", () => ({}))
 
 vi.mock("./webhook/index.js", () => ({ webhookRouter }))
 
+const paymentsWebhookRouter = Object.assign(
+    vi.fn((_req: unknown, _res: unknown, next: () => void) => next()),
+    { use: vi.fn() },
+)
+
+vi.mock("./payments/webhookRouter.js", () => ({ paymentsWebhookRouter }))
+
 const { app } = await import("./app.js")
 const { HttpError } = await import("./lib/errors.js")
 
@@ -109,6 +116,7 @@ describe("app", () => {
     it("mounts webhook, health, and application routers", () => {
         const handles = app._router.stack.map((layer: { handle: unknown }) => layer.handle)
         expect(handles).toContain(webhookRouter)
+        expect(handles).toContain(paymentsWebhookRouter)
         expect(handles).toContain(healthCheckRoute)
         expect(handles).toContain(router)
         expect(router.use).toHaveBeenCalled()
