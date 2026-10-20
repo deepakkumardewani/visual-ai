@@ -12,6 +12,15 @@ const REQUIRED_ENV: Record<string, string> = {
     REPLICATE_API_TOKEN: "test-token",
     RAZORPAY_KEY_ID: "razorpay-id",
     RAZORPAY_KEY_SECRET: "razorpay-secret",
+    PAYMENT_PROVIDER: "dodo",
+    PAYMENT_RETURN_URL: "https://visual-ai.app/checkout/return",
+    DODO_PAYMENTS_API_KEY: "dodo-api-key",
+    DODO_PAYMENTS_ENVIRONMENT: "test_mode",
+    DODO_PAYMENTS_WEBHOOK_KEY: "whsec_test_placeholder",
+    DODO_PRODUCT_ID_PACK_200: "pdt_200",
+    DODO_PRODUCT_ID_PACK_450: "pdt_450",
+    DODO_PRODUCT_ID_PACK_960: "pdt_960",
+    DODO_PRODUCT_ID_PACK_2000: "pdt_2000",
     EMAIL_USER: "test@example.com",
     EMAIL_PASSWORD: "password",
     WEBHOOK_SECRET: "webhook-secret",
@@ -34,6 +43,15 @@ const MANAGED_KEYS = [
     "ENABLE_CRON",
     "QUEUE_PREFIX",
     "ALLOWED_ORIGINS",
+    "PAYMENT_PROVIDER",
+    "PAYMENT_RETURN_URL",
+    "DODO_PAYMENTS_API_KEY",
+    "DODO_PAYMENTS_ENVIRONMENT",
+    "DODO_PAYMENTS_WEBHOOK_KEY",
+    "DODO_PRODUCT_ID_PACK_200",
+    "DODO_PRODUCT_ID_PACK_450",
+    "DODO_PRODUCT_ID_PACK_960",
+    "DODO_PRODUCT_ID_PACK_2000",
 ]
 
 let snapshot: NodeJS.ProcessEnv
@@ -139,6 +157,38 @@ describe("env parse", () => {
         applyEnv({ ALLOWED_ORIGINS: " https://visual-ai.app, ,https://www.visual-ai.app " })
         const { env } = await importEnv()
         expect(env.ALLOWED_ORIGINS).toEqual(["https://visual-ai.app", "https://www.visual-ai.app"])
+    })
+
+    it("defaults PAYMENT_PROVIDER to razorpay when unset in test NODE_ENV", async () => {
+        applyEnv({ PAYMENT_PROVIDER: undefined, NODE_ENV: "test" })
+        const { env } = await importEnv()
+        expect(env.PAYMENT_PROVIDER).toBe("razorpay")
+    })
+
+    it("defaults PAYMENT_PROVIDER to dodo outside test when unset", async () => {
+        applyEnv({ PAYMENT_PROVIDER: undefined, NODE_ENV: "development" })
+        const { env } = await importEnv()
+        expect(env.PAYMENT_PROVIDER).toBe("dodo")
+    })
+
+    it.each([
+        "DODO_PAYMENTS_API_KEY",
+        "DODO_PAYMENTS_WEBHOOK_KEY",
+        "DODO_PRODUCT_ID_PACK_200",
+        "DODO_PRODUCT_ID_PACK_450",
+        "DODO_PRODUCT_ID_PACK_960",
+        "DODO_PRODUCT_ID_PACK_2000",
+        "PAYMENT_RETURN_URL",
+    ] as const)("exits when PAYMENT_PROVIDER=dodo and %s is missing", async (missingKey) => {
+        const exit = vi.spyOn(process, "exit").mockImplementation(((code?: number) => {
+            throw new Error(`process.exit:${code}`)
+        }) as typeof process.exit)
+        vi.spyOn(console, "error").mockImplementation(async () => {})
+
+        applyEnv({ [missingKey]: undefined })
+
+        await expect(importEnv()).rejects.toThrow("process.exit:1")
+        expect(exit).toHaveBeenCalledWith(1)
     })
 
     it("exits with a listed error when required vars are missing or invalid", async () => {

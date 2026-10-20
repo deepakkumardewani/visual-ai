@@ -216,7 +216,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 
 **Try in UI:** No UI in this phase. Run cd apps/api && bunx vitest run to see the payments router and adapter tests pass ; Read apps/api/src/payments/router.ts for POST /payments/checkout, GET /payments and the status endpoint ; Check an unauthenticated call returns 401 in the router tests
 
-### ☐ T3.1 Fix Clerk auth mount order on payments routes (test first)
+### ✅ T3.1 Fix Clerk auth mount order on payments routes (test first)
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/index.ts`, `apps/api/src/routes/payments.test.ts`
@@ -227,7 +227,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Other routers' mounting is unchanged (diff shows only the payments line).
 - **Verify:** `cd apps/api && bunx vitest run routes/payments.test.ts`; `git diff apps/api/src/routes/index.ts`.
 
-### ☐ T3.2 Payment port, constants, errors, service skeleton
+### ✅ T3.2 Payment port, constants, errors, service skeleton
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/types.ts`, `apps/api/src/payments/constants.ts`, `apps/api/src/payments/errors.ts`, `apps/api/src/payments/service.ts`
@@ -237,7 +237,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Client-supplied price or credits cannot reach the provider (proven by T3.6 with a provider mock).
 - **Verify:** `bun run verify`.
 
-### ☐ T3.3 Dodo adapter: checkout creation and session status
+### ✅ T3.3 Dodo adapter: checkout creation and session status
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/dodo/client.ts`, `apps/api/src/payments/dodo/adapter.ts`, `apps/api/src/payments/dodo/productMap.ts`, `apps/api/src/payments/providerFactory.ts`, `apps/api/package.json`
@@ -248,7 +248,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] No `dodopayments` import outside `payments/dodo/` (git grep below; T3.6 adds the guard test).
 - **Verify:** `bun run verify`; `git grep -n "from 'dodopayments'" apps/api/src` lists only `payments/dodo/` files.
 
-### ☐ T3.4 Env validation and payment model changes
+### ✅ T3.4 Env validation and payment model changes
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/config/env.ts`, `apps/api/src/config/env.test.ts`, `apps/api/src/models/payment.ts`, `apps/api/src/models/payment.test.ts`
@@ -259,7 +259,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] A new Dodo-shaped record validates.
 - **Verify:** `cd apps/api && bunx vitest run config/env.test.ts models/payment.test.ts`; `bun run verify`.
 
-### ☐ T3.5 Authenticated payments router
+### ✅ T3.5 Authenticated payments router
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/router.ts`, `apps/api/src/routes/index.ts`, `apps/api/src/payments/service.ts`
@@ -272,7 +272,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Status returns `succeeded` with `credits` when the DB record for the session is `completed`, without calling the provider.
 - **Verify:** `cd apps/api && bunx vitest run routes/payments.test.ts`; `bun run test`; `bun run verify`.
 
-### ☐ T3.6 Unit: payments core
+### ✅ T3.6 Unit: payments core
 
 - **Kind:** unit
 - **Files:** `apps/api/src/payments/service.ts`, `apps/api/src/payments/dodo/adapter.ts`, `apps/api/src/payments/dodo/productMap.ts`, `apps/api/src/payments/providerFactory.ts`, `apps/api/src/payments/errors.ts`
@@ -285,7 +285,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] No `it.fails` unless the source has a real bug (reported as a source bug).
 - **Verify:** `cd apps/api && bunx vitest run payments/service.test.ts payments/dodo/ payments/providerFactory.test.ts payments/errors.test.ts --coverage --coverage.include=src/payments/service.ts --coverage.include=src/payments/dodo/adapter.ts --coverage.include=src/payments/dodo/productMap.ts --coverage.include=src/payments/providerFactory.ts --coverage.include=src/payments/errors.ts --coverage.reporter=text`.
 
-### ☐ T3.7 Unit: payments API surface
+### ✅ T3.7 Unit: payments API surface
 
 - **Kind:** unit
 - **Files:** `apps/api/src/payments/router.ts`, `apps/api/src/config/env.ts`, `apps/api/src/models/payment.ts`

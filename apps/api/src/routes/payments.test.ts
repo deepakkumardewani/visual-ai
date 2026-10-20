@@ -1,5 +1,19 @@
 import crypto from "crypto"
+import express from "express"
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import request from "supertest"
+
+const paymentsApiRouterStub = vi.hoisted(() => {
+    const { Router } = require("express") as typeof import("express")
+    return Router()
+})
+
+vi.mock("../config/env.js", () => ({
+    env: {
+        RAZORPAY_KEY_ID: "rzp_test_key",
+        RAZORPAY_KEY_SECRET: "razorpay-secret",
+    },
+}))
 
 import { env } from "../config/env.js"
 
@@ -28,7 +42,31 @@ vi.mock("../lib/logger.js", () => ({
     }),
 }))
 
+vi.mock("../middlewares/clerk.js", () => ({
+    ClerkExpressRequireAuth:
+        () => (req: express.Request, res: express.Response, next: express.NextFunction) => {
+            if (!req.auth?.userId) {
+                res.status(401).json({ message: "Unauthorized" })
+                return
+            }
+            next()
+        },
+}))
+
+vi.mock("../payments/router.js", () => ({
+    paymentsApiRouter: paymentsApiRouterStub,
+}))
+
 const { paymentsRoute } = await import("./payments.js")
+const { ClerkExpressRequireAuth } = await import("../middlewares/clerk.js")
+const { paymentsApiRouter } = await import("../payments/router.js")
+
+function createMountedLegacyPaymentsApp() {
+    const app = express()
+    app.use(express.json())
+    app.use(ClerkExpressRequireAuth({}) as express.RequestHandler, paymentsApiRouter, paymentsRoute)
+    return app
+}
 
 function mockRes() {
     return {
@@ -78,6 +116,45 @@ async function dispatch(method: string, path: string, req: object, res: object) 
 describe("paymentsRoute", () => {
     beforeEach(() => {
         vi.clearAllMocks()
+    })
+
+    describe("unauthenticated legacy routes (mounted like routes/index.ts)", () => {
+        it("POST /payments returns 401", async () => {
+            const app = createMountedLegacyPaymentsApp()
+            const res = await request(app).post("/payments").send({ id: "user_1" })
+            expect(res.status).toBe(401)
+            expect(res.body).toEqual({ message: "Unauthorized" })
+            expect(Payment.find).not.toHaveBeenCalled()
+        })
+
+        it("GET /payments/:id returns 401", async () => {
+            const app = createMountedLegacyPaymentsApp()
+            const res = await request(app).get("/payments/pay_abc")
+            expect(res.status).toBe(401)
+            expect(res.body).toEqual({ message: "Unauthorized" })
+            expect(Payment.findById).not.toHaveBeenCalled()
+        })
+
+        it("POST /payments/order/create returns 401", async () => {
+            const app = createMountedLegacyPaymentsApp()
+            const res = await request(app)
+                .post("/payments/order/create")
+                .send({ amount: 10, currency: "INR", receipt: "rcpt_1" })
+            expect(res.status).toBe(401)
+            expect(res.body).toEqual({ message: "Unauthorized" })
+            expect(razorpayOrdersCreate).not.toHaveBeenCalled()
+        })
+
+        it("POST /payments/verify-payment returns 401", async () => {
+            const app = createMountedLegacyPaymentsApp()
+            const res = await request(app).post("/payments/verify-payment").send({
+                razorpay_order_id: "order_1",
+                razorpay_payment_id: "pay_1",
+                razorpay_signature: "sig",
+            })
+            expect(res.status).toBe(401)
+            expect(res.body).toEqual({ message: "Unauthorized" })
+        })
     })
 
     it("exposes list, detail, order, and verify routes only", () => {
@@ -155,7 +232,7 @@ describe("paymentsRoute", () => {
             const razorpay_order_id = "order_1"
             const razorpay_payment_id = "pay_1"
             const razorpay_signature = crypto
-                .createHmac("sha256", env.RAZORPAY_KEY_SECRET)
+                .createHmac("sha256", env.RAZORPAY_KEY_SECRET ?? "")
                 .update(`${razorpay_order_id}|${razorpay_payment_id}`)
                 .digest("hex")
             const res = mockRes()

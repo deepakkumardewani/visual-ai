@@ -26,15 +26,76 @@ describe("PaymentSchema", () => {
         expect(status.options.default).toBe("pending")
     })
 
-    it("restricts paymentMethod to card, paypal, and stripe", () => {
+    it("restricts paymentMethod to legacy and Dodo values", () => {
         const paymentMethod = PaymentSchema.path("paymentMethod")
         expect((paymentMethod as unknown as { enumValues: string[] }).enumValues).toEqual([
             "credit_card",
             "paypal",
             "stripe",
+            "card",
+            "upi",
+            "other",
         ])
         expect(paymentMethod.isRequired).toBe(true)
         expect(paymentMethod.options.default).toBe("")
+    })
+
+    it("defaults provider to razorpay for legacy-shaped rows", () => {
+        const provider = PaymentSchema.path("provider")
+        expect((provider as unknown as { enumValues: string[] }).enumValues).toEqual([
+            "razorpay",
+            "dodo",
+        ])
+        expect(provider.options.default).toBe("razorpay")
+    })
+
+    it("defaults currency to INR", () => {
+        expect(PaymentSchema.path("currency").options.default).toBe("INR")
+    })
+
+    it("rejects an invalid provider value", () => {
+        const doc = new PaymentModel({
+            userId: "user_1",
+            transactionId: "pay_bad",
+            provider: "stripe",
+            amount: 1,
+            paymentMethod: "other",
+            humanReadableDate: "01/01/2026",
+        })
+        const error = doc.validateSync()
+        expect(error?.errors.provider).toBeDefined()
+    })
+
+    it("validates a legacy row without an explicit provider", () => {
+        const doc = new PaymentModel({
+            userId: "user_legacy",
+            transactionId: "pay_legacy",
+            amount: 130,
+            paymentMethod: "upi",
+            humanReadableDate: "01/01/2026",
+        })
+        const error = doc.validateSync()
+        expect(error).toBeUndefined()
+        expect(doc.provider).toBe("razorpay")
+    })
+
+    it("validates a Dodo-shaped payment document", () => {
+        const doc = new PaymentModel({
+            userId: "user_1",
+            transactionId: "pay_123",
+            provider: "dodo",
+            providerSessionId: "cks_1",
+            providerPaymentId: "pay_123",
+            packId: "pack_200",
+            credits: 200,
+            currency: "INR",
+            amount: 130,
+            paymentMethod: "upi",
+            status: "completed",
+            humanReadableDate: "01/01/2026",
+        })
+        const error = doc.validateSync()
+        expect(error).toBeUndefined()
     })
 
     it("defaults createdAt to Date.now", () => {

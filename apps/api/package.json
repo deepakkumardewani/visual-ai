@@ -28,6 +28,7 @@
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
         "crypto": "^1.0.1",
+        "dodopayments": "^2.55.0",
         "dotenv": "^16.4.5",
         "express": "^4.16.2",
         "ioredis": "^5.4.2",
@@ -60,10 +61,12 @@
         "@types/nodemailer": "^6.4.17",
         "@types/probe-image-size": "^7.2.5",
         "@types/sharp": "^0.32.0",
+        "@types/supertest": "^7.2.1",
         "@types/uuid": "^10.0.0",
         "@vitest/coverage-istanbul": "4.1.9",
         "@vitest/coverage-v8": "4.1.9",
         "pino-pretty": "^10.3.1",
+        "supertest": "^7.3.1",
         "vitest": "^4.1.9"
     }
 }

@@ -12,10 +12,22 @@ const logger = createLogger("payments-route")
 
 export const paymentsRoute = Router()
 
-const razorpay = new Razorpay({
-    key_id: env.RAZORPAY_KEY_ID,
-    key_secret: env.RAZORPAY_KEY_SECRET,
-})
+let razorpayClient: Razorpay | undefined
+
+function getRazorpayClient(): Razorpay {
+    const keyId = env.RAZORPAY_KEY_ID
+    const keySecret = env.RAZORPAY_KEY_SECRET
+    if (!keyId || !keySecret) {
+        throw new Error("Razorpay is not configured")
+    }
+    if (!razorpayClient) {
+        razorpayClient = new Razorpay({
+            key_id: keyId,
+            key_secret: keySecret,
+        })
+    }
+    return razorpayClient
+}
 
 // POST /payments
 // Get the list of payments made by the user
@@ -45,7 +57,7 @@ paymentsRoute.post(
     "/payments/order/create",
     asyncHandler(async (req: Request, res: Response) => {
         const { amount, currency, receipt } = req.body
-        const order = await razorpay.orders.create({
+        const order = await getRazorpayClient().orders.create({
             amount: amount * 100,
             currency,
             receipt,
@@ -57,10 +69,17 @@ paymentsRoute.post(
 // POST /payments/verify-payment
 // Verify a Razorpay payment using HMAC signature
 paymentsRoute.post("/payments/verify-payment", (req: Request, res: Response) => {
+    const keySecret = env.RAZORPAY_KEY_SECRET
+    if (!keySecret) {
+        logger.warn("Payment verification rejected: Razorpay secret is not configured")
+        res.status(503).json({ success: false, message: "Razorpay verification is not configured" })
+        return
+    }
+
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body
 
     const generatedSignature = crypto
-        .createHmac("sha256", env.RAZORPAY_KEY_SECRET)
+        .createHmac("sha256", keySecret)
         .update(`${razorpay_order_id}|${razorpay_payment_id}`)
         .digest("hex")
 

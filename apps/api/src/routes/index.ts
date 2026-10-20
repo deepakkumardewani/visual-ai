@@ -6,6 +6,7 @@ import { creditsRoute } from "../routes/credits.js"
 import { exploreRoutes } from "../routes/explore.js"
 import { generateRoute } from "../routes/generate.js"
 import { imageRoutes } from "../routes/image.js"
+import { paymentsApiRouter } from "../payments/router.js"
 import { paymentsRoute } from "../routes/payments.js"
 import { promptRoutes } from "../routes/prompt.js"
 import { savedPromptsRoutes } from "../routes/saved-prompts.js"
@@ -21,4 +22,4 @@ router.use(exploreRoutes, ClerkExpressRequireAuth({}) as any)
 router.use(creditsRoute, ClerkExpressRequireAuth({}) as any)
 router.use(imageRoutes, ClerkExpressRequireAuth({}) as any)
 router.use(collectionRoutes, ClerkExpressRequireAuth({}) as any)
-router.use(paymentsRoute, ClerkExpressRequireAuth({}) as any)
+router.use(ClerkExpressRequireAuth({}) as any, paymentsApiRouter, paymentsRoute)
