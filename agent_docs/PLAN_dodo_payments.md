@@ -305,6 +305,7 @@ Filled during `/build-phases` Phases 0-1 (empty until then). One line per fact, 
 | `T0.4-gate:` | T0.4 | `PASS` or `FAIL`, citation; on FAIL the three options and consequences |
 | `T1.1-product:` (x4) | T1.1 | `<packId> \| <name> \| <product id> \| <price minor> <currency> \| <type> \| test_mode \| created\|reused` |
 | `T1.2-endpoint:` | T1.2 | `<endpoint id> \| <url> \| <events> \| test_mode \| created\|reused` |
+| `T1.2-local-endpoint:` | T1.2 | `<endpoint id> \| <url> \| <events> \| test_mode \| created\|reused` (local ngrok dev) |
 
 ### Checkpoint 0 notes
 
@@ -332,4 +333,5 @@ T1.1-product: pack_200 | 200 credits | pdt_0Nq8kJOKsz8HkOMA1c4W8 | 13000 INR | o
 T1.1-product: pack_450 | 450 credits | pdt_0Nq8kJQnTzvtrAhn3eQmg | 29000 INR | one_time_price | test_mode | created
 T1.1-product: pack_960 | 960 credits | pdt_0Nq8kJRvk0XVhagsLjbk9 | 50000 INR | one_time_price | test_mode | created
 T1.1-product: pack_2000 | 2000 credits | pdt_0Nq8kJT0DphjbFE2obFPF | 90000 INR | one_time_price | test_mode | created
-T1.2-endpoint: ep_3KxCY74VR8TTHSRLnFwndSW7Ksi | https://9741-103-163-67-159.ngrok-free.app/webhooks/payments | payment.succeeded, payment.failed | test_mode | reused
+T1.2-endpoint: ep_3KxCY74VR8TTHSRLnFwndSW7Ksi | https://api-staging.visual-ai.app/webhooks/payments | payment.succeeded, payment.failed | test_mode | reused
+T1.2-local-endpoint: ep_3KxEU3NsicWiuj4q4Jc5QJfVdjD | https://9741-103-163-67-159.ngrok-free.app/webhooks/payments | payment.succeeded, payment.failed | test_mode | created
