@@ -3,7 +3,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 vi.mock("../config/env.js", () => ({
     env: {
         PAYMENT_RETURN_URL: "https://visual-ai.app/checkout/return",
+        LOG_LEVEL: "info",
+        NODE_ENV: "test",
     },
+}))
+
+vi.mock("../lib/logger.js", () => ({
+    createLogger: () => ({ debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() }),
+    logger: { info: vi.fn(), error: vi.fn(), warn: vi.fn(), debug: vi.fn() },
 }))
 
 const mockProvider = vi.hoisted(() => ({
@@ -23,9 +30,17 @@ const Payment = vi.hoisted(() => ({
     findOne: vi.fn(),
 }))
 
-vi.mock("../models/payment.js", () => ({
-    PaymentModel: Payment,
+vi.mock("../models/user.js", () => ({
+    UserModel: { exists: vi.fn(), updateOne: vi.fn() },
 }))
+
+vi.mock("../models/payment.js", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("../models/payment.js")>()
+    return {
+        ...actual,
+        PaymentModel: Payment,
+    }
+})
 
 vi.mock("moment", () => ({
     default: () => ({
@@ -37,12 +52,7 @@ import { CREDIT_PACKS } from "@visual-ai/shared"
 
 import { CHECKOUT_SESSION_STATUS, PAYMENT_STATUS } from "./constants.js"
 import { ProviderApiError, UnknownPackError } from "./errors.js"
-import {
-    applyEvent,
-    createCheckout,
-    getCheckoutSessionStatus,
-    listPaymentsForUser,
-} from "./service.js"
+import { createCheckout, getCheckoutSessionStatus, listPaymentsForUser } from "./service.js"
 
 describe("createCheckout", () => {
     beforeEach(() => {
@@ -314,22 +324,5 @@ describe("getCheckoutSessionStatus", () => {
 
         const result = await getCheckoutSessionStatus("user_1", "cks_weird")
         expect(result).toEqual({ status: CHECKOUT_SESSION_STATUS.PENDING })
-    })
-})
-
-describe("applyEvent", () => {
-    it("is not implemented yet", async () => {
-        await expect(
-            applyEvent({
-                providerEventId: "evt_1",
-                type: "payment.succeeded",
-                providerPaymentId: "pay_1",
-                userId: "user_1",
-                packId: "pack_200",
-                amountMinor: 13_000,
-                currency: "INR",
-                occurredAt: new Date("2026-01-01T00:00:00.000Z"),
-            }),
-        ).rejects.toThrow("applyEvent is not implemented yet")
     })
 })

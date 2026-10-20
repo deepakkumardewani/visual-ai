@@ -14,6 +14,7 @@ import { healthCheckRoute } from "./routes/healthcheck.js"
 import { router } from "./routes/index.js"
 import { periodicHealthCheckService } from "./services/periodic-health-check-service.js"
 import "./utils/cronJobs.js"
+import { paymentsWebhookRouter } from "./payments/webhookRouter.js"
 import { webhookRouter } from "./webhook/index.js"
 
 const app: Application = express()
@@ -72,6 +73,7 @@ app.use(
 
 // Webhook routes must come before body-parsing middleware to preserve raw body
 app.use("/", webhookRouter)
+app.use("/", paymentsWebhookRouter)
 app.use("/", healthCheckRoute)
 
 // Connect to the database

@@ -5,8 +5,8 @@ function sanitizeProviderMessage(message: string): string {
 }
 
 export class InvalidSignatureError extends Error {
-    constructor(message = "Invalid webhook signature") {
-        super(message)
+    constructor(message = "Invalid webhook signature", options?: { cause?: unknown }) {
+        super(message, options)
         this.name = "InvalidSignatureError"
     }
 }

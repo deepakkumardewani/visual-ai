@@ -14,16 +14,33 @@ const integrationMocks = vi.hoisted(() => ({
 }))
 
 vi.mock("../config/env.js", () => ({
-    env: { PAYMENT_RETURN_URL: "https://visual-ai.app/checkout/return" },
-}))
-
-vi.mock("../models/payment.js", () => ({
-    PaymentModel: {
-        create: integrationMocks.paymentCreate,
-        find: integrationMocks.paymentFind,
-        findOne: integrationMocks.paymentFindOne,
+    env: {
+        PAYMENT_RETURN_URL: "https://visual-ai.app/checkout/return",
+        LOG_LEVEL: "info",
+        NODE_ENV: "test",
     },
 }))
+
+vi.mock("../lib/logger.js", () => ({
+    createLogger: () => ({ debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() }),
+}))
+
+vi.mock("../models/user.js", () => ({
+    UserModel: { exists: vi.fn(), updateOne: vi.fn() },
+}))
+
+vi.mock("../models/payment.js", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("../models/payment.js")>()
+    return {
+        ...actual,
+        PaymentModel: {
+            create: integrationMocks.paymentCreate,
+            find: integrationMocks.paymentFind,
+            findOne: integrationMocks.paymentFindOne,
+            updateOne: vi.fn(),
+        },
+    }
+})
 
 vi.mock("./providerFactory.js", () => ({
     getPaymentProvider: () => ({

@@ -1,10 +1,35 @@
 import type { IncomingHttpHeaders } from "http"
 
-import { DODO_API_PAYMENT_STATUS, PAYMENT_PROVIDER_DODO, PAYMENT_STATUS } from "../constants.js"
+import {
+    DODO_API_PAYMENT_STATUS,
+    PAYMENT_PROVIDER_DODO,
+    PAYMENT_STATUS,
+    WEBHOOK_HEADERS,
+} from "../constants.js"
 import { asProviderApiError, InvalidSignatureError, ProviderApiError } from "../errors.js"
-import type { PaymentProvider } from "../types.js"
+import type { NormalizedPaymentEvent, PaymentProvider } from "../types.js"
 import { createDodoClient, type DodoClient } from "./client.js"
+import { mapDodoWebhookEvent } from "./eventMapper.js"
 import { getDodoProductIdForPack } from "./productMap.js"
+
+function normalizeWebhookHeaders(headers: IncomingHttpHeaders): Record<string, string> {
+    const normalized: Record<string, string> = {}
+    for (const [key, value] of Object.entries(headers)) {
+        if (value === undefined) {
+            continue
+        }
+        normalized[key.toLowerCase()] = Array.isArray(value) ? value.join(",") : value
+    }
+    return normalized
+}
+
+function requireWebhookHeader(headers: Record<string, string>, name: string): string {
+    const value = headers[name]
+    if (!value) {
+        throw new InvalidSignatureError(`Missing webhook header: ${name}`)
+    }
+    return value
+}
 
 function mapPaymentStatus(
     paymentStatus: string | null | undefined,
@@ -62,8 +87,25 @@ export function createDodoPaymentProvider(
             }
         },
 
-        verifyAndParseWebhook(_rawBody: Buffer, _headers: IncomingHttpHeaders) {
-            throw new InvalidSignatureError("Dodo webhook handling is not implemented yet")
+        verifyAndParseWebhook(
+            rawBody: Buffer,
+            headers: IncomingHttpHeaders,
+        ): NormalizedPaymentEvent | null {
+            const normalizedHeaders = normalizeWebhookHeaders(headers)
+            requireWebhookHeader(normalizedHeaders, WEBHOOK_HEADERS.ID)
+            requireWebhookHeader(normalizedHeaders, WEBHOOK_HEADERS.TIMESTAMP)
+            requireWebhookHeader(normalizedHeaders, WEBHOOK_HEADERS.SIGNATURE)
+
+            const body = rawBody.toString("utf8")
+            let payload: ReturnType<DodoClient["webhooks"]["unwrap"]>
+            try {
+                payload = client.webhooks.unwrap(body, { headers: normalizedHeaders })
+            } catch (error) {
+                throw new InvalidSignatureError(undefined, { cause: error })
+            }
+
+            const webhookId = normalizedHeaders[WEBHOOK_HEADERS.ID]!
+            return mapDodoWebhookEvent(payload, webhookId)
         },
 
         async getSessionStatus(sessionId: string) {

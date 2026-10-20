@@ -312,7 +312,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
 
 **Try in UI:** No UI in this phase. Run cd apps/api && bunx vitest run on the webhook tests: a duplicate delivery adds no credits and an invalid signature gets 401 ; Read apps/api/src/payments webhook router mounted at POST /webhooks/payments
 
-### ☐ T4.1 Event mapper and signature verification
+### ✅ T4.1 Event mapper and signature verification
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/dodo/eventMapper.ts`, `apps/api/src/payments/dodo/constants.ts`, `apps/api/src/payments/dodo/adapter.ts`, `apps/api/src/payments/dodo/eventMapper.test.ts`, `apps/api/src/payments/dodo/verify.test.ts`
@@ -322,7 +322,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Valid `payment.succeeded` and `payment.failed` map to `NormalizedPaymentEvent`; unknown type maps to null.
 - **Verify:** `cd apps/api && bunx vitest run payments/dodo/`; `bun run verify`.
 
-### ☐ T4.2 `applyEvent` with atomic idempotent grant
+### ✅ T4.2 `applyEvent` with atomic idempotent grant
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/service.ts`, `apps/api/src/payments/applyEvent.test.ts`, `apps/api/src/models/user.ts`
@@ -336,7 +336,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] Logs contain `webhookId`, `paymentId`, `userId`; no signature header or secrets.
 - **Verify:** `cd apps/api && bunx vitest run payments/applyEvent.test.ts`; `bun run test`.
 
-### ☐ T4.3 Webhook router and mount
+### ✅ T4.3 Webhook router and mount
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/webhookRouter.ts`, `apps/api/src/payments/webhookRouter.test.ts`, `apps/api/src/app.ts`
@@ -349,7 +349,7 @@ Commands used in Verify (run from repo root unless noted): `bun run test`, `bun 
   - [ ] `/webhooks/clerk` still works (existing test passes).
 - **Verify:** `cd apps/api && bunx vitest run payments/webhookRouter.test.ts webhook/`; `bun run test`; `bun run verify`.
 
-### ☐ T4.4 Unit: webhook
+### ✅ T4.4 Unit: webhook
 
 - **Kind:** unit
 - **Files:** `apps/api/src/payments/dodo/eventMapper.ts`, `apps/api/src/payments/dodo/adapter.ts`, `apps/api/src/payments/webhookRouter.ts`, `apps/api/src/payments/service.ts`

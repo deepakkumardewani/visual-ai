@@ -22,7 +22,7 @@ vi.mock("./client.js", () => ({
 
 import { CREDIT_PACKS } from "@visual-ai/shared"
 
-import { PAYMENT_STATUS } from "../constants.js"
+import { PAYMENT_STATUS, WEBHOOK_HEADERS } from "../constants.js"
 import { InvalidSignatureError, ProviderApiError } from "../errors.js"
 import { createDodoPaymentProvider } from "./adapter.js"
 
@@ -33,6 +33,9 @@ function makeMockClient() {
         checkoutSessions: {
             create: vi.fn(),
             retrieve: vi.fn(),
+        },
+        webhooks: {
+            unwrap: vi.fn(),
         },
     }
 }
@@ -214,11 +217,40 @@ describe("createDodoPaymentProvider", () => {
         })
     })
 
-    it("verifyAndParseWebhook rejects until Phase 4", () => {
+    it("verifyAndParseWebhook throws InvalidSignatureError without webhook headers", () => {
         const provider = createDodoPaymentProvider(makeMockClient() as never)
         expect(() => provider.verifyAndParseWebhook(Buffer.from("{}"), {})).toThrow(
             InvalidSignatureError,
         )
+    })
+
+    it("skips undefined header values and joins array header values", () => {
+        const client = makeMockClient()
+        client.webhooks.unwrap.mockReturnValue({
+            type: "payment.succeeded",
+            data: {
+                payment_id: "pay_hdr",
+                total_amount: 13_000,
+                metadata: { userId: "u1", packId: "pack_200" },
+            },
+        })
+
+        const provider = createDodoPaymentProvider(client as never)
+        const headers = {
+            [WEBHOOK_HEADERS.ID]: ["msg_a", "msg_b"],
+            [WEBHOOK_HEADERS.TIMESTAMP]: "1700000000",
+            [WEBHOOK_HEADERS.SIGNATURE]: "v1,sig",
+            "x-ignored": undefined,
+        }
+
+        provider.verifyAndParseWebhook(Buffer.from("{}"), headers as never)
+
+        expect(client.webhooks.unwrap).toHaveBeenCalledWith("{}", {
+            headers: expect.objectContaining({
+                [WEBHOOK_HEADERS.ID]: "msg_a,msg_b",
+            }),
+        })
+        expect(client.webhooks.unwrap.mock.calls[0]![1].headers).not.toHaveProperty("x-ignored")
     })
 
     it("builds a provider with createDodoClient when no client is injected", async () => {
