@@ -22,8 +22,11 @@ const app: Application = express()
 const LOCAL_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3005",
+    "http://localhost:3006",
     "http://localhost:8080",
     "http://127.0.0.1:8080",
+    "https://visual-ai.localhost",
+    "http://visual-ai.localhost",
 ]
 
 // Deployed origins differ per environment (prod apex vs. staging subdomain),
@@ -64,6 +67,10 @@ app.use(
         },
         customSuccessMessage: (req, res) => `${req.method} ${req.url} ${res.statusCode}`,
         customErrorMessage: (req, res) => `${req.method} ${req.url} ${res.statusCode}`,
+        customProps: (req) => {
+            const origin = req.headers.origin
+            return origin ? { origin } : {}
+        },
         serializers: {
             req: () => undefined,
             res: () => undefined,

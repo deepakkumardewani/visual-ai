@@ -45,6 +45,9 @@ async function shutdown(signal: string) {
 process.on("SIGTERM", () => void shutdown("SIGTERM"))
 process.on("SIGINT", () => void shutdown("SIGINT"))
 
-app.listen(env.APP_PORT, () => {
-    logger.info(`API running at ${env.APP_SERVER}:${env.APP_PORT}`)
+const listenPort = process.env.PORT ? Number(process.env.PORT) : env.APP_PORT
+
+app.listen(listenPort, () => {
+    const publicUrl = process.env.PORTLESS_URL ?? `${env.APP_SERVER}:${env.APP_PORT}`
+    logger.info(`API listening on port ${listenPort} (${publicUrl})`)
 })

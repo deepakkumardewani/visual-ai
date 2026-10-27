@@ -67,5 +67,6 @@
         "pino-pretty": "^10.3.1",
         "supertest": "^7.3.1",
         "vitest": "^4.1.9"
-    }
+    },
+    "portless": "api.visual-ai"
 }

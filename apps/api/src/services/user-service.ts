@@ -20,6 +20,54 @@ export async function getUserOrThrow(clerkUserId: string) {
     return user
 }
 
+function clerkApiUserToSignUpEvent(user: {
+    id: string
+    firstName: string | null
+    lastName: string | null
+    emailAddresses: { id: string; emailAddress: string }[]
+    primaryEmailAddressId: string | null
+}): ClerkUserEvent {
+    const emails = [...user.emailAddresses].sort(
+        (a, b) =>
+            Number(b.id === user.primaryEmailAddressId) -
+            Number(a.id === user.primaryEmailAddressId),
+    )
+
+    return {
+        data: {
+            id: user.id,
+            first_name: user.firstName ?? "",
+            last_name: user.lastName ?? "",
+            email_addresses: emails.map((e) => ({ email_address: e.emailAddress })),
+        },
+    } as unknown as ClerkUserEvent
+}
+
+/**
+ * Returns the Mongo user for a Clerk id, creating the document from Clerk when missing.
+ * Used when local dev (or missed webhooks) skips POST /webhooks/clerk user.created.
+ */
+export async function ensureUserFromClerk(clerkUserId: string, projection?: Record<string, 0>) {
+    let user = await User.findOne({ userId: clerkUserId }, projection)
+    if (user) {
+        return user
+    }
+
+    try {
+        const clerkUser = await clerkClient.users.getUser(clerkUserId)
+        await signUpHandler(clerkApiUserToSignUpEvent(clerkUser))
+    } catch (error) {
+        logger.error({ err: error, userId: clerkUserId }, "Failed to sync user from Clerk")
+        throw new NotFoundError("User not found")
+    }
+
+    user = await User.findOne({ userId: clerkUserId }, projection)
+    if (!user) {
+        throw new NotFoundError("User not found")
+    }
+    return user
+}
+
 /**
  * Update a user's plan
  * @param userId - The user ID

@@ -1,6 +1,6 @@
 import express from "express"
 
-import { ClerkExpressRequireAuth } from "../middlewares/clerk.js"
+import { requireAuth } from "../middlewares/clerk.js"
 import { collectionRoutes } from "../routes/collections.js"
 import { creditsRoute } from "../routes/credits.js"
 import { exploreRoutes } from "../routes/explore.js"
@@ -16,9 +16,9 @@ export const router = express.Router()
 router.use(generateRoute)
 router.use(promptRoutes)
 router.use(savedPromptsRoutes)
-router.use(userRoutes, ClerkExpressRequireAuth({}) as any)
-router.use(exploreRoutes, ClerkExpressRequireAuth({}) as any)
-router.use(creditsRoute, ClerkExpressRequireAuth({}) as any)
-router.use(imageRoutes, ClerkExpressRequireAuth({}) as any)
-router.use(collectionRoutes, ClerkExpressRequireAuth({}) as any)
-router.use(ClerkExpressRequireAuth({}) as any, paymentsApiRouter)
+router.use(requireAuth as any, userRoutes)
+router.use(requireAuth as any, exploreRoutes)
+router.use(requireAuth as any, creditsRoute)
+router.use(requireAuth as any, imageRoutes)
+router.use(requireAuth as any, collectionRoutes)
+router.use(requireAuth as any, paymentsApiRouter)

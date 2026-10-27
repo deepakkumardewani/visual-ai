@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 const mounted = vi.hoisted(() => [] as unknown[][])
 
 vi.mock("../middlewares/clerk.js", () => ({
-    ClerkExpressRequireAuth: () => "clerk-auth",
+    requireAuth: "clerk-auth",
 }))
 
 vi.mock("../routes/collections.js", () => ({ collectionRoutes: "collectionRoutes" }))
@@ -47,11 +47,11 @@ describe("api router index", () => {
 
     it("mounts authenticated routers with ClerkExpressRequireAuth", async () => {
         await import("./index.js")
-        expect(mounted).toContainEqual(["userRoutes", "clerk-auth"])
-        expect(mounted).toContainEqual(["exploreRoutes", "clerk-auth"])
-        expect(mounted).toContainEqual(["creditsRoute", "clerk-auth"])
-        expect(mounted).toContainEqual(["imageRoutes", "clerk-auth"])
-        expect(mounted).toContainEqual(["collectionRoutes", "clerk-auth"])
+        expect(mounted).toContainEqual(["clerk-auth", "userRoutes"])
+        expect(mounted).toContainEqual(["clerk-auth", "exploreRoutes"])
+        expect(mounted).toContainEqual(["clerk-auth", "creditsRoute"])
+        expect(mounted).toContainEqual(["clerk-auth", "imageRoutes"])
+        expect(mounted).toContainEqual(["clerk-auth", "collectionRoutes"])
         expect(mounted).toContainEqual(["clerk-auth", "paymentsApiRouter"])
     })
 

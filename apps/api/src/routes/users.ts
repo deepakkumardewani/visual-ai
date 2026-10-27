@@ -6,7 +6,11 @@ import { env } from "../config/env.js"
 import { asyncHandler } from "../lib/async-handler.js"
 import { BadRequestError, NotFoundError } from "../lib/errors.js"
 import { UserModel as User } from "../models/user.js"
-import { updateUserPlan, deleteClerkUserData } from "../services/user-service.js"
+import {
+    ensureUserFromClerk,
+    updateUserPlan,
+    deleteClerkUserData,
+} from "../services/user-service.js"
 import { deleteCloudinaryUserData } from "../services/cloudinary-service.js"
 
 export const userRoutes = Router()
@@ -24,9 +28,14 @@ userRoutes.get(
 userRoutes.get(
     "/users/:id",
     asyncHandler(async (req: Request, res: Response) => {
-        const user = await User.findOne({ userId: req.params.id }, { collection: 0, activities: 0 })
+        const clerkUserId = req.params.id
+        const projection = { collection: 0, activities: 0 } as const
+        let user = await User.findOne({ userId: clerkUserId }, projection)
         if (!user) {
-            throw new NotFoundError("User not found")
+            if (req.auth?.userId !== clerkUserId) {
+                throw new NotFoundError("User not found")
+            }
+            user = await ensureUserFromClerk(clerkUserId, projection)
         }
         res.status(200).json(user)
     }),

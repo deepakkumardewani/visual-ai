@@ -5,7 +5,7 @@ import { asyncHandler } from "../lib/async-handler.js"
 import { BadRequestError } from "../lib/errors.js"
 import { createLogger } from "../lib/logger.js"
 import { enqueueGeneration } from "../queue/generation-queue.js"
-import { ClerkExpressRequireAuth } from "../middlewares/clerk.js"
+import { requireAuth } from "../middlewares/clerk.js"
 import { upload } from "../middlewares/multer.js"
 import { RedisService } from "../services/redis-service.js"
 import { Props } from "../types"
@@ -79,7 +79,7 @@ generateRoute.get("/progress", async (req: Request, res: Response) => {
 generateRoute.post(
     "/generate/image",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     asyncHandler(async (req: Request, res: Response) => {
         await enqueueGeneration({ kind: "image", body: req.body })
         acceptResponse(res)
@@ -91,7 +91,7 @@ generateRoute.post(
 generateRoute.post(
     "/generate/upscale/image",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     upload.single("image"),
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.path) {
@@ -112,7 +112,7 @@ generateRoute.post(
 generateRoute.post(
     "/generate/revive/image",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     upload.single("image"),
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.path) {
@@ -133,7 +133,7 @@ generateRoute.post(
 generateRoute.post(
     "/generate/colorize/image",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     upload.single("image"),
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.path) {
@@ -154,7 +154,7 @@ generateRoute.post(
 generateRoute.post(
     "/generate/remove-bg/image",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     upload.single("image"),
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.path) {

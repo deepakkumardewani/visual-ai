@@ -1,4 +1,13 @@
 services:
+    mongo:
+        container_name: visual-ai-mongo
+        image: mongo:7
+        restart: unless-stopped
+        ports:
+            - "127.0.0.1:27017:27017"
+        volumes:
+            - mongo_data:/data/db
+
     backend:
         container_name: backend
         restart: always
@@ -28,6 +37,7 @@ services:
             REDIS_HOST: ${REDIS_HOST}
             REDIS_PORT: ${REDIS_PORT}
         depends_on:
+            - mongo
             - redis
 
     redis:
@@ -43,4 +53,5 @@ services:
             - ALLOW_EMPTY_PASSWORD=yes
 
 volumes:
+    mongo_data:
     redis_data:

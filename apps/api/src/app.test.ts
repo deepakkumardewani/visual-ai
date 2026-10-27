@@ -202,4 +202,12 @@ describe("app", () => {
         expect(pinoCapture.options.serializers.res()).toBeUndefined()
         expect(typeof pinoCapture.options.genReqId()).toBe("string")
     })
+
+    it("adds origin to access logs when the client sends Origin", () => {
+        const props = pinoCapture.options.customProps({
+            headers: { origin: "https://visual-ai.localhost" },
+        } as any)
+        expect(props).toEqual({ origin: "https://visual-ai.localhost" })
+        expect(pinoCapture.options.customProps({ headers: {} } as any)).toEqual({})
+    })
 })

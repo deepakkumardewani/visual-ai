@@ -17,7 +17,7 @@ vi.mock("../queue/generation-queue.js", () => ({
 }))
 
 vi.mock("../middlewares/clerk.js", () => ({
-    ClerkExpressRequireAuth: () => (req: any, res: any, next: any) => {
+    requireAuth: (req: any, res: any, next: any) => {
         if (!req.auth) {
             res.status(401).json({ message: "Unauthorized" })
             return

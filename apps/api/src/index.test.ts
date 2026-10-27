@@ -64,7 +64,9 @@ describe("API bootstrap", () => {
 
         expect(startGenerationWorker).toHaveBeenCalledTimes(1)
         expect(listen).toHaveBeenCalledWith(9090, expect.any(Function))
-        expect(logger.info).toHaveBeenCalledWith("API running at http://api.test:9090")
+        expect(logger.info).toHaveBeenCalledWith(
+            "API listening on port 9090 (http://api.test:9090)",
+        )
     })
 
     it("registers an error handler that returns HttpError status", async () => {
