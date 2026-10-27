@@ -8,8 +8,11 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:web": "vp dev apps/web",
-    "dev:api": "cd apps/api && bun dev",
+    "dev": "portless",
+    "dev:web": "cd apps/web && portless",
+    "dev:api": "cd apps/api && portless",
+    "dev:direct:web": "PORTLESS=0 vp dev apps/web",
+    "dev:direct:api": "PORTLESS=0 bun --cwd apps/api dev",
     "build:web": "vp build apps/web",
     "build:api": "cd apps/api && bun build",
     "lint": "vp lint --fix",
@@ -22,6 +25,7 @@
     "@vitejs/plugin-vue": "^6.0.8"
   },
   "devDependencies": {
+    "portless": "^0.15.11",
     "vite-plus": "0.1.18"
   },
   "overrides": {

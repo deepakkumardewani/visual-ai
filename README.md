@@ -25,6 +25,7 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full system design, [do
 ## Prerequisites
 
 - [Bun](https://bun.sh) ≥ 1.3
+- [portless](https://github.com/vercel-labs/portless) (installed as a dev dependency; run `bunx portless trust` once after install)
 - MongoDB and Redis instances (local or hosted)
 - Accounts/keys for: [Replicate](https://replicate.com), [Clerk](https://clerk.com), [Cloudinary](https://cloudinary.com), [Dodo Payments](https://dodopayments.com) (test mode for development)
 
@@ -39,22 +40,31 @@ cp apps/api/.env.example apps/api/.env
 cp apps/web/.env.example apps/web/.env.local
 # fill in the values — see docs/ARCHITECTURE.md §6 for what each variable does
 
-# 3. Run the apps (separate terminals)
-bun run dev:api     # Express API (tsx watch)
-bun run dev:web     # Vue SPA (vp dev)
+# 3. Start MongoDB (if using a local URI on :27017)
+cd apps/api && docker compose up -d mongo redis
+
+# 4. Run the apps via portless (stable HTTPS URLs)
+bunx portless trust   # once: trust the local CA
+bun run dev           # web + API, or dev:web / dev:api separately
 ```
 
-The web app expects the API at `VITE_API_BASEPATH` (default `http://localhost:3000`).
+**Local URLs (portless):** web `https://visual-ai.localhost`, API `https://api.visual-ai.localhost`. Configure `apps/web/.env.local` → `VITE_API_BASEPATH=https://api.visual-ai.localhost` (see `.env.example`).
+
+**MongoDB `ECONNREFUSED :27017`:** the API reads `MONGO_URI` from `apps/api/.env`. That error means Mongo is not running or the URI is wrong. Use `mongodb://127.0.0.1:27017/visual-ai?directConnection=true` and start Mongo (`docker compose up -d mongo` in `apps/api`), or point `MONGO_URI` at MongoDB Atlas.
+
+**Bypass portless:** `bun run dev:direct:web` / `dev:direct:api` (ports 3005 / 3006) and set `VITE_API_BASEPATH=http://localhost:3006`.
 
 ## Scripts
 
-| Command                                   | Description                          |
-| ----------------------------------------- | ------------------------------------ |
-| `bun run dev:web` / `bun run dev:api`     | Start web / API in dev mode          |
-| `bun run build:web` / `bun run build:api` | Production builds                    |
-| `bun run check`                           | Typecheck (`vp check`)               |
-| `bun run lint`                            | Lint with autofix (`vp lint --fix`)  |
-| `bun run test`                            | Run tests (Vitest via `vp test run`) |
+| Command                                     | Description                          |
+| ------------------------------------------- | ------------------------------------ |
+| `bun run dev`                               | Start web + API via portless         |
+| `bun run dev:web` / `bun run dev:api`       | Start one app via portless           |
+| `bun run dev:direct:web` / `dev:direct:api` | Dev without portless (fixed ports)   |
+| `bun run build:web` / `bun run build:api`   | Production builds                    |
+| `bun run check`                             | Typecheck (`vp check`)               |
+| `bun run lint`                              | Lint with autofix (`vp lint --fix`)  |
+| `bun run test`                              | Run tests (Vitest via `vp test run`) |
 
 ## Documentation
 

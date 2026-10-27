@@ -99,14 +99,17 @@ Note: history is embedded in the User document (not a separate collection querie
 
 **API**: `APP_PORT`, `APP_SERVER`, `CLERK_*`, `REPLICATE_API_TOKEN`, `REDIS_*`, `PAYMENT_PROVIDER=dodo`, `DODO_PAYMENTS_*`, `DODO_PRODUCT_ID_PACK_*`, `PAYMENT_RETURN_URL`, `EMAIL_*`, `WEBHOOK_SECRET` (+ Mongo URI, Cloudinary creds via config).
 
-**Web** (`VITE_*`): `API_BASEPATH`, `CLERK_*`, `CLOUDINARY_*`, `VITE_DODO_CHECKOUT_MODE`, `TELEMETRYDECK_*`, `LOG_LEVEL`.
+**Web** (`VITE_*`): `VITE_API_BASEPATH` (default `https://api.visual-ai.localhost` via portless), `CLERK_*`, `CLOUDINARY_*`, `VITE_DODO_CHECKOUT_MODE`, `TELEMETRYDECK_*`, `LOG_LEVEL`.
+
+**Local URLs:** [portless](https://github.com/vercel-labs/portless) (`portless.json`) — `https://visual-ai.localhost` (web), `https://api.visual-ai.localhost` (API). `MONGO_URI` in `apps/api/.env` must reach a running MongoDB instance.
 
 ## 7. Commands
 
 ```bash
 bun install           # root
-bun run dev:web       # vp dev apps/web
-bun run dev:api       # tsx watch (do NOT run — assumed always running)
+bun run dev           # portless: web + API
+bun run dev:web       # portless: web only
+bun run dev:api       # portless: API only
 bun run check         # typecheck (vp check)
 bun run lint          # vp lint --fix
 bun run test          # vitest via vp test run
