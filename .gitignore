@@ -3,6 +3,14 @@ node_modules
 dist/
 buildcache/
 coverage/
+test-results/
+playwright-report/
+.dashboard/*/reports/
+# Keep legacy agent reports that were committed before this ignore rule.
+!.dashboard/tasks_dodo_payments/reports/
+!.dashboard/tasks_dodo_payments/reports/**
+.next-e2e
+apps/web/.next-e2e
 
 # env files
 .env

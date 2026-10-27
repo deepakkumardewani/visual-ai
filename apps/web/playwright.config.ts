@@ -7,14 +7,27 @@ import { AUTH_STATE_PATH, WEB_URL } from './e2e/support/env';
 // dotenv does not override vars already set in the shell; a missing file is reported by preflight.
 dotenv.config({ path: '.env.e2e.local', quiet: true });
 
-// No webServer: the web app and API are always running locally.
+const useProdServer = process.env.E2E_SERVER === 'prod';
+const e2eProdPort = Number(process.env.E2E_PROD_PORT ?? 4173);
+const prodWebUrl = `http://127.0.0.1:${e2eProdPort}`;
+
+const webServer = useProdServer
+  ? {
+      command: `bun run build && bun run preview -- --port ${e2eProdPort} --strictPort`,
+      url: prodWebUrl,
+      reuseExistingServer: false,
+    }
+  : undefined;
+
+// Default (unset or E2E_SERVER=dev): no webServer — web app and API are already running locally.
 export default defineConfig({
   testDir: './e2e',
   globalSetup: './e2e/global.setup.ts',
+  ...(webServer ? { webServer } : {}),
   use: {
-    baseURL: WEB_URL,
+    baseURL: useProdServer ? prodWebUrl : WEB_URL,
     // Portless serves HTTPS with a local CA (`portless trust`).
-    ignoreHTTPSErrors: WEB_URL.startsWith('https://'),
+    ignoreHTTPSErrors: useProdServer ? false : WEB_URL.startsWith('https://'),
   },
   projects: [
     { name: 'setup', testMatch: /auth\.setup\.ts/ },
