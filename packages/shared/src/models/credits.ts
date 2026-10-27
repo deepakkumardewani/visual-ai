@@ -2,13 +2,13 @@ import type { ModelKey } from './types.js';
 import { MODEL_REGISTRY } from './registry.js';
 
 /** Signup credits for new users */
-export const SIGNUP_CREDITS = 50;
+export const SIGNUP_CREDITS = 30;
 
 /** Daily credits reset for all users */
 export const DAILY_CREDITS = 30;
 
 /** Bonus credits for successful referral (both referrer and referee) */
-export const REFERRAL_BONUS = 50;
+export const REFERRAL_BONUS = 30;
 
 /**
  * Get the integer credit cost for a model.

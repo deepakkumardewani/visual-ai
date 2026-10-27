@@ -36,6 +36,7 @@ const emit = defineEmits<{
 }>();
 
 const panelRef = ref<HTMLElement | null>(null);
+const previouslyFocused = ref<HTMLElement | null>(null);
 const bodyLocked = useScrollLock(typeof document !== 'undefined' ? document.body : null);
 
 const isOpen = computed({
@@ -68,10 +69,21 @@ watch(
   (open) => {
     // Nested modals share body lock — only unlock when this instance closes if still top-level.
     if (open) {
+      previouslyFocused.value =
+        typeof document !== 'undefined' && document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null;
       bodyLocked.value = true;
       requestAnimationFrame(() => panelRef.value?.focus());
-    } else if (props.layer === 0) {
-      bodyLocked.value = false;
+    } else {
+      const restoreTarget = previouslyFocused.value;
+      previouslyFocused.value = null;
+      if (props.layer === 0) {
+        bodyLocked.value = false;
+      }
+      if (restoreTarget?.isConnected) {
+        requestAnimationFrame(() => restoreTarget.focus());
+      }
     }
   },
 );

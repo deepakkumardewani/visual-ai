@@ -1,3 +1,5 @@
+import { DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
+
 import { MODELS as CATALOG_MODELS, getFeaturedModels } from '@/utils/models';
 import galleryData from '@/utils/gallery.json';
 
@@ -153,13 +155,11 @@ export { getFeaturedModels };
 export const FAQS: Faq[] = [
   {
     question: 'Is there really a free plan?',
-    answer:
-      'Yes. Every new account gets 50 persistent credits plus 30 daily credits (unused daily credits reset). Generate, upscale, colorize, restore, and remove backgrounds — no card and no subscription required to start.',
+    answer: `Yes. Every new account gets ${SIGNUP_CREDITS} persistent credits plus ${DAILY_CREDITS} daily credits (unused daily credits reset). Generate, upscale, colorize, restore, and remove backgrounds — no card and no subscription required to start.`,
   },
   {
     question: 'How do credits work?',
-    answer:
-      'Each generation or edit spends credits. You get 50 persistent credits that stay on the account, plus 30 daily credits that reset unused at the end of the day. Purchased credits never expire.',
+    answer: `Each generation or edit spends credits. You get ${SIGNUP_CREDITS} persistent credits that stay on the account, plus ${DAILY_CREDITS} daily credits that reset unused at the end of the day. Purchased credits never expire.`,
   },
   {
     question: 'Which models can I use?',

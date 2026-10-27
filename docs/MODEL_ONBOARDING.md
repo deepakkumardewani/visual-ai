@@ -25,6 +25,10 @@ Candidate models and pricing research: [MODELS_COMPARISON.md](../MODELS_COMPARIS
   - `fields` — declare **only** the params the model's Replicate OpenAPI
     schema actually accepts (`aspectRatio`, `outputFormat`, `outputQuality`,
     `numOutputs`, `resolution`, `dimensions`, `imageInput`, `promptEnhance`).
+  - For `imageInput`, set `array: true` when the Replicate schema type is an
+    array (e.g. `input_images` on Flux 2 / GPT Image 2); otherwise `array: false`
+    for string inputs (`image`, `input_image`, `image_input`). Set `max` only
+    when the schema documents a limit (Flux 2 Pro: `max: 8`).
     This is the capability contract that keeps unsupported params from ever
     being sent to Replicate — don't declare a field just because a similar
     model has it.
@@ -41,10 +45,14 @@ Candidate models and pricing research: [MODELS_COMPARISON.md](../MODELS_COMPARIS
       Replicate payload.
 - [ ] Keep any extension data-driven (read `fields.<field>.inputKey` from the
       registry) rather than adding a per-model `if (modelKey === 'X')` branch.
-- [ ] If the model takes a reference/input image (kontext, seedream,
-      upscalers), wire the upload path (Cloudinary via multer) in the relevant
-      `routes/generate.ts` endpoint, following the existing
-      `processUpscale`/`processColorize` pattern.
+- [ ] Text-to-image reference images: users upload via
+      `POST /generate/reference-images`; generation sends
+      `referenceImageUrls[]` on `POST /generate/image`. `buildModelInput`
+      maps URLs using `imageInput.array` — do not infer array vs string from
+      `max` alone.
+- [ ] Utility models (upscale/colorize/etc.) still use the feature upload
+      routes and `imageUrl` in `buildModelInput`, following
+      `processUpscale`/`processColorize`.
 
 ## 3. Frontend catalog — `apps/web/src/utils/models.ts`
 

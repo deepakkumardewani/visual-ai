@@ -21,6 +21,8 @@ import { useAppStore } from './app';
 const log = createLogger('generate');
 
 const GENERIC_ERROR = 'Sorry, there was an error processing your request. Please try again.';
+const REFERENCE_UPLOAD_ERROR =
+  'Could not upload reference images. Please try again or remove them.';
 
 type RetryAction = 'generate' | 'upscale' | 'colorize' | 'remove_bg' | 'revive';
 
@@ -164,6 +166,59 @@ export const useGenerateStore = defineStore('generate', () => {
     }
   }
 
+  function inferUploadFormat(file: File): string {
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    if (ext === 'jpg' || ext === 'jpeg') return 'jpg';
+    if (ext === 'webp') return 'webp';
+    if (ext === 'png') return 'png';
+    if (file.type === 'image/jpeg') return 'jpg';
+    if (file.type === 'image/webp') return 'webp';
+    return 'png';
+  }
+
+  /**
+   * Uploads staged reference files before generation. Orphaned Cloudinary objects after a
+   * failed generation are acceptable — we only send URLs that survive an in-flight remove.
+   */
+  async function uploadReferenceImagesForGenerate(): Promise<string[] | null> {
+    const asideStore = useAsideStore();
+    const staged = [...asideStore.referenceImages];
+    if (!staged.length) return [];
+
+    const uploadBatch = staged.map((item) => ({
+      localId: item.localId,
+      file: item.file,
+    }));
+
+    const formData = new FormData();
+    formData.append('userId', userId.value);
+    formData.append('feature', 'reference');
+    formData.append('format', inferUploadFormat(uploadBatch[0].file));
+    for (const { file } of uploadBatch) {
+      formData.append('images', file);
+    }
+
+    const { data, error } = await useFetch('/generate/reference-images', {
+      method: 'POST',
+      body: formData,
+    }).json<{ urls: string[] }>();
+
+    if (error.value || !data.value?.urls?.length) {
+      log.warn('uploadReferenceImagesForGenerate failed', { error: error.value });
+      return null;
+    }
+
+    const stillPresent = new Set(asideStore.referenceImages.map((item) => item.localId));
+    const urls: string[] = [];
+    for (let i = 0; i < uploadBatch.length; i += 1) {
+      const { localId } = uploadBatch[i];
+      if (!stillPresent.has(localId)) continue;
+      const url = data.value.urls[i];
+      if (url) urls.push(url);
+    }
+    return urls;
+  }
+
   async function generateImage(imgData?: ImageBody) {
     appStore.sendSignal('generate_image');
     isLoading.value = true;
@@ -172,6 +227,16 @@ export const useGenerateStore = defineStore('generate', () => {
     if (imgData) rememberRetry(FeatureType.IMAGE, 'generate', imgData);
     activePrompt.value = imgData?.prompt ?? '';
     images.value = [];
+
+    const referenceImageUrls = await uploadReferenceImagesForGenerate();
+    if (referenceImageUrls === null) {
+      isLoading.value = false;
+      appStore.closeEventSource('image');
+      appStore.snackbarText = REFERENCE_UPLOAD_ERROR;
+      appStore.snackbar = true;
+      setFeatureError(FeatureType.IMAGE, REFERENCE_UPLOAD_ERROR);
+      return;
+    }
 
     const url = `/generate/image`;
     const modelId = imgData?.modelId ?? MODEL_REGISTRY.FLUX_BASIC.key;
@@ -199,6 +264,7 @@ export const useGenerateStore = defineStore('generate', () => {
         outputFormat: imgData?.outputFormat ?? 'jpg',
         styleId: styleId.value,
         enhanceMode: enhanceMode.value,
+        ...(referenceImageUrls.length ? { referenceImageUrls } : {}),
       }),
     }).json<IGenerateResponse>();
     if (error.value) {

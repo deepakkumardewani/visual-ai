@@ -135,6 +135,8 @@ describe("calculateCreditCost", () => {
 describe("runGenerationJob", () => {
     beforeEach(() => {
         vi.clearAllMocks()
+        User.findOne.mockReset()
+        User.findOneAndUpdate.mockReset()
         getImageDetails.mockResolvedValue({ width: 10, height: 20, format: "jpg", bytes: 3 })
         uploadToCloudinary.mockResolvedValue(undefined)
     })
@@ -342,6 +344,8 @@ describe("runGenerationJob", () => {
 describe("processImage", () => {
     beforeEach(() => {
         vi.clearAllMocks()
+        User.findOne.mockReset()
+        User.findOneAndUpdate.mockReset()
         validateModelParams.mockReturnValue(undefined)
         buildModelInput.mockReturnValue({ prompt: "p" })
         getModelReplicateId.mockReturnValue("owner/flux")
@@ -437,11 +441,53 @@ describe("processImage", () => {
             message: undefined,
         })
     })
+
+    it("records validation errors thrown as Error instances", async () => {
+        validateModelParams.mockImplementation(() => {
+            throw new Error("invalid combo")
+        })
+
+        await processImage({
+            jobId: "job_err",
+            modelId: "FLUX_BASIC",
+            prompt: "ok",
+        } as never)
+
+        expect(redisSetStatus).toHaveBeenCalledWith("job_err", {
+            status: "error",
+            image: undefined,
+            userCreditsRemaining: null,
+            message: undefined,
+        })
+    })
+
+    it("forwards referenceImageUrls into buildModelInput and keeps scalar replicate output", async () => {
+        replicateRun.mockResolvedValue("https://scalar.png")
+        const refs = ["https://res.cloudinary.com/demo/a.png"]
+
+        await processImage({
+            userId: "user_1",
+            jobId: "job_ref",
+            modelId: "FLUX_2_PRO",
+            prompt: "with refs",
+            referenceImageUrls: refs,
+        } as never)
+
+        expect(buildModelInput).toHaveBeenCalledWith(
+            "FLUX_2_PRO",
+            expect.objectContaining({ referenceImageUrls: refs }),
+        )
+        expect(uploadToCloudinary).toHaveBeenCalledWith(
+            expect.objectContaining({ imageUrl: "https://scalar.png" }),
+        )
+    })
 })
 
 describe("processUpscale", () => {
     beforeEach(() => {
         vi.clearAllMocks()
+        User.findOne.mockReset()
+        User.findOneAndUpdate.mockReset()
         validateModelParams.mockReturnValue(undefined)
         buildModelInput.mockReturnValue({ image: "in.png" })
         getModelReplicateId.mockReturnValue("owner/upscale")
@@ -491,11 +537,41 @@ describe("processUpscale", () => {
             }),
         )
     })
+
+    it("defaults userId to an empty string when the upscale body omits it", async () => {
+        await processUpscale({
+            body: { jobId: "job_up_anon", outputFormat: "png" },
+            filePath: "in.png",
+            fileName: "orig",
+        } as never)
+
+        expect(replicateRun).toHaveBeenCalled()
+    })
+
+    it("omits scale from validation when the client does not send one", async () => {
+        replicateRun.mockResolvedValue("https://up-scalar.png")
+
+        await processUpscale({
+            body: { userId: "user_1", jobId: "job_up_no_scale", outputFormat: "png" },
+            filePath: "in.png",
+            fileName: "orig",
+        } as never)
+
+        expect(validateModelParams).toHaveBeenCalledWith(
+            "UPSCALE_IMAGE",
+            expect.objectContaining({ imageUrl: "in.png", scale: undefined }),
+        )
+        expect(uploadToCloudinary).toHaveBeenCalledWith(
+            expect.objectContaining({ imageUrl: "https://up-scalar.png" }),
+        )
+    })
 })
 
 describe("processRevive", () => {
     beforeEach(() => {
         vi.clearAllMocks()
+        User.findOne.mockReset()
+        User.findOneAndUpdate.mockReset()
         getModelReplicateId.mockReturnValue("owner/revive")
         replicateRun.mockResolvedValue("https://rev.png")
         setupHappyPersist()
@@ -517,11 +593,27 @@ describe("processRevive", () => {
             expect.objectContaining({ type: FeatureType.REVIVE, imageUrl: "https://rev.png" }),
         )
     })
+
+    it("defaults userId to an empty string when the job body omits it", async () => {
+        await processRevive({
+            body: { jobId: "job_rev_anon" },
+            filePath: "old.png",
+            fileName: "old",
+        } as never)
+
+        expect(replicateRun).toHaveBeenCalledWith(
+            "owner/revive",
+            { input: { img: "old.png" } },
+            expect.any(Function),
+        )
+    })
 })
 
 describe("processColorize", () => {
     beforeEach(() => {
         vi.clearAllMocks()
+        User.findOne.mockReset()
+        User.findOneAndUpdate.mockReset()
         getModelReplicateId.mockReturnValue("owner/color")
         replicateRun.mockResolvedValue("https://col.png")
         setupHappyPersist()
@@ -539,11 +631,25 @@ describe("processColorize", () => {
             expect.objectContaining({ type: FeatureType.COLORIZE, original: "bw.png" }),
         )
     })
+
+    it("defaults userId to an empty string when the job body omits it", async () => {
+        await processColorize({
+            body: { jobId: "job_col_anon", modelId: "COLORIZE_BASIC" },
+            filePath: "bw.png",
+            fileName: "bw",
+        } as never)
+
+        expect(uploadToCloudinary).toHaveBeenCalledWith(
+            expect.objectContaining({ userId: undefined }),
+        )
+    })
 })
 
 describe("processRemoveBg", () => {
     beforeEach(() => {
         vi.clearAllMocks()
+        User.findOne.mockReset()
+        User.findOneAndUpdate.mockReset()
         getModelReplicateId.mockReturnValue("owner/bg")
         replicateRun.mockResolvedValue(["https://cut.png"])
         setupHappyPersist()
@@ -566,6 +672,32 @@ describe("processRemoveBg", () => {
                 type: FeatureType.REMOVE_BG,
                 imageUrl: "https://cut.png",
             }),
+        )
+    })
+
+    it("defaults userId to an empty string when the job body omits it", async () => {
+        await processRemoveBg({
+            body: { jobId: "job_bg_anon" },
+            filePath: "subj.png",
+            fileName: "subj",
+        } as never)
+
+        expect(uploadToCloudinary).toHaveBeenCalledWith(
+            expect.objectContaining({ userId: undefined }),
+        )
+    })
+
+    it("passes through scalar remove-bg output without unwrapping", async () => {
+        replicateRun.mockResolvedValue("https://cut-scalar.png")
+
+        await processRemoveBg({
+            body: { userId: "user_1", jobId: "job_bg_scalar" },
+            filePath: "subj.png",
+            fileName: "subj",
+        } as never)
+
+        expect(uploadToCloudinary).toHaveBeenCalledWith(
+            expect.objectContaining({ imageUrl: "https://cut-scalar.png" }),
         )
     })
 })

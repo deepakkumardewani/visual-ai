@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
+
 import LandingButton from '@/components/Landing/LandingButton.vue';
 
 const plans = [
@@ -8,8 +10,8 @@ const plans = [
     cadence: 'forever',
     featured: false,
     points: [
-      '50 persistent credits at signup',
-      '30 daily credits (unused reset)',
+      `${SIGNUP_CREDITS} persistent credits at signup`,
+      `${DAILY_CREDITS} daily credits (unused reset)`,
       'Access to all models',
       'Everyday models cost 1 credit',
     ],
@@ -40,8 +42,8 @@ const plans = [
         Free forever. Pay only for what you create.
       </h2>
       <p v-reveal="{ delay: 0.1 }" class="pricing__sub">
-        Start with 50 persistent credits and 30 daily. Unused daily credits reset; purchased credits
-        never expire.
+        Start with {{ SIGNUP_CREDITS }} persistent credits and {{ DAILY_CREDITS }} daily. Unused
+        daily credits reset; purchased credits never expire.
       </p>
     </div>
 

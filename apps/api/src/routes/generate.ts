@@ -1,12 +1,18 @@
 import { Router } from "express"
 import { Request, Response } from "express"
+import type { ModelKey } from "@visual-ai/shared"
 
 import { asyncHandler } from "../lib/async-handler.js"
 import { BadRequestError } from "../lib/errors.js"
 import { createLogger } from "../lib/logger.js"
+import { validateReferenceImageUrls } from "../lib/model-input.js"
 import { enqueueGeneration } from "../queue/generation-queue.js"
 import { requireAuth } from "../middlewares/clerk.js"
-import { upload } from "../middlewares/multer.js"
+import {
+    MAX_REFERENCE_IMAGES_PER_REQUEST,
+    referenceImagesUpload,
+    upload,
+} from "../middlewares/multer.js"
 import { RedisService } from "../services/redis-service.js"
 import { Props } from "../types"
 
@@ -76,11 +82,43 @@ generateRoute.get("/progress", async (req: Request, res: Response) => {
 
 // AI Image Generation Endpoint
 // Fire-and-forget: starts background job, returns 202 immediately
+function attachReferenceUploadBody(req: Request, _res: Response, next: () => void) {
+    const authUserId = (req as Request & { auth?: { userId?: string } }).auth?.userId
+    req.body = {
+        ...req.body,
+        userId: authUserId ?? req.body.userId,
+        feature: "reference",
+        format: req.body.format ?? "png",
+    }
+    next()
+}
+
+generateRoute.post(
+    "/generate/reference-images",
+    // @ts-ignore
+    requireAuth,
+    attachReferenceUploadBody,
+    referenceImagesUpload.array("images", MAX_REFERENCE_IMAGES_PER_REQUEST),
+    asyncHandler(async (req: Request, res: Response) => {
+        const files = req.files as { path?: string }[] | undefined
+        if (!files?.length) {
+            throw new BadRequestError("No image files provided")
+        }
+        const urls = files.map((file) => file.path).filter(Boolean)
+        if (urls.length !== files.length) {
+            throw new BadRequestError("Failed to upload one or more reference images")
+        }
+        res.status(200).json({ urls })
+    }),
+)
+
 generateRoute.post(
     "/generate/image",
     // @ts-ignore
     requireAuth,
     asyncHandler(async (req: Request, res: Response) => {
+        const modelKey = (req.body.modelId ?? "FLUX_BASIC") as ModelKey
+        validateReferenceImageUrls(modelKey, req.body.referenceImageUrls)
         await enqueueGeneration({ kind: "image", body: req.body })
         acceptResponse(res)
     }),

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { v4 as uuidv4 } from 'uuid';
 
 import type { IImage } from '@/types';
 import { FeatureType } from '@/types';
@@ -13,6 +14,8 @@ import { createFeatureLocation } from '@/utils/dashboardRoutes';
 import { getDownloadImageUrl } from '@/utils/helpers';
 import { createLogger } from '@/utils/logger';
 import { FLUX_MODES, UPSCALER_MODELS } from '@/utils/models';
+
+import { useAppStore } from '@/stores/app';
 
 const log = createLogger('aside');
 
@@ -31,6 +34,7 @@ const DEFAULT_UPSCALE_MODEL: Model = UPSCALER_MODELS.find(
 ) as Model;
 
 export interface ReferenceImage {
+  localId: string;
   file: File;
   previewUrl: string;
   name: string;
@@ -44,7 +48,7 @@ export const useAsideStore = defineStore('aside', () => {
   const mode = ref<Model>(DEFAULT_MODE);
   const upscaleModel = ref<Model>(DEFAULT_UPSCALE_MODEL);
   const typingPrompt = ref<string>('');
-  const referenceImage = ref<ReferenceImage | null>(null);
+  const referenceImages = ref<ReferenceImage[]>([]);
   /** Pending file for ImageUpload after sendToFeature switches tools. */
   const pendingFeatureImage = ref<File | null>(null);
 
@@ -63,20 +67,69 @@ export const useAsideStore = defineStore('aside', () => {
 
   const imageInputMax = computed(() => selectedModelFields.value?.imageInput?.max ?? 1);
 
-  function clearReferenceImage() {
-    if (referenceImage.value?.previewUrl) {
-      URL.revokeObjectURL(referenceImage.value.previewUrl);
-    }
-    referenceImage.value = null;
+  /** First reference image — kept for PromptBar until multi-thumbnail UI lands in T1.8. */
+  const referenceImage = computed(() => referenceImages.value[0] ?? null);
+
+  function revokeReferencePreview(item: ReferenceImage) {
+    if (item.previewUrl) URL.revokeObjectURL(item.previewUrl);
   }
 
-  function setReferenceImage(file: File) {
-    clearReferenceImage();
-    referenceImage.value = {
+  function clearReferenceImages() {
+    for (const item of referenceImages.value) {
+      revokeReferencePreview(item);
+    }
+    referenceImages.value = [];
+  }
+
+  function clearReferenceImage() {
+    clearReferenceImages();
+  }
+
+  function showReferenceToast(message: string) {
+    const appStore = useAppStore();
+    appStore.snackbarText = message;
+    appStore.snackbar = true;
+  }
+
+  function removeReferenceImageAt(index: number) {
+    const [removed] = referenceImages.value.splice(index, 1);
+    if (removed) revokeReferencePreview(removed);
+  }
+
+  function addReferenceImage(file: File) {
+    referenceImages.value.push({
+      localId: uuidv4(),
       file,
       previewUrl: URL.createObjectURL(file),
       name: file.name,
-    };
+    });
+  }
+
+  function setReferenceImage(file: File) {
+    clearReferenceImages();
+    addReferenceImage(file);
+  }
+
+  function trimReferenceImagesForModel(newModelKey: ModelKey) {
+    const entry = MODEL_REGISTRY[newModelKey];
+    const fields = entry?.fields;
+    const count = referenceImages.value.length;
+    if (!count) return;
+
+    if (!fields?.imageInput) {
+      clearReferenceImages();
+      showReferenceToast('Reference images were removed because this model does not support them.');
+      return;
+    }
+
+    const max = fields.imageInput.max ?? 1;
+    if (max < count) {
+      const removed = referenceImages.value.splice(max);
+      for (const item of removed) revokeReferencePreview(item);
+      showReferenceToast(
+        `Removed ${removed.length} reference image${removed.length === 1 ? '' : 's'} — this model accepts up to ${max}.`,
+      );
+    }
   }
 
   function clearPendingFeatureImage() {
@@ -148,10 +201,13 @@ export const useAsideStore = defineStore('aside', () => {
     return stagePendingFeatureImageFromUrl(url);
   }
 
-  // Drop unused reference when switching to a model that can't consume it
-  watch(supportsImageInput, (supported) => {
-    if (!supported) clearReferenceImage();
-  });
+  watch(
+    () => mode.value.id,
+    (newId, oldId) => {
+      if (!oldId || newId === oldId) return;
+      trimReferenceImagesForModel(newId as ModelKey);
+    },
+  );
 
   return {
     imageFormat,
@@ -161,14 +217,18 @@ export const useAsideStore = defineStore('aside', () => {
     mode,
     upscaleModel,
     typingPrompt,
+    referenceImages,
     referenceImage,
     pendingFeatureImage,
     supportsImageInput,
     imageInputMax,
     selectedModelFields,
     selectedUpscaleModelFields,
+    addReferenceImage,
+    removeReferenceImageAt,
     setReferenceImage,
     clearReferenceImage,
+    clearReferenceImages,
     clearPendingFeatureImage,
     consumePendingFeatureImage,
     sendToFeature,

@@ -1,6 +1,25 @@
+import { DAILY_CREDITS, REFERRAL_BONUS, SIGNUP_CREDITS } from '@visual-ai/shared';
+
 export const SITE_ORIGIN = 'https://visual-ai.app';
 export const SITE_NAME = 'Visual AI';
 export const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
+
+/** Signup + daily credits for marketing copy and FAQ JSON-LD sources. */
+export function newAccountCreditsDefinition(): string {
+  return `New accounts get ${SIGNUP_CREDITS} credits plus ${DAILY_CREDITS} daily credits.`;
+}
+
+export function freeTierSignupFaqAnswer(): string {
+  return `Yes. You start with ${SIGNUP_CREDITS} credits and receive ${DAILY_CREDITS} more every day. Daily credits reset; purchased credits do not expire.`;
+}
+
+export function colorizeFreeTierFaqAnswer(): string {
+  return `Yes, using your ${DAILY_CREDITS} daily credits (and the ${SIGNUP_CREDITS} credits you receive at signup). Each colorize run costs 2 credits.`;
+}
+
+export function referralGiveEarnCopy(): string {
+  return `Give ${REFERRAL_BONUS} credits and earn ${REFERRAL_BONUS} credits for each new referral who signs up.`;
+}
 
 const ORGANIZATION_CREATOR = {
   '@type': 'Organization',

@@ -1,4 +1,9 @@
 import { FeatureType } from '@/types';
+import {
+  colorizeFreeTierFaqAnswer,
+  freeTierSignupFaqAnswer,
+  newAccountCreditsDefinition,
+} from '@/utils/seo';
 
 export interface FeatureLandingFaq {
   question: string;
@@ -34,8 +39,7 @@ export const FEATURE_LANDINGS: FeatureLandingCopy[] = [
     description:
       'Turn a prompt into a studio-grade image on Visual AI. Free daily credits, no Discord, commercial use. Generate photoreal or illustrated stills in the browser.',
     h1: 'Text to image — in the browser',
-    definition:
-      'Visual AI is a text-to-image generator: you type a prompt, pick a model, and download a still. New accounts get 50 credits plus 30 daily credits. There is no Discord bot and no subscription tier — buy extra credit packs in INR when you need them.',
+    definition: `Visual AI is a text-to-image generator: you type a prompt, pick a model, and download a still. ${newAccountCreditsDefinition()} There is no Discord bot and no subscription tier — buy extra credit packs in INR when you need them.`,
     howHeading: 'How to generate an image',
     steps: [
       'Open the generator and write a clear prompt (subject, lighting, style).',
@@ -46,8 +50,7 @@ export const FEATURE_LANDINGS: FeatureLandingCopy[] = [
     faqs: [
       {
         question: 'Is Visual AI a free AI image generator?',
-        answer:
-          'Yes. You start with 50 credits and receive 30 more every day. Daily credits reset; purchased credits do not expire.',
+        answer: freeTierSignupFaqAnswer(),
       },
       {
         question: 'Which models can I use for text to image?',
@@ -129,8 +132,7 @@ export const FEATURE_LANDINGS: FeatureLandingCopy[] = [
       },
       {
         question: 'Can I colorize for free?',
-        answer:
-          'Yes, using your 30 daily credits (and the 50 credits you receive at signup). Each colorize run costs 2 credits.',
+        answer: colorizeFreeTierFaqAnswer(),
       },
     ],
   },

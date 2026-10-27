@@ -13,6 +13,27 @@ vi.mock('vue-clerk', () => ({
   useAuth: () => ({ getToken: vi.fn().mockResolvedValue('tok') }),
 }));
 
+const appStoreMock = {
+  snackbar: false,
+  snackbarText: '',
+};
+
+vi.mock('@/stores/app', () => ({
+  useAppStore: () => appStoreMock,
+}));
+
+const { getDownloadImageUrl } = vi.hoisted(() => ({
+  getDownloadImageUrl: vi.fn(() => undefined as unknown as string),
+}));
+
+vi.mock('@/utils/helpers', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/utils/helpers')>();
+  return {
+    ...actual,
+    getDownloadImageUrl,
+  };
+});
+
 import { useAsideStore } from '@/stores/aside';
 import { FeatureType } from '@/types';
 import { ASPECT_RATIOS, IMAGE_FORMATS } from '@/utils/constants';
@@ -22,7 +43,10 @@ describe('useAsideStore', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
     vi.clearAllMocks();
+    getDownloadImageUrl.mockReturnValue(undefined as unknown as string);
     localStorage.clear();
+    appStoreMock.snackbar = false;
+    appStoreMock.snackbarText = '';
   });
 
   it('has correct initial defaults', () => {
@@ -108,6 +132,57 @@ describe('useAsideStore', () => {
     vi.unstubAllGlobals();
   });
 
+  it('resolves feature image urls from ai, download, and original fields', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        blob: async () => new Blob(['img'], { type: 'image/png' }),
+      }),
+    );
+    const store = useAsideStore();
+
+    expect(
+      await store.sendToFeature(
+        { aiImageUrl: 'https://cdn.example/ai.png' } as never,
+        FeatureType.UPSCALE,
+      ),
+    ).toBe(true);
+    getDownloadImageUrl.mockReturnValueOnce('https://cdn.example/download.png');
+    expect(await store.sendToFeature({} as never, FeatureType.UPSCALE)).toBe(true);
+    expect(
+      await store.sendToFeature(
+        { originalImageUrl: 'https://cdn.example/orig.png' } as never,
+        FeatureType.UPSCALE,
+      ),
+    ).toBe(true);
+    vi.unstubAllGlobals();
+  });
+
+  it('sendToFeature resolves image urls from result objects and relative paths', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      blob: async () => new Blob(['img'], { type: 'image/webp' }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    const store = useAsideStore();
+
+    getDownloadImageUrl.mockReturnValue(undefined as unknown as string);
+    expect(
+      await store.sendToFeature(
+        { enhancedImageUrl: 'https://cdn.example/enh.png' } as never,
+        FeatureType.UPSCALE,
+      ),
+    ).toBe(true);
+    expect(fetchMock.mock.calls[0]?.[0]).toBe('https://cdn.example/enh.png');
+
+    fetchMock.mockClear();
+    expect(await store.sendToFeature('/results/preview.png', FeatureType.REMOVE_BG)).toBe(true);
+    expect(String(fetchMock.mock.calls[0]?.[0])).toContain('/results/preview.png');
+    expect(store.pendingFeatureImage?.name).toBe('from-result.webp');
+    vi.unstubAllGlobals();
+  });
+
   it('sendToFeature stages a file after navigating to the feature', async () => {
     vi.stubGlobal(
       'fetch',
@@ -144,6 +219,80 @@ describe('useAsideStore', () => {
     vi.unstubAllGlobals();
   });
 
+  it('removeReferenceImageAt ignores out-of-range indexes', () => {
+    const revoke = vi.spyOn(URL, 'revokeObjectURL');
+    const store = useAsideStore();
+    store.removeReferenceImageAt(0);
+    expect(revoke).not.toHaveBeenCalled();
+    revoke.mockRestore();
+  });
+
+  it('removeReferenceImageAt revokes the preview url', () => {
+    const revoke = vi.spyOn(URL, 'revokeObjectURL');
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:one');
+    const store = useAsideStore();
+    store.addReferenceImage(new File(['a'], 'one.png', { type: 'image/png' }));
+    store.removeReferenceImageAt(0);
+    expect(store.referenceImages).toHaveLength(0);
+    expect(revoke).toHaveBeenCalledWith('blob:one');
+    revoke.mockRestore();
+  });
+
+  it('trims excess references when switching to a lower max model', async () => {
+    const revoke = vi.spyOn(URL, 'revokeObjectURL');
+    vi.spyOn(URL, 'createObjectURL').mockImplementation(() => `blob:${Math.random()}`);
+    const store = useAsideStore();
+    const multi = MODELS.find((model) => model.id === 'FLUX_2_PRO')!;
+    const single = MODELS.find((model) => model.id === 'FLUX_2_MAX')!;
+
+    store.mode = multi;
+    await nextTick();
+    store.addReferenceImage(new File(['1'], 'one.png', { type: 'image/png' }));
+    store.addReferenceImage(new File(['2'], 'two.png', { type: 'image/png' }));
+    store.addReferenceImage(new File(['3'], 'three.png', { type: 'image/png' }));
+    expect(store.referenceImages).toHaveLength(3);
+
+    store.mode = single;
+    await nextTick();
+    expect(store.referenceImages).toHaveLength(1);
+    expect(revoke).toHaveBeenCalledTimes(2);
+    expect(appStoreMock.snackbarText).toContain('Removed 2 reference images');
+    revoke.mockRestore();
+  });
+
+  it('keeps references when the new model max is equal or higher', async () => {
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:ref');
+    const store = useAsideStore();
+    const multi = MODELS.find((model) => model.id === 'FLUX_2_PRO')!;
+    store.mode = multi;
+    await nextTick();
+    store.addReferenceImage(new File(['1'], 'one.png', { type: 'image/png' }));
+    store.addReferenceImage(new File(['2'], 'two.png', { type: 'image/png' }));
+
+    store.mode = multi;
+    await nextTick();
+    expect(store.referenceImages).toHaveLength(2);
+    expect(appStoreMock.snackbarText).toBe('');
+
+    store.mode = MODELS.find((model) => model.id === 'FLUX_2_DEV')!;
+    await nextTick();
+    expect(store.referenceImages).toHaveLength(1);
+    expect(appStoreMock.snackbarText).toContain('Removed 1 reference image');
+  });
+
+  it('shows a toast when references are cleared for unsupported models', async () => {
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:ref');
+    const store = useAsideStore();
+    store.mode = MODELS.find((model) => model.id === 'FLUX_2_PRO')!;
+    await nextTick();
+    store.setReferenceImage(new File(['a'], 'ref.png', { type: 'image/png' }));
+
+    store.mode = MODELS.find((model) => model.id === 'FLUX_BASIC')!;
+    await nextTick();
+    expect(store.referenceImages).toHaveLength(0);
+    expect(appStoreMock.snackbarText).toContain('does not support them');
+  });
+
   it('clears a reference image when switching to a model without image input', async () => {
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:ref');
     const store = useAsideStore();
@@ -168,5 +317,7 @@ describe('useAsideStore', () => {
     store.mode = { ...store.mode, id: 'NOT_A_MODEL' };
     expect(store.selectedModelFields).toBeNull();
     expect(store.imageInputMax).toBe(1);
+    store.upscaleModel = { ...store.upscaleModel, id: 'NOT_A_MODEL' };
+    expect(store.selectedUpscaleModelFields).toBeNull();
   });
 });

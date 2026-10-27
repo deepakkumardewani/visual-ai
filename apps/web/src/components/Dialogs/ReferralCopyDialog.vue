@@ -7,6 +7,7 @@ import { useUserStore } from '@/stores/user';
 
 import AppModal from '@/components/AppModal.vue';
 import ReferralCode from '@/components/ReferralCode.vue';
+import { referralGiveEarnCopy } from '@/utils/seo';
 
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
@@ -51,7 +52,7 @@ const { credits } = storeToRefs(userStore);
       <div class="ref-copy__offer">
         <p class="ref-copy__offer-text">
           <font-awesome-icon :icon="faGift" class="ref-copy__gift" aria-hidden="true" />
-          Give 50 credits and earn 50 credits for each new referral who signs up.
+          {{ referralGiveEarnCopy() }}
         </p>
         <ReferralCode />
       </div>

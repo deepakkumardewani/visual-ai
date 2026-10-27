@@ -1,6 +1,12 @@
+import { DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
 import { describe, expect, it } from 'vitest';
 
 import { FeatureType } from '@/types';
+import {
+  colorizeFreeTierFaqAnswer,
+  freeTierSignupFaqAnswer,
+  newAccountCreditsDefinition,
+} from '@/utils/seo';
 import {
   FEATURE_LANDINGS,
   featureLandingByPath,
@@ -35,6 +41,19 @@ describe('featureLandings', () => {
   it('looks up a landing by path', () => {
     expect(featureLandingByPath('/colorize-photo')?.feature).toBe(FeatureType.COLORIZE);
     expect(featureLandingByPath('/missing')).toBeUndefined();
+  });
+
+  it('wires FAQ and definition copy to shared credit constants', () => {
+    const textToImage = featureLandingByPath('/text-to-image');
+    expect(textToImage?.definition).toContain(newAccountCreditsDefinition());
+    const freeFaq = textToImage?.faqs.find((f) => f.question.includes('free AI image'));
+    expect(freeFaq?.answer).toBe(freeTierSignupFaqAnswer());
+    expect(freeFaq?.answer).toContain(String(SIGNUP_CREDITS));
+    expect(freeFaq?.answer).toContain(String(DAILY_CREDITS));
+
+    const colorize = featureLandingByPath('/colorize-photo');
+    const colorizeFree = colorize?.faqs.find((f) => f.question.includes('for free'));
+    expect(colorizeFree?.answer).toBe(colorizeFreeTierFaqAnswer());
   });
 
   it('returns the other four landings for related-tool links', () => {

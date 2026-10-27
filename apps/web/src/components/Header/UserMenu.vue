@@ -135,7 +135,7 @@ function showReferralDialog() {
 
 function copyReferralCode() {
   closeMenu();
-  dialogStore.showCopyReferral();
+  dialogStore.showCopyReferral(triggerRef.value);
 }
 
 function handleSignOut() {

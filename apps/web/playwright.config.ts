@@ -13,9 +13,12 @@ const prodWebUrl = `http://127.0.0.1:${e2eProdPort}`;
 
 const webServer = useProdServer
   ? {
-      command: `bun run build && bun run preview -- --port ${e2eProdPort} --strictPort`,
+      // e2e-preview: production build with pk_test + local API (see .env.e2e-preview).
+      command: `VITE_PRERENDER=1 vp build --mode e2e-preview && bun run preview -- --port ${e2eProdPort} --strictPort --host 127.0.0.1`,
       url: prodWebUrl,
       reuseExistingServer: false,
+      // build + preview often exceeds Playwright's default 60s webServer timeout
+      timeout: 300_000,
     }
   : undefined;
 

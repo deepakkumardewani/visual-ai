@@ -318,6 +318,7 @@ export async function processImage(body: Body): Promise<void> {
         outputFormat,
         styleId,
         enhanceMode,
+        referenceImageUrls,
     } = body
 
     const modelKey = modelId as ModelKey
@@ -356,6 +357,7 @@ export async function processImage(body: Body): Promise<void> {
             outputFormat,
             outputQuality,
             numOfOutputs,
+            referenceImageUrls,
         })
     } catch (error) {
         const message = error instanceof Error ? error.message : String(error)

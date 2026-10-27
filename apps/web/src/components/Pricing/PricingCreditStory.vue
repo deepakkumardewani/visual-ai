@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { SIGNUP_CREDITS } from '@visual-ai/shared';
+
 const beats = [
   {
     label: 'Daily Credits',
@@ -8,7 +10,7 @@ const beats = [
   {
     label: 'Persistent Credits',
     value: '∞',
-    copy: 'The 50 you get at signup, plus every pack you buy. They never expire and sit beside your daily allowance.',
+    copy: `The ${SIGNUP_CREDITS} you get at signup, plus every pack you buy. They never expire and sit beside your daily allowance.`,
   },
   {
     label: 'Pay Per Use',

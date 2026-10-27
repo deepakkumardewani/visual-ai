@@ -1,13 +1,14 @@
 import { createPinia, setActivePinia } from 'pinia';
 import { mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { MODEL_REGISTRY, type ModelKey } from '@visual-ai/shared';
+import type { ModelKey } from '@visual-ai/shared';
 
 vi.mock('vue-router', () => ({
   useRouter: () => ({ push: vi.fn() }),
 }));
 
 import ReferenceImageControl from '@/components/Dashboard/Composer/ReferenceImageControl.vue';
+import { MAX_IMAGE_BYTES } from '@/composables/useImageDrop';
 import { useAsideStore } from '@/stores/aside';
 import { MODELS } from '@/utils/models';
 
@@ -20,12 +21,12 @@ const stubs = {
   Teleport: { template: '<div><slot /></div>' },
 };
 
-function enableReference(pinia: ReturnType<typeof createPinia>) {
-  const withInput = MODELS.find((model) => {
-    const fields = MODEL_REGISTRY[model.id as ModelKey]?.fields;
-    return Boolean(fields && 'imageInput' in fields && fields.imageInput);
-  }) ?? { ...useAsideStore(pinia).mode, id: 'FLUX_KONTEXT_PRO' };
-  useAsideStore(pinia).mode = withInput;
+function enableReference(
+  pinia: ReturnType<typeof createPinia>,
+  modelId: ModelKey = 'FLUX_KONTEXT_PRO',
+) {
+  const model = MODELS.find((entry) => entry.id === modelId);
+  useAsideStore(pinia).mode = model ?? { ...useAsideStore(pinia).mode, id: modelId };
 }
 
 function mountControl(pinia = createPinia()) {
@@ -97,11 +98,7 @@ describe('ReferenceImageControl', () => {
     const pinia = createPinia();
     setActivePinia(pinia);
     enableReference(pinia);
-    useAsideStore(pinia).referenceImage = {
-      file: new File(['x'], 'ref.png', { type: 'image/png' }),
-      previewUrl: 'blob:ref',
-      name: 'ref.png',
-    };
+    useAsideStore(pinia).setReferenceImage(new File(['x'], 'ref.png', { type: 'image/png' }));
 
     const wrapper = mountControl(pinia);
     expect(wrapper.get('[data-testid="reference-image-add"]').text()).toMatch(/Replace reference/i);
@@ -143,6 +140,105 @@ describe('ReferenceImageControl', () => {
 
     await input.trigger('change');
     expect(useAsideStore(pinia).referenceImage?.name).toBe('guide.png');
+  });
+
+  it('adds multiple references for multi-image models', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    enableReference(pinia, 'FLUX_2_PRO');
+
+    const wrapper = mountControl(pinia);
+    const files = [
+      new File(['1'], 'one.png', { type: 'image/png' }),
+      new File(['2'], 'two.png', { type: 'image/png' }),
+    ];
+    const input = wrapper.get('input[type="file"]');
+    Object.defineProperty(input.element, 'files', { value: files, configurable: true });
+    await input.trigger('change');
+
+    expect(useAsideStore(pinia).referenceImages).toHaveLength(2);
+  });
+
+  it('uses singular copy when a single-image model is full', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    enableReference(pinia);
+    useAsideStore(pinia).setReferenceImage(new File(['1'], 'one.png', { type: 'image/png' }));
+
+    const wrapper = mountControl(pinia);
+    const input = wrapper.get('input[type="file"]');
+    Object.defineProperty(input.element, 'files', {
+      value: [new File(['2'], 'two.png', { type: 'image/png' })],
+      configurable: true,
+    });
+    await input.trigger('change');
+
+    expect(wrapper.get('[data-testid="reference-image-inline-error"]').text()).toBe(
+      'This model accepts up to 1 image',
+    );
+  });
+
+  it('highlights the trigger while the reference popover is open', () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    enableReference(pinia);
+
+    const wrapper = mount(ReferenceImageControl, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          ...stubs,
+          Popover: {
+            template:
+              '<div><slot name="trigger" :open="true" /><div data-testid="popover-body"><slot /></div></div>',
+          },
+        },
+      },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.get('[data-testid="reference-image-trigger"]').classes()).toContain(
+      'tw-text-ink',
+    );
+    wrapper.unmount();
+  });
+
+  it('blocks selections beyond the model max with an inline message', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    enableReference(pinia, 'FLUX_2_PRO');
+    const store = useAsideStore(pinia);
+    for (let i = 0; i < 8; i += 1) {
+      store.addReferenceImage(new File([String(i)], `img-${i}.png`, { type: 'image/png' }));
+    }
+
+    const wrapper = mountControl(pinia);
+    const input = wrapper.get('input[type="file"]');
+    Object.defineProperty(input.element, 'files', {
+      value: [new File(['9'], 'nine.png', { type: 'image/png' })],
+      configurable: true,
+    });
+    await input.trigger('change');
+
+    expect(store.referenceImages).toHaveLength(8);
+    expect(wrapper.get('[data-testid="reference-image-inline-error"]').text()).toContain(
+      'up to 8 images',
+    );
+  });
+
+  it('shows size and type validation errors inline', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    enableReference(pinia);
+
+    const wrapper = mountControl(pinia);
+    const input = wrapper.get('input[type="file"]');
+    const huge = new File([new Uint8Array(8)], 'big.png', { type: 'image/png' });
+    Object.defineProperty(huge, 'size', { value: MAX_IMAGE_BYTES + 1 });
+    Object.defineProperty(input.element, 'files', { value: [huge], configurable: true });
+    await input.trigger('change');
+
+    expect(wrapper.get('[data-testid="reference-image-inline-error"]').text()).toContain('5MB');
   });
 
   it('ignores invalid or empty file selections', async () => {

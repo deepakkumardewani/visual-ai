@@ -1,7 +1,52 @@
 import { ENHANCE_MODES, MODEL_REGISTRY, STYLE_PRESETS } from "@visual-ai/shared"
 import type { ModelKey } from "@visual-ai/shared"
 
+import { env } from "../config/env.js"
 import { BadRequestError } from "./errors.js"
+
+const CLOUDINARY_HOST = "res.cloudinary.com"
+
+export function isAllowedReferenceImageUrl(url: string): boolean {
+    try {
+        const parsed = new URL(url)
+        if (parsed.protocol !== "https:") return false
+        if (parsed.hostname !== CLOUDINARY_HOST) return false
+        const prefix = `/image/upload/`
+        if (!parsed.pathname.includes(prefix)) return false
+        const cloudSegment = parsed.pathname.split("/")[2]
+        return cloudSegment === env.CLOUDINARY_CLOUD_NAME
+    } catch {
+        return false
+    }
+}
+
+export function validateReferenceImageUrls(
+    modelKey: ModelKey,
+    referenceImageUrls: string[] | undefined,
+): void {
+    if (!referenceImageUrls?.length) return
+
+    const entry = MODEL_REGISTRY[modelKey]
+    if (!entry) throw new BadRequestError(`Unknown model key: "${modelKey}"`)
+    if (!entry.fields.imageInput) {
+        throw new BadRequestError(
+            `Model "${modelKey}" does not accept reference images. Remove referenceImageUrls from the request.`,
+        )
+    }
+
+    const max = entry.fields.imageInput.max ?? 1
+    if (referenceImageUrls.length > max) {
+        throw new BadRequestError(`Model "${modelKey}" accepts at most ${max} reference image(s).`)
+    }
+
+    for (const url of referenceImageUrls) {
+        if (!isAllowedReferenceImageUrl(url)) {
+            throw new BadRequestError(
+                "Each reference image URL must be a valid Cloudinary upload URL.",
+            )
+        }
+    }
+}
 
 /** User-supplied generation parameters — only the fields common to all generation models. */
 export interface UserGenerationParams {
@@ -16,6 +61,8 @@ export interface UserGenerationParams {
     enhanceMode?: string
     /** Image URL for upscaling or image-to-image tasks */
     imageUrl?: string
+    /** Reference image URLs for t2i models with imageInput */
+    referenceImageUrls?: string[]
     /** Scale/upscale factor (model-specific semantics) */
     scale?: number
 }
@@ -139,8 +186,15 @@ export function buildModelInput(
         input[fields.numOutputs.inputKey] = userParams.numOfOutputs ?? 1
     }
 
-    if (fields.imageInput && userParams.imageUrl) {
-        input[fields.imageInput.inputKey] = userParams.imageUrl
+    if (fields.imageInput) {
+        const refUrls = userParams.referenceImageUrls?.filter(Boolean) ?? []
+        if (refUrls.length > 0) {
+            input[fields.imageInput.inputKey] = fields.imageInput.array ? refUrls : refUrls[0]
+        } else if (userParams.imageUrl) {
+            input[fields.imageInput.inputKey] = fields.imageInput.array
+                ? [userParams.imageUrl]
+                : userParams.imageUrl
+        }
     }
 
     if (fields.scale && userParams.scale !== undefined) {

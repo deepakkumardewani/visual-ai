@@ -131,6 +131,7 @@ declare module 'vue' {
     PromptEnhancePicker: typeof import('./components/Dashboard/Sidebar/PromptEnhancePicker.vue')['default']
     ProviderIcon: typeof import('./components/primitives/ProviderIcon.vue')['default']
     ReferenceImageControl: typeof import('./components/Dashboard/Composer/ReferenceImageControl.vue')['default']
+    ReferenceThumbnails: typeof import('./components/Dashboard/Composer/ReferenceThumbnails.vue')['default']
     ReferralCode: typeof import('./components/ReferralCode.vue')['default']
     ReferralCopyDialog: typeof import('./components/Dialogs/ReferralCopyDialog.vue')['default']
     ReferralDialog: typeof import('./components/Dialogs/ReferralDialog.vue')['default']

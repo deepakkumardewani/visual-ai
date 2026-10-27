@@ -1,3 +1,4 @@
+import { DAILY_CREDITS, REFERRAL_BONUS, SIGNUP_CREDITS } from '@visual-ai/shared';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -6,11 +7,30 @@ import {
   SITE_ORIGIN,
   breadcrumbJsonLd,
   canonicalUrl,
+  colorizeFreeTierFaqAnswer,
   faqPageJsonLd,
+  freeTierSignupFaqAnswer,
   itemListJsonLd,
+  newAccountCreditsDefinition,
   organizationJsonLd,
+  referralGiveEarnCopy,
   webApplicationJsonLd,
 } from '@/utils/seo';
+
+describe('credit marketing copy', () => {
+  it('uses shared signup, daily, and referral constants', () => {
+    expect(newAccountCreditsDefinition()).toBe(
+      `New accounts get ${SIGNUP_CREDITS} credits plus ${DAILY_CREDITS} daily credits.`,
+    );
+    expect(freeTierSignupFaqAnswer()).toContain(String(SIGNUP_CREDITS));
+    expect(freeTierSignupFaqAnswer()).toContain(String(DAILY_CREDITS));
+    expect(colorizeFreeTierFaqAnswer()).toContain(String(DAILY_CREDITS));
+    expect(colorizeFreeTierFaqAnswer()).toContain(String(SIGNUP_CREDITS));
+    expect(referralGiveEarnCopy()).toBe(
+      `Give ${REFERRAL_BONUS} credits and earn ${REFERRAL_BONUS} credits for each new referral who signs up.`,
+    );
+  });
+});
 
 describe('canonicalUrl', () => {
   it('returns the site origin for empty and root paths', () => {
@@ -48,13 +68,15 @@ describe('json-ld helpers', () => {
   });
 
   it('strips HTML from FAQ answers', () => {
-    const json = faqPageJsonLd([{ question: 'Free?', answer: 'Yes. <b>50</b>  credits' }]);
+    const json = faqPageJsonLd([
+      { question: 'Free?', answer: `Yes. <b>${SIGNUP_CREDITS}</b>  credits` },
+    ]);
 
     expect(json.mainEntity).toEqual([
       {
         '@type': 'Question',
         name: 'Free?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Yes. 50 credits' },
+        acceptedAnswer: { '@type': 'Answer', text: `Yes. ${SIGNUP_CREDITS} credits` },
       },
     ]);
   });

@@ -62,11 +62,7 @@ describe('PromptBar', () => {
     const pinia = createPinia();
     setActivePinia(pinia);
     const aside = useAsideStore();
-    aside.referenceImage = {
-      file: new File(['x'], 'ref.png', { type: 'image/png' }),
-      previewUrl: 'blob:ref',
-      name: 'ref.png',
-    };
+    aside.setReferenceImage(new File(['x'], 'ref.png', { type: 'image/png' }));
 
     const wrapper = mount(PromptBar, {
       global: { plugins: [pinia], stubs },

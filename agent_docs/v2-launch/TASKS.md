@@ -54,7 +54,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
 **Adds:** New accounts and referrals get 30 credits (copy follows the constants), reference images in the prompt bar are actually sent to the model (up to the model's max), the favicon matches the logo, and the referral dialog is redesigned.
 **Try in UI:** Open the referral dialog in dark and light themes and copy the code ; pick a multi-image model, add 8 reference images and confirm a 9th is blocked, then generate ; switch to a single-image then a no-image model and watch the toasts ; compare the browser tab icon with the header logo.
 
-### ☐ T1.1 Credits constants and referral grant
+### ✅ T1.1 Credits constants and referral grant
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/models/credits.ts`, `apps/api/src/routes/users.ts`, `apps/api/src/routes/users.test.ts` (existing assertions only)
@@ -69,7 +69,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
   - `bun --cwd apps/api run test -- users` (existing assertions that hard-code 50 updated to the constant)
   - `bun run check`
 
-### ☐ T1.2 Copy derives from constants (web source)
+### ✅ T1.2 Copy derives from constants (web source)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dialogs/ReferralOfferDialog.vue`, `apps/web/src/components/Dialogs/ReferralCopyDialog.vue`, `apps/web/src/utils/featureLandings.ts`, `apps/web/src/utils/seo.ts`
@@ -79,7 +79,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
   - `grep -rniE "\b50 (free |bonus )?credits" apps/web/src` shows no signup/referral hits
   - `bun run check`
 
-### ☐ T1.3 Copy derives from constants (static files and stale assertions)
+### ✅ T1.3 Copy derives from constants (static files and stale assertions)
 
 - **Kind:** implementation
 - **Files:** `apps/web/public/pricing.md`, `apps/web/public/llms.txt`, `apps/web/src/utils/seo.test.ts`, `apps/web/src/components/Dialogs/ReferralOfferDialog.test.ts`
@@ -90,7 +90,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
   - `bun run test`
   - `bun run build:web`
 
-### ☐ T1.4 Shared image limits and reference-image upload endpoint
+### ✅ T1.4 Shared image limits and reference-image upload endpoint
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/models/image-limits.ts` (new, exported from shared index), `apps/api/src/middlewares/multer.ts`, `apps/api/src/routes/generate.ts`, `apps/web/src/composables/useImageDrop.ts`
@@ -103,7 +103,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
   - `bun --cwd apps/api run test -- generate`
   - `bun run check`
 
-### ☐ T1.5 Registry `imageInput.array` and input shaping
+### ✅ T1.5 Registry `imageInput.array` and input shaping
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/models/types.ts` (`ModelDefinition.fields.imageInput`, ~line 77), `packages/shared/src/models/registry.ts`, `apps/api/src/lib/model-input.ts`, `docs/MODEL_ONBOARDING.md`
@@ -116,7 +116,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
   - `bun --cwd apps/api run test -- model-input`
   - `bun --cwd packages/shared run build`
 
-### ☐ T1.6 `referenceImageUrls` through route, queue and service
+### ✅ T1.6 `referenceImageUrls` through route, queue and service
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/generate.ts`, `apps/api/src/queue/generation-queue.ts` (job data type), `apps/api/src/queue/generation-worker.ts`, `apps/api/src/services/generation-service.ts`
@@ -129,7 +129,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
   - `bun --cwd apps/api run test -- generation-service`
   - `bun run check`
 
-### ☐ T1.7 Reference images store: array, trim, upload-then-send
+### ✅ T1.7 Reference images store: array, trim, upload-then-send
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/stores/aside.ts`, `apps/web/src/stores/generate.ts`
@@ -143,7 +143,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
   - `bun --cwd apps/web run test -- aside generate`
   - `bun run check`
 
-### ☐ T1.8 Prompt bar multi-image UI
+### ✅ T1.8 Prompt bar multi-image UI
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dashboard/Composer/PromptBar.vue`, `apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue`, `apps/web/src/components/Dashboard/Composer/ReferenceThumbnails.vue` (new, extracted strip)
@@ -157,7 +157,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
   - `bun run check`
   - Seeded QA spec from T1.14: `cd apps/web && bunx playwright test e2e/qa/mods-reference-image.spec.ts --repeat-each=2`
 
-### ☐ T1.9 Favicon refresh
+### ✅ T1.9 Favicon refresh
 
 - **Kind:** implementation
 - **Files:** `apps/web/public/{favicon.ico,favicon.svg,apple-touch-icon.png,icon-192.png,icon-512.png}` (one generated icon set from a single master SVG), `apps/web/public/site.webmanifest`, `apps/web/index.html`
@@ -173,7 +173,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
   - `lighthouse-cli` skill against the running web URL: no icon/manifest warnings
   - Visual comparison of tab icon vs header logo: `agent-browser: screenshot of header logo and favicon.svg` (exploratory only)
 
-### ☐ T1.10 ReferralOfferDialog redesign
+### ✅ T1.10 ReferralOfferDialog redesign
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dialogs/ReferralOfferDialog.vue`, `apps/web/src/components/AppModal.vue` (only if needed)
@@ -187,7 +187,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
   - `grep -nE "#[0-9a-fA-F]{3,8}" apps/web/src/components/Dialogs/ReferralOfferDialog.vue` returns nothing
   - `bun --cwd apps/web run test -- ReferralOfferDialog`
 
-### ☐ T1.11 Unit: API credits and reference-image wiring
+### ✅ T1.11 Unit: API credits and reference-image wiring
 
 - **Kind:** unit
 - **Files:** `apps/api/src/routes/users.ts`, `apps/api/src/routes/generate.ts`, `apps/api/src/lib/model-input.ts`, `apps/api/src/services/generation-service.ts`, `apps/api/src/middlewares/multer.ts`
@@ -195,7 +195,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
 - **Acceptance:** Every file >= 90% lines/branches/functions/statements (repo threshold), target > 95%; no `it.fails` unless the source has a real bug.
 - **Verify:** `cd apps/api && bunx vitest run src/routes/users.test.ts src/routes/generate.test.ts src/lib/model-input.test.ts src/services/generation-service.test.ts --coverage --coverage.include=src/routes/users.ts --coverage.include=src/routes/generate.ts --coverage.include=src/lib/model-input.ts --coverage.include=src/services/generation-service.ts --coverage.include=src/middlewares/multer.ts --coverage.reporter=text`
 
-### ☐ T1.12 Unit: web reference images
+### ✅ T1.12 Unit: web reference images
 
 - **Kind:** unit
 - **Files:** `apps/web/src/stores/aside.ts`, `apps/web/src/stores/generate.ts`, `apps/web/src/composables/useImageDrop.ts`, `apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue`, `apps/web/src/components/Dashboard/Composer/ReferenceThumbnails.vue`
@@ -203,7 +203,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
 - **Acceptance:** Every file >= 90% on all four metrics (repo threshold), target > 95%; no `it.fails` unless real bug.
 - **Verify:** `cd apps/web && bunx vitest run src/stores/aside.test.ts src/stores/generate.test.ts src/composables/useImageDrop.test.ts src/components/Dashboard/Composer --coverage --coverage.include=src/stores/aside.ts --coverage.include=src/stores/generate.ts --coverage.include=src/composables/useImageDrop.ts --coverage.include=src/components/Dashboard/Composer/ReferenceImageControl.vue --coverage.include=src/components/Dashboard/Composer/ReferenceThumbnails.vue --coverage.reporter=text`
 
-### ☐ T1.13 Unit: referral dialogs and constant-driven copy
+### ✅ T1.13 Unit: referral dialogs and constant-driven copy
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Dialogs/ReferralOfferDialog.vue`, `apps/web/src/components/Dialogs/ReferralCopyDialog.vue`, `apps/web/src/utils/featureLandings.ts`, `apps/web/src/utils/seo.ts`
@@ -211,7 +211,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
 - **Acceptance:** Every file >= 90% on all four metrics (repo threshold), target > 95%.
 - **Verify:** `cd apps/web && bunx vitest run src/components/Dialogs/ReferralOfferDialog.test.ts src/components/Dialogs/ReferralCopyDialog.test.ts src/utils/seo.test.ts src/utils/featureLandings.test.ts --coverage --coverage.include=src/components/Dialogs/ReferralOfferDialog.vue --coverage.include=src/components/Dialogs/ReferralCopyDialog.vue --coverage.include=src/utils/featureLandings.ts --coverage.include=src/utils/seo.ts --coverage.reporter=text`
 
-### ☐ T1.14 E2E: reference image flow
+### ✅ T1.14 E2E: reference image flow
 
 - **Kind:** e2e
 - **Scenarios:**
@@ -226,7 +226,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
 - **Files:** none expected
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/mods-reference-image.spec.ts --repeat-each=3`
 
-### ☐ T1.15 E2E: referral dialog, credits copy and favicon
+### ✅ T1.15 E2E: referral dialog, credits copy and favicon
 
 - **Kind:** e2e
 - **Scenarios:**
@@ -239,7 +239,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
 - **Files:** none expected
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/mods-referral-favicon.spec.ts --repeat-each=3`
 
-### ☐ T1.16 Gate: Phase 1
+### ✅ T1.16 Gate: Phase 1
 
 - **Kind:** gate
 - **Files:** none

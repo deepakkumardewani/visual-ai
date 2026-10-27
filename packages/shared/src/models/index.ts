@@ -1,4 +1,5 @@
 export * from './types.js';
+export * from './image-limits.js';
 export * from './registry.js';
 export * from './styles.js';
 export * from './credits.js';

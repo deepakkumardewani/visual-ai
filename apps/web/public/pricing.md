@@ -8,7 +8,7 @@ Interactive checkout: [https://visual-ai.app/pricing](https://visual-ai.app/pric
 
 | Kind      | Amount         | Persistence                  |
 | --------- | -------------- | ---------------------------- |
-| Signup    | 50 credits     | Persistent — do not expire   |
+| Signup    | 30 credits     | Persistent — do not expire   |
 | Daily     | 30 credits     | Reset each day (use-or-lose) |
 | Purchased | Per pack below | Persistent — never expire    |
 

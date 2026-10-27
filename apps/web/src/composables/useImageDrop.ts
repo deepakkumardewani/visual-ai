@@ -1,12 +1,12 @@
+import { ACCEPTED_IMAGE_ACCEPT, MAX_IMAGE_BYTES, isAcceptedImageMime } from '@visual-ai/shared';
 import { type MaybeRefOrGetter, onBeforeUnmount, onMounted, ref, toValue } from 'vue';
 
-export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
-export const ACCEPTED_IMAGE_ACCEPT = 'image/jpeg,image/png,image/webp';
+export { ACCEPTED_IMAGE_ACCEPT, MAX_IMAGE_BYTES };
 
 export type ImageValidationResult = { ok: true; file: File } | { ok: false; error: string };
 
 export function validateImageFile(file: File): ImageValidationResult {
-  if (!file.type.startsWith('image/')) {
+  if (!isAcceptedImageMime(file.type)) {
     return { ok: false, error: 'Please upload a JPG, PNG, or WEBP image.' };
   }
   if (file.size > MAX_IMAGE_BYTES) {

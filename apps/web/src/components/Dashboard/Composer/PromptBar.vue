@@ -2,35 +2,55 @@
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 
-import { useDashboardMotion } from '@/composables/useDashboardMotion';
-import { useImageDrop } from '@/composables/useImageDrop';
+import { useImageDrop, validateImageFile } from '@/composables/useImageDrop';
 import { useAsideStore } from '@/stores/aside';
 import { useGenerateStore } from '@/stores/generate';
 
 import ComposerTextarea from '@/components/Dashboard/Composer/ComposerTextarea.vue';
 import GenerateCTA from '@/components/Dashboard/Composer/GenerateCTA.vue';
 import ReferenceImageControl from '@/components/Dashboard/Composer/ReferenceImageControl.vue';
+import ReferenceThumbnails from '@/components/Dashboard/Composer/ReferenceThumbnails.vue';
 import PromptAiMenu from '@/components/Dashboard/ModelPicker/PromptAiMenu.vue';
 
 const asideStore = useAsideStore();
 const generateStore = useGenerateStore();
-const { typingPrompt, referenceImage, supportsImageInput } = storeToRefs(asideStore);
+const { typingPrompt, referenceImages, supportsImageInput, imageInputMax } =
+  storeToRefs(asideStore);
 const { promptText } = storeToRefs(generateStore);
-const { interactiveTransition } = useDashboardMotion();
 
 const isAiLoading = ref(false);
 const isMultiline = ref(false);
 const dropError = ref('');
 
 const canAcceptReference = computed(() => supportsImageInput.value);
+const hasReferenceImages = computed(() => referenceImages.value.length > 0);
+
+function stageReferenceFile(file: File) {
+  const result = validateImageFile(file);
+  if (!result.ok) {
+    dropError.value = result.error;
+    return;
+  }
+
+  const max = imageInputMax.value;
+  if (referenceImages.value.length >= max) {
+    dropError.value =
+      max === 1 ? 'This model accepts up to 1 image' : `This model accepts up to ${max} images`;
+    return;
+  }
+
+  dropError.value = '';
+  if (max === 1) {
+    asideStore.setReferenceImage(result.file);
+  } else {
+    asideStore.addReferenceImage(result.file);
+  }
+}
 
 const { isDragging, handleDragOver, handleDragLeave, handleDrop } = useImageDrop({
   enabled: canAcceptReference,
   listenPaste: canAcceptReference,
-  onImage: (file) => {
-    dropError.value = '';
-    asideStore.setReferenceImage(file);
-  },
+  onImage: stageReferenceFile,
   onError: (message) => {
     dropError.value = message;
   },
@@ -41,8 +61,8 @@ function applyPrompt(text: string) {
   promptText.value = text;
 }
 
-function removeReference() {
-  asideStore.clearReferenceImage();
+function removeReferenceAt(index: number) {
+  asideStore.removeReferenceImageAt(index);
 }
 </script>
 
@@ -88,40 +108,17 @@ function removeReference() {
       </div>
     </div>
 
-    <!-- Second row: when multiline (actions) and/or a reference preview is set -->
     <div
-      v-if="isMultiline || referenceImage"
+      v-if="isMultiline || hasReferenceImages"
       class="tw-mt-1.5 tw-flex tw-items-end tw-justify-between tw-gap-2"
     >
       <div class="tw-flex tw-min-w-0 tw-items-center tw-gap-2">
-        <div
-          v-if="referenceImage"
-          data-testid="reference-image-preview"
-          class="tw-group tw-relative tw-h-10 tw-w-10 tw-shrink-0 tw-overflow-hidden tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2"
-        >
-          <img
-            :src="referenceImage.previewUrl"
-            :alt="`Reference: ${referenceImage.name}`"
-            class="tw-h-full tw-w-full tw-object-cover"
-          />
-          <button
-            type="button"
-            data-testid="reference-image-remove"
-            :class="[
-              'tw-absolute tw-right-0.5 tw-top-0.5 tw-inline-flex tw-h-4 tw-w-4 tw-items-center tw-justify-center tw-rounded-full tw-bg-canvas/90 tw-text-ink tw-opacity-0 group-hover:tw-opacity-100 focus-visible:tw-opacity-100 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent',
-              interactiveTransition,
-            ]"
-            aria-label="Remove reference image"
-            @click="removeReference"
-          >
-            <font-awesome-icon icon="xmark" class="tw-h-2.5 tw-w-2.5" aria-hidden="true" />
-          </button>
-        </div>
+        <ReferenceThumbnails :images="referenceImages" @remove="removeReferenceAt" />
         <span
-          v-if="referenceImage"
+          v-if="hasReferenceImages"
           class="tw-truncate tw-text-caption tw-font-medium tw-text-ink-muted"
         >
-          Image reference
+          Image reference{{ referenceImages.length > 1 ? 's' : '' }}
         </span>
       </div>
 

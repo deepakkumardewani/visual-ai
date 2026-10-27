@@ -12,6 +12,7 @@ import {
     deleteClerkUserData,
 } from "../services/user-service.js"
 import { deleteCloudinaryUserData } from "../services/cloudinary-service.js"
+import { REFERRAL_BONUS } from "@visual-ai/shared"
 
 export const userRoutes = Router()
 
@@ -173,7 +174,7 @@ userRoutes.post(
         const updatedUser = await User.findOneAndUpdate(
             { userId },
             {
-                $inc: { credits: 50 },
+                $inc: { credits: REFERRAL_BONUS },
                 $push: { referralsUsed: referralCode },
             },
             { new: true },
@@ -187,7 +188,7 @@ userRoutes.post(
         await User.findOneAndUpdate(
             { referralCode },
             {
-                $inc: { credits: 50 },
+                $inc: { credits: REFERRAL_BONUS },
                 $push: { referrals: referral },
             },
             { new: true },

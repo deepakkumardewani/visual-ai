@@ -26,8 +26,16 @@ vi.mock("../middlewares/clerk.js", () => ({
     },
 }))
 
+const referenceUpload = vi.hoisted(() =>
+    vi.fn((_req: unknown, _res: unknown, next: () => void) => next()),
+)
+
 vi.mock("../middlewares/multer.js", () => ({
     upload: { single: () => (_req: unknown, _res: unknown, next: () => void) => next() },
+    referenceImagesUpload: {
+        array: () => referenceUpload,
+    },
+    MAX_REFERENCE_IMAGES_PER_REQUEST: 8,
 }))
 
 vi.mock("../services/redis-service.js", () => ({
@@ -63,7 +71,7 @@ function mockRes() {
     }
 }
 
-async function dispatch(method: string, path: string, req: object, res: object) {
+async function dispatch(method: string, path: string, req: Record<string, unknown>, res: object) {
     const layer = generateRoute.stack.find(
         (entry: any) => entry.route?.path === path && entry.route.methods[method],
     )
@@ -209,12 +217,98 @@ describe("generateRoute", () => {
 
         it("enqueues generation and returns 202", async () => {
             const res = mockRes()
-            const body = { prompt: "a red fox" }
+            const body = { prompt: "a red fox", modelId: "FLUX_BASIC" }
             await dispatch("post", "/generate/image", { body, auth: { userId: "user_1" } }, res)
 
             expect(enqueueGeneration).toHaveBeenCalledWith({ kind: "image", body })
             expect(res.statusCode).toBe(202)
             expect(res.body).toEqual({ message: "Processing started", status: "processing" })
+        })
+
+        it("defaults modelId to FLUX_BASIC when the client omits it", async () => {
+            const res = mockRes()
+            const body = { prompt: "a red fox" }
+            await dispatch("post", "/generate/image", { body, auth: { userId: "user_1" } }, res)
+
+            expect(enqueueGeneration).toHaveBeenCalledWith({ kind: "image", body })
+            expect(res.statusCode).toBe(202)
+        })
+
+        it("rejects invalid referenceImageUrls before enqueue", async () => {
+            const res = mockRes()
+            const body = {
+                modelId: "FLUX_2_PRO",
+                referenceImageUrls: ["https://evil.example/a.png"],
+            }
+            await expect(
+                dispatch("post", "/generate/image", { body, auth: { userId: "user_1" } }, res),
+            ).rejects.toMatchObject({ statusCode: 400 })
+            expect(enqueueGeneration).not.toHaveBeenCalled()
+        })
+    })
+
+    describe("POST /generate/reference-images", () => {
+        it("returns 401 when clerk auth is missing", async () => {
+            const res = mockRes()
+            await dispatch(
+                "post",
+                "/generate/reference-images",
+                { files: [{ path: "https://x" }] },
+                res,
+            )
+            expect(res.statusCode).toBe(401)
+        })
+
+        it("returns uploaded Cloudinary urls", async () => {
+            const res = mockRes()
+            await dispatch(
+                "post",
+                "/generate/reference-images",
+                {
+                    auth: { userId: "user_1" },
+                    body: {},
+                    files: [{ path: "https://res.cloudinary.com/demo/a.png" }],
+                },
+                res,
+            )
+            expect(res.statusCode).toBe(200)
+            expect(res.body).toEqual({
+                urls: ["https://res.cloudinary.com/demo/a.png"],
+            })
+        })
+
+        it("returns 400 when no image files are uploaded", async () => {
+            const res = mockRes()
+            await expect(
+                dispatch(
+                    "post",
+                    "/generate/reference-images",
+                    { auth: { userId: "user_1" }, body: {}, files: [] },
+                    res,
+                ),
+            ).rejects.toMatchObject({
+                statusCode: 400,
+                message: "No image files provided",
+            })
+        })
+
+        it("returns 400 when Cloudinary upload yields no path", async () => {
+            const res = mockRes()
+            await expect(
+                dispatch(
+                    "post",
+                    "/generate/reference-images",
+                    {
+                        auth: { userId: "user_1" },
+                        body: {},
+                        files: [{ path: "https://ok.png" }, {}],
+                    },
+                    res,
+                ),
+            ).rejects.toMatchObject({
+                statusCode: 400,
+                message: "Failed to upload one or more reference images",
+            })
         })
     })
 

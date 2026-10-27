@@ -49,6 +49,8 @@ describe("clerk middleware", () => {
             authorizedParties: [
                 "http://localhost:3000",
                 "http://localhost:3005",
+                "http://127.0.0.1:4173",
+                "http://127.0.0.1:4174",
                 "https://visual-ai.localhost",
                 "http://visual-ai.localhost",
                 "https://visual-ai.app",
@@ -69,6 +71,8 @@ describe("clerk middleware", () => {
             authorizedParties: [
                 "http://localhost:3000",
                 "http://localhost:3005",
+                "http://127.0.0.1:4173",
+                "http://127.0.0.1:4174",
                 "https://visual-ai.localhost",
                 "http://visual-ai.localhost",
                 "https://visual-ai.app",

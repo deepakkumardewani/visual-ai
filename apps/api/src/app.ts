@@ -25,6 +25,8 @@ const LOCAL_ORIGINS = [
     "http://localhost:3006",
     "http://localhost:8080",
     "http://127.0.0.1:8080",
+    "http://127.0.0.1:4173",
+    "http://127.0.0.1:4174",
     "https://visual-ai.localhost",
     "http://visual-ai.localhost",
 ]

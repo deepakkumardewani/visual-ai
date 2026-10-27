@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
+
 import { useAuthStore } from '@/stores/auth';
 
 import LandingButton from '@/components/Landing/LandingButton.vue';
@@ -26,8 +28,8 @@ const auth = useAuthStore();
       </div>
       <h2 v-reveal="{ delay: 0.06 }" class="cta__title">Your next image is one prompt away.</h2>
       <p v-reveal="{ delay: 0.12 }" class="cta__sub">
-        Generate, upscale, colorize, and revive — 50 persistent credits at signup and 30 more every
-        day.
+        Generate, upscale, colorize, and revive — {{ SIGNUP_CREDITS }} persistent credits at signup
+        and {{ DAILY_CREDITS }} more every day.
       </p>
       <div v-reveal="{ delay: 0.18 }" class="cta__actions">
         <LandingButton :to="auth.isSignedIn ? '/create' : '/signin'" size="lg">

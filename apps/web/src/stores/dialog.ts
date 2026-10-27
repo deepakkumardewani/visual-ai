@@ -17,6 +17,7 @@ export type ConfirmChainActionOptions = {
 };
 
 let settleChainConfirm: ((confirmed: boolean) => void) | null = null;
+let copyReferralReturnFocus: HTMLElement | null = null;
 
 export const useDialogStore = defineStore('dialog', () => {
   const showPricingDialog = ref(false);
@@ -73,7 +74,8 @@ export const useDialogStore = defineStore('dialog', () => {
   function showReferral() {
     showReferralDialog.value = true;
   }
-  function showCopyReferral() {
+  function showCopyReferral(returnFocus?: HTMLElement | null) {
+    copyReferralReturnFocus = returnFocus ?? null;
     showCopyReferralDialog.value = true;
   }
   function showBuyCredits() {
@@ -87,6 +89,11 @@ export const useDialogStore = defineStore('dialog', () => {
   }
   function hideCopyReferral() {
     showCopyReferralDialog.value = false;
+    const restoreTarget = copyReferralReturnFocus;
+    copyReferralReturnFocus = null;
+    if (restoreTarget?.isConnected) {
+      requestAnimationFrame(() => restoreTarget.focus());
+    }
   }
   function showDelete() {
     showDeleteDialog.value = true;

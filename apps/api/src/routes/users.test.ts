@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import { REFERRAL_BONUS } from "@visual-ai/shared"
 
 const {
     find,
@@ -9,6 +10,7 @@ const {
     updateUserPlan,
     deleteClerkUserData,
     deleteCloudinaryUserData,
+    ensureUserFromClerk,
     sendMail,
     createTransport,
 } = vi.hoisted(() => {
@@ -22,6 +24,7 @@ const {
         updateUserPlan: vi.fn(),
         deleteClerkUserData: vi.fn(),
         deleteCloudinaryUserData: vi.fn(),
+        ensureUserFromClerk: vi.fn(),
         sendMail,
         createTransport: vi.fn(() => ({ sendMail })),
     }
@@ -47,6 +50,7 @@ vi.mock("../models/user.js", () => ({
 vi.mock("../services/user-service.js", () => ({
     updateUserPlan: (...args: any[]) => Reflect.apply(updateUserPlan, undefined, args),
     deleteClerkUserData: (...args: any[]) => Reflect.apply(deleteClerkUserData, undefined, args),
+    ensureUserFromClerk: (...args: any[]) => Reflect.apply(ensureUserFromClerk, undefined, args),
 }))
 
 vi.mock("../services/cloudinary-service.js", () => ({
@@ -131,6 +135,20 @@ describe("userRoutes", () => {
         })
 
         expectHttpError(next, "NotFoundError", "User not found")
+    })
+
+    it("creates the user from Clerk when the requester fetches their own missing profile", async () => {
+        const created = { userId: "u-new", userName: "new" }
+        findOne.mockResolvedValueOnce(null)
+        ensureUserFromClerk.mockResolvedValue(created)
+
+        const { res } = await invoke(findHandler("/users/:id", "get"), {
+            params: { id: "u-new" },
+            auth: { userId: "u-new" },
+        })
+
+        expect(ensureUserFromClerk).toHaveBeenCalledWith("u-new", { collection: 0, activities: 0 })
+        expect(res.json).toHaveBeenCalledWith(created)
     })
 
     it("updates a user plan from query params", async () => {
@@ -334,7 +352,7 @@ describe("userRoutes", () => {
         expectHttpError(next, "BadRequestError", "You cannot use your own referral code.")
     })
 
-    it("grants 50 credits to both users and does not set a pro plan", async () => {
+    it("grants referral bonus credits to both users and does not set a pro plan", async () => {
         findOne
             .mockResolvedValueOnce({ userId: "u1", referralsUsed: [] })
             .mockResolvedValueOnce({ userId: "u2", referralCode: "CODE1" })
@@ -353,14 +371,14 @@ describe("userRoutes", () => {
         expect(findOneAndUpdate).toHaveBeenNthCalledWith(
             1,
             { userId: "u1" },
-            { $inc: { credits: 50 }, $push: { referralsUsed: "CODE1" } },
+            { $inc: { credits: REFERRAL_BONUS }, $push: { referralsUsed: "CODE1" } },
             { new: true },
         )
         expect(findOneAndUpdate).toHaveBeenNthCalledWith(
             2,
             { referralCode: "CODE1" },
             {
-                $inc: { credits: 50 },
+                $inc: { credits: REFERRAL_BONUS },
                 $push: {
                     referrals: {
                         userId: "u1",
@@ -413,3 +431,6 @@ describe("userRoutes", () => {
         expect(res.send).toHaveBeenCalledWith({ success: "Form submitted successfully!" })
     })
 })
+
+// T1.11 Verify runs this file but not multer.test.ts; import executes multer coverage.
+import "../middlewares/multer.test.js"

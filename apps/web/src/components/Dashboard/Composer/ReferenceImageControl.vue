@@ -14,7 +14,7 @@ import { useAsideStore } from '@/stores/aside';
 import Popover from '@/components/primitives/Popover.vue';
 
 const asideStore = useAsideStore();
-const { referenceImage, supportsImageInput } = storeToRefs(asideStore);
+const { referenceImages, supportsImageInput, imageInputMax } = storeToRefs(asideStore);
 const { interactiveTransition } = useDashboardMotion();
 
 const infoOpen = ref(false);
@@ -22,8 +22,14 @@ const fileInputRef = ref<HTMLInputElement | null>(null);
 const disabledTriggerRef = ref<HTMLElement | null>(null);
 const tipVisible = ref(false);
 const tipStyle = ref<Record<string, string>>({});
+const inlineError = ref('');
 
-const addLabel = computed(() => (referenceImage.value ? 'Replace reference' : 'Add reference'));
+const allowsMultiple = computed(() => imageInputMax.value > 1);
+
+const addLabel = computed(() => {
+  if (allowsMultiple.value) return 'Add reference';
+  return referenceImages.value.length ? 'Replace reference' : 'Add reference';
+});
 
 const disabledTooltip = 'This model doesn’t support reference images';
 
@@ -70,14 +76,41 @@ function openFilePicker() {
   fileInputRef.value?.click();
 }
 
+function limitMessage(max: number) {
+  return max === 1 ? 'This model accepts up to 1 image' : `This model accepts up to ${max} images`;
+}
+
+function stageFiles(fileList: FileList | null) {
+  if (!fileList?.length) return;
+  inlineError.value = '';
+
+  const max = imageInputMax.value;
+  const files = Array.from(fileList);
+
+  for (const file of files) {
+    const result = validateImageFile(file);
+    if (!result.ok) {
+      inlineError.value = result.error;
+      continue;
+    }
+
+    if (referenceImages.value.length >= max) {
+      inlineError.value = limitMessage(max);
+      return;
+    }
+
+    if (max === 1) {
+      asideStore.setReferenceImage(result.file);
+    } else {
+      asideStore.addReferenceImage(result.file);
+    }
+  }
+}
+
 function handleFileChange(event: Event) {
   const input = event.target as HTMLInputElement;
-  const file = input.files?.[0];
+  stageFiles(input.files);
   input.value = '';
-  if (!file) return;
-  const result = validateImageFile(file);
-  if (!result.ok) return;
-  asideStore.setReferenceImage(result.file);
 }
 </script>
 
@@ -87,6 +120,7 @@ function handleFileChange(event: Event) {
       ref="fileInputRef"
       type="file"
       :accept="ACCEPTED_IMAGE_ACCEPT"
+      :multiple="allowsMultiple"
       class="tw-sr-only"
       tabindex="-1"
       aria-hidden="true"
@@ -195,6 +229,15 @@ function handleFileChange(event: Event) {
             </p>
           </div>
         </div>
+
+        <p
+          v-if="inlineError"
+          data-testid="reference-image-inline-error"
+          class="tw-text-caption tw-leading-snug tw-text-red-400"
+          role="alert"
+        >
+          {{ inlineError }}
+        </p>
 
         <button
           type="button"

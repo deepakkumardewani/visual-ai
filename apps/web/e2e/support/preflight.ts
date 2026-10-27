@@ -24,10 +24,26 @@ async function assertClerkUserExists(secretKey: string, userId: string) {
   }
 }
 
+function isLocalDevUrl(url: string): boolean {
+  try {
+    const { hostname } = new URL(url);
+    return hostname === 'localhost' || hostname.endsWith('.localhost');
+  } catch {
+    return false;
+  }
+}
+
 // Any HTTP response counts as "up" (the API has no route on "/"); only network failures matter.
 async function assertServerResponds(name: string, url: string) {
   try {
-    await fetch(url, { signal: AbortSignal.timeout(SERVER_PROBE_TIMEOUT_MS) });
+    const init: RequestInit = { signal: AbortSignal.timeout(SERVER_PROBE_TIMEOUT_MS) };
+    if (isLocalDevUrl(url)) {
+      const { Agent, fetch: undiciFetch } = await import('undici');
+      const dispatcher = new Agent({ connect: { rejectUnauthorized: false } });
+      await undiciFetch(url, { ...init, dispatcher } as Parameters<typeof undiciFetch>[1]);
+      return;
+    }
+    await fetch(url, init);
   } catch (error) {
     throw new Error(
       `[e2e] ${name} is not responding at ${url}. Start it yourself; E2E never starts servers.`,

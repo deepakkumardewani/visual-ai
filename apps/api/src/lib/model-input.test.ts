@@ -1,7 +1,20 @@
-import { describe, it, expect } from "vitest"
+import { describe, it, expect, vi } from "vitest"
 import { STYLE_PRESETS } from "@visual-ai/shared"
-import { buildModelInput, getModelReplicateId, validateModelParams } from "./model-input.js"
+
+vi.mock("../config/env.js", () => ({
+    env: { CLOUDINARY_CLOUD_NAME: "demo-cloud" },
+}))
+
+import {
+    buildModelInput,
+    getModelReplicateId,
+    isAllowedReferenceImageUrl,
+    validateModelParams,
+    validateReferenceImageUrls,
+} from "./model-input.js"
 import type { UserGenerationParams } from "./model-input.js"
+
+const validCloudinaryRefUrl = "https://res.cloudinary.com/x/demo-cloud/image/upload/v1/ref.png"
 
 describe("buildModelInput — per-model payload assertions", () => {
     describe("upscaler models", () => {
@@ -113,7 +126,7 @@ describe("buildModelInput — per-model payload assertions", () => {
             })
             expect(payload.output_format).toBe("jpeg")
             expect(payload.number_of_images).toBe(2)
-            expect(payload.input_images).toBe("https://example.com/ref.png")
+            expect(payload.input_images).toEqual(["https://example.com/ref.png"])
         })
 
         it("maps jpeg to jpg when the model only allows jpg", () => {
@@ -177,6 +190,83 @@ describe("buildModelInput — per-model payload assertions", () => {
                 /unknown model key/,
             )
         })
+
+        it("maps referenceImageUrls to a string input key when the model expects one image", () => {
+            const url = "https://res.cloudinary.com/demo/ref.png"
+            const payload = buildModelInput("SEEDREAM_4", {
+                prompt: "city",
+                referenceImageUrls: [url, "https://res.cloudinary.com/demo/ref2.png"],
+            })
+            expect(payload.image_input).toBe(url)
+        })
+
+        it("maps referenceImageUrls to an array input key when the model accepts many", () => {
+            const urls = [
+                "https://res.cloudinary.com/demo/a.png",
+                "https://res.cloudinary.com/demo/b.png",
+            ]
+            const payload = buildModelInput("FLUX_2_PRO", {
+                prompt: "blend",
+                referenceImageUrls: urls,
+            })
+            expect(payload.input_images).toEqual(urls)
+        })
+
+        it("omits image input when no reference urls or imageUrl are provided", () => {
+            const payload = buildModelInput("FLUX_2_PRO", { prompt: "solo" })
+            expect(payload.input_images).toBeUndefined()
+        })
+    })
+})
+
+describe("isAllowedReferenceImageUrl", () => {
+    it("accepts an https Cloudinary upload URL for the configured cloud name", () => {
+        expect(isAllowedReferenceImageUrl(validCloudinaryRefUrl)).toBe(true)
+    })
+
+    it("rejects non-https, wrong host, missing upload path, wrong cloud, and malformed urls", () => {
+        expect(
+            isAllowedReferenceImageUrl("http://res.cloudinary.com/x/demo-cloud/image/upload/a.png"),
+        ).toBe(false)
+        expect(
+            isAllowedReferenceImageUrl("https://evil.example/x/demo-cloud/image/upload/a.png"),
+        ).toBe(false)
+        expect(isAllowedReferenceImageUrl("https://res.cloudinary.com/demo-cloud/a.png")).toBe(
+            false,
+        )
+        expect(
+            isAllowedReferenceImageUrl(
+                "https://res.cloudinary.com/x/other-cloud/image/upload/a.png",
+            ),
+        ).toBe(false)
+        expect(isAllowedReferenceImageUrl("not-a-url")).toBe(false)
+    })
+})
+
+describe("validateReferenceImageUrls", () => {
+    it("ignores empty or missing reference urls", () => {
+        expect(() => validateReferenceImageUrls("FLUX_2_PRO", undefined)).not.toThrow()
+        expect(() => validateReferenceImageUrls("FLUX_2_PRO", [])).not.toThrow()
+    })
+
+    it("rejects unknown models, models without imageInput, over-max counts, and bad urls", () => {
+        expect(() => validateReferenceImageUrls("NOPE" as any, [validCloudinaryRefUrl])).toThrow(
+            /Unknown model key/,
+        )
+        expect(() => validateReferenceImageUrls("FLUX_BASIC", [validCloudinaryRefUrl])).toThrow(
+            /does not accept reference images/,
+        )
+        const tooMany = Array.from({ length: 9 }, (_, i) => `${validCloudinaryRefUrl}?i=${i}`)
+        expect(() => validateReferenceImageUrls("FLUX_2_PRO", tooMany)).toThrow(/at most 8/)
+        expect(() =>
+            validateReferenceImageUrls("FLUX_2_PRO", ["https://evil.example/a.png"]),
+        ).toThrow(/valid Cloudinary upload URL/)
+    })
+
+    it("accepts valid urls within the model limit", () => {
+        expect(() =>
+            validateReferenceImageUrls("FLUX_2_PRO", [validCloudinaryRefUrl]),
+        ).not.toThrow()
     })
 })
 
