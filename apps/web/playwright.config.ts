@@ -11,7 +11,11 @@ dotenv.config({ path: '.env.e2e.local', quiet: true });
 export default defineConfig({
   testDir: './e2e',
   globalSetup: './e2e/global.setup.ts',
-  use: { baseURL: WEB_URL },
+  use: {
+    baseURL: WEB_URL,
+    // Portless serves HTTPS with a local CA (`portless trust`).
+    ignoreHTTPSErrors: WEB_URL.startsWith('https://'),
+  },
   projects: [
     { name: 'setup', testMatch: /auth\.setup\.ts/ },
     {

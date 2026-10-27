@@ -17,7 +17,7 @@ cd apps/web && bunx playwright test e2e/qa/billing-purchase.spec.ts --repeat-eac
 
 ## Base URL
 
-Configured in `e2e/support/env.ts` as `WEB_URL` (default `http://localhost:3005`). Override with `E2E_WEB_URL` in the shell if needed.
+Configured in `e2e/support/env.ts`: `WEB_URL` / `API_URL` default to portless (`https://visual-ai.localhost`, `https://api.visual-ai.localhost`). Override with `E2E_WEB_URL` / `E2E_API_URL` when using `dev:direct:*`.
 
 ## Auth
 

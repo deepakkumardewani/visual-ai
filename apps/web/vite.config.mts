@@ -155,9 +155,11 @@ export default defineConfig(({ mode }) => ({
     extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.vue'],
   },
   server: {
-    port: 3005,
+    port: Number(process.env.PORT) || 3005,
+    strictPort: Boolean(process.env.PORT),
   },
   preview: {
-    port: 3005,
+    port: Number(process.env.PORT) || 3005,
+    strictPort: Boolean(process.env.PORT),
   },
 }));
