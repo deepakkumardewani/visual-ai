@@ -81,6 +81,9 @@ const envSchema = z
         ANTHROPIC_API_KEY: z.string().min(1, "ANTHROPIC_API_KEY is required"),
         DESCRIBE_MODEL: z.string().default("claude-sonnet-4-5"),
 
+        // Grok speech-to-text (optional — /stt returns 503 when unset)
+        XAI_API_KEY: z.string().optional(),
+
         // Environment isolation
         ENABLE_CRON: z
             .string()

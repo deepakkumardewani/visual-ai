@@ -9,12 +9,14 @@ import { imageRoutes } from "../routes/image.js"
 import { paymentsApiRouter } from "../payments/router.js"
 import { promptRoutes } from "../routes/prompt.js"
 import { savedPromptsRoutes } from "../routes/saved-prompts.js"
+import { sttRoute } from "../routes/stt.js"
 import { userRoutes } from "../routes/users.js"
 
 export const router = express.Router()
 
 router.use(generateRoute)
 router.use(promptRoutes)
+router.use(sttRoute)
 router.use(savedPromptsRoutes)
 router.use(requireAuth as any, userRoutes)
 router.use(requireAuth as any, exploreRoutes)

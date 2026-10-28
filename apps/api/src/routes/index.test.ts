@@ -14,6 +14,7 @@ vi.mock("../routes/image.js", () => ({ imageRoutes: "imageRoutes" }))
 vi.mock("../payments/router.js", () => ({ paymentsApiRouter: "paymentsApiRouter" }))
 vi.mock("../routes/prompt.js", () => ({ promptRoutes: "promptRoutes" }))
 vi.mock("../routes/saved-prompts.js", () => ({ savedPromptsRoutes: "savedPromptsRoutes" }))
+vi.mock("../routes/stt.js", () => ({ sttRoute: "sttRoute" }))
 vi.mock("../routes/users.js", () => ({ userRoutes: "userRoutes" }))
 
 vi.mock("express", () => {
@@ -42,7 +43,8 @@ describe("api router index", () => {
         expect(router).toBeDefined()
         expect(mounted[0]).toEqual(["generateRoute"])
         expect(mounted[1]).toEqual(["promptRoutes"])
-        expect(mounted[2]).toEqual(["savedPromptsRoutes"])
+        expect(mounted[2]).toEqual(["sttRoute"])
+        expect(mounted[3]).toEqual(["savedPromptsRoutes"])
     })
 
     it("mounts authenticated routers with ClerkExpressRequireAuth", async () => {
@@ -63,6 +65,7 @@ describe("api router index", () => {
         expect(routerNames).toEqual([
             "generateRoute",
             "promptRoutes",
+            "sttRoute",
             "savedPromptsRoutes",
             "userRoutes",
             "exploreRoutes",

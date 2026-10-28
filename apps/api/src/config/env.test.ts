@@ -52,6 +52,7 @@ const MANAGED_KEYS = [
     "DODO_PRODUCT_ID_PACK_450",
     "DODO_PRODUCT_ID_PACK_960",
     "DODO_PRODUCT_ID_PACK_2000",
+    "XAI_API_KEY",
 ]
 
 let snapshot: NodeJS.ProcessEnv
@@ -168,6 +169,48 @@ describe("env parse", () => {
         expect((await importEnv()).env.PAYMENT_PROVIDER).toBe("dodo")
     })
 
+    it("skips dodo payment checks when PAYMENT_PROVIDER is not dodo", async () => {
+        // PAYMENT_PROVIDER is z.enum(["dodo"]) only; proxy widens it so superRefine early-return runs.
+        vi.doMock("zod", async (importOriginal) => {
+            const mod = await importOriginal<typeof import("zod")>()
+            const baseZ = mod.z
+            const patchedZ = new Proxy(baseZ, {
+                get(target, prop, receiver) {
+                    if (prop === "enum") {
+                        return (values: readonly [string, ...string[]]) => {
+                            if (values.length === 1 && values[0] === "dodo") {
+                                return baseZ.string().default("dodo")
+                            }
+                            return baseZ.enum(values)
+                        }
+                    }
+                    return Reflect.get(target, prop, receiver)
+                },
+            })
+            return { ...mod, z: patchedZ }
+        })
+
+        try {
+            vi.resetModules()
+            applyEnv({
+                PAYMENT_PROVIDER: "legacy",
+                DODO_PAYMENTS_API_KEY: undefined,
+                DODO_PAYMENTS_WEBHOOK_KEY: undefined,
+                DODO_PRODUCT_ID_PACK_200: undefined,
+                DODO_PRODUCT_ID_PACK_450: undefined,
+                DODO_PRODUCT_ID_PACK_960: undefined,
+                DODO_PRODUCT_ID_PACK_2000: undefined,
+                PAYMENT_RETURN_URL: undefined,
+            })
+
+            const { env } = await importEnv()
+            expect(env.PAYMENT_PROVIDER).toBe("legacy")
+        } finally {
+            vi.doUnmock("zod")
+            vi.resetModules()
+        }
+    })
+
     it.each([
         "DODO_PAYMENTS_API_KEY",
         "DODO_PAYMENTS_WEBHOOK_KEY",
@@ -186,6 +229,15 @@ describe("env parse", () => {
 
         await expect(importEnv()).rejects.toThrow("process.exit:1")
         expect(exit).toHaveBeenCalledWith(1)
+    })
+
+    it("accepts an optional XAI_API_KEY for speech-to-text", async () => {
+        applyEnv({ XAI_API_KEY: "xai-secret" })
+        expect((await importEnv()).env.XAI_API_KEY).toBe("xai-secret")
+
+        vi.resetModules()
+        applyEnv({ XAI_API_KEY: undefined })
+        expect((await importEnv()).env.XAI_API_KEY).toBeUndefined()
     })
 
     it("does not expose removed payment env keys on the parsed env object", async () => {

@@ -7,7 +7,9 @@ import { useAsideStore } from '@/stores/aside';
 import { useGenerateStore } from '@/stores/generate';
 
 import ComposerTextarea from '@/components/Dashboard/Composer/ComposerTextarea.vue';
+import MicButton from '@/components/Dashboard/Composer/VoiceInput/MicButton.vue';
 import GenerateCTA from '@/components/Dashboard/Composer/GenerateCTA.vue';
+import { provideVoiceInput } from '@/composables/useVoiceInput';
 import ReferenceImageControl from '@/components/Dashboard/Composer/ReferenceImageControl.vue';
 import ReferenceThumbnails from '@/components/Dashboard/Composer/ReferenceThumbnails.vue';
 import PromptAiMenu from '@/components/Dashboard/ModelPicker/PromptAiMenu.vue';
@@ -18,6 +20,7 @@ const { typingPrompt, referenceImages, supportsImageInput, imageInputMax } =
   storeToRefs(asideStore);
 const { promptText } = storeToRefs(generateStore);
 
+const voice = provideVoiceInput();
 const isAiLoading = ref(false);
 const isMultiline = ref(false);
 const dropError = ref('');
@@ -93,11 +96,13 @@ function removeReferenceAt(index: number) {
           embedded
           hide-ai-menu
           :ai-loading="isAiLoading"
+          :voice-busy="voice.isBusy.value"
           @multiline-change="isMultiline = $event"
         />
       </div>
 
       <div v-if="!isMultiline" class="tw-flex tw-shrink-0 tw-items-center tw-gap-1.5">
+        <MicButton />
         <PromptAiMenu
           :current-prompt="typingPrompt"
           :disabled="isAiLoading"
@@ -123,6 +128,7 @@ function removeReferenceAt(index: number) {
       </div>
 
       <div v-if="isMultiline" class="tw-flex tw-shrink-0 tw-items-center tw-gap-1.5">
+        <MicButton />
         <PromptAiMenu
           :current-prompt="typingPrompt"
           :disabled="isAiLoading"

@@ -263,7 +263,7 @@ Kind note: T0.1 and T0.2 are config-only work, which conventions exempt from Uni
 
 Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file` last, model `grok-voice-transcribe-2.0`).
 
-### ☐ T2.1 STT constants, rate limiter and env
+### ✅ T2.1 STT constants, rate limiter and env
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/models/stt.ts` (new: `STT_MAX_CLIP_SECONDS`, `STT_RATE_LIMIT`, `STT_MAX_BYTES`), `apps/api/src/middlewares/rate-limit.ts`, `apps/api/src/config/env.ts`, `apps/api/.env.example`, `apps/api/package.json`
@@ -275,7 +275,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - `bun --cwd apps/api run test -- rate-limit`
   - `bun run check`
 
-### ☐ T2.2 `POST /stt` route
+### ✅ T2.2 `POST /stt` route
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/stt.ts`, `apps/api/src/routes/index.ts`
@@ -286,7 +286,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - `grep -rn "XAI_API_KEY" apps/web` returns nothing (key stays server-side)
   - `bun run check`
 
-### ☐ T2.3 Grok recording path and mic button
+### ✅ T2.3 Grok recording path and mic button
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/composables/useGrokRecorder.ts`, `apps/web/src/composables/useVoiceInput.ts`, `apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue`, `apps/web/src/components/Dashboard/Composer/PromptBar.vue`, `apps/web/src/components/Dashboard/Composer/ComposerTextarea.vue`
@@ -297,7 +297,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - `bun run check`
   - `cd apps/web && bunx playwright test e2e/qa/voice-input.spec.ts --repeat-each=2`
 
-### ☐ T2.4 Web Speech engine and engine menu
+### ✅ T2.4 Web Speech engine and engine menu
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/composables/useWebSpeech.ts`, `apps/web/src/components/Dashboard/Composer/VoiceInput/EngineMenu.vue`, `apps/web/src/composables/useVoiceInput.ts`, `apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue`
@@ -308,7 +308,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - `bun run check`
   - `cd apps/web && bunx playwright test e2e/qa/voice-input.spec.ts --repeat-each=2`
 
-### ☐ T2.5 Waveform and accessibility polish
+### ✅ T2.5 Waveform and accessibility polish
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/composables/useAudioLevel.ts`, `apps/web/src/components/Dashboard/Composer/VoiceInput/Waveform.vue`, `apps/web/src/composables/useVoiceInput.ts`, `apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue`
@@ -319,7 +319,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - `bun run check`
   - `cd apps/web && bunx playwright test e2e/qa/voice-input.spec.ts --repeat-each=2`
 
-### ☐ T2.6 Unit: STT API
+### ✅ T2.6 Unit: STT API
 
 - **Kind:** unit
 - **Files:** `apps/api/src/routes/stt.ts`, `apps/api/src/middlewares/rate-limit.ts`, `apps/api/src/config/env.ts`
@@ -327,7 +327,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 - **Acceptance:** Every file >= 90% on all four metrics (repo threshold), target > 95%.
 - **Verify:** `cd apps/api && bunx vitest run src/routes/stt.test.ts src/middlewares/rate-limit.test.ts src/config/env.test.ts --coverage --coverage.include=src/routes/stt.ts --coverage.include=src/middlewares/rate-limit.ts --coverage.include=src/config/env.ts --coverage.reporter=text`
 
-### ☐ T2.7 Unit: voice composables
+### ✅ T2.7 Unit: voice composables
 
 - **Kind:** unit
 - **Files:** `apps/web/src/composables/useVoiceInput.ts`, `apps/web/src/composables/useGrokRecorder.ts`, `apps/web/src/composables/useWebSpeech.ts`, `apps/web/src/composables/useAudioLevel.ts`
@@ -335,7 +335,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 - **Acceptance:** Every file >= 90% on all four metrics (repo threshold), target > 95%.
 - **Verify:** `cd apps/web && bunx vitest run src/composables/useVoiceInput.test.ts src/composables/useGrokRecorder.test.ts src/composables/useWebSpeech.test.ts src/composables/useAudioLevel.test.ts --coverage --coverage.include=src/composables/useVoiceInput.ts --coverage.include=src/composables/useGrokRecorder.ts --coverage.include=src/composables/useWebSpeech.ts --coverage.include=src/composables/useAudioLevel.ts --coverage.reporter=text`
 
-### ☐ T2.8 Unit: voice components
+### ✅ T2.8 Unit: voice components
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue`, `apps/web/src/components/Dashboard/Composer/VoiceInput/EngineMenu.vue`, `apps/web/src/components/Dashboard/Composer/VoiceInput/Waveform.vue`
@@ -343,7 +343,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 - **Acceptance:** Every file >= 90% on all four metrics (repo threshold), target > 95%.
 - **Verify:** `cd apps/web && bunx vitest run src/components/Dashboard/Composer/VoiceInput --coverage --coverage.include=src/components/Dashboard/Composer/VoiceInput/MicButton.vue --coverage.include=src/components/Dashboard/Composer/VoiceInput/EngineMenu.vue --coverage.include=src/components/Dashboard/Composer/VoiceInput/Waveform.vue --coverage.reporter=text`
 
-### ☐ T2.9 E2E: voice input
+### ✅ T2.9 E2E: voice input
 
 - **Kind:** e2e
 - **Scenarios:**
@@ -358,7 +358,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 - **Files:** none expected
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/voice-input.spec.ts --repeat-each=3`
 
-### ☐ T2.10 Gate: Phase 2
+### ✅ T2.10 Gate: Phase 2
 
 - **Kind:** gate
 - **Files:** none

@@ -3,6 +3,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 const mockChild = vi.fn()
 const mockTransport = vi.fn(() => ({ destination: "pretty" }))
 const mockPino = vi.fn(() => ({ child: mockChild }))
+const envMock = vi.hoisted(() => ({
+    NODE_ENV: "test" as string,
+    LOG_LEVEL: "debug" as string,
+}))
 
 vi.mock("pino", () => {
     const pino = (...args: any[]) => Reflect.apply(mockPino, undefined, args)
@@ -11,24 +15,22 @@ vi.mock("pino", () => {
 })
 
 vi.mock("../config/env.js", () => ({
-    env: {
-        NODE_ENV: "test",
-        LOG_LEVEL: "debug",
-    },
+    env: envMock,
 }))
 
 describe("logger", () => {
     beforeEach(() => {
         vi.clearAllMocks()
         vi.resetModules()
+        envMock.NODE_ENV = "test"
+        envMock.LOG_LEVEL = "debug"
         mockPino.mockReturnValue({ child: mockChild })
         mockTransport.mockReturnValue({ destination: "pretty" })
     })
 
     it("creates a development logger with pino-pretty transport", async () => {
-        vi.doMock("../config/env.js", () => ({
-            env: { NODE_ENV: "development", LOG_LEVEL: "info" },
-        }))
+        envMock.NODE_ENV = "development"
+        envMock.LOG_LEVEL = "info"
 
         await import("./logger.js")
 
@@ -50,9 +52,8 @@ describe("logger", () => {
     })
 
     it("creates a production logger without pretty transport", async () => {
-        vi.doMock("../config/env.js", () => ({
-            env: { NODE_ENV: "production", LOG_LEVEL: "warn" },
-        }))
+        envMock.NODE_ENV = "production"
+        envMock.LOG_LEVEL = "warn"
 
         await import("./logger.js")
 
@@ -61,9 +62,8 @@ describe("logger", () => {
     })
 
     it("createLogger returns a child logger scoped to the module", async () => {
-        vi.doMock("../config/env.js", () => ({
-            env: { NODE_ENV: "test", LOG_LEVEL: "info" },
-        }))
+        envMock.NODE_ENV = "test"
+        envMock.LOG_LEVEL = "info"
         mockChild.mockReturnValue({ module: "payments" })
 
         const { createLogger } = await import("./logger.js")

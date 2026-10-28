@@ -1,0 +1,270 @@
+import type { Page } from '@playwright/test';
+
+export type VoiceMockMode = {
+  speechRecognition?: boolean;
+  getUserMedia?: 'grant' | 'deny';
+};
+
+export type SttFetchMode = '200' | '429' | '503' | 'empty';
+
+const RECORDING_MOCK_SOURCE = String.raw`
+(() => {
+  const voiceApi = window.__e2eVoice ?? {
+    getUserMediaMode: 'grant',
+    mediaInstances: [],
+    speech: null,
+    setGetUserMediaMode(next) {
+      this.getUserMediaMode = next;
+    },
+  };
+  window.__e2eVoice = voiceApi;
+
+  const track = { stop: () => undefined };
+  const mockStream = { getTracks: () => [track] };
+
+  if (!navigator.mediaDevices) {
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: {},
+    });
+  }
+  navigator.mediaDevices.getUserMedia = async () => {
+    if (voiceApi.getUserMediaMode === 'deny') {
+      throw new DOMException('Permission denied', 'NotAllowedError');
+    }
+    return mockStream;
+  };
+
+  class E2EMediaRecorder {
+    constructor(stream, options) {
+      this.stream = stream;
+      this.mimeType = options?.mimeType ?? 'audio/webm;codecs=opus';
+      this.state = 'inactive';
+      this.listeners = new Map();
+      voiceApi.mediaInstances.push({
+        emitData: (blob) => {
+          this.listeners.get('dataavailable')?.forEach((fn) => fn({ data: blob }));
+        },
+        stopRecording: () => {
+          if (this.state === 'inactive') return;
+          this.state = 'inactive';
+          this.listeners.get('stop')?.forEach((fn) => fn());
+        },
+      });
+    }
+    addEventListener(type, listener) {
+      if (!this.listeners.has(type)) this.listeners.set(type, new Set());
+      this.listeners.get(type).add(listener);
+    }
+    start() {
+      this.state = 'recording';
+    }
+    stop() {
+      if (this.state === 'inactive') return;
+      this.state = 'inactive';
+      this.listeners.get('stop')?.forEach((fn) => fn());
+    }
+    static isTypeSupported(type) {
+      return type.includes('webm') || type.includes('mp4');
+    }
+  }
+  window.MediaRecorder = E2EMediaRecorder;
+
+  class E2EAudioContext {
+    constructor() {
+      this.state = 'running';
+    }
+    close = async () => undefined;
+    createAnalyser = () => ({
+      fftSize: 256,
+      frequencyBinCount: 4,
+      getByteFrequencyData: (arr) => {
+        arr[0] = 128;
+      },
+    });
+    createMediaStreamSource = () => ({ connect: () => undefined });
+  }
+  window.AudioContext = E2EAudioContext;
+  window.requestAnimationFrame = (cb) => {
+    cb(0);
+    return 1;
+  };
+  window.cancelAnimationFrame = () => undefined;
+})();
+`;
+
+export async function installVoiceBrowserMocks(
+  page: Page,
+  mode: VoiceMockMode = { speechRecognition: true, getUserMedia: 'grant' },
+) {
+  await page.addInitScript((opts) => {
+    const voiceApi = {
+      getUserMediaMode: opts.getUserMedia ?? 'grant',
+      sttMode: '200' as SttFetchMode,
+      mediaInstances: [] as Array<{
+        emitData: (blob: Blob) => void;
+        stopRecording: () => void;
+      }>,
+      speech: null as null | {
+        emitInterim: (text: string) => void;
+        emitFinal: (text: string) => void;
+        emitError: (code: string) => void;
+      },
+      setGetUserMediaMode(next: 'grant' | 'deny') {
+        voiceApi.getUserMediaMode = next;
+      },
+    };
+    (window as Window & { __e2eVoice?: typeof voiceApi }).__e2eVoice = voiceApi;
+
+    if (opts.speechRecognition) {
+      class E2ESpeechRecognition {
+        continuous = false;
+        interimResults = false;
+        lang = '';
+        onresult: ((event: unknown) => void) | null = null;
+        onerror: ((event: { error: string }) => void) | null = null;
+        onend: (() => void) | null = null;
+
+        start() {
+          voiceApi.speech = {
+            emitInterim: (text: string) => {
+              this.onresult?.({
+                resultIndex: 0,
+                results: [{ isFinal: false, 0: { transcript: text } }],
+              });
+            },
+            emitFinal: (text: string) => {
+              this.onresult?.({
+                resultIndex: 0,
+                results: [{ isFinal: true, 0: { transcript: text } }],
+              });
+            },
+            emitError: (code: string) => {
+              this.onerror?.({ error: code });
+            },
+          };
+        }
+
+        stop() {
+          this.onend?.();
+        }
+
+        abort() {
+          this.onend?.();
+        }
+      }
+
+      const w = window as Window & {
+        SpeechRecognition?: typeof E2ESpeechRecognition;
+        webkitSpeechRecognition?: undefined;
+      };
+      w.SpeechRecognition = E2ESpeechRecognition;
+      w.webkitSpeechRecognition = undefined;
+    } else {
+      const w = window as Window & {
+        SpeechRecognition?: undefined;
+        webkitSpeechRecognition?: undefined;
+      };
+      w.SpeechRecognition = undefined;
+      w.webkitSpeechRecognition = undefined;
+    }
+  }, mode);
+}
+
+export async function installVoiceRecordingMocks(page: Page) {
+  await page.evaluate(RECORDING_MOCK_SOURCE);
+}
+
+export async function setGetUserMediaMode(page: Page, mode: 'grant' | 'deny') {
+  await page.evaluate((next) => {
+    window.__e2eVoice?.setGetUserMediaMode(next);
+  }, mode);
+}
+
+export async function finishGrokRecording(page: Page) {
+  await page.evaluate(() => {
+    const inst = window.__e2eVoice?.mediaInstances.at(-1);
+    if (!inst) {
+      throw new Error('No MediaRecorder mock instance');
+    }
+    inst.emitData(new Blob(['audio-bytes'], { type: 'audio/webm' }));
+    inst.stopRecording();
+  });
+}
+
+export async function emitSpeechInterim(page: Page, text: string) {
+  await page.evaluate((value) => {
+    window.__e2eVoice?.speech?.emitInterim(value);
+  }, text);
+}
+
+export async function emitSpeechFinal(page: Page, text: string) {
+  await page.evaluate((value) => {
+    window.__e2eVoice?.speech?.emitFinal(value);
+  }, text);
+}
+
+/** In-page fetch stub for `/stt` error paths — avoids browser network console errors from routed 4xx/5xx. */
+export async function installSttFetchMock(page: Page) {
+  await page.addInitScript(() => {
+    const realFetch = window.fetch.bind(window);
+    window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+      if (!url.endsWith('/stt') || (init?.method ?? 'GET').toUpperCase() !== 'POST') {
+        return realFetch(input, init);
+      }
+
+      const mode = window.__e2eVoice?.sttMode ?? '200';
+      if (mode === '429') {
+        return new Response(JSON.stringify({ error: 'rate limited' }), {
+          status: 429,
+          headers: { 'Retry-After': '180', 'Content-Type': 'application/json' },
+        });
+      }
+      if (mode === '503') {
+        return new Response('upstream', { status: 503, headers: { 'Content-Type': 'text/plain' } });
+      }
+      if (mode === 'empty') {
+        return new Response(JSON.stringify({ text: '   ' }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      return realFetch(input, init);
+    };
+  });
+}
+
+export async function setSttFetchMode(page: Page, mode: SttFetchMode) {
+  await page.evaluate((next) => {
+    if (window.__e2eVoice) {
+      window.__e2eVoice.sttMode = next;
+    }
+  }, mode);
+}
+
+export async function hideDocument(page: Page) {
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+}
+
+declare global {
+  interface Window {
+    __e2eVoice?: {
+      getUserMediaMode: 'grant' | 'deny';
+      mediaInstances: Array<{
+        emitData: (blob: Blob) => void;
+        stopRecording: () => void;
+      }>;
+      speech: null | {
+        emitInterim: (text: string) => void;
+        emitFinal: (text: string) => void;
+        emitError: (code: string) => void;
+      };
+      setGetUserMediaMode: (next: 'grant' | 'deny') => void;
+      sttMode?: SttFetchMode;
+    };
+  }
+}

@@ -12,7 +12,7 @@ export async function gotoStudio(page: Page, path = CREATE_PATH) {
     const profileOk = page.waitForResponse((res) => USER_PROFILE_URL.test(res.url()) && res.ok(), {
       timeout: 30_000,
     });
-    await page.goto(path);
+    await page.goto(path, { waitUntil: 'domcontentloaded' });
     try {
       await profileOk;
       await expect(page.getByTestId('composer-textarea-input')).toBeVisible();

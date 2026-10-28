@@ -9,6 +9,7 @@ vi.mock('vue-clerk', () => ({
 
 vi.mock('vue-router', () => ({
   useRouter: () => ({ push: vi.fn() }),
+  useRoute: () => ({ fullPath: '/create/image' }),
 }));
 
 import PromptBar from '@/components/Dashboard/Composer/PromptBar.vue';
