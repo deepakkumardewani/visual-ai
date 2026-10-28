@@ -1,0 +1,163 @@
+[
+ {
+  "file": "2/T2.3-1.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": "Mic in prompt bar with aria-label and data-tour mic anchor",
+  "attempt": null,
+  "caption": "Microphone control sits on the right side of the composer prompt bar, idle and ready.",
+  "annotations": [
+   {
+    "x": 80.5,
+    "y": 15.3,
+    "w": 2.8,
+    "h": 6.2,
+    "label": "Mic button in prompt bar"
+   },
+   {
+    "x": 26.3,
+    "y": 14.7,
+    "w": 51,
+    "h": 6.2,
+    "label": "Composer prompt input"
+   }
+  ],
+  "at": "2026-10-28T13:12:17.287Z"
+ },
+ {
+  "file": "2/T2.3-2.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": "Grok recording path with MediaRecorder and aria-pressed recording state",
+  "attempt": null,
+  "caption": "Grok recording active: mic pressed and waveform visible beside the prompt.",
+  "annotations": [
+   {
+    "x": 80.5,
+    "y": 15.3,
+    "w": 2.8,
+    "h": 6.2,
+    "label": "Recording: aria-pressed true"
+   },
+   {
+    "x": 75.2,
+    "y": 16.4,
+    "w": 2.5,
+    "h": 4.2,
+    "label": "Live waveform while recording"
+   }
+  ],
+  "at": "2026-10-28T13:12:22.152Z"
+ },
+ {
+  "file": "2/T2.3-3.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": "Mic disabled while transcribing; append-not-replace after completion",
+  "attempt": null,
+  "caption": "After stop, transcribing state disables the mic until STT completes.",
+  "annotations": [
+   {
+    "x": 80.5,
+    "y": 15.3,
+    "w": 2.8,
+    "h": 6.2,
+    "label": "Mic disabled while transcribing"
+   }
+  ],
+  "at": "2026-10-28T13:12:26.214Z"
+ },
+ {
+  "file": "2/T2.4-1.png",
+  "taskId": "T2.4",
+  "kind": "proof",
+  "step": "Engine choice menu with Web Speech / Grok and privacy note",
+  "attempt": null,
+  "caption": "Engine menu lists Web Speech and Grok with privacy note for Chrome.",
+  "annotations": [
+   {
+    "x": 63,
+    "y": 21.6,
+    "w": 17.2,
+    "h": 25.1,
+    "label": "Engine menu with Web Speech and Grok"
+   },
+   {
+    "x": 78,
+    "y": 16,
+    "w": 2.2,
+    "h": 4.9,
+    "label": "Chevron engine trigger"
+   }
+  ],
+  "at": "2026-10-28T13:12:42.793Z"
+ },
+ {
+  "file": "2/T2.4-2.png",
+  "taskId": "T2.4",
+  "kind": "proof",
+  "step": "Web Speech interim results previewed live without replacing existing text",
+  "attempt": null,
+  "caption": "Web Speech shows interim dictation appended after existing prompt text.",
+  "annotations": [
+   {
+    "x": 26.3,
+    "y": 14.7,
+    "w": 51,
+    "h": 6.2,
+    "label": "Interim + existing text appended"
+   },
+   {
+    "x": 80.5,
+    "y": 15.3,
+    "w": 2.8,
+    "h": 6.2,
+    "label": "Web Speech recording"
+   }
+  ],
+  "at": "2026-10-28T13:12:47.688Z"
+ },
+ {
+  "file": "2/T2.5-1.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": "Waveform animates with live volume during Grok recording",
+  "attempt": null,
+  "caption": "Recording shows reactive multi-bar waveform driven by audio level.",
+  "annotations": [
+   {
+    "x": 75.2,
+    "y": 16.4,
+    "w": 2.5,
+    "h": 4.2,
+    "label": "Animated multi-bar waveform"
+   },
+   {
+    "x": 80.5,
+    "y": 15.3,
+    "w": 2.8,
+    "h": 6.2,
+    "label": "Recording with Esc cancel available"
+   }
+  ],
+  "at": "2026-10-28T13:13:08.684Z"
+ },
+ {
+  "file": "2/T2.5-2.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": "Reduced-motion variant renders opacity-only level meter",
+  "attempt": null,
+  "caption": "With prefers-reduced-motion, waveform collapses to a single opacity level meter.",
+  "annotations": [
+   {
+    "x": 75.2,
+    "y": 16.4,
+    "w": 2.5,
+    "h": 4.2,
+    "label": "Reduced-motion opacity meter"
+   }
+  ],
+  "at": "2026-10-28T13:13:29.455Z"
+ }
+]
