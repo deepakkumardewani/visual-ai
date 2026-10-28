@@ -1,12 +1,10 @@
-# STT: voice input in composer
+# Voice input (prompt bar mic)
 
-# evidence: useVoiceInput.ts, useGrokRecorder.ts, useWebSpeech.ts, MicButton.vue, EngineMenu.vue, Waveform.vue
+# evidence: useVoiceInput.ts, useGrokRecorder.ts, MicButton.vue, Waveform.vue, VoiceDisclosureDialog.vue
 
-## @critical Grok engine: mocked `getUserMedia`/`MediaRecorder` and intercepted `**/stt`; recorded text appends to existing prompt without replacing it.
+## @critical Grok STT: mocked `getUserMedia`/`MediaRecorder` and intercepted `**/stt`; recorded text appends to existing prompt without replacing it.
 
-## @critical Web Speech engine: mocked `SpeechRecognition` shows interim text live and commits on finalize.
-
-## @high Engine choice persists across reload; with `SpeechRecognition` removed, default is Grok and Web Speech shows "Not supported in this browser".
+## @critical First mic use shows AI processing disclosure once; acceptance persists in localStorage.
 
 ## @high Error states: permission denied, `**/stt` 429 (minutes message), 5xx, empty text each show a visible message.
 

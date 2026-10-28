@@ -41,7 +41,6 @@ declare module 'vue' {
     DashboardShell: typeof import('./components/Dashboard/DashboardShell.vue')['default']
     DashboardSidebar: typeof import('./components/Dashboard/Sidebar/DashboardSidebar.vue')['default']
     DeleteDialog: typeof import('./components/Dialogs/DeleteDialog.vue')['default']
-    EngineMenu: typeof import('./components/Dashboard/Composer/VoiceInput/EngineMenu.vue')['default']
     ExploreFeed: typeof import('./components/Dashboard/Feed/ExploreFeed.vue')['default']
     FAQ: typeof import('./components/FAQ.vue')['default']
     FaqSection: typeof import('./components/Landing/FaqSection.vue')['default']
@@ -168,6 +167,7 @@ declare module 'vue' {
     ViewerDetails: typeof import('./components/Explore/ViewerDetails.vue')['default']
     ViewerFilmstrip: typeof import('./components/Explore/ViewerFilmstrip.vue')['default']
     ViewerStage: typeof import('./components/Explore/ViewerStage.vue')['default']
+    VoiceDisclosureDialog: typeof import('./components/Dashboard/Composer/VoiceInput/VoiceDisclosureDialog.vue')['default']
     Waveform: typeof import('./components/Dashboard/Composer/VoiceInput/Waveform.vue')['default']
   }
 }

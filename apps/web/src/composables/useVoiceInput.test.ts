@@ -33,26 +33,6 @@ import {
 import { useAsideStore } from '@/stores/aside';
 import { useGenerateStore } from '@/stores/generate';
 
-function installSpeechRecognition() {
-  class MockSpeechRecognition {
-    continuous = false;
-    interimResults = false;
-    lang = '';
-    onresult: ((event: unknown) => void) | null = null;
-    onerror: ((event: { error: string }) => void) | null = null;
-    onend: (() => void) | null = null;
-    start = vi.fn();
-    stop = vi.fn(() => {
-      this.onend?.();
-    });
-    abort = vi.fn(() => {
-      this.onend?.();
-    });
-  }
-  vi.stubGlobal('SpeechRecognition', MockSpeechRecognition);
-  vi.stubGlobal('webkitSpeechRecognition', undefined);
-}
-
 function mountVoiceInput() {
   let voice!: ReturnType<typeof useVoiceInput>;
   const wrapper = mount({
@@ -75,7 +55,6 @@ describe('useVoiceInput', () => {
     vi.useFakeTimers();
     vi.stubEnv('VITE_API_BASEPATH', 'https://api.test');
     route.fullPath = '/create/image';
-    installSpeechRecognition();
     installGetUserMedia();
     media = installMediaRecorder({ webmSupported: true, mp4Supported: true });
     installAudioContext();
@@ -85,34 +64,6 @@ describe('useVoiceInput', () => {
     vi.useRealTimers();
     vi.unstubAllGlobals();
     vi.unstubAllEnvs();
-  });
-
-  it('persists engine choice and falls back to grok when web speech is unavailable', async () => {
-    localStorage.setItem('visual-ai-voice-engine', 'grok');
-    const { voice, wrapper } = mountVoiceInput();
-    expect(voice.engine.value).toBe('grok');
-
-    voice.setEngine('web-speech');
-    expect(localStorage.getItem('visual-ai-voice-engine')).toBe('web-speech');
-
-    wrapper.unmount();
-    vi.unstubAllGlobals();
-    vi.stubGlobal('SpeechRecognition', undefined);
-    localStorage.setItem('visual-ai-voice-engine', 'web-speech');
-    const mounted = mountVoiceInput();
-    await nextTick();
-    expect(mounted.voice.engine.value).toBe('grok');
-    mounted.wrapper.unmount();
-  });
-
-  it('ignores switching to web speech when unsupported', () => {
-    vi.unstubAllGlobals();
-    vi.stubGlobal('SpeechRecognition', undefined);
-    const { voice, wrapper } = mountVoiceInput();
-    voice.setEngine('grok');
-    voice.setEngine('web-speech');
-    expect(voice.engine.value).toBe('grok');
-    wrapper.unmount();
   });
 
   it('appends grok transcript without replacing existing prompt text', async () => {
@@ -128,7 +79,6 @@ describe('useVoiceInput', () => {
     aside.typingPrompt = 'existing';
     generate.promptText = 'existing';
 
-    voice.setEngine('grok');
     await voice.startRecording();
     media.last?.emitData(new Blob(['audio'], { type: 'audio/webm' }));
     await voice.stopRecording();
@@ -154,7 +104,6 @@ describe('useVoiceInput', () => {
     );
 
     const { voice, wrapper } = mountVoiceInput();
-    voice.setEngine('grok');
     await voice.startRecording();
     media.last?.emitData(new Blob(['audio'], { type: 'audio/webm' }));
     void voice.stopRecording();
@@ -171,7 +120,6 @@ describe('useVoiceInput', () => {
 
   it('cancels on tab hidden and route changes while recording', async () => {
     const { voice, wrapper } = mountVoiceInput();
-    voice.setEngine('web-speech');
     await voice.startRecording();
     expect(voice.isRecording.value).toBe(true);
 
@@ -185,24 +133,6 @@ describe('useVoiceInput', () => {
     await nextTick();
     expect(voice.isRecording.value).toBe(false);
 
-    wrapper.unmount();
-  });
-
-  it('reports permission errors for web speech getUserMedia failures', async () => {
-    Object.defineProperty(navigator, 'mediaDevices', {
-      configurable: true,
-      value: {
-        getUserMedia: vi.fn().mockRejectedValue(new DOMException('denied', 'NotAllowedError')),
-      },
-    });
-
-    const { voice, wrapper } = mountVoiceInput();
-    voice.setEngine('web-speech');
-    await voice.startRecording();
-
-    expect(voice.inlineError.value).toContain('Microphone access is blocked');
-    expect(showToast).toHaveBeenCalled();
-    expect(voice.isRecording.value).toBe(false);
     wrapper.unmount();
   });
 
@@ -223,29 +153,15 @@ describe('useVoiceInput', () => {
       },
       template: '<VoiceConsumer />',
     });
-    expect(injected?.engine).toBeDefined();
+    expect(injected?.isRecording).toBeDefined();
   });
 
   it('throws when voice input context is missing', () => {
     expect(() => useVoiceInputContext()).toThrow('voice input context missing');
   });
 
-  it('ignores corrupt stored engine values and still updates when persistence throws', () => {
-    localStorage.setItem('visual-ai-voice-engine', 'invalid-engine');
-    const { voice, wrapper } = mountVoiceInput();
-    expect(voice.engine.value).toBe('web-speech');
-
-    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-      throw new Error('quota');
-    });
-    voice.setEngine('grok');
-    expect(voice.engine.value).toBe('grok');
-    wrapper.unmount();
-  });
-
   it('toggle stops an active recording via stopRecording', async () => {
     const { voice, wrapper } = mountVoiceInput();
-    voice.setEngine('web-speech');
     await voice.startRecording();
     expect(voice.isRecording.value).toBe(true);
 
@@ -255,25 +171,17 @@ describe('useVoiceInput', () => {
     wrapper.unmount();
   });
 
-  it('routes stop and cancel to the active engine implementation', async () => {
+  it('cancelRecording stops an active session', async () => {
     const { voice, wrapper } = mountVoiceInput();
-
-    voice.setEngine('web-speech');
-    await voice.startRecording();
-    await voice.stopRecording();
-    expect(voice.isRecording.value).toBe(false);
-
-    voice.setEngine('grok');
     await voice.startRecording();
     voice.cancelRecording();
     expect(voice.isRecording.value).toBe(false);
     wrapper.unmount();
   });
 
-  it('toggle invokes startRecording when idle', () => {
+  it('startRecording marks the session as recording when idle', async () => {
     const { voice, wrapper } = mountVoiceInput();
-    voice.setEngine('web-speech');
-    voice.toggleRecording();
+    await voice.startRecording();
     expect(voice.isRecording.value).toBe(true);
     wrapper.unmount();
   });
@@ -286,24 +194,13 @@ describe('useVoiceInput', () => {
       },
     });
     const { voice, wrapper } = mountVoiceInput();
-    voice.setEngine('grok');
     await voice.startRecording();
     expect(voice.ariaLiveMessage.value).not.toBe('Recording');
     wrapper.unmount();
   });
 
-  it('falls back when reading stored engine throws', () => {
-    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
-      throw new Error('storage blocked');
-    });
-    const { voice, wrapper } = mountVoiceInput();
-    expect(voice.engine.value).toBe('web-speech');
-    wrapper.unmount();
-  });
-
   it('blocks startRecording while busy', async () => {
     const { voice, wrapper } = mountVoiceInput();
-    voice.setEngine('grok');
     await voice.startRecording();
     await voice.startRecording();
     expect(voice.isRecording.value).toBe(true);

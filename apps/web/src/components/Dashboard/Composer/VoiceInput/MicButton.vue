@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
-import { inject, onMounted, onUnmounted } from 'vue';
+import { inject, onMounted, onUnmounted, ref } from 'vue';
 
-import EngineMenu from '@/components/Dashboard/Composer/VoiceInput/EngineMenu.vue';
+import { faCheck, faTimes } from '@/plugins/icons';
+
+import VoiceDisclosureDialog from '@/components/Dashboard/Composer/VoiceInput/VoiceDisclosureDialog.vue';
 import Waveform from '@/components/Dashboard/Composer/VoiceInput/Waveform.vue';
 import { voiceInputKey, type UseVoiceInputReturn } from '@/composables/useVoiceInput';
+import {
+  acceptVoiceInputDisclosure,
+  hasAcceptedVoiceInputDisclosure,
+} from '@/composables/voiceInputDisclosure';
 
 const voice = inject(voiceInputKey) as UseVoiceInputReturn;
 
 const {
-  engine,
-  setEngine,
-  webSpeechSupported,
   isRecording,
   isTranscribing,
   isBusy,
@@ -21,9 +24,29 @@ const {
   audioLevel,
   toggleRecording,
   cancelRecording,
+  stopRecording,
 } = voice;
 
 const { level: audioLevelValue, reactiveWaveform } = audioLevel;
+
+const disclosureOpen = ref(false);
+
+function onMicClick() {
+  if (isTranscribing.value) {
+    return;
+  }
+  if (!hasAcceptedVoiceInputDisclosure()) {
+    disclosureOpen.value = true;
+    return;
+  }
+  toggleRecording();
+}
+
+function onDisclosureAccept() {
+  acceptVoiceInputDisclosure();
+  disclosureOpen.value = false;
+  toggleRecording();
+}
 
 function onKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape' && isRecording.value) {
@@ -45,26 +68,41 @@ onUnmounted(() => {
   <div class="tw-flex tw-items-center tw-gap-1">
     <span class="tw-sr-only" aria-live="polite">{{ ariaLiveMessage }}</span>
 
-    <Waveform v-if="isRecording" :level="audioLevelValue" :reactive-waveform="reactiveWaveform" />
+    <template v-if="isRecording">
+      <Waveform :level="audioLevelValue" :reactive-waveform="reactiveWaveform" />
 
-    <span
-      v-if="countdownSeconds !== null"
-      data-testid="voice-countdown"
-      class="tw-text-eyebrow tw-tabular-nums tw-text-ink-muted"
-      aria-hidden="true"
-    >
-      {{ countdownSeconds }}s
-    </span>
+      <span
+        v-if="countdownSeconds !== null"
+        data-testid="voice-countdown"
+        class="tw-text-eyebrow tw-tabular-nums tw-text-ink-muted"
+        aria-hidden="true"
+      >
+        {{ countdownSeconds }}s
+      </span>
 
-    <EngineMenu
-      :engine="engine"
-      :web-speech-supported="webSpeechSupported"
-      :disabled="isBusy"
-      :menu-disabled="isRecording"
-      @update:engine="setEngine"
-    />
+      <button
+        type="button"
+        data-testid="voice-cancel-button"
+        class="tw-inline-flex tw-min-h-[36px] tw-min-w-[36px] tw-items-center tw-justify-center tw-rounded-md tw-text-ink-muted hover:tw-text-ink focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
+        aria-label="Cancel voice recording"
+        @click="cancelRecording"
+      >
+        <font-awesome-icon :icon="faTimes" class="tw-h-4 tw-w-4" aria-hidden="true" />
+      </button>
+
+      <button
+        type="button"
+        data-testid="voice-accept-button"
+        class="tw-inline-flex tw-min-h-[36px] tw-min-w-[36px] tw-items-center tw-justify-center tw-rounded-md tw-text-accent hover:tw-text-accent/90 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
+        aria-label="Stop recording and transcribe"
+        @click="stopRecording"
+      >
+        <font-awesome-icon :icon="faCheck" class="tw-h-4 tw-w-4" aria-hidden="true" />
+      </button>
+    </template>
 
     <button
+      v-else
       type="button"
       data-testid="voice-mic-button"
       data-tour="mic"
@@ -72,7 +110,7 @@ onUnmounted(() => {
       :aria-label="isTranscribing ? 'Transcribing voice input' : 'Voice input'"
       :aria-pressed="isRecording"
       :disabled="isTranscribing"
-      @click="toggleRecording"
+      @click="onMicClick"
     >
       <font-awesome-icon
         :icon="faMicrophone"
@@ -87,5 +125,7 @@ onUnmounted(() => {
     </p>
 
     <p v-if="isTranscribing" class="tw-sr-only" aria-live="polite">Transcribing</p>
+
+    <VoiceDisclosureDialog :open="disclosureOpen" @accept="onDisclosureAccept" />
   </div>
 </template>

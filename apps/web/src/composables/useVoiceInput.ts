@@ -13,47 +13,14 @@ import {
 import { useRoute } from 'vue-router';
 
 import { useAudioLevel } from '@/composables/useAudioLevel';
-import { grokErrorMessage, useGrokRecorder } from '@/composables/useGrokRecorder';
-import { getSpeechRecognitionConstructor, useWebSpeech } from '@/composables/useWebSpeech';
+import { useGrokRecorder, appendPromptText } from '@/composables/useGrokRecorder';
 import { useShareActions } from '@/composables/useShareActions';
-import { appendPromptText } from '@/composables/useGrokRecorder';
 import { useAsideStore } from '@/stores/aside';
 import { useGenerateStore } from '@/stores/generate';
-
-export type VoiceEngine = 'web-speech' | 'grok';
-
-const ENGINE_STORAGE_KEY = 'visual-ai-voice-engine';
 
 export type UseVoiceInputReturn = ReturnType<typeof useVoiceInput>;
 
 export const voiceInputKey: InjectionKey<UseVoiceInputReturn> = Symbol('voiceInput');
-
-function readStoredEngine(): VoiceEngine | null {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-  try {
-    const value = window.localStorage.getItem(ENGINE_STORAGE_KEY);
-    if (value === 'web-speech' || value === 'grok') {
-      return value;
-    }
-  } catch {
-    // SSR or private mode
-  }
-  return null;
-}
-
-function writeStoredEngine(engine: VoiceEngine) {
-  try {
-    window.localStorage.setItem(ENGINE_STORAGE_KEY, engine);
-  } catch {
-    // ignore
-  }
-}
-
-function defaultEngine(): VoiceEngine {
-  return getSpeechRecognitionConstructor() ? 'web-speech' : 'grok';
-}
 
 export function useVoiceInput() {
   const asideStore = useAsideStore();
@@ -64,12 +31,9 @@ export function useVoiceInput() {
   const route = useRoute();
   const { showToast } = useShareActions();
 
-  const engine = ref<VoiceEngine>(readStoredEngine() ?? defaultEngine());
   const countdownSeconds = ref<number | null>(null);
   const inlineError = ref('');
   const ariaLiveMessage = ref('');
-
-  const webSpeechSupported = Boolean(getSpeechRecognitionConstructor());
 
   const audioLevel = useAudioLevel();
 
@@ -95,13 +59,7 @@ export function useVoiceInput() {
     },
   });
 
-  const webSpeech = useWebSpeech({
-    getPrompt: () => typingPrompt.value,
-    setPrompt: syncPrompt,
-    onError: reportError,
-  });
-
-  const isRecording = computed(() => grok.isRecording.value || webSpeech.isRecording.value);
+  const isRecording = computed(() => grok.isRecording.value);
   const isTranscribing = computed(() => grok.isTranscribing.value);
   const isBusy = computed(() => isRecording.value || isTranscribing.value);
 
@@ -119,63 +77,27 @@ export function useVoiceInput() {
     ariaLiveMessage.value = value;
   });
 
-  function setEngine(next: VoiceEngine) {
-    if (next === 'web-speech' && !webSpeechSupported) {
-      return;
-    }
-    engine.value = next;
-    writeStoredEngine(next);
-  }
-
-  async function startAudioLevel(stream?: MediaStream) {
-    await audioLevel.start(stream);
-  }
-
   async function startRecording() {
     if (isBusy.value) {
       return;
     }
     inlineError.value = '';
 
-    if (engine.value === 'grok') {
-      const started = await grok.startRecording();
-      if (started) {
-        ariaLiveMessage.value = 'Recording';
-        await startAudioLevel(grok.getStream() ?? undefined);
-      }
-      return;
-    }
-
-    const started = webSpeech.startRecording();
+    const started = await grok.startRecording();
     if (started) {
       ariaLiveMessage.value = 'Recording';
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        await startAudioLevel(stream);
-      } catch {
-        audioLevel.reactiveWaveform.value = false;
-        webSpeech.cancelRecording();
-        reportError(grokErrorMessage({ code: 'permission_denied' }));
-      }
+      await audioLevel.start(grok.getStream() ?? undefined);
     }
   }
 
   async function stopRecording() {
-    if (engine.value === 'grok') {
-      await grok.stopRecording();
-    } else {
-      webSpeech.stopRecording();
-    }
+    await grok.stopRecording();
     audioLevel.stop();
     countdownSeconds.value = null;
   }
 
   function cancelRecording() {
-    if (engine.value === 'grok') {
-      grok.cancelRecording();
-    } else {
-      webSpeech.cancelRecording();
-    }
+    grok.cancelRecording();
     audioLevel.stop();
     countdownSeconds.value = null;
     ariaLiveMessage.value = '';
@@ -199,9 +121,6 @@ export function useVoiceInput() {
   }
 
   onMounted(() => {
-    if (!webSpeechSupported && engine.value === 'web-speech') {
-      engine.value = 'grok';
-    }
     document.addEventListener('visibilitychange', onVisibilityChange);
   });
 
@@ -220,9 +139,6 @@ export function useVoiceInput() {
   );
 
   return {
-    engine,
-    setEngine,
-    webSpeechSupported,
     isRecording,
     isTranscribing,
     isBusy,

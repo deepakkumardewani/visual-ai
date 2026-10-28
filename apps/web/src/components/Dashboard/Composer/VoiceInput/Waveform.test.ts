@@ -24,7 +24,7 @@ describe('Waveform', () => {
     });
     const root = wrapper.get('[data-testid="voice-waveform"]');
     const bars = root.findAll('span');
-    expect(bars).toHaveLength(5);
+    expect(bars).toHaveLength(6);
     expect(bars[0].attributes('style')).toContain('height:');
   });
 
@@ -33,9 +33,7 @@ describe('Waveform', () => {
       props: { level: 0, reactiveWaveform: true },
     });
     const bars = wrapper.get('[data-testid="voice-waveform"]').findAll('span');
-    // center bar uses max(0.12, level) => 12%
     expect(bars[2].attributes('style')).toBe('height: 12%;');
-    // edge bar uses max(0.12, level - 0.16) => 12%
     expect(bars[0].attributes('style')).toBe('height: 12%;');
   });
 
@@ -44,7 +42,7 @@ describe('Waveform', () => {
       props: { level: 0.95, reactiveWaveform: true },
     });
     const bars = wrapper.get('[data-testid="voice-waveform"]').findAll('span');
-    expect(bars[4].attributes('style')).toBe('height: 100%;');
+    expect(bars[5].attributes('style')).toBe('height: 100%;');
   });
 
   it('returns no bar heights when reactiveWaveform is false', () => {

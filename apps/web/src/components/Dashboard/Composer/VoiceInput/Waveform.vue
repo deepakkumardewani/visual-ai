@@ -11,9 +11,9 @@ const props = defineProps<{
 const prefersReducedMotion = useReducedMotion();
 
 const bars = computed(() => {
-  const count = 5;
+  const count = 6;
   return Array.from({ length: count }, (_, index) => {
-    const offset = (index - 2) * 0.08;
+    const offset = (index - (count - 1) / 2) * 0.07;
     return Math.min(1, Math.max(0.12, props.level + offset));
   });
 });
@@ -22,7 +22,7 @@ const bars = computed(() => {
 <template>
   <div
     data-testid="voice-waveform"
-    class="tw-flex tw-h-6 tw-items-end tw-gap-0.5"
+    class="tw-flex tw-h-5 tw-items-end tw-gap-px"
     aria-hidden="true"
   >
     <template v-if="!prefersReducedMotion && reactiveWaveform">

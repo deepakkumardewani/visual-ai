@@ -26,28 +26,20 @@ vi.mock('vue-router', () => ({
 
 import MicButton from '@/components/Dashboard/Composer/VoiceInput/MicButton.vue';
 import { provideVoiceInput, type UseVoiceInputReturn } from '@/composables/useVoiceInput';
+import {
+  VOICE_INPUT_DISCLOSURE_BODY,
+  VOICE_INPUT_DISCLOSURE_STORAGE_KEY,
+  VOICE_INPUT_DISCLOSURE_TITLE,
+} from '@/composables/voiceInputDisclosure';
 
-const stubs = { 'font-awesome-icon': true };
-
-function installSpeechRecognition() {
-  class MockSpeechRecognition {
-    continuous = false;
-    interimResults = false;
-    lang = '';
-    onresult: ((event: unknown) => void) | null = null;
-    onerror: ((event: { error: string }) => void) | null = null;
-    onend: (() => void) | null = null;
-    start = vi.fn();
-    stop = vi.fn(() => {
-      this.onend?.();
-    });
-    abort = vi.fn(() => {
-      this.onend?.();
-    });
-  }
-  vi.stubGlobal('SpeechRecognition', MockSpeechRecognition);
-  vi.stubGlobal('webkitSpeechRecognition', undefined);
-}
+const stubs = {
+  AppModal: {
+    props: ['open'],
+    template:
+      '<div v-if="open" data-testid="app-modal"><slot name="title" /><slot /><slot name="actions" /></div>',
+  },
+  'font-awesome-icon': true,
+};
 
 function mountMic() {
   let voice!: UseVoiceInputReturn;
@@ -65,6 +57,10 @@ function mountMic() {
   return { wrapper, voice };
 }
 
+function acceptDisclosure() {
+  localStorage.setItem(VOICE_INPUT_DISCLOSURE_STORAGE_KEY, '1');
+}
+
 describe('MicButton', () => {
   let media: ReturnType<typeof installMediaRecorder>;
 
@@ -75,7 +71,6 @@ describe('MicButton', () => {
     vi.useFakeTimers();
     vi.stubEnv('VITE_API_BASEPATH', 'https://api.test');
     route.fullPath = '/create/image';
-    installSpeechRecognition();
     installGetUserMedia();
     media = installMediaRecorder({ webmSupported: true, mp4Supported: true });
     installAudioContext();
@@ -87,27 +82,52 @@ describe('MicButton', () => {
     vi.unstubAllEnvs();
   });
 
-  it('shows the waveform while recording', async () => {
+  it('shows blocking disclosure on first mic use', async () => {
+    const { wrapper } = mountMic();
+    await wrapper.get('[data-testid="voice-mic-button"]').trigger('click');
+    expect(wrapper.find('[data-testid="voice-disclosure-accept"]').exists()).toBe(true);
+    expect(wrapper.text()).toContain(VOICE_INPUT_DISCLOSURE_TITLE);
+    expect(wrapper.text()).toContain(VOICE_INPUT_DISCLOSURE_BODY);
+    expect(wrapper.find('[data-testid="voice-waveform"]').exists()).toBe(false);
+    wrapper.unmount();
+  });
+
+  it('starts recording after disclosure is accepted', async () => {
     const { wrapper, voice } = mountMic();
-    voice.setEngine('web-speech');
+    await wrapper.get('[data-testid="voice-mic-button"]').trigger('click');
+    await wrapper.get('[data-testid="voice-disclosure-accept"]').trigger('click');
+    await flushPromises();
+    expect(localStorage.getItem(VOICE_INPUT_DISCLOSURE_STORAGE_KEY)).toBe('1');
+    expect(voice.isRecording.value).toBe(true);
+    wrapper.unmount();
+  });
+
+  it('shows the waveform while recording', async () => {
+    acceptDisclosure();
+    const { wrapper, voice } = mountMic();
     await voice.startRecording();
     expect(voice.isRecording.value).toBe(true);
     expect(wrapper.find('[data-testid="voice-waveform"]').exists()).toBe(true);
     wrapper.unmount();
   });
 
-  it('sets aria-pressed while recording', async () => {
+  it('shows accept and cancel controls while recording', async () => {
+    acceptDisclosure();
     const { wrapper, voice } = mountMic();
-    voice.setEngine('web-speech');
     await voice.startRecording();
-    expect(wrapper.get('[data-testid="voice-mic-button"]').attributes('aria-pressed')).toBe('true');
+    expect(wrapper.find('[data-testid="voice-mic-button"]').exists()).toBe(false);
+    expect(wrapper.get('[data-testid="voice-accept-button"]').attributes('aria-label')).toBe(
+      'Stop recording and transcribe',
+    );
+    expect(wrapper.get('[data-testid="voice-cancel-button"]').attributes('aria-label')).toBe(
+      'Cancel voice recording',
+    );
     wrapper.unmount();
   });
 
-  it('uses Voice input aria-label when not transcribing', async () => {
-    const { wrapper, voice } = mountMic();
-    voice.setEngine('web-speech');
-    await voice.startRecording();
+  it('uses Voice input aria-label when idle', async () => {
+    acceptDisclosure();
+    const { wrapper } = mountMic();
     expect(wrapper.get('[data-testid="voice-mic-button"]').attributes('aria-label')).toBe(
       'Voice input',
     );
@@ -128,8 +148,8 @@ describe('MicButton', () => {
       ),
     );
 
+    acceptDisclosure();
     const { wrapper, voice } = mountMic();
-    voice.setEngine('grok');
     await voice.startRecording();
     media.last?.emitData(new Blob(['audio'], { type: 'audio/webm' }));
     await voice.stopRecording();
@@ -142,12 +162,35 @@ describe('MicButton', () => {
     wrapper.unmount();
   });
 
-  it('wires the mic button click to toggleRecording', async () => {
+  it('starts recording from the mic when disclosure accepted', async () => {
+    acceptDisclosure();
     const { wrapper, voice } = mountMic();
     const mic = wrapper.get('[data-testid="voice-mic-button"]');
     mic.element.removeAttribute('disabled');
     await mic.trigger('click');
     expect(voice.isRecording.value).toBe(true);
+    wrapper.unmount();
+  });
+
+  it('accept stops recording and cancel discards without transcribing', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(new Response(JSON.stringify({ text: 'hello' }), { status: 200 })),
+    );
+
+    acceptDisclosure();
+    const { wrapper, voice } = mountMic();
+    await voice.startRecording();
+    media.last?.emitData(new Blob(['audio'], { type: 'audio/webm' }));
+    await wrapper.get('[data-testid="voice-accept-button"]').trigger('click');
+    await flushPromises();
+    expect(voice.isRecording.value).toBe(false);
+    expect(fetch).toHaveBeenCalled();
+
+    await voice.startRecording();
+    await wrapper.get('[data-testid="voice-cancel-button"]').trigger('click');
+    expect(voice.isRecording.value).toBe(false);
+    expect(fetch).toHaveBeenCalledTimes(1);
     wrapper.unmount();
   });
 
@@ -159,8 +202,8 @@ describe('MicButton', () => {
       },
     });
 
+    acceptDisclosure();
     const { wrapper, voice } = mountMic();
-    voice.setEngine('web-speech');
     await voice.startRecording();
 
     const alert = wrapper.get('[data-testid="voice-inline-error"]');
@@ -169,18 +212,9 @@ describe('MicButton', () => {
     wrapper.unmount();
   });
 
-  it('disables the engine menu while recording', async () => {
-    const { wrapper, voice } = mountMic();
-    voice.setEngine('web-speech');
-    await voice.startRecording();
-    const trigger = wrapper.get('[data-testid="voice-engine-menu-trigger"]');
-    expect(trigger.attributes('disabled')).toBeDefined();
-    wrapper.unmount();
-  });
-
   it('cancels recording on Escape while recording', async () => {
+    acceptDisclosure();
     const { wrapper, voice } = mountMic();
-    voice.setEngine('web-speech');
     await voice.startRecording();
 
     const event = new KeyboardEvent('keydown', { key: 'Escape', cancelable: true });
@@ -197,25 +231,17 @@ describe('MicButton', () => {
     wrapper.unmount();
   });
 
-  it('forwards engine updates from the menu', async () => {
-    const { wrapper, voice } = mountMic();
-    await wrapper.get('[data-testid="voice-engine-menu-trigger"]').trigger('click');
-    await wrapper.get('[data-testid="voice-engine-grok"]').trigger('click');
-    expect(voice.engine.value).toBe('grok');
-    wrapper.unmount();
-  });
-
   it('renders aria-live status text from the voice context', async () => {
+    acceptDisclosure();
     const { wrapper, voice } = mountMic();
-    voice.setEngine('web-speech');
     await voice.startRecording();
     expect(wrapper.find('[aria-live="polite"]').text().length).toBeGreaterThan(0);
     wrapper.unmount();
   });
 
   it('shows countdown seconds while recording', async () => {
+    acceptDisclosure();
     const { wrapper, voice } = mountMic();
-    voice.setEngine('grok');
     await voice.startRecording();
     vi.advanceTimersByTime(49_000);
     expect(wrapper.find('[data-testid="voice-countdown"]').exists()).toBe(false);

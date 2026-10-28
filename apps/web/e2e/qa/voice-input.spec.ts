@@ -4,8 +4,6 @@ import { expect, test } from '../fixtures/qa';
 import { E2E_WEB_ORIGIN } from '../support/env';
 import { gotoStudio } from '../support/studio';
 import {
-  emitSpeechFinal,
-  emitSpeechInterim,
   finishGrokRecording,
   hideDocument,
   installVoiceBrowserMocks,
@@ -14,8 +12,7 @@ import {
   setGetUserMediaMode,
   setSttFetchMode,
 } from '../support/voiceMocks';
-
-const ENGINE_STORAGE_KEY = 'visual-ai-voice-engine';
+import { VOICE_INPUT_DISCLOSURE_STORAGE_KEY } from '../../src/composables/voiceInputDisclosure';
 
 const STT_CORS = {
   'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
@@ -34,27 +31,23 @@ async function setPrompt(page: Page, value: string) {
   await expect(input).toHaveValue(value);
 }
 
-async function selectEngine(page: Page, engine: 'grok' | 'web-speech') {
-  await page.getByTestId('voice-engine-menu-trigger').click();
-  const menu = page.getByTestId('voice-engine-menu');
-  await expect(menu).toBeVisible();
-  await page
-    .getByTestId(engine === 'grok' ? 'voice-engine-grok' : 'voice-engine-web-speech')
-    .click();
-  await expect(menu).toBeHidden();
-  await expect
-    .poll(async () => page.evaluate((key) => localStorage.getItem(key), ENGINE_STORAGE_KEY))
-    .toBe(engine);
-}
-
 function visibleMic(page: Page) {
   return page.getByTestId('voice-mic-button').locator('visible=true').first();
+}
+
+async function acceptVoiceDisclosure(page: Page) {
+  const accept = page.getByTestId('voice-disclosure-accept');
+  if (await accept.isVisible().catch(() => false)) {
+    await accept.click();
+    await expect(accept).toBeHidden();
+  }
 }
 
 async function startMic(page: Page) {
   const mic = visibleMic(page);
   await mic.dispatchEvent('click');
-  await expect(mic).toHaveAttribute('aria-pressed', 'true', { timeout: 15_000 });
+  await acceptVoiceDisclosure(page);
+  await expect(page.getByTestId('voice-accept-button')).toBeVisible({ timeout: 15_000 });
 }
 
 type SttRouteHandler = (route: Parameters<Parameters<Page['route']>[1]>[0]) => Promise<void> | void;
@@ -69,7 +62,7 @@ async function routeStt(page: Page, handler: SttRouteHandler) {
 }
 
 async function prepareVoicePage(page: Page, mode?: Parameters<typeof installVoiceBrowserMocks>[1]) {
-  await installVoiceBrowserMocks(page, mode ?? { speechRecognition: true, getUserMedia: 'grant' });
+  await installVoiceBrowserMocks(page, mode ?? { getUserMedia: 'grant' });
 }
 
 async function openStudioWithVoice(
@@ -89,6 +82,11 @@ test.describe('voice input', () => {
     'Grok engine: mocked `getUserMedia`/`MediaRecorder` and intercepted `**/stt`; recorded text appends to existing prompt without replacing it.',
     { tag: ['@critical'] },
     async ({ page }) => {
+      await openStudioWithVoice(page);
+      await page.evaluate(
+        (key) => localStorage.setItem(key, '1'),
+        VOICE_INPUT_DISCLOSURE_STORAGE_KEY,
+      );
       await routeStt(page, async (route) => {
         if (route.request().method() !== 'POST') {
           return route.continue();
@@ -99,8 +97,6 @@ test.describe('voice input', () => {
           body: JSON.stringify({ text: 'dictated phrase' }),
         });
       });
-      await openStudioWithVoice(page);
-      await selectEngine(page, 'grok');
       await setPrompt(page, 'existing prompt');
 
       await startMic(page);
@@ -114,56 +110,32 @@ test.describe('voice input', () => {
   );
 
   test(
-    'Web Speech engine: mocked `SpeechRecognition` shows interim text live and commits on finalize.',
+    'First mic use shows AI processing disclosure once; acceptance persists in localStorage.',
     { tag: ['@critical'] },
     async ({ page }) => {
       await openStudioWithVoice(page);
-      await selectEngine(page, 'web-speech');
-      await setPrompt(page, 'seed text');
+      await visibleMic(page).dispatchEvent('click');
 
-      await startMic(page);
-      await emitSpeechInterim(page, 'interim words');
-      await expect(page.getByTestId('composer-textarea-input')).toHaveValue(
-        'seed text interim words',
-      );
+      await expect(page.getByTestId('voice-disclosure-accept')).toBeVisible();
+      await expect(page.getByText(/sent to AI for processing/i)).toBeVisible();
+      await expect(page.getByText(/Grok/i)).toHaveCount(0);
 
-      await emitSpeechFinal(page, 'final words');
-      await expect(page.getByTestId('composer-textarea-input')).toHaveValue(
-        'seed text final words',
-      );
-    },
-  );
-
-  test(
-    'Engine choice persists across reload; with `SpeechRecognition` removed, default is Grok and Web Speech shows "Not supported in this browser".',
-    { tag: ['@high'] },
-    async ({ page }) => {
-      await openStudioWithVoice(page);
-      await selectEngine(page, 'web-speech');
+      await page.getByTestId('voice-disclosure-accept').click();
+      await expect(page.getByTestId('voice-accept-button')).toBeVisible();
 
       await page.reload();
       await installVoiceRecordingMocks(page);
       await expect(page.getByTestId('composer-textarea-input')).toBeVisible();
-      await page.getByTestId('voice-engine-menu-trigger').click();
-      await expect(page.getByTestId('voice-engine-web-speech')).toHaveAttribute(
-        'aria-checked',
-        'true',
-      );
-      await page.keyboard.press('Escape');
 
-      await prepareVoicePage(page, { speechRecognition: false, getUserMedia: 'grant' });
-      await page.reload();
-      await installVoiceRecordingMocks(page);
-      await expect(page.getByTestId('composer-textarea-input')).toBeVisible();
+      await visibleMic(page).dispatchEvent('click');
+      await expect(page.getByTestId('voice-disclosure-accept')).toHaveCount(0);
+      await expect(page.getByTestId('voice-accept-button')).toBeVisible();
 
-      await page.getByTestId('voice-engine-menu-trigger').click();
-      await expect(page.getByTestId('voice-engine-grok')).toHaveAttribute('aria-checked', 'true');
-      await expect(page.getByTestId('voice-engine-web-speech')).toContainText(
-        'Not supported in this browser',
-      );
       await expect
-        .poll(async () => page.evaluate((key) => localStorage.getItem(key), ENGINE_STORAGE_KEY))
-        .toBe('web-speech');
+        .poll(async () =>
+          page.evaluate((key) => localStorage.getItem(key), VOICE_INPUT_DISCLOSURE_STORAGE_KEY),
+        )
+        .toBe('1');
     },
   );
 
@@ -173,7 +145,10 @@ test.describe('voice input', () => {
     async ({ page }) => {
       await installSttFetchMock(page);
       await openStudioWithVoice(page);
-      await selectEngine(page, 'grok');
+      await page.evaluate(
+        (key) => localStorage.setItem(key, '1'),
+        VOICE_INPUT_DISCLOSURE_STORAGE_KEY,
+      );
 
       await setGetUserMediaMode(page, 'deny');
       await visibleMic(page).dispatchEvent('click');
@@ -219,7 +194,10 @@ test.describe('voice input', () => {
       });
 
       await openStudioWithVoice(page);
-      await selectEngine(page, 'grok');
+      await page.evaluate(
+        (key) => localStorage.setItem(key, '1'),
+        VOICE_INPUT_DISCLOSURE_STORAGE_KEY,
+      );
       await setPrompt(page, 'hold');
 
       await startMic(page);
@@ -253,10 +231,13 @@ test.describe('voice input', () => {
       await page.emulateMedia({ reducedMotion: 'reduce' });
 
       await openStudioWithVoice(page);
-      await selectEngine(page, 'grok');
+      await page.evaluate(
+        (key) => localStorage.setItem(key, '1'),
+        VOICE_INPUT_DISCLOSURE_STORAGE_KEY,
+      );
 
       await expect(page.getByTestId('voice-mic-button')).toBeVisible();
-      await expect(page.getByTestId('voice-engine-menu-trigger')).toBeVisible();
+      await expect(page.getByTestId('voice-engine-menu-trigger')).toHaveCount(0);
 
       await page.clock.install({ time: Date.now() });
       await startMic(page);

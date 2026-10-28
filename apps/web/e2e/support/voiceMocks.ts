@@ -1,7 +1,6 @@
 import type { Page } from '@playwright/test';
 
 export type VoiceMockMode = {
-  speechRecognition?: boolean;
   getUserMedia?: 'grant' | 'deny';
 };
 
@@ -12,7 +11,6 @@ const RECORDING_MOCK_SOURCE = String.raw`
   const voiceApi = window.__e2eVoice ?? {
     getUserMediaMode: 'grant',
     mediaInstances: [],
-    speech: null,
     setGetUserMediaMode(next) {
       this.getUserMediaMode = next;
     },
@@ -95,7 +93,7 @@ const RECORDING_MOCK_SOURCE = String.raw`
 
 export async function installVoiceBrowserMocks(
   page: Page,
-  mode: VoiceMockMode = { speechRecognition: true, getUserMedia: 'grant' },
+  mode: VoiceMockMode = { getUserMedia: 'grant' },
 ) {
   await page.addInitScript((opts) => {
     const voiceApi = {
@@ -105,69 +103,11 @@ export async function installVoiceBrowserMocks(
         emitData: (blob: Blob) => void;
         stopRecording: () => void;
       }>,
-      speech: null as null | {
-        emitInterim: (text: string) => void;
-        emitFinal: (text: string) => void;
-        emitError: (code: string) => void;
-      },
       setGetUserMediaMode(next: 'grant' | 'deny') {
         voiceApi.getUserMediaMode = next;
       },
     };
     (window as Window & { __e2eVoice?: typeof voiceApi }).__e2eVoice = voiceApi;
-
-    if (opts.speechRecognition) {
-      class E2ESpeechRecognition {
-        continuous = false;
-        interimResults = false;
-        lang = '';
-        onresult: ((event: unknown) => void) | null = null;
-        onerror: ((event: { error: string }) => void) | null = null;
-        onend: (() => void) | null = null;
-
-        start() {
-          voiceApi.speech = {
-            emitInterim: (text: string) => {
-              this.onresult?.({
-                resultIndex: 0,
-                results: [{ isFinal: false, 0: { transcript: text } }],
-              });
-            },
-            emitFinal: (text: string) => {
-              this.onresult?.({
-                resultIndex: 0,
-                results: [{ isFinal: true, 0: { transcript: text } }],
-              });
-            },
-            emitError: (code: string) => {
-              this.onerror?.({ error: code });
-            },
-          };
-        }
-
-        stop() {
-          this.onend?.();
-        }
-
-        abort() {
-          this.onend?.();
-        }
-      }
-
-      const w = window as Window & {
-        SpeechRecognition?: typeof E2ESpeechRecognition;
-        webkitSpeechRecognition?: undefined;
-      };
-      w.SpeechRecognition = E2ESpeechRecognition;
-      w.webkitSpeechRecognition = undefined;
-    } else {
-      const w = window as Window & {
-        SpeechRecognition?: undefined;
-        webkitSpeechRecognition?: undefined;
-      };
-      w.SpeechRecognition = undefined;
-      w.webkitSpeechRecognition = undefined;
-    }
   }, mode);
 }
 
@@ -190,18 +130,6 @@ export async function finishGrokRecording(page: Page) {
     inst.emitData(new Blob(['audio-bytes'], { type: 'audio/webm' }));
     inst.stopRecording();
   });
-}
-
-export async function emitSpeechInterim(page: Page, text: string) {
-  await page.evaluate((value) => {
-    window.__e2eVoice?.speech?.emitInterim(value);
-  }, text);
-}
-
-export async function emitSpeechFinal(page: Page, text: string) {
-  await page.evaluate((value) => {
-    window.__e2eVoice?.speech?.emitFinal(value);
-  }, text);
 }
 
 /** In-page fetch stub for `/stt` error paths — avoids browser network console errors from routed 4xx/5xx. */
@@ -258,11 +186,6 @@ declare global {
         emitData: (blob: Blob) => void;
         stopRecording: () => void;
       }>;
-      speech: null | {
-        emitInterim: (text: string) => void;
-        emitFinal: (text: string) => void;
-        emitError: (code: string) => void;
-      };
       setGetUserMediaMode: (next: 'grant' | 'deny') => void;
       sttMode?: SttFetchMode;
     };
