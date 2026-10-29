@@ -49,6 +49,7 @@ declare module 'vue' {
     FeatureLandingHero: typeof import('./components/Landing/FeatureLandingHero.vue')['default']
     FeatureLandingMore: typeof import('./components/Landing/FeatureLandingMore.vue')['default']
     FeatureLandingSteps: typeof import('./components/Landing/FeatureLandingSteps.vue')['default']
+    FeatureList: typeof import('./components/Intro/FeatureList.vue')['default']
     FeatureSelect: typeof import('./components/Header/FeatureSelect.vue')['default']
     Filter: typeof import('./components/History/Filter.vue')['default']
     FinalCta: typeof import('./components/Landing/FinalCta.vue')['default']
@@ -98,6 +99,7 @@ declare module 'vue' {
     ImageGenerateAside: typeof import('./components/Dashboard/Sidebar/ImageGenerateAside.vue')['default']
     ImageUpload: typeof import('./components/Dashboard/Sidebar/ImageUpload.vue')['default']
     ImageViewer: typeof import('./components/Explore/ImageViewer.vue')['default']
+    IntroSlide: typeof import('./components/Intro/IntroSlide.vue')['default']
     LandingButton: typeof import('./components/Landing/LandingButton.vue')['default']
     LandingFooter: typeof import('./components/Landing/LandingFooter.vue')['default']
     LandingHero: typeof import('./components/Landing/LandingHero.vue')['default']
@@ -159,6 +161,7 @@ declare module 'vue' {
     TokenScratch: typeof import('./components/primitives/TokenScratch.vue')['default']
     ToolChapter: typeof import('./components/Landing/ToolChapter.vue')['default']
     Tooltip: typeof import('./components/primitives/Tooltip.vue')['default']
+    TourPopover: typeof import('./components/Intro/TourPopover.vue')['default']
     UpscaleImageAside: typeof import('./components/Dashboard/Sidebar/UpscaleImageAside.vue')['default']
     UpscaleModelPicker: typeof import('./components/Dashboard/ModelPicker/UpscaleModelPicker.vue')['default']
     UserDetails: typeof import('./components/Profile/UserDetails.vue')['default']
@@ -169,5 +172,6 @@ declare module 'vue' {
     ViewerStage: typeof import('./components/Explore/ViewerStage.vue')['default']
     VoiceDisclosureDialog: typeof import('./components/Dashboard/Composer/VoiceInput/VoiceDisclosureDialog.vue')['default']
     Waveform: typeof import('./components/Dashboard/Composer/VoiceInput/Waveform.vue')['default']
+    WhatsNewModal: typeof import('./components/Intro/WhatsNewModal.vue')['default']
   }
 }

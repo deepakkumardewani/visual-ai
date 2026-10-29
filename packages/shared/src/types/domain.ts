@@ -113,6 +113,8 @@ export interface IUser {
   credits: number;
   dailyCredits: number;
   referralCode: string;
+  /** Last intro version the user dismissed; null until they see one. */
+  seenIntroVersion?: string | null;
   referrals: IReferral[];
   payments: IPayment[];
   history: IImageObject[];

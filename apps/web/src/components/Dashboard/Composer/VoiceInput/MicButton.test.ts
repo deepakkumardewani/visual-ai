@@ -119,6 +119,7 @@ describe('MicButton', () => {
     expect(wrapper.get('[data-testid="voice-accept-button"]').attributes('aria-label')).toBe(
       'Stop recording and transcribe',
     );
+    expect(wrapper.find('[data-testid="voice-waveform-pill"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="voice-cancel-button"]').attributes('aria-label')).toBe(
       'Cancel voice recording',
     );
@@ -159,6 +160,7 @@ describe('MicButton', () => {
     expect(mic.attributes('aria-label')).toBe('Transcribing voice input');
     expect(mic.attributes('disabled')).toBeDefined();
     expect(wrapper.text()).toContain('Transcribing');
+    expect(wrapper.find('[data-testid="voice-spinner"]').exists()).toBe(true);
     wrapper.unmount();
   });
 
@@ -191,6 +193,16 @@ describe('MicButton', () => {
     await wrapper.get('[data-testid="voice-cancel-button"]').trigger('click');
     expect(voice.isRecording.value).toBe(false);
     expect(fetch).toHaveBeenCalledTimes(1);
+    wrapper.unmount();
+  });
+
+  it('prevents default on cancel mousedown so the textarea keeps focus', async () => {
+    acceptDisclosure();
+    const { wrapper, voice } = mountMic();
+    await voice.startRecording();
+    const event = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+    wrapper.get('[data-testid="voice-cancel-button"]').element.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
     wrapper.unmount();
   });
 

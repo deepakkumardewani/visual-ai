@@ -51,6 +51,13 @@ describe("UserModel schema", () => {
         expect(UserModel.schema.path("history").options.default).toEqual([])
     })
 
+    it("defaults seenIntroVersion to null as a string", () => {
+        const seen = UserModel.schema.path("seenIntroVersion")
+        expect(seen.instance).toBe("String")
+        expect(seen.options.default).toBeNull()
+        expect(new UserModel({ userId: "u1", userName: "ada" }).seenIntroVersion).toBeNull()
+    })
+
     it("embeds referral documents with required identity fields", () => {
         const referrals = UserModel.schema.path("referrals")
         const nested = referrals.schema

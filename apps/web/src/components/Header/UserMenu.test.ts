@@ -1,13 +1,16 @@
 import { createPinia, setActivePinia } from 'pinia';
 import { mount } from '@vue/test-utils';
+import { nextTick } from 'vue';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const push = vi.fn();
 const signOut = vi.fn();
+const routeState = vi.hoisted(() => ({ name: 'create' as string }));
+const useFetchMock = vi.hoisted(() => vi.fn());
 
 vi.mock('vue-router', () => ({
   useRouter: () => ({ push }),
-  useRoute: () => ({ name: 'create', params: {}, query: {} }),
+  useRoute: () => ({ name: routeState.name, params: {}, query: {} }),
 }));
 
 vi.mock('vue-clerk', () => ({
@@ -15,6 +18,9 @@ vi.mock('vue-clerk', () => ({
   useUser: () => ({ user: { value: null } }),
 }));
 
+vi.mock('@/composables/useFetch', () => ({ useFetch: useFetchMock }));
+
+import { useIntro } from '@/composables/useIntro';
 import UserMenu from '@/components/Header/UserMenu.vue';
 import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
@@ -31,6 +37,9 @@ describe('UserMenu', () => {
     setActivePinia(createPinia());
     push.mockReset();
     signOut.mockReset();
+    useFetchMock.mockReset();
+    routeState.name = 'create';
+    useIntro().isOpen.value = false;
   });
 
   it('shows initials when there is no avatar', () => {
@@ -175,5 +184,68 @@ describe('UserMenu', () => {
     await dark.get('[data-testid="user-menu-trigger"]').trigger('click');
     expect(dark.text()).toContain('Light Mode');
     expect(dark.text()).toContain('Dark');
+  });
+
+  it("reopens What's new on an app-shell route without a DB write", async () => {
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    await wrapper.get('[data-testid="user-menu-item-whats-new"]').trigger('click');
+    expect(useIntro().isOpen.value).toBe(true);
+    expect(push).not.toHaveBeenCalled();
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(false);
+
+    await useIntro().dismiss();
+    expect(useFetchMock).not.toHaveBeenCalled();
+  });
+
+  it("hops to the create surface before opening What's new from another page", async () => {
+    routeState.name = 'profile';
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    await wrapper.get('[data-testid="user-menu-item-whats-new"]').trigger('click');
+    await vi.waitFor(() => expect(useIntro().isOpen.value).toBe(true));
+    expect(push).toHaveBeenCalledWith({ name: 'create' });
+  });
+
+  it('closes the open menu when clicking outside it', async () => {
+    const wrapper = mount(UserMenu, { global: { stubs }, attachTo: document.body });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(true);
+    document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+    document.body.click();
+    await nextTick();
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(false);
+    wrapper.unmount();
+  });
+
+  it('opens from ArrowDown on the trigger and ignores other keys', async () => {
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('keydown', { key: 'a' });
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(false);
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('keydown', { key: 'ArrowDown' });
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(true);
+  });
+
+  it('wraps ArrowDown on the last item to the first and keeps the menu open on other keys', async () => {
+    const wrapper = mount(UserMenu, { global: { stubs }, attachTo: document.body });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    const items = wrapper.findAll('[role="menuitem"]');
+    const last = wrapper.get('[data-testid="user-menu-item-whats-new"]');
+    await last.trigger('keydown', { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(items[0].element);
+    await items[0].trigger('keydown', { key: 'ArrowUp' });
+    expect(document.activeElement).toBe(last.element);
+    await last.trigger('keydown', { key: 'x' });
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(true);
+    wrapper.unmount();
+  });
+
+  it('falls back to blanks when profile fields are missing', async () => {
+    const userStore = useUserStore();
+    userStore.userDetails = {} as never;
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    expect(wrapper.text()).toContain('Your account');
+    expect(wrapper.get('[data-testid="user-menu-trigger"]').text().trim()).toBe('');
   });
 });

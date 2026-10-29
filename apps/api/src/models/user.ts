@@ -29,6 +29,7 @@ const UserSchema = new Schema(
             sparse: true,
         },
         referralsUsed: { type: [String], default: [] },
+        seenIntroVersion: { type: String, default: null },
         referrals: {
             type: [ReferralSchema],
             default: [],

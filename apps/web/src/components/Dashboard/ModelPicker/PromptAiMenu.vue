@@ -148,6 +148,7 @@ async function handleFileChange(event: Event) {
       <template #trigger="{ open }">
         <span
           data-testid="prompt-ai-trigger"
+          data-tour="prompt-tools"
           :class="[
             'tw-inline-flex tw-min-h-9 tw-min-w-9 tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2 tw-text-ink-muted hover:tw-border-accent/40 hover:tw-text-accent focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
             interactiveTransition,

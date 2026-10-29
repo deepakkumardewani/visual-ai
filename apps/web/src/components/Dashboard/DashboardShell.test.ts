@@ -1,11 +1,15 @@
 import { mount } from '@vue/test-utils';
+import { createPinia } from 'pinia';
 import { describe, expect, it } from 'vitest';
 
 import DashboardShell from '@/components/Dashboard/DashboardShell.vue';
 
+const global = { plugins: [createPinia()], stubs: { WhatsNewModal: true } };
+
 describe('DashboardShell', () => {
   it('mounts rail and canvas slots', () => {
     const wrapper = mount(DashboardShell, {
+      global,
       slots: {
         rail: '<div data-testid="rail-content">Rail</div>',
         canvas: '<div data-testid="canvas-content">Canvas</div>',
@@ -18,6 +22,7 @@ describe('DashboardShell', () => {
 
   it('uses design tokens and contains no v-* components in its own markup', () => {
     const wrapper = mount(DashboardShell, {
+      global,
       slots: {
         rail: 'rail',
         canvas: 'canvas',

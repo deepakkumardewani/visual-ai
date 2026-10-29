@@ -72,6 +72,7 @@ function removeReferenceAt(index: number) {
 <template>
   <div
     data-testid="prompt-bar"
+    data-tour="prompt-bar"
     :class="[
       'tw-overflow-visible tw-rounded-xl tw-border tw-bg-surface-1 tw-p-2 tw-shadow-[0_1px_2px_rgba(0,0,0,0.25)] tw-transition-[border-color,box-shadow] tw-duration-base focus-within:tw-border-accent/60 focus-within:tw-shadow-[0_1px_2px_rgba(0,0,0,0.25),0_8px_18px_-12px_rgba(201,138,90,0.45)] motion-reduce:tw-transition-none',
       isDragging ? 'tw-border-accent tw-bg-accent/5' : 'tw-border-hairline',

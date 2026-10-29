@@ -1,5 +1,7 @@
 <script setup lang="ts">
- /**
+import WhatsNewModal from '@/components/Intro/WhatsNewModal.vue';
+
+/**
  * Two-column dashboard layout: control rail (left) + result canvas (right).
  * Below `sm` (640px) the rail is hidden from flow — Create mounts settings in a
  * mobile bottom sheet instead so the composer stays reachable.
@@ -26,6 +28,7 @@
         <slot name="canvas" />
       </main>
     </div>
+    <WhatsNewModal />
   </div>
 </template>
 

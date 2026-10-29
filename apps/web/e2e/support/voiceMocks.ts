@@ -4,12 +4,15 @@ export type VoiceMockMode = {
   getUserMedia?: 'grant' | 'deny';
 };
 
+export type VoiceAnalyserMode = 'audible' | 'silent';
+
 export type SttFetchMode = '200' | '429' | '503' | 'empty';
 
 const RECORDING_MOCK_SOURCE = String.raw`
 (() => {
   const voiceApi = window.__e2eVoice ?? {
     getUserMediaMode: 'grant',
+    analyserMode: 'audible',
     mediaInstances: [],
     setGetUserMediaMode(next) {
       this.getUserMediaMode = next;
@@ -77,14 +80,23 @@ const RECORDING_MOCK_SOURCE = String.raw`
       fftSize: 256,
       frequencyBinCount: 4,
       getByteFrequencyData: (arr) => {
-        arr[0] = 128;
+        arr[0] = voiceApi.analyserMode === 'silent' ? 0 : 128;
       },
     });
     createMediaStreamSource = () => ({ connect: () => undefined });
   }
   window.AudioContext = E2EAudioContext;
+  // Sample once per start: a synchronous callback that re-schedules itself would recurse until the
+  // stack overflows, which the app reads as "no analyser" and then never reports silence.
+  let inFrame = false;
   window.requestAnimationFrame = (cb) => {
-    cb(0);
+    if (inFrame) return 1;
+    inFrame = true;
+    try {
+      cb(0);
+    } finally {
+      inFrame = false;
+    }
     return 1;
   };
   window.cancelAnimationFrame = () => undefined;
@@ -113,6 +125,15 @@ export async function installVoiceBrowserMocks(
 
 export async function installVoiceRecordingMocks(page: Page) {
   await page.evaluate(RECORDING_MOCK_SOURCE);
+}
+
+/** Silent mode makes the mocked analyser report zero level; the default stays audible so clips reach `/stt`. */
+export async function setAnalyserMode(page: Page, mode: VoiceAnalyserMode) {
+  await page.evaluate((next) => {
+    if (window.__e2eVoice) {
+      window.__e2eVoice.analyserMode = next;
+    }
+  }, mode);
 }
 
 export async function setGetUserMediaMode(page: Page, mode: 'grant' | 'deny') {
@@ -188,6 +209,7 @@ declare global {
       }>;
       setGetUserMediaMode: (next: 'grant' | 'deny') => void;
       sttMode?: SttFetchMode;
+      analyserMode?: VoiceAnalyserMode;
     };
   }
 }

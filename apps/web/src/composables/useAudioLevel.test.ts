@@ -98,4 +98,27 @@ describe('useAudioLevel', () => {
     expect(handle.level.value).toBe(0);
     expect(stream.getTracks()[0]?.stop).toHaveBeenCalled();
   });
+
+  it('reports speech only once the peak level reaches the silence threshold', async () => {
+    const { analyser } = installAudioContext();
+    analyser.getByteFrequencyData.mockImplementation(() => undefined);
+    const { handle } = mountAudioLevel();
+    await handle.start(createMockStream());
+    expect(handle.hasHeardSpeech()).toBe(false);
+
+    analyser.getByteFrequencyData.mockImplementation((arr: Uint8Array) => {
+      arr[0] = 255;
+    });
+    handle.stop();
+    await handle.start(createMockStream());
+    expect(handle.hasHeardSpeech()).toBe(true);
+  });
+
+  it('never claims silence when the analyser is unavailable', async () => {
+    vi.stubGlobal('AudioContext', undefined);
+    const { handle } = mountAudioLevel();
+    await handle.start(createMockStream());
+    expect(handle.reactiveWaveform.value).toBe(false);
+    expect(handle.hasHeardSpeech()).toBe(true);
+  });
 });

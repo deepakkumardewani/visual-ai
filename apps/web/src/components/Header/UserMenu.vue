@@ -4,6 +4,7 @@ import {
   faCreditCard,
   faLink,
   faMoon,
+  faRocket,
   faSignOutAlt,
   faSun,
   faUser,
@@ -14,16 +15,22 @@ import { onClickOutside } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useClerk } from 'vue-clerk';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
+import { useIntro } from '@/composables/useIntro';
+
 import ReferralCopyDialog from '@/components/Dialogs/ReferralCopyDialog.vue';
 import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue';
 
+import { APP_SURFACE, isAppShellRoute } from '@/utils/dashboardRoutes';
+
 const router = useRouter();
+const route = useRoute();
+const intro = useIntro();
 const dialogStore = useDialogStore();
 const appStore = useAppStore();
 const userStore = useUserStore();
@@ -68,6 +75,7 @@ const menuItems = computed(() => [
   { id: 'payments', label: 'Payments', icon: faCreditCard, action: goToPayments },
   { id: 'use-referral', label: 'Use Referral Code', icon: faUsers, action: showReferralDialog },
   { id: 'refer-earn', label: 'Refer & Earn Credits', icon: faLink, action: copyReferralCode },
+  { id: 'whats-new', label: "What's new", icon: faRocket, action: showWhatsNew },
 ]);
 
 function toggleMenu() {
@@ -136,6 +144,15 @@ function showReferralDialog() {
 function copyReferralCode() {
   closeMenu();
   dialogStore.showCopyReferral(triggerRef.value);
+}
+
+/** The modal is mounted by the dashboard, so other pages hop there first. */
+async function showWhatsNew() {
+  closeMenu();
+  if (!isAppShellRoute(route)) {
+    await router.push({ name: APP_SURFACE.CREATE });
+  }
+  intro.open();
 }
 
 function handleSignOut() {

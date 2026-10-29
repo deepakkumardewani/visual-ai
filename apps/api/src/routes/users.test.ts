@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { REFERRAL_BONUS } from "@visual-ai/shared"
+import { CURRENT_INTRO_VERSION, REFERRAL_BONUS } from "@visual-ai/shared"
 
 const {
     find,
@@ -202,6 +202,81 @@ describe("userRoutes", () => {
         expect(deleteCloudinaryUserData).toHaveBeenCalledWith("u1")
         expect(deleteClerkUserData).toHaveBeenCalledWith("u1")
         expect(res.json).toHaveBeenCalledWith({ message: "User deleted successfully" })
+    })
+
+    it("returns the seenIntroVersion field on the profile GET", async () => {
+        findOne.mockResolvedValue({ userId: "u1", seenIntroVersion: CURRENT_INTRO_VERSION })
+
+        const { res } = await invoke(findHandler("/users/:id", "get"), { params: { id: "u1" } })
+
+        expect(res.json).toHaveBeenCalledWith(
+            expect.objectContaining({ seenIntroVersion: CURRENT_INTRO_VERSION }),
+        )
+    })
+
+    it("returns a null seenIntroVersion for a user who has not seen the intro", async () => {
+        findOne.mockResolvedValue({ userId: "u1", seenIntroVersion: null })
+
+        const { res } = await invoke(findHandler("/users/:id", "get"), { params: { id: "u1" } })
+
+        expect(res.json).toHaveBeenCalledWith({ userId: "u1", seenIntroVersion: null })
+    })
+
+    it("records a known intro version for the authenticated caller", async () => {
+        findOneAndUpdate.mockResolvedValue({ seenIntroVersion: CURRENT_INTRO_VERSION })
+
+        const { res, next } = await invoke(findHandler("/users/intro-seen", "put"), {
+            auth: { userId: "caller" },
+            body: { version: CURRENT_INTRO_VERSION },
+        })
+
+        expect(next).not.toHaveBeenCalled()
+        expect(findOneAndUpdate).toHaveBeenCalledWith(
+            { userId: "caller" },
+            { seenIntroVersion: CURRENT_INTRO_VERSION },
+            { new: true },
+        )
+        expect(res.status).toHaveBeenCalledWith(200)
+        expect(res.json).toHaveBeenCalledWith({ seenIntroVersion: CURRENT_INTRO_VERSION })
+    })
+
+    it("ignores a spoofed userId in the intro-seen body and writes only the caller", async () => {
+        findOneAndUpdate.mockResolvedValue({ seenIntroVersion: CURRENT_INTRO_VERSION })
+
+        await invoke(findHandler("/users/intro-seen", "put"), {
+            auth: { userId: "caller" },
+            body: { version: CURRENT_INTRO_VERSION, userId: "victim" },
+        })
+
+        expect(findOneAndUpdate).toHaveBeenCalledTimes(1)
+        expect(findOneAndUpdate.mock.calls[0][0]).toEqual({ userId: "caller" })
+    })
+
+    it.each([
+        ["an unknown version", { version: "v999" }],
+        ["a non-string version", { version: 2 }],
+        ["a missing version", {}],
+        ["an absent body", undefined],
+    ])("rejects intro-seen with %s and does not write", async (_label, body) => {
+        const { next } = await invoke(findHandler("/users/intro-seen", "put"), {
+            auth: { userId: "caller" },
+            body,
+        })
+
+        expectHttpError(next, "BadRequestError", "Unknown intro version")
+        expect(next.mock.calls[0][0].statusCode).toBe(400)
+        expect(findOneAndUpdate).not.toHaveBeenCalled()
+    })
+
+    it("throws NotFoundError when the intro-seen caller has no user record", async () => {
+        findOneAndUpdate.mockResolvedValue(null)
+
+        const { next } = await invoke(findHandler("/users/intro-seen", "put"), {
+            auth: { userId: "caller" },
+            body: { version: CURRENT_INTRO_VERSION },
+        })
+
+        expectHttpError(next, "NotFoundError", "User not found")
     })
 
     it("rejects a username update without a username", async () => {

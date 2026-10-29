@@ -9,10 +9,14 @@ import {
   installVoiceBrowserMocks,
   installSttFetchMock,
   installVoiceRecordingMocks,
+  setAnalyserMode,
   setGetUserMediaMode,
   setSttFetchMode,
 } from '../support/voiceMocks';
 import { VOICE_INPUT_DISCLOSURE_STORAGE_KEY } from '../../src/composables/voiceInputDisclosure';
+
+// Evidence PNGs land in the repo-level agent_docs/qa tree (playwright runs from apps/web).
+const shotPath = (name: string) => `../../agent_docs/qa/voice-input/${name}`;
 
 const STT_CORS = {
   'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
@@ -172,7 +176,10 @@ test.describe('voice input', () => {
       await setSttFetchMode(page, 'empty');
       await startMic(page);
       await finishGrokRecording(page);
-      await expectVoiceMessage(page, 'No speech detected. Try speaking closer to the mic.');
+      await expect(
+        page.getByRole('status').filter({ hasText: "Couldn't make out any words. Try again." }),
+      ).toBeVisible();
+      await expect(page.getByTestId('voice-inline-error')).toHaveCount(0);
     },
   );
 
@@ -257,6 +264,155 @@ test.describe('voice input', () => {
       await expect(page.getByTestId('composer-textarea-input')).toHaveValue('timed clip', {
         timeout: 15_000,
       });
+    },
+  );
+
+  test(
+    'Clicking the mic replaces it with a stop icon and shows the waveform pill; stop shows a spinner until the mocked `**/stt` resolves, then the mic icon returns and text is appended.',
+    { tag: ['@critical'] },
+    async ({ page }) => {
+      let release: () => void = () => undefined;
+      const gate = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      await routeStt(page, async (route) => {
+        if (route.request().method() !== 'POST') {
+          return route.continue();
+        }
+        await gate;
+        return route.fulfill({
+          status: 200,
+          headers: { ...STT_CORS, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: 'polished words' }),
+        });
+      });
+      await openStudioWithVoice(page);
+      await page.evaluate(
+        (key) => localStorage.setItem(key, '1'),
+        VOICE_INPUT_DISCLOSURE_STORAGE_KEY,
+      );
+      await setPrompt(page, 'start');
+
+      await expect(page.getByTestId('voice-waveform-pill')).toHaveCount(0);
+      await startMic(page);
+      await expect(page.getByTestId('voice-waveform-pill')).toBeVisible();
+      await expect(page.getByTestId('voice-mic-button')).toHaveCount(0);
+      await expect(page.getByTestId('voice-cancel-button')).toBeVisible();
+      await page.screenshot({ path: shotPath('stt-recording.png') });
+
+      await page.getByTestId('voice-accept-button').click();
+      await finishGrokRecording(page);
+      await expect(page.getByTestId('voice-spinner')).toBeVisible();
+      await expect(page.getByTestId('voice-mic-button')).toBeDisabled();
+      await expect(page.getByTestId('composer-textarea-input')).toHaveValue('start');
+      await page.screenshot({ path: shotPath('stt-transcribing.png') });
+
+      release();
+      await expect(page.getByTestId('voice-spinner')).toHaveCount(0);
+      await expect(page.getByTestId('voice-mic-button')).toBeEnabled();
+      await expect(page.getByTestId('composer-textarea-input')).toHaveValue('start polished words');
+    },
+  );
+
+  test(
+    'Silent mocked audio: no request to `**/stt` is made and the silence toast is visible; prompt unchanged.',
+    { tag: ['@critical'] },
+    async ({ page }) => {
+      let sttPosts = 0;
+      await routeStt(page, async (route) => {
+        if (route.request().method() === 'POST') {
+          sttPosts += 1;
+        }
+        return route.fulfill({
+          status: 200,
+          headers: { ...STT_CORS, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: 'must not be requested' }),
+        });
+      });
+      await openStudioWithVoice(page);
+      await page.evaluate(
+        (key) => localStorage.setItem(key, '1'),
+        VOICE_INPUT_DISCLOSURE_STORAGE_KEY,
+      );
+      await setAnalyserMode(page, 'silent');
+      await setPrompt(page, 'unchanged');
+
+      await startMic(page);
+      await finishGrokRecording(page);
+
+      const toast = page.getByRole('status').filter({
+        hasText: "We didn't hear anything. Try again and speak a little closer to the mic.",
+      });
+      await expect(toast).toBeVisible();
+      await page.screenshot({ path: shotPath('stt-silence-toast.png') });
+      await expect(page.getByTestId('voice-mic-button')).toBeEnabled();
+      await expect(page.getByTestId('composer-textarea-input')).toHaveValue('unchanged');
+      expect(sttPosts).toBe(0);
+    },
+  );
+
+  test(
+    'Mocked `**/stt` returns empty text with audible input: the empty-transcript toast is visible; prompt unchanged.',
+    { tag: ['@high'] },
+    async ({ page }) => {
+      let sttPosts = 0;
+      await routeStt(page, async (route) => {
+        if (route.request().method() === 'POST') {
+          sttPosts += 1;
+        }
+        return route.fulfill({
+          status: 200,
+          headers: { ...STT_CORS, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: '' }),
+        });
+      });
+      await openStudioWithVoice(page);
+      await page.evaluate(
+        (key) => localStorage.setItem(key, '1'),
+        VOICE_INPUT_DISCLOSURE_STORAGE_KEY,
+      );
+      await setPrompt(page, 'keep me');
+
+      await startMic(page);
+      await finishGrokRecording(page);
+
+      await expect(
+        page.getByRole('status').filter({ hasText: "Couldn't make out any words. Try again." }),
+      ).toBeVisible();
+      expect(sttPosts).toBe(1);
+      await expect(page.getByTestId('composer-textarea-input')).toHaveValue('keep me');
+    },
+  );
+
+  test(
+    'Cancel (X) while recording makes no `**/stt` request.',
+    { tag: ['@high'] },
+    async ({ page }) => {
+      let sttPosts = 0;
+      await routeStt(page, async (route) => {
+        if (route.request().method() === 'POST') {
+          sttPosts += 1;
+        }
+        return route.fulfill({
+          status: 200,
+          headers: { ...STT_CORS, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: 'must not be requested' }),
+        });
+      });
+      await openStudioWithVoice(page);
+      await page.evaluate(
+        (key) => localStorage.setItem(key, '1'),
+        VOICE_INPUT_DISCLOSURE_STORAGE_KEY,
+      );
+      await setPrompt(page, 'steady');
+
+      await startMic(page);
+      await page.getByTestId('voice-cancel-button').click();
+
+      await expect(page.getByTestId('voice-waveform-pill')).toHaveCount(0);
+      await expect(page.getByTestId('voice-mic-button')).toBeEnabled();
+      await expect(page.getByTestId('composer-textarea-input')).toHaveValue('steady');
+      expect(sttPosts).toBe(0);
     },
   );
 });

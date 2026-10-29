@@ -1,3 +1,4 @@
+import { STT_SILENCE_LEVEL_THRESHOLD } from '@visual-ai/shared';
 import { onBeforeUnmount, ref, type Ref } from 'vue';
 
 export type UseAudioLevelOptions = {
@@ -12,6 +13,7 @@ export function useAudioLevel(options: UseAudioLevelOptions = {}) {
   let analyser: AnalyserNode | null = null;
   let stream: MediaStream | null = null;
   let rafId = 0;
+  let peakLevel = 0;
   let dataArray: Uint8Array | null = null;
 
   function stopTracks() {
@@ -45,11 +47,13 @@ export function useAudioLevel(options: UseAudioLevelOptions = {}) {
       sum += dataArray[i] ?? 0;
     }
     level.value = sum / (dataArray.length * 255);
+    peakLevel = Math.max(peakLevel, level.value);
     rafId = requestAnimationFrame(tick);
   }
 
   async function start(streamOverride?: MediaStream): Promise<void> {
     stop();
+    peakLevel = 0;
     try {
       stream = streamOverride ?? (await navigator.mediaDevices.getUserMedia({ audio: true }));
       audioContext = new AudioContext();
@@ -74,6 +78,11 @@ export function useAudioLevel(options: UseAudioLevelOptions = {}) {
     closeAudioContext();
   }
 
+  // Without a working analyser we cannot measure loudness, so never claim silence.
+  function hasHeardSpeech(): boolean {
+    return !reactiveWaveform.value || peakLevel >= STT_SILENCE_LEVEL_THRESHOLD;
+  }
+
   onBeforeUnmount(stop);
 
   return {
@@ -81,6 +90,7 @@ export function useAudioLevel(options: UseAudioLevelOptions = {}) {
     reactiveWaveform,
     start,
     stop,
+    hasHeardSpeech,
   };
 }
 
@@ -89,4 +99,5 @@ export type AudioLevelHandle = {
   reactiveWaveform: Ref<boolean>;
   start: (stream?: MediaStream) => Promise<void>;
   stop: () => void;
+  hasHeardSpeech: () => boolean;
 };

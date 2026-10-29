@@ -21,22 +21,25 @@ const bars = computed(() => {
 
 <template>
   <div
-    data-testid="voice-waveform"
-    class="tw-flex tw-h-5 tw-items-end tw-gap-px"
+    data-testid="voice-waveform-pill"
+    class="tw-flex tw-h-8 tw-items-center tw-gap-2 tw-self-center tw-rounded-full tw-bg-accent/10 tw-px-3"
     aria-hidden="true"
   >
-    <template v-if="!prefersReducedMotion && reactiveWaveform">
+    <div data-testid="voice-waveform" class="tw-flex tw-h-5 tw-items-end tw-gap-px">
+      <template v-if="!prefersReducedMotion && reactiveWaveform">
+        <span
+          v-for="(height, index) in bars"
+          :key="index"
+          class="tw-w-0.5 tw-rounded-full tw-bg-accent tw-transition-[height] tw-duration-75 motion-reduce:tw-transition-none"
+          :style="{ height: `${Math.round(height * 100)}%` }"
+        />
+      </template>
       <span
-        v-for="(height, index) in bars"
-        :key="index"
-        class="tw-w-0.5 tw-rounded-full tw-bg-accent tw-transition-[height] tw-duration-75 motion-reduce:tw-transition-none"
-        :style="{ height: `${Math.round(height * 100)}%` }"
+        v-else
+        class="tw-h-2 tw-w-8 tw-rounded-full tw-bg-accent/70 motion-reduce:tw-transition-none"
+        :style="{ opacity: 0.35 + level * 0.65 }"
       />
-    </template>
-    <span
-      v-else
-      class="tw-h-2 tw-w-8 tw-rounded-full tw-bg-accent/70 motion-reduce:tw-transition-none"
-      :style="{ opacity: 0.35 + level * 0.65 }"
-    />
+    </div>
+    <slot />
   </div>
 </template>

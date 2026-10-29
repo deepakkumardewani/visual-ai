@@ -62,7 +62,7 @@ function toggleExpanded() {
 </script>
 
 <template>
-  <div class="tw-flex tw-flex-col tw-gap-2" data-testid="aspect-ratio-picker">
+  <div class="tw-flex tw-flex-col tw-gap-2" data-testid="aspect-ratio-picker" data-tour="sizes">
     <div
       class="tw-grid tw-gap-1 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2/60 tw-p-1"
       :class="primaryGridClass"

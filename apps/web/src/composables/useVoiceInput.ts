@@ -54,6 +54,8 @@ export function useVoiceInput() {
   const grok = useGrokRecorder({
     onAppend: appendToPrompt,
     onError: reportError,
+    onNotice: showToast,
+    hasSpeech: audioLevel.hasHeardSpeech,
     onCountdown: (value) => {
       countdownSeconds.value = value;
     },

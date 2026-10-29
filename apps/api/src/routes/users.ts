@@ -12,7 +12,7 @@ import {
     deleteClerkUserData,
 } from "../services/user-service.js"
 import { deleteCloudinaryUserData } from "../services/cloudinary-service.js"
-import { REFERRAL_BONUS } from "@visual-ai/shared"
+import { KNOWN_INTRO_VERSIONS, REFERRAL_BONUS } from "@visual-ai/shared"
 
 export const userRoutes = Router()
 
@@ -74,6 +74,28 @@ userRoutes.delete(
         await deleteCloudinaryUserData(userId)
         await deleteClerkUserData(userId)
         res.status(200).json({ message: "User deleted successfully" })
+    }),
+)
+
+// Record that the caller has seen an intro version (identity comes from auth, never the body)
+userRoutes.put(
+    "/users/intro-seen",
+    asyncHandler(async (req: Request, res: Response) => {
+        const { version } = req.body ?? {}
+        if (typeof version !== "string" || !KNOWN_INTRO_VERSIONS.includes(version)) {
+            throw new BadRequestError("Unknown intro version")
+        }
+
+        const updatedUser = await User.findOneAndUpdate(
+            { userId: req.auth.userId },
+            { seenIntroVersion: version },
+            { new: true },
+        )
+        if (!updatedUser) {
+            throw new NotFoundError("User not found")
+        }
+
+        res.status(200).json({ seenIntroVersion: updatedUser.seenIntroVersion })
     }),
 )
 

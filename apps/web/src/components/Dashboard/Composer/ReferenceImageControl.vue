@@ -115,7 +115,11 @@ function handleFileChange(event: Event) {
 </script>
 
 <template>
-  <div data-testid="reference-image-control" class="reference-image-control tw-shrink-0">
+  <div
+    data-testid="reference-image-control"
+    data-tour="ref-image"
+    class="reference-image-control tw-shrink-0"
+  >
     <input
       ref="fileInputRef"
       type="file"

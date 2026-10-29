@@ -376,13 +376,13 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 
 ## Phase 3: V2 intro (carousel and tour)
 
-**Adds:** A one-time "What's new in V2" modal per account with an optional guided tour, reopenable from the user menu.
-**Try in UI:** Sign in with an account that has not seen it and see the modal once ; dismiss, reload and confirm it stays gone ; open the user menu and choose "What's new" ; click "Show me around" on the last slide and step through the tour.
+**Adds:** A one-time "What's new in V2" large split modal per account (10 feature slides with short video loops, clickable jump-to list, icon prev/next navigation) with an optional guided tour, reopenable from the user menu; plus mic polish (stop icon, pill waveform, spinner, silence and empty-transcript toasts).
+**Try in UI:** Sign in with an account that has not seen it and see the modal once ; dismiss, reload and confirm it stays gone ; open the user menu and choose "What's new" ; click a feature in the list to jump, use the chevron icons to step through all 10 ; click "Show me around" on the last slide and step through the tour ; click the mic, see the stop icon and pill waveform, stop and see the spinner, and record silence to see the "We didn't hear anything" toast.
 
-### ☐ T3.1 Intro-seen persistence
+### ✅ T3.1 Intro-seen persistence
 
 - **Kind:** implementation
-- **Files:** `packages/shared/src/models/intro.ts` (new: `CURRENT_INTRO_VERSION = 'v2'`, `KNOWN_INTRO_VERSIONS`), `apps/api/src/models/user.ts` (locate with grep; adds `seenIntroVersion: { type: String, default: null }`), `apps/api/src/routes/users.ts`
+- **Files:** `packages/shared/src/models/intro.ts` (new: `CURRENT_INTRO_VERSION = 'v2'`, `KNOWN_INTRO_VERSIONS`), `apps/api/src/models/user.ts` (locate with grep; adds `seenIntroVersion: { type: String, default: null }`), `apps/api/src/routes/users.ts`, `packages/shared/src/models/index.ts` (re-export), `packages/shared/src/models/intro.ts`
 - **Do:** Add `PUT /users/intro-seen` (router-level `requireAuth`; identity from `req.auth.userId`, any body id ignored; version validated against the known list, else 400). The profile GET returns `seenIntroVersion`. Rebuild shared.
 - **Acceptance:** 401 unauthenticated; writes only the caller's document even if a body id is sent; 400 unknown version; profile GET includes the field.
 - **Verify:**
@@ -390,52 +390,74 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - `bun --cwd apps/api run test -- users`
   - `bun run check`
 
-### ☐ T3.2 Show rule and modal shell
+### ✅ T3.2 Show rule and large split modal shell
 
 - **Kind:** implementation
-- **Files:** `apps/web/src/composables/useIntro.ts`, `apps/web/src/components/Intro/WhatsNewModal.vue`, `apps/web/src/components/Intro/IntroSlide.vue`, `apps/web/src/components/Header/UserMenu.vue`, `apps/web/src/components/Dashboard/DashboardShell.vue` (mount point)
-- **Do:** `useIntro`: show only when logged in, profile loaded, `seenIntroVersion !== CURRENT_INTRO_VERSION` and localStorage `intro-seen:<userId>` unset (skip without waiting if the flag is set; no render before profile loads; delay until dashboard mounted; `storage` event closes a second tab). On dismiss write localStorage first, then PUT (retry once). `WhatsNewModal` with placeholder slides, `role="dialog"` + `aria-roledescription="carousel"`, live region, dots, prev/next, Skip, arrows, Esc = skip, focus trap, swipe, reduced-motion instant swap, full-bleed sheet under 640px. "What's new" item in `UserMenu.vue` opens it regardless of seen state without any DB write. Logged-out visitors never see it.
-- **Acceptance:** Visibility matrix correct (DB flag x localStorage x profile loading); reopen does not alter the DB; PUT failure leaves the localStorage guard in place.
+- **Files:** `apps/web/src/composables/useIntro.ts`, `apps/web/src/components/Intro/WhatsNewModal.vue`, `apps/web/src/components/Intro/IntroSlide.vue` (video stage with placeholder media), `apps/web/src/components/Intro/FeatureList.vue`, `apps/web/src/components/Intro/slides.ts` (10 placeholder entries, final in T3.6), `apps/web/src/components/Header/UserMenu.vue`, `apps/web/src/components/Dashboard/DashboardShell.vue` (mount point)
+- **Do:** `useIntro`: show only when logged in, profile loaded, `seenIntroVersion !== CURRENT_INTRO_VERSION` and localStorage `intro-seen:<userId>` unset (skip without waiting if the flag is set; no render before profile loads; delay until dashboard mounted; `storage` event closes a second tab). On dismiss write localStorage first, then PUT (retry once). `WhatsNewModal`: LARGE split modal about 1040x620 (max-width clamps to the viewport). Left about 62% is the video stage (`IntroSlide.vue`); right column holds `FeatureList.vue` (all 10 slides, clickable jump-to, active item highlighted), the active slide title and one-line description, and a footer with "n / 10" and prev/next chevron ICON buttons (clear contrast, `aria-label`s "Previous feature"/"Next feature"). Header shows "What's new in V2" plus Skip/close. Only the current slide is visible (no adjacent slide bleed at the edges). The last slide shows "Show me around" (starts the tour, T3.4) and "Done"; both mark seen. Keep a11y: `role="dialog"` + `aria-roledescription="carousel"`, live region, arrow keys, Esc = skip, focus trap, swipe, reduced-motion instant swap. Under 640px it becomes a full-screen sheet: media on top, list collapses to dots/segmented progress, icon buttons stay. "What's new" item in `UserMenu.vue` opens it regardless of seen state without any DB write. Logged-out visitors never see it.
+- **Acceptance:** Visibility matrix correct (DB flag x localStorage x profile loading); reopen does not alter the DB; PUT failure leaves the localStorage guard in place; at 1440x900 the modal is about 1040x620 with a video stage and a list of 10 items; prev/next are icon buttons with aria-labels and no neighbouring slide is visible; at 375px it is a full-screen sheet.
 - **Verify:**
-  - `bun --cwd apps/web run test -- useIntro WhatsNewModal`
+  - `bun --cwd apps/web run test -- useIntro WhatsNewModal FeatureList`
   - `bun run check`
   - `cd apps/web && bunx playwright test e2e/qa/v2-intro.spec.ts --repeat-each=2`
 
-### ☐ T3.3 Tour anchors (`data-tour` attributes)
+### ✅ T3.3 Tour anchors (`data-tour` attributes)
 
 - **Kind:** implementation
-- **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelPickerTrigger.vue`, `apps/web/src/components/Header/CreditsChip.vue`, `apps/web/src/components/Header/UserMenu.vue`, `apps/web/src/components/Dashboard/Composer/PromptBar.vue`, `apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue`
-- **Do:** Add stable `data-tour` attributes on the owning root elements: `model-picker`, `credits`, `user-menu`, `prompt-bar`, `ref-image` (the mic's `data-tour="mic"` already exists from T2.3). T3.4's `tour.ts` keeps these names in one exported constant map that its steps use. No behaviour change.
-- **Acceptance:** All six anchors (`model-picker`, `prompt-bar`, `mic`, `ref-image`, `credits`, `user-menu`) are present in the rendered dashboard; existing component tests still pass.
+- **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelPickerTrigger.vue`, `apps/web/src/components/Dashboard/Sidebar/StylePicker.vue`, `apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.vue`, `apps/web/src/components/Dashboard/Composer/PromptBar.vue`, `apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.vue`, `apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue`, `apps/web/src/components/Header/NavTabs.vue`
+- **Do:** Add stable `data-tour` attributes as string literals in the templates (static `data-tour="..."`; in the `NavTabs.vue` `v-for`, a conditional bound literal on the Explore tab only) on the owning root elements: `model-picker` (ModelPickerTrigger), `style-picker` (StylePicker), `sizes` (AspectRatioPicker), `prompt-bar` (PromptBar), `prompt-tools` (the wand/prompt-tools trigger in PromptAiMenu), `ref-image` (ReferenceImageControl), `explore-tab` (the Explore tab in NavTabs). The mic's `data-tour="mic"` in `VoiceInput/MicButton.vue` already exists from T2.3. T3.4's `tour.ts` keeps these names in one exported constant map used for its step selectors (templates keep the literals so the grep check below holds). No behaviour change.
+- **Acceptance:** All 8 anchors (`model-picker`, `style-picker`, `sizes`, `prompt-bar`, `mic`, `prompt-tools`, `ref-image`, `explore-tab`) are present in the rendered dashboard; existing component tests still pass.
 - **Verify:**
-  - `grep -rn 'data-tour=' apps/web/src/components | wc -l` is at least 6
-  - `bun --cwd apps/web run test -- ModelPickerTrigger CreditsChip UserMenu PromptBar ReferenceImageControl`
+  - `for a in model-picker style-picker sizes prompt-bar mic prompt-tools ref-image explore-tab; do grep -rh --include='*.vue' 'data-tour' apps/web/src/components | grep -q -- "$a" || echo "missing $a"; done` prints nothing
+  - `bun --cwd apps/web run test -- ModelPickerTrigger StylePicker AspectRatioPicker PromptBar PromptAiMenu ReferenceImageControl NavTabs`
   - `bun run check`
 
-### ☐ T3.4 Driver.js tour
+### ✅ T3.4 Driver.js tour with custom token-styled popover
 
 - **Kind:** implementation
-- **Files:** `apps/web/src/components/Intro/tour.ts`, `apps/web/src/components/Intro/WhatsNewModal.vue`, `apps/web/package.json`
-- **Do:** Add `driver.js` (MIT; listed in SPEC dependencies). Steps target the `data-tour` anchors from T3.3 and T2.3 (model picker, prompt bar, mic, ref-image upload, credits chip, user menu). Filter out missing/hidden elements before start; if fewer than 2 remain, skip with a toast. Semantic-token popover, `animate: false` under reduced motion. "Show me around" starts the tour; both it and "Done" mark seen. Ready-checks for lazily rendered elements.
-- **Acceptance:** Step filtering correct on desktop and mobile; fewer-than-2 case toasts and skips; both final buttons mark seen.
+- **Files:** `apps/web/src/components/Intro/tour.ts`, `apps/web/src/components/Intro/TourPopover.vue` (custom popover, mounted via `onPopoverRender`), `apps/web/src/components/Intro/WhatsNewModal.vue`, `apps/web/package.json`
+- **Do:** Add `driver.js` (MIT; listed in SPEC dependencies; react-joyride is React-only and rejected). Steps target the T3.3 anchors (model picker, style picker, sizes, prompt bar + mic, prompt tools, ref-image upload, Explore tab). Render a CUSTOM popover through driver.js popover hooks (`onPopoverRender`) using semantic tokens: step counter "x / y", progress bar, prev/next icon buttons (aria-labelled), Skip and close. Filter out missing/hidden elements before start; if fewer than 2 remain, skip with a toast. `animate: false` under reduced motion. "Show me around" starts the tour; both it and "Done" mark seen. Ready-checks for lazily rendered elements. Logic stays in `tour.ts`.
+- **Acceptance:** Step filtering correct on desktop and mobile; fewer-than-2 case toasts and skips; popover shows "x / y", a progress bar, icon prev/next, Skip and close; both final buttons mark seen.
 - **Verify:**
   - `bun install`
   - `bun --cwd apps/web run test -- tour`
   - `bun run check`
   - `cd apps/web && bunx playwright test e2e/qa/v2-intro.spec.ts --repeat-each=2`
 
-### ☐ T3.5 Real slides and screenshots (capture last)
+### ✅ T3.5 STT polish (mic to stop, pill waveform, spinner, silence skip and two toasts)
 
 - **Kind:** implementation
-- **Files:** `apps/web/public/intro/slide-{1..6}.webp` (one generated set, 4-6 files), `apps/web/src/components/Intro/slides.ts`
-- **Do:** Finalize 4-6 slides from `git log master..feature-enhancement` (candidates: model lineup, tools, redesigned UI/themes, voice prompts, multiple reference images, payments/credits). Capture from the running app at 1440x900 (dark primary) with agent-browser (do not start the app); no emails or real user content visible. Convert to WebP (q ~80, width <= 1200, each < 150 KB) with `sharp`/`cwebp` one-off. Slides data includes `alt`, `width`, `height`; images lazy-loaded.
-- **Acceptance:** 4-6 slides; each file < 150 KB and <= 1200 wide; no CLS (dimensions set); no personal data visible; alt text on all.
+- **Files:** `apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue`, `apps/web/src/components/Dashboard/Composer/VoiceInput/Waveform.vue`, `apps/web/src/composables/useGrokRecorder.ts`, `apps/web/src/composables/useAudioLevel.ts`, `apps/web/src/composables/useVoiceInput.ts`, `packages/shared/src/models/stt.ts` (named `STT_SILENCE_LEVEL_THRESHOLD`, beside the existing STT limits)
+- **Do:** Clicking the mic turns the button in place into a STOP (square) icon button. The waveform becomes a rounded PILL vertically centred in the prompt bar with the countdown inside it. Keep the small X cancel (discards, no `/stt` call, no API cost). Pressing stop shows a spinner on the button while transcribing, then the text is appended to the prompt and the button returns to the mic icon. Silence: `useAudioLevel` tracks the peak level during recording; if it never crossed `STT_SILENCE_LEVEL_THRESHOLD`, skip the `/stt` request and `showToast` "We didn't hear anything. Try again and speak a little closer to the mic.". An empty Grok response (sound present, empty text; `empty_text` code in `useGrokRecorder.ts`) shows `showToast` "Couldn't make out any words. Try again." instead of the inline/sr-only error (the `grokErrorMessage` `empty_text` copy "No speech detected. Try speaking closer to the mic." is replaced by this text; update the existing assertions of the old copy in `useGrokRecorder.test.ts` and `e2e/qa/voice-input.spec.ts` as an intended spec change). Both leave the prompt unchanged. Existing a11y (aria-pressed, aria-live, Esc cancel, reduced-motion meter) is kept.
+- **Acceptance:**
+  - While recording, the mic button shows a stop icon (not the mic icon) and the waveform pill is visible with the countdown inside.
+  - After stop, a spinner shows until transcription ends, then the mic icon returns and text is appended.
+  - Silent recording: no `/stt` request is made and the silence toast text appears; prompt unchanged.
+  - Empty transcript response: the "Couldn't make out any words" toast appears; prompt unchanged.
+  - Cancel (X) makes no `/stt` request.
+  - The threshold is a named exported constant, not a literal.
 - **Verify:**
-  - `find apps/web/public/intro -name "*.webp" -size +150k` returns nothing
-  - `cd apps/web && bunx playwright test e2e/qa/v2-intro.spec.ts --repeat-each=2` (slides load, dimensions set)
-  - `agent-browser: review each slide screenshot for sensitive data` (visual check only; no `qa-seed.init.js` exists in this repo, so open the running app signed in as the QA user from `e2e/fixtures/qa.ts`)
+  - `bun --cwd packages/shared run build`
+  - `bun --cwd apps/web run test -- MicButton Waveform useGrokRecorder useAudioLevel useVoiceInput`
+  - `bun run check`
+  - `cd apps/web && bunx playwright test e2e/qa/voice-input.spec.ts --repeat-each=2`
 
-### ☐ T3.6 Unit: intro persistence API
+### ✅ T3.6 Feature video loops and posters for 10 slides (capture last)
+
+- **Kind:** implementation
+- **Files:** `apps/web/public/intro/slide-{1..10}.webm`, `apps/web/public/intro/slide-{1..10}.mp4`, `apps/web/public/intro/slide-{1..10}.webp` (posters), `apps/web/src/components/Intro/slides.ts`, `apps/web/src/components/Intro/IntroSlide.vue`, `apps/web/public/intro/slide-1.webm`, `apps/web/public/intro/slide-1.mp4`, `apps/web/public/intro/slide-1.webp`, `apps/web/public/intro/slide-2.webm`, `apps/web/public/intro/slide-2.mp4`, `apps/web/public/intro/slide-2.webp`, `apps/web/public/intro/slide-3.webm`, `apps/web/public/intro/slide-3.mp4`, `apps/web/public/intro/slide-3.webp`, `apps/web/public/intro/slide-4.webm`, `apps/web/public/intro/slide-4.mp4`, `apps/web/public/intro/slide-4.webp`, `apps/web/public/intro/slide-5.webm`, `apps/web/public/intro/slide-5.mp4`, `apps/web/public/intro/slide-5.webp`, `apps/web/public/intro/slide-6.webm`, `apps/web/public/intro/slide-6.mp4`, `apps/web/public/intro/slide-6.webp`, `apps/web/public/intro/slide-7.webm`, `apps/web/public/intro/slide-7.mp4`, `apps/web/public/intro/slide-7.webp`, `apps/web/public/intro/slide-8.webm`, `apps/web/public/intro/slide-8.mp4`, `apps/web/public/intro/slide-8.webp`, `apps/web/public/intro/slide-9.webm`, `apps/web/public/intro/slide-9.mp4`, `apps/web/public/intro/slide-9.webp`, `apps/web/public/intro/slide-10.webm`, `apps/web/public/intro/slide-10.mp4`, `apps/web/public/intro/slide-10.webp`
+- **Do:** Capture AFTER T3.5 so the voice clip shows the new mic. Slides in order: 1 New models, 2 Style picker, 3 More sizes, 4 New dashboard, 5 Voice dictation, 6 Improve / Generate / Save prompts, 7 Explore tab and page, 8 Tools (Upscale, Colorize), 9 Reference images, 10 Remove background. Record 10 clips of 4-6s from the running app with agent-browser (do not start the app; sign in as the QA user from `e2e/fixtures/qa.ts`), dark theme, tightly cropped to the one feature shown, no personal data. Encode one-off with ffmpeg to WebM + MP4 plus a WebP poster per slide. Budgets: each clip <= 400 KB, each poster < 100 KB. `slides.ts` entries carry `title`, `description`, video sources, `poster`, `alt`, `width`, `height`. `IntroSlide.vue` renders `<video muted autoplay loop playsinline>` with WebM then MP4 sources and the poster; lazy-load only the current and next slide and pause inactive slides; under reduced motion show the poster only with no autoplay.
+- **Acceptance:** Exactly 10 slides in the order above; each clip is 4-6s, <= 400 KB; each poster < 100 KB; no CLS (dimensions set); alt text on all; no personal data visible; reduced motion shows posters only; inactive slides are not loaded or playing.
+- **Verify:**
+  - `find apps/web/public/intro -name "*.webm" -size +400k` returns nothing
+  - `find apps/web/public/intro -name "*.mp4" -size +400k` returns nothing
+  - `find apps/web/public/intro -name "*.webp" -size +100k` returns nothing
+  - `ls apps/web/public/intro | wc -l` is 30
+  - `for f in apps/web/public/intro/*.webm apps/web/public/intro/*.mp4; do ffprobe -v error -show_entries format=duration -of csv=p=0 "$f" | awk -v f="$f" '$1<4 || $1>6 {print "out of range", f, $1}'; done` prints nothing
+  - `cd apps/web && bunx playwright test e2e/qa/v2-intro.spec.ts --repeat-each=2` (media attributes, lazy-load, reduced-motion poster)
+  - `agent-browser: review each clip poster for sensitive data` (visual check only; no `qa-seed.init.js` exists in this repo, so use the running app signed in as the QA user from `e2e/fixtures/qa.ts`)
+
+### ✅ T3.7 Unit: intro persistence API
 
 - **Kind:** unit
 - **Files:** `apps/api/src/routes/users.ts`, `apps/api/src/models/user.ts`
@@ -443,50 +465,76 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 - **Acceptance:** Every file >= 90% on all four metrics (repo threshold), target > 95%.
 - **Verify:** `cd apps/api && bunx vitest run src/routes/users.test.ts --coverage --coverage.include=src/routes/users.ts --coverage.include=src/models/user.ts --coverage.reporter=text`
 
-### ☐ T3.7 Unit: intro logic
+### ✅ T3.8 Unit: intro logic (useIntro, tour.ts, slides.ts)
 
 - **Kind:** unit
-- **Files:** `apps/web/src/composables/useIntro.ts`, `apps/web/src/components/Intro/tour.ts`, `apps/web/src/components/Intro/slides.ts`
-- **Do:** Matrix of DB flag x localStorage x profile-loading; PUT retry once then localStorage guard; storage-event second tab; tour step filtering and <2 skip; slide data shape (alt, width, height, cap 6).
+- **Files:** `apps/web/src/composables/useIntro.ts`, `apps/web/src/components/Intro/tour.ts`, `apps/web/src/components/Intro/slides.ts`, `apps/web/src/components/Intro/tour.test.ts`, `apps/web/src/components/Intro/slides.test.ts`, `apps/web/src/composables/useIntro.test.ts`
+- **Do:** Matrix of DB flag x localStorage x profile-loading; PUT retry once then localStorage guard; storage-event second tab; tour step filtering over the 8 anchors, <2 skip toast, `animate: false` under reduced motion, popover step counter and progress value; slide data shape (exactly 10, in order, with title, description, video sources, poster, alt, width, height).
 - **Acceptance:** Every file >= 90% on all four metrics (repo threshold), target > 95%.
 - **Verify:** `cd apps/web && bunx vitest run src/composables/useIntro.test.ts src/components/Intro --coverage --coverage.include=src/composables/useIntro.ts --coverage.include=src/components/Intro/tour.ts --coverage.include=src/components/Intro/slides.ts --coverage.reporter=text`
 
-### ☐ T3.8 Unit: intro components
+### ✅ T3.9 Unit: intro components
 
 - **Kind:** unit
-- **Files:** `apps/web/src/components/Intro/WhatsNewModal.vue`, `apps/web/src/components/Intro/IntroSlide.vue`, `apps/web/src/components/Header/UserMenu.vue`
-- **Do:** Carousel semantics, keyboard (arrows, Esc, Tab trap), dots/prev/next/Skip, final-slide buttons, reopen from the menu without a DB write, reduced-motion path.
+- **Files:** `apps/web/src/components/Intro/WhatsNewModal.vue`, `apps/web/src/components/Intro/IntroSlide.vue`, `apps/web/src/components/Intro/FeatureList.vue`, `apps/web/src/components/Intro/TourPopover.vue`, `apps/web/src/components/Header/UserMenu.vue`, `apps/web/src/components/Intro/WhatsNewModal.test.ts`, `apps/web/src/components/Intro/IntroSlide.test.ts`, `apps/web/src/components/Intro/FeatureList.test.ts`, `apps/web/src/components/Intro/TourPopover.test.ts`
+- **Do:** Carousel semantics, keyboard (arrows, Esc, Tab trap), feature-list jump-to and active state, icon prev/next with aria-labels and "n / 10", Skip/close, final-slide buttons, video attributes (muted, loop, playsinline, poster), lazy-load of current+next only, reduced-motion poster-only path, tour popover rendering, reopen from the menu without a DB write.
 - **Acceptance:** Every file >= 90% on all four metrics (repo threshold), target > 95%.
-- **Verify:** `cd apps/web && bunx vitest run src/components/Intro src/components/Header/UserMenu.test.ts --coverage --coverage.include=src/components/Intro/WhatsNewModal.vue --coverage.include=src/components/Intro/IntroSlide.vue --coverage.include=src/components/Header/UserMenu.vue --coverage.reporter=text`
+- **Verify:** `cd apps/web && bunx vitest run src/components/Intro src/components/Header/UserMenu.test.ts --coverage --coverage.include=src/components/Intro/WhatsNewModal.vue --coverage.include=src/components/Intro/IntroSlide.vue --coverage.include=src/components/Intro/FeatureList.vue --coverage.include=src/components/Intro/TourPopover.vue --coverage.include=src/components/Header/UserMenu.vue --coverage.reporter=text`
 
-### ☐ T3.9 E2E: intro once-only and tour
+### ✅ T3.10 Unit: STT polish (MicButton, Waveform, useGrokRecorder, useAudioLevel/silence)
+
+- **Kind:** unit
+- **Files:** `apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue`, `apps/web/src/components/Dashboard/Composer/VoiceInput/Waveform.vue`, `apps/web/src/composables/useGrokRecorder.ts`, `apps/web/src/composables/useAudioLevel.ts`
+- **Do:** Stop icon while recording, spinner while transcribing, pill waveform with countdown, cancel path; silence detection around `STT_SILENCE_LEVEL_THRESHOLD` (below skips `/stt` and toasts A, at or above proceeds); empty-text response toasts B; prompt unchanged in both; mocked `getUserMedia`, `MediaRecorder`, AudioContext.
+- **Acceptance:** Every file >= 90% on all four metrics (repo threshold), target > 95%.
+- **Verify:** `cd apps/web && bunx vitest run src/components/Dashboard/Composer/VoiceInput src/composables/useGrokRecorder.test.ts src/composables/useAudioLevel.test.ts --coverage --coverage.include=src/components/Dashboard/Composer/VoiceInput/MicButton.vue --coverage.include=src/components/Dashboard/Composer/VoiceInput/Waveform.vue --coverage.include=src/composables/useGrokRecorder.ts --coverage.include=src/composables/useAudioLevel.ts --coverage.reporter=text`
+
+### ✅ T3.11 E2E: intro once-only, layout, tour
 
 - **Kind:** e2e
 - **Scenarios:**
   - @critical New account (seed `seenIntroVersion: null`) sees the modal once; after dismiss and reload it does not show.
   - @critical Account with `seenIntroVersion: 'v2'` never sees it.
+  - @critical The feature list shows exactly 10 items; clicking an item jumps to that slide and updates the title and "n / 10".
+  - @high Icon prev/next (by aria-label) steps through slides with no neighbouring slide visible; arrow keys and Esc skip also work.
   - @high "What's new" in the user menu reopens it and does not call the intro-seen PUT.
-  - @high "Show me around" starts the tour with visible steps and marks seen; "Done" marks seen.
+  - @high "Show me around" starts the tour with visible steps (custom popover with "x / y" and progress) and marks seen; "Done" marks seen.
   - @high PUT failure: localStorage still prevents a repeat on reload.
-  - @medium Keyboard (arrows, Esc skip), 375px full-bleed sheet, logged-out visitor sees nothing.
+  - @medium Layout at 1440x900: modal box is about 1040x620 (bounding box within tolerance) and the video stage is about 62% of its width.
+  - @medium Reduced motion: slides show the poster and no video autoplays.
+  - @medium 375px renders a full-screen sheet; logged-out visitor sees nothing.
 - **Acceptance:** Every listed scenario passes with `--repeat-each=3`, no flakes, no test weakened to pass.
 - **Spec:** `e2e/qa/v2-intro.spec.ts` (seed data for the profile flag included)
-- **Files:** none expected
+- **Files:** `apps/web/e2e/qa/v2-intro.spec.ts`
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/v2-intro.spec.ts --repeat-each=3`
 
-### ☐ T3.10 Gate: Phase 3
+### ✅ T3.12 E2E: STT polish
+
+- **Kind:** e2e
+- **Scenarios:**
+  - @critical Clicking the mic replaces it with a stop icon and shows the waveform pill; stop shows a spinner until the mocked `**/stt` resolves, then the mic icon returns and text is appended.
+  - @critical Silent mocked audio: no request to `**/stt` is made and the toast "We didn't hear anything. Try again and speak a little closer to the mic." is visible; prompt unchanged.
+  - @high Mocked `**/stt` returns empty text with audible input: toast "Couldn't make out any words. Try again." is visible; prompt unchanged.
+  - @high Cancel (X) while recording makes no `**/stt` request.
+- **Acceptance:** Every listed scenario passes with `--repeat-each=3`, no flakes, no test weakened to pass; existing Phase 2 scenarios in the spec still pass (the Phase 2 empty-text scenario now expects toast B, per STT-POLISH-5).
+- **Spec:** `e2e/qa/voice-input.spec.ts` (extend the existing spec)
+- **Files:** `apps/web/e2e/support/voiceMocks.ts` (add a silent analyser mode; the default mock level stays audible so Phase 2 scenarios still reach `**/stt`)
+- **Verify:** `cd apps/web && bunx playwright test e2e/qa/voice-input.spec.ts --repeat-each=3`
+
+### ✅ T3.13 Gate: Phase 3
 
 - **Kind:** gate
 - **Files:** none
 - **Do:** Run all evidence; regression for Phases 1-2. Cross-device "other browser sees nothing" needs the user to confirm with a real second browser at the checkpoint.
-- **Acceptance:** All Phase 3 AC met; slides < 150 KB; intro once-only per account (DB + localStorage) proven by QA spec.
+- **Acceptance:** All Phase 3 AC met; clips <= 400 KB and posters < 100 KB; intro once-only per account (DB + localStorage) proven by QA spec; STT polish proven by the extended voice spec.
 - **Verify:**
   - `bun run test` and `bun --cwd apps/api run test`
   - `bun run verify`
   - `bun run build:web`
+  - `find apps/web/public/intro \( -name "*.webm" -o -name "*.mp4" \) -size +400k` and `find apps/web/public/intro -name "*.webp" -size +100k` return nothing
   - `cd apps/web && bunx playwright test e2e/qa/v2-intro.spec.ts e2e/qa/voice-input.spec.ts e2e/qa/mods-reference-image.spec.ts --repeat-each=2`
 
-🔶 **Checkpoint 3**: Intro shows once per account, reopens from the menu, tour degrades gracefully; screenshots final.
+🔶 **Checkpoint 3**: Intro shows once per account in the large split modal with 10 video-loop slides, reopens from the menu, tour degrades gracefully, mic polish (stop icon, pill waveform, spinner, silence and empty toasts) verified, size budgets met; clips final.
 
 ---
 
@@ -625,8 +673,8 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 - **Files:** none
 - **Do:** Verify every SPEC success criterion has passing evidence; list items needing the user (real generation with reference, real mic, second-browser intro check, Gmail test send, deploy-then-send ordering).
 - **Acceptance:**
-  - Setup and gates green: T0.1, T0.2, T1.16, T2.10, T3.10, T4.11.
-  - Track evidence: MOD via T1.11-T1.15; STT via T2.6-T2.9; INTRO via T3.6-T3.9; MAIL via T4.7-T4.10.
+  - Setup and gates green: T0.1, T0.2, T1.16, T2.10, T3.13, T4.11.
+  - Track evidence: MOD via T1.11-T1.15; STT via T2.6-T2.9; INTRO and STT polish via T3.7-T3.12; MAIL via T4.7-T4.10.
   - No open SPEC_ISSUE; MOD-2 grep clean; no secrets or `.env` in `git status`; nothing sent to real recipients.
 - **Verify:**
   - `bun --cwd packages/shared run build && bun run test && bun --cwd apps/api run test && bun --cwd packages/email run test`

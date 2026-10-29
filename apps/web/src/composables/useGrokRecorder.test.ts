@@ -12,7 +12,12 @@ vi.mock('@/stores/auth', () => ({
   useAuthStore: () => ({ getToken }),
 }));
 
-import { appendPromptText, grokErrorMessage, useGrokRecorder } from '@/composables/useGrokRecorder';
+import {
+  appendPromptText,
+  grokErrorMessage,
+  STT_SILENCE_MESSAGE,
+  useGrokRecorder,
+} from '@/composables/useGrokRecorder';
 
 describe('grokErrorMessage', () => {
   it('maps every STT-8 error code to a user-facing message', () => {
@@ -23,7 +28,7 @@ describe('grokErrorMessage', () => {
       'No microphone found. Connect a mic and try again.',
     );
     expect(grokErrorMessage({ code: 'empty_text' })).toBe(
-      'No speech detected. Try speaking closer to the mic.',
+      "Couldn't make out any words. Try again.",
     );
     expect(grokErrorMessage({ code: 'rate_limit', retryAfterMinutes: 3 })).toBe(
       'Too many voice requests. Try again in 3 minutes.',
@@ -55,6 +60,8 @@ describe('useGrokRecorder', () => {
   const onAppend = vi.fn();
   const onError = vi.fn();
   const onCountdown = vi.fn();
+  const onNotice = vi.fn();
+  const hasSpeech = vi.fn(() => true);
   let media: ReturnType<typeof installMediaRecorder>;
 
   beforeEach(() => {
@@ -72,7 +79,7 @@ describe('useGrokRecorder', () => {
   });
 
   function createRecorder() {
-    return useGrokRecorder({ onAppend, onError, onCountdown });
+    return useGrokRecorder({ onAppend, onError, onCountdown, onNotice, hasSpeech });
   }
 
   it('blocks concurrent start while recording or transcribing', async () => {
@@ -195,7 +202,21 @@ describe('useGrokRecorder', () => {
     );
     const recorder = createRecorder();
     await stopWithBlob(recorder, media);
-    expect(onError).toHaveBeenCalledWith('No speech detected. Try speaking closer to the mic.');
+    expect(onNotice).toHaveBeenCalledWith("Couldn't make out any words. Try again.");
+    expect(onError).not.toHaveBeenCalled();
+    expect(onAppend).not.toHaveBeenCalled();
+  });
+
+  it('skips the /stt request and notifies when no speech was heard', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    hasSpeech.mockReturnValueOnce(false);
+    const recorder = createRecorder();
+    await stopWithBlob(recorder, media);
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(onNotice).toHaveBeenCalledWith(STT_SILENCE_MESSAGE);
+    expect(onAppend).not.toHaveBeenCalled();
+    expect(recorder.isTranscribing.value).toBe(false);
   });
 
   it('surfaces rate limit, upstream, and network failures', async () => {

@@ -88,6 +88,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
         type="button"
         role="tab"
         :data-testid="`nav-tab-${tabItem.name.toLowerCase()}`"
+        :data-tour="tabItem.name === 'Explore' ? 'explore-tab' : undefined"
         :aria-selected="activeTabId === tabItem.id"
         :tabindex="activeTabId === tabItem.id ? 0 : -1"
         class="nav-tabs__tab tw-relative tw-z-[1] tw-min-h-11 tw-flex-1 tw-rounded-full tw-border-0 tw-bg-transparent tw-px-3 tw-text-sm tw-font-medium tw-text-ink-muted tw-transition-colors tw-duration-fast hover:tw-text-ink-primary focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"

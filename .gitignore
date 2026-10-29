@@ -55,3 +55,6 @@ infra/.env.staging
 apps/web/playwright/.auth/
 apps/web/test-results/
 apps/web/playwright-report/
+
+# QA evidence screenshots written by e2e/qa specs
+agent_docs/qa/

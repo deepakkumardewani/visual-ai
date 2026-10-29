@@ -9,6 +9,10 @@ const COUNTDOWN_FROM_SECONDS = 10;
 const PREFERRED_MIME = 'audio/webm;codecs=opus';
 const FALLBACK_MIME = 'audio/mp4';
 
+export const STT_SILENCE_MESSAGE =
+  "We didn't hear anything. Try again and speak a little closer to the mic.";
+export const STT_EMPTY_TEXT_MESSAGE = "Couldn't make out any words. Try again.";
+
 export type GrokRecorderErrorCode =
   | 'permission_denied'
   | 'no_device'
@@ -66,7 +70,7 @@ export function grokErrorMessage(error: GrokRecorderError): string {
     case 'no_device':
       return 'No microphone found. Connect a mic and try again.';
     case 'empty_text':
-      return 'No speech detected. Try speaking closer to the mic.';
+      return STT_EMPTY_TEXT_MESSAGE;
     case 'rate_limit':
       return `Too many voice requests. Try again in ${error.retryAfterMinutes ?? 10} minutes.`;
     case 'upstream':
@@ -82,6 +86,10 @@ export function useGrokRecorder(options: {
   onAppend: (text: string) => void;
   onError: (message: string) => void;
   onCountdown: (secondsLeft: number | null) => void;
+  /** Toast-only notices (silence, empty transcript): the prompt stays unchanged and nothing is an error. */
+  onNotice: (message: string) => void;
+  /** Checked when a clip ends; false skips the /stt request. */
+  hasSpeech: () => boolean;
 }) {
   const isRecording = ref(false);
   const isTranscribing = ref(false);
@@ -135,7 +143,7 @@ export function useGrokRecorder(options: {
       const payload = (await response.json()) as { text?: string };
       const text = typeof payload.text === 'string' ? payload.text.trim() : '';
       if (!text) {
-        options.onError(grokErrorMessage({ code: 'empty_text' }));
+        options.onNotice(grokErrorMessage({ code: 'empty_text' }));
         return;
       }
       options.onAppend(text);
@@ -199,9 +207,14 @@ export function useGrokRecorder(options: {
       chunks = [];
       mediaRecorder = null;
       isRecording.value = false;
-      if (blob.size > 0) {
-        void upload(blob, mimeType);
+      if (blob.size === 0) {
+        return;
       }
+      if (!options.hasSpeech()) {
+        options.onNotice(STT_SILENCE_MESSAGE);
+        return;
+      }
+      void upload(blob, mimeType);
     });
 
     mediaRecorder.start();
