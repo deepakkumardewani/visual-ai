@@ -40,12 +40,13 @@ Package manager is **bun** (`bun.lock`, `packageManager: bun@1.3.6`), toolchain 
 
 ```
 packages/shared/src/models/credits.ts        constants
+packages/shared/src/models/intro.ts, stt.ts  CURRENT_INTRO_VERSION; STT limits + STT_SILENCE_LEVEL_THRESHOLD
 apps/web/src/components/Dashboard/Composer/  ReferenceImageControl.vue, PromptBar.vue, ComposerTextarea.vue, VoiceInput/*
 apps/web/src/composables/                    useVoiceInput.ts, useWebSpeech.ts, useGrokRecorder.ts, useAudioLevel.ts, useIntro.ts
-apps/web/src/components/Intro/               WhatsNewModal.vue, IntroSlide.vue, tour.ts
+apps/web/src/components/Intro/               WhatsNewModal.vue, IntroSlide.vue (video stage: video + poster), FeatureList.vue, slides.ts (the 10 slides), tour.ts, TourPopover.vue (custom driver.js popover)
 apps/web/src/components/Header/UserMenu.vue  "What's new" item
 apps/web/src/components/Dialogs/ReferralOfferDialog.vue (redesign)
-apps/web/public/intro/*.webp                 slide screenshots
+apps/web/public/intro/                       per-slide video loops (*.webm + *.mp4) and WebP posters
 apps/api/src/routes/stt.ts                   POST /stt
 apps/web/src/stores/aside.ts, generate.ts   referenceImages[] + trim/toast, send URLs
 apps/api/src/routes/generate.ts, services/generation-service.ts, lib/model-input.ts  reference image wiring
@@ -69,7 +70,7 @@ export const STT_RATE_LIMIT = { windowMs: 10 * 60 * 1000, max: 20 } as const;
 
 ## Testing Strategy
 
-Vitest unit/component tests co-located (`*.test.ts`) for every new module; API route tests with mocked xAI/Resend/Cloudinary; Playwright e2e specs in the seeded QA harness (`apps/web/e2e/qa/*.spec.ts`, fixtures `apps/web/e2e/fixtures/qa.ts`) for: ref-image flow, referral dialog/copy/favicon, mic UI with mocked `getUserMedia`/`SpeechRecognition`, intro once-only, email unsubscribe. Manual verification with agent-browser for visuals (dark and light themes, mobile width 375). Email: render snapshot test + manual Gmail web/mobile test send + dark-mode check.
+Vitest unit/component tests co-located (`*.test.ts`) for every new module; API route tests with mocked xAI/Resend/Cloudinary; Playwright e2e specs in the seeded QA harness (`apps/web/e2e/qa/*.spec.ts`, fixtures `apps/web/e2e/fixtures/qa.ts`) for: ref-image flow, referral dialog/copy/favicon, mic UI with mocked `getUserMedia`/`SpeechRecognition` (including the STT-POLISH stop icon, spinner, silence toast and empty-response toast), intro once-only, intro layout and tour, email unsubscribe. Unit tests for the intro logic/components and the STT polish (MicButton, Waveform, useGrokRecorder, useAudioLevel silence detection). Manual verification with agent-browser for visuals (dark and light themes, mobile width 375). Email: render snapshot test + manual Gmail web/mobile test send + dark-mode check.
 
 ## Boundaries
 
@@ -139,15 +140,21 @@ Reference (source doc: `/Users/deepakdewani1/Desktop/grok-stt.md`; re-read befor
 
 - INTRO-1 Data: add to the User schema `seenIntroVersion: { type: String, default: null }`. Constant `CURRENT_INTRO_VERSION = 'v2'` in shared. Endpoint `PUT /users/intro-seen` (router-level requireAuth; identity from `req.auth.userId`, matching existing `/users/username` style; any client-supplied id is ignored) sets `seenIntroVersion` to the posted version (validated against the known list, else 400). The existing profile GET returns the field.
 - INTRO-2 Show rule: logged-in user, profile loaded, `seenIntroVersion !== CURRENT_INTRO_VERSION`, and localStorage key `intro-seen:<userId>` not equal to the version. On dismissal/completion: write localStorage immediately, then fire the PUT (retry once on failure; localStorage alone prevents repeat on this device). Do not render before the profile loads (no flash); if the localStorage flag is set skip without waiting. Never shows on another device after the DB write succeeds.
-- INTRO-3 Modal carousel: 4-6 slides (WebP screenshot of the real UI, headline, one-line benefit); dots, prev/next, Skip; keyboard (arrows, Esc = skip, Tab trapped), swipe on touch, focus management, `role="dialog"` + carousel semantics (`aria-roledescription="carousel"`, live region for slide change). Reduced motion: crossfade replaced by instant swap.
-- INTRO-4 Candidate slides (finalize from `git log master..feature-enhancement` and code at implementation): new model lineup; tools (remove-bg, revive, colorize, upscale); redesigned UI/themes; voice prompts; multiple reference images; payments/credits. Cap 6.
+- INTRO-3 Modal (desktop): large split modal, about 1040x620 (max-width clamps to the viewport). Left about 62%: video stage (`IntroSlide.vue`). Right column: clickable feature list (`FeatureList.vue`, all slides, active highlighted, click jumps to that slide), the active slide's title and one-line description, and a footer with an "n / 10" counter and prev/next ICON buttons (chevrons, clear contrast, `aria-label`s). Header: "What's new in V2" plus Skip/close. No slide bleed (the next slide is never visible at the edge). Keep existing a11y: `role="dialog"` + `aria-roledescription="carousel"`, live region for slide change, arrows, Esc = skip, Tab trapped, swipe on touch, focus management. Reduced motion: crossfade replaced by instant swap. Colors via semantic tokens only.
+- INTRO-4 Slides: exactly 10, in this order (cap 10; deliberate change: New dashboard moved to first, New models second): 1 New dashboard (Create / Explore / Assets tabs, "Your creations" feed grouped by date, Remix); 2 New models (featured model picker: Z-Image Turbo, Seedream 4, Flux 2 Pro, Nano Banana 2/Pro, GPT Image 2, speed tiers + credit cost); 3 Style picker (visual style grid with preview thumbnails); 4 More sizes (aspect ratios incl. "More sizes": 9:16, 16:9, 4:3, 3:4, 5:4); 5 Voice dictation (mic in the prompt bar); 6 Improve / Generate / Save prompts (prompt tools menu: Improve, Random, Describe with AI, Save current prompt, Saved prompts); 7 Explore tab and page (community feed + image detail page: prompt, copy, Remix, Download, Use as reference); 8 Tools (Upscale, Remove background); 9 Reference images (upload in the prompt bar); 10 Remove background. Themes and payments/credits are dropped (no credits slide). Copy is finalized at implementation from the running UI.
 - INTRO-5 Final slide has "Show me around" (start tour) and "Done". Both mark seen.
-- INTRO-6 Tour via driver.js (MIT, add dependency): steps target stable `data-tour="..."` attributes (model picker, prompt bar, mic, ref-image upload, credits chip, user menu). Add the attributes in the owning components. Missing/hidden elements (e.g. mobile, no imageInput) are filtered out before start; if fewer than 2 steps remain, skip the tour with a toast. Popover styling uses semantic tokens; reduced motion disables animation (`animate: false`).
+- INTRO-6 Tour via driver.js (MIT, add dependency; kept over react-joyride, which is React-only). Logic stays in `tour.ts`; the popover is a custom, token-styled template (`TourPopover.vue`) with step counter "x / y", progress bar, prev/next icon buttons, Skip and close. Steps target stable `data-tour="..."` attributes: `model-picker`, `style-picker`, `sizes` (output settings), `prompt-bar`, `mic`, `prompt-tools` (magic/wand menu), `ref-image`, `explore-tab`. Add the attributes in the owning components (`mic` exists). Missing/hidden elements (e.g. mobile, no imageInput) are filtered out before start; if fewer than 2 steps remain, skip the tour with a toast. Credits chip and user menu are no longer tour steps. Popover styling uses semantic tokens; reduced motion disables animation (`animate: false`).
 - INTRO-7 Reopen: "What's new" item in `Header/UserMenu.vue` opens the modal regardless of seen state; closing it does not alter the DB.
-- INTRO-8 Screenshots: captured with agent-browser from the running app (do not start it) at 1440x900 and a mobile variant if useful, dark theme primary; optimized to WebP (quality about 80, width <= 1200, each < 150 KB), stored in `apps/web/public/intro/`, lazy-loaded with width/height set (no CLS), `alt` text provided. Sensitive data (emails, real user content) must not appear.
-- INTRO-9 Mobile: modal full-bleed sheet under 640px; tour popovers reposition; tested at 375px.
-- Success: new and existing account see it once; after dismiss, reload, other browser and new device do not; reopen from menu works; unit tests for visibility logic (matrix of DB flag x localStorage x profile-loading), PUT authz (401 unauthenticated, writes only the caller's doc even if a body id is sent, 400 unknown version), tour step filtering; e2e once-only scenario.
-- Edge cases: PUT fails offline (localStorage guards, retry on next load); user dismisses mid-profile-load; two tabs open (storage event closes the second); logged-out visitors never see it; route-guarded pages (onboarding) delay the intro until the dashboard is mounted.
+- INTRO-8 Media: one cropped real-UI video loop per slide (no GIFs, no full-page screenshots), recorded from the running app (do not start it) in dark theme, tightly cropped to the single feature shown; dark-only clips accepted (no light variants). 4-6 s, `muted autoplay loop playsinline`, WebM + MP4 fallback, plus a WebP poster. Lazy-load only the current and next slide's media; pause when not active. Reduced motion: poster only, no autoplay. Budgets: about <= 400 KB per clip, poster < 100 KB; width/height set (no CLS); `alt`/accessible label provided. No personal data (emails, real user content). Stored in `apps/web/public/intro/`. Captured last, after STT-POLISH, so the voice clip shows the new mic.
+- INTRO-9 Mobile: under 640px the modal is a full-screen sheet, video on top, feature list collapses to dots/segmented progress, prev/next icon buttons stay; tour popovers reposition; tested at 375px.
+- STT-POLISH-1 Idle/recording button: clicking the mic turns the mic button into a stop (square) icon button in place; `aria-label` and `aria-pressed` follow state.
+- STT-POLISH-2 Waveform is a rounded pill, vertically centred in the prompt bar, with the countdown (STT-6) shown inside the pill. The small X cancel stays (discards without transcribing, no API cost).
+- STT-POLISH-3 Stop: pressing stop shows a spinner on the button while transcribing; the returned text is appended to the prompt (never replacing it); the button then returns to the mic icon.
+- STT-POLISH-4 Silence: client-side detection in `useAudioLevel.ts` (tracks the peak level while recording): if the level never crossed `STT_SILENCE_LEVEL_THRESHOLD` (named constant in `packages/shared/src/models/stt.ts`, beside the existing STT limits) during recording, skip the `/stt` call and show toast A: "We didn't hear anything. Try again and speak a little closer to the mic."
+- STT-POLISH-5 Empty response: a Grok response with sound but empty text shows toast B: "Couldn't make out any words. Try again." (replaces the inline/sr-only `empty_text` error; the `grokErrorMessage` `empty_text` copy "No speech detected. Try speaking closer to the mic." is replaced by toast B's copy).
+- STT-POLISH-6 Toasts A and B use the existing `showToast`; the prompt is left unchanged in both cases. Touches `VoiceInput/{MicButton,Waveform}.vue`, `useGrokRecorder.ts`, `useAudioLevel.ts`, `useVoiceInput.ts`. Phase 2 is not reopened; this is Phase 3 task T3.5.
+- Success: new and existing account see it once; after dismiss, reload, other browser and new device do not; reopen from menu works; the modal shows 10 slides with feature-list jump, "n / 10" and icon nav, no bleed; unit tests for visibility logic (matrix of DB flag x localStorage x profile-loading), PUT authz (401 unauthenticated, writes only the caller's doc even if a body id is sent, 400 unknown version), tour step filtering, STT-POLISH (silence skips the API call, both toasts, stop/spinner states); e2e once-only scenario, layout, tour, and STT-POLISH with mocked `getUserMedia`.
+- Edge cases: PUT fails offline (localStorage guards, retry on next load); user dismisses mid-profile-load; two tabs open (storage event closes the second); logged-out visitors never see it; route-guarded pages (onboarding) delay the intro until the dashboard is mounted; autoplay blocked by the browser (poster shown); data-saver/slow network (only current + next media loaded); a recording that is silent for its whole length vs. one with brief speech.
 
 ## Track 4: V2 announcement email
 
@@ -183,13 +190,13 @@ Reference (source doc: `/Users/deepakdewani1/Desktop/grok-stt.md`; re-read befor
 - web: `driver.js` (MIT).
 - api: `resend`, `express-rate-limit`, `rate-limit-redis` (store chosen at runtime: Redis when configured, else memory, so the package is always installed).
 - email package: `@react-email/components`, `react-email`, `@react-email/render`.
-- tooling for assets: `sharp` (dev) for WebP/favicon generation, or a one-off CLI (`cwebp`); not a runtime dependency.
+- tooling for assets: `sharp` (dev) for WebP posters/favicon generation, or a one-off CLI (`cwebp`); `ffmpeg` (local CLI) for encoding WebM/MP4 clips; not runtime dependencies.
 
 ## Phasing and gates
 
 1. Phase 1 (MOD) gate: tests, typecheck, build of shared, agent-browser checks of upload, dialog (both themes), favicon.
 2. Phase 2 (STT) gate: API tests, mocked-mic component tests, manual Chrome and Firefox verification.
-3. Phase 3 (INTRO) depends on Phases 1-2 (screens show the final UI and mic). Screenshots captured last.
+3. Phase 3 (INTRO + STT polish) depends on Phases 1-2 (clips show the final UI and mic). Order: persistence, modal shell, tour anchors, tour, STT polish (T3.5), then video loops and posters captured last (T3.6, so the voice clip shows the new mic), then tests and gate.
 4. Phase 4 (MAIL) can be built in parallel with 3 but sends only after the app deploy is live.
 
 ## Open risks
@@ -204,10 +211,12 @@ Reference (source doc: `/Users/deepakdewani1/Desktop/grok-stt.md`; re-read befor
 - Favicon caching: browsers cache aggressively; use versioned query on links.
 - Intro written to DB only after PUT success; lost writes only cost a repeat on another device.
 - driver.js tour on dynamic layouts (lazy-rendered elements) may misposition; mitigate with ready-checks.
+- Intro video weight: 10 clips x 2 formats plus posters; mitigate with the per-clip budget, lazy load of current + next only, and pausing inactive slides. Clips go stale if the UI changes after capture.
+- Silence threshold may misjudge quiet mics or noisy rooms (false "didn't hear anything" or false pass); keep it a single tunable constant and cover both sides in tests.
 
 ## Out of scope
 
-Grok live WebSocket streaming; charging credits for STT; a settings page; changing existing users' balances; hosted email campaign tools (Mailchimp/Brevo UI); translation/localization; automated bounce/complaint processing; A/B testing of the email.
+Grok live WebSocket streaming; charging credits for STT; a settings page; changing existing users' balances; hosted email campaign tools (Mailchimp/Brevo UI); translation/localization; automated bounce/complaint processing; A/B testing of the email; react-joyride or GlowTour for the tour; GIFs or full-page screenshots as intro media; light-theme intro clip variants; a credits/payments intro slide.
 
 ## Resolved decisions
 

@@ -42,9 +42,10 @@ PLAN tasks are coarse; TASKS.md splits them into ≤5-file tasks and adds Unit/E
 | 2.5 e2e, P2 gate | T2.6-T2.8 Unit, T2.9 E2E, T2.10 Gate |
 | 3.1 intro-seen | T3.1 |
 | 3.2 show rule + shell | T3.2 |
-| 3.3 tour | T3.3 (data-tour anchors), T3.4 (driver.js tour) |
-| 3.4 slides | T3.5 |
-| 3.5 e2e, P3 gate | T3.6-T3.8 Unit, T3.9 E2E, T3.10 Gate |
+| 3.3 tour | T3.3 (data-tour anchors), T3.4 (driver.js tour, custom popover) |
+| 3.4 STT polish | T3.5 |
+| 3.5 video loops (last) | T3.6 |
+| 3.6 e2e, P3 tests / gate | T3.7-T3.10 Unit, T3.11-T3.12 E2E, T3.13 Gate |
 | 4.1 scaffold | T4.1 |
 | 4.2 unsubscribe | T4.2 (token, User fields, env), T4.3 (public route) |
 | 4.3 script core | T4.4 |
@@ -59,8 +60,8 @@ PLAN tasks are coarse; TASKS.md splits them into ≤5-file tasks and adds Unit/E
 credits constants (T1.1) --> web copy (T1.2) --> static copy/tests (T1.3) --> referral dialog (T1.10)
 shared limits + upload endpoint (T1.4) --> registry flag/input shape (T1.5) --> route/queue/service (T1.6) --> stores incl. trim (T1.7) --> prompt bar UI (T1.8)
 favicon (T1.9) independent
-P1 (UI final) --> P2 (mic, T2.3 adds data-tour="mic") --> P3 anchors (T3.3) --> tour (T3.4) --> screenshots (T3.5, last)
-P4: T4.1 scaffold, T4.2-T4.3 unsubscribe, T4.4-T4.5 script need only P1; T4.6 template needs P3 copy/screenshots
+P1 (UI final) --> P2 (mic, T2.3 adds data-tour="mic") --> P3 anchors (T3.3) --> tour (T3.4) --> STT polish (T3.5) --> video loops (T3.6, last)
+P4: T4.1 scaffold, T4.2-T4.3 unsubscribe, T4.4-T4.5 script need only P1; T4.6 template needs P3 copy/media (T3.6)
 ```
 
 Parallel-safe: T1.9 (favicon) with anything; T4.1-T4.5 with P2/P3. Execution order stays Phase 0 → 1 → 2 → 3 → 4 (user-confirmed).
@@ -195,50 +196,59 @@ Parallel-safe: T1.9 (favicon) with anything; T4.1-T4.5 with P2/P3. Execution ord
 
 # Phase 3: V2 intro (carousel + tour)
 
-**Goal:** one-time "What's new" modal per account with optional driver.js tour; reopenable from the user menu.
+**Goal:** one-time large split "What's new in V2" modal per account (10 slides, clickable feature list, icon nav, cropped real-UI video loops) with an optional driver.js tour using a custom token-styled popover; reopenable from the user menu. Also polishes the Phase 2 mic UX (stop icon, pill waveform, spinner, silence handling) before the clips are recorded.
 
-**Files touched:** `packages/shared` (`CURRENT_INTRO_VERSION`, known list), User model (`seenIntroVersion`), `routes/users.ts` (+test), `apps/web/src/composables/useIntro.ts`, `components/Intro/{WhatsNewModal,IntroSlide}.vue`, `components/Intro/tour.ts`, `Header/UserMenu.vue`, `data-tour` attributes in model picker, `PromptBar`, mic, ref-image control, credits chip, `App.vue`/`DashboardShell.vue` mount, `public/intro/*.webp`, e2e scenario. New dep: `driver.js` (web).
+**Files touched:** `packages/shared` (`CURRENT_INTRO_VERSION`, known list; `STT_SILENCE_LEVEL_THRESHOLD` in `models/stt.ts`), User model (`seenIntroVersion`), `routes/users.ts` (+test), `apps/web/src/composables/useIntro.ts`, `components/Intro/{WhatsNewModal,IntroSlide,FeatureList,TourPopover}.vue` (+ `slides.ts`; `IntroSlide` is the video stage), `components/Intro/tour.ts`, `Header/UserMenu.vue`, `data-tour` anchors (`model-picker`, `style-picker`, `sizes`, `prompt-bar`, `mic`, `prompt-tools`, `ref-image`, `explore-tab`) in their owning components, `DashboardShell.vue` mount, STT polish in `components/Dashboard/Composer/VoiceInput/{MicButton,Waveform}.vue`, `composables/{useGrokRecorder,useAudioLevel,useVoiceInput}.ts`, `public/intro/*.{webm,mp4,webp}` (clips + WebP posters), e2e scenarios (`v2-intro.spec.ts`, extend `voice-input.spec.ts`). New dep: `driver.js` (web, stays; react-joyride and GlowTour rejected).
 
-**Dependencies:** Phases 1-2 complete (screenshots show final UI). 3.1 and 3.2 can start before screenshots.
+**Dependencies:** Phases 1-2 complete (clips show the final UI). Order by TASKS ids: T3.1 and T3.2 can start before clips; T3.3 anchors -> T3.4 tour -> T3.5 STT polish -> T3.6 clips (last, so the voice clip shows the new mic). PLAN task numbers below differ from TASKS ids; see the mapping table.
 
-### Task 3.1: Intro-seen persistence (S)
+**Slides (exactly 10, this order; deliberate change: New dashboard first, New models second):** 1 New dashboard, 2 New models, 3 Style picker, 4 More sizes, 5 Voice dictation, 6 Improve/Generate/Save prompts, 7 Explore tab and page, 8 Tools (Upscale, Remove background), 9 Reference images, 10 Remove background. No credits slide.
+
+### Task 3.1: Intro-seen persistence (S; TASKS T3.1)
 
 - Description: schema field + `PUT /users/intro-seen` (identity from auth only; 400 unknown version); profile GET returns the field.
 - AC: 401 unauth; writes only caller doc even with body id; 400 unknown version.
 - Verify: `bun --cwd apps/api run test -- users`; shared build.
 - Files: shared, user model, `routes/users.ts`, test.
 
-### Task 3.2: Show rule + modal shell (M, vertical)
+### Task 3.2: Show rule + modal shell (M, vertical; TASKS T3.2)
 
-- Description: `useIntro` visibility logic (DB flag x localStorage x profile loaded, no flash, two-tab storage event, PUT retry once, delay until dashboard mounted); `WhatsNewModal` with placeholder slides, carousel semantics, keyboard, swipe, Esc=skip, mobile sheet <640px; "What's new" item in `UserMenu.vue` (no DB write on reopen).
-- AC: visibility matrix tests; modal shows once per account in browser, reopen works.
-- Verify: unit tests; agent-browser new vs seen account, reload.
-- Files: `useIntro.ts`, `WhatsNewModal.vue`, `IntroSlide.vue`, `UserMenu.vue`, `DashboardShell.vue`, tests.
+- Description: `useIntro` visibility logic (DB flag x localStorage x profile loaded, no flash, two-tab storage event, PUT retry once, delay until dashboard mounted); large split `WhatsNewModal` (~1040x620, max-w clamps to viewport): left ~62% video stage (`IntroSlide`), right column with clickable `FeatureList` (all 10 slides, active highlighted, jump-to), active title + one-line description, footer "n / 10" with prev/next chevron icon buttons (clear contrast, aria-labels), header "What's new in V2" + Skip/close, no slide bleed; placeholder media; last slide offers "Show me around" and "Done"; keep a11y (role=dialog, `aria-roledescription=carousel`, live region, arrows, Esc=skip, focus trap, swipe); mobile <640px full-screen sheet with video on top and list collapsed to dots/segmented progress; "What's new" item in `UserMenu.vue` (no DB write on reopen).
+- AC: visibility matrix tests; modal shows once per account in browser, reopen works; list jump-to and icon nav work; no neighbouring slide visible; mobile sheet layout holds at 375px.
+- Verify: unit tests; agent-browser new vs seen account, reload, 1440 and 375.
+- Files: `useIntro.ts`, `WhatsNewModal.vue`, `IntroSlide.vue`, `FeatureList.vue`, `slides.ts`, `UserMenu.vue`, `DashboardShell.vue`, tests.
 
-### Task 3.3: Driver.js tour (M)
+### Task 3.3: Tour anchors and driver.js tour (M; split in TASKS as T3.3 anchors and T3.4 tour)
 
-- Description: add `data-tour` attributes in owning components (`ModelPickerTrigger`, `CreditsChip`, `UserMenu`, `PromptBar`, `ReferenceImageControl`; mic in `MicButton` from Phase 2); `tour.ts` filters missing/hidden steps, skips with toast if <2; semantic-token popover, `animate:false` on reduced motion; "Show me around" and "Done" both mark seen.
-- AC: step filtering tests; tour runs on desktop, degrades on mobile.
+- Description: T3.3: add `data-tour` attributes in owning components: `model-picker` (`ModelPickerTrigger`), `style-picker`, `sizes` (output settings), `prompt-bar` (`PromptBar`), `mic` (exists from Phase 2), `prompt-tools` (magic/wand menu), `ref-image` (`ReferenceImageControl`), `explore-tab`; `credits`/`user-menu` are no longer tour steps. T3.4: `tour.ts` (driver.js) filters missing/hidden steps, skips with toast if <2; custom popover rendered with semantic tokens (step counter "x / y", progress bar, prev/next icon buttons, Skip, close); `animate:false` on reduced motion; "Show me around" and "Done" both mark seen.
+- AC: all eight anchors present and unique; step filtering tests; tour runs on desktop, degrades on mobile; popover uses tokens only (no hardcoded hex).
 - Verify: unit tests; agent-browser at 1440 and 375.
-- Files: `tour.ts`, `WhatsNewModal.vue`, `apps/web/package.json`, plus the five anchor components above (split in TASKS as T3.3 and T3.4).
+- Files: `tour.ts`, `TourPopover.vue`, `WhatsNewModal.vue`, `apps/web/package.json`, plus the anchor-owning components above.
 
-### Task 3.4: Real slides and screenshots (M, last)
+### Task 3.4: STT polish (M; TASKS T3.5)
 
-- Description: finalize 4-6 slides from `git log master..feature-enhancement`; capture with agent-browser at 1440x900 (dark primary, no sensitive data); WebP ~q80, <=1200 wide, <150 KB; width/height + alt; lazy load.
-- AC: size/CLS requirements met; no personal data visible.
-- Verify: file size check; agent-browser visual review both themes and 375px.
-- Files: `public/intro/*.webp`, slide data.
+- Description: reshape the Phase 2 mic UX (Phase 2 is not reopened). Clicking mic turns the button into a stop (square) icon button in place; waveform becomes a rounded pill vertically centred in the prompt bar with the countdown inside; keep the small X cancel (discard, no `/stt` call); stop shows a spinner on the button while transcribing, appends text, then returns to the mic icon. Silence: `useAudioLevel` tracks whether the level ever crossed `STT_SILENCE_LEVEL_THRESHOLD` (named constant in `packages/shared/src/models/stt.ts`, beside the existing STT limits); if not, skip the `/stt` call and toast "We didn't hear anything. Try again and speak a little closer to the mic." Empty Grok response (`empty_text`) toasts "Couldn't make out any words. Try again." (replaces the current `grokErrorMessage` copy "No speech detected..." and the inline/sr-only error). Both via `showToast`, prompt unchanged.
+- AC: stop icon, pill waveform and spinner states render; silent recording makes no API call and shows toast A; empty text shows toast B; prompt unchanged in both; cancel still free; threshold is a named constant.
+- Verify: unit tests (T3.10) and e2e (T3.12); agent-browser real dictation at 1440 and 375.
+- Files: `MicButton.vue`, `Waveform.vue`, `useGrokRecorder.ts`, `useAudioLevel.ts`, `useVoiceInput.ts`, `packages/shared/src/models/stt.ts`, tests.
 
-### Task 3.5: Once-only e2e (S)
+### Task 3.5: Feature video loops and posters (M, last; TASKS T3.6)
 
-- Description: seeded QA spec `apps/web/e2e/qa/v2-intro.spec.ts` for new account, dismiss, reload, reopen from menu, tour start, PUT failure.
-- AC: shows once per account; reopen makes no PUT; localStorage guards a failed PUT; passes with `--repeat-each=3`.
-- Verify: `cd apps/web && bunx playwright test e2e/qa/v2-intro.spec.ts --repeat-each=3` (e2e-engineer agent).
+- Description: record 10 cropped real-UI clips (one per slide) from the running app with agent-browser (do not start it), dark theme, tightly cropped to the single feature; 4-6 s, muted, autoplay, loop, playsinline; WebM + MP4 fallback plus WebP poster; no GIFs or full-page screenshots; no personal data. `IntroSlide.vue` lazy-loads only current + next slide and pauses inactive; reduced motion shows poster only, no autoplay. Dark-only clips accepted. Captured after T3.5 (STT polish) so the voice clip shows the new mic.
+- AC: each clip <= ~400 KB, poster < 100 KB; width/height + alt set (no CLS); only current/next load; reduced motion shows poster; no personal data visible.
+- Verify: `find apps/web/public/intro` size checks for `.webm`/`.mp4` (+400k) and `.webp` (+100k) return nothing; ffprobe durations 4-6 s; autoplay/pause check in agent-browser at 1440 and 375.
+- Files: `public/intro/slide-{1..10}.{webm,mp4,webp}`, `IntroSlide.vue`, `slides.ts`.
 
-### Phase 3 gate
+### Task 3.6: Unit and e2e tests (TASKS T3.7-T3.12)
 
-- [ ] New and existing account see it once; other device does not after DB write; tests, `bun run verify`, build green
-      **Risks:** driver.js misposition on lazy elements (ready-checks), flash before profile loads, screenshots go stale if UI changes after capture (capture last), route-guarded onboarding.
+- Description: unit: persistence API (T3.7), intro logic `useIntro`/`tour.ts`/`slides.ts` (T3.8), components `WhatsNewModal`/`IntroSlide`/`FeatureList`/`TourPopover`/`UserMenu` (T3.9), STT polish `MicButton`/`Waveform`/`useGrokRecorder`/`useAudioLevel` silence (T3.10). E2E: `apps/web/e2e/qa/v2-intro.spec.ts` for new account, dismiss, reload, reopen from menu, layout, tour start, PUT failure (T3.11); extend `e2e/qa/voice-input.spec.ts` with mocked `getUserMedia` for stop icon, spinner, silence toast, empty-response toast (T3.12).
+- AC: shows once per account; reopen makes no PUT; localStorage guards a failed PUT; silence skips the `/stt` request; both specs pass with `--repeat-each=3`.
+- Verify: `cd apps/web && bunx playwright test e2e/qa/v2-intro.spec.ts e2e/qa/voice-input.spec.ts --repeat-each=3` (e2e-engineer agent); `bun run test`.
+
+### Phase 3 gate (TASKS T3.13)
+
+- [ ] New and existing account see it once; other device does not after DB write; tour covers the eight anchors; STT polish behaves per AC; clips <= 400 KB and posters < 100 KB; `v2-intro` and `voice-input` specs green; tests, `bun run verify`, build green
+      **Risks:** video weight (size budgets, lazy-load only current + next) and staleness (UI changes after capture; capture last), autoplay policies (muted + playsinline, poster fallback), driver.js misposition on lazy elements (ready-checks), flash before profile loads, route-guarded onboarding, silence threshold false positives on quiet mics (named constant, tune with real dictation).
 
 ---
 
@@ -248,7 +258,7 @@ Parallel-safe: T1.9 (favicon) with anything; T4.1-T4.5 with P2/P3. Execution ord
 
 **Files touched:** `packages/email/*` (package.json `@visual-ai/email`, `src/V2Announcement.tsx`, `src/render.ts`, snapshot test), User model (`emailOptOut`, `announcements.v2`), `apps/api/src/lib/unsubscribe-token.ts` (+test), `routes/email.ts` (+test, mounted above line 19 of `routes/index.ts`, before router-level `requireAuth`), `apps/api/scripts/send-v2-announcement.ts` (thin CLI) + `apps/api/src/lib/v2-announcement/*` (logic and tests, under `src/` so vitest collects them), `.env.example` (incl. `API_PUBLIC_URL` for unsubscribe links), `apps/web/public/email/*` hosted images. New deps: `@react-email/components`, `react-email`, `@react-email/render` (email); `resend` (api).
 
-**Dependencies:** 4.1-4.3 need only Phase 1 (can run parallel with P2/P3). 4.4 template needs P3 copy and screenshots. Real send only after app deploy is live and domain SPF/DKIM/DMARC verified.
+**Dependencies:** 4.1-4.3 need only Phase 1 (can run parallel with P2/P3). 4.4 template needs P3 copy and media (WebP posters). Real send only after app deploy is live and domain SPF/DKIM/DMARC verified.
 
 ### Task 4.1: Workspace scaffold + render (S)
 

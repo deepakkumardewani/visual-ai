@@ -159,5 +159,211 @@
    }
   ],
   "at": "2026-10-28T13:13:29.455Z"
+ },
+ {
+  "file": "3/T3.2-1.png",
+  "taskId": "T3.2",
+  "kind": "after",
+  "step": "Modal about 1040x620, 10 items",
+  "attempt": null,
+  "caption": "Large split modal at 1440x900 with video stage, 10-item feature list, prev/next icon buttons and n / 10.",
+  "annotations": [
+   {
+    "x": 14,
+    "y": 16,
+    "w": 72,
+    "h": 84,
+    "label": "Modal 1040x620 with ~62% stage and feature list"
+   }
+  ],
+  "at": "2026-10-29T05:10:47.565Z"
+ },
+ {
+  "file": "3/T3.2-2.png",
+  "taskId": "T3.2",
+  "kind": "after",
+  "step": "Full-screen sheet at 375px",
+  "attempt": null,
+  "caption": "At 375px the intro is a full-screen sheet with segmented progress and icon buttons.",
+  "annotations": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 100,
+    "h": 100,
+    "label": "Full-screen sheet"
+   }
+  ],
+  "at": "2026-10-29T05:10:47.678Z"
+ },
+ {
+  "file": "3/T3.4-1.png",
+  "taskId": "T3.4",
+  "kind": "after",
+  "step": "Custom popover",
+  "attempt": null,
+  "caption": "Tour popover with x / y counter, progress bar, icon prev/next, Skip and close.",
+  "annotations": [
+   {
+    "x": 19,
+    "y": 16,
+    "w": 27,
+    "h": 42,
+    "label": "Custom popover with counter, progress, icon buttons"
+   }
+  ],
+  "at": "2026-10-29T05:10:47.765Z"
+ },
+ {
+  "file": "3/T3.5-1.png",
+  "taskId": "T3.5",
+  "kind": "proof",
+  "step": "recording",
+  "attempt": null,
+  "caption": "Recording: stop icon, pill waveform with countdown",
+  "annotations": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 10,
+    "h": 10,
+    "label": "pill"
+   }
+  ],
+  "at": "2026-10-29T05:27:36.040Z"
+ },
+ {
+  "file": "3/T3.6-1.webp",
+  "taskId": "T3.6",
+  "kind": "proof",
+  "step": "poster",
+  "attempt": null,
+  "caption": "Slide 9 poster",
+  "annotations": [],
+  "at": "2026-10-29T05:27:36.179Z"
+ },
+ {
+  "file": "3/T3.11-1.png",
+  "taskId": "T3.11",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "New account sees the What's new modal at 1440x900 with the 10-item feature list",
+  "annotations": [],
+  "at": "2026-10-29T09:07:35.886Z"
+ },
+ {
+  "file": "3/T3.11-2.png",
+  "taskId": "T3.11",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Show me around starts the tour with the custom popover (1 / n, progress)",
+  "annotations": [],
+  "at": "2026-10-29T09:07:35.990Z"
+ },
+ {
+  "file": "3/T3.11-3.png",
+  "taskId": "T3.11",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "At 375px the intro is a full-screen sheet with progress bars",
+  "annotations": [],
+  "at": "2026-10-29T09:07:36.074Z"
+ },
+ {
+  "file": "3/T3.12-1.png",
+  "taskId": "T3.12",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Mic replaced by waveform pill with cancel and stop",
+  "annotations": [],
+  "at": "2026-10-29T09:07:55.936Z"
+ },
+ {
+  "file": "3/T3.12-2.png",
+  "taskId": "T3.12",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Spinner on mic while stt pending",
+  "annotations": [],
+  "at": "2026-10-29T09:07:56.025Z"
+ },
+ {
+  "file": "3/T3.12-3.png",
+  "taskId": "T3.12",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Silence toast, prompt unchanged",
+  "annotations": [],
+  "at": "2026-10-29T09:07:56.104Z"
+ },
+ {
+  "file": "3/T3.2-3.png",
+  "taskId": "T3.2",
+  "kind": "proof",
+  "step": "Video stage plus list of 10 items; prev/next are icon buttons; no neighbouring slide visible",
+  "attempt": 2,
+  "caption": "Split modal with the slide 1 video loop on the left, the 10-item feature list, title and description, and icon prev/next with 1 / 10 (1280x720 viewport; 1440x900 size asserted by the e2e layout test).",
+  "annotations": [
+   {
+    "x": 9.4,
+    "y": 7,
+    "w": 50.4,
+    "h": 86,
+    "label": "Video stage shows only the current slide"
+   },
+   {
+    "x": 61.3,
+    "y": 16.4,
+    "w": 27.7,
+    "h": 46.8,
+    "label": "Feature list with all 10 items, active one highlighted"
+   },
+   {
+    "x": 81.8,
+    "y": 84.4,
+    "w": 7.6,
+    "h": 6,
+    "label": "Icon prev/next buttons"
+   }
+  ],
+  "at": "2026-10-29T09:24:14.940Z"
+ },
+ {
+  "file": "3/T3.5-2.png",
+  "taskId": "T3.5",
+  "kind": "proof",
+  "step": "Recording shows the stop icon and the waveform pill",
+  "attempt": 2,
+  "caption": "While recording, the mic is replaced by a stop (square) button and a rounded waveform pill sits centred in the prompt bar, with the X cancel beside it.",
+  "annotations": [
+   {
+    "x": 76.6,
+    "y": 9.6,
+    "w": 3,
+    "h": 4.4,
+    "label": "Waveform pill"
+   },
+   {
+    "x": 79.9,
+    "y": 10.3,
+    "w": 1.6,
+    "h": 3,
+    "label": "X cancel"
+   },
+   {
+    "x": 83,
+    "y": 10.4,
+    "w": 1.9,
+    "h": 3,
+    "label": "Stop (square) icon in place of the mic"
+   }
+  ],
+  "at": "2026-10-29T09:24:15.049Z"
  }
 ]
