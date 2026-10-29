@@ -40,13 +40,13 @@ describe('IntroSlide', () => {
     expect(video.element.muted).toBe(true);
     expect(video.element.loop).toBe(true);
     expect(video.attributes('playsinline')).toBeDefined();
-    expect(video.attributes('poster')).toBe('/intro/slide-1.webp');
+    expect(video.attributes('poster')).toBe('/intro/slide-4.webp');
     expect(video.attributes('width')).toBe('960');
     expect(video.attributes('height')).toBe('600');
     expect(video.attributes('aria-label')).toBe(slide.alt);
     const sources = wrapper.findAll('source');
     expect(sources.map((s) => s.attributes('type'))).toEqual(['video/webm', 'video/mp4']);
-    expect(sources[0].attributes('src')).toBe('/intro/slide-1.webm');
+    expect(sources[0].attributes('src')).toBe('/intro/slide-4.webm');
   });
 
   it('loads no media when the slide is neither current nor next', () => {
@@ -60,7 +60,7 @@ describe('IntroSlide', () => {
     const wrapper = mountSlide({ load: true, playing: true });
     expect(wrapper.find('video').exists()).toBe(false);
     const img = wrapper.get('img');
-    expect(img.attributes('src')).toBe('/intro/slide-1.webp');
+    expect(img.attributes('src')).toBe('/intro/slide-4.webp');
     expect(img.attributes('alt')).toBe(slide.alt);
     expect(play).not.toHaveBeenCalled();
   });

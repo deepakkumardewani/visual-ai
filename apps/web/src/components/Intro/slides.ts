@@ -15,13 +15,13 @@ const MEDIA_WIDTH = 960;
 const MEDIA_HEIGHT = 600;
 
 function slide(
-  position: number,
+  mediaId: number,
   id: string,
   title: string,
   description: string,
   alt: string,
 ): IntroSlideData {
-  const base = `/intro/slide-${position}`;
+  const base = `/intro/slide-${mediaId}`;
   return {
     id,
     title,
@@ -37,8 +37,19 @@ function slide(
   };
 }
 
-/** Order is fixed by the V2 launch spec; media lives in public/intro. */
+/**
+ * Display order is the array order (dashboard first by deliberate choice).
+ * The first argument is the media file number in public/intro, which is
+ * independent of display order so media files never need renaming.
+ */
 export const INTRO_SLIDES: readonly IntroSlideData[] = [
+  slide(
+    4,
+    'dashboard',
+    'New dashboard',
+    'A cleaner studio with Create, Explore and Assets in one place.',
+    'The redesigned dashboard with its three tabs',
+  ),
   slide(
     1,
     'models',
@@ -61,13 +72,6 @@ export const INTRO_SLIDES: readonly IntroSlideData[] = [
     'Aspect ratio options in the sidebar',
   ),
   slide(
-    4,
-    'dashboard',
-    'New dashboard',
-    'A cleaner studio with Create, Explore and Assets in one place.',
-    'The redesigned dashboard with its three tabs',
-  ),
-  slide(
     5,
     'voice',
     'Voice dictation',
@@ -86,28 +90,28 @@ export const INTRO_SLIDES: readonly IntroSlideData[] = [
     'explore',
     'Explore',
     'Browse what the community is creating and remix what inspires you.',
-    'Explore feed of community images',
+    'Opening an image from the Explore feed to view it on the full Explore page',
   ),
   slide(
     8,
     'tools',
     'Tools',
-    'Upscale and colorize your images without leaving the studio.',
-    'Upscale and colorize tools applied to an image',
+    'Upscale or remove the background from any image, right under the result.',
+    'Zooming across the tools row under a generated image, from Download to Remove background',
   ),
   slide(
     9,
     'reference',
     'Reference images',
     'Guide a generation with your own picture.',
-    'Uploading a reference image next to the prompt',
+    'Clicking the upload icon and adding a reference image next to the prompt',
   ),
   slide(
     10,
     'remove-background',
     'Remove background',
     'Cut out the subject of any image in one click.',
-    'Background removed from an image',
+    'Uploading an image, removing its background and showing the cutout result',
   ),
 ];
 

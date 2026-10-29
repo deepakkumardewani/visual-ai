@@ -48,7 +48,7 @@ watch(
       :width="slide.width"
       :height="slide.height"
       :aria-label="slide.alt"
-      class="tw-h-full tw-w-full tw-object-cover"
+      class="tw-h-full tw-w-full tw-object-contain"
     >
       <source
         v-for="source in slide.sources"
@@ -63,7 +63,7 @@ watch(
       :alt="slide.alt"
       :width="slide.width"
       :height="slide.height"
-      class="tw-h-full tw-w-full tw-object-cover"
+      class="tw-h-full tw-w-full tw-object-contain"
     />
   </div>
 </template>

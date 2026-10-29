@@ -14,7 +14,7 @@ describe('FeatureList', () => {
     const buttons = wrapper.findAll('button');
     expect(buttons).toHaveLength(10);
     expect(buttons[0].text()).toContain('1');
-    expect(buttons[0].text()).toContain('New models');
+    expect(buttons[0].text()).toContain('New dashboard');
     expect(buttons[9].text()).toContain('Remove background');
   });
 

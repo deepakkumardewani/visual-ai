@@ -118,7 +118,7 @@ async function showMeAround() {
           <header class="tw-flex tw-items-center tw-justify-between tw-gap-2">
             <h2
               :id="TITLE_ID"
-              class="tw-m-0 tw-font-display tw-text-lg tw-font-normal tw-text-ink-primary"
+              class="tw-m-0 tw-text-eyebrow tw-font-semibold tw-uppercase tw-text-ink-muted"
             >
               What's new in V2
             </h2>
@@ -157,22 +157,29 @@ async function showMeAround() {
                 type="button"
                 :aria-label="`Go to feature ${index + 1}: ${slide.title}`"
                 :aria-current="index === activeIndex ? 'true' : undefined"
-                class="tw-h-1.5 tw-w-full tw-rounded-full tw-border-0 tw-p-0"
-                :class="index === activeIndex ? 'tw-bg-accent' : 'tw-bg-surface-3'"
+                class="tw-flex tw-h-6 tw-w-full tw-items-center tw-border-0 tw-bg-transparent tw-p-0"
                 @click="goTo(index)"
-              />
+              >
+                <span
+                  class="tw-h-1.5 tw-w-full tw-rounded-full"
+                  :class="index === activeIndex ? 'tw-bg-accent' : 'tw-bg-surface-3'"
+                />
+              </button>
             </li>
           </ol>
 
-          <section class="tw-mt-auto tw-flex tw-flex-col tw-gap-1" aria-live="polite">
+          <section
+            class="tw-mt-auto tw-flex tw-flex-col tw-gap-2 tw-border-t tw-border-hairline tw-pt-4"
+            aria-live="polite"
+          >
             <h3
-              class="tw-m-0 tw-text-base tw-font-semibold tw-text-ink-primary"
+              class="tw-m-0 tw-font-display tw-text-display-md tw-font-normal tw-text-ink-primary"
               data-testid="whats-new-slide-title"
             >
               {{ activeSlide.title }}
             </h3>
             <p
-              class="tw-m-0 tw-text-body-sm tw-text-ink-muted"
+              class="tw-m-0 tw-max-w-[34ch] tw-text-body-sm tw-text-ink-muted"
               data-testid="whats-new-slide-description"
             >
               {{ activeSlide.description }}
@@ -244,9 +251,10 @@ async function showMeAround() {
 }
 
 .whats-new__panel {
-  width: min(1040px, 100%);
-  height: min(620px, 100%);
-  grid-template-columns: 62fr 38fr;
+  // Wide stage so the 16:10 media shows uncropped; the side column keeps a fixed readable width.
+  width: min(1280px, 100%);
+  height: min(680px, 100%);
+  grid-template-columns: minmax(0, 1fr) 360px;
   outline: none;
 }
 
