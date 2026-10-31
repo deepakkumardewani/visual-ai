@@ -9,8 +9,10 @@ const PROFILE_URL = /\/users\/user_[^/?]+$/;
 const INTRO_SEEN_URL = /\/users\/intro-seen$/;
 const INTRO_VERSION = 'v2';
 const SIZE_TOLERANCE_PX = 3;
-const STAGE_RATIO = 0.62;
-const STAGE_RATIO_TOLERANCE = 0.02;
+const MODAL_WIDTH_PX = 1280;
+const MODAL_HEIGHT_PX = 680;
+// The side column has a fixed width; the stage takes the remaining width.
+const SIDE_COLUMN_PX = 360;
 const MOBILE_VIEWPORT = { width: 375, height: 812 };
 const DESKTOP_VIEWPORT = { width: 1440, height: 900 };
 
@@ -262,7 +264,7 @@ test.describe('v2 intro', () => {
     await expect(modal(page)).toBeHidden();
   });
 
-  test('@medium Layout at 1440x900: modal about 1040x620 and the video stage about 62% of its width', async ({
+  test('@medium Layout at 1440x900: modal about 1280x680 and the video stage fills the width beside the 360px side column', async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP_VIEWPORT);
@@ -272,10 +274,10 @@ test.describe('v2 intro', () => {
     const stage = await page.getByTestId('whats-new-stage').boundingBox();
     expect(box).not.toBeNull();
     expect(stage).not.toBeNull();
-    expect(Math.abs(box!.width - 1040)).toBeLessThanOrEqual(SIZE_TOLERANCE_PX);
-    expect(Math.abs(box!.height - 620)).toBeLessThanOrEqual(SIZE_TOLERANCE_PX);
-    expect(Math.abs(stage!.width / box!.width - STAGE_RATIO)).toBeLessThanOrEqual(
-      STAGE_RATIO_TOLERANCE,
+    expect(Math.abs(box!.width - MODAL_WIDTH_PX)).toBeLessThanOrEqual(SIZE_TOLERANCE_PX);
+    expect(Math.abs(box!.height - MODAL_HEIGHT_PX)).toBeLessThanOrEqual(SIZE_TOLERANCE_PX);
+    expect(Math.abs(stage!.width - (box!.width - SIDE_COLUMN_PX))).toBeLessThanOrEqual(
+      SIZE_TOLERANCE_PX,
     );
   });
 

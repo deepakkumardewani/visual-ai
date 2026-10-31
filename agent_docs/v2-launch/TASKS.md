@@ -394,8 +394,8 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/composables/useIntro.ts`, `apps/web/src/components/Intro/WhatsNewModal.vue`, `apps/web/src/components/Intro/IntroSlide.vue` (video stage with placeholder media), `apps/web/src/components/Intro/FeatureList.vue`, `apps/web/src/components/Intro/slides.ts` (10 placeholder entries, final in T3.6), `apps/web/src/components/Header/UserMenu.vue`, `apps/web/src/components/Dashboard/DashboardShell.vue` (mount point)
-- **Do:** `useIntro`: show only when logged in, profile loaded, `seenIntroVersion !== CURRENT_INTRO_VERSION` and localStorage `intro-seen:<userId>` unset (skip without waiting if the flag is set; no render before profile loads; delay until dashboard mounted; `storage` event closes a second tab). On dismiss write localStorage first, then PUT (retry once). `WhatsNewModal`: LARGE split modal about 1040x620 (max-width clamps to the viewport). Left about 62% is the video stage (`IntroSlide.vue`); right column holds `FeatureList.vue` (all 10 slides, clickable jump-to, active item highlighted), the active slide title and one-line description, and a footer with "n / 10" and prev/next chevron ICON buttons (clear contrast, `aria-label`s "Previous feature"/"Next feature"). Header shows "What's new in V2" plus Skip/close. Only the current slide is visible (no adjacent slide bleed at the edges). The last slide shows "Show me around" (starts the tour, T3.4) and "Done"; both mark seen. Keep a11y: `role="dialog"` + `aria-roledescription="carousel"`, live region, arrow keys, Esc = skip, focus trap, swipe, reduced-motion instant swap. Under 640px it becomes a full-screen sheet: media on top, list collapses to dots/segmented progress, icon buttons stay. "What's new" item in `UserMenu.vue` opens it regardless of seen state without any DB write. Logged-out visitors never see it.
-- **Acceptance:** Visibility matrix correct (DB flag x localStorage x profile loading); reopen does not alter the DB; PUT failure leaves the localStorage guard in place; at 1440x900 the modal is about 1040x620 with a video stage and a list of 10 items; prev/next are icon buttons with aria-labels and no neighbouring slide is visible; at 375px it is a full-screen sheet.
+- **Do:** `useIntro`: show only when logged in, profile loaded, `seenIntroVersion !== CURRENT_INTRO_VERSION` and localStorage `intro-seen:<userId>` unset (skip without waiting if the flag is set; no render before profile loads; delay until dashboard mounted; `storage` event closes a second tab). On dismiss write localStorage first, then PUT (retry once). `WhatsNewModal`: LARGE split modal about 1280x680 (max-width clamps to the viewport). Left is the video stage, filling the width beside a fixed 360px side column (`IntroSlide.vue`); right column holds `FeatureList.vue` (all 10 slides, clickable jump-to, active item highlighted), the active slide title and one-line description, and a footer with "n / 10" and prev/next chevron ICON buttons (clear contrast, `aria-label`s "Previous feature"/"Next feature"). Header shows "What's new in V2" plus Skip/close. Only the current slide is visible (no adjacent slide bleed at the edges). The last slide shows "Show me around" (starts the tour, T3.4) and "Done"; both mark seen. Keep a11y: `role="dialog"` + `aria-roledescription="carousel"`, live region, arrow keys, Esc = skip, focus trap, swipe, reduced-motion instant swap. Under 640px it becomes a full-screen sheet: media on top, list collapses to dots/segmented progress, icon buttons stay. "What's new" item in `UserMenu.vue` opens it regardless of seen state without any DB write. Logged-out visitors never see it.
+- **Acceptance:** Visibility matrix correct (DB flag x localStorage x profile loading); reopen does not alter the DB; PUT failure leaves the localStorage guard in place; at 1440x900 the modal is about 1280x680 with a video stage and a list of 10 items; prev/next are icon buttons with aria-labels and no neighbouring slide is visible; at 375px it is a full-screen sheet.
 - **Verify:**
   - `bun --cwd apps/web run test -- useIntro WhatsNewModal FeatureList`
   - `bun run check`
@@ -500,7 +500,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - @high "What's new" in the user menu reopens it and does not call the intro-seen PUT.
   - @high "Show me around" starts the tour with visible steps (custom popover with "x / y" and progress) and marks seen; "Done" marks seen.
   - @high PUT failure: localStorage still prevents a repeat on reload.
-  - @medium Layout at 1440x900: modal box is about 1040x620 (bounding box within tolerance) and the video stage is about 62% of its width.
+  - @medium Layout at 1440x900: modal box is about 1280x680 (bounding box within tolerance) and the video stage fills the width beside the 360px side column.
   - @medium Reduced motion: slides show the poster and no video autoplays.
   - @medium 375px renders a full-screen sheet; logged-out visitor sees nothing.
 - **Acceptance:** Every listed scenario passes with `--repeat-each=3`, no flakes, no test weakened to pass.
@@ -667,7 +667,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 **Adds:** Final bundle-wide regression and sign-off across all four tracks. No new behaviour.
 **Try in UI:** Walk the Phase 1-3 "Try in UI" steps once more on a fresh session ; confirm a new account shows 30 credits and the intro appears once.
 
-### ☐ T5.1 DoD: V2 launch bundle
+### ✅ T5.1 DoD: V2 launch bundle
 
 - **Kind:** dod
 - **Files:** none
