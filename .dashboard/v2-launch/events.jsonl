@@ -338,3 +338,14 @@
 {"at":"2026-10-31T10:20:40.318Z","type":"verify_passed","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"attempt":"3"}
 {"at":"2026-10-31T10:20:40.420Z","type":"deliverable","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"text":"V2 announcement email: template, unsubscribe flow, send script with durable batch replay, gate fix for Node 26 webstorage","files":["packages/email","apps/api","apps/web","vite.config.ts"]}
 {"at":"2026-10-31T10:21:11.216Z","type":"commit","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"attempt":"3","text":"feat(v2-launch): phase 4 V2 announcement email","sha":"6567f51dd046142ddc62b80411ad70f12dc5e011","branch":"feature-enhancement","pushed":"yes","evidence":"e2e 16/16 x3 dev+prod, lowest unit coverage 90% (recipients.ts branches), root 2097/2097, api 837"}
+{"at":"2026-10-31T10:23:07.801Z","type":"build_started","tasks":["T5.1"],"attempt":"1"}
+{"at":"2026-10-31T10:23:07.980Z","type":"task_started","tasks":["T5.1"],"attempt":"1"}
+{"at":"2026-10-31T10:23:20.676Z","type":"task_started","tasks":["T5.1"]}
+{"at":"2026-10-31T10:29:33.657Z","type":"task_built","tasks":["T5.1"],"text":"all Verify green; qa 99/99; fixed stale intro layout spec","files":["apps/web/e2e/qa/v2-intro.spec.ts"]}
+{"at":"2026-10-31T10:29:45.808Z","type":"verify_started","tasks":["T5.1"],"attempt":"1"}
+{"at":"2026-10-31T10:51:06.871Z","type":"advisory","tasks":["T5.1"],"text":"prod e2e: ignoreHTTPSErrors:false and Node does not trust ~/.portless/ca.pem; route.fetch fails with self-signed cert unless NODE_EXTRA_CA_CERTS is set"}
+{"at":"2026-10-31T10:51:06.993Z","type":"advisory","tasks":["T5.1"],"text":"prod full e2e/qa run: 5 load-timeout failures (billing-history, billing-purchase, mods-referral-favicon); 31/31 pass in isolation; root-cause before PASS"}
+{"at":"2026-10-31T10:51:25.533Z","type":"blocked","tasks":["T5.1"],"text":"spec issue: INTRO-3 doc says ~1040x620 modal, code (89ee685) is 1280x680 with 360px side column","unblock":"Decide: update SPEC.md:143, TASKS.md:397-398,503, PLAN.md:216 to the new size (recommended), or revert modal"}
+{"at":"2026-10-31T10:55:03.676Z","type":"verify_passed","tasks":["T5.1"],"attempt":"1"}
+{"at":"2026-10-31T10:55:03.785Z","type":"deliverable","tasks":["T5.1"],"text":"V2 bundle DoD verified; stale intro modal size docs updated to 1280x680; v2-intro e2e spec aligned","files":["apps/web/e2e/qa/v2-intro.spec.ts","agent_docs/v2-launch/SPEC.md","agent_docs/v2-launch/PLAN.md","agent_docs/v2-launch/TASKS.md"]}
+{"at":"2026-10-31T10:55:14.677Z","type":"commit","tasks":["T5.1"],"attempt":"1","text":"feat(v2-launch): phase 5 definition of done","sha":"57fe8e67aaf8d5a305d2d360d8e6caa3fe64a6aa","branch":"feature-enhancement","pushed":"yes","evidence":"e2e qa 99/99 dev, unit 2097+837+15 pass"}

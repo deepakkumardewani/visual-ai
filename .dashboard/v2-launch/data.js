@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-10-31T10:21:11.220Z",
+ "generatedAt": "2026-10-31T10:55:14.681Z",
  "feature": {
   "slug": "v2-launch",
   "title": "Visual AI V2 Launch Bundle"
@@ -27,8 +27,7 @@ window.DASHBOARD = {
   "phases": 6,
   "tasks": 53,
   "byStatus": {
-   "verified": 52,
-   "ready": 1
+   "verified": 53
   }
  },
  "phases": [
@@ -966,11 +965,11 @@ window.DASHBOARD = {
       "apps/web/src/components/Dashboard/DashboardShell.vue (mount point)"
      ],
      "gherkin": null,
-     "do": "`useIntro`: show only when logged in, profile loaded, `seenIntroVersion !== CURRENT_INTRO_VERSION` and localStorage `intro-seen:<userId>` unset (skip without waiting if the flag is set; no render before profile loads; delay until dashboard mounted; `storage` event closes a second tab). On dismiss write localStorage first, then PUT (retry once). `WhatsNewModal`: LARGE split modal about 1040x620 (max-width clamps to the viewport). Left about 62% is the video stage (`IntroSlide.vue`); right column holds `FeatureList.vue` (all 10 slides, clickable jump-to, active item highlighted), the active slide title and one-line description, and a footer with \"n / 10\" and prev/next chevron ICON buttons (clear contrast, `aria-label`s \"Previous feature\"/\"Next feature\"). Header shows \"What's new in V2\" plus Skip/close. Only the current slide is visible (no adjacent slide bleed at the edges). The last slide shows \"Show me around\" (starts the tour, T3.4) and \"Done\"; both mark seen. Keep a11y: `role=\"dialog\"` + `aria-roledescription=\"carousel\"`, live region, arrow keys, Esc = skip, focus trap, swipe, reduced-motion instant swap. Under 640px it becomes a full-screen sheet: media on top, list collapses to dots/segmented progress, icon buttons stay. \"What's new\" item in `UserMenu.vue` opens it regardless of seen state without any DB write. Logged-out visitors never see it.",
+     "do": "`useIntro`: show only when logged in, profile loaded, `seenIntroVersion !== CURRENT_INTRO_VERSION` and localStorage `intro-seen:<userId>` unset (skip without waiting if the flag is set; no render before profile loads; delay until dashboard mounted; `storage` event closes a second tab). On dismiss write localStorage first, then PUT (retry once). `WhatsNewModal`: LARGE split modal about 1280x680 (max-width clamps to the viewport). Left is the video stage, filling the width beside a fixed 360px side column (`IntroSlide.vue`); right column holds `FeatureList.vue` (all 10 slides, clickable jump-to, active item highlighted), the active slide title and one-line description, and a footer with \"n / 10\" and prev/next chevron ICON buttons (clear contrast, `aria-label`s \"Previous feature\"/\"Next feature\"). Header shows \"What's new in V2\" plus Skip/close. Only the current slide is visible (no adjacent slide bleed at the edges). The last slide shows \"Show me around\" (starts the tour, T3.4) and \"Done\"; both mark seen. Keep a11y: `role=\"dialog\"` + `aria-roledescription=\"carousel\"`, live region, arrow keys, Esc = skip, focus trap, swipe, reduced-motion instant swap. Under 640px it becomes a full-screen sheet: media on top, list collapses to dots/segmented progress, icon buttons stay. \"What's new\" item in `UserMenu.vue` opens it regardless of seen state without any DB write. Logged-out visitors never see it.",
      "spec": null,
      "filesDeclared": true,
      "acceptance": [
-      "Visibility matrix correct (DB flag x localStorage x profile loading); reopen does not alter the DB; PUT failure leaves the localStorage guard in place; at 1440x900 the modal is about 1040x620 with a video stage and a list of 10 items; prev/next are icon buttons with aria-labels and no neighbouring slide is visible; at 375px it is a full-screen sheet."
+      "Visibility matrix correct (DB flag x localStorage x profile loading); reopen does not alter the DB; PUT failure leaves the localStorage guard in place; at 1440x900 the modal is about 1280x680 with a video stage and a list of 10 items; prev/next are icon buttons with aria-labels and no neighbouring slide is visible; at 375px it is a full-screen sheet."
      ],
      "verify": [
       "bun --cwd apps/web run test -- useIntro WhatsNewModal FeatureList",
@@ -1686,7 +1685,7 @@ window.DASHBOARD = {
     {
      "id": "T5.1",
      "title": "DoD: V2 launch bundle",
-     "done": false,
+     "done": true,
      "kind": "dod",
      "depends": [],
      "files": [],
@@ -1707,17 +1706,17 @@ window.DASHBOARD = {
      ],
      "line": 670,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-10-31T10:55:14.677Z"
     }
    ],
-   "verified": 0,
+   "verified": 1,
    "total": 1,
-   "complete": false
+   "complete": true
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/v2-launch/TASKS.md phase 5",
+ "nextCommand": null,
  "questions": [
   {
    "at": "2026-10-27T14:11:40.591Z",
@@ -1777,6 +1776,29 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-10-31T10:55:14.677Z",
+   "ok": true,
+   "phase": "5",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "1",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e qa 99/99 dev, unit 2097+837+15 pass",
+   "error": null,
+   "sha": "57fe8e67aaf8d5a305d2d360d8e6caa3fe64a6aa",
+   "shortSha": "57fe8e6",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/57fe8e67aaf8d5a305d2d360d8e6caa3fe64a6aa",
+   "subject": "feat(v2-launch): phase 5 definition of done",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-10-31T16:25:07+05:30",
+   "filesChanged": 4,
+   "added": 15,
+   "removed": 13
+  },
   {
    "at": "2026-10-31T10:21:11.216Z",
    "ok": true,
@@ -2607,6 +2629,20 @@ window.DASHBOARD = {
  ],
  "deliverables": [
   {
+   "at": "2026-10-31T10:55:03.785Z",
+   "type": "deliverable",
+   "tasks": [
+    "T5.1"
+   ],
+   "text": "V2 bundle DoD verified; stale intro modal size docs updated to 1280x680; v2-intro e2e spec aligned",
+   "files": [
+    "apps/web/e2e/qa/v2-intro.spec.ts",
+    "agent_docs/v2-launch/SPEC.md",
+    "agent_docs/v2-launch/PLAN.md",
+    "agent_docs/v2-launch/TASKS.md"
+   ]
+  },
+  {
    "at": "2026-10-31T10:20:40.420Z",
    "type": "deliverable",
    "tasks": [
@@ -2698,6 +2734,22 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-10-31T10:51:06.993Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.1"
+   ],
+   "text": "prod full e2e/qa run: 5 load-timeout failures (billing-history, billing-purchase, mods-referral-favicon); 31/31 pass in isolation; root-cause before PASS"
+  },
+  {
+   "at": "2026-10-31T10:51:06.871Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.1"
+   ],
+   "text": "prod e2e: ignoreHTTPSErrors:false and Node does not trust ~/.portless/ca.pem; route.fetch fails with self-signed cert unless NODE_EXTRA_CA_CERTS is set"
+  },
   {
    "at": "2026-10-31T10:16:23.624Z",
    "type": "advisory",
@@ -3204,6 +3256,108 @@ window.DASHBOARD = {
   }
  ],
  "activity": [
+  {
+   "at": "2026-10-31T10:55:14.677Z",
+   "type": "commit",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "1",
+   "text": "feat(v2-launch): phase 5 definition of done",
+   "sha": "57fe8e67aaf8d5a305d2d360d8e6caa3fe64a6aa",
+   "branch": "feature-enhancement",
+   "pushed": "yes",
+   "evidence": "e2e qa 99/99 dev, unit 2097+837+15 pass"
+  },
+  {
+   "at": "2026-10-31T10:55:03.785Z",
+   "type": "deliverable",
+   "tasks": [
+    "T5.1"
+   ],
+   "text": "V2 bundle DoD verified; stale intro modal size docs updated to 1280x680; v2-intro e2e spec aligned",
+   "files": [
+    "apps/web/e2e/qa/v2-intro.spec.ts",
+    "agent_docs/v2-launch/SPEC.md",
+    "agent_docs/v2-launch/PLAN.md",
+    "agent_docs/v2-launch/TASKS.md"
+   ]
+  },
+  {
+   "at": "2026-10-31T10:55:03.676Z",
+   "type": "verify_passed",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-10-31T10:51:25.533Z",
+   "type": "blocked",
+   "tasks": [
+    "T5.1"
+   ],
+   "text": "spec issue: INTRO-3 doc says ~1040x620 modal, code (89ee685) is 1280x680 with 360px side column",
+   "unblock": "Decide: update SPEC.md:143, TASKS.md:397-398,503, PLAN.md:216 to the new size (recommended), or revert modal"
+  },
+  {
+   "at": "2026-10-31T10:51:06.993Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.1"
+   ],
+   "text": "prod full e2e/qa run: 5 load-timeout failures (billing-history, billing-purchase, mods-referral-favicon); 31/31 pass in isolation; root-cause before PASS"
+  },
+  {
+   "at": "2026-10-31T10:51:06.871Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.1"
+   ],
+   "text": "prod e2e: ignoreHTTPSErrors:false and Node does not trust ~/.portless/ca.pem; route.fetch fails with self-signed cert unless NODE_EXTRA_CA_CERTS is set"
+  },
+  {
+   "at": "2026-10-31T10:29:45.808Z",
+   "type": "verify_started",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-10-31T10:29:33.657Z",
+   "type": "task_built",
+   "tasks": [
+    "T5.1"
+   ],
+   "text": "all Verify green; qa 99/99; fixed stale intro layout spec",
+   "files": [
+    "apps/web/e2e/qa/v2-intro.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-10-31T10:23:20.676Z",
+   "type": "task_started",
+   "tasks": [
+    "T5.1"
+   ]
+  },
+  {
+   "at": "2026-10-31T10:23:07.980Z",
+   "type": "task_started",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-10-31T10:23:07.801Z",
+   "type": "build_started",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "1"
+  },
   {
    "at": "2026-10-31T10:21:11.216Z",
    "type": "commit",
@@ -3728,110 +3882,6 @@ window.DASHBOARD = {
     "T4.10"
    ],
    "attempt": "3"
-  },
-  {
-   "at": "2026-10-29T15:12:19.652Z",
-   "type": "task_built",
-   "tasks": [
-    "T4.8"
-   ],
-   "text": "unit lowest 96.15% branches (5 files, 110 tests)",
-   "files": [
-    "apps/api/src/lib/v2-announcement/recipients.test.ts",
-    "apps/api/src/lib/v2-announcement/modes.test.ts",
-    "apps/api/src/lib/v2-announcement/send-script.test.ts",
-    "apps/api/src/lib/v2-announcement/batching.test.ts"
-   ]
-  },
-  {
-   "at": "2026-10-29T15:10:50.804Z",
-   "type": "task_started",
-   "tasks": [
-    "T4.8"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-10-29T15:10:35.064Z",
-   "type": "task_built",
-   "tasks": [
-    "T4.4"
-   ],
-   "text": "retry: gitignore exception, email dedupe incl sent/opted-out, atomic bulk markBatchSent",
-   "files": [
-    "apps/api/scripts/send-v2-announcement.ts",
-    "apps/api/src/lib/v2-announcement/batching.ts",
-    "apps/api/src/lib/v2-announcement/recipients.ts"
-   ]
-  },
-  {
-   "at": "2026-10-29T15:08:24.114Z",
-   "type": "task_started",
-   "tasks": [
-    "T4.4"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-10-29T15:08:24.025Z",
-   "type": "build_started",
-   "tasks": [
-    "T4.4",
-    "T4.8",
-    "T4.10"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-10-29T15:08:23.935Z",
-   "type": "verify_failed",
-   "tasks": [
-    "T4.4",
-    "T4.8",
-    "T4.10"
-   ],
-   "attempt": "2",
-   "text": "[code-bug] CLI script gitignored; dedupe vs already-sent emails; crash-rerun idempotency unproven; [test-quality] e2e fails under E2E_SERVER=prod (self-signed cert on request ctx)"
-  },
-  {
-   "at": "2026-10-29T15:07:33.861Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.6"
-   ],
-   "text": "color-scheme meta is light only and card/button text use pure #ffffff; MAIL-3 asks dark-mode safe with no pure-white dependency; light/dark preview not visually verified"
-  },
-  {
-   "at": "2026-10-29T15:07:33.772Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.11"
-   ],
-   "text": "Verify lines bun --cwd <dir> run test only print bun help; ran via cd <dir> && bun run test. bun run verify (--fix) replaced by vp lint + bun run check"
-  },
-  {
-   "at": "2026-10-29T15:07:33.683Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.3"
-   ],
-   "text": "apps/api/src/app.ts CORS exemption is outside every Files list (orchestrator-directed); NON_PUBLIC_EMAIL_PATH name is misleading (it matches all non-/email paths)"
-  },
-  {
-   "at": "2026-10-29T15:07:33.593Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.7"
-   ],
-   "text": "Verify command omits src/models/user.test.ts so user.ts reports 0%; with it all three files are 100%"
-  },
-  {
-   "at": "2026-10-29T15:07:33.506Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.10"
-   ],
-   "text": "400 test bypasses the console guard via browser.newContext (fixture has no allowlist hook); consider an expected-error hook"
   }
  ]
 };
