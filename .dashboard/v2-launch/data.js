@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-10-31T10:20:40.424Z",
+ "generatedAt": "2026-10-31T10:21:11.220Z",
  "feature": {
   "slug": "v2-launch",
   "title": "Visual AI V2 Launch Bundle"
@@ -1388,7 +1388,7 @@ window.DASHBOARD = {
      "line": 546,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-10-31T10:20:40.420Z"
+     "updatedAt": "2026-10-31T10:21:11.216Z"
     },
     {
      "id": "T4.2",
@@ -1416,7 +1416,7 @@ window.DASHBOARD = {
      "line": 558,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-10-31T10:20:40.420Z"
+     "updatedAt": "2026-10-31T10:21:11.216Z"
     },
     {
      "id": "T4.3",
@@ -1443,7 +1443,7 @@ window.DASHBOARD = {
      "line": 568,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-10-31T10:20:40.420Z"
+     "updatedAt": "2026-10-31T10:21:11.216Z"
     },
     {
      "id": "T4.4",
@@ -1472,7 +1472,7 @@ window.DASHBOARD = {
      "line": 579,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-10-31T10:20:40.420Z"
+     "updatedAt": "2026-10-31T10:21:11.216Z"
     },
     {
      "id": "T4.5",
@@ -1500,7 +1500,7 @@ window.DASHBOARD = {
      "line": 589,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-10-31T10:20:40.420Z"
+     "updatedAt": "2026-10-31T10:21:11.216Z"
     },
     {
      "id": "T4.6",
@@ -1531,7 +1531,7 @@ window.DASHBOARD = {
      "line": 600,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-10-31T10:20:40.420Z"
+     "updatedAt": "2026-10-31T10:21:11.216Z"
     },
     {
      "id": "T4.7",
@@ -1557,7 +1557,7 @@ window.DASHBOARD = {
      "line": 612,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-10-31T10:20:40.420Z"
+     "updatedAt": "2026-10-31T10:21:11.216Z"
     },
     {
      "id": "T4.8",
@@ -1585,7 +1585,7 @@ window.DASHBOARD = {
      "line": 620,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-10-31T10:20:40.420Z"
+     "updatedAt": "2026-10-31T10:21:11.216Z"
     },
     {
      "id": "T4.9",
@@ -1611,7 +1611,7 @@ window.DASHBOARD = {
      "line": 628,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-10-31T10:20:40.420Z"
+     "updatedAt": "2026-10-31T10:21:11.216Z"
     },
     {
      "id": "T4.10",
@@ -1633,7 +1633,7 @@ window.DASHBOARD = {
      "line": 636,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-10-31T10:20:40.420Z"
+     "updatedAt": "2026-10-31T10:21:11.216Z"
     },
     {
      "id": "T4.11",
@@ -1658,7 +1658,7 @@ window.DASHBOARD = {
      "line": 649,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-10-31T10:20:40.420Z"
+     "updatedAt": "2026-10-31T10:21:11.216Z"
     }
    ],
    "verified": 11,
@@ -1777,6 +1777,39 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-10-31T10:21:11.216Z",
+   "ok": true,
+   "phase": "4",
+   "tasks": [
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8",
+    "T4.9",
+    "T4.10",
+    "T4.11"
+   ],
+   "attempt": "3",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 16/16 x3 dev+prod, lowest unit coverage 90% (recipients.ts branches), root 2097/2097, api 837",
+   "error": null,
+   "sha": "6567f51dd046142ddc62b80411ad70f12dc5e011",
+   "shortSha": "6567f51",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/6567f51dd046142ddc62b80411ad70f12dc5e011",
+   "subject": "feat(v2-launch): phase 4 V2 announcement email",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-10-31T15:50:55+05:30",
+   "filesChanged": 76,
+   "added": 5200,
+   "removed": 567
+  },
   {
    "at": "2026-10-29T09:45:12.601Z",
    "ok": true,
@@ -3172,6 +3205,29 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
+   "at": "2026-10-31T10:21:11.216Z",
+   "type": "commit",
+   "tasks": [
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8",
+    "T4.9",
+    "T4.10",
+    "T4.11"
+   ],
+   "attempt": "3",
+   "text": "feat(v2-launch): phase 4 V2 announcement email",
+   "sha": "6567f51dd046142ddc62b80411ad70f12dc5e011",
+   "branch": "feature-enhancement",
+   "pushed": "yes",
+   "evidence": "e2e 16/16 x3 dev+prod, lowest unit coverage 90% (recipients.ts branches), root 2097/2097, api 837"
+  },
+  {
    "at": "2026-10-31T10:20:40.420Z",
    "type": "deliverable",
    "tasks": [
@@ -3776,14 +3832,6 @@ window.DASHBOARD = {
     "T4.10"
    ],
    "text": "400 test bypasses the console guard via browser.newContext (fixture has no allowlist hook); consider an expected-error hook"
-  },
-  {
-   "at": "2026-10-29T15:07:33.414Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.10"
-   ],
-   "text": "Proof shots T4.10-1..11 have no annotation boxes; 5-11 captions are filenames and 1-4 duplicate them"
   }
  ]
 };
