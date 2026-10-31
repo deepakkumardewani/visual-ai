@@ -8,6 +8,7 @@ vi.mock("../middlewares/clerk.js", () => ({
 
 vi.mock("../routes/collections.js", () => ({ collectionRoutes: "collectionRoutes" }))
 vi.mock("../routes/credits.js", () => ({ creditsRoute: "creditsRoute" }))
+vi.mock("../routes/email.js", () => ({ emailRoutes: "emailRoutes" }))
 vi.mock("../routes/explore.js", () => ({ exploreRoutes: "exploreRoutes" }))
 vi.mock("../routes/generate.js", () => ({ generateRoute: "generateRoute" }))
 vi.mock("../routes/image.js", () => ({ imageRoutes: "imageRoutes" }))
@@ -67,6 +68,7 @@ describe("api router index", () => {
             "promptRoutes",
             "sttRoute",
             "savedPromptsRoutes",
+            "emailRoutes",
             "userRoutes",
             "exploreRoutes",
             "creditsRoute",

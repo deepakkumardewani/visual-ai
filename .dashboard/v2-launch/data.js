@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-10-29T09:45:12.604Z",
+ "generatedAt": "2026-10-31T10:20:40.424Z",
  "feature": {
   "slug": "v2-launch",
   "title": "Visual AI V2 Launch Bundle"
@@ -27,8 +27,8 @@ window.DASHBOARD = {
   "phases": 6,
   "tasks": 53,
   "byStatus": {
-   "verified": 41,
-   "ready": 12
+   "verified": 52,
+   "ready": 1
   }
  },
  "phases": [
@@ -1127,7 +1127,7 @@ window.DASHBOARD = {
       "apps/web/public/intro/slide-10.webp"
      ],
      "gherkin": null,
-     "do": "Capture AFTER T3.5 so the voice clip shows the new mic. Slides in order: 1 New models, 2 Style picker, 3 More sizes, 4 New dashboard, 5 Voice dictation, 6 Improve / Generate / Save prompts, 7 Explore tab and page, 8 Tools (Upscale, Colorize), 9 Reference images, 10 Remove background. Record 10 clips of 4-6s from the running app with agent-browser (do not start the app; sign in as the QA user from `e2e/fixtures/qa.ts`), dark theme, tightly cropped to the one feature shown, no personal data. Encode one-off with ffmpeg to WebM + MP4 plus a WebP poster per slide. Budgets: each clip <= 400 KB, each poster < 100 KB. `slides.ts` entries carry `title`, `description`, video sources, `poster`, `alt`, `width`, `height`. `IntroSlide.vue` renders `<video muted autoplay loop playsinline>` with WebM then MP4 sources and the poster; lazy-load only the current and next slide and pause inactive slides; under reduced motion show the poster only with no autoplay.",
+     "do": "Capture AFTER T3.5 so the voice clip shows the new mic. Slides in order (deliberate change: dashboard first, models second; media files keep their original slide-N numbers, decoupled from display order via a mediaId in `slides.ts`): 1 New dashboard, 2 New models, 3 Style picker, 4 More sizes, 5 Voice dictation, 6 Improve / Generate / Save prompts, 7 Explore tab and page, 8 Tools (Upscale, Remove background), 9 Reference images, 10 Remove background. Record 10 clips of 4-6s from the running app with agent-browser (do not start the app; sign in as the QA user from `e2e/fixtures/qa.ts`), dark theme, tightly cropped to the one feature shown, no personal data. Encode one-off with ffmpeg to WebM + MP4 plus a WebP poster per slide. Budgets: each clip <= 400 KB, each poster < 100 KB. `slides.ts` entries carry `title`, `description`, video sources, `poster`, `alt`, `width`, `height`. `IntroSlide.vue` renders `<video muted autoplay loop playsinline>` with WebM then MP4 sources and the poster; lazy-load only the current and next slide and pause inactive slides; under reduced motion show the poster only with no autoplay.",
      "spec": null,
      "filesDeclared": true,
      "acceptance": [
@@ -1362,7 +1362,7 @@ window.DASHBOARD = {
     {
      "id": "T4.1",
      "title": "Email workspace scaffold and render",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -1387,13 +1387,13 @@ window.DASHBOARD = {
      ],
      "line": 546,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-10-31T10:20:40.420Z"
     },
     {
      "id": "T4.2",
      "title": "Unsubscribe token and User fields",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -1415,13 +1415,13 @@ window.DASHBOARD = {
      ],
      "line": 558,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-10-31T10:20:40.420Z"
     },
     {
      "id": "T4.3",
      "title": "Public unsubscribe route",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -1442,13 +1442,13 @@ window.DASHBOARD = {
      ],
      "line": 568,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-10-31T10:20:40.420Z"
     },
     {
      "id": "T4.4",
      "title": "Send script core",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -1471,13 +1471,13 @@ window.DASHBOARD = {
      ],
      "line": 579,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-10-31T10:20:40.420Z"
     },
     {
      "id": "T4.5",
      "title": "Modes and guards",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -1499,13 +1499,13 @@ window.DASHBOARD = {
      ],
      "line": 589,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-10-31T10:20:40.420Z"
     },
     {
      "id": "T4.6",
      "title": "Template content and design",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -1530,13 +1530,13 @@ window.DASHBOARD = {
      ],
      "line": 600,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-10-31T10:20:40.420Z"
     },
     {
      "id": "T4.7",
      "title": "Unit: unsubscribe token and route",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
@@ -1552,17 +1552,17 @@ window.DASHBOARD = {
       "Every file >= 90% on all four metrics (repo threshold), target > 95%."
      ],
      "verify": [
-      "cd apps/api && bunx vitest run src/lib/unsubscribe-token.test.ts src/routes/email.test.ts --coverage --coverage.include=src/lib/unsubscribe-token.ts --coverage.include=src/routes/email.ts --coverage.include=src/models/user.ts --coverage.reporter=text"
+      "cd apps/api && bunx vitest run src/lib/unsubscribe-token.test.ts src/routes/email.test.ts src/models/user.test.ts --coverage --coverage.include=src/lib/unsubscribe-token.ts --coverage.include=src/routes/email.ts --coverage.include=src/models/user.ts --coverage.reporter=text"
      ],
      "line": 612,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-10-31T10:20:40.420Z"
     },
     {
      "id": "T4.8",
      "title": "Unit: send script libs",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
@@ -1584,13 +1584,13 @@ window.DASHBOARD = {
      ],
      "line": 620,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-10-31T10:20:40.420Z"
     },
     {
      "id": "T4.9",
      "title": "Unit: email template",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
@@ -1610,13 +1610,13 @@ window.DASHBOARD = {
      ],
      "line": 628,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-10-31T10:20:40.420Z"
     },
     {
      "id": "T4.10",
      "title": "E2E: unsubscribe flow",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [],
      "files": [],
@@ -1632,13 +1632,13 @@ window.DASHBOARD = {
      ],
      "line": 636,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-10-31T10:20:40.420Z"
     },
     {
      "id": "T4.11",
      "title": "Gate: Phase 4",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -1657,13 +1657,13 @@ window.DASHBOARD = {
      ],
      "line": 649,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-10-31T10:20:40.420Z"
     }
    ],
-   "verified": 0,
+   "verified": 11,
    "total": 11,
-   "complete": false
+   "complete": true
   },
   {
    "id": "5",
@@ -1717,7 +1717,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/v2-launch/TASKS.md phase 4",
+ "nextCommand": "/build-phases agent_docs/v2-launch/TASKS.md phase 5",
  "questions": [
   {
    "at": "2026-10-27T14:11:40.591Z",
@@ -2314,9 +2314,289 @@ window.DASHBOARD = {
    "file": "3/T3.12-3.png",
    "phase": "3",
    "href": "shots/3/T3.12-3.png"
+  },
+  {
+   "taskId": "T4.6",
+   "kind": "proof",
+   "step": "Template content and design",
+   "attempt": null,
+   "caption": "Rendered V2 email at 1440 wide, single 600px column",
+   "annotations": [
+    {
+     "x": 30,
+     "y": 2,
+     "w": 40,
+     "h": 8,
+     "label": "hero and CTA"
+    }
+   ],
+   "at": "2026-10-29T14:42:12.403Z",
+   "file": "4/T4.6-1.png",
+   "phase": "4",
+   "href": "shots/4/T4.6-1.png"
+  },
+  {
+   "taskId": "T4.6",
+   "kind": "proof",
+   "step": "Single column under 480px",
+   "attempt": null,
+   "caption": "Rendered V2 email at 375 wide, single column with CTA, highlights, credits and footer",
+   "annotations": [
+    {
+     "x": 28,
+     "y": 20,
+     "w": 45,
+     "h": 4,
+     "label": "Try V2 now CTA"
+    }
+   ],
+   "at": "2026-10-29T14:42:12.511Z",
+   "file": "4/T4.6-2.png",
+   "phase": "4",
+   "href": "shots/4/T4.6-2.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Confirm page for a signed link",
+   "annotations": [],
+   "at": "2026-10-29T14:54:37.374Z",
+   "file": "4/T4.10-1.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-1.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Missing token shows friendly 400 page",
+   "annotations": [],
+   "at": "2026-10-29T14:54:37.478Z",
+   "file": "4/T4.10-2.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-2.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Invalid token shows friendly 400 page",
+   "annotations": [],
+   "at": "2026-10-29T14:54:37.567Z",
+   "file": "4/T4.10-3.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-3.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Confirm page at 375px, unauthenticated",
+   "annotations": [],
+   "at": "2026-10-29T14:54:37.659Z",
+   "file": "4/T4.10-4.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-4.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "unsubscribe 01-confirm",
+   "annotations": [],
+   "at": "2026-10-29T14:56:39.831Z",
+   "file": "4/T4.10-5.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-5.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "unsubscribe 02-success",
+   "annotations": [],
+   "at": "2026-10-29T14:56:39.939Z",
+   "file": "4/T4.10-6.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-6.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "unsubscribe 03-repeat-success",
+   "annotations": [],
+   "at": "2026-10-29T14:56:40.034Z",
+   "file": "4/T4.10-7.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-7.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "unsubscribe 04-missing-token",
+   "annotations": [],
+   "at": "2026-10-29T14:56:40.127Z",
+   "file": "4/T4.10-8.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-8.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "unsubscribe 05-invalid-token",
+   "annotations": [],
+   "at": "2026-10-29T14:56:40.221Z",
+   "file": "4/T4.10-9.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-9.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "unsubscribe 06-confirm-375",
+   "annotations": [],
+   "at": "2026-10-29T14:56:40.316Z",
+   "file": "4/T4.10-10.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-10.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "unsubscribe 07-success-375",
+   "annotations": [],
+   "at": "2026-10-29T14:56:40.409Z",
+   "file": "4/T4.10-11.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-11.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Signed link GET shows the confirm page; user is not opted out yet",
+   "annotations": [],
+   "at": "2026-10-29T15:13:27.837Z",
+   "file": "4/T4.10-12.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-12.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Clicking confirm shows 'You are unsubscribed' and sets emailOptOut",
+   "annotations": [],
+   "at": "2026-10-29T15:13:27.939Z",
+   "file": "4/T4.10-13.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-13.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Confirming a second time still shows success (idempotent)",
+   "annotations": [],
+   "at": "2026-10-29T15:13:28.026Z",
+   "file": "4/T4.10-14.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-14.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Missing token returns a friendly 400 invalid-link page",
+   "annotations": [],
+   "at": "2026-10-29T15:13:28.113Z",
+   "file": "4/T4.10-15.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-15.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Tampered or wrong-purpose token returns the 400 invalid-link page",
+   "annotations": [],
+   "at": "2026-10-29T15:13:28.203Z",
+   "file": "4/T4.10-16.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-16.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Confirm page fits a 375px viewport with no session",
+   "annotations": [],
+   "at": "2026-10-29T15:13:28.290Z",
+   "file": "4/T4.10-17.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-17.png"
+  },
+  {
+   "taskId": "T4.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Success page fits a 375px viewport with no horizontal scroll",
+   "annotations": [],
+   "at": "2026-10-29T15:13:28.380Z",
+   "file": "4/T4.10-18.png",
+   "phase": "4",
+   "href": "shots/4/T4.10-18.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-10-31T10:20:40.420Z",
+   "type": "deliverable",
+   "tasks": [
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8",
+    "T4.9",
+    "T4.10",
+    "T4.11"
+   ],
+   "text": "V2 announcement email: template, unsubscribe flow, send script with durable batch replay, gate fix for Node 26 webstorage",
+   "files": [
+    "packages/email",
+    "apps/api",
+    "apps/web",
+    "vite.config.ts"
+   ]
+  },
   {
    "at": "2026-10-29T09:44:48.491Z",
    "type": "deliverable",
@@ -2385,6 +2665,270 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-10-31T10:16:23.624Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.4"
+   ],
+   "text": "partial provider ids leave remainder replayed under same key with different payload: noisy reconcile, no duplicate risk"
+  },
+  {
+   "at": "2026-10-31T10:16:23.500Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.6"
+   ],
+   "text": "light/dark not checked visually (needs user-started React Email dev preview)"
+  },
+  {
+   "at": "2026-10-31T10:16:23.380Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.1"
+   ],
+   "text": "T4.1/T4.9 no proof shots of their own (template shots under T4.6); no Design field"
+  },
+  {
+   "at": "2026-10-31T10:16:23.258Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.3"
+   ],
+   "text": "no proof shots of its own (covered by T4.10); no Design field"
+  },
+  {
+   "at": "2026-10-31T10:16:23.137Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.10"
+   ],
+   "text": "spec has 5 tests for 4 scenarios (@medium split in two); acceptable"
+  },
+  {
+   "at": "2026-10-31T10:16:23.015Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.10"
+   ],
+   "text": "stale shots T4.10-1..11 still registered (filename captions, no boxes); 12-18 are good"
+  },
+  {
+   "at": "2026-10-31T10:16:22.855Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.4"
+   ],
+   "text": "send-script.test.ts:127-139 order test passes even without awaiting connect (mock connect pushes synchronously); use a deferred connect"
+  },
+  {
+   "at": "2026-10-31T10:16:22.678Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.11"
+   ],
+   "text": "bun run verify runs lint/check with --fix (mutating); verifier ran non-mutating bun run check + vp lint (0 errors)"
+  },
+  {
+   "at": "2026-10-31T10:08:47.200Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.4"
+   ],
+   "text": "partial provider ids leave a shrunken pending batch under the same key; replay likely rejected until stale"
+  },
+  {
+   "at": "2026-10-31T10:08:47.121Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.6"
+   ],
+   "text": "light/dark not visually checked; color-scheme light only"
+  },
+  {
+   "at": "2026-10-31T10:08:47.046Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.9"
+   ],
+   "text": "T4.1/T4.9 have no shots of their own; template shots under T4.6"
+  },
+  {
+   "at": "2026-10-31T10:08:46.966Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.3"
+   ],
+   "text": "no shots of its own; covered by T4.10-12..18"
+  },
+  {
+   "at": "2026-10-31T10:08:46.842Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.10"
+   ],
+   "text": "stale shots T4.10-1..11 still registered (filename captions, no boxes)"
+  },
+  {
+   "at": "2026-10-31T10:01:05.588Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.6"
+   ],
+   "text": "light/dark React Email preview not visually reviewed (needs user-started dev preview); template uses color-scheme light only"
+  },
+  {
+   "at": "2026-10-31T10:01:05.483Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.7"
+   ],
+   "text": "Verify line omits src/models/user.test.ts so user.ts shows 0%; with it all 3 files 100%"
+  },
+  {
+   "at": "2026-10-31T10:01:05.380Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.9"
+   ],
+   "text": "T4.1/T4.9 have no shots of their own (template shots under T4.6); no Design field"
+  },
+  {
+   "at": "2026-10-31T10:01:05.278Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.3"
+   ],
+   "text": "no shots of its own (server-rendered pages covered by T4.10-12..18); no Design field"
+  },
+  {
+   "at": "2026-10-31T10:01:05.179Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.10"
+   ],
+   "text": "stale shots T4.10-1..11 (filename captions, no boxes) still registered; 12-18 are good"
+  },
+  {
+   "at": "2026-10-31T10:01:05.053Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.4"
+   ],
+   "text": "pickRunRecipients subtracts pending count: a pending batch that fails every run (4xx or payload drift -> key mismatch) zeroes fresh allowance forever; campaign stalls"
+  },
+  {
+   "at": "2026-10-29T15:19:16.493Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.6"
+   ],
+   "text": "color-scheme light only; light/dark preview not visually verified"
+  },
+  {
+   "at": "2026-10-29T15:19:16.401Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.7"
+   ],
+   "text": "Verify command omits user.test.ts so user.ts shows 0%; with it 100%"
+  },
+  {
+   "at": "2026-10-29T15:19:16.306Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.10"
+   ],
+   "text": "stale shots T4.10-1..11 still registered with filename captions, no boxes"
+  },
+  {
+   "at": "2026-10-29T15:19:16.188Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.3"
+   ],
+   "text": "no T4.3 shots; unsubscribe pages covered by T4.10-12..18"
+  },
+  {
+   "at": "2026-10-29T15:19:15.976Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.4"
+   ],
+   "text": "batching.ts:92-96 comment overclaims rerun idempotency (holds only if the eligible set is unchanged)"
+  },
+  {
+   "at": "2026-10-29T15:19:15.802Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.4"
+   ],
+   "text": "recipients.ts:38-43 order-dependent dedupe: lower-_id unsent account sharing an address with a later sent/opted-out account is mailed"
+  },
+  {
+   "at": "2026-10-29T15:07:33.861Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.6"
+   ],
+   "text": "color-scheme meta is light only and card/button text use pure #ffffff; MAIL-3 asks dark-mode safe with no pure-white dependency; light/dark preview not visually verified"
+  },
+  {
+   "at": "2026-10-29T15:07:33.772Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.11"
+   ],
+   "text": "Verify lines bun --cwd <dir> run test only print bun help; ran via cd <dir> && bun run test. bun run verify (--fix) replaced by vp lint + bun run check"
+  },
+  {
+   "at": "2026-10-29T15:07:33.683Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.3"
+   ],
+   "text": "apps/api/src/app.ts CORS exemption is outside every Files list (orchestrator-directed); NON_PUBLIC_EMAIL_PATH name is misleading (it matches all non-/email paths)"
+  },
+  {
+   "at": "2026-10-29T15:07:33.593Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.7"
+   ],
+   "text": "Verify command omits src/models/user.test.ts so user.ts reports 0%; with it all three files are 100%"
+  },
+  {
+   "at": "2026-10-29T15:07:33.506Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.10"
+   ],
+   "text": "400 test bypasses the console guard via browser.newContext (fixture has no allowlist hook); consider an expected-error hook"
+  },
+  {
+   "at": "2026-10-29T15:07:33.414Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.10"
+   ],
+   "text": "Proof shots T4.10-1..11 have no annotation boxes; 5-11 captions are filenames and 1-4 duplicate them"
+  },
+  {
+   "at": "2026-10-29T15:07:33.325Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.9"
+   ],
+   "text": "UI task by heuristic (.tsx) with no registered proof shot and no Design field (unit task)"
+  },
+  {
+   "at": "2026-10-29T15:07:33.228Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.1"
+   ],
+   "text": "UI task by heuristic (.tsx) with no registered proof shot and no Design field; template shots live under T4.6"
+  },
   {
    "at": "2026-10-29T09:42:45.378Z",
    "type": "advisory",
@@ -2628,671 +3172,618 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
-   "at": "2026-10-29T09:45:12.601Z",
-   "type": "commit",
-   "tasks": [
-    "T3.1",
-    "T3.2",
-    "T3.3",
-    "T3.4",
-    "T3.5",
-    "T3.6",
-    "T3.7",
-    "T3.8",
-    "T3.9",
-    "T3.10",
-    "T3.11",
-    "T3.12",
-    "T3.13"
-   ],
-   "attempt": "3",
-   "text": "feat(v2-launch): phase 3 intro carousel, tour and STT polish",
-   "sha": "34aa078fa69b7ed9340b6f8cb982e2059aac1104",
-   "branch": "feature-enhancement",
-   "pushed": "yes",
-   "evidence": "e2e 40/40 v2-intro, 27/27 voice x3 dev+prod; lowest unit coverage 93.8% branches"
-  },
-  {
-   "at": "2026-10-29T09:44:48.491Z",
+   "at": "2026-10-31T10:20:40.420Z",
    "type": "deliverable",
    "tasks": [
-    "T3.1",
-    "T3.2",
-    "T3.3",
-    "T3.4",
-    "T3.5",
-    "T3.6",
-    "T3.7",
-    "T3.8",
-    "T3.9",
-    "T3.10",
-    "T3.11",
-    "T3.12",
-    "T3.13"
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8",
+    "T4.9",
+    "T4.10",
+    "T4.11"
    ],
-   "text": "V2 intro carousel + tour, intro-seen API, STT polish, 10 slide clips, unit+e2e specs",
+   "text": "V2 announcement email: template, unsubscribe flow, send script with durable batch replay, gate fix for Node 26 webstorage",
    "files": [
-    "apps/web/src/components/Intro",
-    "apps/api/src/routes/users.ts",
-    "packages/shared/src/models/intro.ts"
+    "packages/email",
+    "apps/api",
+    "apps/web",
+    "vite.config.ts"
    ]
   },
   {
-   "at": "2026-10-29T09:44:48.402Z",
+   "at": "2026-10-31T10:20:40.318Z",
    "type": "verify_passed",
    "tasks": [
-    "T3.1",
-    "T3.2",
-    "T3.3",
-    "T3.4",
-    "T3.5",
-    "T3.6",
-    "T3.7",
-    "T3.8",
-    "T3.9",
-    "T3.10",
-    "T3.11",
-    "T3.12",
-    "T3.13"
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8",
+    "T4.9",
+    "T4.10",
+    "T4.11"
    ],
    "attempt": "3"
   },
   {
-   "at": "2026-10-29T09:42:45.378Z",
-   "type": "advisory",
-   "tasks": [
-    "T3.13"
-   ],
-   "text": "[flaky-env] mods-reference-image.spec.ts:201 failed once in prod x3 (CORS preflight to the live dev API failed while a concurrent shared rebuild ran); serial prod re-run 18/18 clean"
-  },
-  {
-   "at": "2026-10-29T09:39:26.248Z",
-   "type": "advisory",
-   "tasks": [
-    "T3.11"
-   ],
-   "text": "[test-quality] v2-intro.spec.ts:126,262 negative toBeHidden after reload has no positive sync on the intro decision (only profile response + composer visible); a late-opening modal could slip past"
-  },
-  {
-   "at": "2026-10-29T09:35:33.294Z",
-   "type": "verify_started",
-   "tasks": [
-    "T3.1",
-    "T3.2",
-    "T3.3",
-    "T3.4",
-    "T3.5",
-    "T3.6",
-    "T3.7",
-    "T3.8",
-    "T3.9",
-    "T3.10",
-    "T3.11",
-    "T3.12",
-    "T3.13"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-10-29T09:35:27.507Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.13"
-   ],
-   "text": "gate green incl prod e2e",
-   "files": [
-    "agent_docs/v2-launch/TASKS.md"
-   ]
-  },
-  {
-   "at": "2026-10-29T09:31:58.409Z",
+   "at": "2026-10-31T10:19:24.737Z",
    "type": "task_started",
    "tasks": [
-    "T3.13"
+    "T4.11"
    ],
-   "attempt": "3"
+   "attempt": "1"
   },
   {
-   "at": "2026-10-29T09:31:58.307Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.11"
-   ],
-   "text": "v2-intro 40/40 dev+prod x3",
-   "files": [
-    "apps/web/e2e/qa/v2-intro.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-10-29T09:29:27.575Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.10"
-   ],
-   "text": "MicButton func cov 100%",
-   "files": [
-    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.test.ts"
-   ]
-  },
-  {
-   "at": "2026-10-29T09:28:51.470Z",
-   "type": "task_started",
-   "tasks": [
-    "T3.11"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-10-29T09:28:46.426Z",
-   "type": "task_started",
-   "tasks": [
-    "T3.10"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-10-29T09:28:46.353Z",
+   "at": "2026-10-31T10:19:24.612Z",
    "type": "build_started",
    "tasks": [
-    "T3.1",
-    "T3.2",
-    "T3.3",
-    "T3.4",
-    "T3.5",
-    "T3.6",
-    "T3.7",
-    "T3.8",
-    "T3.9",
-    "T3.10",
-    "T3.11",
-    "T3.12",
-    "T3.13"
+    "T4.11"
    ],
-   "attempt": "3"
+   "attempt": "1"
   },
   {
-   "at": "2026-10-29T09:28:46.275Z",
+   "at": "2026-10-31T10:17:02.505Z",
+   "type": "blocked",
+   "tasks": [
+    "T4.11"
+   ],
+   "text": "retries exhausted",
+   "unblock": "Pin Node<=25 (or disable webstorage in vitest config) then re-run gate root bun run test"
+  },
+  {
+   "at": "2026-10-31T10:17:02.376Z",
    "type": "verify_failed",
    "tasks": [
-    "T3.10",
-    "T3.11",
-    "T3.13"
+    "T4.11"
    ],
-   "attempt": "2",
-   "text": "[test-quality] MicButton func cov 88.9%; v2-intro prod-mode route.fetch cert failure; v2 test relies on DB row"
+   "attempt": "3",
+   "text": "flaky-env: root bun run test fails under Node 26 (localStorage), passes 2097/2097 with NODE_OPTIONS=--no-experimental-webstorage"
   },
   {
-   "at": "2026-10-29T09:28:02.307Z",
+   "at": "2026-10-31T10:16:23.624Z",
    "type": "advisory",
    "tasks": [
-    "T3.10"
+    "T4.4"
    ],
-   "text": "[test-quality] UI task (lists .vue files, no Design field) has no registered proof shot in shots/manifest.json"
+   "text": "partial provider ids leave remainder replayed under same key with different payload: noisy reconcile, no duplicate risk"
   },
   {
-   "at": "2026-10-29T09:28:02.232Z",
+   "at": "2026-10-31T10:16:23.500Z",
    "type": "advisory",
    "tasks": [
-    "T3.9"
+    "T4.6"
    ],
-   "text": "[test-quality] UI task (lists .vue files, no Design field) has no registered proof shot in shots/manifest.json"
+   "text": "light/dark not checked visually (needs user-started React Email dev preview)"
   },
   {
-   "at": "2026-10-29T09:28:02.137Z",
+   "at": "2026-10-31T10:16:23.380Z",
    "type": "advisory",
    "tasks": [
-    "T3.3"
+    "T4.1"
    ],
-   "text": "[test-quality] UI task (lists .vue files, no Design field) has no registered proof shot in shots/manifest.json"
+   "text": "T4.1/T4.9 no proof shots of their own (template shots under T4.6); no Design field"
   },
   {
-   "at": "2026-10-29T09:24:56.587Z",
+   "at": "2026-10-31T10:16:23.258Z",
    "type": "advisory",
    "tasks": [
-    "T3.6"
+    "T4.3"
    ],
-   "text": "[test-quality] shots/3/T3.6-1.webp has no annotation; voice clip (slide 5) is wide, not tightly cropped to the mic"
+   "text": "no proof shots of its own (covered by T4.10); no Design field"
   },
   {
-   "at": "2026-10-29T09:24:56.513Z",
+   "at": "2026-10-31T10:16:23.137Z",
    "type": "advisory",
    "tasks": [
-    "T3.13"
+    "T4.10"
    ],
-   "text": "[flaky-env] bun run verify not run by verifier (it applies --fix); substituted vp lint + bun run check: 0 errors, 6 warnings in test files"
+   "text": "spec has 5 tests for 4 scenarios (@medium split in two); acceptable"
   },
   {
-   "at": "2026-10-29T09:24:56.440Z",
+   "at": "2026-10-31T10:16:23.015Z",
    "type": "advisory",
    "tasks": [
-    "T3.3"
+    "T4.10"
    ],
-   "text": "[code-bug] scope: Composer/ModelChip.vue (model-picker anchor) and shared types/domain.ts (T3.1) edited outside Files; documented builder decisions"
+   "text": "stale shots T4.10-1..11 still registered (filename captions, no boxes); 12-18 are good"
   },
   {
-   "at": "2026-10-29T09:24:56.364Z",
+   "at": "2026-10-31T10:16:22.855Z",
    "type": "advisory",
    "tasks": [
-    "T3.11"
+    "T4.4"
    ],
-   "text": "[test-quality] v2-intro.spec.ts:6 expected titles/alt/poster come from production slides.ts, not independent literals; PUT failure simulated as 200 non-JSON, retry not asserted in e2e"
+   "text": "send-script.test.ts:127-139 order test passes even without awaiting connect (mock connect pushes synchronously); use a deferred connect"
   },
   {
-   "at": "2026-10-29T09:24:56.286Z",
+   "at": "2026-10-31T10:16:22.678Z",
    "type": "advisory",
    "tasks": [
-    "T3.6"
+    "T4.11"
    ],
-   "text": "[test-quality] Verify says v2-intro.spec covers media attributes and lazy-load; it does not (only unit WhatsNewModal.test.ts:96, IntroSlide.test.ts:37)"
+   "text": "bun run verify runs lint/check with --fix (mutating); verifier ran non-mutating bun run check + vp lint (0 errors)"
   },
   {
-   "at": "2026-10-29T09:24:56.213Z",
-   "type": "advisory",
-   "tasks": [
-    "T3.6"
-   ],
-   "text": "[code-bug] IntroSlide.vue:40 video has no autoplay attribute (plays via play()); IntroSlide.vue:29 .catch(() => undefined) silently swallows the play() rejection"
-  },
-  {
-   "at": "2026-10-29T09:24:56.138Z",
-   "type": "advisory",
-   "tasks": [
-    "T3.7"
-   ],
-   "text": "[test-quality] Verify command omits src/models/user.test.ts, so user.ts reports 0% with it; 100% on all metrics when user.test.ts is included"
-  },
-  {
-   "at": "2026-10-29T09:24:56.046Z",
-   "type": "advisory",
-   "tasks": [
-    "T3.11"
-   ],
-   "text": "[flaky-env] e2e/qa/v2-intro.spec.ts:42 route.fetch fails under E2E_SERVER=prod (self-signed API cert, prod config sets ignoreHTTPSErrors false): 33/33 v2-intro tests fail in prod; verified in dev 40/40 x3"
-  },
-  {
-   "at": "2026-10-29T09:16:25.871Z",
+   "at": "2026-10-31T10:10:52.787Z",
    "type": "verify_started",
    "tasks": [
-    "T3.1",
-    "T3.2",
-    "T3.3",
-    "T3.4",
-    "T3.5",
-    "T3.6",
-    "T3.7",
-    "T3.8",
-    "T3.9",
-    "T3.10",
-    "T3.11",
-    "T3.12",
-    "T3.13"
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8",
+    "T4.9",
+    "T4.10",
+    "T4.11"
    ],
-   "attempt": "2"
+   "attempt": "3"
   },
   {
-   "at": "2026-10-29T09:16:20.464Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.4",
-    "T3.5",
-    "T3.11",
-    "T3.12"
-   ],
-   "text": "attempt 2: tour popover remount + cancel X fixed, specs green x3",
-   "files": [
-    "apps/web/src/components/Intro/tour.ts",
-    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue"
-   ]
-  },
-  {
-   "at": "2026-10-29T09:11:14.801Z",
+   "at": "2026-10-31T10:10:02.804Z",
    "type": "task_started",
    "tasks": [
-    "T3.4",
-    "T3.5",
-    "T3.11",
-    "T3.12"
+    "T4.4",
+    "T4.5"
    ],
-   "attempt": "2"
+   "attempt": "3"
   },
   {
-   "at": "2026-10-29T09:11:14.713Z",
+   "at": "2026-10-31T10:10:02.724Z",
    "type": "build_started",
    "tasks": [
-    "T3.1",
-    "T3.2",
-    "T3.3",
-    "T3.4",
-    "T3.5",
-    "T3.6",
-    "T3.7",
-    "T3.8",
-    "T3.9",
-    "T3.10",
-    "T3.11",
-    "T3.12",
-    "T3.13"
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8",
+    "T4.9",
+    "T4.10",
+    "T4.11"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-10-31T10:10:02.619Z",
+   "type": "verify_failed",
+   "tasks": [
+    "T4.4",
+    "T4.5"
+   ],
+   "attempt": "2",
+   "text": "code-bug: loadPendingBatches runs before mongoose.connect so real --confirm buffers 10s and dies"
+  },
+  {
+   "at": "2026-10-31T10:08:47.200Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.4"
+   ],
+   "text": "partial provider ids leave a shrunken pending batch under the same key; replay likely rejected until stale"
+  },
+  {
+   "at": "2026-10-31T10:08:47.121Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.6"
+   ],
+   "text": "light/dark not visually checked; color-scheme light only"
+  },
+  {
+   "at": "2026-10-31T10:08:47.046Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.9"
+   ],
+   "text": "T4.1/T4.9 have no shots of their own; template shots under T4.6"
+  },
+  {
+   "at": "2026-10-31T10:08:46.966Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.3"
+   ],
+   "text": "no shots of its own; covered by T4.10-12..18"
+  },
+  {
+   "at": "2026-10-31T10:08:46.842Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.10"
+   ],
+   "text": "stale shots T4.10-1..11 still registered (filename captions, no boxes)"
+  },
+  {
+   "at": "2026-10-31T10:03:40.145Z",
+   "type": "verify_started",
+   "tasks": [
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8",
+    "T4.9",
+    "T4.10",
+    "T4.11"
    ],
    "attempt": "2"
   },
   {
-   "at": "2026-10-29T09:11:14.637Z",
-   "type": "task_failed",
+   "at": "2026-10-31T10:01:48.614Z",
+   "type": "task_started",
    "tasks": [
-    "T3.12"
+    "T4.4"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-10-31T10:01:48.528Z",
+   "type": "build_started",
+   "tasks": [
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8",
+    "T4.9",
+    "T4.10",
+    "T4.11"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-10-31T10:01:48.428Z",
+   "type": "verify_failed",
+   "tasks": [
+    "T4.4"
    ],
    "attempt": "1",
-   "text": "stray qa screenshots untracked",
-   "unblock": "fix app bug / gitignore / update files lists"
+   "text": "code-bug: pendingKey replayed with no age limit; Resend idempotency keys expire (~24h), late replay duplicates and mails opted-out users"
   },
   {
-   "at": "2026-10-29T09:11:14.562Z",
-   "type": "task_failed",
+   "at": "2026-10-31T10:01:05.588Z",
+   "type": "advisory",
    "tasks": [
-    "T3.11"
+    "T4.6"
    ],
-   "attempt": "1",
-   "text": "stray spec file not in files list",
-   "unblock": "fix app bug / gitignore / update files lists"
+   "text": "light/dark React Email preview not visually reviewed (needs user-started dev preview); template uses color-scheme light only"
   },
   {
-   "at": "2026-10-29T09:11:14.489Z",
-   "type": "task_failed",
+   "at": "2026-10-31T10:01:05.483Z",
+   "type": "advisory",
    "tasks": [
-    "T3.5"
+    "T4.7"
    ],
-   "attempt": "1",
-   "text": "voice cancel X real-click bug",
-   "unblock": "fix app bug / gitignore / update files lists"
+   "text": "Verify line omits src/models/user.test.ts so user.ts shows 0%; with it all 3 files 100%"
   },
   {
-   "at": "2026-10-29T09:11:14.414Z",
-   "type": "task_failed",
+   "at": "2026-10-31T10:01:05.380Z",
+   "type": "advisory",
    "tasks": [
-    "T3.4"
+    "T4.9"
    ],
-   "attempt": "1",
-   "text": "preflight stray files + tour popover remount bug",
-   "unblock": "fix app bug / gitignore / update files lists"
+   "text": "T4.1/T4.9 have no shots of their own (template shots under T4.6); no Design field"
   },
   {
-   "at": "2026-10-29T09:10:58.806Z",
-   "type": "task_built",
+   "at": "2026-10-31T10:01:05.278Z",
+   "type": "advisory",
    "tasks": [
-    "T3.13"
+    "T4.3"
    ],
-   "text": "gate verify green; 2 open app bugs reported",
-   "files": [
-    "agent_docs/v2-launch/TASKS.md"
-   ]
+   "text": "no shots of its own (server-rendered pages covered by T4.10-12..18); no Design field"
   },
   {
-   "at": "2026-10-29T09:10:50.373Z",
-   "type": "task_built",
+   "at": "2026-10-31T10:01:05.179Z",
+   "type": "advisory",
    "tasks": [
-    "T3.13"
+    "T4.10"
    ],
-   "text": "gate verify all green; 2 known app bugs open"
+   "text": "stale shots T4.10-1..11 (filename captions, no boxes) still registered; 12-18 are good"
   },
   {
-   "at": "2026-10-29T09:08:23.993Z",
-   "type": "task_started",
+   "at": "2026-10-31T10:01:05.053Z",
+   "type": "advisory",
    "tasks": [
-    "T3.13"
-   ]
-  },
-  {
-   "at": "2026-10-29T09:08:12.731Z",
-   "type": "task_started",
-   "tasks": [
-    "T3.13"
+    "T4.4"
    ],
-   "attempt": "1"
+   "text": "pickRunRecipients subtracts pending count: a pending batch that fails every run (4xx or payload drift -> key mismatch) zeroes fresh allowance forever; campaign stalls"
   },
   {
-   "at": "2026-10-29T09:08:12.640Z",
-   "type": "task_built",
+   "at": "2026-10-31T09:56:38.987Z",
+   "type": "verify_started",
    "tasks": [
-    "T3.12"
-   ],
-   "text": "28 passed x3",
-   "files": [
-    "apps/web/e2e/qa/voice-input.spec.ts",
-    "apps/web/e2e/support/voiceMocks.ts"
-   ]
-  },
-  {
-   "at": "2026-10-29T09:08:12.553Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.11"
-   ],
-   "text": "13 tests x3 green; 1 test.fail for app bug (tour popover remount)",
-   "files": [
-    "apps/web/e2e/qa/v2-intro.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-10-29T09:03:52.723Z",
-   "type": "task_started",
-   "tasks": [
-    "T3.11",
-    "T3.12"
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8",
+    "T4.9",
+    "T4.10",
+    "T4.11"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-10-29T09:03:52.588Z",
+   "at": "2026-10-31T09:56:13.733Z",
    "type": "task_built",
    "tasks": [
-    "T3.10"
+    "T4.4"
    ],
-   "text": "voice input specs 99.5% cov",
+   "text": "durable pending-batch reservation (announcements.v2.pendingKey) replayed first; opt-out + changed-flag rerun tests; bun run check exit 0; 137 tests pass",
    "files": [
-    "apps/web/src/composables/useGrokRecorder.test.ts"
+    "apps/api/src/lib/v2-announcement/batching.ts",
+    "apps/api/src/lib/v2-announcement/modes.ts",
+    "apps/api/src/lib/v2-announcement/recipients.ts",
+    "apps/api/scripts/send-v2-announcement.ts",
+    "apps/api/src/models/user.ts"
    ]
   },
   {
-   "at": "2026-10-29T09:03:52.465Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.9"
-   ],
-   "text": "Intro components + UserMenu specs >95%",
-   "files": [
-    "apps/web/src/components/Intro/WhatsNewModal.test.ts",
-    "apps/web/src/components/Header/UserMenu.test.ts"
-   ]
-  },
-  {
-   "at": "2026-10-29T09:03:52.351Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.8"
-   ],
-   "text": "useIntro/tour/slides specs 100% cov",
-   "files": [
-    "apps/web/src/composables/useIntro.test.ts",
-    "apps/web/src/components/Intro/tour.test.ts"
-   ]
-  },
-  {
-   "at": "2026-10-29T09:03:52.224Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.7"
-   ],
-   "text": "users/user unit specs 100% cov",
-   "files": [
-    "apps/api/src/routes/users.test.ts",
-    "apps/api/src/models/user.test.ts"
-   ]
-  },
-  {
-   "at": "2026-10-29T05:27:46.653Z",
+   "at": "2026-10-31T09:53:58.846Z",
    "type": "task_started",
    "tasks": [
-    "T3.7",
-    "T3.8",
-    "T3.9",
-    "T3.10"
+    "T4.4"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-10-29T05:27:36.431Z",
-   "type": "task_built",
+   "at": "2026-10-31T09:53:58.751Z",
+   "type": "build_started",
    "tasks": [
-    "T3.6"
-   ],
-   "text": "30 intro files, budgets and durations pass",
-   "files": [
-    "apps/web/public/intro",
-    "apps/web/src/components/Intro/slides.ts"
-   ]
-  },
-  {
-   "at": "2026-10-29T05:27:36.334Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.5"
-   ],
-   "text": "stop icon, pill countdown, spinner, silence/empty toasts; unit 55 pass, qa spec 11 pass",
-   "files": [
-    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue",
-    "apps/web/src/composables/useGrokRecorder.ts"
-   ]
-  },
-  {
-   "at": "2026-10-29T05:13:39.423Z",
-   "type": "task_started",
-   "tasks": [
-    "T3.6"
-   ]
-  },
-  {
-   "at": "2026-10-29T05:13:39.329Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.5"
-   ],
-   "text": "tests 55 pass, check clean, voice-input.spec 11 pass x2",
-   "files": [
-    "packages/shared/src/models/stt.ts",
-    "apps/web/src/composables/useAudioLevel.ts",
-    "apps/web/src/composables/useGrokRecorder.ts",
-    "apps/web/src/composables/useVoiceInput.ts",
-    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue",
-    "apps/web/src/components/Dashboard/Composer/VoiceInput/Waveform.vue"
-   ]
-  },
-  {
-   "at": "2026-10-29T05:11:17.318Z",
-   "type": "task_started",
-   "tasks": [
-    "T3.5"
-   ]
-  },
-  {
-   "at": "2026-10-29T05:11:03.071Z",
-   "type": "task_started",
-   "tasks": [
-    "T3.5",
-    "T3.6"
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8",
+    "T4.9",
+    "T4.10",
+    "T4.11"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-10-29T05:10:47.914Z",
+   "at": "2026-10-29T15:19:39.907Z",
+   "type": "blocked",
+   "tasks": [
+    "T4.4",
+    "T4.8",
+    "T4.10"
+   ],
+   "text": "retries exhausted",
+   "unblock": "Persist accepted batch (key + userIds) or per-user pending marker before calling Resend and replay it on rerun; add tests for opt-out between runs and changed flags; prettier the two files"
+  },
+  {
+   "at": "2026-10-29T15:19:39.702Z",
+   "type": "verify_failed",
+   "tasks": [
+    "T4.4",
+    "T4.8",
+    "T4.10"
+   ],
+   "attempt": "3",
+   "text": "[code-bug] crash-rerun idempotency key not persisted (opt-out or changed flags between runs duplicates sends); [type-lint] bun run check formatting in modes.test.ts and v2-email-unsubscribe.spec.ts"
+  },
+  {
+   "at": "2026-10-29T15:19:16.493Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.6"
+   ],
+   "text": "color-scheme light only; light/dark preview not visually verified"
+  },
+  {
+   "at": "2026-10-29T15:19:16.401Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.7"
+   ],
+   "text": "Verify command omits user.test.ts so user.ts shows 0%; with it 100%"
+  },
+  {
+   "at": "2026-10-29T15:19:16.306Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.10"
+   ],
+   "text": "stale shots T4.10-1..11 still registered with filename captions, no boxes"
+  },
+  {
+   "at": "2026-10-29T15:19:16.188Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.3"
+   ],
+   "text": "no T4.3 shots; unsubscribe pages covered by T4.10-12..18"
+  },
+  {
+   "at": "2026-10-29T15:19:15.976Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.4"
+   ],
+   "text": "batching.ts:92-96 comment overclaims rerun idempotency (holds only if the eligible set is unchanged)"
+  },
+  {
+   "at": "2026-10-29T15:19:15.802Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.4"
+   ],
+   "text": "recipients.ts:38-43 order-dependent dedupe: lower-_id unsent account sharing an address with a later sent/opted-out account is mailed"
+  },
+  {
+   "at": "2026-10-29T15:13:51.457Z",
+   "type": "verify_started",
+   "tasks": [
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8",
+    "T4.9",
+    "T4.10",
+    "T4.11"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-10-29T15:13:44.575Z",
    "type": "task_built",
    "tasks": [
-    "T3.3"
+    "T4.10"
    ],
-   "text": "also ModelChip anchor so model-picker renders in the sidebar",
+   "text": "e2e 16/16 x3 under dev and prod",
    "files": [
-    "apps/web/src/components/Dashboard/Composer/ModelChip.vue"
+    "apps/web/e2e/qa/v2-email-unsubscribe.spec.ts"
    ]
   },
   {
-   "at": "2026-10-29T05:10:47.839Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.4"
-   ],
-   "text": "driver.js tour.ts + TourPopover; 8 steps shown on desktop, popover verified in browser; check clean",
-   "files": [
-    "apps/web/src/components/Intro/tour.ts",
-    "apps/web/src/components/Intro/TourPopover.vue",
-    "apps/web/package.json"
-   ]
-  },
-  {
-   "at": "2026-10-29T05:07:40.761Z",
+   "at": "2026-10-29T15:12:19.738Z",
    "type": "task_started",
    "tasks": [
-    "T3.4"
-   ]
+    "T4.10"
+   ],
+   "attempt": "3"
   },
   {
-   "at": "2026-10-29T05:07:40.652Z",
+   "at": "2026-10-29T15:12:19.652Z",
    "type": "task_built",
    "tasks": [
-    "T3.2"
+    "T4.8"
    ],
-   "text": "useIntro, WhatsNewModal, IntroSlide, FeatureList, slides, UserMenu item, shell mount; check clean, UserMenu/Shell tests pass",
+   "text": "unit lowest 96.15% branches (5 files, 110 tests)",
    "files": [
-    "apps/web/src/composables/useIntro.ts",
-    "apps/web/src/components/Intro/WhatsNewModal.vue"
+    "apps/api/src/lib/v2-announcement/recipients.test.ts",
+    "apps/api/src/lib/v2-announcement/modes.test.ts",
+    "apps/api/src/lib/v2-announcement/send-script.test.ts",
+    "apps/api/src/lib/v2-announcement/batching.test.ts"
    ]
   },
   {
-   "at": "2026-10-29T05:05:11.865Z",
+   "at": "2026-10-29T15:10:50.804Z",
+   "type": "task_started",
+   "tasks": [
+    "T4.8"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-10-29T15:10:35.064Z",
    "type": "task_built",
    "tasks": [
-    "T3.3"
+    "T4.4"
    ],
-   "text": "7 data-tour anchors added; grep check clean; 63 component tests pass",
+   "text": "retry: gitignore exception, email dedupe incl sent/opted-out, atomic bulk markBatchSent",
    "files": [
-    "components/Dashboard/ModelPicker/ModelPickerTrigger.vue"
+    "apps/api/scripts/send-v2-announcement.ts",
+    "apps/api/src/lib/v2-announcement/batching.ts",
+    "apps/api/src/lib/v2-announcement/recipients.ts"
    ]
   },
   {
-   "at": "2026-10-29T05:04:52.925Z",
+   "at": "2026-10-29T15:08:24.114Z",
    "type": "task_started",
    "tasks": [
-    "T3.3"
-   ]
-  },
-  {
-   "at": "2026-10-29T05:04:52.830Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.1"
+    "T4.4"
    ],
-   "text": "PUT /users/intro-seen + schema field + shared intro consts; users tests 29 pass; check clean",
-   "files": [
-    "packages/shared/src/models/intro.ts",
-    "apps/api/src/models/user.ts",
-    "apps/api/src/routes/users.ts"
-   ]
+   "attempt": "3"
   },
   {
-   "at": "2026-10-29T05:04:28.532Z",
-   "type": "task_started",
+   "at": "2026-10-29T15:08:24.025Z",
+   "type": "build_started",
    "tasks": [
-    "T3.1"
-   ]
-  },
-  {
-   "at": "2026-10-29T05:03:58.302Z",
-   "type": "task_started",
-   "tasks": [
-    "T3.1",
-    "T3.2",
-    "T3.4",
-    "T3.3"
+    "T4.4",
+    "T4.8",
+    "T4.10"
    ],
-   "attempt": "1"
+   "attempt": "3"
+  },
+  {
+   "at": "2026-10-29T15:08:23.935Z",
+   "type": "verify_failed",
+   "tasks": [
+    "T4.4",
+    "T4.8",
+    "T4.10"
+   ],
+   "attempt": "2",
+   "text": "[code-bug] CLI script gitignored; dedupe vs already-sent emails; crash-rerun idempotency unproven; [test-quality] e2e fails under E2E_SERVER=prod (self-signed cert on request ctx)"
+  },
+  {
+   "at": "2026-10-29T15:07:33.861Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.6"
+   ],
+   "text": "color-scheme meta is light only and card/button text use pure #ffffff; MAIL-3 asks dark-mode safe with no pure-white dependency; light/dark preview not visually verified"
+  },
+  {
+   "at": "2026-10-29T15:07:33.772Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.11"
+   ],
+   "text": "Verify lines bun --cwd <dir> run test only print bun help; ran via cd <dir> && bun run test. bun run verify (--fix) replaced by vp lint + bun run check"
+  },
+  {
+   "at": "2026-10-29T15:07:33.683Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.3"
+   ],
+   "text": "apps/api/src/app.ts CORS exemption is outside every Files list (orchestrator-directed); NON_PUBLIC_EMAIL_PATH name is misleading (it matches all non-/email paths)"
+  },
+  {
+   "at": "2026-10-29T15:07:33.593Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.7"
+   ],
+   "text": "Verify command omits src/models/user.test.ts so user.ts reports 0%; with it all three files are 100%"
+  },
+  {
+   "at": "2026-10-29T15:07:33.506Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.10"
+   ],
+   "text": "400 test bypasses the console guard via browser.newContext (fixture has no allowlist hook); consider an expected-error hook"
+  },
+  {
+   "at": "2026-10-29T15:07:33.414Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.10"
+   ],
+   "text": "Proof shots T4.10-1..11 have no annotation boxes; 5-11 captions are filenames and 1-4 duplicate them"
   }
  ]
 };

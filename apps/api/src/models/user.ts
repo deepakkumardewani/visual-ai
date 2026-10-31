@@ -29,6 +29,17 @@ const UserSchema = new Schema(
             sparse: true,
         },
         referralsUsed: { type: [String], default: [] },
+        emailOptOut: { type: Boolean, default: false },
+        announcements: {
+            v2: {
+                sentAt: { type: Date },
+                resendId: { type: String },
+                // Idempotency key of a batch reserved for sending; lets a rerun replay it exactly.
+                pendingKey: { type: String },
+                // When pendingKey was reserved; replay is only safe while Resend still remembers the key.
+                pendingAt: { type: Date },
+            },
+        },
         seenIntroVersion: { type: String, default: null },
         referrals: {
             type: [ReferralSchema],

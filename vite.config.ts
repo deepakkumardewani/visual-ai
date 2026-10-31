@@ -49,6 +49,9 @@ export default defineConfig({
       },
     },
     setupFiles: ['apps/web/src/test/setup.ts'],
+    // Node 25+ ships an experimental global localStorage that throws without --localstorage-file
+    // and shadows happy-dom's implementation; disable it in test workers.
+    execArgv: ['--no-experimental-webstorage'],
   },
   lint: {
     plugins: ['typescript'],

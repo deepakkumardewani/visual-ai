@@ -182,6 +182,18 @@ describe("app", () => {
         expect(deny.mock.calls[0][0].message).toBe("Not allowed by CORS")
     })
 
+    it("exempts /email/* from the CORS origin check but keeps it elsewhere", () => {
+        const corsLayer = app._router.stack.find(
+            (layer: { name?: string }) => layer.name === "corsMiddleware",
+        )
+        const matches = (path: string) => corsLayer.regexp.test(path)
+        expect(matches("/email/unsubscribe")).toBe(false)
+        expect(matches("/email")).toBe(false)
+        expect(matches("/users")).toBe(true)
+        expect(matches("/emails")).toBe(true)
+        expect(matches("/")).toBe(true)
+    })
+
     it("skips HTTP access logs for health, progress, and generate paths", () => {
         const ignore = pinoCapture.options.autoLogging.ignore
         expect(ignore({ url: "/health" })).toBe(true)

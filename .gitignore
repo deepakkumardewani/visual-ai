@@ -48,7 +48,8 @@ pnpm-debug.log*
 
 copyEnv.sh
 
-scripts/
+# `scripts/*` (not `scripts/`) so a nested .gitignore can re-include a specific file
+**/scripts/*
 infra/.env.prod
 infra/.env.staging
 # Playwright

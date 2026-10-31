@@ -245,3 +245,95 @@
 {"at":"2026-10-29T09:44:48.402Z","type":"verify_passed","tasks":["T3.1","T3.2","T3.3","T3.4","T3.5","T3.6","T3.7","T3.8","T3.9","T3.10","T3.11","T3.12","T3.13"],"attempt":"3"}
 {"at":"2026-10-29T09:44:48.491Z","type":"deliverable","tasks":["T3.1","T3.2","T3.3","T3.4","T3.5","T3.6","T3.7","T3.8","T3.9","T3.10","T3.11","T3.12","T3.13"],"text":"V2 intro carousel + tour, intro-seen API, STT polish, 10 slide clips, unit+e2e specs","files":["apps/web/src/components/Intro","apps/api/src/routes/users.ts","packages/shared/src/models/intro.ts"]}
 {"at":"2026-10-29T09:45:12.601Z","type":"commit","tasks":["T3.1","T3.2","T3.3","T3.4","T3.5","T3.6","T3.7","T3.8","T3.9","T3.10","T3.11","T3.12","T3.13"],"attempt":"3","text":"feat(v2-launch): phase 3 intro carousel, tour and STT polish","sha":"34aa078fa69b7ed9340b6f8cb982e2059aac1104","branch":"feature-enhancement","pushed":"yes","evidence":"e2e 40/40 v2-intro, 27/27 voice x3 dev+prod; lowest unit coverage 93.8% branches"}
+{"at":"2026-10-29T14:39:04.366Z","type":"build_started","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"attempt":"1"}
+{"at":"2026-10-29T14:39:04.465Z","type":"task_started","tasks":["T4.1","T4.6","T4.2","T4.3"],"attempt":"1"}
+{"at":"2026-10-29T14:39:45.607Z","type":"task_started","tasks":["T4.1"]}
+{"at":"2026-10-29T14:39:45.701Z","type":"task_started","tasks":["T4.6"]}
+{"at":"2026-10-29T14:39:45.791Z","type":"task_started","tasks":["T4.2"]}
+{"at":"2026-10-29T14:39:45.876Z","type":"task_started","tasks":["T4.3"]}
+{"at":"2026-10-29T14:42:12.599Z","type":"task_built","tasks":["T4.1"],"text":"workspace installs; render html 8.5KB, text non-empty; check passes","files":["packages/email/package.json","packages/email/tsconfig.json","packages/email/src/render.ts","packages/email/src/index.ts"]}
+{"at":"2026-10-29T14:42:12.687Z","type":"task_built","tasks":["T4.6"],"text":"template+Highlight+5 PNGs <200KB; no http/relative src; 375/1440 shots","files":["packages/email/src/V2Announcement.tsx","packages/email/src/components/Highlight.tsx","packages/email/src/constants.ts","apps/web/public/email"]}
+{"at":"2026-10-29T14:42:12.775Z","type":"task_built","tasks":["T4.2"],"text":"token sign/verify, user fields, optional env; ad hoc verified","files":["apps/api/src/lib/unsubscribe-token.ts","apps/api/src/models/user.ts","apps/api/src/config/env.ts","apps/api/.env.example"]}
+{"at":"2026-10-29T14:42:12.860Z","type":"task_built","tasks":["T4.3"],"text":"public GET/POST unsubscribe; ad hoc 200/400/idempotent; index.test updated","files":["apps/api/src/routes/email.ts","apps/api/src/routes/index.ts","apps/api/src/routes/index.test.ts"]}
+{"at":"2026-10-29T14:42:24.138Z","type":"task_started","tasks":["T4.4","T4.5"],"attempt":"1"}
+{"at":"2026-10-29T14:43:05.413Z","type":"task_started","tasks":["T4.4"]}
+{"at":"2026-10-29T14:43:05.518Z","type":"task_started","tasks":["T4.5"]}
+{"at":"2026-10-29T14:44:50.938Z","type":"task_built","tasks":["T4.4"],"text":"typecheck+check clean; dry-run and guard verified","files":["apps/api/scripts/send-v2-announcement.ts","apps/api/src/lib/v2-announcement/modes.ts"]}
+{"at":"2026-10-29T14:44:51.087Z","type":"task_built","tasks":["T4.5"],"text":"typecheck+check clean; dry-run and guard verified","files":["apps/api/scripts/send-v2-announcement.ts","apps/api/src/lib/v2-announcement/modes.ts"]}
+{"at":"2026-10-29T14:45:01.920Z","type":"task_started","tasks":["T4.7","T4.8","T4.9"],"attempt":"1"}
+{"at":"2026-10-29T14:46:06.252Z","type":"task_built","tasks":["T4.7"],"text":"unit lowest 100% (3 files, 40 tests)","files":["apps/api/src/lib/unsubscribe-token.test.ts","apps/api/src/routes/email.test.ts","apps/api/src/models/user.test.ts"]}
+{"at":"2026-10-29T14:46:35.930Z","type":"task_built","tasks":["T4.9"],"text":"unit lowest 100% (3 files, 15 tests)","files":["packages/email/src/V2Announcement.test.ts","packages/email/src/components/Highlight.test.ts","packages/email/src/render.test.ts","packages/email/vitest.config.ts"]}
+{"at":"2026-10-29T14:47:07.583Z","type":"task_built","tasks":["T4.8"],"text":"unit lowest 100% (5 files, 102 tests)","files":["apps/api/src/lib/v2-announcement/recipients.test.ts","apps/api/src/lib/v2-announcement/batching.test.ts","apps/api/src/lib/v2-announcement/resend-client.test.ts","apps/api/src/lib/v2-announcement/modes.test.ts","apps/api/src/lib/v2-announcement/preview.test.ts"]}
+{"at":"2026-10-29T14:47:07.680Z","type":"task_started","tasks":["T4.10"],"attempt":"1"}
+{"at":"2026-10-29T14:55:05.832Z","type":"task_failed","tasks":["T4.10"],"attempt":"1","text":"App bug: POST /email/unsubscribe from browser returns 500 Not allowed by CORS (Origin = API origin not in corsOptions, apps/api/src/app.ts)","unblock":"Allow same-origin/public unsubscribe POST past CORS (T4.3), then re-run e2e and remove test.fail() markers"}
+{"at":"2026-10-29T14:55:05.920Z","type":"build_started","tasks":["T4.3","T4.10","T4.11"],"attempt":"2"}
+{"at":"2026-10-29T14:55:06.008Z","type":"task_started","tasks":["T4.3"],"attempt":"2"}
+{"at":"2026-10-29T14:56:10.352Z","type":"task_built","tasks":["T4.3"],"text":"CORS exempt for /email/*; api tests 59 pass","files":["apps/api/src/app.ts","apps/api/src/app.test.ts","apps/web/.env.e2e.example"]}
+{"at":"2026-10-29T14:56:10.452Z","type":"task_started","tasks":["T4.10"],"attempt":"2"}
+{"at":"2026-10-29T14:57:13.459Z","type":"task_built","tasks":["T4.10"],"text":"e2e 5/5 x3 repeats pass, no test.fail markers","files":["apps/web/e2e/qa/v2-email-unsubscribe.spec.ts","apps/web/e2e/support/unsubscribe.ts"]}
+{"at":"2026-10-29T14:57:13.579Z","type":"task_started","tasks":["T4.11"],"attempt":"2"}
+{"at":"2026-10-29T14:57:23.654Z","type":"task_started","tasks":["T4.11"]}
+{"at":"2026-10-29T15:00:06.719Z","type":"task_built","tasks":["T4.11"],"text":"gate verify items all pass (Node 22)","files":["packages/email/src/render.test.ts"]}
+{"at":"2026-10-29T15:00:19.787Z","type":"verify_started","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"attempt":"2"}
+{"at":"2026-10-29T15:07:33.228Z","type":"advisory","tasks":["T4.1"],"text":"UI task by heuristic (.tsx) with no registered proof shot and no Design field; template shots live under T4.6"}
+{"at":"2026-10-29T15:07:33.325Z","type":"advisory","tasks":["T4.9"],"text":"UI task by heuristic (.tsx) with no registered proof shot and no Design field (unit task)"}
+{"at":"2026-10-29T15:07:33.414Z","type":"advisory","tasks":["T4.10"],"text":"Proof shots T4.10-1..11 have no annotation boxes; 5-11 captions are filenames and 1-4 duplicate them"}
+{"at":"2026-10-29T15:07:33.506Z","type":"advisory","tasks":["T4.10"],"text":"400 test bypasses the console guard via browser.newContext (fixture has no allowlist hook); consider an expected-error hook"}
+{"at":"2026-10-29T15:07:33.593Z","type":"advisory","tasks":["T4.7"],"text":"Verify command omits src/models/user.test.ts so user.ts reports 0%; with it all three files are 100%"}
+{"at":"2026-10-29T15:07:33.683Z","type":"advisory","tasks":["T4.3"],"text":"apps/api/src/app.ts CORS exemption is outside every Files list (orchestrator-directed); NON_PUBLIC_EMAIL_PATH name is misleading (it matches all non-/email paths)"}
+{"at":"2026-10-29T15:07:33.772Z","type":"advisory","tasks":["T4.11"],"text":"Verify lines bun --cwd <dir> run test only print bun help; ran via cd <dir> && bun run test. bun run verify (--fix) replaced by vp lint + bun run check"}
+{"at":"2026-10-29T15:07:33.861Z","type":"advisory","tasks":["T4.6"],"text":"color-scheme meta is light only and card/button text use pure #ffffff; MAIL-3 asks dark-mode safe with no pure-white dependency; light/dark preview not visually verified"}
+{"at":"2026-10-29T15:08:23.935Z","type":"verify_failed","tasks":["T4.4","T4.8","T4.10"],"attempt":"2","text":"[code-bug] CLI script gitignored; dedupe vs already-sent emails; crash-rerun idempotency unproven; [test-quality] e2e fails under E2E_SERVER=prod (self-signed cert on request ctx)"}
+{"at":"2026-10-29T15:08:24.025Z","type":"build_started","tasks":["T4.4","T4.8","T4.10"],"attempt":"3"}
+{"at":"2026-10-29T15:08:24.114Z","type":"task_started","tasks":["T4.4"],"attempt":"3"}
+{"at":"2026-10-29T15:10:35.064Z","type":"task_built","tasks":["T4.4"],"text":"retry: gitignore exception, email dedupe incl sent/opted-out, atomic bulk markBatchSent","files":["apps/api/scripts/send-v2-announcement.ts","apps/api/src/lib/v2-announcement/batching.ts","apps/api/src/lib/v2-announcement/recipients.ts"]}
+{"at":"2026-10-29T15:10:50.804Z","type":"task_started","tasks":["T4.8"],"attempt":"3"}
+{"at":"2026-10-29T15:12:19.652Z","type":"task_built","tasks":["T4.8"],"text":"unit lowest 96.15% branches (5 files, 110 tests)","files":["apps/api/src/lib/v2-announcement/recipients.test.ts","apps/api/src/lib/v2-announcement/modes.test.ts","apps/api/src/lib/v2-announcement/send-script.test.ts","apps/api/src/lib/v2-announcement/batching.test.ts"]}
+{"at":"2026-10-29T15:12:19.738Z","type":"task_started","tasks":["T4.10"],"attempt":"3"}
+{"at":"2026-10-29T15:13:44.575Z","type":"task_built","tasks":["T4.10"],"text":"e2e 16/16 x3 under dev and prod","files":["apps/web/e2e/qa/v2-email-unsubscribe.spec.ts"]}
+{"at":"2026-10-29T15:13:51.457Z","type":"verify_started","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"attempt":"3"}
+{"at":"2026-10-29T15:19:15.802Z","type":"advisory","tasks":["T4.4"],"text":"recipients.ts:38-43 order-dependent dedupe: lower-_id unsent account sharing an address with a later sent/opted-out account is mailed"}
+{"at":"2026-10-29T15:19:15.976Z","type":"advisory","tasks":["T4.4"],"text":"batching.ts:92-96 comment overclaims rerun idempotency (holds only if the eligible set is unchanged)"}
+{"at":"2026-10-29T15:19:16.188Z","type":"advisory","tasks":["T4.3"],"text":"no T4.3 shots; unsubscribe pages covered by T4.10-12..18"}
+{"at":"2026-10-29T15:19:16.306Z","type":"advisory","tasks":["T4.10"],"text":"stale shots T4.10-1..11 still registered with filename captions, no boxes"}
+{"at":"2026-10-29T15:19:16.401Z","type":"advisory","tasks":["T4.7"],"text":"Verify command omits user.test.ts so user.ts shows 0%; with it 100%"}
+{"at":"2026-10-29T15:19:16.493Z","type":"advisory","tasks":["T4.6"],"text":"color-scheme light only; light/dark preview not visually verified"}
+{"at":"2026-10-29T15:19:39.702Z","type":"verify_failed","tasks":["T4.4","T4.8","T4.10"],"attempt":"3","text":"[code-bug] crash-rerun idempotency key not persisted (opt-out or changed flags between runs duplicates sends); [type-lint] bun run check formatting in modes.test.ts and v2-email-unsubscribe.spec.ts"}
+{"at":"2026-10-29T15:19:39.907Z","type":"blocked","tasks":["T4.4","T4.8","T4.10"],"text":"retries exhausted","unblock":"Persist accepted batch (key + userIds) or per-user pending marker before calling Resend and replay it on rerun; add tests for opt-out between runs and changed flags; prettier the two files"}
+{"at":"2026-10-31T09:53:58.751Z","type":"build_started","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"attempt":"1"}
+{"at":"2026-10-31T09:53:58.846Z","type":"task_started","tasks":["T4.4"],"attempt":"1"}
+{"at":"2026-10-31T09:56:13.733Z","type":"task_built","tasks":["T4.4"],"text":"durable pending-batch reservation (announcements.v2.pendingKey) replayed first; opt-out + changed-flag rerun tests; bun run check exit 0; 137 tests pass","files":["apps/api/src/lib/v2-announcement/batching.ts","apps/api/src/lib/v2-announcement/modes.ts","apps/api/src/lib/v2-announcement/recipients.ts","apps/api/scripts/send-v2-announcement.ts","apps/api/src/models/user.ts"]}
+{"at":"2026-10-31T09:56:38.987Z","type":"verify_started","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"attempt":"1"}
+{"at":"2026-10-31T10:01:05.053Z","type":"advisory","tasks":["T4.4"],"text":"pickRunRecipients subtracts pending count: a pending batch that fails every run (4xx or payload drift -> key mismatch) zeroes fresh allowance forever; campaign stalls"}
+{"at":"2026-10-31T10:01:05.179Z","type":"advisory","tasks":["T4.10"],"text":"stale shots T4.10-1..11 (filename captions, no boxes) still registered; 12-18 are good"}
+{"at":"2026-10-31T10:01:05.278Z","type":"advisory","tasks":["T4.3"],"text":"no shots of its own (server-rendered pages covered by T4.10-12..18); no Design field"}
+{"at":"2026-10-31T10:01:05.380Z","type":"advisory","tasks":["T4.9"],"text":"T4.1/T4.9 have no shots of their own (template shots under T4.6); no Design field"}
+{"at":"2026-10-31T10:01:05.483Z","type":"advisory","tasks":["T4.7"],"text":"Verify line omits src/models/user.test.ts so user.ts shows 0%; with it all 3 files 100%"}
+{"at":"2026-10-31T10:01:05.588Z","type":"advisory","tasks":["T4.6"],"text":"light/dark React Email preview not visually reviewed (needs user-started dev preview); template uses color-scheme light only"}
+{"at":"2026-10-31T10:01:48.428Z","type":"verify_failed","tasks":["T4.4"],"attempt":"1","text":"code-bug: pendingKey replayed with no age limit; Resend idempotency keys expire (~24h), late replay duplicates and mails opted-out users"}
+{"at":"2026-10-31T10:01:48.528Z","type":"build_started","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"attempt":"2"}
+{"at":"2026-10-31T10:01:48.614Z","type":"task_started","tasks":["T4.4"],"attempt":"2"}
+{"at":"2026-10-31T10:03:40.145Z","type":"verify_started","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"attempt":"2"}
+{"at":"2026-10-31T10:08:46.842Z","type":"advisory","tasks":["T4.10"],"text":"stale shots T4.10-1..11 still registered (filename captions, no boxes)"}
+{"at":"2026-10-31T10:08:46.966Z","type":"advisory","tasks":["T4.3"],"text":"no shots of its own; covered by T4.10-12..18"}
+{"at":"2026-10-31T10:08:47.046Z","type":"advisory","tasks":["T4.9"],"text":"T4.1/T4.9 have no shots of their own; template shots under T4.6"}
+{"at":"2026-10-31T10:08:47.121Z","type":"advisory","tasks":["T4.6"],"text":"light/dark not visually checked; color-scheme light only"}
+{"at":"2026-10-31T10:08:47.200Z","type":"advisory","tasks":["T4.4"],"text":"partial provider ids leave a shrunken pending batch under the same key; replay likely rejected until stale"}
+{"at":"2026-10-31T10:10:02.619Z","type":"verify_failed","tasks":["T4.4","T4.5"],"attempt":"2","text":"code-bug: loadPendingBatches runs before mongoose.connect so real --confirm buffers 10s and dies"}
+{"at":"2026-10-31T10:10:02.724Z","type":"build_started","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"attempt":"3"}
+{"at":"2026-10-31T10:10:02.804Z","type":"task_started","tasks":["T4.4","T4.5"],"attempt":"3"}
+{"at":"2026-10-31T10:10:52.787Z","type":"verify_started","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"attempt":"3"}
+{"at":"2026-10-31T10:16:22.678Z","type":"advisory","tasks":["T4.11"],"text":"bun run verify runs lint/check with --fix (mutating); verifier ran non-mutating bun run check + vp lint (0 errors)"}
+{"at":"2026-10-31T10:16:22.855Z","type":"advisory","tasks":["T4.4"],"text":"send-script.test.ts:127-139 order test passes even without awaiting connect (mock connect pushes synchronously); use a deferred connect"}
+{"at":"2026-10-31T10:16:23.015Z","type":"advisory","tasks":["T4.10"],"text":"stale shots T4.10-1..11 still registered (filename captions, no boxes); 12-18 are good"}
+{"at":"2026-10-31T10:16:23.137Z","type":"advisory","tasks":["T4.10"],"text":"spec has 5 tests for 4 scenarios (@medium split in two); acceptable"}
+{"at":"2026-10-31T10:16:23.258Z","type":"advisory","tasks":["T4.3"],"text":"no proof shots of its own (covered by T4.10); no Design field"}
+{"at":"2026-10-31T10:16:23.380Z","type":"advisory","tasks":["T4.1"],"text":"T4.1/T4.9 no proof shots of their own (template shots under T4.6); no Design field"}
+{"at":"2026-10-31T10:16:23.500Z","type":"advisory","tasks":["T4.6"],"text":"light/dark not checked visually (needs user-started React Email dev preview)"}
+{"at":"2026-10-31T10:16:23.624Z","type":"advisory","tasks":["T4.4"],"text":"partial provider ids leave remainder replayed under same key with different payload: noisy reconcile, no duplicate risk"}
+{"at":"2026-10-31T10:17:02.376Z","type":"verify_failed","tasks":["T4.11"],"attempt":"3","text":"flaky-env: root bun run test fails under Node 26 (localStorage), passes 2097/2097 with NODE_OPTIONS=--no-experimental-webstorage"}
+{"at":"2026-10-31T10:17:02.505Z","type":"blocked","tasks":["T4.11"],"text":"retries exhausted","unblock":"Pin Node<=25 (or disable webstorage in vitest config) then re-run gate root bun run test"}
+{"at":"2026-10-31T10:19:24.612Z","type":"build_started","tasks":["T4.11"],"attempt":"1"}
+{"at":"2026-10-31T10:19:24.737Z","type":"task_started","tasks":["T4.11"],"attempt":"1"}
+{"at":"2026-10-31T10:20:40.318Z","type":"verify_passed","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"attempt":"3"}
+{"at":"2026-10-31T10:20:40.420Z","type":"deliverable","tasks":["T4.1","T4.2","T4.3","T4.4","T4.5","T4.6","T4.7","T4.8","T4.9","T4.10","T4.11"],"text":"V2 announcement email: template, unsubscribe flow, send script with durable batch replay, gate fix for Node 26 webstorage","files":["packages/email","apps/api","apps/web","vite.config.ts"]}

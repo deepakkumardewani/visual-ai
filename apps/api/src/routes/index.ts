@@ -2,6 +2,7 @@ import express from "express"
 
 import { requireAuth } from "../middlewares/clerk.js"
 import { collectionRoutes } from "../routes/collections.js"
+import { emailRoutes } from "../routes/email.js"
 import { creditsRoute } from "../routes/credits.js"
 import { exploreRoutes } from "../routes/explore.js"
 import { generateRoute } from "../routes/generate.js"
@@ -18,6 +19,8 @@ router.use(generateRoute)
 router.use(promptRoutes)
 router.use(sttRoute)
 router.use(savedPromptsRoutes)
+// Public (signed-token) unsubscribe: must stay above the requireAuth mounts below
+router.use(emailRoutes)
 router.use(requireAuth as any, userRoutes)
 router.use(requireAuth as any, exploreRoutes)
 router.use(requireAuth as any, creditsRoute)

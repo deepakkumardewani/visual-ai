@@ -28,5 +28,6 @@ logs
 
 dist/
 buildcache/
-scripts/
+scripts/*
+!scripts/send-v2-announcement.ts
 !.env.example

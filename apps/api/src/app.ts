@@ -48,8 +48,12 @@ const corsOptions = {
     credentials: true,
 }
 
-app.use(cors(corsOptions))
-app.options("*", cors(corsOptions))
+// The public unsubscribe endpoint is opened from email clients and posted by plain
+// HTML forms (Origin is absent or the API's own), so it must bypass the origin check.
+const NON_PUBLIC_EMAIL_PATH = /^(?!\/email(\/|$))/
+
+app.use(NON_PUBLIC_EMAIL_PATH, cors(corsOptions))
+app.options(NON_PUBLIC_EMAIL_PATH, cors(corsOptions))
 
 // HTTP access logs: one-liners. Skip generate (domain logs cover those) + health/SSE noise.
 app.use(

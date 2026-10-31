@@ -76,4 +76,12 @@ describe("UserModel schema", () => {
         expect(nested.path("image").options.ref).toBe("Image")
         expect(nested.path("timestamp").options.default).toBe(Date.now)
     })
+
+    it("defaults emailOptOut to false and tracks the v2 announcement send", () => {
+        expect(UserModel.schema.path("emailOptOut").options.default).toBe(false)
+        expect(UserModel.schema.path("announcements.v2.sentAt").instance).toBe("Date")
+        expect(UserModel.schema.path("announcements.v2.resendId").instance).toBe("String")
+        expect(UserModel.schema.path("announcements.v2.pendingKey").instance).toBe("String")
+        expect(new UserModel({ userName: "u" }).emailOptOut).toBe(false)
+    })
 })

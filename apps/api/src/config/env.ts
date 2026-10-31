@@ -70,6 +70,16 @@ const envSchema = z
         EMAIL_USER: z.string().email("EMAIL_USER must be a valid email"),
         EMAIL_PASSWORD: z.string().min(1, "EMAIL_PASSWORD is required"),
 
+        // V2 announcement email + unsubscribe (all optional so the API boots without them;
+        // UNSUBSCRIBE_SECRET unset makes the unsubscribe route answer 400)
+        UNSUBSCRIBE_SECRET: z.string().optional(),
+        APP_PUBLIC_URL: z.string().optional(),
+        API_PUBLIC_URL: z.string().optional(),
+        RESEND_API_KEY: z.string().optional(),
+        MAIL_FROM: z.string().optional(),
+        EMAIL_REPLY_TO: z.string().optional(),
+        MAIL_POSTAL_ADDRESS: z.string().optional(),
+
         // Webhooks
         WEBHOOK_SECRET: z.string().min(1, "WEBHOOK_SECRET is required"),
 

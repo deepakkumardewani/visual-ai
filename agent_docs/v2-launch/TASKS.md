@@ -543,7 +543,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 **Adds:** A React Email V2 announcement template, a resumable and idempotent Resend send script (dry-run, test-send, capped real send), and a working one-click unsubscribe. No real send happens in this phase's tasks.
 **Try in UI:** Open the unsubscribe confirm page from a signed link and confirm it sets opt-out ; run `cd apps/api && bun scripts/send-v2-announcement.ts --dry-run` and open the printed HTML preview ; run `bun --cwd packages/email run dev` and view the template in light and dark.
 
-### ☐ T4.1 Email workspace scaffold and render
+### ✅ T4.1 Email workspace scaffold and render
 
 - **Kind:** implementation
 - **Files:** `packages/email/package.json` (`@visual-ai/email`), `packages/email/src/V2Announcement.tsx` (skeleton), `packages/email/src/render.ts`, `packages/email/tsconfig.json`, `packages/email/src/index.ts`
@@ -555,7 +555,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - `bun -e "const m = await import('@visual-ai/email'); const r = await m.renderV2Announcement({ firstName: 'A', unsubscribeUrl: 'https://example.test/u', postalAddress: 'Test address' }); if (!(r.html.length < 102400 && r.text.length > 0)) process.exit(1)"` exits 0
   - `node -e "process.exit(require('./packages/email/package.json').scripts?.test ? 0 : 1)"` exits 0
 
-### ☐ T4.2 Unsubscribe token and User fields
+### ✅ T4.2 Unsubscribe token and User fields
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/models/user.ts`, `apps/api/src/lib/unsubscribe-token.ts`, `apps/api/src/config/env.ts`, `apps/api/.env.example`
@@ -565,7 +565,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - `bun --cwd apps/api run test -- unsubscribe-token`
   - `bun run check`
 
-### ☐ T4.3 Public unsubscribe route
+### ✅ T4.3 Public unsubscribe route
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/email.ts`, `apps/api/src/routes/index.ts`
@@ -576,7 +576,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - `cd apps/web && bunx playwright test e2e/qa/v2-email-unsubscribe.spec.ts --repeat-each=2`
   - `bun run check`
 
-### ☐ T4.4 Send script core
+### ✅ T4.4 Send script core
 
 - **Kind:** implementation
 - **Files:** `apps/api/scripts/send-v2-announcement.ts` (thin CLI entry), `apps/api/src/lib/v2-announcement/recipients.ts`, `apps/api/src/lib/v2-announcement/batching.ts`, `apps/api/src/lib/v2-announcement/resend-client.ts`, `apps/api/package.json`
@@ -586,7 +586,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - `bun --cwd apps/api run test -- v2-announcement`
   - `bun run check`
 
-### ☐ T4.5 Modes and guards
+### ✅ T4.5 Modes and guards
 
 - **Kind:** implementation
 - **Files:** `apps/api/scripts/send-v2-announcement.ts`, `apps/api/src/lib/v2-announcement/modes.ts`, `apps/api/src/lib/v2-announcement/preview.ts`
@@ -597,7 +597,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - `cd apps/api && RESEND_API_KEY= bun scripts/send-v2-announcement.ts --dry-run` (prints count and preview path; with the key blanked no Resend call is possible)
   - `cd apps/api && RESEND_API_KEY= MAIL_FROM= MAIL_POSTAL_ADDRESS= bun scripts/send-v2-announcement.ts --confirm; echo $?` prints non-zero (key also blanked so a broken guard still cannot send)
 
-### ☐ T4.6 Template content and design
+### ✅ T4.6 Template content and design
 
 - **Kind:** implementation
 - **Files:** `packages/email/src/V2Announcement.tsx`, `packages/email/src/components/Highlight.tsx`, `packages/email/src/render.ts`, `apps/web/public/email/*.png` (one generated image set: hero plus 3-5 highlight images, each < ~200 KB)
@@ -609,15 +609,15 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
   - `grep -rnE "src=\"(http:|/)" packages/email/src` returns nothing
   - `agent-browser: open React Email preview (bun --cwd packages/email run dev already running or user-started) in light and dark` (visual only)
 
-### ☐ T4.7 Unit: unsubscribe token and route
+### ✅ T4.7 Unit: unsubscribe token and route
 
 - **Kind:** unit
 - **Files:** `apps/api/src/lib/unsubscribe-token.ts`, `apps/api/src/routes/email.ts`, `apps/api/src/models/user.ts`
 - **Do:** Sign/verify roundtrip, tamper, wrong purpose, missing secret; GET page, POST idempotency, invalid token 400, public (no auth), opt-out persisted.
 - **Acceptance:** Every file >= 90% on all four metrics (repo threshold), target > 95%.
-- **Verify:** `cd apps/api && bunx vitest run src/lib/unsubscribe-token.test.ts src/routes/email.test.ts --coverage --coverage.include=src/lib/unsubscribe-token.ts --coverage.include=src/routes/email.ts --coverage.include=src/models/user.ts --coverage.reporter=text`
+- **Verify:** `cd apps/api && bunx vitest run src/lib/unsubscribe-token.test.ts src/routes/email.test.ts src/models/user.test.ts --coverage --coverage.include=src/lib/unsubscribe-token.ts --coverage.include=src/routes/email.ts --coverage.include=src/models/user.ts --coverage.reporter=text`
 
-### ☐ T4.8 Unit: send script libs
+### ✅ T4.8 Unit: send script libs
 
 - **Kind:** unit
 - **Files:** `apps/api/src/lib/v2-announcement/recipients.ts`, `apps/api/src/lib/v2-announcement/batching.ts`, `apps/api/src/lib/v2-announcement/resend-client.ts`, `apps/api/src/lib/v2-announcement/modes.ts`, `apps/api/src/lib/v2-announcement/preview.ts`
@@ -625,7 +625,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 - **Acceptance:** Every file >= 90% on all four metrics (repo threshold), target > 95%.
 - **Verify:** `cd apps/api && bunx vitest run src/lib/v2-announcement --coverage --coverage.include=src/lib/v2-announcement/recipients.ts --coverage.include=src/lib/v2-announcement/batching.ts --coverage.include=src/lib/v2-announcement/resend-client.ts --coverage.include=src/lib/v2-announcement/modes.ts --coverage.include=src/lib/v2-announcement/preview.ts --coverage.reporter=text`
 
-### ☐ T4.9 Unit: email template
+### ✅ T4.9 Unit: email template
 
 - **Kind:** unit
 - **Files:** `packages/email/src/V2Announcement.tsx`, `packages/email/src/components/Highlight.tsx`, `packages/email/src/render.ts`
@@ -633,7 +633,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 - **Acceptance:** Every file >= 90% on all four metrics (matching the repo threshold), target > 95%.
 - **Verify:** `cd packages/email && bunx vitest run --coverage --coverage.include=src/V2Announcement.tsx --coverage.include=src/components/Highlight.tsx --coverage.include=src/render.ts --coverage.reporter=text`
 
-### ☐ T4.10 E2E: unsubscribe flow
+### ✅ T4.10 E2E: unsubscribe flow
 
 - **Kind:** e2e
 - **Scenarios:**
@@ -646,7 +646,7 @@ Before T2.2: re-read `/Users/deepakdewani1/Desktop/grok-stt.md` (xAI STT: `file`
 - **Files:** none expected
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/v2-email-unsubscribe.spec.ts --repeat-each=3`
 
-### ☐ T4.11 Gate: Phase 4
+### ✅ T4.11 Gate: Phase 4
 
 - **Kind:** gate
 - **Files:** none

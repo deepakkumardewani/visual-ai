@@ -365,5 +365,221 @@
    }
   ],
   "at": "2026-10-29T09:24:15.049Z"
+ },
+ {
+  "file": "4/T4.6-1.png",
+  "taskId": "T4.6",
+  "kind": "proof",
+  "step": "Template content and design",
+  "attempt": null,
+  "caption": "Rendered V2 email at 1440 wide, single 600px column",
+  "annotations": [
+   {
+    "x": 30,
+    "y": 2,
+    "w": 40,
+    "h": 8,
+    "label": "hero and CTA"
+   }
+  ],
+  "at": "2026-10-29T14:42:12.403Z"
+ },
+ {
+  "file": "4/T4.6-2.png",
+  "taskId": "T4.6",
+  "kind": "proof",
+  "step": "Single column under 480px",
+  "attempt": null,
+  "caption": "Rendered V2 email at 375 wide, single column with CTA, highlights, credits and footer",
+  "annotations": [
+   {
+    "x": 28,
+    "y": 20,
+    "w": 45,
+    "h": 4,
+    "label": "Try V2 now CTA"
+   }
+  ],
+  "at": "2026-10-29T14:42:12.511Z"
+ },
+ {
+  "file": "4/T4.10-1.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Confirm page for a signed link",
+  "annotations": [],
+  "at": "2026-10-29T14:54:37.374Z"
+ },
+ {
+  "file": "4/T4.10-2.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Missing token shows friendly 400 page",
+  "annotations": [],
+  "at": "2026-10-29T14:54:37.478Z"
+ },
+ {
+  "file": "4/T4.10-3.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Invalid token shows friendly 400 page",
+  "annotations": [],
+  "at": "2026-10-29T14:54:37.567Z"
+ },
+ {
+  "file": "4/T4.10-4.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Confirm page at 375px, unauthenticated",
+  "annotations": [],
+  "at": "2026-10-29T14:54:37.659Z"
+ },
+ {
+  "file": "4/T4.10-5.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "unsubscribe 01-confirm",
+  "annotations": [],
+  "at": "2026-10-29T14:56:39.831Z"
+ },
+ {
+  "file": "4/T4.10-6.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "unsubscribe 02-success",
+  "annotations": [],
+  "at": "2026-10-29T14:56:39.939Z"
+ },
+ {
+  "file": "4/T4.10-7.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "unsubscribe 03-repeat-success",
+  "annotations": [],
+  "at": "2026-10-29T14:56:40.034Z"
+ },
+ {
+  "file": "4/T4.10-8.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "unsubscribe 04-missing-token",
+  "annotations": [],
+  "at": "2026-10-29T14:56:40.127Z"
+ },
+ {
+  "file": "4/T4.10-9.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "unsubscribe 05-invalid-token",
+  "annotations": [],
+  "at": "2026-10-29T14:56:40.221Z"
+ },
+ {
+  "file": "4/T4.10-10.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "unsubscribe 06-confirm-375",
+  "annotations": [],
+  "at": "2026-10-29T14:56:40.316Z"
+ },
+ {
+  "file": "4/T4.10-11.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "unsubscribe 07-success-375",
+  "annotations": [],
+  "at": "2026-10-29T14:56:40.409Z"
+ },
+ {
+  "file": "4/T4.10-12.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Signed link GET shows the confirm page; user is not opted out yet",
+  "annotations": [],
+  "at": "2026-10-29T15:13:27.837Z"
+ },
+ {
+  "file": "4/T4.10-13.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Clicking confirm shows 'You are unsubscribed' and sets emailOptOut",
+  "annotations": [],
+  "at": "2026-10-29T15:13:27.939Z"
+ },
+ {
+  "file": "4/T4.10-14.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Confirming a second time still shows success (idempotent)",
+  "annotations": [],
+  "at": "2026-10-29T15:13:28.026Z"
+ },
+ {
+  "file": "4/T4.10-15.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Missing token returns a friendly 400 invalid-link page",
+  "annotations": [],
+  "at": "2026-10-29T15:13:28.113Z"
+ },
+ {
+  "file": "4/T4.10-16.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Tampered or wrong-purpose token returns the 400 invalid-link page",
+  "annotations": [],
+  "at": "2026-10-29T15:13:28.203Z"
+ },
+ {
+  "file": "4/T4.10-17.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Confirm page fits a 375px viewport with no session",
+  "annotations": [],
+  "at": "2026-10-29T15:13:28.290Z"
+ },
+ {
+  "file": "4/T4.10-18.png",
+  "taskId": "T4.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Success page fits a 375px viewport with no horizontal scroll",
+  "annotations": [],
+  "at": "2026-10-29T15:13:28.380Z"
  }
 ]

@@ -1,0 +1,28 @@
+{
+  "name": "@visual-ai/email",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "dev": "email dev --dir src --port 3030",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@react-email/components": "^1.0.12",
+    "@react-email/render": "^2.2.0",
+    "@visual-ai/shared": "workspace:*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-email": "^6.11.6"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^4.1.9"
+  }
+}
