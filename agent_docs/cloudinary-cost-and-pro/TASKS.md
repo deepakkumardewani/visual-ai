@@ -65,15 +65,15 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 **Adds:** Dev, e2e and staging are documented and checked to use a separate free Cloudinary cloud, never production.
 **Try in UI:** No UI change ; open `apps/api/.env.example` and `apps/web/.env.example` and read the dev-cloud notes ; run `node apps/web/scripts/check-cloudinary-env.mjs` and confirm it flags `ddzuitkzt` in any non-production env file.
 
-### ☐ T2.1 Env docs and model-input tests
+### ✅ T2.1 Env docs and model-input tests
 
 - **Kind:** implementation
-- **Files:** `apps/api/.env.example`, `apps/web/.env.example`, `apps/api/src/lib/model-input.test.ts`
+- **Files:** `apps/api/.env.example`, `apps/web/.env.example`, `apps/api/src/lib/model-input.test.ts`, `apps/api/src/lib/model-input.ts`
 - **Do:** Document the five vars that remain after Phase 4 (`CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `CLOUDINARY_BASE_PATH` dev default `private/development/uploads`, `VITE_CLOUDINARY_BASE_URL`) plus `VITE_CLOUDINARY_ASSETS_URL` until T4.2 removes it; same dev cloud for api and web; staging and `.env.e2e-preview` must not use the production cloud; optional 70% usage alert. Parameterise model-input tests on the env cloud name.
 - **Acceptance:** Both examples list the vars with comments and no real secrets; model-input accepts a dev-cloud URL and rejects another cloud.
 - **Verify:** `cd apps/api && bun run test`
 
-### ☐ T2.2 Env leak check script and owner checklist
+### ✅ T2.2 Env leak check script and owner checklist
 
 - **Kind:** implementation
 - **Files:** `apps/web/scripts/check-cloudinary-env.mjs`, `apps/web/vite.config.mts`, `agent_docs/cloudinary-cost-and-pro/GO-LIVE.md`, `apps/api/.env.example`
@@ -81,28 +81,28 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Exits 1 and names the file when a non-production env file holds `ddzuitkzt`; exits 0 when none; checklist exists and is referenced.
 - **Verify:** `node apps/web/scripts/check-cloudinary-env.mjs; echo $?` (output reviewed); `cd apps/web && bun run check`.
 
-### ☐ T2.3 Unit: env leak check
+### ✅ T2.3 Unit: env leak check
 
 - **Kind:** unit
-- **Files:** `apps/web/scripts/check-cloudinary-env.mjs`
+- **Files:** `apps/web/scripts/check-cloudinary-env.mjs`, `apps/web/scripts/check-cloudinary-env.test.mjs`
 - **Do:** Cover detection, production-file exemption, missing files and exit codes using temp directories.
 - **Acceptance:** Every file at least 80% lines/branches/functions/statements, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run scripts/check-cloudinary-env.test.mjs --coverage --coverage.include=scripts/check-cloudinary-env.mjs --coverage.reporter=text`
 
-### ☐ T2.4 Gate: Phase 2
+### ✅ T2.4 Gate: Phase 2
 
 - **Kind:** gate
-- **Files:** none
+- **Files:** `packages/email/package.json`, `packages/email/tsconfig.json`, `apps/web/scripts/.gitignore`, `bun.lock`
 - **Do:** Owner confirms the manual env repoint; run suites as evidence.
 - **Acceptance:** Check script exits 0 on the owner machine; an upload during a dev session appears in the dev cloud (owner confirmed); tests green.
 - **Verify:** `node apps/web/scripts/check-cloudinary-env.mjs`; `cd apps/api && bun run test`; `cd apps/web && bun run test`; `bun run check`.
 
-### ☐ T2.5 E2E: reference image from configured cloud
+### ✅ T2.5 E2E: reference image from configured cloud
 
 - **Kind:** e2e
 - **Scenarios:** `@high` a reference image URL from the configured cloud is accepted; `@high` a URL from another cloud is rejected with an error; `@medium` empty reference input is ignored.
 - **Spec:** `e2e/qa/dev-cloud-reference.spec.ts`
-- **Files:** none
+- **Files:** `apps/web/e2e/qa/dev-cloud-reference.spec.ts`
 - **Acceptance:** Scenarios derived from the SPEC acceptance criteria pass with zero Cloudinary network hits.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/dev-cloud-reference.spec.ts --repeat-each=3`
 

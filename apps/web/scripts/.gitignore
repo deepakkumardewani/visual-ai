@@ -1,0 +1,4 @@
+# Re-include the env check script and its test (ignored by root **/scripts/*)
+!check-cloudinary-env.mjs
+!check-cloudinary-env.test.mjs
+!.gitignore

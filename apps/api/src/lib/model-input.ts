@@ -11,9 +11,9 @@ export function isAllowedReferenceImageUrl(url: string): boolean {
         const parsed = new URL(url)
         if (parsed.protocol !== "https:") return false
         if (parsed.hostname !== CLOUDINARY_HOST) return false
-        const prefix = `/image/upload/`
-        if (!parsed.pathname.includes(prefix)) return false
-        const cloudSegment = parsed.pathname.split("/")[2]
+        // Real shape: /<cloud>/image/upload/...
+        const [, cloudSegment, resourceType, deliveryType] = parsed.pathname.split("/")
+        if (resourceType !== "image" || deliveryType !== "upload") return false
         return cloudSegment === env.CLOUDINARY_CLOUD_NAME
     } catch {
         return false
