@@ -16,6 +16,8 @@ import ResultNextActions from '@/components/Dashboard/Canvas/ResultNextActions.v
 import ImageDialog from '@/components/Dialogs/ImageDialog.vue';
 import ImageActionButtons from '@/components/History/ImageActionButtons.vue';
 
+import { thumbUrl } from '@/utils/cloudinaryUrl';
+
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
 const asideStore = useAsideStore();
@@ -228,7 +230,7 @@ function handleRemix(prompt: string) {
               >
                 <img
                   v-if="getImageUrl(img)"
-                  :src="getImageUrl(img)"
+                  :src="thumbUrl(getImageUrl(img))"
                   :alt="item.prompt.slice(0, 80)"
                   loading="lazy"
                   class="tw-h-full tw-w-full tw-object-cover tw-transition-transform tw-duration-base tw-ease-soft group-hover:tw-scale-[1.03] motion-reduce:tw-transition-none motion-reduce:group-hover:tw-scale-100"

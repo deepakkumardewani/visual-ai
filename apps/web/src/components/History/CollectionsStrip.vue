@@ -13,6 +13,7 @@ import { useUserStore } from '@/stores/user';
 import Popover from '@/components/primitives/Popover.vue';
 import Tooltip from '@/components/primitives/Tooltip.vue';
 
+import { thumbUrl } from '@/utils/cloudinaryUrl';
 import { ENABLE_COLLECTION_ALL, ENABLE_COLLECTION_CREATE } from '@/utils/history-collection-ui';
 
 const collectionsStore = useCollectionsStore();
@@ -47,9 +48,9 @@ function getThumbUrl(image: IImage | undefined) {
   const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
   const publicId = image.aiImagePublicId ?? image.enhancedPublicId;
   if (publicId) {
-    return `${cloudinaryBaseUrl}/q_auto,f_auto,w_80,h_80,c_fill/${publicId}`;
+    return thumbUrl(`${cloudinaryBaseUrl}/${publicId}`);
   }
-  return image.aiImageUrl ?? image.enhancedImageUrl ?? '';
+  return thumbUrl(image.aiImageUrl ?? image.enhancedImageUrl);
 }
 
 function coverUrls(collection: CollectionListItem): string[] {

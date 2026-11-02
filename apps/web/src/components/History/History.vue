@@ -18,6 +18,7 @@ import ImageActionButtons from '@/components/History/ImageActionButtons.vue';
 import NoResults from '@/components/History/NoResults.vue';
 import SelectActionButtons from '@/components/History/SelectActionButtons.vue';
 
+import { thumbUrl } from '@/utils/cloudinaryUrl';
 import { SIZE_CLASSES } from '@/utils/constants';
 
 const props = withDefaults(defineProps<{ isFavorites?: boolean; embedded?: boolean }>(), {
@@ -242,7 +243,7 @@ watch(
           >
             <img
               v-if="subItem.images.length === 1"
-              :src="getImageUrl(subItem.images[0])"
+              :src="thumbUrl(getImageUrl(subItem.images[0]))"
               :alt="subItem.prompt?.slice(0, 80) || subItem.featureType"
               loading="lazy"
               class="asset-tile__img tw-h-full tw-w-full tw-object-cover"
@@ -259,7 +260,7 @@ watch(
                 class="multi-image-stack__cell"
               >
                 <img
-                  :src="getImageUrl(img)"
+                  :src="thumbUrl(getImageUrl(img))"
                   :alt="subItem.prompt?.slice(0, 80) || subItem.featureType"
                   loading="lazy"
                   class="asset-tile__img tw-h-full tw-w-full tw-object-cover"

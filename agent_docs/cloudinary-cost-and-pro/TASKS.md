@@ -113,7 +113,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 **Adds:** Grids load small optimized thumbnails instead of full-size images, cutting bandwidth. The image dialog still shows full size.
 **Try in UI:** Open History and inspect an image request URL for `w_400` ; open Collections and the dashboard generations grid and check the same ; open an image in the dialog and confirm it loads the full-size URL.
 
-### ☐ T3.1 thumbUrl helper
+### ✅ T3.1 thumbUrl helper
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/cloudinaryUrl.ts`
@@ -121,7 +121,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Handles Cloudinary, already-transformed, non-Cloudinary, video and malformed URLs without throwing.
 - **Verify:** `cd apps/web && bun run check`; `bun run lint`.
 
-### ☐ T3.2 Use thumbnails in grids
+### ✅ T3.2 Use thumbnails in grids
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/History/History.vue`, `apps/web/src/components/Dashboard/Feed/UserGenerationsGrid.vue`, `apps/web/src/components/History/CollectionsStrip.vue`
@@ -129,15 +129,15 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Thumbnail `src` contains `w_400`; dialog image is unchanged; existing component tests still pass.
 - **Verify:** `cd apps/web && bun run check`; `bun run test`.
 
-### ☐ T3.3 Unit: thumbUrl
+### ✅ T3.3 Unit: thumbUrl
 
 - **Kind:** unit
-- **Files:** `apps/web/src/utils/cloudinaryUrl.ts`
+- **Files:** `apps/web/src/utils/cloudinaryUrl.ts`, `apps/web/src/utils/cloudinaryUrl.test.ts`
 - **Do:** Cover Cloudinary URL, already-transformed, non-Cloudinary, video, malformed, empty.
 - **Acceptance:** Every file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/utils/cloudinaryUrl.test.ts --coverage --coverage.include=src/utils/cloudinaryUrl.ts --coverage.reporter=text`
 
-### ☐ T3.4 E2E: thumbnail requests
+### ✅ T3.4 E2E: thumbnail requests
 
 - **Kind:** e2e
 - **Scenarios:** `@high` History grid image request URL contains `w_400`; `@high` collections strip image request URL contains `w_400`; `@high` ImageDialog requests the non-thumbnail URL; `@medium` empty history renders no image requests.
