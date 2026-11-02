@@ -1,7 +1,7 @@
 import type { Page, Route } from '@playwright/test';
 
 import { expect, test } from './fixtures/generation';
-import { WEB_URL } from './support/env';
+import { E2E_WEB_ORIGIN } from './support/env';
 
 const USER_PROFILE_URL = /\/users\/user_/;
 const UPSCALE_PATH = '/create/upscale';
@@ -9,7 +9,7 @@ const COLORIZE_PATH = '/create/colorize';
 const REVIVE_PATH = '/create/revive';
 const REMOVE_BG_PATH = '/create/remove_bg';
 const RESULT_PROMPT = 'e2e transform result';
-const FIXTURE_IMAGE_URL = `${WEB_URL}/e2e-fixture.png`;
+const FIXTURE_IMAGE_URL = `${E2E_WEB_ORIGIN}/e2e-fixture.png`;
 
 const TINY_PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
@@ -17,7 +17,7 @@ const TINY_PNG = Buffer.from(
 );
 
 const API_CORS = {
-  'Access-Control-Allow-Origin': WEB_URL,
+  'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
   'Access-Control-Allow-Credentials': 'true',
 };
 

@@ -22,15 +22,20 @@ const webServer = useProdServer
     }
   : undefined;
 
+const VITEST_FILE_PATTERN = /\.test\.ts$/;
+
 // Default (unset or E2E_SERVER=dev): no webServer — web app and API are already running locally.
 export default defineConfig({
   testDir: './e2e',
+  // Vitest unit tests live beside the e2e helpers; Playwright must not collect them.
+  testIgnore: VITEST_FILE_PATTERN,
   globalSetup: './e2e/global.setup.ts',
   ...(webServer ? { webServer } : {}),
   use: {
     baseURL: useProdServer ? prodWebUrl : WEB_URL,
-    // Portless serves HTTPS with a local CA (`portless trust`).
-    ignoreHTTPSErrors: useProdServer ? false : WEB_URL.startsWith('https://'),
+    // Portless serves HTTPS with a local CA (`portless trust`). The prod preview page is plain
+    // http but still calls the https portless API, so it needs the same allowance.
+    ignoreHTTPSErrors: useProdServer || WEB_URL.startsWith('https://'),
   },
   projects: [
     { name: 'setup', testMatch: /auth\.setup\.ts/ },
@@ -54,7 +59,8 @@ export default defineConfig({
     },
     {
       name: 'chromium',
-      testIgnore: [/auth\.setup\.ts/, /billing-(purchase|history)\.spec\.ts/],
+      // A project-level testIgnore replaces the top-level one, so repeat the Vitest-file pattern.
+      testIgnore: [VITEST_FILE_PATTERN, /auth\.setup\.ts/, /billing-(purchase|history)\.spec\.ts/],
       grepInvert: /@guest/,
       dependencies: ['setup'],
       // Real local API + one Clerk user: parallel signed-in specs race on /users/user_*.

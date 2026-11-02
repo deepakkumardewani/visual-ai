@@ -1,10 +1,10 @@
-import { test as base } from '@playwright/test';
+import { test as base } from './base';
 
 import type { IImageObject, JobStatus } from '@visual-ai/shared';
 
-import { WEB_URL } from '../support/env';
+import { E2E_WEB_ORIGIN } from '../support/env';
 
-const FIXTURE_IMAGE_URL = `${WEB_URL}/e2e-fixture.png`;
+const FIXTURE_IMAGE_URL = `${E2E_WEB_ORIGIN}/e2e-fixture.png`;
 const E2E_JOB_ID = 'e2e-stub-job';
 // 1x1 transparent PNG
 const FIXTURE_IMAGE_BASE64 =
@@ -12,7 +12,7 @@ const FIXTURE_IMAGE_BASE64 =
 
 // The API lives on another origin, so cross-origin responses need CORS headers.
 const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': WEB_URL,
+  'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
   'Access-Control-Allow-Credentials': 'true',
   'Access-Control-Allow-Headers': '*',
 };
@@ -159,4 +159,4 @@ export const test = base.extend<{ generationStub: GenerationStub }>({
   },
 });
 
-export { expect } from '@playwright/test';
+export { expect } from './base';

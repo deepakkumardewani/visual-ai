@@ -1,6 +1,6 @@
 import { clerk } from '@clerk/testing/playwright';
-import { expect, test as setup } from '@playwright/test';
 
+import { expect, test as setup } from './fixtures/base';
 import { AUTH_STATE_PATH, requireEnv } from './support/env';
 import { gotoStudio } from './support/studio';
 

@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 
 import { expect, test } from './fixtures/generation';
-import { WEB_URL } from './support/env';
+import { E2E_WEB_ORIGIN } from './support/env';
 
 const CREATE_PATH = '/create/image';
 const PROMPT = 'e2e create-image: misty harbor at dawn';
@@ -11,10 +11,10 @@ const SAVED_PROMPT_ID = 'e2e-saved-prompt-1';
 const USER_PROFILE_URL = /\/users\/user_/;
 const GENERIC_ERROR = 'Sorry, there was an error processing your request. Please try again.';
 const ALT_PREFIX_LENGTH = 60;
-const FIXTURE_IMAGE_URL = `${WEB_URL}/e2e-fixture.png`;
+const FIXTURE_IMAGE_URL = `${E2E_WEB_ORIGIN}/e2e-fixture.png`;
 
 const API_CORS = {
-  'Access-Control-Allow-Origin': WEB_URL,
+  'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
   'Access-Control-Allow-Credentials': 'true',
 };
 

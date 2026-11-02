@@ -1,15 +1,15 @@
 import type { Page, Route } from '@playwright/test';
 
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/base';
 
-import { API_URL, WEB_URL } from './support/env';
+import { API_URL, E2E_WEB_ORIGIN } from './support/env';
 
 const USER_PROFILE_URL = /\/users\/user_/;
 const SHOWCASE_FIRST_PROMPT =
   'A futuristic city skyline at dusk, with glowing neon lights reflecting off sleek glass buildings, flying cars zooming by, and a vibrant sunset fading into the horizon.';
 
 const API_CORS = {
-  'Access-Control-Allow-Origin': WEB_URL,
+  'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
   'Access-Control-Allow-Credentials': 'true',
   'Access-Control-Allow-Headers': '*',
 };

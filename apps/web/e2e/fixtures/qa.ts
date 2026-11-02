@@ -1,6 +1,6 @@
-import { test as base, expect } from '@playwright/test';
 import type { APIResponse, ConsoleMessage, TestInfo } from '@playwright/test';
 
+import { test as base, expect } from './base';
 import { API_URL, requireEnv } from '../support/env';
 import { signWebhook } from '../support/signWebhook';
 
