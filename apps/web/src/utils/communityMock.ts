@@ -6,8 +6,7 @@ export type CommunityFeedItem = ExploreFeedItem;
 export const COMMUNITY_FEED: CommunityFeedItem[] = [
   {
     id: 'cf-001',
-    imageUrl:
-      'https://res.cloudinary.com/ddzuitkzt/image/upload/v1731824914/gallery/ofccaxq9nly01yi9nhcq.jpg',
+    imageUrl: '/landing/gallery-ofccaxq9nly01yi9nhcq.1431a3dc.webp',
     author: 'neon_skylines',
     authorUserId: 'user-001',
     modelName: 'Flux Basic',
@@ -18,8 +17,7 @@ export const COMMUNITY_FEED: CommunityFeedItem[] = [
   },
   {
     id: 'cf-002',
-    imageUrl:
-      'https://res.cloudinary.com/ddzuitkzt/image/upload/v1731824917/gallery/jhquao95wd3gtiikz5uy.jpg',
+    imageUrl: '/landing/gallery-jhquao95wd3gtiikz5uy.7497147d.webp',
     author: 'forest_whisper',
     authorUserId: 'user-002',
     modelName: 'Flux Basic',
@@ -30,8 +28,7 @@ export const COMMUNITY_FEED: CommunityFeedItem[] = [
   },
   {
     id: 'cf-003',
-    imageUrl:
-      'https://res.cloudinary.com/ddzuitkzt/image/upload/v1731824921/gallery/htfs4vc03mdbyf7mv6wf.jpg',
+    imageUrl: '/landing/gallery-htfs4vc03mdbyf7mv6wf.19917cbf.webp',
     author: 'cyber_vendor',
     authorUserId: 'user-003',
     modelName: 'Flux Pro',
@@ -42,8 +39,7 @@ export const COMMUNITY_FEED: CommunityFeedItem[] = [
   },
   {
     id: 'cf-004',
-    imageUrl:
-      'https://res.cloudinary.com/ddzuitkzt/image/upload/v1731824923/gallery/wcqinro0ha8tnmieqqvh.jpg',
+    imageUrl: '/landing/gallery-wcqinro0ha8tnmieqqvh.138e75e6.webp',
     author: 'dragonforge',
     authorUserId: 'user-004',
     modelName: 'Flux Basic',
@@ -54,8 +50,7 @@ export const COMMUNITY_FEED: CommunityFeedItem[] = [
   },
   {
     id: 'cf-005',
-    imageUrl:
-      'https://res.cloudinary.com/ddzuitkzt/image/upload/v1731824926/gallery/tlj2pf9ldkpftj4rn58i.jpg',
+    imageUrl: '/landing/gallery-tlj2pf9ldkpftj4rn58i.3fb42238.webp',
     author: 'zen_garden',
     authorUserId: 'user-005',
     modelName: 'Flux Basic',
@@ -66,8 +61,7 @@ export const COMMUNITY_FEED: CommunityFeedItem[] = [
   },
   {
     id: 'cf-006',
-    imageUrl:
-      'https://res.cloudinary.com/ddzuitkzt/image/upload/v1731824929/gallery/issf6d8i728zd7pwaabs.jpg',
+    imageUrl: '/landing/gallery-issf6d8i728zd7pwaabs.92dce6bb.webp',
     author: 'deep_blue',
     authorUserId: 'user-006',
     modelName: 'Flux Pro',
@@ -78,8 +72,7 @@ export const COMMUNITY_FEED: CommunityFeedItem[] = [
   },
   {
     id: 'cf-007',
-    imageUrl:
-      'https://res.cloudinary.com/ddzuitkzt/image/upload/v1731824932/gallery/txotpcqxitozx474wew7.jpg',
+    imageUrl: '/landing/gallery-txotpcqxitozx474wew7.2d64f603.webp',
     author: 'steam_sky',
     authorUserId: 'user-007',
     modelName: 'Flux Basic',
@@ -90,8 +83,7 @@ export const COMMUNITY_FEED: CommunityFeedItem[] = [
   },
   {
     id: 'cf-008',
-    imageUrl:
-      'https://res.cloudinary.com/ddzuitkzt/image/upload/v1731824934/gallery/eq7isybabahxdxtmcxzp.jpg',
+    imageUrl: '/landing/gallery-eq7isybabahxdxtmcxzp.a6d4c645.webp',
     author: 'rebel_grid',
     authorUserId: 'user-008',
     modelName: 'Flux Basic',
@@ -102,8 +94,7 @@ export const COMMUNITY_FEED: CommunityFeedItem[] = [
   },
   {
     id: 'cf-009',
-    imageUrl:
-      'https://res.cloudinary.com/ddzuitkzt/image/upload/v1731824937/gallery/jiltu5cbskl7q83lsfz2.jpg',
+    imageUrl: '/landing/gallery-jiltu5cbskl7q83lsfz2.8949e112.webp',
     author: 'meadow_light',
     authorUserId: 'user-009',
     modelName: 'Flux Pro',
@@ -114,8 +105,7 @@ export const COMMUNITY_FEED: CommunityFeedItem[] = [
   },
   {
     id: 'cf-010',
-    imageUrl:
-      'https://res.cloudinary.com/ddzuitkzt/image/upload/v1731824939/gallery/umzjnrj6v3eitwjl0me8.jpg',
+    imageUrl: '/landing/gallery-umzjnrj6v3eitwjl0me8.4e8d5b78.webp',
     author: 'cosmos_drift',
     authorUserId: 'user-010',
     modelName: 'Flux Basic',

@@ -3,9 +3,6 @@ import { DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
 import { MODELS as CATALOG_MODELS, getFeaturedModels } from '@/utils/models';
 import galleryData from '@/utils/gallery.json';
 
-const BASE_URL = import.meta.env.VITE_CLOUDINARY_BASE_URL;
-const ASSETS_URL = import.meta.env.VITE_CLOUDINARY_ASSETS_URL;
-
 export interface GalleryItem {
   url: string;
   aspectRatio: string;
@@ -85,8 +82,8 @@ export const TOOLS: ToolChapter[] = [
     ctaTo: '/image-upscaler',
     media: {
       kind: 'compare',
-      before: `${BASE_URL}/examples/upscale/upscale-1.jpg`,
-      after: `${BASE_URL}/examples/upscale/upscale-1.1.png`,
+      before: '/landing/upscale-1.769d2c02.webp',
+      after: '/landing/upscale-1.1.d76f06d3.webp',
     },
   },
   {
@@ -103,8 +100,8 @@ export const TOOLS: ToolChapter[] = [
     ctaTo: '/colorize-photo',
     media: {
       kind: 'compare',
-      before: `${BASE_URL}/examples/colorize/colorize-1.webp`,
-      after: `${BASE_URL}/examples/colorize/colorize-1.1.png`,
+      before: '/landing/colorize-1.144e6229.webp',
+      after: '/landing/colorize-1.1.382dd645.webp',
     },
   },
   {
@@ -121,8 +118,8 @@ export const TOOLS: ToolChapter[] = [
     ctaTo: '/photo-restorer',
     media: {
       kind: 'compare',
-      before: `${BASE_URL}/examples/revive/revive-1.png`,
-      after: `${BASE_URL}/examples/revive/revive-1.1.png`,
+      before: '/landing/revive-1.001ae842.webp',
+      after: '/landing/revive-1.1.fe6b12b1.webp',
     },
   },
   {
@@ -190,4 +187,4 @@ export const NAV_LINKS = [
   { label: 'FAQ', href: '#faq' },
 ];
 
-export const HERO_IMAGE = `${ASSETS_URL}/hero.png`;
+export const HERO_IMAGE = '/landing/hero.0053f405.webp';

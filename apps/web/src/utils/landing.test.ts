@@ -1,8 +1,12 @@
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { MODELS as CATALOG_MODELS, getFeaturedModels } from '@/utils/models';
 import {
   FAQS,
+  HERO_IMAGE,
   MODELS,
   NAV_LINKS,
   SHOWCASE,
@@ -70,5 +74,28 @@ describe('landing', () => {
       '#pricing',
       '#faq',
     ]);
+  });
+  describe('asset references', () => {
+    const LANDING_PREFIX = '/landing/';
+    const PUBLIC_DIR = resolve(__dirname, '../../public');
+
+    const toolMediaUrls = TOOLS.flatMap((tool) =>
+      tool.media.kind === 'gallery' ? tool.media.images : [tool.media.before, tool.media.after],
+    );
+    const allUrls = [HERO_IMAGE, ...SHOWCASE.map((item) => item.url), ...toolMediaUrls];
+
+    it('collects urls from every exported source', () => {
+      expect(toolMediaUrls.length).toBeGreaterThan(0);
+      expect(allUrls).toContain(HERO_IMAGE);
+    });
+
+    it.each(allUrls)('%s is served from /landing/ and not Cloudinary', (url) => {
+      expect(url.startsWith(LANDING_PREFIX)).toBe(true);
+      expect(url).not.toContain('res.cloudinary.com');
+    });
+
+    it.each([...new Set(allUrls)])('%s exists in public/', (url) => {
+      expect(existsSync(resolve(PUBLIC_DIR, url.slice(1)))).toBe(true);
+    });
   });
 });

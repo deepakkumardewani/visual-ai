@@ -10,7 +10,6 @@ import SideBySide from '@/components/SideBySide.vue';
 
 const appStore = useAppStore();
 const { isDark } = storeToRefs(appStore);
-const baseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
 const tab = ref(1);
 
 const tabOptions = [
@@ -28,65 +27,65 @@ usePageSeo({
 
 const upscaleExamples = [
   {
-    original: `${baseUrl}/examples/upscale/upscale-1.jpg`,
-    upscaled: `${baseUrl}/examples/upscale/upscale-1.1.png`,
+    original: '/landing/upscale-1.769d2c02.webp',
+    upscaled: '/landing/upscale-1.1.d76f06d3.webp',
   },
   {
-    original: `${baseUrl}/examples/upscale/upscale-2.webp`,
-    upscaled: `${baseUrl}/examples/upscale/upscale-2.2.png`,
+    original: '/landing/upscale-2.a6eedddb.webp',
+    upscaled: '/landing/upscale-2.2.e31a8791.webp',
   },
   {
-    original: `${baseUrl}/examples/upscale/upscale-3.jpg`,
-    upscaled: `${baseUrl}/examples/upscale/upscale-3.3.png`,
+    original: '/landing/upscale-3.e4b5dc76.webp',
+    upscaled: '/landing/upscale-3.3.93ea4137.webp',
   },
   {
-    original: `${baseUrl}/examples/upscale/upscale-4.jpg`,
-    upscaled: `${baseUrl}/examples/upscale/upscale-4.4.png`,
+    original: '/landing/upscale-4.20a58e01.webp',
+    upscaled: '/landing/upscale-4.4.c8dcd976.webp',
   },
   {
-    original: `${baseUrl}/examples/upscale/upscale-5.jpg`,
-    upscaled: `${baseUrl}/examples/upscale/upscale-5.5.png`,
+    original: '/landing/upscale-5.2e238568.webp',
+    upscaled: '/landing/upscale-5.5.47525fe6.webp',
   },
 ];
 const colorizeExamples = [
   {
-    original: `${baseUrl}/examples/colorize/colorize-1.webp`,
-    colorized: `${baseUrl}/examples/colorize/colorize-1.1.png`,
+    original: '/landing/colorize-1.144e6229.webp',
+    colorized: '/landing/colorize-1.1.382dd645.webp',
   },
   {
-    original: `${baseUrl}/examples/colorize/colorize-2.webp`,
-    colorized: `${baseUrl}/examples/colorize/colorize-2.2.png`,
+    original: '/landing/colorize-2.bc3a2bd1.webp',
+    colorized: '/landing/colorize-2.2.17d411f3.webp',
   },
   {
-    original: `${baseUrl}/examples/colorize/colorize-3.webp`,
-    colorized: `${baseUrl}/examples/colorize/colorize-3.3.png`,
+    original: '/landing/colorize-3.c7fc4ac1.webp',
+    colorized: '/landing/colorize-3.3.fae5eb85.webp',
   },
   {
-    original: `${baseUrl}/examples/colorize/colorize-4.webp`,
-    colorized: `${baseUrl}/examples/colorize/colorize-4.4.png`,
+    original: '/landing/colorize-4.9a458295.webp',
+    colorized: '/landing/colorize-4.4.496da185.webp',
   },
   {
-    original: `${baseUrl}/examples/colorize/colorize-5.jpg`,
-    colorized: `${baseUrl}/examples/colorize/colorize-5.5.png`,
+    original: '/landing/colorize-5.703a3231.webp',
+    colorized: '/landing/colorize-5.5.6ab9b64d.webp',
   },
 ];
 
 const reviveExamples = [
   {
-    original: `${baseUrl}/examples/revive/revive-1.png`,
-    revived: `${baseUrl}/examples/revive/revive-1.1.png`,
+    original: '/landing/revive-1.001ae842.webp',
+    revived: '/landing/revive-1.1.fe6b12b1.webp',
   },
   {
-    original: `${baseUrl}/examples/revive/revive-2.jpg`,
-    revived: `${baseUrl}/examples/revive/revive-2.2.png`,
+    original: '/landing/revive-2.6db90260.webp',
+    revived: '/landing/revive-2.2.f2d26347.webp',
   },
   {
-    original: `${baseUrl}/examples/revive/revive-3.png`,
-    revived: `${baseUrl}/examples/revive/revive-3.3.png`,
+    original: '/landing/revive-3.008eb7fc.webp',
+    revived: '/landing/revive-3.3.5bec0e6b.webp',
   },
   {
-    original: `${baseUrl}/examples/revive/revive-4.png`,
-    revived: `${baseUrl}/examples/revive/revive-4.4.png`,
+    original: '/landing/revive-4.5d76e8db.webp',
+    revived: '/landing/revive-4.4.86f5e93c.webp',
   },
 ];
 </script>

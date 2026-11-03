@@ -13,7 +13,7 @@ describe('communityMock', () => {
 
     for (const item of COMMUNITY_FEED) {
       expect(item.id).toBeTruthy();
-      expect(item.imageUrl).toMatch(/^https:\/\//);
+      expect(item.imageUrl).toMatch(/^\/landing\//);
       expect(item.author).toBeTruthy();
       expect(item.authorUserId).toBeTruthy();
       expect(item.prompt).toBeTruthy();

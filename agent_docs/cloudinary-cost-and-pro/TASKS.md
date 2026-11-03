@@ -153,7 +153,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 **Adds:** Landing and marketing pages serve optimized images (and any demo videos) from the web host instead of Cloudinary.
 **Try in UI:** Open `/` and watch the network tab for zero `res.cloudinary.com` requests ; open `/gallery` and a feature landing page and check the same ; open the signup dialog and confirm its images load.
 
-### ☐ T4.1 Optimise and relocate media, cache headers
+### ✅ T4.1 Optimise and relocate media, cache headers
 
 - **Kind:** implementation
 - **Files:** `apps/web/public/landing/*`, `apps/web/nginx/conf/spa.conf`
@@ -161,7 +161,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every image at most ~150 KB (revive-1 included); any MP4 at most ~1 MB with a poster; `spa.conf` serves `/landing/*` with the immutable header.
 - **Verify:** `ls -lh apps/web/public/landing`; `grep -n "landing\|immutable\|mp4" apps/web/nginx/conf/spa.conf`.
 
-### ☐ T4.2 Repoint references and remove env var
+### ✅ T4.2 Repoint references and remove env var
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/landing.ts`, `apps/web/src/utils/communityMock.ts`, `apps/web/src/utils/gallery.json`, `apps/web/src/components/Dialogs/SignupDialog.vue`, `apps/web/.env.example`
@@ -169,7 +169,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Only user-content code paths (History, grids, collections, ImageDialog, helpers) still reference Cloudinary; `VITE_CLOUDINARY_ASSETS_URL` no longer appears in `apps/web/src`.
 - **Verify:** `grep -rn "res.cloudinary.com\|CLOUDINARY_ASSETS_URL" apps/web/src`; `cd apps/web && bun run check`; `bun run test`.
 
-### ☐ T4.5 Unit: landing asset references
+### ✅ T4.5 Unit: landing asset references
 
 - **Kind:** unit
 - **Files:** `apps/web/src/utils/landing.ts`
@@ -177,7 +177,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every file at least 80% lines/branches/functions/statements, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/utils/landing.test.ts --coverage --coverage.include=src/utils/landing.ts --coverage.reporter=text`
 
-### ☐ T4.3 E2E: marketing pages make no Cloudinary requests
+### ✅ T4.3 E2E: marketing pages make no Cloudinary requests
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` `/` attempts 0 requests to `res.cloudinary.com` (mock opted out, attempted requests counted and aborted); `@high` `/gallery`, `/examples`, `/pricing` and one feature landing attempt 0; `@high` the signup dialog images load from `/landing/`.
@@ -186,7 +186,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Scenarios from SPEC A3 pass; the spec opts out of the global mock explicitly and documents why.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/landing-no-cloudinary.spec.ts --repeat-each=3`
 
-### ☐ T4.4 Gate: Workstream A
+### ✅ T4.4 Gate: Workstream A
 
 - **Kind:** gate
 - **Files:** none
