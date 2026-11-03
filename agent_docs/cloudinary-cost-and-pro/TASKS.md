@@ -249,7 +249,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 **Adds:** Users can subscribe to Pro ($5/month) through Dodo checkout, and webhooks activate, renew, cancel and expire the plan.
 **Try in UI:** No UI yet (UI is Phase 9) ; run `cd apps/api && bun run test` and confirm the webhook lifecycle tests pass ; owner: complete a Dodo test-mode subscription and confirm `GET /users/<your id>` shows `plan: "pro"`.
 
-### ☐ T6.1 Dodo Pro product and env
+### ✅ T6.1 Dodo Pro product and env
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/config/env.ts`, `apps/api/.env.example`, `agent_docs/cloudinary-cost-and-pro/GO-LIVE.md`
@@ -257,7 +257,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Test-mode product exists via MCP product list; env schema validates the new var; event-name list recorded; no secret committed.
 - **Verify:** `cd apps/api && bun run test`; MCP product list shows the product.
 
-### ☐ T6.2 Subscription checkout (POST /payments/subscribe)
+### ✅ T6.2 Subscription checkout (POST /payments/subscribe)
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/service.ts`, `apps/api/src/payments/router.ts`, `apps/api/src/payments/types.ts`, `apps/api/src/payments/dodo/adapter.ts`, `apps/api/src/payments/dodo/productMap.ts`
@@ -265,7 +265,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Returns checkout URL; 401 unauthenticated; 409 for active Pro; no parallel payment stack.
 - **Verify:** `cd apps/api && bun run test`; `bun run check`.
 
-### ☐ T6.3 Subscription webhook lifecycle
+### ✅ T6.3 Subscription webhook lifecycle
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/dodo/eventMapper.ts`, `apps/api/src/payments/service.ts`, `apps/api/src/payments/webhookRouter.ts`, `apps/api/src/payments/dodo/constants.ts`
@@ -273,7 +273,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Active sets pro and period end; renewed extends; cancelled sets `cancelAtPeriodEnd` and stays Pro until period end; failed marks `past_due` with grace until period end; expired sets free; duplicate event id is a no-op; out-of-order events do not regress state.
 - **Verify:** `cd apps/api && bun run test`; `bun run check`.
 
-### ☐ T6.4 Unit: Dodo adapter and subscribe service
+### ✅ T6.4 Unit: Dodo adapter and subscribe service
 
 - **Kind:** unit
 - **Files:** `apps/api/src/payments/dodo/adapter.ts`, `apps/api/src/payments/dodo/productMap.ts`, `apps/api/src/payments/service.ts`, `apps/api/src/payments/router.ts`
@@ -281,7 +281,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/api && npx vitest run src/payments --coverage --coverage.include=src/payments/dodo/adapter.ts,src/payments/dodo/productMap.ts,src/payments/service.ts,src/payments/router.ts --coverage.reporter=text`
 
-### ☐ T6.5 Unit: webhook event mapper and applyEvent
+### ✅ T6.5 Unit: webhook event mapper and applyEvent
 
 - **Kind:** unit
 - **Files:** `apps/api/src/payments/dodo/eventMapper.ts`, `apps/api/src/payments/webhookRouter.ts`
@@ -289,7 +289,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every file at least 80% across all metrics, target over 95%; lifecycle integration test included.
 - **Verify:** `cd apps/api && npx vitest run src/payments --coverage --coverage.include=src/payments/dodo/eventMapper.ts,src/payments/webhookRouter.ts --coverage.reporter=text`
 
-### ☐ T6.6 E2E: subscription lifecycle
+### ✅ T6.6 E2E: subscription lifecycle
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` signed active webhook flips the user to Pro; `@high` cancelled webhook keeps Pro until period end; `@high` expired webhook returns to free; `@medium` duplicate event id is a no-op; `@medium` subscribe while already Pro returns 409.

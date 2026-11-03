@@ -4,8 +4,13 @@ import type { Request, Response } from "express"
 import { asyncHandler } from "../lib/async-handler.js"
 import { BadRequestError } from "../lib/errors.js"
 import { PAYMENTS_MESSAGES } from "./constants.js"
-import { ProviderApiError, UnknownPackError } from "./errors.js"
-import { createCheckout, getCheckoutSessionStatus, listPaymentsForUser } from "./service.js"
+import { AlreadySubscribedError, ProviderApiError, UnknownPackError } from "./errors.js"
+import {
+    createCheckout,
+    createSubscriptionCheckout,
+    getCheckoutSessionStatus,
+    listPaymentsForUser,
+} from "./service.js"
 
 export const paymentsApiRouter = Router()
 
@@ -16,6 +21,11 @@ function getUserIdOrRespondUnauthorized(req: Request, res: Response): string | u
         return undefined
     }
     return userId
+}
+
+function getSessionEmail(req: Request): string | undefined {
+    const email = req.auth?.sessionClaims?.email
+    return typeof email === "string" ? email : undefined
 }
 
 paymentsApiRouter.post(
@@ -31,10 +41,7 @@ paymentsApiRouter.post(
             throw new BadRequestError("packId is required")
         }
 
-        const email =
-            typeof req.auth?.sessionClaims?.email === "string"
-                ? req.auth.sessionClaims.email
-                : undefined
+        const email = getSessionEmail(req)
 
         try {
             const result = await createCheckout(userId, packId, email)
@@ -42,6 +49,33 @@ paymentsApiRouter.post(
         } catch (error) {
             if (error instanceof UnknownPackError) {
                 throw new BadRequestError(error.message)
+            }
+            if (error instanceof ProviderApiError) {
+                res.status(502).json({ message: PAYMENTS_MESSAGES.PROVIDER_UNAVAILABLE })
+                return
+            }
+            throw error
+        }
+    }),
+)
+
+paymentsApiRouter.post(
+    "/payments/subscribe",
+    asyncHandler(async (req: Request, res: Response) => {
+        const userId = getUserIdOrRespondUnauthorized(req, res)
+        if (!userId) {
+            return
+        }
+
+        const email = getSessionEmail(req)
+
+        try {
+            const result = await createSubscriptionCheckout(userId, email)
+            res.status(201).json(result)
+        } catch (error) {
+            if (error instanceof AlreadySubscribedError) {
+                res.status(409).json({ message: error.message })
+                return
             }
             if (error instanceof ProviderApiError) {
                 res.status(502).json({ message: PAYMENTS_MESSAGES.PROVIDER_UNAVAILABLE })

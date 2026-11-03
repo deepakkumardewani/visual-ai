@@ -1,8 +1,9 @@
-import { getCreditPack, type CreditPack } from "@visual-ai/shared"
+import { getCreditPack, PLAN, SUBSCRIPTION_STATUS, type CreditPack } from "@visual-ai/shared"
 import moment from "moment"
 
 import { env } from "../config/env.js"
 import { NotFoundError } from "../lib/errors.js"
+import { isPro } from "../lib/isPro.js"
 import { createLogger } from "../lib/logger.js"
 import { PaymentModel as Payment } from "../models/payment.js"
 import { UserModel as User } from "../models/user.js"
@@ -13,12 +14,17 @@ import {
     PAYMENT_PROVIDER_DODO,
     PAYMENT_STATUS,
     PAYMENTS_MESSAGES,
+    SUBSCRIPTION_EVENT_TYPE,
     type CheckoutSessionStatus,
 } from "./constants.js"
 import { type ParsedWebhookEvent } from "./dodo/eventMapper.js"
-import { asProviderApiError, UnknownPackError } from "./errors.js"
+import { AlreadySubscribedError, asProviderApiError, UnknownPackError } from "./errors.js"
 import { getPaymentProvider } from "./providerFactory.js"
-import type { NormalizedPaymentEvent } from "./types.js"
+import type {
+    NormalizedPaymentEvent,
+    NormalizedSubscriptionEvent,
+    NormalizedWebhookEvent,
+} from "./types.js"
 
 const paymentsLogger = createLogger("payments-service")
 
@@ -61,6 +67,36 @@ export async function createCheckout(
     })
 
     return checkout
+}
+
+/** Blocks a second subscription while one is active and not set to cancel. */
+async function assertNotActivelySubscribed(userId: string): Promise<void> {
+    const user = await User.findOne({ userId }).select("plan subscription").lean()
+    const subscription = user?.subscription
+    const hasLiveSubscription =
+        isPro(user) &&
+        subscription?.status === SUBSCRIPTION_STATUS.ACTIVE &&
+        !subscription.cancelAtPeriodEnd
+    if (hasLiveSubscription) {
+        throw new AlreadySubscribedError()
+    }
+}
+
+export async function createSubscriptionCheckout(
+    userId: string,
+    email?: string,
+): Promise<{ checkoutUrl: string; sessionId: string }> {
+    await assertNotActivelySubscribed(userId)
+
+    try {
+        return await getPaymentProvider().createSubscriptionCheckout({
+            userId,
+            email,
+            returnUrl: env.PAYMENT_RETURN_URL as string,
+        })
+    } catch (error) {
+        throw asProviderApiError(error, PAYMENTS_MESSAGES.PROVIDER_REQUEST_FAILED)
+    }
 }
 
 export async function listPaymentsForUser(userId: string) {
@@ -322,8 +358,110 @@ async function dispatchWebhookPayment(parsed: ParsedWebhookEvent, pack: CreditPa
     }
 }
 
-/** Provider-agnostic webhook handler (idempotent credit grant). */
-export async function applyEvent(event: NormalizedPaymentEvent): Promise<void> {
+type SubscriptionPatch = Record<string, unknown>
+
+function isSubscriptionEvent(event: NormalizedWebhookEvent): event is NormalizedSubscriptionEvent {
+    return (Object.values(SUBSCRIPTION_EVENT_TYPE) as string[]).includes(event.type)
+}
+
+/** Builds the `$set` for one lifecycle event; `plan` access follows `isPro`, which reads status and period end. */
+function buildSubscriptionPatch(event: NormalizedSubscriptionEvent): SubscriptionPatch {
+    const base: SubscriptionPatch = {
+        "subscription.providerSubscriptionId": event.providerSubscriptionId,
+        "subscription.lastEventAt": event.occurredAt,
+    }
+
+    switch (event.type) {
+        case SUBSCRIPTION_EVENT_TYPE.ACTIVATED:
+        case SUBSCRIPTION_EVENT_TYPE.RENEWED:
+            return {
+                ...base,
+                plan: PLAN.PRO,
+                "subscription.status": SUBSCRIPTION_STATUS.ACTIVE,
+                "subscription.currentPeriodEnd": event.currentPeriodEnd,
+                "subscription.cancelAtPeriodEnd": false,
+            }
+        case SUBSCRIPTION_EVENT_TYPE.CANCELLED:
+            // Period end is deliberately untouched: Pro lasts until the already-paid term ends.
+            return {
+                ...base,
+                "subscription.status": SUBSCRIPTION_STATUS.CANCELLED,
+                "subscription.cancelAtPeriodEnd": true,
+            }
+        case SUBSCRIPTION_EVENT_TYPE.PAYMENT_FAILED:
+            return { ...base, "subscription.status": SUBSCRIPTION_STATUS.PAST_DUE }
+        case SUBSCRIPTION_EVENT_TYPE.EXPIRED:
+            return {
+                ...base,
+                plan: PLAN.FREE,
+                "subscription.status": SUBSCRIPTION_STATUS.EXPIRED,
+                "subscription.cancelAtPeriodEnd": false,
+            }
+    }
+}
+
+/**
+ * Only a new subscription may replace the stored one; every other event must target the stored
+ * subscription (or fill an empty slot when it arrived before its activation).
+ */
+function subscriptionOwnerClauses(event: NormalizedSubscriptionEvent) {
+    if (event.type === SUBSCRIPTION_EVENT_TYPE.ACTIVATED) {
+        return []
+    }
+    return [
+        {
+            $or: [
+                { "subscription.providerSubscriptionId": event.providerSubscriptionId },
+                { "subscription.providerSubscriptionId": { $exists: false } },
+            ],
+        },
+    ]
+}
+
+/** Drops duplicate and out-of-order deliveries by provider timestamp. */
+function staleEventClause(event: NormalizedSubscriptionEvent) {
+    return {
+        $or: [
+            { "subscription.lastEventAt": { $exists: false } },
+            { "subscription.lastEventAt": { $lt: event.occurredAt } },
+        ],
+    }
+}
+
+async function applySubscriptionEvent(event: NormalizedSubscriptionEvent): Promise<void> {
+    const logCtx = {
+        webhookId: event.providerEventId,
+        subscriptionId: event.providerSubscriptionId,
+        userId: event.userId,
+        type: event.type,
+    }
+
+    if (!event.userId) {
+        paymentsLogger.warn({ ...logCtx, reason: "missing_user_id" }, "Webhook missing userId")
+        return
+    }
+
+    const result = await User.updateOne(
+        {
+            userId: event.userId,
+            $and: [...subscriptionOwnerClauses(event), staleEventClause(event)],
+        },
+        { $set: buildSubscriptionPatch(event) },
+    )
+
+    if (result.modifiedCount === 0) {
+        paymentsLogger.info(logCtx, "Subscription event ignored (stale, duplicate or no user)")
+        return
+    }
+    paymentsLogger.info(logCtx, "Subscription event applied")
+}
+
+/** Provider-agnostic webhook handler (idempotent credit grant and subscription lifecycle). */
+export async function applyEvent(event: NormalizedWebhookEvent): Promise<void> {
+    if (isSubscriptionEvent(event)) {
+        await applySubscriptionEvent(event)
+        return
+    }
     const resolved = await resolveWebhookGrant(event)
     if (!resolved) {
         return

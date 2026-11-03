@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest"
 
-import { NORMALIZED_EVENT_TYPE } from "../constants.js"
-import { mapDodoWebhookEvent } from "./eventMapper.js"
+import { NORMALIZED_EVENT_TYPE, SUBSCRIPTION_EVENT_TYPE } from "../constants.js"
+import {
+    isDodoSubscriptionEvent,
+    mapDodoSubscriptionEvent,
+    mapDodoWebhookEvent,
+} from "./eventMapper.js"
 
 describe("mapDodoWebhookEvent", () => {
     it("maps payment.succeeded with metadata and amount fields", () => {
@@ -153,5 +157,120 @@ describe("mapDodoWebhookEvent", () => {
         )
         expect(emptyStrings?.userId).toBeNull()
         expect(emptyStrings?.packId).toBeNull()
+    })
+})
+
+function subscriptionPayload(
+    type: string,
+    data: Record<string, unknown> = {},
+    timestamp: unknown = "2026-04-01T10:00:00.000Z",
+) {
+    return {
+        type,
+        timestamp,
+        business_id: "biz_1",
+        data: {
+            subscription_id: "sub_1",
+            next_billing_date: "2026-05-01T00:00:00.000Z",
+            metadata: { userId: "user_1" },
+            ...data,
+        },
+    } as never
+}
+
+describe("isDodoSubscriptionEvent", () => {
+    it("is true for subscription.* types", () => {
+        expect(isDodoSubscriptionEvent(subscriptionPayload("subscription.active"))).toBe(true)
+    })
+
+    it("is false for payment types", () => {
+        expect(isDodoSubscriptionEvent(subscriptionPayload("payment.succeeded"))).toBe(false)
+    })
+})
+
+describe("mapDodoSubscriptionEvent", () => {
+    it.each([
+        ["subscription.active", SUBSCRIPTION_EVENT_TYPE.ACTIVATED],
+        ["subscription.renewed", SUBSCRIPTION_EVENT_TYPE.RENEWED],
+        ["subscription.cancelled", SUBSCRIPTION_EVENT_TYPE.CANCELLED],
+        ["subscription.failed", SUBSCRIPTION_EVENT_TYPE.PAYMENT_FAILED],
+        ["subscription.on_hold", SUBSCRIPTION_EVENT_TYPE.PAYMENT_FAILED],
+        ["subscription.past_due", SUBSCRIPTION_EVENT_TYPE.PAYMENT_FAILED],
+        ["subscription.expired", SUBSCRIPTION_EVENT_TYPE.EXPIRED],
+    ])("maps %s to %s", (dodoType, expected) => {
+        const result = mapDodoSubscriptionEvent(subscriptionPayload(dodoType), "wh_1")
+
+        expect(result).toEqual({
+            providerEventId: "wh_1",
+            type: expected,
+            providerSubscriptionId: "sub_1",
+            userId: "user_1",
+            currentPeriodEnd: new Date("2026-05-01T00:00:00.000Z"),
+            occurredAt: new Date("2026-04-01T10:00:00.000Z"),
+        })
+    })
+
+    it("returns null for an unknown subscription event", () => {
+        expect(
+            mapDodoSubscriptionEvent(subscriptionPayload("subscription.plan_changed"), "w"),
+        ).toBeNull()
+    })
+
+    it("returns null when subscription_id is missing", () => {
+        const payload = subscriptionPayload("subscription.active", { subscription_id: 42 })
+        expect(mapDodoSubscriptionEvent(payload, "w")).toBeNull()
+    })
+
+    it.each(["subscription.active", "subscription.renewed"])(
+        "returns null for %s without a valid billing date",
+        (type) => {
+            expect(
+                mapDodoSubscriptionEvent(
+                    subscriptionPayload(type, { next_billing_date: null }),
+                    "w",
+                ),
+            ).toBeNull()
+            expect(
+                mapDodoSubscriptionEvent(
+                    subscriptionPayload(type, { next_billing_date: "not-a-date" }),
+                    "w",
+                ),
+            ).toBeNull()
+        },
+    )
+
+    it("keeps a null period end for cancelled and expired events", () => {
+        const cancelled = mapDodoSubscriptionEvent(
+            subscriptionPayload("subscription.cancelled", { next_billing_date: undefined }),
+            "w",
+        )
+        expect(cancelled).toMatchObject({
+            type: SUBSCRIPTION_EVENT_TYPE.CANCELLED,
+            currentPeriodEnd: null,
+        })
+    })
+
+    it("yields a null userId when metadata is absent or has no userId", () => {
+        expect(
+            mapDodoSubscriptionEvent(
+                subscriptionPayload("subscription.active", { metadata: null }),
+                "w",
+            )?.userId,
+        ).toBeNull()
+        expect(
+            mapDodoSubscriptionEvent(
+                subscriptionPayload("subscription.active", { metadata: { userId: "" } }),
+                "w",
+            )?.userId,
+        ).toBeNull()
+    })
+
+    it("falls back to the current time when the timestamp is unparseable", () => {
+        const before = Date.now()
+        const result = mapDodoSubscriptionEvent(
+            subscriptionPayload("subscription.active", {}, "garbage"),
+            "w",
+        )
+        expect(result!.occurredAt.getTime()).toBeGreaterThanOrEqual(before)
     })
 })

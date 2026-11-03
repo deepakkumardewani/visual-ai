@@ -21,6 +21,7 @@ const REQUIRED_ENV: Record<string, string> = {
     DODO_PRODUCT_ID_PACK_450: "pdt_450",
     DODO_PRODUCT_ID_PACK_960: "pdt_960",
     DODO_PRODUCT_ID_PACK_2000: "pdt_2000",
+    DODO_PRODUCT_ID_PRO: "pdt_pro",
     EMAIL_USER: "test@example.com",
     EMAIL_PASSWORD: "password",
     WEBHOOK_SECRET: "webhook-secret",
@@ -52,6 +53,7 @@ const MANAGED_KEYS = [
     "DODO_PRODUCT_ID_PACK_450",
     "DODO_PRODUCT_ID_PACK_960",
     "DODO_PRODUCT_ID_PACK_2000",
+    "DODO_PRODUCT_ID_PRO",
     "XAI_API_KEY",
 ]
 
@@ -200,6 +202,7 @@ describe("env parse", () => {
                 DODO_PRODUCT_ID_PACK_450: undefined,
                 DODO_PRODUCT_ID_PACK_960: undefined,
                 DODO_PRODUCT_ID_PACK_2000: undefined,
+                DODO_PRODUCT_ID_PRO: undefined,
                 PAYMENT_RETURN_URL: undefined,
             })
 
@@ -218,6 +221,7 @@ describe("env parse", () => {
         "DODO_PRODUCT_ID_PACK_450",
         "DODO_PRODUCT_ID_PACK_960",
         "DODO_PRODUCT_ID_PACK_2000",
+        "DODO_PRODUCT_ID_PRO",
         "PAYMENT_RETURN_URL",
     ] as const)("exits when PAYMENT_PROVIDER=dodo and %s is missing", async (missingKey) => {
         const exit = vi.spyOn(process, "exit").mockImplementation(((code?: number) => {

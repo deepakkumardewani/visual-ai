@@ -2,8 +2,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { CREDIT_PACKS } from "@visual-ai/shared"
 
-import { NORMALIZED_EVENT_TYPE, PAYMENT_STATUS } from "./constants.js"
+import { NORMALIZED_EVENT_TYPE, PAYMENT_STATUS, SUBSCRIPTION_EVENT_TYPE } from "./constants.js"
 import type { ParsedWebhookEvent } from "./dodo/eventMapper.js"
+import type { NormalizedSubscriptionEvent } from "./types.js"
 
 const logger = vi.hoisted(() => ({
     info: vi.fn(),
@@ -350,5 +351,129 @@ describe("applyEvent", () => {
             }),
         )
         expect(User.updateOne).not.toHaveBeenCalled()
+    })
+})
+
+describe("applyEvent subscription lifecycle", () => {
+    const occurredAt = new Date("2026-04-01T10:00:00.000Z")
+    const periodEnd = new Date("2026-05-01T00:00:00.000Z")
+
+    function subEvent(
+        overrides: Partial<NormalizedSubscriptionEvent> = {},
+    ): NormalizedSubscriptionEvent {
+        return {
+            providerEventId: "wh_sub_1",
+            type: SUBSCRIPTION_EVENT_TYPE.ACTIVATED,
+            providerSubscriptionId: "sub_1",
+            userId: "user_1",
+            currentPeriodEnd: periodEnd,
+            occurredAt,
+            ...overrides,
+        }
+    }
+
+    beforeEach(() => {
+        vi.clearAllMocks()
+        User.updateOne.mockResolvedValue({ modifiedCount: 1 })
+    })
+
+    it.each([SUBSCRIPTION_EVENT_TYPE.ACTIVATED, SUBSCRIPTION_EVENT_TYPE.RENEWED])(
+        "%s sets Pro, active status and the billing date",
+        async (type) => {
+            await applyEvent(subEvent({ type }))
+
+            expect(User.updateOne).toHaveBeenCalledTimes(1)
+            expect(User.updateOne.mock.calls[0]![1]).toEqual({
+                $set: {
+                    "subscription.providerSubscriptionId": "sub_1",
+                    "subscription.lastEventAt": occurredAt,
+                    plan: "pro",
+                    "subscription.status": "active",
+                    "subscription.currentPeriodEnd": periodEnd,
+                    "subscription.cancelAtPeriodEnd": false,
+                },
+            })
+        },
+    )
+
+    it("cancelled keeps the plan and period end, flagging cancel at period end", async () => {
+        await applyEvent(subEvent({ type: SUBSCRIPTION_EVENT_TYPE.CANCELLED }))
+
+        const set = User.updateOne.mock.calls[0]![1].$set
+        expect(set).toMatchObject({
+            "subscription.status": "cancelled",
+            "subscription.cancelAtPeriodEnd": true,
+        })
+        expect(set).not.toHaveProperty("plan")
+        expect(set).not.toHaveProperty("subscription.currentPeriodEnd")
+    })
+
+    it("payment failure marks past_due without touching the plan", async () => {
+        await applyEvent(subEvent({ type: SUBSCRIPTION_EVENT_TYPE.PAYMENT_FAILED }))
+
+        const set = User.updateOne.mock.calls[0]![1].$set
+        expect(set["subscription.status"]).toBe("past_due")
+        expect(set).not.toHaveProperty("plan")
+    })
+
+    it("expired returns the user to free", async () => {
+        await applyEvent(subEvent({ type: SUBSCRIPTION_EVENT_TYPE.EXPIRED }))
+
+        expect(User.updateOne.mock.calls[0]![1].$set).toMatchObject({
+            plan: "free",
+            "subscription.status": "expired",
+            "subscription.cancelAtPeriodEnd": false,
+        })
+    })
+
+    it("lets only activation replace the stored subscription", async () => {
+        await applyEvent(subEvent({ type: SUBSCRIPTION_EVENT_TYPE.ACTIVATED }))
+        await applyEvent(subEvent({ type: SUBSCRIPTION_EVENT_TYPE.CANCELLED }))
+
+        expect(User.updateOne.mock.calls[0]![0].$and).toHaveLength(1)
+        expect(User.updateOne.mock.calls[1]![0].$and).toHaveLength(2)
+        expect(User.updateOne.mock.calls[1]![0].$and[0]).toEqual({
+            $or: [
+                { "subscription.providerSubscriptionId": "sub_1" },
+                { "subscription.providerSubscriptionId": { $exists: false } },
+            ],
+        })
+    })
+
+    it("guards against stale deliveries by lastEventAt", async () => {
+        await applyEvent(subEvent())
+
+        const filter = User.updateOne.mock.calls[0]![0]
+        expect(filter.userId).toBe("user_1")
+        expect(filter.$and.at(-1)).toEqual({
+            $or: [
+                { "subscription.lastEventAt": { $exists: false } },
+                { "subscription.lastEventAt": { $lt: occurredAt } },
+            ],
+        })
+    })
+
+    it("logs and does not throw when nothing was modified (stale or duplicate)", async () => {
+        User.updateOne.mockResolvedValue({ modifiedCount: 0 })
+
+        await expect(applyEvent(subEvent())).resolves.toBeUndefined()
+
+        expect(logger.info).toHaveBeenCalledWith(
+            expect.objectContaining({ webhookId: "wh_sub_1" }),
+            "Subscription event ignored (stale, duplicate or no user)",
+        )
+    })
+
+    it("warns and skips the update when userId is missing", async () => {
+        await applyEvent(subEvent({ userId: null }))
+
+        expect(User.updateOne).not.toHaveBeenCalled()
+        expect(logger.warn).toHaveBeenCalledTimes(1)
+    })
+
+    it("propagates database errors so the router returns 500", async () => {
+        User.updateOne.mockRejectedValue(new Error("db down"))
+
+        await expect(applyEvent(subEvent())).rejects.toThrow("db down")
     })
 })

@@ -1,7 +1,7 @@
 import type { CreditPack, PaymentProviderName } from "@visual-ai/shared"
 import type { IncomingHttpHeaders } from "http"
 
-import type { NormalizedEventType, PaymentStatus } from "./constants.js"
+import type { NormalizedEventType, PaymentStatus, SubscriptionEventType } from "./constants.js"
 
 export interface CheckoutResult {
     checkoutUrl: string
@@ -19,6 +19,18 @@ export interface NormalizedPaymentEvent {
     occurredAt: Date
 }
 
+export interface NormalizedSubscriptionEvent {
+    providerEventId: string
+    type: SubscriptionEventType
+    providerSubscriptionId: string
+    userId: string | null
+    /** Provider's next billing date; null when the payload carries none. */
+    currentPeriodEnd: Date | null
+    occurredAt: Date
+}
+
+export type NormalizedWebhookEvent = NormalizedPaymentEvent | NormalizedSubscriptionEvent
+
 export interface PaymentProvider {
     readonly name: PaymentProviderName
     createCheckout(req: {
@@ -27,10 +39,15 @@ export interface PaymentProvider {
         email?: string
         returnUrl: string
     }): Promise<CheckoutResult>
+    createSubscriptionCheckout(req: {
+        userId: string
+        email?: string
+        returnUrl: string
+    }): Promise<CheckoutResult>
     verifyAndParseWebhook(
         rawBody: Buffer,
         headers: IncomingHttpHeaders,
-    ): NormalizedPaymentEvent | null
+    ): NormalizedWebhookEvent | null
     getSessionStatus(sessionId: string): Promise<{
         paymentId: string | null
         status: PaymentStatus

@@ -4,6 +4,7 @@ import { fileURLToPath } from "url"
 import { describe, expect, it, vi } from "vitest"
 
 const mockEnv = vi.hoisted(() => ({
+    DODO_PRODUCT_ID_PRO: "pdt_env_pro",
     DODO_PRODUCT_ID_PACK_200: "pdt_from_env_200",
     DODO_PRODUCT_ID_PACK_450: "pdt_env_450",
     DODO_PRODUCT_ID_PACK_960: "pdt_env_960",
@@ -70,6 +71,61 @@ describe("createDodoPaymentProvider", () => {
         expect(payload).not.toHaveProperty("price")
         expect(payload).not.toHaveProperty("credits")
         expect(JSON.stringify(payload)).not.toMatch(/99999/)
+    })
+
+    it("creates a subscription session from the Pro product id with only userId metadata", async () => {
+        const client = makeMockClient()
+        client.checkoutSessions.create.mockResolvedValue({
+            checkout_url: "https://checkout.example/sub",
+            session_id: "cks_sub",
+        })
+
+        const provider = createDodoPaymentProvider(client as never)
+        const result = await provider.createSubscriptionCheckout({
+            userId: "user_1",
+            email: "pro@example.com",
+            returnUrl: "https://app.example/return",
+        })
+
+        expect(result).toEqual({
+            checkoutUrl: "https://checkout.example/sub",
+            sessionId: "cks_sub",
+        })
+        expect(client.checkoutSessions.create).toHaveBeenCalledWith({
+            product_cart: [{ product_id: "pdt_env_pro", quantity: 1 }],
+            metadata: { userId: "user_1" },
+            customer: { email: "pro@example.com" },
+            return_url: "https://app.example/return",
+        })
+    })
+
+    it("wraps subscription checkout SDK failures as sanitized ProviderApiError", async () => {
+        const client = makeMockClient()
+        client.checkoutSessions.create.mockRejectedValue(new Error("boom sk_live_secret"))
+
+        const provider = createDodoPaymentProvider(client as never)
+        await expect(
+            provider.createSubscriptionCheckout({
+                userId: "user_1",
+                returnUrl: "https://app.example/return",
+            }),
+        ).rejects.toMatchObject({ name: "ProviderApiError", message: "boom [redacted]" })
+    })
+
+    it("uses the default message when subscription rejection is not an Error", async () => {
+        const client = makeMockClient()
+        client.checkoutSessions.create.mockRejectedValue("nope")
+
+        const provider = createDodoPaymentProvider(client as never)
+        await expect(
+            provider.createSubscriptionCheckout({
+                userId: "user_1",
+                returnUrl: "https://app.example/return",
+            }),
+        ).rejects.toMatchObject({
+            name: "ProviderApiError",
+            message: "Dodo subscription checkout creation failed",
+        })
     })
 
     it("omits customer when email is not provided", async () => {

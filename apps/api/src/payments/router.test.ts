@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import request from "supertest"
 
 import { PAYMENTS_MESSAGES } from "./constants.js"
-import { ProviderApiError, UnknownPackError } from "./errors.js"
+import { AlreadySubscribedError, ProviderApiError, UnknownPackError } from "./errors.js"
 
 const integrationMocks = vi.hoisted(() => ({
     providerCreateCheckout: vi.fn(),
@@ -51,6 +51,7 @@ vi.mock("./providerFactory.js", () => ({
 
 vi.mock("./service.js", () => ({
     createCheckout: vi.fn(),
+    createSubscriptionCheckout: vi.fn(),
     listPaymentsForUser: vi.fn(),
     getCheckoutSessionStatus: vi.fn(),
     applyEvent: vi.fn(),
@@ -163,6 +164,63 @@ describe("paymentsApiRouter", () => {
             vi.mocked(service.createCheckout).mockRejectedValue(new Error("database offline"))
             const app = createTestApp({ userId: "user_1" })
             const res = await request(app).post("/payments/checkout").send({ packId: "pack_200" })
+            expect(res.status).toBe(500)
+        })
+    })
+
+    describe("POST /payments/subscribe", () => {
+        it("returns 401 when unauthenticated", async () => {
+            const res = await request(createTestApp()).post("/payments/subscribe")
+            expect(res.status).toBe(401)
+            expect(res.body).toEqual({ message: "Unauthorized" })
+            expect(service.createSubscriptionCheckout).not.toHaveBeenCalled()
+        })
+
+        it("returns 201 with checkoutUrl and sessionId, passing the session email", async () => {
+            vi.mocked(service.createSubscriptionCheckout).mockResolvedValue({
+                checkoutUrl: "https://checkout.test/sub",
+                sessionId: "cks_sub",
+            })
+            const app = createTestApp({ userId: "user_1", email: "pro@example.com" })
+            const res = await request(app).post("/payments/subscribe")
+            expect(res.status).toBe(201)
+            expect(res.body).toEqual({
+                checkoutUrl: "https://checkout.test/sub",
+                sessionId: "cks_sub",
+            })
+            expect(service.createSubscriptionCheckout).toHaveBeenCalledWith(
+                "user_1",
+                "pro@example.com",
+            )
+        })
+
+        it("returns 409 when the user is already subscribed", async () => {
+            vi.mocked(service.createSubscriptionCheckout).mockRejectedValue(
+                new AlreadySubscribedError(),
+            )
+            const res = await request(createTestApp({ userId: "user_1" })).post(
+                "/payments/subscribe",
+            )
+            expect(res.status).toBe(409)
+            expect(res.body).toEqual({ message: PAYMENTS_MESSAGES.ALREADY_SUBSCRIBED })
+        })
+
+        it("returns 502 with a generic message on provider failure", async () => {
+            vi.mocked(service.createSubscriptionCheckout).mockRejectedValue(
+                new ProviderApiError("upstream down"),
+            )
+            const res = await request(createTestApp({ userId: "user_1" })).post(
+                "/payments/subscribe",
+            )
+            expect(res.status).toBe(502)
+            expect(res.body).toEqual({ message: "Payment provider temporarily unavailable" })
+        })
+
+        it("rethrows unexpected errors to the error handler", async () => {
+            vi.mocked(service.createSubscriptionCheckout).mockRejectedValue(new Error("db down"))
+            const res = await request(createTestApp({ userId: "user_1" })).post(
+                "/payments/subscribe",
+            )
             expect(res.status).toBe(500)
         })
     })

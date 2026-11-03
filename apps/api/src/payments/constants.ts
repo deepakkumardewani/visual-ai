@@ -27,6 +27,17 @@ export const NORMALIZED_EVENT_TYPE = {
 
 export type NormalizedEventType = (typeof NORMALIZED_EVENT_TYPE)[keyof typeof NORMALIZED_EVENT_TYPE]
 
+export const SUBSCRIPTION_EVENT_TYPE = {
+    ACTIVATED: "subscription.activated",
+    RENEWED: "subscription.renewed",
+    CANCELLED: "subscription.cancelled",
+    PAYMENT_FAILED: "subscription.payment_failed",
+    EXPIRED: "subscription.expired",
+} as const
+
+export type SubscriptionEventType =
+    (typeof SUBSCRIPTION_EVENT_TYPE)[keyof typeof SUBSCRIPTION_EVENT_TYPE]
+
 export const WEBHOOK_HEADERS = {
     ID: "webhook-id",
     TIMESTAMP: "webhook-timestamp",
@@ -47,4 +58,5 @@ export const PAYMENTS_MESSAGES = {
     PROVIDER_UNAVAILABLE: "Payment provider temporarily unavailable",
     PROVIDER_REQUEST_FAILED: "Payment provider request failed",
     CHECKOUT_SESSION_NOT_FOUND: "Checkout session not found",
+    ALREADY_SUBSCRIBED: "You already have an active Pro subscription",
 } as const

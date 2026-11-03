@@ -7,10 +7,21 @@ import {
     WEBHOOK_HEADERS,
 } from "../constants.js"
 import { asProviderApiError, InvalidSignatureError, ProviderApiError } from "../errors.js"
-import type { NormalizedPaymentEvent, PaymentProvider } from "../types.js"
+import type { CheckoutResult, NormalizedWebhookEvent, PaymentProvider } from "../types.js"
 import { createDodoClient, type DodoClient } from "./client.js"
-import { mapDodoWebhookEvent } from "./eventMapper.js"
-import { getDodoProductIdForPack } from "./productMap.js"
+import {
+    isDodoSubscriptionEvent,
+    mapDodoSubscriptionEvent,
+    mapDodoWebhookEvent,
+} from "./eventMapper.js"
+import { getDodoProductIdForPack, getDodoProductIdForPro } from "./productMap.js"
+
+interface CheckoutSessionInput {
+    productId: string
+    metadata: Record<string, string>
+    email?: string
+    returnUrl: string
+}
 
 function normalizeWebhookHeaders(headers: IncomingHttpHeaders): Record<string, string> {
     const normalized: Record<string, string> = {}
@@ -49,6 +60,24 @@ function mapPaymentStatus(
     return PAYMENT_STATUS.PENDING
 }
 
+async function createSession(
+    client: DodoClient,
+    { productId, metadata, email, returnUrl }: CheckoutSessionInput,
+): Promise<CheckoutResult> {
+    const session = await client.checkoutSessions.create({
+        product_cart: [{ product_id: productId, quantity: 1 }],
+        metadata,
+        ...(email ? { customer: { email } } : {}),
+        return_url: returnUrl,
+    })
+
+    if (!session.checkout_url || !session.session_id) {
+        throw new ProviderApiError("Checkout session missing checkout URL or session id")
+    }
+
+    return { checkoutUrl: session.checkout_url, sessionId: session.session_id }
+}
+
 export function createDodoPaymentProvider(
     client: DodoClient = createDodoClient(),
 ): PaymentProvider {
@@ -57,40 +86,34 @@ export function createDodoPaymentProvider(
 
         async createCheckout({ userId, pack, email, returnUrl }) {
             try {
-                const session = await client.checkoutSessions.create({
-                    product_cart: [
-                        {
-                            product_id: getDodoProductIdForPack(pack.id),
-                            quantity: 1,
-                        },
-                    ],
-                    metadata: {
-                        userId,
-                        packId: pack.id,
-                    },
-                    ...(email ? { customer: { email } } : {}),
-                    return_url: returnUrl,
+                return await createSession(client, {
+                    productId: getDodoProductIdForPack(pack.id),
+                    metadata: { userId, packId: pack.id },
+                    email,
+                    returnUrl,
                 })
-
-                if (!session.checkout_url || !session.session_id) {
-                    throw new ProviderApiError(
-                        "Checkout session missing checkout URL or session id",
-                    )
-                }
-
-                return {
-                    checkoutUrl: session.checkout_url,
-                    sessionId: session.session_id,
-                }
             } catch (error) {
                 throw asProviderApiError(error, "Dodo checkout session creation failed")
+            }
+        },
+
+        async createSubscriptionCheckout({ userId, email, returnUrl }) {
+            try {
+                return await createSession(client, {
+                    productId: getDodoProductIdForPro(),
+                    metadata: { userId },
+                    email,
+                    returnUrl,
+                })
+            } catch (error) {
+                throw asProviderApiError(error, "Dodo subscription checkout creation failed")
             }
         },
 
         verifyAndParseWebhook(
             rawBody: Buffer,
             headers: IncomingHttpHeaders,
-        ): NormalizedPaymentEvent | null {
+        ): NormalizedWebhookEvent | null {
             const normalizedHeaders = normalizeWebhookHeaders(headers)
             requireWebhookHeader(normalizedHeaders, WEBHOOK_HEADERS.ID)
             requireWebhookHeader(normalizedHeaders, WEBHOOK_HEADERS.TIMESTAMP)
@@ -105,7 +128,9 @@ export function createDodoPaymentProvider(
             }
 
             const webhookId = normalizedHeaders[WEBHOOK_HEADERS.ID]!
-            return mapDodoWebhookEvent(payload, webhookId)
+            return isDodoSubscriptionEvent(payload)
+                ? mapDodoSubscriptionEvent(payload, webhookId)
+                : mapDodoWebhookEvent(payload, webhookId)
         },
 
         async getSessionStatus(sessionId: string) {

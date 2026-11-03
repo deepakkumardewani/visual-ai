@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 const USERS_COLLECTION = 'users';
 const API_ENV_PATH = resolve(process.cwd(), '../api/.env');
 
-function mongoUri(): string {
+export function mongoUri(): string {
   const parsed = dotenv.config({
     path: API_ENV_PATH,
     processEnv: {},

@@ -40,6 +40,8 @@ const UserSchema = new Schema(
             status: { type: String, enum: SubscriptionStatus.options },
             currentPeriodEnd: { type: Date },
             cancelAtPeriodEnd: { type: Boolean, default: false },
+            /** Provider timestamp of the last applied webhook; drops stale and duplicate deliveries. */
+            lastEventAt: { type: Date },
         },
         referralsUsed: { type: [String], default: [] },
         emailOptOut: { type: Boolean, default: false },

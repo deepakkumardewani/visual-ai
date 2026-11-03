@@ -65,6 +65,7 @@ const envSchema = z
         DODO_PRODUCT_ID_PACK_450: z.string().optional(),
         DODO_PRODUCT_ID_PACK_960: z.string().optional(),
         DODO_PRODUCT_ID_PACK_2000: z.string().optional(),
+        DODO_PRODUCT_ID_PRO: z.string().optional(),
 
         // Email
         EMAIL_USER: z.string().email("EMAIL_USER must be a valid email"),
@@ -126,6 +127,7 @@ const envSchema = z
             "DODO_PRODUCT_ID_PACK_450",
             "DODO_PRODUCT_ID_PACK_960",
             "DODO_PRODUCT_ID_PACK_2000",
+            "DODO_PRODUCT_ID_PRO",
             "PAYMENT_RETURN_URL",
         ]
 
