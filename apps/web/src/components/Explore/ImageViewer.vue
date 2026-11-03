@@ -24,7 +24,7 @@ import { faChevronLeft, faLink } from '@/plugins/icons';
 import { detectMonochrome } from '@/utils/detectMonochrome';
 import { getTransformCreditCost } from '@/utils/generationCredits';
 import { APP_SURFACE, createFeatureLocation } from '@/utils/dashboardRoutes';
-import { downloadImage } from '@/utils/helpers';
+import { downloadImage, downloadItemImage } from '@/utils/helpers';
 import { createLogger } from '@/utils/logger';
 
 const props = defineProps<{
@@ -52,6 +52,7 @@ const {
   processingLabel,
   originalUrl,
   resultUrl,
+  resultItem,
   hasResult,
   resultIsTransparent,
   startAction,
@@ -123,7 +124,12 @@ async function handleDownload(event?: Event) {
     showToast('Nothing to download');
     return;
   }
-  const ok = await downloadImage(event, url);
+  // A transform result is the user's own saved entry (plan-aware endpoint); other users' public
+  // images have no saved result and use the direct URL.
+  const ok =
+    hasResult.value && resultItem.value
+      ? await downloadItemImage(event, resultItem.value)
+      : await downloadImage(event, url);
   if (ok) {
     showToast(hasResult.value ? 'Result downloaded' : 'Image downloaded');
     return;

@@ -209,6 +209,85 @@ describe("runGenerationJob", () => {
         )
     })
 
+    describe("history cap and privacy", () => {
+        const imageJob = {
+            model: "owner/model",
+            input: {},
+            jobId: "job_cap",
+            userId: "user_1",
+            featureType: FeatureType.IMAGE,
+            creditCost: 1,
+            buildCloudinaryPayload: () => ({}),
+        } as never
+
+        it("guards the push with a $expr size check against the free cap", async () => {
+            replicateRun.mockResolvedValue("https://out.png")
+            setupHappyPersist()
+            User.findOne.mockResolvedValue({ plan: "free" })
+            const services = { jobStatus: jobStatus() }
+
+            await runGenerationJob(imageJob, services)
+
+            const [filter] = User.findOneAndUpdate.mock.calls[0]
+            expect(filter).toEqual({
+                userId: "user_1",
+                $expr: { $lt: [{ $size: { $ifNull: ["$history", []] } }, 100] },
+            })
+        })
+
+        it("saves a free generation as public and uses the Pro cap and private flag for Pro", async () => {
+            replicateRun.mockResolvedValue("https://out.png")
+            setupHappyPersist()
+            User.findOne.mockResolvedValue({
+                plan: "pro",
+                subscription: { status: "active" },
+                history: [{ _id: { toString: () => "img_123" } }],
+            })
+            const services = { jobStatus: jobStatus() }
+
+            await runGenerationJob(imageJob, services)
+
+            const [filter, update] = User.findOneAndUpdate.mock.calls[0]
+            expect(filter.$expr.$lt[1]).toBe(500)
+            expect(update.$push.history.isPrivate).toBe(true)
+        })
+
+        it("stores free generations with isPrivate false", async () => {
+            replicateRun.mockResolvedValue("https://out.png")
+            setupHappyPersist()
+            const services = { jobStatus: jobStatus() }
+
+            await runGenerationJob(imageJob, services)
+
+            expect(User.findOneAndUpdate.mock.calls[0][1].$push.history.isPrivate).toBe(false)
+        })
+
+        it("at the cap returns the Replicate URL unsaved, charges credits and never uploads", async () => {
+            replicateRun.mockResolvedValue("https://out.png")
+            getImageDetails.mockResolvedValue({ width: 1, height: 1, format: "png", bytes: 1 })
+            User.findOne.mockResolvedValue({ plan: "free" })
+            User.findOneAndUpdate
+                .mockResolvedValueOnce(null)
+                .mockResolvedValueOnce({ dailyCredits: 3, credits: 2 })
+            const services = { jobStatus: jobStatus() }
+
+            await runGenerationJob(imageJob, services)
+
+            expect(uploadToCloudinary).not.toHaveBeenCalled()
+            expect(User.findOneAndUpdate).toHaveBeenCalledTimes(2)
+            expect(services.jobStatus.setStatus).toHaveBeenCalledTimes(1)
+            expect(services.jobStatus.setStatus).toHaveBeenCalledWith("job_cap", {
+                status: "completed",
+                image: expect.objectContaining({
+                    images: [expect.objectContaining({ aiImageUrl: "https://out.png" })],
+                    createdAt: expect.any(Date),
+                }),
+                userCreditsRemaining: 5,
+                savedToHistory: false,
+            })
+        })
+    })
+
     it("sets error status when Replicate returns no output", async () => {
         replicateRun.mockResolvedValue("")
         const services = { jobStatus: jobStatus() }
@@ -234,7 +313,7 @@ describe("runGenerationJob", () => {
         expect(uploadToCloudinary).not.toHaveBeenCalled()
     })
 
-    it("logs when the user is missing during persist and still continues", async () => {
+    it("treats a missing user as an unsaved result and still completes", async () => {
         replicateRun.mockResolvedValue("https://out.png")
         getImageDetails.mockResolvedValue({ width: 1, height: 1, format: "png", bytes: 1 })
         User.findOneAndUpdate.mockResolvedValueOnce(null).mockResolvedValueOnce({

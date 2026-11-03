@@ -6,7 +6,12 @@ import ImageActionButtons from '@/components/History/ImageActionButtons.vue';
 import { useGenerateStore } from '@/stores/generate';
 import { makeImageObject as makeItem } from '@/test/imageFixtures';
 import type { IImageObject } from '@/types';
-import { deleteImage, downloadImage, favoriteImage, getDownloadImageUrl } from '@/utils/helpers';
+import {
+  deleteImage,
+  downloadItemImage,
+  favoriteImage,
+  getDownloadImageUrl,
+} from '@/utils/helpers';
 
 const shareLink = vi.fn();
 const copyPrompt = vi.fn();
@@ -30,7 +35,7 @@ vi.mock('@/composables/useImageChainActions', () => ({
 
 vi.mock('@/utils/helpers', () => ({
   deleteImage: vi.fn(),
-  downloadImage: vi.fn(),
+  downloadItemImage: vi.fn(),
   favoriteImage: vi.fn(),
   getDownloadImageUrl: vi.fn(() => 'https://cdn.example.com/file.jpg'),
 }));
@@ -77,7 +82,7 @@ describe('ImageActionButtons', () => {
     expect(copyPrompt).toHaveBeenCalledWith('A fox in neon rain');
 
     await wrapper.get('[aria-label="Download image"]').trigger('click');
-    expect(downloadImage).toHaveBeenCalled();
+    expect(downloadItemImage).toHaveBeenCalledWith(expect.any(Event), item, 0);
 
     await wrapper.get('[aria-label="Add to favorites"]').trigger('click');
     expect(favoriteImage).toHaveBeenCalledWith(expect.any(Event), 'img-1');
@@ -115,6 +120,7 @@ describe('ImageActionButtons', () => {
 
   it('uses the requested image index and falls back to the first image', async () => {
     const item = makeItem({
+      _id: 'img-2',
       images: [
         { aiImageUrl: 'https://cdn.example.com/a.jpg' },
         { aiImageUrl: 'https://cdn.example.com/b.jpg' },
@@ -123,7 +129,20 @@ describe('ImageActionButtons', () => {
     const wrapper = mountActions(item, 1);
 
     await wrapper.get('[aria-label="Download image"]').trigger('click');
-    expect(getDownloadImageUrl).toHaveBeenCalled();
+    expect(downloadItemImage).toHaveBeenCalledWith(expect.any(Event), item, 1);
+
+    wrapper.unmount();
+  });
+
+  it('downloads the provider URL directly for unsaved results without an id', async () => {
+    const wrapper = mountActions(makeItem({ _id: undefined }));
+
+    await wrapper.get('[aria-label="Download image"]').trigger('click');
+    expect(downloadItemImage).toHaveBeenCalledWith(
+      expect.any(Event),
+      expect.objectContaining({ _id: undefined }),
+      0,
+    );
 
     wrapper.unmount();
   });

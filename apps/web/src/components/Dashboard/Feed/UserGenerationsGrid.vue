@@ -62,28 +62,38 @@ const progressRingStyle = computed(() => {
 });
 
 /**
- * The single row whose tiles should reveal-in: the one that was just added
- * by the generation that finished. Every other row — including everything
- * present at mount — is never "fresh", so only that one row's images animate.
+ * Fresh/action rows are tracked as "the latest item" rather than by `_id`,
+ * because an at-cap result (savedToHistory:false) has no `_id`.
  */
-const freshRowId = ref<string | null>(null);
-/** Persists after reveal animation so next-actions remain available. */
-const actionRowId = ref<string | null>(null);
+const latestItem = computed<IImageObject | undefined>(() => imageHistory.value[0]);
+/** True from generation finish until the reveal animation ends: only the latest row animates. */
+const freshActive = ref(false);
+/** Persists after reveal animation so next-actions remain available on the latest row. */
+const actionsActive = ref(false);
 
 watch(isLoading, (loading, wasLoading) => {
   if (loading) {
-    actionRowId.value = null;
+    actionsActive.value = false;
     return;
   }
-  if (wasLoading && !loading) {
-    const id = imageHistory.value[0]?._id ?? null;
-    freshRowId.value = id;
-    actionRowId.value = id;
+  if (wasLoading) {
+    const hasResult = latestItem.value !== undefined;
+    freshActive.value = hasResult;
+    actionsActive.value = hasResult;
   }
 });
 
+function isLatest(item: IImageObject): boolean {
+  return item === latestItem.value;
+}
+
+/** Id-less (unsaved) results still need a stable, unique key. */
+function rowKey(item: IImageObject): string {
+  return item._id ?? `unsaved:${new Date(item.createdAt).getTime()}:${item.prompt}`;
+}
+
 function settleFreshRow() {
-  freshRowId.value = null;
+  freshActive.value = false;
 }
 
 const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
@@ -209,10 +219,10 @@ function handleRemix(prompt: string) {
         <div class="date-group__rows">
           <article
             v-for="item in group.data"
-            :key="item._id"
+            :key="rowKey(item)"
             data-testid="user-generation-card"
             class="generation-row"
-            :class="{ 'generation-row--fresh': item._id === freshRowId }"
+            :class="{ 'generation-row--fresh': freshActive && isLatest(item) }"
             @animationend="settleFreshRow"
           >
             <!-- Primary: images are the hero -->
@@ -267,7 +277,11 @@ function handleRemix(prompt: string) {
                 </button>
               </div>
 
-              <ResultNextActions v-if="item._id === actionRowId" :item="item" :image-index="0" />
+              <ResultNextActions
+                v-if="actionsActive && isLatest(item)"
+                :item="item"
+                :image-index="0"
+              />
 
               <!-- Tertiary: quiet meta line -->
               <p class="generation-meta">

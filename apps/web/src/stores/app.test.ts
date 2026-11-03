@@ -227,7 +227,7 @@ describe('useAppStore', () => {
     });
     await flushPromises();
     expect(userStore.history).toHaveLength(1);
-    expect(userStore.history[0]).toEqual(resultImage);
+    expect(userStore.history[0]).toEqual({ ...resultImage, createdAt: expect.any(Date) });
     expect(generateStore.images).toEqual(resultImage.images);
     expect(generateStore.isLoading).toBe(false);
     expect(eventSources.image.close).toHaveBeenCalled();
@@ -243,6 +243,32 @@ describe('useAppStore', () => {
     await flushPromises();
     expect(userStore.history).toHaveLength(1);
     expect(userStore.history[0]._id).toBe('img_2');
+  });
+
+  it('keeps id-less (unsaved) results as separate history items', async () => {
+    useAppStore();
+    const userStore = useUserStore();
+    const first = { ...resultImage, _id: undefined, prompt: 'first unsaved' };
+    const second = { ...resultImage, _id: undefined, prompt: 'second unsaved' };
+    userStore.history = [first as never];
+    eventSources.image.data.value = JSON.stringify({ status: 'completed', image: second });
+    await flushPromises();
+    expect(userStore.history).toHaveLength(2);
+    expect(userStore.history[0].prompt).toBe('first unsaved');
+    expect(userStore.history[1].prompt).toBe('second unsaved');
+  });
+
+  it('stamps createdAt on an at-cap result that arrives without one', async () => {
+    useAppStore();
+    const userStore = useUserStore();
+    const { createdAt: _omit, ...noTimestamp } = { ...resultImage, _id: undefined } as Record<
+      string,
+      unknown
+    >;
+    eventSources.image.data.value = JSON.stringify({ status: 'completed', image: noTimestamp });
+    await flushPromises();
+    expect(userStore.history).toHaveLength(1);
+    expect(userStore.history[0].createdAt).toBeInstanceOf(Date);
   });
 
   it('completed payloads without an image still close the stream', async () => {

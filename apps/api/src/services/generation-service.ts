@@ -1,8 +1,9 @@
 import type { Prediction } from "replicate"
 
 import type { ModelKey } from "@visual-ai/shared"
-import { MODEL_REGISTRY } from "@visual-ai/shared"
+import { HISTORY_CAP, MODEL_REGISTRY, PLAN } from "@visual-ai/shared"
 
+import { isPro } from "../lib/isPro.js"
 import { createLogger, shortId } from "../lib/logger.js"
 import { buildModelInput, getModelReplicateId, validateModelParams } from "../lib/model-input.js"
 import { BadRequestError } from "../lib/errors.js"
@@ -110,14 +111,37 @@ async function buildImageObject(
     return imageObj
 }
 
-async function storeImageInDB(image: IImageObject, userId: string): Promise<IImageObject> {
+/** Resolves Pro entitlement from the stored user; unknown users are free. */
+export async function resolveUserIsPro(userId: string): Promise<boolean> {
+    const user = await User.findOne({ userId }, { plan: 1, subscription: 1 })
+    return isPro(user)
+}
+
+/**
+ * Appends to history only while it is under the plan cap. The size check and the push
+ * are one conditional update, so concurrent jobs can never exceed the cap; grandfathered
+ * users already over it simply never match.
+ *
+ * @returns the stored image, or null when the history is full (or the user is missing)
+ */
+async function storeImageInDB(
+    image: IImageObject,
+    userId: string,
+    historyCap: number,
+): Promise<IImageObject | null> {
     const newImage = new Image(image)
     const user = await User.findOneAndUpdate(
-        { userId },
+        {
+            userId,
+            $expr: { $lt: [{ $size: { $ifNull: ["$history", []] } }, historyCap] },
+        },
         { $push: { history: newImage } },
         { new: true },
     )
-    if (!user) logger.error({ userId }, "User not found when storing image")
+    if (!user) {
+        logger.info({ userId, historyCap }, "History not saved: cap reached or user not found")
+        return null
+    }
     return newImage.toObject() as IImageObject
 }
 
@@ -258,6 +282,7 @@ async function runGenerationJob(
 
         logger.debug(`gen progress job=${jid} stage=persist +${elapsed()}`)
 
+        const userIsPro = await resolveUserIsPro(userId)
         const imageObj = await buildImageObject(
             userId,
             output,
@@ -267,8 +292,25 @@ async function runGenerationJob(
             aspectRatio,
             modelName,
         )
-        const newImage = await storeImageInDB(imageObj, userId)
+        imageObj.isPrivate = userIsPro
+        const historyCap = HISTORY_CAP[userIsPro ? PLAN.PRO : PLAN.FREE]
+        const newImage = await storeImageInDB(imageObj, userId, historyCap)
         const credits = await updateAndGetUserCredits(userId, creditCost)
+
+        if (!newImage) {
+            // History is full: hand back the Replicate URL as-is, with no Cloudinary upload or cleanup job.
+            await jobStatus.setStatus(jobId, {
+                status: "completed",
+                // Never persisted, so Mongoose's createdAt default doesn't apply; the grid sorts on it.
+                image: { ...imageObj, createdAt: new Date() },
+                userCreditsRemaining: credits,
+                savedToHistory: false,
+            })
+            logger.info(
+                `gen done     job=${jid} unsaved (history cap) credits=${credits} ${elapsed()}`,
+            )
+            return
+        }
 
         await jobStatus.setStatus(jobId, {
             status: "processing",

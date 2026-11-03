@@ -305,7 +305,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 **Adds:** Pro perks enforced by the API: premium models, priority queue, 500 history cap (free 100), private generations, full-quality downloads.
 **Try in UI:** As a free user try a premium model and confirm it is rejected ; generate with a full history and confirm the result is not saved but downloadable ; download an image as free (optimized) and Pro (original).
 
-### ☐ T7.1 Premium model gate
+### ✅ T7.1 Premium model gate
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/generate.ts`, `apps/api/src/services/generation-service.ts`, `apps/api/src/lib/errors.ts`
@@ -313,7 +313,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Non-Pro gets 403 with the typed code and credits unchanged; Pro succeeds; non-premium models unaffected.
 - **Verify:** `cd apps/api && bun run test`; `bun run check`.
 
-### ☐ T7.2 Priority queue
+### ✅ T7.2 Priority queue
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/queue/generation-queue.ts`, `apps/api/src/queue/generation-worker.ts`
@@ -321,15 +321,15 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Pro jobs get priority 1, free 10; retry options preserve priority.
 - **Verify:** `cd apps/api && bun run test`; `bun run check`.
 
-### ☐ T7.3 History cap, atomic guard and unsaved path
+### ✅ T7.3 History cap, atomic guard and unsaved path
 
 - **Kind:** implementation
-- **Files:** `apps/api/src/services/generation-service.ts`, `apps/api/src/models/user.ts`, `packages/shared/src/types/domain.ts`
+- **Files:** `apps/api/src/services/generation-service.ts`, `apps/api/src/models/user.ts`, `packages/shared/src/types/domain.ts`, `apps/web/src/components/Dashboard/Feed/UserGenerationsGrid.vue`, `apps/web/src/components/Dashboard/Feed/UserGenerationsGrid.test.ts`, `apps/web/src/stores/app.ts`, `apps/web/src/stores/app.test.ts`, `apps/api/src/services/generation-service.test.ts`
 - **Do:** Conditional update using `$expr` size check against `HISTORY_CAP`; at cap skip the Cloudinary upload, return the Replicate URL with `savedToHistory:false` (add the field to the generation progress/result type in `domain.ts`), still charge credits, no cleanup job.
 - **Acceptance:** Cap-1 saves; at cap not saved; concurrent jobs never exceed cap; over-cap path makes 0 Cloudinary upload calls and returns the Replicate URL; grandfathered free users with over 100 can read and delete but not add.
 - **Verify:** `cd apps/api && bun run test`; `bun run check`.
 
-### ☐ T7.4 Private generations and Explore filter
+### ✅ T7.4 Private generations and Explore filter
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/services/generation-service.ts`, `apps/api/src/services/explore-service.ts`, `apps/api/src/routes/explore.ts`
@@ -337,7 +337,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Pro images private, free not; Explore excludes private and includes legacy; single-image public fetch of a private image returns 404.
 - **Verify:** `cd apps/api && bun run test`; `bun run check`.
 
-### ☐ T7.5 Server download endpoint
+### ✅ T7.5 Server download endpoint
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/image.ts`, `apps/api/src/services/download-service.ts`
@@ -345,15 +345,15 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Free gets derivative; Pro gets original; unauthenticated (401) and non-owner (404) rejected.
 - **Verify:** `cd apps/api && bun run test`; `bun run check`.
 
-### ☐ T7.6 Client downloads use the endpoint
+### ✅ T7.6 Client downloads use the endpoint
 
 - **Kind:** implementation
-- **Files:** `apps/web/src/utils/helpers.ts`, `apps/web/src/components/Dialogs/ImageDialog.vue`, `apps/web/src/components/History/SelectActionButtons.vue`
+- **Files:** `apps/web/src/utils/helpers.ts`, `apps/web/src/components/Dialogs/ImageDialog.vue`, `apps/web/src/components/History/SelectActionButtons.vue`, `apps/web/src/components/History/ImageActionButtons.vue`, `apps/web/src/components/History/ImageActionButtons.test.ts`, `apps/web/src/components/Dashboard/Canvas/ResultNextActions.vue`, `apps/web/src/components/Dashboard/Canvas/ResultNextActions.test.ts`, `apps/web/src/components/Dialogs/ImageDialog.test.ts`, `apps/web/src/utils/helpers.test.ts`, `apps/api/src/routes/generate.ts`, `apps/web/src/components/Explore/ImageViewer.vue`, `apps/web/src/components/Explore/ImageViewer.test.ts`, `apps/web/src/composables/useViewerTransform.ts`, `apps/web/src/composables/useViewerTransform.test.ts`
 - **Do:** Switch `getDownloadImageUrl`, `downloadImage`, `bulkDownload` to the server endpoint, including bulk (selection actions); update existing download tests.
 - **Acceptance:** No client-built original URLs remain; single and bulk download go through the endpoint.
 - **Verify:** `cd apps/web && bun run test`; `bun run check`; `grep -n "upload/" apps/web/src/utils/helpers.ts` shows no URL construction for downloads.
 
-### ☐ T7.7 Unit: premium gate and priority queue
+### ✅ T7.7 Unit: premium gate and priority queue
 
 - **Kind:** unit
 - **Files:** `apps/api/src/routes/generate.ts`, `apps/api/src/queue/generation-queue.ts`
@@ -361,7 +361,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/api && npx vitest run src/routes src/queue --coverage --coverage.include=src/routes/generate.ts,src/queue/generation-queue.ts --coverage.reporter=text`
 
-### ☐ T7.8 Unit: history cap and private generations
+### ✅ T7.8 Unit: history cap and private generations
 
 - **Kind:** unit
 - **Files:** `apps/api/src/services/generation-service.ts`, `apps/api/src/services/explore-service.ts`, `apps/api/src/routes/explore.ts`
@@ -369,20 +369,20 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/api && npx vitest run src/services src/routes/explore.test.ts --coverage --coverage.include=src/services/generation-service.ts,src/services/explore-service.ts,src/routes/explore.ts --coverage.reporter=text`
 
-### ☐ T7.9 Unit: download service and client helpers
+### ✅ T7.9 Unit: download service and client helpers
 
 - **Kind:** unit
-- **Files:** `apps/api/src/services/download-service.ts`, `apps/api/src/routes/image.ts`, `apps/web/src/utils/helpers.ts`
+- **Files:** `apps/api/src/services/download-service.ts`, `apps/api/src/routes/image.ts`, `apps/web/src/utils/helpers.ts`, `apps/api/src/services/download-service.test.ts`
 - **Do:** Free derivative vs Pro original, non-owner rejection, client single and bulk download via the endpoint.
 - **Acceptance:** Every file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/api && npx vitest run src/services/download-service.test.ts src/routes/image.test.ts --coverage --coverage.include=src/services/download-service.ts,src/routes/image.ts --coverage.reporter=text`; `cd apps/web && npx vitest run src/utils/helpers.test.ts --coverage --coverage.include=src/utils/helpers.ts --coverage.reporter=text`
 
-### ☐ T7.10 E2E: Pro perks enforced
+### ✅ T7.10 E2E: Pro perks enforced
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` free user gets 403 for a premium model and credits are unchanged; `@high` history at cap returns an unsaved result with Download; `@high` Pro generation hidden from Explore; `@high` free download is optimized and Pro download is original; `@medium` legacy docs still appear in Explore.
 - **Spec:** `e2e/qa/pro-perks.spec.ts`
-- **Files:** none
+- **Files:** `apps/web/e2e/qa/pro-perks.spec.ts`, `apps/web/e2e/support/proPerksSeed.ts`
 - **Acceptance:** Scenarios derived from the SPEC acceptance criteria pass with zero Cloudinary network hits.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/pro-perks.spec.ts --repeat-each=3`
 

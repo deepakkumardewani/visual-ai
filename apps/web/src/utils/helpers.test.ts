@@ -19,6 +19,8 @@ import {
   contactForm,
   deleteImage,
   bulkDownload,
+  downloadHistoryImage,
+  downloadItemImage,
   downloadImage,
   favoriteImage,
   formatFileSize,
@@ -115,37 +117,26 @@ describe('getPublicIds', () => {
 });
 
 describe('getDownloadImageUrl', () => {
-  it('prefers the ai public id over the enhanced one', () => {
+  it('prefers the ai image url and never builds a url from a public id', () => {
     const url = getDownloadImageUrl({
       name: 'a',
       resolution: '1k',
       aiImagePublicId: 'folder/ai',
-      enhancedPublicId: 'folder/enh',
-      format: 'jpg',
-    } as IImage);
-
-    expect(url).toBe(`${import.meta.env.VITE_CLOUDINARY_BASE_URL}/folder/ai.jpg`);
-  });
-
-  it('falls back to the enhanced public id', () => {
-    const url = getDownloadImageUrl({
-      name: 'a',
-      resolution: '1k',
-      enhancedPublicId: 'folder/enh',
-      format: 'png',
-    } as IImage);
-
-    expect(url).toBe(`${import.meta.env.VITE_CLOUDINARY_BASE_URL}/folder/enh.png`);
-  });
-
-  it('falls back to direct image urls when no public id exists', () => {
-    const url = getDownloadImageUrl({
-      name: 'a',
-      resolution: '1k',
-      format: 'webp',
       aiImageUrl: 'https://cdn.example/direct.webp',
+      enhancedImageUrl: 'https://cdn.example/enh.webp',
+      format: 'webp',
     } as IImage);
     expect(url).toBe('https://cdn.example/direct.webp');
+  });
+
+  it('falls back to the enhanced then original url, then an empty string', () => {
+    expect(getDownloadImageUrl({ enhancedImageUrl: 'https://cdn.example/e.png' } as IImage)).toBe(
+      'https://cdn.example/e.png',
+    );
+    expect(getDownloadImageUrl({ originalImageUrl: 'https://cdn.example/o.png' } as IImage)).toBe(
+      'https://cdn.example/o.png',
+    );
+    expect(getDownloadImageUrl({ aiImagePublicId: 'folder/ai' } as IImage)).toBe('');
   });
 });
 
@@ -293,7 +284,11 @@ describe('store-backed helpers', () => {
     expect(user.history).toHaveLength(1);
   });
 
-  it('bulkDownload fetches image and enhance urls and skips empty rows', async () => {
+  it('bulkDownload requests the server endpoint per stored image and skips empty rows', async () => {
+    mockFetchJson({
+      data: { value: { url: 'https://cdn.example/dl.jpg' } },
+      error: { value: null },
+    });
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       blob: async () => new Blob(['x'], { type: 'image/jpeg' }),
@@ -320,6 +315,7 @@ describe('store-backed helpers', () => {
         ],
       }),
       imageObject({
+        _id: 'gen_2',
         featureType: FeatureType.UPSCALE,
         images: [
           { name: 'c', resolution: '4k', enhancedPublicId: 'enh/1', format: 'jpg' } as IImage,
@@ -328,8 +324,108 @@ describe('store-backed helpers', () => {
       }),
     ]);
 
-    await vi.waitFor(() => {
-      expect(fetchMock).toHaveBeenCalled();
+    expect(useFetch).toHaveBeenCalledTimes(2);
+    expect(useFetch).toHaveBeenCalledWith('/images/gen_1/download?index=0');
+    expect(useFetch).toHaveBeenCalledWith('/images/gen_2/download?index=0');
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledWith('https://cdn.example/dl.jpg');
+  });
+
+  it('bulkDownload contains a malformed entry and still processes the others', async () => {
+    mockFetchJson({ data: { value: null }, error: { value: new Error('404') } });
+
+    await expect(
+      bulkDownload([
+        imageObject({ _id: 'broken', images: undefined as unknown as IImage[] }),
+        imageObject({ _id: 'gen_ok' }),
+      ]),
+    ).resolves.toBeUndefined();
+
+    expect(useFetch).toHaveBeenCalledTimes(1);
+    expect(useFetch).toHaveBeenCalledWith('/images/gen_ok/download?index=0');
+  });
+
+  it('downloadHistoryImage returns false without an id or when the endpoint fails', async () => {
+    await expect(downloadHistoryImage(undefined, undefined)).resolves.toBe(false);
+    expect(useFetch).not.toHaveBeenCalled();
+
+    mockFetchJson({ data: { value: null }, error: { value: new Error('404') } });
+    await expect(downloadHistoryImage(undefined, 'gen_1', 2)).resolves.toBe(false);
+    expect(useFetch).toHaveBeenCalledWith('/images/gen_1/download?index=2');
+  });
+
+  describe('downloadItemImage', () => {
+    const providerUrl = 'https://replicate.delivery/pbxt/result.png';
+    const providerImage = { aiImageUrl: providerUrl } as IImage;
+    const fetchMock = vi.fn();
+
+    let originalUrlFns: { create: typeof URL.createObjectURL; revoke: typeof URL.revokeObjectURL };
+
+    beforeEach(() => {
+      fetchMock.mockReset();
+      fetchMock.mockResolvedValue({
+        ok: true,
+        blob: async () => new Blob(['x'], { type: 'image/png' }),
+      });
+      vi.stubGlobal('fetch', fetchMock);
+      originalUrlFns = { create: URL.createObjectURL, revoke: URL.revokeObjectURL };
+      URL.createObjectURL = () => 'blob:x';
+      URL.revokeObjectURL = () => {};
+    });
+
+    afterEach(() => {
+      URL.createObjectURL = originalUrlFns.create;
+      URL.revokeObjectURL = originalUrlFns.revoke;
+      vi.unstubAllGlobals();
+    });
+
+    it('uses the plan-aware endpoint for saved entries', async () => {
+      mockFetchJson({
+        data: { value: { url: 'https://cdn.example/orig.png' } },
+        error: { value: null },
+      });
+      const item = imageObject({
+        _id: 'gen_1',
+        images: [providerImage, providerImage],
+      });
+
+      await expect(downloadItemImage(undefined, item, 1)).resolves.toBe(true);
+
+      expect(useFetch).toHaveBeenCalledWith('/images/gen_1/download?index=1');
+      expect(fetchMock).toHaveBeenCalledWith('https://cdn.example/orig.png');
+    });
+
+    it('sends the resolved index to the endpoint when the requested one is out of range', async () => {
+      mockFetchJson({
+        data: { value: { url: 'https://cdn.example/orig.png' } },
+        error: { value: null },
+      });
+      const item = imageObject({ _id: 'gen_1', images: [providerImage] });
+
+      await expect(downloadItemImage(undefined, item, 5)).resolves.toBe(true);
+
+      expect(useFetch).toHaveBeenCalledWith('/images/gen_1/download?index=0');
+    });
+
+    it('downloads the provider URL for unsaved entries without an _id', async () => {
+      const item = imageObject({ _id: undefined, images: [providerImage] });
+
+      await expect(downloadItemImage(undefined, item)).resolves.toBe(true);
+
+      expect(useFetch).not.toHaveBeenCalled();
+      expect(fetchMock).toHaveBeenCalledWith(providerUrl);
+    });
+
+    it('returns false when the item has no images', async () => {
+      await expect(downloadItemImage(undefined, imageObject({ images: [] }))).resolves.toBe(false);
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it('stops event propagation', async () => {
+      const event = new Event('click');
+      const stop = vi.spyOn(event, 'stopPropagation');
+      await downloadItemImage(event, imageObject({ _id: undefined, images: [providerImage] }));
+      expect(stop).toHaveBeenCalled();
     });
   });
 

@@ -7,6 +7,9 @@ const redis = vi.hoisted(() => ({
 }))
 
 const enqueueGeneration = vi.hoisted(() => vi.fn())
+const resolveUserIsPro = vi.hoisted(() => vi.fn())
+
+vi.mock("../services/generation-service.js", () => ({ resolveUserIsPro }))
 
 vi.mock("../lib/logger.js", () => ({
     createLogger: () => ({ debug: vi.fn(), error: vi.fn(), info: vi.fn() }),
@@ -98,6 +101,7 @@ describe("generateRoute", () => {
     beforeEach(() => {
         vi.clearAllMocks()
         enqueueGeneration.mockResolvedValue(undefined)
+        resolveUserIsPro.mockResolvedValue(false)
         redis.setStatus.mockResolvedValue(undefined)
         redis.getStatus.mockResolvedValue(null)
         redis.deleteStatus.mockResolvedValue(undefined)
@@ -220,7 +224,7 @@ describe("generateRoute", () => {
             const body = { prompt: "a red fox", modelId: "FLUX_BASIC" }
             await dispatch("post", "/generate/image", { body, auth: { userId: "user_1" } }, res)
 
-            expect(enqueueGeneration).toHaveBeenCalledWith({ kind: "image", body })
+            expect(enqueueGeneration).toHaveBeenCalledWith({ kind: "image", body, isPro: false })
             expect(res.statusCode).toBe(202)
             expect(res.body).toEqual({ message: "Processing started", status: "processing" })
         })
@@ -230,7 +234,49 @@ describe("generateRoute", () => {
             const body = { prompt: "a red fox" }
             await dispatch("post", "/generate/image", { body, auth: { userId: "user_1" } }, res)
 
-            expect(enqueueGeneration).toHaveBeenCalledWith({ kind: "image", body })
+            expect(enqueueGeneration).toHaveBeenCalledWith({ kind: "image", body, isPro: false })
+            expect(res.statusCode).toBe(202)
+        })
+
+        it("rejects a premium model for a non-Pro user with a typed 403 and no enqueue", async () => {
+            const res = mockRes()
+            const body = { prompt: "a red fox", modelId: "NANO_BANANA_PRO" }
+            await dispatch("post", "/generate/image", { body, auth: { userId: "user_1" } }, res)
+
+            expect(resolveUserIsPro).toHaveBeenCalledWith("user_1")
+            expect(res.statusCode).toBe(403)
+            expect(res.body).toEqual({
+                error: "This model requires a Pro plan",
+                code: "PREMIUM_MODEL_REQUIRES_PRO",
+            })
+            expect(enqueueGeneration).not.toHaveBeenCalled()
+        })
+
+        it("resolves Pro from the body userId when the session has no userId, else an empty id", async () => {
+            await dispatch(
+                "post",
+                "/generate/image",
+                { body: { prompt: "p", userId: "body_user" }, auth: {} },
+                mockRes(),
+            )
+            expect(resolveUserIsPro).toHaveBeenLastCalledWith("body_user")
+
+            await dispatch(
+                "post",
+                "/generate/image",
+                { body: { prompt: "p" }, auth: {} },
+                mockRes(),
+            )
+            expect(resolveUserIsPro).toHaveBeenLastCalledWith("")
+        })
+
+        it("lets a Pro user queue a premium model", async () => {
+            resolveUserIsPro.mockResolvedValue(true)
+            const res = mockRes()
+            const body = { prompt: "a red fox", modelId: "NANO_BANANA_PRO" }
+            await dispatch("post", "/generate/image", { body, auth: { userId: "user_1" } }, res)
+
+            expect(enqueueGeneration).toHaveBeenCalledWith({ kind: "image", body, isPro: true })
             expect(res.statusCode).toBe(202)
         })
 
@@ -274,6 +320,34 @@ describe("generateRoute", () => {
             expect(res.statusCode).toBe(200)
             expect(res.body).toEqual({
                 urls: ["https://res.cloudinary.com/demo/a.png"],
+            })
+        })
+
+        it("stamps reference feature, session userId and the default png format on the body", async () => {
+            const req = {
+                auth: { userId: "session_user" },
+                body: { userId: "body_user" },
+                files: [{ path: "https://x/a.png" }],
+            }
+            await dispatch("post", "/generate/reference-images", req, mockRes())
+            expect(req.body).toEqual({
+                userId: "session_user",
+                feature: "reference",
+                format: "png",
+            })
+        })
+
+        it("keeps a client format and falls back to the body userId when the session has none", async () => {
+            const req = {
+                auth: {},
+                body: { userId: "body_user", format: "jpeg" },
+                files: [{ path: "https://x/a.png" }],
+            }
+            await dispatch("post", "/generate/reference-images", req, mockRes())
+            expect(req.body).toEqual({
+                userId: "body_user",
+                feature: "reference",
+                format: "jpeg",
             })
         })
 
@@ -367,6 +441,7 @@ describe("generateRoute", () => {
                 expect(enqueueGeneration).toHaveBeenCalledWith({
                     kind,
                     props: { body, filePath: "/tmp/photo.png", fileName: "photo.png" },
+                    isPro: false,
                 })
                 expect(res.statusCode).toBe(202)
             })

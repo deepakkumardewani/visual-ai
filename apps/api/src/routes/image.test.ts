@@ -6,7 +6,12 @@ const imageService = vi.hoisted(() => ({
     deleteBulkUserImages: vi.fn(),
 }))
 
+const downloadService = vi.hoisted(() => ({ getImageDownloadUrl: vi.fn() }))
+
 vi.mock("../services/image-service.js", () => imageService)
+vi.mock("../services/download-service.js", () => downloadService)
+
+import { NotFoundError } from "../lib/errors.js"
 
 const { imageRoutes } = await import("./image.js")
 
@@ -121,6 +126,62 @@ describe("imageRoutes", () => {
         expect(res.body).toEqual({
             success: true,
             message: "Images deleted successfully",
+        })
+    })
+    describe("GET /images/:imageId/download", () => {
+        const download = (req: object, res: object) =>
+            dispatch("get", "/images/:imageId/download", req, res)
+
+        it("returns the url resolved for the authenticated user", async () => {
+            downloadService.getImageDownloadUrl.mockResolvedValue("https://cdn.example/o.png")
+            const res = mockRes()
+            await download(
+                { auth: { userId: "user_1" }, params: { imageId: "img_1" }, query: { index: "2" } },
+                res,
+            )
+
+            expect(downloadService.getImageDownloadUrl).toHaveBeenCalledWith("user_1", "img_1", 2)
+            expect(res.statusCode).toBe(200)
+            expect(res.body).toEqual({ success: true, url: "https://cdn.example/o.png" })
+        })
+
+        it("defaults the image index to 0", async () => {
+            downloadService.getImageDownloadUrl.mockResolvedValue("u")
+            await download(
+                { auth: { userId: "user_1" }, params: { imageId: "img_1" }, query: {} },
+                mockRes(),
+            )
+
+            expect(downloadService.getImageDownloadUrl).toHaveBeenCalledWith("user_1", "img_1", 0)
+        })
+
+        it("rejects unauthenticated requests", async () => {
+            await expect(
+                download({ params: { imageId: "img_1" }, query: {} }, mockRes()),
+            ).rejects.toMatchObject({ statusCode: 401 })
+            expect(downloadService.getImageDownloadUrl).not.toHaveBeenCalled()
+        })
+
+        it.each(["-1", "1.5", "abc"])("rejects invalid index %s", async (index) => {
+            await expect(
+                download(
+                    { auth: { userId: "user_1" }, params: { imageId: "img_1" }, query: { index } },
+                    mockRes(),
+                ),
+            ).rejects.toMatchObject({ statusCode: 400, message: "Invalid image index" })
+            expect(downloadService.getImageDownloadUrl).not.toHaveBeenCalled()
+        })
+
+        it("propagates not-found for a non-owner", async () => {
+            downloadService.getImageDownloadUrl.mockRejectedValue(
+                new NotFoundError("Image not found"),
+            )
+            await expect(
+                download(
+                    { auth: { userId: "intruder" }, params: { imageId: "img_1" }, query: {} },
+                    mockRes(),
+                ),
+            ).rejects.toMatchObject({ statusCode: 404 })
         })
     })
 })

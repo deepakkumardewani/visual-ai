@@ -64,6 +64,8 @@ export interface JobStatus {
   image: IImageObject | undefined;
   userCreditsRemaining: number | null;
   progress?: number;
+  /** False when the history cap was reached: the image is the provider URL and is not stored. */
+  savedToHistory?: boolean;
   /** User-facing explanation, set on 'error' status for known/expected failure reasons (e.g. moderation rejection) */
   message?: string;
 }

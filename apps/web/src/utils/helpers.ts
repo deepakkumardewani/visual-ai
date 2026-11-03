@@ -111,6 +111,51 @@ export const downloadImage = async (event?: Event, image?: string) => {
   }
 };
 
+/**
+ * Asks the server for the download URL of one image of a history entry: Pro users get the
+ * original, free users an optimized derivative. Returns undefined on failure.
+ */
+export const fetchDownloadUrl = async (imageId: string, imageIndex = 0) => {
+  const { error, data } = await useFetch(`/images/${imageId}/download?index=${imageIndex}`).json<{
+    url: string;
+  }>();
+  if (error.value || !data.value?.url) {
+    log.error('fetchDownloadUrl failed', { error: error.value, imageId, imageIndex });
+    return undefined;
+  }
+  return data.value.url;
+};
+
+export const downloadHistoryImage = async (
+  event: Event | undefined,
+  imageId: string | undefined,
+  imageIndex = 0,
+) => {
+  event?.stopPropagation();
+  if (!imageId) return false;
+
+  const url = await fetchDownloadUrl(imageId, imageIndex);
+  return downloadImage(undefined, url);
+};
+
+/**
+ * Downloads one image of a result. Saved entries (with an `_id`) go through the plan-aware
+ * endpoint; unsaved results (e.g. history is full) only have a provider URL.
+ */
+export const downloadItemImage = async (
+  event: Event | undefined,
+  item: IImageObject,
+  imageIndex = 0,
+) => {
+  event?.stopPropagation();
+  const resolvedIndex = item.images?.[imageIndex] ? imageIndex : 0;
+  const image = item.images?.[resolvedIndex];
+  if (!image) return false;
+
+  if (item._id) return downloadHistoryImage(undefined, item._id, resolvedIndex);
+  return downloadImage(undefined, getDownloadImageUrl(image));
+};
+
 export const bulkFavorite = async (images: IImageObject[]) => {
   const userStore = useUserStore();
   const { userId, history } = storeToRefs(userStore);
@@ -173,29 +218,20 @@ export const bulkDelete = async (images: IImageObject[]) => {
   }
 };
 export const bulkDownload = async (images: IImageObject[]) => {
-  images.forEach(async (image) => {
-    if (!image) return;
+  await Promise.all(
+    images.map(async (image) => {
+      if (!image?._id) return;
+      const publicIdKey = image.featureType === 'image' ? 'aiImagePublicId' : 'enhancedPublicId';
 
-    try {
-      if (image.featureType === 'image') {
-        for (const img of image.images) {
-          if (img.aiImagePublicId) {
-            const imageUrl = getDownloadImageUrl(img);
-            await downloadImage(undefined, imageUrl);
-          }
+      try {
+        for (const [index, img] of image.images.entries()) {
+          if (img[publicIdKey]) await downloadHistoryImage(undefined, image._id, index);
         }
-      } else {
-        for (const img of image.images) {
-          if (img.enhancedPublicId) {
-            const imageUrl = getDownloadImageUrl(img);
-            await downloadImage(undefined, imageUrl);
-          }
-        }
+      } catch (error) {
+        log.error('bulkDownload failed', { error, imageId: image._id });
       }
-    } catch (error) {
-      log.error('bulkDownload failed', { error, imageId: image._id });
-    }
-  });
+    }),
+  );
 };
 
 export const applyReferralCode = async (code: string) => {
@@ -304,11 +340,6 @@ export function getPublicIds(images: IImageObject[]): string[] {
   return publicIdsToDelete;
 }
 
-export const getDownloadImageUrl = (image: IImage) => {
-  const publicId = image.aiImagePublicId ? image.aiImagePublicId : image.enhancedPublicId;
-  if (publicId) {
-    const cloudinaryBaseUrl = import.meta.env.VITE_CLOUDINARY_BASE_URL;
-    return `${cloudinaryBaseUrl}/${publicId}.${image.format}`;
-  }
-  return image.aiImageUrl ?? image.enhancedImageUrl ?? image.originalImageUrl ?? '';
-};
+/** Display/share fallback only; downloads must go through `downloadHistoryImage`. */
+export const getDownloadImageUrl = (image: IImage) =>
+  image.aiImageUrl ?? image.enhancedImageUrl ?? image.originalImageUrl ?? '';

@@ -1,9 +1,9 @@
 import { Router } from "express"
 import { Request, Response } from "express"
-import type { ModelKey } from "@visual-ai/shared"
+import { PREMIUM_MODEL_KEYS, type ModelKey } from "@visual-ai/shared"
 
 import { asyncHandler } from "../lib/async-handler.js"
-import { BadRequestError } from "../lib/errors.js"
+import { BadRequestError, PremiumModelRequiresProError } from "../lib/errors.js"
 import { createLogger } from "../lib/logger.js"
 import { validateReferenceImageUrls } from "../lib/model-input.js"
 import { enqueueGeneration } from "../queue/generation-queue.js"
@@ -13,6 +13,7 @@ import {
     referenceImagesUpload,
     upload,
 } from "../middlewares/multer.js"
+import { resolveUserIsPro } from "../services/generation-service.js"
 import { RedisService } from "../services/redis-service.js"
 import { Props } from "../types"
 
@@ -21,6 +22,11 @@ const logger = createLogger("generate-route")
 const jobStatusService = new RedisService()
 
 export const generateRoute = Router()
+
+/** Prefers the verified session; falls back to `req.body.userId` only when no session is attached. */
+function authedUserId(req: Request): string {
+    return req.auth?.userId ?? req.body.userId ?? ""
+}
 
 function acceptResponse(res: Response) {
     res.status(202).json({
@@ -119,7 +125,14 @@ generateRoute.post(
     asyncHandler(async (req: Request, res: Response) => {
         const modelKey = (req.body.modelId ?? "FLUX_BASIC") as ModelKey
         validateReferenceImageUrls(modelKey, req.body.referenceImageUrls)
-        await enqueueGeneration({ kind: "image", body: req.body })
+        const isPro = await resolveUserIsPro(authedUserId(req))
+        if (!isPro && PREMIUM_MODEL_KEYS.includes(modelKey)) {
+            // Rejected before queueing, so no credits are ever deducted for a gated request.
+            const error = new PremiumModelRequiresProError()
+            res.status(error.statusCode).json({ error: error.message, code: error.code })
+            return
+        }
+        await enqueueGeneration({ kind: "image", body: req.body, isPro })
         acceptResponse(res)
     }),
 )
@@ -140,7 +153,11 @@ generateRoute.post(
             filePath: req.file.path,
             fileName: req.file.filename,
         }
-        await enqueueGeneration({ kind: "upscale", props })
+        await enqueueGeneration({
+            kind: "upscale",
+            props,
+            isPro: await resolveUserIsPro(authedUserId(req)),
+        })
         acceptResponse(res)
     }),
 )
@@ -161,7 +178,11 @@ generateRoute.post(
             filePath: req.file.path,
             fileName: req.file.filename,
         }
-        await enqueueGeneration({ kind: "revive", props })
+        await enqueueGeneration({
+            kind: "revive",
+            props,
+            isPro: await resolveUserIsPro(authedUserId(req)),
+        })
         acceptResponse(res)
     }),
 )
@@ -182,7 +203,11 @@ generateRoute.post(
             filePath: req.file.path,
             fileName: req.file.filename,
         }
-        await enqueueGeneration({ kind: "colorize", props })
+        await enqueueGeneration({
+            kind: "colorize",
+            props,
+            isPro: await resolveUserIsPro(authedUserId(req)),
+        })
         acceptResponse(res)
     }),
 )
@@ -203,7 +228,11 @@ generateRoute.post(
             filePath: req.file.path,
             fileName: req.file.filename,
         }
-        await enqueueGeneration({ kind: "remove-bg", props })
+        await enqueueGeneration({
+            kind: "remove-bg",
+            props,
+            isPro: await resolveUserIsPro(authedUserId(req)),
+        })
         acceptResponse(res)
     }),
 )

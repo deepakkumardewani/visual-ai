@@ -25,7 +25,12 @@ import Tooltip from '@/components/primitives/Tooltip.vue';
 
 import { useImageChainActions } from '@/composables/useImageChainActions';
 import { useShareActions } from '@/composables/useShareActions';
-import { deleteImage, downloadImage, favoriteImage, getDownloadImageUrl } from '@/utils/helpers';
+import {
+  deleteImage,
+  downloadItemImage,
+  favoriteImage,
+  getDownloadImageUrl,
+} from '@/utils/helpers';
 
 const props = withDefaults(
   defineProps<{
@@ -113,6 +118,11 @@ const shareUrl = computed(() => {
   return typeof window !== 'undefined' ? window.location.href : '';
 });
 
+function handleDownload(event: Event) {
+  if (!downloadTarget.value) return;
+  void downloadItemImage(event, props.item, props.imageIndex);
+}
+
 function openDeleteConfirm(event: Event) {
   event.stopPropagation();
   chainMenuOpen.value = false;
@@ -163,7 +173,7 @@ async function runChain(action: () => void | Promise<void>, event: Event) {
       class="tile-action"
       aria-label="Download image"
       :disabled="!downloadTarget"
-      @click="downloadTarget && downloadImage($event, getDownloadImageUrl(downloadTarget))"
+      @click="handleDownload"
     >
       <font-awesome-icon :icon="faDownload" class="tw-h-3 tw-w-3" aria-hidden="true" />
     </button>

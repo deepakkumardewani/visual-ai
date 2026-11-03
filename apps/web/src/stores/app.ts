@@ -124,15 +124,19 @@ export const useAppStore = defineStore('app', () => {
       generateStore.clearJobProgress();
 
       if (data.image) {
-        const historyIndex = history.value.findIndex((img) => img._id === data.image?._id);
+        // Guard for payloads without a timestamp: the grid sorts newest-first on createdAt.
+        const result = data.image.createdAt ? data.image : { ...data.image, createdAt: new Date() };
+        const resultId = result._id;
+        // Unsaved (at-cap) results have no _id and must never match each other.
+        const historyIndex = resultId ? history.value.findIndex((img) => img._id === resultId) : -1;
         if (historyIndex !== -1) {
-          history.value[historyIndex] = data.image;
+          history.value[historyIndex] = result;
         } else {
-          history.value.push(data.image);
+          history.value.push(result);
         }
         if (feature === FeatureType.IMAGE) {
-          images.value = data.image.images;
-          imageData.value = data.image;
+          images.value = result.images;
+          imageData.value = result;
           isLoading.value = false;
         }
       }
