@@ -1,6 +1,12 @@
 import mongoose from "mongoose"
 import { v4 as uuidv4 } from "uuid"
-import { SIGNUP_CREDITS, DAILY_CREDITS } from "@visual-ai/shared"
+import {
+    SIGNUP_CREDITS,
+    DAILY_CREDITS,
+    PLAN,
+    PlanSchema,
+    SubscriptionStatus,
+} from "@visual-ai/shared"
 
 import { ImageObjectSchema } from "./image.js"
 import { PaymentSchema } from "./payment.js"
@@ -27,6 +33,13 @@ const UserSchema = new Schema(
             type: String,
             unique: true,
             sparse: true,
+        },
+        plan: { type: String, enum: PlanSchema.options, default: PLAN.FREE },
+        subscription: {
+            providerSubscriptionId: { type: String },
+            status: { type: String, enum: SubscriptionStatus.options },
+            currentPeriodEnd: { type: Date },
+            cancelAtPeriodEnd: { type: Boolean, default: false },
         },
         referralsUsed: { type: [String], default: [] },
         emailOptOut: { type: Boolean, default: false },

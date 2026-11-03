@@ -39,7 +39,6 @@ vi.mock("../middlewares/clerk.js", () => ({
 const {
     generateUsername,
     getUserOrThrow,
-    updateUserPlan,
     updateFreeUserCredits,
     signUpHandler,
     deleteClerkUserData,
@@ -91,24 +90,6 @@ describe("getUserOrThrow", () => {
             statusCode: 404,
             message: "User not found",
         })
-    })
-})
-
-describe("updateUserPlan", () => {
-    beforeEach(() => {
-        vi.clearAllMocks()
-    })
-
-    it("updates the plan field", async () => {
-        User.findOneAndUpdate.mockResolvedValue({})
-
-        await updateUserPlan("user_1", "pro")
-
-        expect(User.findOneAndUpdate).toHaveBeenCalledWith(
-            { userId: "user_1" },
-            { plan: "pro" },
-            { new: true },
-        )
     })
 })
 

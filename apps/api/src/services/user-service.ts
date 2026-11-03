@@ -69,16 +69,6 @@ export async function ensureUserFromClerk(clerkUserId: string, projection?: Reco
 }
 
 /**
- * Update a user's plan
- * @param userId - The user ID
- * @param plan - The plan to set
- */
-export async function updateUserPlan(userId: string, plan: string) {
-    logger.debug({ userId, plan }, "Updating user plan")
-    await User.findOneAndUpdate({ userId }, { plan }, { new: true })
-}
-
-/**
  * Update free user credits (daily limit)
  * @param userId - The user ID
  */

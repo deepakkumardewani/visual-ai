@@ -201,7 +201,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 **Adds:** The data model and a single `isPro` helper for free and Pro plans, and the old unguarded plan-change route is closed; nothing else changes for existing users.
 **Try in UI:** No UI change ; call `GET /users/<your id>` and confirm `plan`, `periodEnd`, `cancelAtPeriodEnd` appear with `plan: "free"` ; call `GET /users/update/plan?plan=pro` and confirm 404 ; run `cd apps/api && bun run test` and confirm the `isPro` tests pass.
 
-### ☐ T5.1 Shared plan constants and types
+### ✅ T5.1 Shared plan constants and types
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/models/plans.ts`, `packages/shared/src/models/index.ts`, `packages/shared/src/types/domain.ts`
@@ -209,7 +209,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Constants match SPEC; premium keys typed as `ModelKey`; importable from `@visual-ai/shared`.
 - **Verify:** `bun run check`.
 
-### ☐ T5.2 User model fields, isPro, plan status and closing the legacy plan route
+### ✅ T5.2 User model fields, isPro, plan status and closing the legacy plan route
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/models/user.ts`, `apps/api/src/models/image.ts`, `apps/api/src/lib/isPro.ts`, `apps/api/src/routes/users.ts`, `apps/api/src/services/user-service.ts`
@@ -217,7 +217,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Legacy docs without the fields behave as free; `GET /users/:id` returns plan fields; `GET /users/update/plan` returns 404; no perk reads `user.plan` directly.
 - **Verify:** `cd apps/api && bun run test`; `bun run check`; `grep -rn "updateUserPlan\|update/plan" apps/api/src` prints nothing.
 
-### ☐ T5.3 Unit: plans constants
+### ✅ T5.3 Unit: plans constants
 
 - **Kind:** unit
 - **Files:** `packages/shared/src/models/plans.ts`
@@ -225,7 +225,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every file at least 80% across all metrics, target over 95%.
 - **Verify:** `npx vitest run packages/shared/src/models/plans.test.ts --coverage --coverage.include=packages/shared/src/models/plans.ts --coverage.reporter=text`
 
-### ☐ T5.4 Unit: isPro and plan status route
+### ✅ T5.4 Unit: isPro and plan status route
 
 - **Kind:** unit
 - **Files:** `apps/api/src/lib/isPro.ts`, `apps/api/src/routes/users.ts`
@@ -233,7 +233,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/api && npx vitest run src/lib/isPro.test.ts src/routes/users.test.ts --coverage --coverage.include=src/lib/isPro.ts,src/routes/users.ts --coverage.reporter=text`
 
-### ☐ T5.5 E2E: plan status for free users
+### ✅ T5.5 E2E: plan status for free users
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` a free user sees no Pro badge and `/users/me` reports plan free; `@high` a legacy user without plan fields behaves as free; `@medium` plan state persists after reload.
