@@ -12,7 +12,10 @@ vi.mock("../routes/email.js", () => ({ emailRoutes: "emailRoutes" }))
 vi.mock("../routes/explore.js", () => ({ exploreRoutes: "exploreRoutes" }))
 vi.mock("../routes/generate.js", () => ({ generateRoute: "generateRoute" }))
 vi.mock("../routes/image.js", () => ({ imageRoutes: "imageRoutes" }))
-vi.mock("../payments/router.js", () => ({ paymentsApiRouter: "paymentsApiRouter" }))
+vi.mock("../payments/router.js", () => ({
+    paymentsApiRouter: "paymentsApiRouter",
+    paymentsPublicRouter: "paymentsPublicRouter",
+}))
 vi.mock("../routes/prompt.js", () => ({ promptRoutes: "promptRoutes" }))
 vi.mock("../routes/saved-prompts.js", () => ({ savedPromptsRoutes: "savedPromptsRoutes" }))
 vi.mock("../routes/stt.js", () => ({ sttRoute: "sttRoute" }))
@@ -69,6 +72,7 @@ describe("api router index", () => {
             "sttRoute",
             "savedPromptsRoutes",
             "emailRoutes",
+            "paymentsPublicRouter",
             "userRoutes",
             "exploreRoutes",
             "creditsRoute",

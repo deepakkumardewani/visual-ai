@@ -4,6 +4,9 @@ import type { Request, Response } from "express"
 import { asyncHandler } from "../lib/async-handler.js"
 import { BadRequestError } from "../lib/errors.js"
 import { PAYMENTS_MESSAGES } from "./constants.js"
+import { getFxRates } from "./fx.js"
+import { resolveCountry } from "./geo.js"
+import { buildPrices } from "./prices.js"
 import { AlreadySubscribedError, ProviderApiError, UnknownPackError } from "./errors.js"
 import {
     createCheckout,
@@ -13,6 +16,17 @@ import {
 } from "./service.js"
 
 export const paymentsApiRouter = Router()
+
+/** Pricing page is public, so this router is mounted outside requireAuth. */
+export const paymentsPublicRouter = Router()
+
+paymentsPublicRouter.get(
+    "/payments/prices",
+    asyncHandler(async (req: Request, res: Response) => {
+        const [country, rates] = await Promise.all([resolveCountry(req), getFxRates()])
+        res.status(200).json(buildPrices(country, rates))
+    }),
+)
 
 function getUserIdOrRespondUnauthorized(req: Request, res: Response): string | undefined {
     const userId = req.auth?.userId

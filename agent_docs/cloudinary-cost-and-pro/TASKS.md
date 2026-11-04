@@ -393,7 +393,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 **Adds:** Visitors see an approximate Pro and credit pack price in their local currency, falling back to USD; Dodo Adaptive Currency handles actual checkout.
 **Try in UI:** No UI yet (UI is Phase 9) ; call `GET /payments/prices` with a geo country header and confirm local currency ; call without the header and confirm USD ; owner: in Dodo test checkout from a non-US billing address confirm local currency.
 
-### ☐ T8.1 Currency mapping and formatter (pure)
+### ✅ T8.1 Currency mapping and formatter (pure)
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/pricing/currencyMap.ts`, `packages/shared/src/pricing/convert.ts`, `packages/shared/src/pricing/format.ts`, `packages/shared/src/index.ts`
@@ -401,7 +401,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Unknown or missing country gives USD; unsupported currency gives USD; formatting per locale.
 - **Verify:** `bun run check`.
 
-### ☐ T8.2 FX table, country resolution and GET /payments/prices
+### ✅ T8.2 FX table, country resolution and GET /payments/prices
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/prices.ts`, `apps/api/src/payments/fx.ts`, `apps/api/src/payments/geo.ts`, `apps/api/src/payments/router.ts`
@@ -417,7 +417,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Test checkout from a non-US billing address shows local currency for a pack and for Pro.
 - **Verify:** Owner confirmation recorded in GO-LIVE.md; supporting evidence `cd apps/api && bun run test`.
 
-### ☐ T8.4 Unit: pricing helpers
+### ✅ T8.4 Unit: pricing helpers
 
 - **Kind:** unit
 - **Files:** `packages/shared/src/pricing/currencyMap.ts`, `packages/shared/src/pricing/convert.ts`, `packages/shared/src/pricing/format.ts`
@@ -425,7 +425,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every file at least 80% across all metrics, target over 95%.
 - **Verify:** `npx vitest run packages/shared/src/pricing --coverage --coverage.include=packages/shared/src/pricing/currencyMap.ts,packages/shared/src/pricing/convert.ts,packages/shared/src/pricing/format.ts --coverage.reporter=text`
 
-### ☐ T8.5 Unit: prices endpoint services
+### ✅ T8.5 Unit: prices endpoint services
 
 - **Kind:** unit
 - **Files:** `apps/api/src/payments/prices.ts`, `apps/api/src/payments/fx.ts`, `apps/api/src/payments/geo.ts`
@@ -433,7 +433,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/api && npx vitest run src/payments --coverage --coverage.include=src/payments/prices.ts,src/payments/fx.ts,src/payments/geo.ts --coverage.reporter=text`
 
-### ☐ T8.6 E2E: localized prices
+### ✅ T8.6 E2E: localized prices
 
 - **Kind:** e2e
 - **Scenarios:** `@high` a mocked country header shows local currency with the approx. note; `@high` no header shows USD; `@medium` stale FX shows USD.
