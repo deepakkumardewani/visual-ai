@@ -38,6 +38,8 @@ export function pickMockAsset(url: string): MockAsset {
   return isVideo ? VIDEO_ASSET : IMAGE_ASSET;
 }
 
+const TARGET_CLOSED_PATTERN = /Target page, context or browser has been closed/;
+
 export function createCloudinaryRecorder(): CloudinaryRecorder {
   return { requestedUrls: [], networkHits: [] };
 }
@@ -64,7 +66,12 @@ export async function installCloudinaryMock(
   context.on('response', async (response) => {
     const url = response.url();
     if (!isCloudinaryUrl(url)) return;
-    if ((await response.serverAddr()) !== null) recorder.networkHits.push(url);
+    const serverAddr = await response.serverAddr().catch((error: Error) => {
+      // A response still in flight when the test ends loses its context; nothing left to record.
+      if (TARGET_CLOSED_PATTERN.test(error.message)) return null;
+      throw error;
+    });
+    if (serverAddr !== null) recorder.networkHits.push(url);
   });
 
   return recorder;

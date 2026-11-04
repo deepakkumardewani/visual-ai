@@ -513,7 +513,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 **Adds:** A full walkthrough of the Pro experience and the owner go-live checklist.
 **Try in UI:** Run `cd apps/web && bunx playwright test e2e/qa/pro-tier.spec.ts` ; as free open a premium model and see the lock ; open `/` and confirm no Cloudinary requests.
 
-### ☐ T10.1 Walkthrough: Pro tier UI
+### ✅ T10.1 Walkthrough: Pro tier UI
 
 - **Kind:** walkthrough
 - **Files:** none
@@ -521,7 +521,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every Phase 9 UI behaviour confirmed; evidence from the QA spec run.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/pro-tier.spec.ts e2e/qa/landing-no-cloudinary.spec.ts --repeat-each=2`; `bun run test`; `bun run check`; `bun run lint`.
 
-### ☐ T10.2 Go-live checklist (owner)
+### ✅ T10.2 Go-live checklist (owner)
 
 - **Kind:** walkthrough
 - **Files:** `agent_docs/cloudinary-cost-and-pro/GO-LIVE.md`
@@ -529,7 +529,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every SPEC success criterion maps to a checklist line with an owner action or command.
 - **Verify:** Review GO-LIVE.md against SPEC success criteria.
 
-### ☐ T10.3 Definition of done
+### ✅ T10.3 Definition of done
 
 - **Kind:** dod
 - **Files:** none

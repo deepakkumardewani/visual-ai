@@ -70,7 +70,9 @@ async function readStatus(page: Page): Promise<PlanStatus> {
     headers: { Authorization: `Bearer ${token}` },
   });
   expect(res.ok(), `GET /users/${E2E_USER_ID} failed: ${res.status()}`).toBeTruthy();
-  return (await res.json()) as PlanStatus;
+  const user = (await res.json()) as PlanStatus;
+  // Only plan fields: the rest of the user doc has volatile data (e.g. relative history dates).
+  return { plan: user.plan, periodEnd: user.periodEnd, cancelAtPeriodEnd: user.cancelAtPeriodEnd };
 }
 
 async function activate(page: Page, subscriptionId: string) {

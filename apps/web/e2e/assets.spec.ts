@@ -108,6 +108,14 @@ async function stubAssetsApi(page: Page, options: AssetsMockOptions = {}) {
     return fulfillJson(route, userPayload());
   });
 
+  // Downloads resolve their URL through the plan-aware endpoint (GET /images/:id/download).
+  await page.route('**/images/*/download**', async (route) => {
+    if (route.request().method() === 'OPTIONS') {
+      return route.fulfill({ status: 204, headers: API_CORS });
+    }
+    return fulfillJson(route, { url: FIXTURE_DOWNLOAD_URL });
+  });
+
   await page.route('**/collections**', async (route) => {
     if (route.request().method() === 'OPTIONS') {
       return route.fulfill({ status: 204, headers: API_CORS });

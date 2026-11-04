@@ -272,7 +272,8 @@ qaTest(
     ]);
     await expect(page.getByTestId('reference-image-remove')).toHaveCount(3);
 
-    await selectSidebarModel(page, 'Flux 2 Max');
+    // Flux 2 Max is premium (locked for free users); Dev has the same single-reference cap.
+    await selectSidebarModel(page, 'Flux 2 Dev');
     await expectToast(page, /Removed 2 reference images/);
     await expect(page.getByTestId('reference-image-remove')).toHaveCount(1);
 

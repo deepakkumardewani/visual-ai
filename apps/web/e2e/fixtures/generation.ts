@@ -132,6 +132,18 @@ export const test = base.extend<{ generationStub: GenerationStub }>({
       });
     });
 
+    // Downloads resolve their URL through the plan-aware endpoint (GET /images/:id/download).
+    await page.route('**/images/*/download**', (route) => {
+      if (route.request().method() === 'OPTIONS') {
+        return route.fulfill({ status: 204, headers: CORS_HEADERS });
+      }
+      return route.fulfill({
+        status: 200,
+        headers: CORS_HEADERS,
+        json: { url: FIXTURE_IMAGE_URL },
+      });
+    });
+
     await page.route('**/e2e-fixture.png**', (route) =>
       route.fulfill({
         status: 200,
