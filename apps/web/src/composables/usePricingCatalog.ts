@@ -1,7 +1,59 @@
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
-import { CREDIT_PACKS, getCreditCost, MODEL_REGISTRY } from '@visual-ai/shared';
-import type { ModelKey } from '@visual-ai/shared';
+import {
+  CREDIT_PACKS,
+  CREDIT_PACK_CURRENCY,
+  FALLBACK_CURRENCY,
+  PRO_PRICE_USD_MONTHLY,
+  formatPrice,
+  getCreditCost,
+  isSupportedCurrency,
+  MODEL_REGISTRY,
+} from '@visual-ai/shared';
+import type { CreditPack, ModelKey, SupportedCurrency } from '@visual-ai/shared';
+
+import { useFetch } from '@/composables/useFetch';
+import { createLogger } from '@/utils/logger';
+
+const log = createLogger('pricing-catalog');
+
+const USD_MINOR_UNITS = 100;
+
+type PriceEntry = { amountMinor: number; currency: string };
+export type PricesResponse = {
+  country: string | null;
+  currency: string;
+  isEstimate: true;
+  pro: PriceEntry;
+  packs: Array<PriceEntry & { id: string }>;
+};
+
+/** Shared across callers so the dialog, Pro card and packs trigger a single fetch. */
+const prices = ref<PricesResponse | null>(null);
+let pricesRequest: Promise<void> | null = null;
+
+function loadPrices(): Promise<void> {
+  if (prices.value) return Promise.resolve();
+  pricesRequest ??= (async () => {
+    const { data, error } = await useFetch('/payments/prices').json<PricesResponse>();
+    if (error.value || !data.value?.pro) {
+      // Keep the USD fallback; clear the memo so the next open can retry.
+      log.warn('prices fetch failed, using USD fallback', { error: error.value });
+      pricesRequest = null;
+      return;
+    }
+    prices.value = data.value;
+  })();
+  return pricesRequest;
+}
+
+/** Formats an API price entry, or null when the currency is not one we can format. */
+function formatEntry(entry: PriceEntry): string | null {
+  if (!isSupportedCurrency(entry.currency)) return null;
+  return formatPrice(entry.amountMinor, entry.currency);
+}
+
+const FALLBACK_PRO_PRICE = formatPrice(PRO_PRICE_USD_MONTHLY * USD_MINOR_UNITS, FALLBACK_CURRENCY);
 
 export type PricingModelRow = { key: ModelKey; label: string; cost: number };
 export type PricingCategory = 'Image Generation' | 'Utilities' | 'Upscaling';
@@ -176,5 +228,36 @@ export function usePricingCatalog() {
 
   const creditPacks = computed(() => [...CREDIT_PACKS]);
 
-  return { modelsByCategory, pricingBoard, creditPacks };
+  const proPrice = computed(() =>
+    prices.value ? (formatEntry(prices.value.pro) ?? FALLBACK_PRO_PRICE) : FALLBACK_PRO_PRICE,
+  );
+
+  /** Localized amount for a pack, or the pack's own (INR) price when estimates are unavailable. */
+  function packAmount(pack: CreditPack): { amountMinor: number; currency: SupportedCurrency } {
+    const entry = prices.value?.packs.find((candidate) => candidate.id === pack.id);
+    if (entry && isSupportedCurrency(entry.currency)) {
+      return { amountMinor: entry.amountMinor, currency: entry.currency };
+    }
+    return { amountMinor: pack.priceMinor, currency: CREDIT_PACK_CURRENCY };
+  }
+
+  function formatPackPrice(pack: CreditPack): string {
+    const { amountMinor, currency } = packAmount(pack);
+    return formatPrice(amountMinor, currency);
+  }
+
+  function formatPackPerCredit(pack: CreditPack): string {
+    const { amountMinor, currency } = packAmount(pack);
+    return formatPrice(amountMinor / pack.credits, currency);
+  }
+
+  return {
+    modelsByCategory,
+    pricingBoard,
+    creditPacks,
+    proPrice,
+    formatPackPrice,
+    formatPackPerCredit,
+    loadPrices,
+  };
 }

@@ -6,6 +6,7 @@ import { useDialogStore } from '@/stores/dialog';
 
 import AppModal from '@/components/AppModal.vue';
 import FAQ from '@/components/FAQ.vue';
+import PricingProCard from '@/components/Pricing/PricingProCard.vue';
 
 import { PRICING_FAQS } from '@/utils/constants';
 
@@ -39,6 +40,7 @@ const { showPricingDialog } = storeToRefs(dialogStore);
         Unlock the full power of Visual AI
       </h2>
 
+      <PricingProCard />
       <Pricing />
       <FAQ :faqs="PRICING_FAQS" />
     </div>

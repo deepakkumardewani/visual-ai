@@ -6,8 +6,10 @@ import { useUserStore } from '@/stores/user';
 import type { CreditPackId } from '@visual-ai/shared';
 
 import {
+  AlreadySubscribedClientError,
   CheckoutClientError,
   createCheckoutSession,
+  createSubscriptionSession,
   fetchCheckoutStatus,
   type CheckoutSessionStatus,
 } from './checkoutClient';
@@ -15,6 +17,7 @@ import { PAYMENT_POLL_INTERVAL_MS, PAYMENT_POLL_TIMEOUT_MS, PAYMENT_TOAST } from
 import { openDodoCheckout } from './dodoOverlay';
 
 export type PurchaseOutcome = 'succeeded' | 'failed' | 'timeout' | 'cancelled';
+export type SubscribeOutcome = PurchaseOutcome | 'already_pro';
 
 const isPurchasing = ref(false);
 
@@ -44,6 +47,19 @@ async function pollUntilTerminal(sessionId: string): Promise<CheckoutSessionStat
   }
 
   return 'pending';
+}
+
+async function pollUntilPro(): Promise<boolean> {
+  const userStore = useUserStore();
+  const deadline = Date.now() + PAYMENT_POLL_TIMEOUT_MS;
+
+  while (Date.now() < deadline) {
+    await userStore.getUserDetails();
+    if (userStore.isPro) return true;
+    await sleep(PAYMENT_POLL_INTERVAL_MS);
+  }
+
+  return false;
 }
 
 export function usePurchase() {
@@ -84,5 +100,38 @@ export function usePurchase() {
     }
   }
 
-  return { start, isPurchasing };
+  /** Pro is granted by the signed webhook, so we poll the user record rather than the checkout status. */
+  async function subscribe(): Promise<SubscribeOutcome> {
+    if (isPurchasing.value) {
+      return 'cancelled';
+    }
+
+    isPurchasing.value = true;
+
+    try {
+      const { checkoutUrl } = await createSubscriptionSession();
+      await openDodoCheckout(checkoutUrl);
+
+      if (await pollUntilPro()) {
+        showToast(PAYMENT_TOAST.SUBSCRIBED);
+        return 'succeeded';
+      }
+
+      showToast(PAYMENT_TOAST.SUBSCRIPTION_PROCESSING);
+      return 'timeout';
+    } catch (error) {
+      if (error instanceof AlreadySubscribedClientError) {
+        showToast(PAYMENT_TOAST.ALREADY_PRO);
+        return 'already_pro';
+      }
+      if (error instanceof CheckoutClientError) {
+        showToast(PAYMENT_TOAST.CHECKOUT_UNAVAILABLE);
+      }
+      return 'failed';
+    } finally {
+      isPurchasing.value = false;
+    }
+  }
+
+  return { start, subscribe, isPurchasing };
 }

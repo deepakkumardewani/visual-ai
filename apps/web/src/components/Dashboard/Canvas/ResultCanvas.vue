@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, onBeforeUnmount } from 'vue';
 
 import { FeatureType } from '@/types';
 
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
 
+import UnsavedResultNotice from '@/components/Dashboard/Canvas/UnsavedResultNotice.vue';
 import StarterPromptsGrid from '@/components/Dashboard/Canvas/StarterPromptsGrid.vue';
 import UserGenerationsGrid from '@/components/Dashboard/Feed/UserGenerationsGrid.vue';
 
 const generateStore = useGenerateStore();
 const userStore = useUserStore();
-const { isLoading } = storeToRefs(generateStore);
+const { isLoading, unsavedResult, showUnsavedNotice } = storeToRefs(generateStore);
 const { history, isReady: isUserReady } = storeToRefs(userStore);
 
 const hasSavedGenerations = computed(() =>
@@ -24,10 +25,18 @@ const hasSavedGenerations = computed(() =>
 const showStarterPrompts = computed(
   () => isUserReady.value && !isLoading.value && !hasSavedGenerations.value,
 );
+
+// The notice lasts until dismissed or the user navigates away from the canvas.
+onBeforeUnmount(generateStore.dismissUnsavedNotice);
 </script>
 
 <template>
   <div data-testid="result-canvas" class="result-canvas tw-w-full tw-bg-canvas">
+    <UnsavedResultNotice
+      v-if="showUnsavedNotice && unsavedResult"
+      :result="unsavedResult"
+      @dismiss="generateStore.dismissUnsavedNotice"
+    />
     <div
       v-if="!isUserReady"
       data-testid="result-canvas-loading"

@@ -1,13 +1,33 @@
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 
-import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue';
-import { useUserStore } from '@/stores/user';
+// Bound in beforeEach: usePricingCatalog keeps module-level price state, so each
+// test needs a fresh module graph to stay order-independent.
+let BuyMoreCreditsDialog: typeof import('@/components/Dialogs/BuyMoreCreditsDialog.vue').default;
+let useFetch: typeof import('@/composables/useFetch').useFetch;
+let useUserStore: typeof import('@/stores/user').useUserStore;
+let useDialogStore: typeof import('@/stores/dialog').useDialogStore;
 
-import { useDialogStore } from '@/stores/dialog';
+vi.mock('@/composables/useFetch', () => ({ useFetch: vi.fn() }));
 
 const startPurchase = vi.fn();
+
+const PACK_200_EUR_MINOR = 250;
+
+function mockPricesResponse(data: unknown, error: unknown = null) {
+  vi.mocked(useFetch).mockReturnValue({
+    json: async () => ({ data: { value: data }, error: { value: error } }),
+  } as unknown as ReturnType<typeof useFetch>);
+}
+
+const EUR_PRICES = {
+  country: 'DE',
+  currency: 'EUR',
+  isEstimate: true,
+  pro: { amountMinor: 450, currency: 'EUR' },
+  packs: [{ id: 'pack_200', amountMinor: PACK_200_EUR_MINOR, currency: 'EUR' }],
+};
 
 vi.mock('@/payments/usePurchase', () => ({
   usePurchase: () => ({
@@ -21,9 +41,15 @@ const modalStub = {
 };
 
 describe('BuyMoreCreditsDialog', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    vi.resetModules();
+    BuyMoreCreditsDialog = (await import('@/components/Dialogs/BuyMoreCreditsDialog.vue')).default;
+    ({ useFetch } = await import('@/composables/useFetch'));
+    ({ useUserStore } = await import('@/stores/user'));
+    ({ useDialogStore } = await import('@/stores/dialog'));
     setActivePinia(createPinia());
     startPurchase.mockReset();
+    mockPricesResponse(null, new Error('offline'));
   });
 
   it('renders dialog with current balance display', () => {
@@ -242,5 +268,16 @@ describe('BuyMoreCreditsDialog', () => {
     expect(wrapper.text()).toContain('Dodo Payments');
     expect(wrapper.text()).not.toContain('Purchase successful');
     errorSpy.mockRestore();
+  });
+
+  it('shows localized pack prices once /payments/prices resolves', async () => {
+    mockPricesResponse(EUR_PRICES);
+    const wrapper = mount(BuyMoreCreditsDialog, {
+      global: { stubs: { AppModal: modalStub, 'font-awesome-icon': true } },
+    });
+    await flushPromises();
+    const pack200 = wrapper.findAll('.buy__pkg')[0];
+    expect(pack200.text()).toContain('€2.50');
+    expect(pack200.text()).not.toContain('₹');
   });
 });

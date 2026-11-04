@@ -12,6 +12,7 @@ const stubs = {
       '<div v-if="open" data-testid="app-modal"><slot name="title" /><slot /><slot name="actions" /></div>',
   },
   Pricing: { template: '<div data-testid="pricing-page" />' },
+  PricingProCard: { template: '<div data-testid="pricing-pro-card" />' },
   FAQ: { template: '<div data-testid="pricing-faq" />' },
   'font-awesome-icon': true,
 };
@@ -31,6 +32,7 @@ describe('PricingDialog', () => {
     dialogStore.showPricing();
     const wrapper = mount(PricingDialog, { global: { stubs } });
     expect(wrapper.text()).toContain('Unlock the full power of Visual AI');
+    expect(wrapper.find('[data-testid="pricing-pro-card"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="pricing-page"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="pricing-faq"]').exists()).toBe(true);
   });

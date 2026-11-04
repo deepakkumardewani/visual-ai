@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { faCheck } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
-import { computed, shallowRef } from 'vue';
+import { computed, onMounted, shallowRef } from 'vue';
 
+import { usePricingCatalog } from '@/composables/usePricingCatalog';
 import { usePurchase } from '@/payments/usePurchase';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
@@ -18,6 +19,9 @@ const userStore = useUserStore();
 const { showBuyCreditsDialog } = storeToRefs(dialogStore);
 const { credits, dailyCredits } = storeToRefs(userStore);
 const { start } = usePurchase();
+const { formatPackPrice, formatPackPerCredit, loadPrices } = usePricingCatalog();
+
+onMounted(loadPrices);
 
 const loading = shallowRef(false);
 const successBalance = shallowRef<number | null>(null);
@@ -40,14 +44,6 @@ const mostPopularIndex = computed(() => {
 });
 
 const totalCredits = computed(() => credits.value + dailyCredits.value);
-
-function priceMajor(pack: CreditPack) {
-  return pack.priceMinor / 100;
-}
-
-function perCreditRate(pack: CreditPack) {
-  return (priceMajor(pack) / pack.credits).toFixed(2);
-}
 
 function savingsLabel(pack: CreditPack) {
   return pack.savingsPercent > 0 ? `${pack.savingsPercent}%` : undefined;
@@ -141,10 +137,10 @@ async function handlePurchase() {
 
               <span class="pkg-credits">{{ pkg.credits }}</span>
               <span class="pkg-credits-label">credits</span>
-              <span class="pkg-price">₹{{ priceMajor(pkg) }}</span>
+              <span class="pkg-price">{{ formatPackPrice(pkg) }}</span>
               <span v-if="savingsLabel(pkg)" class="pkg-savings">Save {{ savingsLabel(pkg) }}</span>
               <span v-else class="pkg-savings pkg-savings--empty">&nbsp;</span>
-              <span class="pkg-meta"> ₹{{ perCreditRate(pkg) }}/credit </span>
+              <span class="pkg-meta"> {{ formatPackPerCredit(pkg) }}/credit </span>
               <span class="pkg-estimate"
                 >≈ {{ estimatedBudgetImages(pkg.credits) }} budget images</span
               >

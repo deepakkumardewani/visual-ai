@@ -87,6 +87,46 @@ describe('useUserStore', () => {
     expect(getToken).toHaveBeenCalled();
   });
 
+  it('canAffordOutputs defaults to a one-credit cost per image', () => {
+    const store = useUserStore();
+    store.setCredits(2);
+    expect(store.canAffordOutputs(2)).toBe(true);
+    expect(store.canAffordOutputs(3)).toBe(false);
+  });
+
+  it('is not Pro by default', () => {
+    const store = useUserStore();
+    expect(store.plan).toBe('free');
+    expect(store.isPro).toBe(false);
+  });
+
+  it('getUserDetails marks the user as Pro when the API returns the pro plan', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValue({ ok: true, json: async () => ({ userId: 'user_1', plan: 'pro' }) }),
+    );
+    const store = useUserStore();
+    store.userId = 'user_1';
+    await store.getUserDetails();
+    expect(store.plan).toBe('pro');
+    expect(store.isPro).toBe(true);
+  });
+
+  it('getUserDetails falls back to the free plan when the API omits it', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({ ok: true, json: async () => ({ userId: 'user_1' }) }),
+    );
+    const store = useUserStore();
+    store.userId = 'user_1';
+    store.plan = 'pro';
+    await store.getUserDetails();
+    expect(store.plan).toBe('free');
+    expect(store.isPro).toBe(false);
+  });
+
   it('getUserDetails does not overwrite existing localStorage userDetails', async () => {
     localStorage.setItem('userDetails', JSON.stringify({ userId: 'cached' }));
     vi.stubGlobal(

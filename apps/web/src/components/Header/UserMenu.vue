@@ -23,6 +23,7 @@ import { useUserStore } from '@/stores/user';
 
 import { useIntro } from '@/composables/useIntro';
 
+import PricingDialog from '@/components/Dialogs/PricingDialog.vue';
 import ReferralCopyDialog from '@/components/Dialogs/ReferralCopyDialog.vue';
 import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue';
 
@@ -34,7 +35,7 @@ const intro = useIntro();
 const dialogStore = useDialogStore();
 const appStore = useAppStore();
 const userStore = useUserStore();
-const { userDetails } = storeToRefs(userStore);
+const { userDetails, isPro } = storeToRefs(userStore);
 const { isDark } = storeToRefs(appStore);
 const { signOut } = useClerk();
 
@@ -218,9 +219,17 @@ function setItemRef(index: number) {
             <span v-else aria-hidden="true">{{ userInitials }}</span>
           </span>
           <span class="tw-min-w-0 tw-flex-1">
-            <span class="tw-block tw-truncate tw-text-sm tw-font-semibold tw-text-ink-primary">{{
-              fullName || 'Your account'
-            }}</span>
+            <span class="tw-flex tw-items-center tw-gap-2">
+              <span class="tw-truncate tw-text-sm tw-font-semibold tw-text-ink-primary">{{
+                fullName || 'Your account'
+              }}</span>
+              <span
+                v-if="isPro"
+                data-testid="pro-badge"
+                class="user-menu__badge user-menu__badge--pro tw-inline-flex tw-shrink-0 tw-items-center tw-rounded-full tw-bg-gold/15 tw-px-2 tw-py-0.5 tw-text-[0.625rem] tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gold"
+                >Pro</span
+              >
+            </span>
             <span v-if="email" class="tw-block tw-truncate tw-text-xs tw-text-ink-muted">{{
               email
             }}</span>
@@ -308,6 +317,7 @@ function setItemRef(index: number) {
     </transition>
   </div>
   <ReferralDialog />
+  <PricingDialog />
   <ReferralCopyDialog />
 </template>
 

@@ -20,16 +20,37 @@ vi.mock('vue-router', async (importOriginal) => {
   };
 });
 
+vi.mock('@/composables/useFetch', () => ({ useFetch: vi.fn() }));
+
 vi.mock('@/payments/usePurchase', () => ({
   usePurchase: () => ({
     start: (...args: unknown[]) => Reflect.apply(startPurchase, undefined, args),
   }),
 }));
 
-import PricingPacks from '@/components/Pricing/PricingPacks.vue';
-import { useUserStore } from '@/stores/user';
+// Bound in beforeEach: usePricingCatalog keeps module-level price state, so each
+// test needs a fresh module graph to stay order-independent.
+let PricingPacks: typeof import('@/components/Pricing/PricingPacks.vue').default;
+let useFetch: typeof import('@/composables/useFetch').useFetch;
+let useUserStore: typeof import('@/stores/user').useUserStore;
 
 const packs = [...CREDIT_PACKS];
+
+const PACK_200_EUR_MINOR = 250;
+
+function mockPricesResponse(data: unknown, error: unknown = null) {
+  vi.mocked(useFetch).mockReturnValue({
+    json: async () => ({ data: { value: data }, error: { value: error } }),
+  } as unknown as ReturnType<typeof useFetch>);
+}
+
+const EUR_PRICES = {
+  country: 'DE',
+  currency: 'EUR',
+  isEstimate: true,
+  pro: { amountMinor: 450, currency: 'EUR' },
+  packs: [{ id: 'pack_200', amountMinor: PACK_200_EUR_MINOR, currency: 'EUR' }],
+};
 
 const stubs = {
   LandingButton: {
@@ -41,10 +62,15 @@ const stubs = {
 };
 
 describe('PricingPacks', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    vi.resetModules();
+    PricingPacks = (await import('@/components/Pricing/PricingPacks.vue')).default;
+    ({ useFetch } = await import('@/composables/useFetch'));
+    ({ useUserStore } = await import('@/stores/user'));
     setActivePinia(createPinia());
     push.mockReset();
     startPurchase.mockReset();
+    mockPricesResponse(null, new Error('offline'));
   });
 
   it('renders credit packs and features the best savings', () => {
@@ -122,5 +148,15 @@ describe('PricingPacks', () => {
       .trigger('click');
     await flushPromises();
     expect(startPurchase).toHaveBeenCalledWith('pack_2000');
+  });
+
+  it('shows localized pack prices once /payments/prices resolves', async () => {
+    mockPricesResponse(EUR_PRICES);
+    const wrapper = mount(PricingPacks, { props: { packs }, global: { stubs } });
+    await flushPromises();
+    const pack200 = wrapper.findAll('article').find((a) => a.text().includes('200 credits'))!;
+    expect(pack200.text()).toContain('€2.50');
+    expect(pack200.text()).toContain('€0.01 per credit');
+    expect(pack200.text()).not.toContain('₹');
   });
 });

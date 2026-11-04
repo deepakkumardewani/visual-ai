@@ -45,6 +45,7 @@ vi.mock('@/composables/local', () => ({
 
 import { useFetch } from '@/composables/useFetch';
 import { useAsideStore } from '@/stores/aside';
+import { useDialogStore } from '@/stores/dialog';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
 import { FeatureType } from '@/types';
@@ -260,6 +261,59 @@ describe('useGenerateStore', () => {
     expect(closeEventSource).toHaveBeenCalledWith('image');
   });
 
+  it('generateImage opens the pricing dialog on a premium-model 403 without a generic error', async () => {
+    vi.mocked(useFetch).mockReturnValue({
+      json: async () => ({
+        data: { value: { code: 'PREMIUM_MODEL_REQUIRES_PRO' } },
+        error: { value: new Error('Forbidden') },
+      }),
+    } as unknown as ReturnType<typeof useFetch>);
+    const store = useGenerateStore();
+    const dialogStore = useDialogStore();
+    await store.generateImage(imageBody);
+
+    expect(dialogStore.showPricingDialog).toBe(true);
+    expect(store.errMsg.image).toBeUndefined();
+    expect(store.isLoading).toBe(false);
+    expect(closeEventSource).toHaveBeenCalledWith('image');
+  });
+
+  it('generateImage keeps the generic error for a non-premium 403', async () => {
+    vi.mocked(useFetch).mockReturnValue({
+      json: async () => ({
+        data: { value: { code: 'SOMETHING_ELSE' } },
+        error: { value: new Error('Forbidden') },
+      }),
+    } as unknown as ReturnType<typeof useFetch>);
+    const store = useGenerateStore();
+    const dialogStore = useDialogStore();
+    await store.generateImage(imageBody);
+
+    expect(dialogStore.showPricingDialog).toBe(false);
+    expect(store.errMsg.image).toContain('Sorry, there was an error');
+  });
+
+  it('shows the unsaved notice only for a result without an _id', () => {
+    const store = useGenerateStore();
+    expect(store.showUnsavedNotice).toBe(false);
+
+    store.imageData = { _id: 'img_1', url: 'https://x/saved.png' } as never;
+    expect(store.showUnsavedNotice).toBe(false);
+
+    store.imageData = { url: 'https://x/unsaved.png' } as never;
+    expect(store.showUnsavedNotice).toBe(true);
+  });
+
+  it('dismissUnsavedNotice hides the notice until a new unsaved result arrives', () => {
+    const store = useGenerateStore();
+    store.imageData = { url: 'https://x/first.png' } as never;
+    store.dismissUnsavedNotice();
+    expect(store.showUnsavedNotice).toBe(false);
+
+    store.imageData = { url: 'https://x/second.png' } as never;
+    expect(store.showUnsavedNotice).toBe(true);
+  });
+
   it('upscaleImage appends form data and handles object errors', async () => {
     const store = useGenerateStore();
     await store.upscaleImage({
@@ -410,6 +464,31 @@ describe('useGenerateStore', () => {
       .mock.calls.find(([path]) => fetchUrlString(path).includes('reference-images'));
     expect(refCall).toBeDefined();
     expect((refCall![1]!.body as FormData).get('format')).toBe('webp');
+  });
+
+  it.each([
+    ['photo.jpeg', 'application/octet-stream', 'jpg'],
+    ['photo.png', 'application/octet-stream', 'png'],
+    ['blob', 'image/jpeg', 'jpg'],
+    ['blob', 'image/webp', 'webp'],
+    ['blob', 'application/octet-stream', 'png'],
+  ])('infers upload format for %s (%s) as %s', async (name, type, expected) => {
+    const aside = useAsideStore();
+    aside.clearReferenceImages();
+    aside.addReferenceImage(new File(['x'], name, { type }));
+
+    mockFetchByUrl((url) => {
+      if (url.includes('reference-images')) {
+        return { data: { value: { urls: ['https://cdn/x'] } }, error: { value: null } };
+      }
+      return { data: { value: {} }, error: { value: null } };
+    });
+
+    await useGenerateStore().generateImage(imageBody);
+    const refCall = vi
+      .mocked(useFetch)
+      .mock.calls.find(([path]) => fetchUrlString(path).includes('reference-images'));
+    expect((refCall![1]!.body as FormData).get('format')).toBe(expected);
   });
 
   it('retryFailed no-ops without a payload and retries remembered actions', async () => {

@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import UserDetails from '@/components/Profile/UserDetails.vue';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
+import { PLAN } from '@visual-ai/shared';
 
 vi.mock('vue-clerk', () => ({
   useUser: () => ({
@@ -46,6 +47,7 @@ describe('UserDetails', () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.unstubAllEnvs();
   });
 
   it('renders profile fields from the user store', () => {
@@ -221,5 +223,50 @@ describe('UserDetails', () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.text()).toContain('alan@example.com');
     expect(wrapper.text()).toContain('Alan Turing');
+  });
+
+  describe('plan status', () => {
+    const PORTAL_URL = 'https://billing.example.com/portal';
+    const PERIOD_END = '2030-01-15T00:00:00.000Z';
+
+    function seedPro(store: ReturnType<typeof useUserStore>, cancelAtPeriodEnd: boolean) {
+      seedUser(store);
+      store.plan = PLAN.PRO;
+      store.periodEnd = PERIOD_END;
+      store.cancelAtPeriodEnd = cancelAtPeriodEnd;
+    }
+
+    it('shows no Pro status or portal link for free users', () => {
+      vi.stubEnv('VITE_DODO_CUSTOMER_PORTAL_URL', PORTAL_URL);
+      seedUser(useUserStore());
+      const wrapper = mountDetails();
+      expect(wrapper.find('[data-testid="profile-pro-status"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="manage-subscription-link"]').exists()).toBe(false);
+    });
+
+    it('shows renewal date and the portal link for Pro users', () => {
+      vi.stubEnv('VITE_DODO_CUSTOMER_PORTAL_URL', PORTAL_URL);
+      seedPro(useUserStore(), false);
+      const wrapper = mountDetails();
+      expect(wrapper.get('[data-testid="profile-pro-status"]').text()).toContain('Renews on');
+      expect(wrapper.get('[data-testid="manage-subscription-link"]').attributes('href')).toBe(
+        PORTAL_URL,
+      );
+    });
+
+    it('shows the end date when the subscription is set to cancel', () => {
+      vi.stubEnv('VITE_DODO_CUSTOMER_PORTAL_URL', PORTAL_URL);
+      seedPro(useUserStore(), true);
+      const wrapper = mountDetails();
+      expect(wrapper.get('[data-testid="profile-pro-status"]').text()).toContain('Pro ends on');
+    });
+
+    it('omits the portal link when no portal URL is configured', () => {
+      vi.stubEnv('VITE_DODO_CUSTOMER_PORTAL_URL', '');
+      seedPro(useUserStore(), false);
+      const wrapper = mountDetails();
+      expect(wrapper.find('[data-testid="profile-pro-status"]').exists()).toBe(true);
+      expect(wrapper.find('[data-testid="manage-subscription-link"]').exists()).toBe(false);
+    });
   });
 });

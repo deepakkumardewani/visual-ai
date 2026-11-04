@@ -409,7 +409,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Contract matches SPEC; stale FX, failed lookup and unknown country give USD; unauthenticated request returns 200; checkout code does not import `prices.ts` (grep).
 - **Verify:** `cd apps/api && bun run test`; `bun run check`; `grep -rn "prices" apps/api/src/payments/service.ts` prints nothing.
 
-### ☐ T8.3 Enable Adaptive Currency (owner, manual)
+### ✅ T8.3 Enable Adaptive Currency (owner, manual)
 
 - **Kind:** walkthrough
 - **Files:** none
@@ -449,23 +449,23 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 **Adds:** Pro badge, pricing and upgrade dialog with local currency, lock badges on premium models, and a not-saved notice with Download for over-cap results.
 **Try in UI:** As a free user open the pricing dialog and see the Pro price in local currency ; pick a locked premium model and see the upsell ; fill history and generate to see the not-saved notice with Download ; as Pro open the user menu and see the Pro badge.
 
-### ☐ T9.1 Plan state and Pro badge
+### ✅ T9.1 Plan state and Pro badge
 
 - **Kind:** implementation
-- **Files:** `apps/web/src/stores/user.ts`, `apps/web/src/components/Header/UserMenu.vue`, `apps/web/src/components/Profile/UserDetails.vue`
+- **Files:** `apps/web/src/stores/user.ts`, `apps/web/src/components/Header/UserMenu.vue`, `apps/web/src/components/Profile/UserDetails.vue`, `apps/web/src/components/Profile/UserDetails.test.ts`, `apps/web/.env.example`
 - **Do:** Store `plan`, `periodEnd`, `cancelAtPeriodEnd` from the existing `GET /users/:id` fetch; expose an `isPro` getter; Pro badge in the user menu; Dodo customer portal link on the profile.
 - **Acceptance:** Free users see no badge; Pro users see badge and portal link; state updates on refetch.
 - **Verify:** `cd apps/web && bun run check`; `bun run test`.
 
-### ☐ T9.2 Pricing and upgrade dialog
+### ✅ T9.2 Pricing and upgrade dialog
 
 - **Kind:** implementation
-- **Files:** `apps/web/src/components/Dialogs/PricingDialog.vue`, `apps/web/src/components/Pricing/PricingProCard.vue`, `apps/web/src/composables/usePricingCatalog.ts`, `apps/web/src/payments/usePurchase.ts`, `apps/web/src/payments/checkoutClient.ts`
+- **Files:** `apps/web/src/components/Dialogs/PricingDialog.vue`, `apps/web/src/components/Pricing/PricingProCard.vue`, `apps/web/src/composables/usePricingCatalog.ts`, `apps/web/src/payments/usePurchase.ts`, `apps/web/src/payments/checkoutClient.ts`, `apps/web/src/payments/constants.ts`, `apps/web/src/components/Pricing/PricingPacks.vue`, `apps/web/src/components/Dialogs/BuyMoreCreditsDialog.vue`, `apps/web/src/components/Dialogs/PricingDialog.test.ts`, `apps/web/src/components/Pricing/PricingPacks.test.ts`, `apps/web/src/components/Dialogs/BuyMoreCreditsDialog.test.ts`
 - **Do:** Extend the existing pricing dialog and catalog (no parallel dialog or store): new `PricingProCard.vue` with perk list, localized Pro price and the note "Approx. price; final amount in your currency is shown at checkout"; `usePricingCatalog` fetches `GET /payments/prices` and formats credit pack prices too; subscribe calls `POST /payments/subscribe`; 409 handled gracefully.
 - **Acceptance:** Local currency with a geo header, USD without; 409 shows a friendly "already Pro" message; pack prices localized.
 - **Verify:** `cd apps/web && bun run check`; `bun run test`.
 
-### ☐ T9.3 Premium lock badges
+### ✅ T9.3 Premium lock badges
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue`, `apps/web/src/components/Dashboard/ModelPicker/PremiumLockBadge.vue`, `apps/web/src/stores/generate.ts`
@@ -473,7 +473,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Free users see locks and upsell; Pro users see none; 403 opens the pricing dialog instead of a generic error.
 - **Verify:** `cd apps/web && bun run check`; `bun run test`.
 
-### ☐ T9.4 Unsaved result notice
+### ✅ T9.4 Unsaved result notice
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dashboard/Canvas/UnsavedResultNotice.vue`, `apps/web/src/components/Dashboard/Canvas/ResultCanvas.vue`, `apps/web/src/stores/generate.ts`
@@ -481,7 +481,7 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Notice persists until dismissed or navigated away; CTAs differ by plan; Download uses the Replicate URL.
 - **Verify:** `cd apps/web && bun run check`; `bun run test`.
 
-### ☐ T9.5 Unit: plan, pricing and generate state
+### ✅ T9.5 Unit: plan, pricing and generate state
 
 - **Kind:** unit
 - **Files:** `apps/web/src/stores/user.ts`, `apps/web/src/composables/usePricingCatalog.ts`, `apps/web/src/stores/generate.ts`
@@ -489,20 +489,20 @@ Commands: web `cd apps/web && bun run test` / `bun run check` / `bun run lint`; 
 - **Acceptance:** Every file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/stores src/composables --coverage --coverage.include=src/stores/user.ts,src/composables/usePricingCatalog.ts,src/stores/generate.ts --coverage.reporter=text`
 
-### ☐ T9.6 Unit: UI components with logic
+### ✅ T9.6 Unit: UI components with logic
 
 - **Kind:** unit
-- **Files:** `apps/web/src/components/Pricing/PricingProCard.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue`, `apps/web/src/components/Dashboard/Canvas/UnsavedResultNotice.vue`
+- **Files:** `apps/web/src/components/Pricing/PricingProCard.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue`, `apps/web/src/components/Dashboard/Canvas/UnsavedResultNotice.vue`, `apps/web/src/components/Pricing/PricingProCard.test.ts`, `apps/web/src/components/Dashboard/Canvas/UnsavedResultNotice.test.ts`
 - **Do:** Component tests for the Pro card (409, price display), lock rendering, notice CTA per plan.
 - **Acceptance:** Every file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/components --coverage --coverage.include=src/components/Pricing/PricingProCard.vue,src/components/Dashboard/ModelPicker/ModelOption.vue,src/components/Dashboard/Canvas/UnsavedResultNotice.vue --coverage.reporter=text`
 
-### ☐ T9.7 E2E: Pro tier
+### ✅ T9.7 E2E: Pro tier
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` free user sees locked premium model and upsell; `@critical` webhook-simulated Pro can select a premium model; `@high` not-saved notice with Download and correct CTA per plan; `@high` Pro generation hidden from Explore; `@high` mocked geo header shows local currency, no header shows USD; `@medium` 409 on subscribing while already Pro; `@medium` Pro badge persists after reload.
 - **Spec:** `apps/web/e2e/qa/pro-tier.spec.ts`
-- **Files:** `apps/web/e2e/support/signWebhook.ts`
+- **Files:** `apps/web/e2e/support/signWebhook.ts`, `apps/web/e2e/support/proWebhook.ts`, `apps/web/e2e/support/proPerksSeed.ts`
 - **Acceptance:** Scenarios derived from SPEC Workstream B pass; Pro state set only via signed webhook.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/pro-tier.spec.ts --repeat-each=3`
 

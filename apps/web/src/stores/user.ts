@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 import type { IImageObject, IPayment, IUser } from '@/types';
+import { PLAN, type Plan } from '@visual-ai/shared';
 
 import { useAuthStore } from '@/stores/auth';
 import { useFetch } from '@/composables/useFetch';
@@ -17,6 +18,9 @@ export const useUserStore = defineStore('user', () => {
   const userId = ref('');
   const credits = ref(0);
   const dailyCredits = ref(0);
+  const plan = ref<Plan>(PLAN.FREE);
+  const periodEnd = ref<IUser['periodEnd']>(null);
+  const cancelAtPeriodEnd = ref(false);
   /** True after the first getUserDetails attempt finishes (success or failure). */
   const isReady = ref(false);
   const hasJustSubscribed = ref(false);
@@ -32,6 +36,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const hasCredits = computed(() => credits.value > 0);
+  const isPro = computed(() => plan.value === PLAN.PRO);
   async function getUserDetails() {
     if (!userId.value) return;
 
@@ -67,6 +72,9 @@ export const useUserStore = defineStore('user', () => {
       }
       credits.value = userData.credits;
       dailyCredits.value = userData.dailyCredits ?? 0;
+      plan.value = userData.plan ?? PLAN.FREE;
+      periodEnd.value = userData.periodEnd ?? null;
+      cancelAtPeriodEnd.value = userData.cancelAtPeriodEnd ?? false;
     } catch (error) {
       log.error('getUserDetails failed', { error, userId: userId.value });
     } finally {
@@ -134,6 +142,10 @@ export const useUserStore = defineStore('user', () => {
     userId,
     credits,
     dailyCredits,
+    plan,
+    periodEnd,
+    cancelAtPeriodEnd,
+    isPro,
     userDetails,
     history,
     isReady,

@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import type { Model } from '@/types/model';
+import { PREMIUM_MODEL_KEYS, type ModelKey } from '@visual-ai/shared';
+import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
+
+import { useDialogStore } from '@/stores/dialog';
+import { useUserStore } from '@/stores/user';
 
 import { useDashboardMotion } from '@/composables/useDashboardMotion';
 import { getModelBestForHint, getModelLogoUrl, getModelSpeedHint } from '@/utils/models';
 
+import PremiumLockBadge from '@/components/Dashboard/ModelPicker/PremiumLockBadge.vue';
 import ProviderIcon from '@/components/primitives/ProviderIcon.vue';
 
 const props = defineProps<{
@@ -12,9 +18,12 @@ const props = defineProps<{
   selected?: boolean;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   select: [];
 }>();
+
+const dialogStore = useDialogStore();
+const { isPro } = storeToRefs(useUserStore());
 
 const { interactiveTransition, pressable } = useDashboardMotion();
 
@@ -22,6 +31,18 @@ const logoUrl = computed(() => getModelLogoUrl(props.model.iconUrl));
 const speedHint = computed(() => getModelSpeedHint(props.model.id));
 const creditCost = computed(() => props.model.creditCost ?? 1);
 const bestFor = computed(() => getModelBestForHint(props.model));
+const isLocked = computed(
+  () => !isPro.value && PREMIUM_MODEL_KEYS.includes(props.model.id as ModelKey),
+);
+
+// Locked models upsell instead of selecting, so a free user never queues a request the API rejects.
+function onClick() {
+  if (isLocked.value) {
+    dialogStore.showPricing();
+    return;
+  }
+  emit('select');
+}
 </script>
 
 <template>
@@ -36,7 +57,8 @@ const bestFor = computed(() => getModelBestForHint(props.model));
       pressable,
       selected ? 'tw-bg-surface-2 tw-ring-1 tw-ring-accent/30' : '',
     ]"
-    @click="$emit('select')"
+    :data-locked="isLocked || undefined"
+    @click="onClick"
   >
     <img
       v-if="logoUrl"
@@ -56,6 +78,7 @@ const bestFor = computed(() => getModelBestForHint(props.model));
     </span>
 
     <span class="tw-flex tw-shrink-0 tw-flex-col tw-items-end tw-gap-1 tw-pt-0.5">
+      <PremiumLockBadge v-if="isLocked" />
       <span
         v-if="speedHint"
         class="tw-text-[10px] tw-font-medium tw-uppercase tw-tracking-wide tw-text-ink-muted"

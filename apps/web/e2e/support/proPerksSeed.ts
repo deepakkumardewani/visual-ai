@@ -122,7 +122,10 @@ export type ExploreSeed = {
   publicItem: SeededImage;
 };
 
-/** Three throwaway users (Pro private, legacy without the field, free public), one image each. */
+/**
+ * Three throwaway users (Pro-to-be private, legacy without the field, free public), one image
+ * each. Plans are never written as Pro here: callers upgrade `userIds[0]` via the signed webhook.
+ */
 export async function seedExploreUsers(token: string): Promise<ExploreSeed> {
   const createdAt = new Date(Date.now() + FUTURE_OFFSET_MS);
   const privateImg = buildHistoryEntry(
@@ -138,7 +141,7 @@ export async function seedExploreUsers(token: string): Promise<ExploreSeed> {
     createdAt,
   );
   const rows = [
-    { suffix: 'pro', img: privateImg, plan: 'pro' },
+    { suffix: 'pro', img: privateImg, plan: 'free' },
     { suffix: 'legacy', img: legacyImg, plan: undefined },
     { suffix: 'free', img: publicImg, plan: 'free' },
   ];
@@ -167,4 +170,11 @@ export async function seedExploreUsers(token: string): Promise<ExploreSeed> {
 
 export async function deleteUsers(userIds: string[]): Promise<void> {
   await withUsers((users) => users.deleteMany({ userId: { $in: userIds } }));
+}
+
+export async function readPlan(userId: string): Promise<string | undefined> {
+  return withUsers(async (users) => {
+    const doc = await users.findOne({ userId }, { projection: { plan: 1 } });
+    return doc?.plan as string | undefined;
+  });
 }

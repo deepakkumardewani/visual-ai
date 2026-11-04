@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, shallowRef } from 'vue';
+import { computed, onMounted, shallowRef } from 'vue';
 
 import { useRouter } from 'vue-router';
 
 import LandingButton from '@/components/Landing/LandingButton.vue';
+import { usePricingCatalog } from '@/composables/usePricingCatalog';
 import { usePurchase } from '@/payments/usePurchase';
 import { useUserStore } from '@/stores/user';
 import type { CreditPack } from '@visual-ai/shared';
@@ -15,7 +16,10 @@ const props = defineProps<{
 const router = useRouter();
 const userStore = useUserStore();
 const { start } = usePurchase();
+const { formatPackPrice, formatPackPerCredit, loadPrices } = usePricingCatalog();
 const buyingId = shallowRef<string | null>(null);
+
+onMounted(loadPrices);
 
 const featuredId = computed(() => {
   return props.packs.reduce((best, pack) => {
@@ -30,14 +34,6 @@ const orderedPacks = computed(() => {
     return 0;
   });
 });
-
-function priceMajor(pack: CreditPack) {
-  return pack.priceMinor / 100;
-}
-
-function perCredit(pack: CreditPack) {
-  return (priceMajor(pack) / pack.credits).toFixed(2);
-}
 
 function savingsLabel(pack: CreditPack) {
   return pack.savingsPercent > 0 ? `${pack.savingsPercent}%` : undefined;
@@ -78,8 +74,8 @@ async function buyPack(pack: CreditPack) {
       >
         <p v-if="savingsLabel(pack)" class="pack__save">Save {{ savingsLabel(pack) }}</p>
         <h3 class="pack__credits">{{ pack.credits }} credits</h3>
-        <p class="pack__price">₹{{ priceMajor(pack) }}</p>
-        <p class="pack__unit">₹{{ perCredit(pack) }} per credit</p>
+        <p class="pack__price">{{ formatPackPrice(pack) }}</p>
+        <p class="pack__unit">{{ formatPackPerCredit(pack) }} per credit</p>
         <LandingButton
           class="pack__cta"
           :variant="pack.id === featuredId ? 'primary' : 'ghost'"

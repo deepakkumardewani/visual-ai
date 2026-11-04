@@ -14,7 +14,23 @@ const SAVE_ERROR_MESSAGE = 'Couldn’t save. Try again.';
 
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
-const { userDetails, isUpdatingName, isUpdatingUsername } = storeToRefs(userStore);
+const { userDetails, isUpdatingName, isUpdatingUsername, isPro, periodEnd, cancelAtPeriodEnd } =
+  storeToRefs(userStore);
+
+// Dodo hosts the customer portal (cancel / payment method); the URL is per environment.
+const billingPortalUrl = import.meta.env.VITE_DODO_CUSTOMER_PORTAL_URL as string | undefined;
+
+const periodEndLabel = computed(() => {
+  if (!periodEnd.value) return '';
+  return new Date(periodEnd.value).toLocaleDateString(undefined, { dateStyle: 'medium' });
+});
+
+const proStatusText = computed(() => {
+  if (!periodEndLabel.value) return '';
+  return cancelAtPeriodEnd.value
+    ? `Pro ends on ${periodEndLabel.value}`
+    : `Renews on ${periodEndLabel.value}`;
+});
 
 const firstName = ref('');
 const lastName = ref('');
@@ -111,6 +127,19 @@ watch(
             {{ userDetails?.fullName || 'Your profile' }}
           </h2>
           <p v-if="email" class="user-details__email">{{ email }}</p>
+          <p v-if="isPro" class="user-details__plan" data-testid="profile-pro-status">
+            <span class="user-details__pro-badge">Pro</span>
+            <span v-if="proStatusText">{{ proStatusText }}</span>
+            <a
+              v-if="billingPortalUrl"
+              :href="billingPortalUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="user-details__portal"
+              data-testid="manage-subscription-link"
+              >Manage subscription</a
+            >
+          </p>
         </div>
       </div>
       <ProfileCreditsCard />
@@ -286,6 +315,32 @@ watch(
   margin: 0.25rem 0 0;
   font-size: 0.9rem;
   color: rgb(var(--tw-ink-muted));
+}
+
+.user-details__plan {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: rgb(var(--tw-ink-muted));
+}
+
+.user-details__pro-badge {
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: rgb(var(--tw-accent) / 0.15);
+  color: rgb(var(--tw-accent));
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.user-details__portal {
+  color: rgb(var(--tw-accent));
+  text-decoration: underline;
 }
 
 .user-details__form {
