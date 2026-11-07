@@ -34,7 +34,7 @@ describe("UserModel schema", () => {
 
     it("defaults credits from shared constants", () => {
         expect(UserModel.schema.path("credits").options.default).toBe(SIGNUP_CREDITS)
-        expect(UserModel.schema.path("dailyCredits").options.default).toBe(DAILY_CREDITS)
+        expect(UserModel.schema.path("dailyCredits").options.default).toBe(DAILY_CREDITS.free)
     })
 
     it("keeps referralCode unique and sparse", () => {

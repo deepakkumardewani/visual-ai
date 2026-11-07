@@ -9,8 +9,9 @@ import LandingButton from '@/components/Landing/LandingButton.vue';
     <p class="eyebrow">Credits</p>
     <h1 class="hero__title">Free Forever, Always</h1>
     <p class="hero__lede">
-      Start with {{ SIGNUP_CREDITS }} persistent credits, earn {{ DAILY_CREDITS }} more every day,
-      and buy a pack only when you want more headroom. Nothing expires except unused daily credits.
+      Start with {{ SIGNUP_CREDITS }} persistent credits, earn {{ DAILY_CREDITS.free }} more every
+      day, and buy a pack only when you want more headroom. Nothing expires except unused daily
+      credits.
     </p>
     <LandingButton href="#packs" size="lg">Buy a credit pack</LandingButton>
   </header>

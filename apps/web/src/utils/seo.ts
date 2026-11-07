@@ -6,15 +6,15 @@ export const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 
 /** Signup + daily credits for marketing copy and FAQ JSON-LD sources. */
 export function newAccountCreditsDefinition(): string {
-  return `New accounts get ${SIGNUP_CREDITS} credits plus ${DAILY_CREDITS} daily credits.`;
+  return `New accounts get ${SIGNUP_CREDITS} credits plus ${DAILY_CREDITS.free} daily credits.`;
 }
 
 export function freeTierSignupFaqAnswer(): string {
-  return `Yes. You start with ${SIGNUP_CREDITS} credits and receive ${DAILY_CREDITS} more every day. Daily credits reset; purchased credits do not expire.`;
+  return `Yes. You start with ${SIGNUP_CREDITS} credits and receive ${DAILY_CREDITS.free} more every day. Daily credits reset; purchased credits do not expire.`;
 }
 
 export function colorizeFreeTierFaqAnswer(): string {
-  return `Yes, using your ${DAILY_CREDITS} daily credits (and the ${SIGNUP_CREDITS} credits you receive at signup). Each colorize run costs 2 credits.`;
+  return `Yes, using your ${DAILY_CREDITS.free} daily credits (and the ${SIGNUP_CREDITS} credits you receive at signup). Each colorize run costs 2 credits.`;
 }
 
 export function referralGiveEarnCopy(): string {

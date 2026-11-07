@@ -28,7 +28,7 @@ const UserSchema = new Schema(
         fullName: { type: String, required: false, default: "" },
         email: { type: String, required: false, unique: true, default: "" },
         credits: { type: Number, default: SIGNUP_CREDITS },
-        dailyCredits: { type: Number, default: DAILY_CREDITS },
+        dailyCredits: { type: Number, default: DAILY_CREDITS.free },
         referralCode: {
             type: String,
             unique: true,

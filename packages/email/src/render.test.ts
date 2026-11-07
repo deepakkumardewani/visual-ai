@@ -23,7 +23,7 @@ describe('renderV2Announcement', () => {
     expect(text).not.toMatch(/<[a-z][^>]*>/i);
     expect(text.toLowerCase()).toContain('hi sam');
     expect(text).toContain(data.postalAddress);
-    expect(text).toContain(String(DAILY_CREDITS));
+    expect(text).toContain(String(DAILY_CREDITS.free));
     expect(text).toContain(data.unsubscribeUrl);
   });
 

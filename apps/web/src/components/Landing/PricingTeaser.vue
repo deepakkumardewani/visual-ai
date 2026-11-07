@@ -11,7 +11,7 @@ const plans = [
     featured: false,
     points: [
       `${SIGNUP_CREDITS} persistent credits at signup`,
-      `${DAILY_CREDITS} daily credits (unused reset)`,
+      `${DAILY_CREDITS.free} daily credits (unused reset)`,
       'Access to all models',
       'Everyday models cost 1 credit',
     ],
@@ -42,8 +42,8 @@ const plans = [
         Free forever. Pay only for what you create.
       </h2>
       <p v-reveal="{ delay: 0.1 }" class="pricing__sub">
-        Start with {{ SIGNUP_CREDITS }} persistent credits and {{ DAILY_CREDITS }} daily. Unused
-        daily credits reset; purchased credits never expire.
+        Start with {{ SIGNUP_CREDITS }} persistent credits and {{ DAILY_CREDITS.free }} daily.
+        Unused daily credits reset; purchased credits never expire.
       </p>
     </div>
 

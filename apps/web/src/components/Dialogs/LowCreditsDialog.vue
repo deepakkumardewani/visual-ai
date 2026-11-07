@@ -25,6 +25,8 @@ function handleBuyCredits() {
   dialogStore.showBuyCredits();
 }
 
+const { dailyAllowance } = storeToRefs(userStore);
+
 const isCritical = computed(() => (userStore.dailyCredits || 0) + (userStore.credits || 0) <= 5);
 
 const creditRequirement = computed(() => {
@@ -86,7 +88,8 @@ const featureText = computed(() => {
       <p class="low__copy">
         You are running low on credits. To {{ featureText }},
         {{ creditRequirement }}
-        {{ creditRequirement === 1 ? 'credit is' : 'credits are' }} required.
+        {{ creditRequirement === 1 ? 'credit is' : 'credits are' }} required. Your plan refreshes
+        {{ dailyAllowance }} credits every day.
       </p>
 
       <div class="low__chip" :class="{ 'low__chip--critical': isCritical }">

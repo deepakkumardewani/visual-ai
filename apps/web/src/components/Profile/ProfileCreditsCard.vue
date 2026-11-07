@@ -9,7 +9,7 @@ import LandingButton from '@/components/Landing/LandingButton.vue';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
-const { credits, dailyCredits } = storeToRefs(userStore);
+const { credits, dailyCredits, dailyAllowance } = storeToRefs(userStore);
 
 const totalCredits = computed(() => (dailyCredits.value || 0) + (credits.value || 0));
 </script>
@@ -21,7 +21,7 @@ const totalCredits = computed(() => (dailyCredits.value || 0) + (credits.value |
       <span class="profile-credits__unit">credits</span>
     </p>
     <p class="profile-credits__meta">
-      {{ dailyCredits || 0 }} daily · {{ credits || 0 }} persistent
+      {{ dailyCredits || 0 }}/{{ dailyAllowance }} daily · {{ credits || 0 }} persistent
     </p>
     <LandingButton
       variant="primary"

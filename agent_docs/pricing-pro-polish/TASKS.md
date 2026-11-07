@@ -11,7 +11,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** Model tiers, the 5-credit cost, per-plan daily credits (30 Free, 50 Pro), the reset hour and the history-full helper live in one shared place. Every existing consumer is migrated so the repo still compiles and shows the right numbers.
 **Try in UI:** No new UI ; run `grep -rn DAILY_CREDITS apps packages --exclude-dir=node_modules --exclude-dir=coverage` and confirm no scalar use ; run `grep -n "4–5" apps/web/src/utils/pricingFAQ.json` and confirm no old premium cost ; open the dashboard and confirm Free shows 30 daily credits.
 
-### ☐ T1.1 Shared tier, cost, daily, history constants
+### ✅ T1.1 Shared tier, cost, daily, history constants
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/models/credits.ts`, `packages/shared/src/models/plans.ts`, `packages/shared/src/models/index.ts`, `packages/shared/src/models/plans.test.ts`, `packages/shared/src/models/registry.ts`
@@ -19,7 +19,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC items 6 and 7 constants exist exactly as specified; `PREMIUM_MODEL_KEYS` has 6 entries; shared package typechecks; no duplicated model lists.
 - **Verify:** `cd packages/shared && npx vitest run`; `bun run check`.
 
-### ☐ T1.2 Migrate API DAILY_CREDITS consumers
+### ✅ T1.2 Migrate API DAILY_CREDITS consumers
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/models/user.ts`, `apps/api/src/models/user.test.ts`, `apps/api/src/services/generation-service.ts`, `apps/api/src/utils/cronJobs.ts`, `apps/api/src/utils/cronJobs.test.ts`
@@ -27,7 +27,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 6 completeness: no scalar use in `apps/api`; API typechecks; `SIGNUP_CREDITS` and `REFERRAL_BONUS` unchanged.
 - **Verify:** `cd apps/api && bun run test`; `bun run check`; `grep -rn DAILY_CREDITS apps/api/src --exclude-dir=node_modules`.
 
-### ☐ T1.3 Migrate email package consumers
+### ✅ T1.3 Migrate email package consumers
 
 - **Kind:** implementation
 - **Files:** `packages/email/src/constants.ts`, `packages/email/src/V2Announcement.tsx`, `packages/email/src/components/CreditsCallout.tsx`, `packages/email/src/V2Announcement.test.ts`, `packages/email/src/render.test.ts`
@@ -35,7 +35,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 6 email consumers compile and render tests pass; no email is sent or any mail client invoked.
 - **Verify:** `cd packages/email && npx vitest run`; `bun run check`.
 
-### ☐ T1.4 Migrate web stores and utils
+### ✅ T1.4 Migrate web stores and utils
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/stores/user.ts`, `apps/web/src/utils/landing.ts`, `apps/web/src/utils/seo.ts`, `apps/web/src/utils/seo.test.ts`, `apps/web/src/utils/featureLandings.test.ts`
@@ -43,7 +43,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 6: TS copy derives from constants; user store exposes the plan-appropriate daily amount (30 Free, 50 Pro).
 - **Verify:** `cd apps/web && npx vitest run src/utils/seo.test.ts src/utils/featureLandings.test.ts src/utils/landing.test.ts src/stores/user.test.ts`; `bun run check`.
 
-### ☐ T1.5 Migrate web components A
+### ✅ T1.5 Migrate web components A
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Landing/FinalCta.vue`, `apps/web/src/components/Landing/PricingTeaser.vue`, `apps/web/src/components/Pricing/PricingHero.vue`, `apps/web/src/components/Dialogs/LowCreditsDialog.vue`, `apps/web/src/components/Dialogs/ReferralCopyDialog.vue`
@@ -51,7 +51,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 6: these components compile and render 30 for Free and 50 for Pro where plan-dependent; no literal daily number remains.
 - **Verify:** `cd apps/web && npx vitest run src/components/Landing src/components/Pricing/PricingHero.test.ts src/components/Dialogs/LowCreditsDialog.test.ts src/components/Dialogs/ReferralCopyDialog.test.ts`; `bun run check`.
 
-### ☐ T1.6 Migrate web components B and FAQ JSON
+### ✅ T1.6 Migrate web components B and FAQ JSON
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Profile/ProfileCreditsCard.vue`, `apps/web/src/components/Dialogs/BuyMoreCreditsDialog.vue`, `apps/web/src/components/Pricing/PricingCreditStory.vue`, `apps/web/src/utils/generalFAQ.json`, `apps/web/src/utils/models.ts`
@@ -59,7 +59,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 6 completeness: `grep -rn DAILY_CREDITS apps packages --exclude-dir=node_modules --exclude-dir=coverage` shows no remaining scalar use; FAQ JSON matches constants.
 - **Verify:** `cd apps/web && npx vitest run src/components/Profile src/components/Dialogs/BuyMoreCreditsDialog.test.ts src/components/Pricing/PricingCreditStory.test.ts src/utils/models.test.ts`; `bun run check`.
 
-### ☐ T1.7 Pricing FAQ cost and daily copy
+### ✅ T1.7 Pricing FAQ cost and daily copy
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/pricingFAQ.json`
@@ -67,23 +67,23 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 7: no FAQ copy states an old cost; SPEC item 6: daily numbers match the constants.
 - **Verify:** `grep -nE "4–5|4-5" apps/web/src/utils/pricingFAQ.json` returns nothing; `cd apps/web && npx vitest run src/utils`.
 
-### ☐ T1.8 Unit: shared constants
+### ✅ T1.8 Unit: shared constants
 
 - **Kind:** unit
-- **Files:** `packages/shared/src/models/credits.ts`, `packages/shared/src/models/plans.ts`
+- **Files:** `packages/shared/src/models/credits.ts`, `packages/shared/src/models/plans.ts`, `packages/shared/src/models/credits.test.ts`, `packages/shared/src/models/plans.test.ts`
 - **Do:** Write `credits.test.ts` and extend `plans.test.ts`: parametrized table over all 10 model keys asserting `getCreditCost` and `PREMIUM_MODEL_KEYS` membership (length 6); `getDailyCredits(true|false)`; `getHistoryFullLevel` boundaries 89/90/99/100 of 100 and 500, count above cap is full, NaN/undefined is none.
 - **Acceptance:** SPEC item 7 unit criterion and item 8 helper boundaries covered; every file at least 80% lines/branches/functions/statements, target over 95%; no `it.fails` unless the source has a real bug.
 - **Verify:** `cd packages/shared && npx vitest run src/models/credits.test.ts src/models/plans.test.ts --coverage --coverage.include=src/models/credits.ts,src/models/plans.ts --coverage.reporter=text`
 
-### ☐ T1.9 Unit: daily-credit copy consistency
+### ✅ T1.9 Unit: daily-credit copy consistency
 
 - **Kind:** unit
-- **Files:** `apps/web/src/utils/landing.ts`, `apps/web/src/utils/seo.ts`
+- **Files:** `apps/web/src/utils/landing.ts`, `apps/web/src/utils/seo.ts`, `apps/web/src/utils/dailyCreditsConsistency.test.ts`
 - **Do:** Add `apps/web/src/utils/dailyCreditsConsistency.test.ts` that parses `generalFAQ.json` and `pricingFAQ.json` and asserts every number adjacent to the word "daily" agrees with `DAILY_CREDITS` (do not match "50 persistent"), and that landing and SEO output contain the Free amount derived from shared.
 - **Acceptance:** SPEC item 6 consistency test across shared, both FAQ JSONs, landing, seo passes and fails if a number drifts; coverage on listed files at least 80%, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/utils/dailyCreditsConsistency.test.ts src/utils/landing.test.ts src/utils/seo.test.ts --coverage --coverage.include=src/utils/landing.ts,src/utils/seo.ts --coverage.reporter=text`
 
-### ☐ T1.10 E2E: daily credits copy
+### ✅ T1.10 E2E: daily credits copy
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` Free dashboard credit chip and profile card show 30 daily credits; `@high` landing and /pricing copy mention 30 daily credits; `@high` low-credits dialog shows the Free amount; `@medium` the app still loads with the migrated constants after reload.
@@ -92,7 +92,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** Scenarios derived from SPEC item 6 copy criteria pass; no paid endpoint reached; `paidCallGuard` clean.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/daily-credits-copy.spec.ts --repeat-each=3`
 
-### ☐ T1.11 Gate: Phase 1
+### ✅ T1.11 Gate: Phase 1
 
 - **Kind:** gate
 - **Files:** none

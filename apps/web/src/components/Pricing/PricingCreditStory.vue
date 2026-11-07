@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { SIGNUP_CREDITS } from '@visual-ai/shared';
+import { DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
 
 const beats = [
   {
     label: 'Daily Credits',
-    value: '30',
+    value: String(DAILY_CREDITS.free),
     copy: 'Refreshed at midnight. Use them that day — unused daily credits do not roll over.',
   },
   {
@@ -14,8 +14,8 @@ const beats = [
   },
   {
     label: 'Pay Per Use',
-    value: '1–8',
-    copy: 'Budget generation is 1 credit. Utilities are 2. Premium models and upscalers run 4–8. The studio shows the cost before you run.',
+    value: '1–5',
+    copy: 'Budget generation is 1 credit. Utilities are 2. Premium upscalers are 4 and premium generation is 5. The studio shows the cost before you run.',
   },
 ] as const;
 </script>

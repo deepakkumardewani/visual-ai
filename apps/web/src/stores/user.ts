@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 import type { IImageObject, IPayment, IUser } from '@/types';
-import { PLAN, type Plan } from '@visual-ai/shared';
+import { PLAN, getDailyCredits, type Plan } from '@visual-ai/shared';
 
 import { useAuthStore } from '@/stores/auth';
 import { useFetch } from '@/composables/useFetch';
@@ -37,6 +37,8 @@ export const useUserStore = defineStore('user', () => {
 
   const hasCredits = computed(() => credits.value > 0);
   const isPro = computed(() => plan.value === PLAN.PRO);
+  // Plan-appropriate daily amount (30 Free, 50 Pro), distinct from the remaining `dailyCredits` balance.
+  const dailyAllowance = computed(() => getDailyCredits(isPro.value));
   async function getUserDetails() {
     if (!userId.value) return;
 
@@ -146,6 +148,7 @@ export const useUserStore = defineStore('user', () => {
     periodEnd,
     cancelAtPeriodEnd,
     isPro,
+    dailyAllowance,
     userDetails,
     history,
     isReady,

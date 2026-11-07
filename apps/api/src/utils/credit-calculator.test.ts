@@ -15,7 +15,7 @@ describe("calculateCreditCost", () => {
     it("uses the shared model cost for IMAGE generation when a model is provided", () => {
         expect(calculateCreditCost(FeatureType.IMAGE, "FLUX_QUICK")).toBe(1)
         expect(calculateCreditCost(FeatureType.IMAGE, "FLUX_PRO")).toBe(5)
-        expect(calculateCreditCost(FeatureType.IMAGE, "IMAGEN_4_ULTRA")).toBe(4)
+        expect(calculateCreditCost(FeatureType.IMAGE, "IMAGEN_4_ULTRA")).toBe(5)
     })
 
     it("throws when a utility feature is missing a modelKey", () => {

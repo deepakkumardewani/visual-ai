@@ -49,7 +49,7 @@ describe('featureLandings', () => {
     const freeFaq = textToImage?.faqs.find((f) => f.question.includes('free AI image'));
     expect(freeFaq?.answer).toBe(freeTierSignupFaqAnswer());
     expect(freeFaq?.answer).toContain(String(SIGNUP_CREDITS));
-    expect(freeFaq?.answer).toContain(String(DAILY_CREDITS));
+    expect(freeFaq?.answer).toContain(String(DAILY_CREDITS.free));
 
     const colorize = featureLandingByPath('/colorize-photo');
     const colorizeFree = colorize?.faqs.find((f) => f.question.includes('for free'));

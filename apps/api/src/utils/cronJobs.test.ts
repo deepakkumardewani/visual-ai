@@ -43,7 +43,10 @@ describe("cronJobs", () => {
         const job = mocks.schedule.mock.calls[0]?.[1] as () => Promise<void>
         await job()
 
-        expect(mocks.updateMany).toHaveBeenCalledWith({}, { $set: { dailyCredits: DAILY_CREDITS } })
+        expect(mocks.updateMany).toHaveBeenCalledWith(
+            {},
+            { $set: { dailyCredits: DAILY_CREDITS.free } },
+        )
         expect(mocks.logger.info).toHaveBeenCalledWith("Daily credits successfully reset")
     })
 
