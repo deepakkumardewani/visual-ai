@@ -227,7 +227,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** In local development the API can be told which country to price for, so INR and other currencies are testable. Production and staging ignore the override entirely.
 **Try in UI:** Set `DEV_COUNTRY_OVERRIDE=IN` in the API env (owner action, server already running) ; open pricing and the buy-credits dialog and see rupee prices ; remove it and confirm USD again.
 
-### ☐ T4.1 Geo override and prices route
+### ✅ T4.1 Geo override and prices route
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/geo.ts`, `apps/api/src/payments/router.ts`
@@ -235,7 +235,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 4: override works in dev and test, is ignored in production and staging; invalid codes fall through to header/IP.
 - **Verify:** `cd apps/api && bun run test src/payments/geo.test.ts src/payments/router.test.ts`; `bun run check`.
 
-### ☐ T4.2 Env schema, startup warning and docs
+### ✅ T4.2 Env schema, startup warning and docs
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/config/env.ts`, `apps/api/.env.example`
@@ -243,7 +243,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 4: env var documented and validated; warning logged when set; boot never fails because of it.
 - **Verify:** `cd apps/api && bun run test src/config/env.test.ts`; `bun run check`.
 
-### ☐ T4.3 Unit: geo, env and prices route
+### ✅ T4.3 Unit: geo, env and prices route
 
 - **Kind:** unit
 - **Files:** `apps/api/src/payments/geo.ts`, `apps/api/src/payments/router.ts`, `apps/api/src/config/env.ts`
@@ -251,7 +251,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 4 unit criteria; every file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/api && npx vitest run src/payments/geo.test.ts src/payments/router.test.ts src/config/env.test.ts --coverage --coverage.include=src/payments/geo.ts,src/payments/router.ts,src/config/env.ts --coverage.reporter=text`
 
-### ☐ T4.4 Unit: web INR rendering
+### ✅ T4.4 Unit: web INR rendering
 
 - **Kind:** unit
 - **Files:** `apps/web/src/composables/usePricingCatalog.ts`
@@ -259,7 +259,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 4 web catalog test; files at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/composables/usePricingCatalog.test.ts --coverage --coverage.include=src/composables/usePricingCatalog.ts --coverage.reporter=text`
 
-### ☐ T4.5 E2E: localized currency
+### ✅ T4.5 E2E: localized currency
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` request with `cf-ipcountry: IN` shows rupee prices in pricing and the buy dialog; `@high` no header shows USD; `@high` `/payments/prices?country=ZZ` ignored and falls back to header or USD; `@medium` dev `?country=IN` on `/payments/prices` returns INR amounts.
@@ -268,7 +268,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** Scenarios derived from SPEC item 4 pass; country is set via the `cf-ipcountry` header or dev `?country=` (the always-running API is `NODE_ENV=development`, also under `E2E_SERVER=prod`, which only builds the web app); no paid call; the header-less case may hit the existing free ipapi.co fallback in the running API (not a paid call; unit tests mock it).
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/localized-prices.spec.ts --repeat-each=3`
 
-### ☐ T4.6 Gate: Phase 4
+### ✅ T4.6 Gate: Phase 4
 
 - **Kind:** gate
 - **Files:** none

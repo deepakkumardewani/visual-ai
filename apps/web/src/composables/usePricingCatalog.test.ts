@@ -274,3 +274,73 @@ describe('usePricingCatalog prices', () => {
     expect(second.proPrice.value).toContain('€');
   });
 });
+
+describe('usePricingCatalog localized currency rendering', () => {
+  let loadCatalog: () => ReturnType<typeof usePricingCatalog>;
+
+  beforeEach(async () => {
+    vi.resetModules();
+    vi.mocked(useFetch).mockReset();
+    const mod = await import('@/composables/usePricingCatalog');
+    loadCatalog = mod.usePricingCatalog;
+  });
+
+  it('renders an INR catalog with the rupee symbol for Pro and packs', async () => {
+    mockPricesResponse({
+      data: {
+        country: 'IN',
+        currency: 'INR',
+        isEstimate: true,
+        pro: { amountMinor: 49900, currency: 'INR' },
+        packs: [{ id: CREDIT_PACKS[0].id, amountMinor: 29900, currency: 'INR' }],
+      },
+      error: null,
+    });
+    const catalog = loadCatalog();
+    await catalog.loadPrices();
+
+    expect(catalog.proPrice.value).toContain('₹');
+    expect(catalog.proPrice.value).toMatch(/499/);
+    expect(catalog.proPrice.value).not.toContain('$');
+    expect(catalog.formatPackPrice(CREDIT_PACKS[0])).toMatch(/₹\s?299/);
+  });
+
+  it('keeps USD rendering unchanged when the API returns USD', async () => {
+    mockPricesResponse({
+      data: {
+        country: 'US',
+        currency: 'USD',
+        isEstimate: true,
+        pro: { amountMinor: 500, currency: 'USD' },
+        packs: [{ id: CREDIT_PACKS[0].id, amountMinor: 350, currency: 'USD' }],
+      },
+      error: null,
+    });
+    const catalog = loadCatalog();
+    await catalog.loadPrices();
+
+    expect(catalog.proPrice.value).toBe(shared.formatPrice(500, 'USD'));
+    expect(catalog.proPrice.value).toMatch(/\$\s?5\.00/);
+    expect(catalog.formatPackPrice(CREDIT_PACKS[0])).toMatch(/\$\s?3\.50/);
+  });
+
+  it('formats JPY as a zero-decimal currency', async () => {
+    mockPricesResponse({
+      data: {
+        country: 'JP',
+        currency: 'JPY',
+        isEstimate: true,
+        pro: { amountMinor: 750, currency: 'JPY' },
+        packs: [{ id: CREDIT_PACKS[0].id, amountMinor: 500, currency: 'JPY' }],
+      },
+      error: null,
+    });
+    const catalog = loadCatalog();
+    await catalog.loadPrices();
+
+    expect(catalog.proPrice.value).toMatch(/750$/);
+    expect(catalog.proPrice.value).not.toMatch(/[.,]\d{2}$/);
+    expect(catalog.proPrice.value).not.toContain('7.50');
+    expect(catalog.formatPackPrice(CREDIT_PACKS[0])).toMatch(/500$/);
+  });
+});

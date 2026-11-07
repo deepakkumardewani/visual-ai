@@ -44,6 +44,8 @@ const MANAGED_KEYS = [
     "ENABLE_CRON",
     "QUEUE_PREFIX",
     "ALLOWED_ORIGINS",
+    "E2E_USER_IDS",
+    "DEV_COUNTRY_OVERRIDE",
     "PAYMENT_PROVIDER",
     "PAYMENT_RETURN_URL",
     "DODO_PAYMENTS_API_KEY",
@@ -160,6 +162,52 @@ describe("env parse", () => {
         applyEnv({ ALLOWED_ORIGINS: " https://visual-ai.app, ,https://www.visual-ai.app " })
         const { env } = await importEnv()
         expect(env.ALLOWED_ORIGINS).toEqual(["https://visual-ai.app", "https://www.visual-ai.app"])
+    })
+
+    it("splits, trims, and drops empty E2E_USER_IDS", async () => {
+        applyEnv({ E2E_USER_IDS: " user_a, ,user_b " })
+        expect((await importEnv()).env.E2E_USER_IDS).toEqual(["user_a", "user_b"])
+    })
+
+    it("defaults E2E_USER_IDS to an empty list when unset", async () => {
+        applyEnv({ E2E_USER_IDS: undefined })
+        expect((await importEnv()).env.E2E_USER_IDS).toEqual([])
+    })
+
+    it("normalizes DEV_COUNTRY_OVERRIDE and warns that it is set", async () => {
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+        applyEnv({ DEV_COUNTRY_OVERRIDE: " in " })
+
+        expect((await importEnv()).env.DEV_COUNTRY_OVERRIDE).toBe("IN")
+        expect(warn).toHaveBeenCalledWith(expect.stringContaining("DEV_COUNTRY_OVERRIDE=IN"))
+    })
+
+    it.each(["XX1", "IND", "india", "  i1 "])(
+        "turns invalid DEV_COUNTRY_OVERRIDE %j into undefined, warns naming the value, and does not exit",
+        async (raw) => {
+            const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+            const exit = vi.spyOn(process, "exit").mockImplementation((() => {
+                throw new Error("process.exit")
+            }) as typeof process.exit)
+            applyEnv({ DEV_COUNTRY_OVERRIDE: raw })
+
+            expect((await importEnv()).env.DEV_COUNTRY_OVERRIDE).toBeUndefined()
+            expect(warn).toHaveBeenCalledWith(
+                expect.stringContaining(`DEV_COUNTRY_OVERRIDE="${raw.trim()}"`),
+            )
+            expect(warn).toHaveBeenCalledWith(
+                expect.stringContaining("not a valid ISO 3166-1 alpha-2"),
+            )
+            expect(exit).not.toHaveBeenCalled()
+        },
+    )
+
+    it("leaves DEV_COUNTRY_OVERRIDE undefined and silent when unset", async () => {
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+        applyEnv({ DEV_COUNTRY_OVERRIDE: undefined })
+
+        expect((await importEnv()).env.DEV_COUNTRY_OVERRIDE).toBeUndefined()
+        expect(warn).not.toHaveBeenCalled()
     })
 
     it("defaults PAYMENT_PROVIDER to dodo when unset", async () => {

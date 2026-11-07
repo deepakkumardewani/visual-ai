@@ -23,7 +23,10 @@ export const paymentsPublicRouter = Router()
 paymentsPublicRouter.get(
     "/payments/prices",
     asyncHandler(async (req: Request, res: Response) => {
-        const [country, rates] = await Promise.all([resolveCountry(req), getFxRates()])
+        const [country, rates] = await Promise.all([
+            resolveCountry(req, req.query.country),
+            getFxRates(),
+        ])
         res.status(200).json(buildPrices(country, rates))
     }),
 )
