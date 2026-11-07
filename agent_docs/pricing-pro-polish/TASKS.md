@@ -283,7 +283,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** The model picker shows one tidy line per model (logo, name and description, reference-image icon, PRO lock, cost) and groups models into Featured, Free and Pro sections.
 **Try in UI:** Open the model picker as Free ; confirm equal row heights and sections in order Featured, Free, Pro ; hover the reference-image icon to see "Up to N reference images" ; log in as Pro and confirm no locks.
 
-### ☐ T5.1 Single-line ModelOption
+### ✅ T5.1 Single-line ModelOption
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue`, `apps/web/src/components/Dashboard/ModelPicker/PremiumLockBadge.vue`
@@ -291,7 +291,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 3: rows have identical height, icon only for ref-capable models, exact tooltip text, Pro users see no lock.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/ModelPicker/ModelOption.test.ts`; `bun run check`.
 
-### ☐ T5.2 Featured / Free / Pro sections
+### ✅ T5.2 Featured / Free / Pro sections
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelCompanyGroup.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelCompanySubmenu.vue`
@@ -299,7 +299,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 3: sections in that order; Pro section shows locks for Free users; no change to `UpscaleModelPicker.vue` behaviour.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/ModelPicker`; `bun run check`.
 
-### ☐ T5.3 Unit: model picker
+### ✅ T5.3 Unit: model picker
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue`, `apps/web/src/components/Dashboard/ModelPicker/PremiumLockBadge.vue`
@@ -307,7 +307,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 3 unit criteria; files at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/ModelPicker --coverage --coverage.include=src/components/Dashboard/ModelPicker/ModelOption.vue,src/components/Dashboard/ModelPicker/ModelPickerPanel.vue,src/components/Dashboard/ModelPicker/PremiumLockBadge.vue --coverage.reporter=text`
 
-### ☐ T5.4 E2E: model menu
+### ✅ T5.4 E2E: model menu
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` sections appear in order Featured, Free, Pro; `@critical` all rows share one height; `@high` reference icon only on ref-capable models with exact tooltip; `@high` Free sees locks in Featured and Pro sections, Pro sees none; `@medium` desktop and mobile widths do not overflow.
@@ -316,7 +316,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** Scenarios derived from SPEC item 3 browser criteria pass; generation endpoints stubbed; `paidCallGuard` clean.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/model-menu.spec.ts --repeat-each=3`
 
-### ☐ T5.5 Gate: Phase 5
+### ✅ T5.5 Gate: Phase 5
 
 - **Kind:** gate
 - **Files:** none

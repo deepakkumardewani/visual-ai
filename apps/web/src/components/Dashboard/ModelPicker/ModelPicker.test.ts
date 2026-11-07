@@ -23,14 +23,11 @@ import ModelPicker from '@/components/Dashboard/ModelPicker/ModelPicker.vue';
 import { MODEL_IDS } from '@visual-ai/shared';
 import { FLUX_MODES, getFeaturedModels, MODELS } from '@/utils/models';
 
-// Non-featured models live in a per-company submenu that only renders on hover
-// (ModelCompanyGroup.vue). Simulate the mouseenter that Popover's real DOM would receive.
-function openCompanySubmenu(companyName: string) {
-  const label = body()
-    .findAll('span')
-    .find((el) => el.text() === companyName)!;
-  const row = label.element.parentElement!.parentElement as HTMLElement;
-  row.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+// Every model is listed in its tier section, so options are looked up by title.
+function findOption(title: string) {
+  return body()
+    .findAll('[data-testid="model-option"]')
+    .find((el) => el.text().includes(title))!;
 }
 
 describe('ModelPicker', () => {
@@ -84,9 +81,13 @@ describe('ModelPicker', () => {
 
     await wrapper.get('button').trigger('click');
     const options = body().findAll('[data-testid="model-option"]');
-    expect(options.length).toBe(getFeaturedModels().length);
-    expect(body().text()).toContain('Black Forest Labs');
-    expect(body().text()).toContain('OpenAI');
+    // Featured models repeat once in their tier section, and every model has exactly one tier.
+    expect(options.length).toBe(getFeaturedModels().length + MODELS.length);
+    expect(
+      body()
+        .findAll('h3')
+        .map((h) => h.text()),
+    ).toEqual(['Featured', 'Free', 'Pro']);
   });
 
   it('supports keyboard navigation between model options', async () => {
@@ -110,11 +111,7 @@ describe('ModelPicker', () => {
     await wrapper.get('button').trigger('click');
 
     const fluxPro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_PRO)!;
-    openCompanySubmenu(fluxPro.companyName!);
-    await wrapper.vm.$nextTick();
-    const proOption = body()
-      .findAll('[data-testid="model-option"]')
-      .find((el) => el.text().includes(fluxPro.title))!;
+    const proOption = findOption(fluxPro.title);
 
     await proOption.trigger('click');
 
@@ -131,11 +128,7 @@ describe('ModelPicker', () => {
     await wrapper.get('button').trigger('click');
 
     const flux11Pro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_1_1_PRO)!;
-    openCompanySubmenu(flux11Pro.companyName!);
-    await wrapper.vm.$nextTick();
-    const proOption = body()
-      .findAll('[data-testid="model-option"]')
-      .find((el) => el.text().includes(flux11Pro.title))!;
+    const proOption = findOption(flux11Pro.title);
 
     await proOption.trigger('click');
 

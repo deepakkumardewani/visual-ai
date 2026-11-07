@@ -5,9 +5,8 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import ModelOption from '@/components/Dashboard/ModelPicker/ModelOption.vue';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
-import { MODELS, FLUX_MODES, getModelBestForHint, getModelSpeedHint } from '@/utils/models';
-import type { Model } from '@/types/model';
-import { PLAN, PREMIUM_MODEL_KEYS, type ModelKey } from '@visual-ai/shared';
+import { MODELS, FLUX_MODES, getModelBestForHint } from '@/utils/models';
+import { MODEL_REGISTRY, PLAN, PREMIUM_MODEL_KEYS, type ModelKey } from '@visual-ai/shared';
 
 const premiumModel = MODELS.find((m) => m.id === 'GPT_IMAGE_2')!;
 const PRO_BADGE = '[data-testid="premium-lock-badge"]';
@@ -63,12 +62,19 @@ describe('ModelOption', () => {
     expect(wrapper.text()).toContain(getModelBestForHint(model));
     expect(wrapper.text()).toContain(String(model.creditCost));
     expect(wrapper.text()).not.toContain('cr');
-    const speedHint = getModelSpeedHint(model.id);
-    if (speedHint) {
-      expect(wrapper.text()).toContain(speedHint);
-    }
     expect(wrapper.text()).not.toContain('Premium');
   });
+
+  // Guards against Vue's whitespace condensing fusing the two spans ("Grok ImagineCheap, ...").
+  it.each(MODELS.map((m) => [m.title, m] as const))(
+    '%s separates name and description with a single space',
+    (_title, model) => {
+      const wrapper = mount(ModelOption, { props: { model } });
+      const label = wrapper.get('[data-testid="model-option-label"]').element;
+
+      expect(label.textContent).toBe(`${model.title} ${getModelBestForHint(model)}`);
+    },
+  );
 
   it('displays logo image when iconUrl is provided', () => {
     const model = FLUX_MODES[2]; // Has iconUrl
@@ -125,9 +131,27 @@ describe('ModelOption', () => {
     expect(wrapper.get('[data-testid="model-option"]').attributes('aria-selected')).toBe('true');
   });
 
-  it('omits the speed hint for a model without one', () => {
-    const model = { ...FLUX_MODES[0], id: 'UNKNOWN_MODEL' } as unknown as Model;
-    const wrapper = mount(ModelOption, { props: { model } });
-    expect(wrapper.find('.tw-uppercase').exists()).toBe(false);
+  it('shows the reference icon with the exact tooltip text only for ref-capable models', () => {
+    const REF_ICON = '[data-testid="reference-image-icon"]';
+    for (const model of MODELS) {
+      const imageInput = MODEL_REGISTRY[model.id as ModelKey]?.fields?.imageInput;
+      const icon = mount(ModelOption, { props: { model } }).find(REF_ICON);
+      expect(icon.exists()).toBe(Boolean(imageInput));
+      if (imageInput) {
+        expect(icon.attributes('aria-label')).toBe(`Up to ${imageInput.max ?? 1} reference images`);
+      }
+    }
+  });
+
+  it('renders every row at the same fixed height class', () => {
+    const heights = new Set(
+      MODELS.map((model) =>
+        mount(ModelOption, { props: { model } })
+          .get('[data-testid="model-option"]')
+          .classes()
+          .find((c) => c.startsWith('tw-h-')),
+      ),
+    );
+    expect(heights.size).toBe(1);
   });
 });
