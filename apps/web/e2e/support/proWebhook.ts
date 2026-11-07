@@ -13,20 +13,26 @@ function nextEventTime(): string {
   return new Date(Date.now() + sequence * EVENT_STEP_MS).toISOString();
 }
 
-/** POSTs a signed `subscription.active` webhook: the only way these specs make a user Pro. */
-export async function activateProViaWebhook(
+export type SubscriptionWebhookType = 'subscription.active' | 'subscription.renewed';
+
+/** POSTs a signed subscription webhook; pass `timestamp` to replay the exact same event. */
+export async function sendSubscriptionWebhook(
   page: Page,
-  userId: string,
-  subscriptionId: string,
+  options: {
+    type: SubscriptionWebhookType;
+    userId: string;
+    subscriptionId: string;
+    timestamp?: string;
+  },
 ): Promise<APIResponse> {
   const body = JSON.stringify({
-    type: 'subscription.active',
-    timestamp: nextEventTime(),
+    type: options.type,
+    timestamp: options.timestamp ?? nextEventTime(),
     business_id: 'biz_e2e',
     data: {
-      subscription_id: subscriptionId,
+      subscription_id: options.subscriptionId,
       next_billing_date: new Date(Date.now() + PERIOD_DAYS_MS).toISOString(),
-      metadata: { userId },
+      metadata: { userId: options.userId },
     },
   });
   const headers = signWebhook({ body, secret: requireEnv('DODO_PAYMENTS_WEBHOOK_KEY') });
@@ -35,3 +41,15 @@ export async function activateProViaWebhook(
     data: body,
   });
 }
+
+/** POSTs a signed `subscription.active` webhook: the only way these specs make a user Pro. */
+export function activateProViaWebhook(
+  page: Page,
+  userId: string,
+  subscriptionId: string,
+): Promise<APIResponse> {
+  return sendSubscriptionWebhook(page, { type: 'subscription.active', userId, subscriptionId });
+}
+
+/** Event time to feed back into `sendSubscriptionWebhook` for a replay. */
+export const freshEventTime = nextEventTime;

@@ -1,4 +1,10 @@
-import { getCreditPack, PLAN, SUBSCRIPTION_STATUS, type CreditPack } from "@visual-ai/shared"
+import {
+    DAILY_CREDITS,
+    getCreditPack,
+    PLAN,
+    SUBSCRIPTION_STATUS,
+    type CreditPack,
+} from "@visual-ai/shared"
 import moment from "moment"
 
 import { env } from "../config/env.js"
@@ -401,6 +407,18 @@ function buildSubscriptionPatch(event: NormalizedSubscriptionEvent): Subscriptio
 }
 
 /**
+ * ACTIVATED tops the daily balance up to the Pro allowance once (`$max` never lowers a higher
+ * balance); RENEWED and EXPIRED leave it alone. Replays are dropped by `staleEventClause`.
+ */
+function buildSubscriptionUpdate(event: NormalizedSubscriptionEvent) {
+    const update: Record<string, unknown> = { $set: buildSubscriptionPatch(event) }
+    if (event.type === SUBSCRIPTION_EVENT_TYPE.ACTIVATED) {
+        update.$max = { dailyCredits: DAILY_CREDITS.pro }
+    }
+    return update
+}
+
+/**
  * Only a new subscription may replace the stored one; every other event must target the stored
  * subscription (or fill an empty slot when it arrived before its activation).
  */
@@ -446,7 +464,7 @@ async function applySubscriptionEvent(event: NormalizedSubscriptionEvent): Promi
             userId: event.userId,
             $and: [...subscriptionOwnerClauses(event), staleEventClause(event)],
         },
-        { $set: buildSubscriptionPatch(event) },
+        buildSubscriptionUpdate(event),
     )
 
     if (result.modifiedCount === 0) {

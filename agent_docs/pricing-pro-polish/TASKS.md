@@ -163,7 +163,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** Pro users get 50 daily credits and Free users 30, reset at 00:00 UTC. Subscribing to Pro mid-day tops the balance up to 50 once, never on renewal or webhook replay.
 **Try in UI:** Log in as Free and note the chip shows up to 30 ; activate Pro through the signed test webhook and see the balance rise to 50 if it was lower ; reload and confirm it does not top up again.
 
-### ☐ T3.1 Single Pro filter builder
+### ✅ T3.1 Single Pro filter builder
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/lib/isPro.ts`
@@ -171,7 +171,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 6: one exported builder used by the cron; `isPro` behaviour unchanged.
 - **Verify:** `cd apps/api && bun run test src/lib/isPro.test.ts`; `bun run check`.
 
-### ☐ T3.2 Cron per-plan reset in UTC
+### ✅ T3.2 Cron per-plan reset in UTC
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/utils/cronJobs.ts`, `apps/api/src/utils/cronJobs.test.ts`
@@ -179,7 +179,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 6: Pro get 50, everyone else 30, timezone pinned to UTC; past_due/cancelled within period still Pro; after period end 30.
 - **Verify:** `cd apps/api && bun run test src/utils/cronJobs.test.ts`; `bun run check`.
 
-### ☐ T3.3 Mid-day upgrade top-up on ACTIVATED
+### ✅ T3.3 Mid-day upgrade top-up on ACTIVATED
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/payments/service.ts`
@@ -187,7 +187,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 6: current 12 becomes 50, current 80 stays 80, replay unchanged, RENEWED no top-up, EXPIRED leaves balance.
 - **Verify:** `cd apps/api && bun run test src/payments/service.test.ts src/payments/service.subscription.test.ts`; `bun run check`.
 
-### ☐ T3.4 Unit: Pro filter and cron
+### ✅ T3.4 Unit: Pro filter and cron
 
 - **Kind:** unit
 - **Files:** `apps/api/src/lib/isPro.ts`, `apps/api/src/utils/cronJobs.ts`
@@ -195,7 +195,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 6 cron and parity criteria; every file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/api && npx vitest run src/lib/isPro.test.ts src/utils/cronJobs.test.ts --coverage --coverage.include=src/lib/isPro.ts,src/utils/cronJobs.ts --coverage.reporter=text`
 
-### ☐ T3.5 Unit: subscription top-up
+### ✅ T3.5 Unit: subscription top-up
 
 - **Kind:** unit
 - **Files:** `apps/api/src/payments/service.ts`
@@ -203,7 +203,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 6 webhook criteria and edge cases; file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/api && npx vitest run src/payments/service.test.ts src/payments/service.subscription.test.ts src/payments/webhookLifecycle.test.ts --coverage --coverage.include=src/payments/service.ts --coverage.reporter=text`
 
-### ☐ T3.6 E2E: Pro daily credits and mid-day top-up
+### ✅ T3.6 E2E: Pro daily credits and mid-day top-up
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` Free account shows 30/day on the profile credits card (local-time reset text is Phase 7, covered by T7.7); `@critical` signed ACTIVATED webhook raises a low balance to 50 and the chip updates; `@high` a replayed or RENEWED webhook does not change the balance; `@high` Pro profile shows 50/day; `@medium` a balance above 50 is unchanged by activation.
@@ -212,7 +212,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** Scenarios derived from SPEC item 6 browser criteria pass; Pro state set only via the signed test webhook (no Dodo live); no paid endpoint reached.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/daily-credits.spec.ts --repeat-each=3`
 
-### ☐ T3.7 Gate: Phase 3
+### ✅ T3.7 Gate: Phase 3
 
 - **Kind:** gate
 - **Files:** none

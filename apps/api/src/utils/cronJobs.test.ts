@@ -1,7 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { DAILY_CREDITS } from "@visual-ai/shared"
-
 const mocks = vi.hoisted(() => ({
     schedule: vi.fn(),
     updateMany: vi.fn(),
@@ -29,25 +27,47 @@ describe("cronJobs", () => {
     beforeEach(() => {
         vi.clearAllMocks()
         vi.resetModules()
+        vi.useRealTimers()
         mocks.env.ENABLE_CRON = true
     })
 
     it("schedules the midnight job and resets daily credits", async () => {
+        vi.useFakeTimers()
+        vi.setSystemTime(new Date("2026-06-15T00:00:00.000Z"))
         mocks.updateMany.mockResolvedValue({ modifiedCount: 3 })
 
         await import("./cronJobs.js")
 
-        expect(mocks.schedule).toHaveBeenCalledWith("0 0 * * *", expect.any(Function))
+        expect(mocks.schedule).toHaveBeenCalledWith("0 0 * * *", expect.any(Function), {
+            timezone: "UTC",
+        })
         expect(mocks.logger.info).toHaveBeenCalledWith("Cron jobs enabled")
 
         const job = mocks.schedule.mock.calls[0]?.[1] as () => Promise<void>
         await job()
 
-        expect(mocks.updateMany).toHaveBeenCalledWith(
-            {},
-            { $set: { dailyCredits: DAILY_CREDITS.free } },
+        expect(mocks.updateMany).toHaveBeenCalledTimes(2)
+        const now = new Date("2026-06-15T00:00:00.000Z")
+        const literalProFilter = {
+            plan: "pro",
+            $or: [
+                { "subscription.status": "active" },
+                {
+                    "subscription.status": { $in: ["past_due", "cancelled"] },
+                    "subscription.currentPeriodEnd": { $gt: now },
+                },
+            ],
+        }
+        expect(mocks.updateMany).toHaveBeenNthCalledWith(1, literalProFilter, {
+            $set: { dailyCredits: 50 },
+        })
+        expect(mocks.updateMany).toHaveBeenNthCalledWith(
+            2,
+            { $nor: [literalProFilter] },
+            { $set: { dailyCredits: 30 } },
         )
         expect(mocks.logger.info).toHaveBeenCalledWith("Daily credits successfully reset")
+        vi.useRealTimers()
     })
 
     it("logs when the scheduled reset fails", async () => {
