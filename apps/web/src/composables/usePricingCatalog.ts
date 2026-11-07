@@ -9,6 +9,7 @@ import {
   getCreditCost,
   isSupportedCurrency,
   MODEL_REGISTRY,
+  PREMIUM_CREDIT_COST,
 } from '@visual-ai/shared';
 import type { CreditPack, ModelKey, SupportedCurrency } from '@visual-ai/shared';
 
@@ -210,7 +211,7 @@ export function usePricingCatalog() {
     return [
       {
         category: 'Image generation',
-        blurb: 'Most prompts cost 1 credit. A few flagship models cost 4 or 5.',
+        blurb: `Most prompts cost 1 credit. A few flagship models cost ${PREMIUM_CREDIT_COST}.`,
         bands: generationBands(cats['Image Generation']),
       },
       {

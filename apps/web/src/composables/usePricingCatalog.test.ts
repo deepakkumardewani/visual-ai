@@ -92,6 +92,13 @@ describe('usePricingCatalog', () => {
     expect(generation.bands.some((band) => band.title === 'Everyday generation')).toBe(true);
   });
 
+  it('derives the flagship blurb cost from PREMIUM_CREDIT_COST', () => {
+    const { pricingBoard } = usePricingCatalog();
+    expect(pricingBoard.value[0].blurb).toBe(
+      `Most prompts cost 1 credit. A few flagship models cost ${shared.PREMIUM_CREDIT_COST}.`,
+    );
+  });
+
   it('builds premium-only generation when no everyday models remain', () => {
     vi.spyOn(shared, 'getCreditCost').mockImplementation((key: ModelKey) => {
       const model = shared.MODEL_REGISTRY[key];

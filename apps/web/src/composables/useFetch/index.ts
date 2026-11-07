@@ -43,7 +43,7 @@ export const useFetch = createFetch({
       const start = (_ctx.options as Record<symbol, number> | undefined)?.[REQUEST_START];
       const duration = start ? Date.now() - start : undefined;
       const status = _ctx.response?.status ?? 'NETWORK_ERROR';
-      apiLogger.error(`${_ctx.options.method ?? 'GET'} ${_ctx.url} → ${status}`, {
+      apiLogger.error(`${_ctx.options?.method ?? 'GET'} ${_ctx.url} → ${status}`, {
         duration,
         status,
         error: _ctx.error,

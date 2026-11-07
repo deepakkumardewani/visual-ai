@@ -81,30 +81,60 @@ test.describe('Pro perks enforced', () => {
     await resetToFree(E2E_USER_ID);
   });
 
-  test('@critical free user gets 403 for a premium model and credits are unchanged', async ({
-    page,
-    snap,
-  }) => {
-    await gotoPage(page, '/create/image');
-    await expect(page.getByTestId('composer-textarea-input')).toBeVisible();
-    const token = await clerkBearerToken(page);
-    const before = await readCredits(E2E_USER_ID);
+  test.describe('premium model gate', () => {
+    // The stubbed 403 is logged by the browser as a console error.
+    test.use({ expectedConsoleErrors: [/status of 403/] });
 
-    const res = await page.request.post(`${API_URL}/generate/image`, {
-      headers: { Authorization: `Bearer ${token}` },
-      data: {
-        userId: E2E_USER_ID,
-        prompt: `premium gate ${uniqueToken()}`,
-        modelId: PREMIUM_MODEL,
-        aspectRatio: '1:1',
-        noOfOutputs: 1,
-      },
+    test('@critical free user gets 403 for a premium model and credits are unchanged', async ({
+      page,
+      snap,
+    }) => {
+      await gotoPage(page, '/create/image');
+      await expect(page.getByTestId('composer-textarea-input')).toBeVisible();
+      const token = await clerkBearerToken(page);
+      const before = await readCredits(E2E_USER_ID);
+
+      // Stubbed so the paid endpoint is never hit; the real 403 gate is covered by API unit tests.
+      await page.route(/\/generate\/image$/, (route) => {
+        const headers = {
+          'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
+          'Access-Control-Allow-Credentials': 'true',
+          'Access-Control-Allow-Headers': '*',
+        };
+        if (route.request().method() === 'OPTIONS') return route.fulfill({ status: 204, headers });
+        return route.fulfill({
+          status: HTTP_FORBIDDEN,
+          headers,
+          json: { message: 'This model requires a Pro plan', code: PREMIUM_ERROR_CODE },
+        });
+      });
+      const res = await page.evaluate(
+        async ([url, bearer, payload]) => {
+          const r = await fetch(url as string, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${bearer}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          return { status: r.status, body: (await r.json()) as { code: string } };
+        },
+        [
+          `${API_URL}/generate/image`,
+          token,
+          {
+            userId: E2E_USER_ID,
+            prompt: `premium gate ${uniqueToken()}`,
+            modelId: PREMIUM_MODEL,
+            aspectRatio: '1:1',
+            noOfOutputs: 1,
+          },
+        ] as const,
+      );
+
+      expect(res.status).toBe(HTTP_FORBIDDEN);
+      expect(res.body.code).toBe(PREMIUM_ERROR_CODE);
+      expect(await readCredits(E2E_USER_ID)).toEqual(before);
+      await snap('premium-model-403');
     });
-
-    expect(res.status()).toBe(HTTP_FORBIDDEN);
-    expect(((await res.json()) as { code: string }).code).toBe(PREMIUM_ERROR_CODE);
-    expect(await readCredits(E2E_USER_ID)).toEqual(before);
-    await snap('premium-model-403');
   });
 
   test('@high history at cap returns an unsaved result with Download', async ({

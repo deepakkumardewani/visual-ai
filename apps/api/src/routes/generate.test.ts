@@ -34,7 +34,9 @@ const referenceUpload = vi.hoisted(() =>
 )
 
 vi.mock("../middlewares/multer.js", () => ({
-    upload: { single: () => (_req: unknown, _res: unknown, next: () => void) => next() },
+    upload: {
+        single: () => (_req: unknown, _res: unknown, next: () => void) => next(),
+    },
     referenceImagesUpload: {
         array: () => referenceUpload,
     },
@@ -113,7 +115,11 @@ describe("generateRoute", () => {
 
     describe("GET /progress", () => {
         it("writes SSE status and cleans up on close", async () => {
-            const status = { status: "processing", image: undefined, userCreditsRemaining: null }
+            const status = {
+                status: "processing",
+                image: undefined,
+                userCreditsRemaining: null,
+            }
             redis.getStatus.mockResolvedValue(status)
             const listeners: Record<string, () => Promise<void>> = {}
             const res = mockRes()
@@ -224,9 +230,16 @@ describe("generateRoute", () => {
             const body = { prompt: "a red fox", modelId: "FLUX_BASIC" }
             await dispatch("post", "/generate/image", { body, auth: { userId: "user_1" } }, res)
 
-            expect(enqueueGeneration).toHaveBeenCalledWith({ kind: "image", body, isPro: false })
+            expect(enqueueGeneration).toHaveBeenCalledWith({
+                kind: "image",
+                body: { ...body, userId: "user_1" },
+                isPro: false,
+            })
             expect(res.statusCode).toBe(202)
-            expect(res.body).toEqual({ message: "Processing started", status: "processing" })
+            expect(res.body).toEqual({
+                message: "Processing started",
+                status: "processing",
+            })
         })
 
         it("defaults modelId to FLUX_BASIC when the client omits it", async () => {
@@ -234,7 +247,11 @@ describe("generateRoute", () => {
             const body = { prompt: "a red fox" }
             await dispatch("post", "/generate/image", { body, auth: { userId: "user_1" } }, res)
 
-            expect(enqueueGeneration).toHaveBeenCalledWith({ kind: "image", body, isPro: false })
+            expect(enqueueGeneration).toHaveBeenCalledWith({
+                kind: "image",
+                body: { ...body, userId: "user_1" },
+                isPro: false,
+            })
             expect(res.statusCode).toBe(202)
         })
 
@@ -250,6 +267,78 @@ describe("generateRoute", () => {
                 code: "PREMIUM_MODEL_REQUIRES_PRO",
             })
             expect(enqueueGeneration).not.toHaveBeenCalled()
+        })
+
+        describe("model tier gate (SPEC item 7)", () => {
+            const proOnlyKeys = [
+                "FLUX_REALISM",
+                "FLUX_KONTEXT_PRO",
+                "FLUX_KONTEXT_MAX",
+                "IMAGEN_4_ULTRA",
+                "NANO_BANANA_PRO",
+                "GPT_IMAGE_2",
+            ]
+            const freeFiveCreditKeys = ["FLUX_2_PRO", "FLUX_1_1_PRO", "FLUX_2_MAX", "FLUX_PRO"]
+
+            it.each(proOnlyKeys)(
+                "rejects %s for a Free user with the premium code",
+                async (modelId) => {
+                    const res = mockRes()
+                    await dispatch(
+                        "post",
+                        "/generate/image",
+                        { body: { prompt: "p", modelId }, auth: { userId: "user_1" } },
+                        res,
+                    )
+
+                    expect(res.statusCode).toBe(403)
+                    expect(res.body).toMatchObject({
+                        code: "PREMIUM_MODEL_REQUIRES_PRO",
+                    })
+                    expect(enqueueGeneration).not.toHaveBeenCalled()
+                },
+            )
+
+            it.each(freeFiveCreditKeys)(
+                "accepts %s for a Free user and queues it",
+                async (modelId) => {
+                    const res = mockRes()
+                    await dispatch(
+                        "post",
+                        "/generate/image",
+                        { body: { prompt: "p", modelId }, auth: { userId: "user_1" } },
+                        res,
+                    )
+
+                    expect(res.statusCode).toBe(202)
+                    expect(enqueueGeneration).toHaveBeenCalledWith({
+                        kind: "image",
+                        body: { prompt: "p", modelId, userId: "user_1" },
+                        isPro: false,
+                    })
+                },
+            )
+
+            it.each([...proOnlyKeys, ...freeFiveCreditKeys])(
+                "accepts %s for a Pro user and queues it",
+                async (modelId) => {
+                    resolveUserIsPro.mockResolvedValue(true)
+                    const res = mockRes()
+                    await dispatch(
+                        "post",
+                        "/generate/image",
+                        { body: { prompt: "p", modelId }, auth: { userId: "user_1" } },
+                        res,
+                    )
+
+                    expect(res.statusCode).toBe(202)
+                    expect(enqueueGeneration).toHaveBeenCalledWith({
+                        kind: "image",
+                        body: { prompt: "p", modelId, userId: "user_1" },
+                        isPro: true,
+                    })
+                },
+            )
         })
 
         it("resolves Pro from the body userId when the session has no userId, else an empty id", async () => {
@@ -270,13 +359,49 @@ describe("generateRoute", () => {
             expect(resolveUserIsPro).toHaveBeenLastCalledWith("")
         })
 
+        it("overrides a client-supplied userId with the authenticated id (e2e id spoof)", async () => {
+            const body = { prompt: "p", userId: "e2e_user" }
+            await dispatch(
+                "post",
+                "/generate/image",
+                { body, auth: { userId: "real_user" } },
+                mockRes(),
+            )
+
+            expect(enqueueGeneration).toHaveBeenCalledWith({
+                kind: "image",
+                body: { prompt: "p", userId: "real_user" },
+                isPro: false,
+            })
+        })
+
+        it("stamps the authenticated id when the client omits userId", async () => {
+            const body = { prompt: "p" }
+            await dispatch(
+                "post",
+                "/generate/image",
+                { body, auth: { userId: "e2e_user" } },
+                mockRes(),
+            )
+
+            expect(enqueueGeneration).toHaveBeenCalledWith({
+                kind: "image",
+                body: { prompt: "p", userId: "e2e_user" },
+                isPro: false,
+            })
+        })
+
         it("lets a Pro user queue a premium model", async () => {
             resolveUserIsPro.mockResolvedValue(true)
             const res = mockRes()
             const body = { prompt: "a red fox", modelId: "NANO_BANANA_PRO" }
             await dispatch("post", "/generate/image", { body, auth: { userId: "user_1" } }, res)
 
-            expect(enqueueGeneration).toHaveBeenCalledWith({ kind: "image", body, isPro: true })
+            expect(enqueueGeneration).toHaveBeenCalledWith({
+                kind: "image",
+                body: { ...body, userId: "user_1" },
+                isPro: true,
+            })
             expect(res.statusCode).toBe(202)
         })
 
@@ -418,10 +543,34 @@ describe("generateRoute", () => {
                     dispatch(
                         "post",
                         path,
-                        { body: {}, auth: { userId: "user_1" }, file: { filename: "empty.png" } },
+                        {
+                            body: {},
+                            auth: { userId: "user_1" },
+                            file: { filename: "empty.png" },
+                        },
                         res,
                     ),
                 ).rejects.toMatchObject({ message: "No image file provided" })
+            })
+
+            it("overrides a client-supplied userId with the authenticated id", async () => {
+                await dispatch(
+                    "post",
+                    path,
+                    {
+                        body: { userId: "e2e_user" },
+                        auth: { userId: "real_user" },
+                        file: { path: "/tmp/photo.png", filename: "photo.png" },
+                    },
+                    mockRes(),
+                )
+
+                expect(enqueueGeneration).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        kind,
+                        props: expect.objectContaining({ body: { userId: "real_user" } }),
+                    }),
+                )
             })
 
             it("enqueues the job and returns 202", async () => {
@@ -440,7 +589,11 @@ describe("generateRoute", () => {
 
                 expect(enqueueGeneration).toHaveBeenCalledWith({
                     kind,
-                    props: { body, filePath: "/tmp/photo.png", fileName: "photo.png" },
+                    props: {
+                        body: { ...body, userId: "user_1" },
+                        filePath: "/tmp/photo.png",
+                        fileName: "photo.png",
+                    },
                     isPro: false,
                 })
                 expect(res.statusCode).toBe(202)

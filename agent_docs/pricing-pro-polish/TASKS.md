@@ -107,7 +107,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** Free users are blocked from the six Pro-only models and charged 5 credits on the four free 5-credit models; the client shows the same locks and a clear upsell instead of a raw error.
 **Try in UI:** Log in as Free and open the model picker ; confirm lock plus PRO badge on the six Pro-only models and none on FLUX.2 Max ; click a locked model and see pricing open ; open pricing and read the model cost table grouped by 5 credits.
 
-### ☐ T2.1 API gate and cost expectations
+### ✅ T2.1 API gate and cost expectations
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/generate.ts`, `apps/api/src/services/generation-service.ts`, `apps/api/src/routes/generate.test.ts`, `apps/api/src/services/generation-service.test.ts`
@@ -115,7 +115,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 7: Free requests for a Pro-only key return the premium-required error with no deduction and nothing queued; Free with FLUX_2_MAX/FLUX_2_PRO/FLUX_1_1_PRO/FLUX_PRO accepted and charged 5; Pro accepted for all; Replicate is always mocked.
 - **Verify:** `cd apps/api && bun run test src/routes/generate.test.ts src/services/generation-service.test.ts`; `bun run check`.
 
-### ☐ T2.2 Web lock, upsell and cost table
+### ✅ T2.2 Web lock, upsell and cost table
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue`, `apps/web/src/stores/generate.ts`, `apps/web/src/components/Pricing/PricingModelCosts.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue`
@@ -123,7 +123,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 7 follow-through: lock and PRO badge on six Pro-only models for Free, none on FLUX_2_MAX; stale Free selection of a Pro-only model gets the upsell; cost table matches the table in SPEC item 7.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/ModelPicker src/stores/generate.test.ts src/components/Pricing/PricingModelCosts.test.ts`; `bun run check`.
 
-### ☐ T2.3 Unit: API gate and charging
+### ✅ T2.3 Unit: API gate and charging
 
 - **Kind:** unit
 - **Files:** `apps/api/src/routes/generate.ts`, `apps/api/src/services/generation-service.ts`
@@ -131,7 +131,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 7 API criteria covered; every file at least 80% lines/branches/functions/statements, target over 95%; no real Replicate call.
 - **Verify:** `cd apps/api && npx vitest run src/routes/generate.test.ts src/services/generation-service.test.ts --coverage --coverage.include=src/routes/generate.ts,src/services/generation-service.ts --coverage.reporter=text`
 
-### ☐ T2.4 Unit: web lock, store and cost table
+### ✅ T2.4 Unit: web lock, store and cost table
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue`, `apps/web/src/stores/generate.ts`, `apps/web/src/components/Pricing/PricingModelCosts.vue`
@@ -139,7 +139,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 7 browser-facing logic covered; every file at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/ModelPicker/ModelOption.test.ts src/stores/generate.test.ts src/components/Pricing/PricingModelCosts.test.ts --coverage --coverage.include=src/components/Dashboard/ModelPicker/ModelOption.vue,src/stores/generate.ts,src/components/Pricing/PricingModelCosts.vue --coverage.reporter=text`
 
-### ☐ T2.5 E2E: model tiers and gating
+### ✅ T2.5 E2E: model tiers and gating
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` Free sees lock and PRO badge on the six Pro-only models and clicking opens pricing; `@critical` Free can select FLUX.2 Max with no lock and cost shows 5; `@critical` Pro sees no locks; `@high` stale Pro-only selection for Free shows the upsell not a raw error (generate endpoint stubbed to return the premium-required error); `@high` existing specs `pro-perks`, `dev-cloud-reference`, `mods-reference-image` updated for new costs and gates with paid endpoints stubbed; `@medium` cost table shows the 5-credit group.
@@ -148,7 +148,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** Scenarios derived from SPEC item 7 browser criteria pass; `paidCallGuard` reports zero un-intercepted paid calls; no real Replicate call.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/pro-tier.spec.ts e2e/qa/pro-perks.spec.ts e2e/qa/dev-cloud-reference.spec.ts e2e/qa/mods-reference-image.spec.ts --repeat-each=3`
 
-### ☐ T2.6 Gate: Phase 2
+### ✅ T2.6 Gate: Phase 2
 
 - **Kind:** gate
 - **Files:** none

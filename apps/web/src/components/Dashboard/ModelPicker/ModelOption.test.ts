@@ -7,10 +7,48 @@ import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 import { MODELS, FLUX_MODES, getModelBestForHint, getModelSpeedHint } from '@/utils/models';
 import type { Model } from '@/types/model';
-import { PLAN } from '@visual-ai/shared';
+import { PLAN, PREMIUM_MODEL_KEYS, type ModelKey } from '@visual-ai/shared';
 
 const premiumModel = MODELS.find((m) => m.id === 'GPT_IMAGE_2')!;
 const PRO_BADGE = '[data-testid="premium-lock-badge"]';
+
+const TABLE_KEYS = [
+  'FLUX_REALISM',
+  'FLUX_KONTEXT_PRO',
+  'FLUX_KONTEXT_MAX',
+  'IMAGEN_4_ULTRA',
+  'NANO_BANANA_PRO',
+  'GPT_IMAGE_2',
+  'FLUX_2_PRO',
+  'FLUX_1_1_PRO',
+  'FLUX_2_MAX',
+  'FLUX_PRO',
+] as const;
+
+describe('ModelOption lock per table key', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia());
+  });
+
+  it.each(TABLE_KEYS)(
+    '%s is locked for free exactly when it is Pro-only; Pro never locked',
+    async (key) => {
+      const model = MODELS.find((m) => m.id === key)!;
+      expect(model).toBeDefined();
+      const proOnly = PREMIUM_MODEL_KEYS.includes(key as ModelKey);
+
+      const free = mount(ModelOption, { props: { model } });
+      expect(free.find(PRO_BADGE).exists()).toBe(proOnly);
+      await free.get('[data-testid="model-option"]').trigger('click');
+      expect(free.emitted('select')?.length ?? 0).toBe(proOnly ? 0 : 1);
+      expect(useDialogStore().showPricingDialog).toBe(proOnly);
+
+      useUserStore().plan = PLAN.PRO;
+      const pro = mount(ModelOption, { props: { model } });
+      expect(pro.find(PRO_BADGE).exists()).toBe(false);
+    },
+  );
+});
 
 describe('ModelOption', () => {
   beforeEach(() => {
