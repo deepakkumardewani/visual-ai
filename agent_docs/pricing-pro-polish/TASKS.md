@@ -523,7 +523,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** Final proof that every spec item works together with zero real paid calls, plus a documented walkthrough.
 **Try in UI:** Run `cd apps/web && bunx playwright test e2e/qa/paid-call-guard.spec.ts` and confirm green ; walk the header pill, model menu, buy dialog, pricing, profile credits and history note as Free and Pro ; confirm INR with the dev override set.
 
-### ☐ T9.1 Final consistency sweep
+### ✅ T9.1 Final consistency sweep
 
 - **Kind:** gate
 - **Files:** none
@@ -531,7 +531,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Boundaries: no duplicated model or tier lists in web copy; no scalar `DAILY_CREDITS`; docs consistent.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/paid-call-guard.spec.ts e2e/qa/pricing-layout.spec.ts --repeat-each=2`; `cd apps/web && npx vitest run src/utils/dailyCreditsConsistency.test.ts`; `bun run verify`; `bun run test`.
 
-### ☐ T9.2 Gate: full e2e in both server modes
+### ✅ T9.2 Gate: full e2e in both server modes
 
 - **Kind:** gate
 - **Files:** none
@@ -539,7 +539,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** `paid-call-guard.spec.ts` passes and the guard reports zero un-intercepted paid calls; all new and changed specs green; no test weakened.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/pro-tier.spec.ts e2e/qa/pro-perks.spec.ts e2e/qa/model-menu.spec.ts e2e/qa/upgrade-entry.spec.ts e2e/qa/pricing-layout.spec.ts e2e/qa/history-full.spec.ts e2e/qa/daily-credits.spec.ts e2e/qa/localized-prices.spec.ts e2e/qa/plan-status.spec.ts e2e/qa/subscription-lifecycle.spec.ts e2e/qa/paid-call-guard.spec.ts --repeat-each=2`; `cd apps/web && bun run test:e2e`; `cd apps/web && E2E_SERVER=prod bun run test:e2e`.
 
-### ☐ T9.3 Walkthrough: all spec items
+### ✅ T9.3 Walkthrough: all spec items
 
 - **Kind:** walkthrough
 - **Files:** none
@@ -547,7 +547,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** Every SPEC item is verifiable in the browser through its QA spec; screenshots of modal, /pricing, model menu and header pill reviewed against the owner's reference screenshots.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/pro-tier.spec.ts e2e/qa/model-menu.spec.ts e2e/qa/upgrade-entry.spec.ts e2e/qa/pricing-layout.spec.ts e2e/qa/history-full.spec.ts --repeat-each=2`; `bun run test`; `bun run check`.
 
-### ☐ T9.4 Definition of done
+### ✅ T9.4 Definition of done
 
 - **Kind:** dod
 - **Files:** none

@@ -67,7 +67,7 @@ test.describe('daily credits copy (Free = 30)', () => {
     const page = await context.newPage();
     try {
       await page.goto('/pricing');
-      await expect(page.getByText(`earn ${FREE_DAILY} more every day`)).toBeVisible();
+      await expect(page.getByText(`${FREE_DAILY} new ones every day`)).toBeVisible();
       await expect(
         page.getByText('Premium upscalers are 4 and premium generation is 5'),
       ).toBeVisible();
