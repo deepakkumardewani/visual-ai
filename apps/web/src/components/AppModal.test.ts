@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
@@ -102,5 +105,26 @@ describe('AppModal', () => {
     await wrapper.setProps({ open: true });
     await wrapper.setProps({ open: false });
     expect(wrapper.emitted('close')).toBeFalsy();
+  });
+
+  it('renders the backdrop overlay element with its base class and no fullscreen modifier by default', () => {
+    const wrapper = mount(AppModal, {
+      props: { open: true },
+      slots: { default: 'Body' },
+      global: { stubs: { Teleport: true, Transition: false } },
+    });
+
+    const overlay = wrapper.get('[role="presentation"]');
+    expect(overlay.classes()).toEqual(['app-modal']);
+    expect(overlay.attributes('style')).toContain('z-index: 1200');
+  });
+
+  // Scoped CSS is not applied in jsdom, so the backdrop look is asserted on the SFC style block.
+  it('styles the backdrop with a 0.6 alpha scrim and a 10px blur', () => {
+    const source = readFileSync(resolve(__dirname, 'AppModal.vue'), 'utf8');
+    const rule = source.match(/\n\.app-modal \{([^}]*)\}/)?.[1] ?? '';
+
+    expect(rule).toContain('background: rgba(8, 6, 4, 0.6)');
+    expect(rule).toContain('backdrop-filter: blur(10px)');
   });
 });

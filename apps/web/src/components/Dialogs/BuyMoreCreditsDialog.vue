@@ -10,16 +10,16 @@ import { useUserStore } from '@/stores/user';
 
 import AppModal from '@/components/AppModal.vue';
 
-import { CREDIT_PACKS, type CreditPack } from '@visual-ai/shared';
+import { formatImageEstimate } from '@/utils/pricePerCredits';
 
-const BUDGET_IMAGE_CREDIT_COST = 1;
+import { CREDIT_PACKS, type CreditPack } from '@visual-ai/shared';
 
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
 const { showBuyCreditsDialog } = storeToRefs(dialogStore);
-const { credits, dailyCredits } = storeToRefs(userStore);
+const { credits, dailyCredits, isPro } = storeToRefs(userStore);
 const { start } = usePurchase();
-const { formatPackPrice, formatPackPerCredit, loadPrices } = usePricingCatalog();
+const { formatPackPrice, formatPackPer100Credits, loadPrices } = usePricingCatalog();
 
 onMounted(loadPrices);
 
@@ -49,8 +49,9 @@ function savingsLabel(pack: CreditPack) {
   return pack.savingsPercent > 0 ? `${pack.savingsPercent}%` : undefined;
 }
 
-function estimatedBudgetImages(creditCount: number) {
-  return Math.floor(creditCount / BUDGET_IMAGE_CREDIT_COST);
+function openPricing() {
+  dialogStore.hideBuyCredits();
+  dialogStore.showPricing();
 }
 
 async function handlePurchase() {
@@ -139,14 +140,23 @@ async function handlePurchase() {
               <span class="pkg-credits-label">credits</span>
               <span class="pkg-price">{{ formatPackPrice(pkg) }}</span>
               <span v-if="savingsLabel(pkg)" class="pkg-savings">Save {{ savingsLabel(pkg) }}</span>
-              <span v-else class="pkg-savings pkg-savings--empty">&nbsp;</span>
-              <span class="pkg-meta"> {{ formatPackPerCredit(pkg) }}/credit </span>
-              <span class="pkg-estimate"
-                >≈ {{ estimatedBudgetImages(pkg.credits) }} budget images</span
-              >
+              <span class="pkg-meta">{{ formatPackPer100Credits(pkg) }} per 100 credits</span>
+              <span class="pkg-estimate">{{ formatImageEstimate(pkg.credits) }}</span>
             </button>
           </div>
         </div>
+
+        <p v-if="!isPro" class="upgrade-cta">
+          Generating a lot?
+          <button
+            type="button"
+            class="upgrade-cta__link"
+            data-testid="buy-credits-upgrade-link"
+            @click="openPricing"
+          >
+            Upgrade to Pro
+          </button>
+        </p>
 
         <p class="trust-line">
           Secure payment via Dodo Payments. Credits apply after payment confirmation.
@@ -283,7 +293,6 @@ async function handlePurchase() {
   flex-direction: column;
   align-items: flex-start;
   gap: 0.25rem;
-  min-height: 11.5rem;
   padding: 1.75rem 0.85rem 0.9rem;
   border: 1px solid rgb(var(--tw-border));
   border-radius: 12px;
@@ -351,14 +360,13 @@ async function handlePurchase() {
 }
 
 .pkg-savings {
-  min-height: 1rem;
   font-size: 0.7rem;
   font-weight: 600;
   color: #6faf7a;
 }
 
-.pkg-savings--empty {
-  visibility: hidden;
+.pkg-meta {
+  padding-top: 0.35rem;
 }
 
 .pkg-meta,
@@ -366,6 +374,29 @@ async function handlePurchase() {
   font-size: 0.7rem;
   line-height: 1.35;
   color: rgb(var(--tw-ink-muted));
+}
+
+.upgrade-cta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgb(var(--tw-ink-muted));
+}
+
+.upgrade-cta__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: #c9a84c;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid #c9a84c;
+    outline-offset: 2px;
+  }
 }
 
 .trust-line {

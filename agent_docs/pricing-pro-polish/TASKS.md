@@ -331,7 +331,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** Free users see an "Upgrade to Pro" pill next to their credits and a cross-sell in the buy-credits dialog; Pro users see a Pro badge. The dialog gets a lighter blurred backdrop, readable per-100-credit prices, clearer image estimates and aligned cards.
 **Try in UI:** As Free see the pill beside credits and click it to open pricing ; open Buy more credits and check equal-height cards, "per 100 credits" prices and the Upgrade link ; as Pro see the badge instead of the pill ; shrink to mobile width and confirm no header overflow.
 
-### ☐ T6.1 Header pill and Pro badge
+### ✅ T6.1 Header pill and Pro badge
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Header/CreditsChip.vue`, `apps/web/src/components/Header/AppHeader.vue`, `apps/web/src/components/Header/UserMenu.vue`
@@ -339,7 +339,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 1: pill for Free, badge for Pro, none while loading, no mobile overflow, click opens pricing.
 - **Verify:** `cd apps/web && npx vitest run src/components/Header`; `bun run check`.
 
-### ☐ T6.2 Shared modal backdrop
+### ✅ T6.2 Shared modal backdrop
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/AppModal.vue`
@@ -347,7 +347,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 2 and assumption 4: backdrop dim and blurred, no dialog regression.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dialogs src/components/AppModal.test.ts`; `bun run check`.
 
-### ☐ T6.3 Price-per-100-credits helper
+### ✅ T6.3 Price-per-100-credits helper
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/pricePerCredits.ts`, `apps/web/src/composables/usePricingCatalog.ts`
@@ -355,7 +355,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 2 price and estimate rules: helper exported and typed, `usePricingCatalog` no longer divides to a per-credit amount, repo typechecks (behaviour proven in T6.6).
 - **Verify:** `cd apps/web && bun run check`; `cd apps/web && npx vitest run src/composables/usePricingCatalog.test.ts`.
 
-### ☐ T6.4 Buy-more-credits dialog layout
+### ✅ T6.4 Buy-more-credits dialog layout
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dialogs/BuyMoreCreditsDialog.vue`
@@ -363,7 +363,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 2 and item 1 dialog link: no card shows $0.00, no empty save placeholder, cards equal height, link present for Free only.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dialogs/BuyMoreCreditsDialog.test.ts`; `bun run check`.
 
-### ☐ T6.5 Unit: header
+### ✅ T6.5 Unit: header
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Header/CreditsChip.vue`, `apps/web/src/components/Header/AppHeader.vue`, `apps/web/src/components/Header/UserMenu.vue`
@@ -371,15 +371,15 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 1 unit criteria; files at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/components/Header --coverage --coverage.include=src/components/Header/CreditsChip.vue,src/components/Header/AppHeader.vue,src/components/Header/UserMenu.vue --coverage.reporter=text`
 
-### ☐ T6.6 Unit: price helper, dialog and modal
+### ✅ T6.6 Unit: price helper, dialog and modal
 
 - **Kind:** unit
-- **Files:** `apps/web/src/utils/pricePerCredits.ts`, `apps/web/src/composables/usePricingCatalog.ts`, `apps/web/src/components/Dialogs/BuyMoreCreditsDialog.vue`, `apps/web/src/components/AppModal.vue`
+- **Files:** `apps/web/src/utils/pricePerCredits.ts`, `apps/web/src/composables/usePricingCatalog.ts`, `apps/web/src/components/Dialogs/BuyMoreCreditsDialog.vue`, `apps/web/src/components/AppModal.vue`, `apps/web/src/utils/pricePerCredits.test.ts`
 - **Do:** Helper tests across all packs in USD, INR and JPY (2000-pack never "$0.00"); image-estimate text test; DOM test that no empty "save" placeholder renders; Upgrade link by plan; AppModal backdrop classes.
 - **Acceptance:** SPEC item 2 unit criteria; files at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/utils/pricePerCredits.test.ts src/composables/usePricingCatalog.test.ts src/components/Dialogs/BuyMoreCreditsDialog.test.ts src/components/AppModal.test.ts --coverage --coverage.include=src/utils/pricePerCredits.ts,src/composables/usePricingCatalog.ts,src/components/Dialogs/BuyMoreCreditsDialog.vue,src/components/AppModal.vue --coverage.reporter=text`
 
-### ☐ T6.7 E2E: upgrade entry and buy dialog
+### ✅ T6.7 E2E: upgrade entry and buy dialog
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` Free shows the pill and click opens pricing; `@critical` Pro (activated by signed test webhook) shows the badge and no pill; `@high` buy dialog has Upgrade link for Free, cards equal height, no "$0.00", per-100 text; `@high` backdrop is blurred and dim; `@medium` mobile width has no horizontal overflow; `@medium` no pill flash while loading.
@@ -388,7 +388,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** Scenarios derived from SPEC items 1 and 2 browser criteria pass; no checkout or Dodo live call (checkout endpoints stubbed); `paidCallGuard` clean.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/upgrade-entry.spec.ts --repeat-each=3`
 
-### ☐ T6.8 Gate: Phase 6
+### ✅ T6.8 Gate: Phase 6
 
 - **Kind:** gate
 - **Files:** none

@@ -88,7 +88,7 @@ const showEndSkeleton = computed(() => {
         </div>
 
         <div
-          class="header-v2__end tw-ml-auto tw-flex tw-shrink-0 tw-items-center tw-gap-2 lg:tw-basis-1/4 lg:tw-justify-end lg:tw-gap-3"
+          class="header-v2__end tw-ml-auto tw-flex tw-shrink-0 tw-items-center tw-gap-2 lg:tw-min-w-max lg:tw-basis-1/4 lg:tw-justify-end lg:tw-gap-3"
         >
           <div
             v-if="showEndSkeleton"

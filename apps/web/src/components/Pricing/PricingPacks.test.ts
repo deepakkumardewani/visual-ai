@@ -80,7 +80,7 @@ describe('PricingPacks', () => {
     });
     expect(wrapper.text()).toMatch(/200 credits|2000 credits/i);
     expect(wrapper.find('.pack--featured').text()).toContain('2000 credits');
-    expect(wrapper.text()).toContain('₹0.45 per credit');
+    expect(wrapper.text()).toContain('₹45.00 per 100 credits');
   });
 
   it('sends signed-out buyers to sign in', async () => {
@@ -156,7 +156,7 @@ describe('PricingPacks', () => {
     await flushPromises();
     const pack200 = wrapper.findAll('article').find((a) => a.text().includes('200 credits'))!;
     expect(pack200.text()).toContain('€2.50');
-    expect(pack200.text()).toContain('€0.01 per credit');
+    expect(pack200.text()).toContain('€1.25 per 100 credits');
     expect(pack200.text()).not.toContain('₹');
   });
 });

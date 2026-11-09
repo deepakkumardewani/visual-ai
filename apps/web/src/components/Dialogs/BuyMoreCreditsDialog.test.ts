@@ -71,7 +71,7 @@ describe('BuyMoreCreditsDialog', () => {
     expect(wrapper.text()).toContain('120'); // total
   });
 
-  it('shows the dialog title and a placeholder when a pack has no savings', () => {
+  it('shows the dialog title and no empty placeholder when a pack has no savings', () => {
     const userStore = useUserStore();
     userStore.credits = 50;
     userStore.dailyCredits = 10;
@@ -86,7 +86,36 @@ describe('BuyMoreCreditsDialog', () => {
     });
 
     expect(wrapper.text()).toContain('Buy more credits');
-    expect(wrapper.find('.pkg-savings--empty').exists()).toBe(true);
+    expect(wrapper.find('.pkg-savings--empty').exists()).toBe(false);
+  });
+
+  it('shows the Upgrade to Pro link for Free users and opens pricing from it', async () => {
+    const userStore = useUserStore();
+    userStore.plan = 'free';
+    const dialogStore = useDialogStore();
+    const hideSpy = vi.spyOn(dialogStore, 'hideBuyCredits');
+    const pricingSpy = vi.spyOn(dialogStore, 'showPricing');
+
+    const wrapper = mount(BuyMoreCreditsDialog, {
+      global: { stubs: { AppModal: modalStub, 'font-awesome-icon': true } },
+    });
+
+    const link = wrapper.get('[data-testid="buy-credits-upgrade-link"]');
+    expect(link.text()).toBe('Upgrade to Pro');
+    await link.trigger('click');
+    expect(hideSpy).toHaveBeenCalledTimes(1);
+    expect(pricingSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('hides the Upgrade to Pro link for Pro users', () => {
+    const userStore = useUserStore();
+    userStore.plan = 'pro';
+
+    const wrapper = mount(BuyMoreCreditsDialog, {
+      global: { stubs: { AppModal: modalStub, 'font-awesome-icon': true } },
+    });
+
+    expect(wrapper.find('[data-testid="buy-credits-upgrade-link"]').exists()).toBe(false);
   });
 
   it('displays all four credit packages', () => {
@@ -122,15 +151,15 @@ describe('BuyMoreCreditsDialog', () => {
     });
 
     const packages = wrapper.findAll('.buy__pkg');
-    expect(packages[0].text()).toContain('₹0.65/credit');
-    expect(packages[0].text()).toContain('≈ 200 budget images');
-    expect(packages[3].text()).toContain('₹0.45/credit');
-    expect(packages[3].text()).toContain('≈ 2000 budget images');
+    expect(packages[0].text()).toContain('₹65.00 per 100 credits');
+    expect(packages[0].text()).toContain('≈ 200 images at 1 credit / 40 at 5 credits');
+    expect(packages[3].text()).toContain('₹45.00 per 100 credits');
+    expect(packages[3].text()).toContain('≈ 2000 images at 1 credit / 400 at 5 credits');
 
     await packages[3].trigger('click');
 
-    expect(packages[0].text()).toContain('₹0.65/credit');
-    expect(packages[3].text()).toContain('₹0.45/credit');
+    expect(packages[0].text()).toContain('₹65.00 per 100 credits');
+    expect(packages[3].text()).toContain('₹45.00 per 100 credits');
   });
 
   it('highlights best value package', () => {

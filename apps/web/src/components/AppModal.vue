@@ -148,8 +148,8 @@ watch(
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background: rgba(8, 6, 4, 0.72);
-  backdrop-filter: blur(8px);
+  background: rgba(8, 6, 4, 0.6);
+  backdrop-filter: blur(10px);
 }
 
 .app-modal--fullscreen {

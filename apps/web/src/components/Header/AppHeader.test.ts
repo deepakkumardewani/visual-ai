@@ -161,6 +161,16 @@ describe('AppHeader', () => {
     expect(wrapper.find('[data-testid="header-end-skeleton"]').exists()).toBe(true);
   });
 
+  it('shows only the avatar placeholder in the skeleton on non-dashboard pages', () => {
+    routePathRef.value = '/pricing';
+    routeNameRef.value = 'pricing';
+    isAuthLoaded.value = false;
+    const wrapper = mountHeader();
+
+    const skeleton = wrapper.get('[data-testid="header-end-skeleton"]');
+    expect(skeleton.findAll('div')).toHaveLength(1);
+  });
+
   it('hides the theme button on legal pages and shows Try it now on the landing path', () => {
     routePathRef.value = '/privacy';
     routeNameRef.value = 'privacy';

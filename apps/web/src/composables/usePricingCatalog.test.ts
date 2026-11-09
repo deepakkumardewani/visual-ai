@@ -200,26 +200,18 @@ describe('usePricingCatalog prices', () => {
     expect(catalog.formatPackPrice(CREDIT_PACKS[1])).toContain('₹');
   });
 
-  it('shows the per-credit price in INR when no estimates are loaded', () => {
-    const pack = CREDIT_PACKS[0];
-    const expected = new Intl.NumberFormat(undefined, {
-      style: 'currency',
-      currency: 'INR',
-    }).format(pack.priceMinor / pack.credits / 100);
-    expect(loadCatalog().formatPackPerCredit(pack)).toBe(expected);
+  it('shows the per-100-credit price in INR when no estimates are loaded', () => {
+    // 13000 paise / 200 credits * 100 = 6500 paise
+    expect(loadCatalog().formatPackPer100Credits(CREDIT_PACKS[0])).toBe('₹65.00');
   });
 
-  it('shows the per-credit price in the localized currency after a fetch', async () => {
+  it('shows the per-100-credit price in the localized currency after a fetch', async () => {
     mockPricesResponse({ data: EUR_PRICES, error: null });
     const catalog = loadCatalog();
     await catalog.loadPrices();
 
-    const pack = CREDIT_PACKS[0];
-    const expected = new Intl.NumberFormat(undefined, {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(250 / pack.credits / 100);
-    expect(catalog.formatPackPerCredit(pack)).toBe(expected);
+    // 250 cents / 200 credits * 100 = 125 cents
+    expect(catalog.formatPackPer100Credits(CREDIT_PACKS[0])).toMatch(/^€\s?1[.,]25$|^1[.,]25\s?€$/);
   });
 
   it('falls back to USD and INR when the API returns an unsupported currency', async () => {

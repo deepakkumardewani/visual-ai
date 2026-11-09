@@ -16,7 +16,7 @@ const props = defineProps<{
 const router = useRouter();
 const userStore = useUserStore();
 const { start } = usePurchase();
-const { formatPackPrice, formatPackPerCredit, loadPrices } = usePricingCatalog();
+const { formatPackPrice, formatPackPer100Credits, loadPrices } = usePricingCatalog();
 const buyingId = shallowRef<string | null>(null);
 
 onMounted(loadPrices);
@@ -75,7 +75,7 @@ async function buyPack(pack: CreditPack) {
         <p v-if="savingsLabel(pack)" class="pack__save">Save {{ savingsLabel(pack) }}</p>
         <h3 class="pack__credits">{{ pack.credits }} credits</h3>
         <p class="pack__price">{{ formatPackPrice(pack) }}</p>
-        <p class="pack__unit">{{ formatPackPerCredit(pack) }} per credit</p>
+        <p class="pack__unit">{{ formatPackPer100Credits(pack) }} per 100 credits</p>
         <LandingButton
           class="pack__cta"
           :variant="pack.id === featuredId ? 'primary' : 'ghost'"

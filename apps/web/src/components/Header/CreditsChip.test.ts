@@ -1,3 +1,4 @@
+import { PLAN } from '@visual-ai/shared';
 import { createPinia, setActivePinia } from 'pinia';
 import { mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -126,5 +127,84 @@ describe('CreditsChip', () => {
     expect(wrapper.get('[data-testid="credits-chip"]').classes().join(' ')).not.toContain(
       'credits-chip__trigger--low',
     );
+  });
+  describe('upgrade entry', () => {
+    const mountChip = (attachTo?: HTMLElement) =>
+      mount(CreditsChip, {
+        attachTo,
+        global: {
+          stubs: {
+            AnimatedCounter: true,
+            'font-awesome-icon': true,
+          },
+        },
+      });
+
+    it('shows the upgrade pill and no Pro badge for a ready Free user', () => {
+      const userStore = useUserStore();
+      userStore.isReady = true;
+      userStore.plan = PLAN.FREE;
+
+      const wrapper = mountChip();
+
+      expect(wrapper.find('[data-testid="upgrade-pill"]').exists()).toBe(true);
+      expect(wrapper.find('[data-testid="pro-badge-header"]').exists()).toBe(false);
+    });
+
+    it('shows the Pro badge and no pill for a ready Pro user', () => {
+      const userStore = useUserStore();
+      userStore.isReady = true;
+      userStore.plan = PLAN.PRO;
+
+      const wrapper = mountChip();
+
+      expect(wrapper.get('[data-testid="pro-badge-header"]').text()).toBe('Pro');
+      expect(wrapper.find('[data-testid="upgrade-pill"]').exists()).toBe(false);
+    });
+
+    it.each([false, true])('hides both while loading (isPro=%s)', (isPro) => {
+      const userStore = useUserStore();
+      userStore.isReady = false;
+      userStore.plan = isPro ? PLAN.PRO : PLAN.FREE;
+
+      const wrapper = mountChip();
+
+      expect(wrapper.find('[data-testid="upgrade-pill"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="pro-badge-header"]').exists()).toBe(false);
+    });
+
+    it('opens the pricing dialog and closes the menu when the pill is clicked', async () => {
+      const userStore = useUserStore();
+      userStore.isReady = true;
+      userStore.plan = PLAN.FREE;
+      const { useDialogStore } = await import('@/stores/dialog');
+      const dialogStore = useDialogStore();
+      const showPricing = vi.spyOn(dialogStore, 'showPricing');
+
+      const wrapper = mountChip();
+      await wrapper.get('[data-testid="credits-chip"]').trigger('click');
+      expect(wrapper.find('[data-testid="credits-chip-menu"]').exists()).toBe(true);
+      await wrapper.get('[data-testid="upgrade-pill"]').trigger('click');
+
+      expect(showPricing).toHaveBeenCalledTimes(1);
+      expect(wrapper.find('[data-testid="credits-chip-menu"]').exists()).toBe(false);
+    });
+
+    it('closes the open menu when clicking outside', async () => {
+      const host = document.createElement('div');
+      document.body.appendChild(host);
+      const wrapper = mountChip(host);
+
+      await wrapper.get('[data-testid="credits-chip"]').trigger('click');
+      expect(wrapper.find('[data-testid="credits-chip-menu"]').exists()).toBe(true);
+
+      document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+      document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-testid="credits-chip-menu"]').exists()).toBe(false);
+      wrapper.unmount();
+      host.remove();
+    });
   });
 });

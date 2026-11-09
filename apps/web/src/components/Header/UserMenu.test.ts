@@ -1,3 +1,4 @@
+import { PLAN } from '@visual-ai/shared';
 import { createPinia, setActivePinia } from 'pinia';
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
@@ -247,5 +248,17 @@ describe('UserMenu', () => {
     await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
     expect(wrapper.text()).toContain('Your account');
     expect(wrapper.get('[data-testid="user-menu-trigger"]').text().trim()).toBe('');
+  });
+  it('shows the Pro badge in the open menu only for Pro users', async () => {
+    const userStore = useUserStore();
+    userStore.plan = PLAN.PRO;
+    const pro = mount(UserMenu, { global: { stubs } });
+    await pro.get('[data-testid="user-menu-trigger"]').trigger('click');
+    expect(pro.get('[data-testid="pro-badge"]').text()).toBe('Pro');
+
+    userStore.plan = PLAN.FREE;
+    const free = mount(UserMenu, { global: { stubs } });
+    await free.get('[data-testid="user-menu-trigger"]').trigger('click');
+    expect(free.find('[data-testid="pro-badge"]').exists()).toBe(false);
   });
 });

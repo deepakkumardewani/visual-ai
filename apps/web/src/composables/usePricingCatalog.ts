@@ -15,6 +15,7 @@ import type { CreditPack, ModelKey, SupportedCurrency } from '@visual-ai/shared'
 
 import { useFetch } from '@/composables/useFetch';
 import { createLogger } from '@/utils/logger';
+import { formatPricePer100Credits } from '@/utils/pricePerCredits';
 
 const log = createLogger('pricing-catalog');
 
@@ -247,9 +248,9 @@ export function usePricingCatalog() {
     return formatPrice(amountMinor, currency);
   }
 
-  function formatPackPerCredit(pack: CreditPack): string {
+  function formatPackPer100Credits(pack: CreditPack): string {
     const { amountMinor, currency } = packAmount(pack);
-    return formatPrice(amountMinor / pack.credits, currency);
+    return formatPricePer100Credits(amountMinor, pack.credits, currency);
   }
 
   return {
@@ -258,7 +259,7 @@ export function usePricingCatalog() {
     creditPacks,
     proPrice,
     formatPackPrice,
-    formatPackPerCredit,
+    formatPackPer100Credits,
     loadPrices,
   };
 }

@@ -10,7 +10,7 @@ import AnimatedCounter from '@/components/Header/AnimatedCounter.vue';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
-const { credits, dailyCredits, hasJustSubscribed } = storeToRefs(userStore);
+const { credits, dailyCredits, hasJustSubscribed, isPro, isReady } = storeToRefs(userStore);
 
 const isOpen = ref(false);
 const rootRef = ref<HTMLElement | null>(null);
@@ -33,6 +33,11 @@ function closeMenu() {
   isOpen.value = false;
 }
 
+function upgrade() {
+  closeMenu();
+  dialogStore.showPricing();
+}
+
 function buyCredits() {
   closeMenu();
   dialogStore.showBuyCredits();
@@ -42,7 +47,7 @@ function buyCredits() {
 <template>
   <div
     ref="rootRef"
-    class="credits-chip tw-relative tw-inline-flex"
+    class="credits-chip tw-relative tw-inline-flex tw-items-center tw-gap-2"
     data-testid="credits-chip-root"
   >
     <button
@@ -64,6 +69,28 @@ function buyCredits() {
       />
       <AnimatedCounter :number="totalCredits" :animate="hasJustSubscribed" />
     </button>
+
+    <template v-if="isReady">
+      <span
+        v-if="isPro"
+        data-testid="pro-badge-header"
+        class="tw-inline-flex tw-min-h-9 tw-shrink-0 tw-items-center tw-gap-1.5 tw-rounded-full tw-bg-gold/15 tw-px-2.5 tw-py-1 tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gold"
+      >
+        <font-awesome-icon icon="fa-solid fa-crown" aria-hidden="true" />
+        Pro
+      </span>
+      <button
+        v-else
+        type="button"
+        data-testid="upgrade-pill"
+        aria-label="Upgrade to Pro"
+        class="tw-inline-flex tw-min-h-11 tw-shrink-0 tw-items-center tw-gap-1.5 tw-rounded-full tw-border tw-border-gold/40 tw-bg-gold/10 tw-px-3 tw-py-1 tw-text-sm tw-font-semibold tw-text-gold tw-transition-colors tw-duration-fast hover:tw-bg-gold/20 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-gold"
+        @click="upgrade"
+      >
+        <font-awesome-icon icon="fa-solid fa-crown" aria-hidden="true" />
+        <span class="tw-hidden sm:tw-inline">Upgrade to Pro</span>
+      </button>
+    </template>
 
     <transition name="credits-chip-fade">
       <div
