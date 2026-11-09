@@ -92,7 +92,10 @@ describe('PricingPacks', () => {
       .findAll('button')
       .find((btn) => btn.text().includes('Buy this pack'))!
       .trigger('click');
-    expect(push).toHaveBeenCalledWith({ name: 'signin', query: { redirect: '/pricing' } });
+    expect(push).toHaveBeenCalledWith({
+      name: 'signin',
+      query: { redirect: '/pricing' },
+    });
     expect(startPurchase).not.toHaveBeenCalled();
   });
 
@@ -152,7 +155,10 @@ describe('PricingPacks', () => {
 
   it('shows localized pack prices once /payments/prices resolves', async () => {
     mockPricesResponse(EUR_PRICES);
-    const wrapper = mount(PricingPacks, { props: { packs }, global: { stubs } });
+    const wrapper = mount(PricingPacks, {
+      props: { packs },
+      global: { stubs },
+    });
     await flushPromises();
     const pack200 = wrapper.findAll('article').find((a) => a.text().includes('200 credits'))!;
     expect(pack200.text()).toContain('€2.50');

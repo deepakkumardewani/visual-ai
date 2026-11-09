@@ -89,7 +89,9 @@ test.describe('marketing — signed-out visitor', () => {
     await page.goto('/image-upscaler');
     await page.getByRole('link', { name: 'See credit packs' }).click();
     await expect(page).toHaveURL(/\/pricing$/);
-    await expect(page.getByRole('heading', { name: 'Free Forever, Always' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Start free. Go further with Pro.' }),
+    ).toBeVisible();
   });
 
   test('contact form rejects incomplete details', async ({ page }) => {

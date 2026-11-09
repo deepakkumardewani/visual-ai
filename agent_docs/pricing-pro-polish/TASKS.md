@@ -403,7 +403,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** The pricing modal and the /pricing page share one layout: Free vs Pro comparison, packs framed as "Top up any plan", model costs, then FAQ. The "Free Forever" claim and the approximate-price note are gone, Pro perks list the real Pro models, and reset times show in local time.
 **Try in UI:** Open pricing from the header pill and visit /pricing ; confirm the same layout with the footer only on the page ; read Free 30 vs Pro 50 daily credits and history 100 vs 500 ; confirm the six Pro models in perks and no "Approx. price" note.
 
-### ☐ T7.1 Shared PricingLayout and wrappers
+### ✅ T7.1 Shared PricingLayout and wrappers
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Pricing/PricingLayout.vue`, `apps/web/src/pages/Pricing.vue`, `apps/web/src/components/Dialogs/PricingDialog.vue`
@@ -411,7 +411,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 5: both surfaces render the same layout component; order comparison, packs, model costs, FAQ; no footer before or inside the FAQ in the modal.
 - **Verify:** `cd apps/web && npx vitest run src/pages/Pricing.test.ts src/components/Dialogs/PricingDialog.test.ts`; `bun run check`.
 
-### ☐ T7.2 Comparison, hero and packs
+### ✅ T7.2 Comparison, hero and packs
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Pricing/PricingComparison.vue`, `apps/web/src/components/Pricing/PricingHero.vue`, `apps/web/src/components/Pricing/PricingPacks.vue`
@@ -419,7 +419,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 5 and item 6 comparison: numbers derive from shared constants; hero copy does not contradict the upsell.
 - **Verify:** `cd apps/web && npx vitest run src/components/Pricing`; `bun run check`.
 
-### ☐ T7.3 Pro card perks from shared
+### ✅ T7.3 Pro card perks from shared
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Pricing/PricingProCard.vue`, `apps/web/e2e/qa/localized-prices.spec.ts`, `apps/web/e2e/qa/pro-tier.spec.ts`, `apps/web/e2e/qa/mods-reference-image.spec.ts`
@@ -427,7 +427,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 5: removed note absent; perks list the six Pro models and follow the constant; the three existing specs pass against the new copy.
 - **Verify:** `cd apps/web && npx vitest run src/components/Pricing/PricingProCard.test.ts`; `bun run check`; `cd apps/web && bunx playwright test e2e/qa/localized-prices.spec.ts e2e/qa/pro-tier.spec.ts e2e/qa/mods-reference-image.spec.ts`.
 
-### ☐ T7.4 Local-time reset copy
+### ✅ T7.4 Local-time reset copy
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/dailyReset.ts`, `apps/web/src/components/Profile/ProfileCreditsCard.vue`, `apps/web/src/components/Pricing/PricingCreditStory.vue`, `apps/web/src/utils/generalFAQ.json`, `apps/web/src/utils/pricingFAQ.json`
@@ -435,7 +435,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 6: reset time shown explicitly in local time from one shared constant; Pro profile 50/day, Free 30/day; SPEC item 5: no FAQ says there are no paid tiers.
 - **Verify:** `cd apps/web && npx vitest run src/components/Profile src/components/Pricing/PricingCreditStory.test.ts src/utils/dailyCreditsConsistency.test.ts`; `bun run check`.
 
-### ☐ T7.5 Unit: pricing layout, comparison and perks
+### ✅ T7.5 Unit: pricing layout, comparison and perks
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Pricing/PricingLayout.vue`, `apps/web/src/components/Pricing/PricingComparison.vue`, `apps/web/src/components/Pricing/PricingProCard.vue`, `apps/web/src/pages/Pricing.vue`, `apps/web/src/components/Dialogs/PricingDialog.vue`
@@ -443,7 +443,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 5 unit criteria; files at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/pages/Pricing.test.ts src/components/Dialogs/PricingDialog.test.ts src/components/Pricing --coverage --coverage.include=src/components/Pricing/PricingLayout.vue,src/components/Pricing/PricingComparison.vue,src/components/Pricing/PricingProCard.vue,src/pages/Pricing.vue,src/components/Dialogs/PricingDialog.vue --coverage.reporter=text`
 
-### ☐ T7.6 Unit: reset time helper and hero
+### ✅ T7.6 Unit: reset time helper and hero
 
 - **Kind:** unit
 - **Files:** `apps/web/src/utils/dailyReset.ts`, `apps/web/src/components/Pricing/PricingHero.vue`, `apps/web/src/components/Pricing/PricingCreditStory.vue`
@@ -451,7 +451,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 6 reset copy criteria; files at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/utils/dailyReset.test.ts src/components/Pricing/PricingHero.test.ts src/components/Pricing/PricingCreditStory.test.ts --coverage --coverage.include=src/utils/dailyReset.ts,src/components/Pricing/PricingHero.vue,src/components/Pricing/PricingCreditStory.vue --coverage.reporter=text`
 
-### ☐ T7.7 E2E: pricing layout
+### ✅ T7.7 E2E: pricing layout
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` modal and /pricing show comparison, packs, model costs, FAQ in that order; `@critical` modal has no site footer, page has it after the FAQ; `@high` comparison shows 30 vs 50 daily credits and 100 vs 500 history; `@high` "Approx. price" note and "Free Forever, Always" absent; `@high` Pro perks list the six Pro models; `@medium` mobile stacks the comparison without overflow; `@medium` local-time reset text visible.
@@ -460,7 +460,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** Scenarios derived from SPEC items 5 and 6 browser criteria pass; checkout stubbed; `paidCallGuard` clean.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/pricing-layout.spec.ts --repeat-each=3`
 
-### ☐ T7.8 Gate: Phase 7
+### ✅ T7.8 Gate: Phase 7
 
 - **Kind:** gate
 - **Files:** none

@@ -7,13 +7,13 @@ import LandingButton from '@/components/Landing/LandingButton.vue';
 <template>
   <header class="hero">
     <p class="eyebrow">Credits</p>
-    <h1 class="hero__title">Free Forever, Always</h1>
+    <h1 class="hero__title">Start free. Go further with Pro.</h1>
     <p class="hero__lede">
-      Start with {{ SIGNUP_CREDITS }} persistent credits, earn {{ DAILY_CREDITS.free }} more every
-      day, and buy a pack only when you want more headroom. Nothing expires except unused daily
-      credits.
+      Start with {{ SIGNUP_CREDITS }} persistent credits and {{ DAILY_CREDITS.free }} new ones every
+      day. Upgrade to Pro for {{ DAILY_CREDITS.pro }} a day and premium models, or top up with a
+      pack whenever you need more.
     </p>
-    <LandingButton href="#packs" size="lg">Buy a credit pack</LandingButton>
+    <LandingButton href="#comparison" size="lg">Compare plans</LandingButton>
   </header>
 </template>
 
@@ -24,7 +24,7 @@ import LandingButton from '@/components/Landing/LandingButton.vue';
   align-items: flex-start;
   gap: 0;
   max-width: 40rem;
-  padding: clamp(2.5rem, 6vw, 4.5rem) 0 0;
+  padding: clamp(1.5rem, 4vw, 3rem) 0 0;
 }
 
 .hero__title {

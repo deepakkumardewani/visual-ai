@@ -5,11 +5,11 @@
   },
   {
     "question": "How do credits work?",
-    "answer": "Credits are the only currency on Visual AI. Each generate or edit spends credits based on the model (budget generation 1 credit; premium generation 5; utility tools 2; premium upscalers 4).<br><br>Signup credits (30) and bought credits persist and never expire. Daily credits (30) reset every day — unused daily credits are lost. Daily credits do not roll over. There are no paid subscription tiers."
+    "answer": "Credits are the only currency on Visual AI. Each generate or edit spends credits based on the model (budget generation 1 credit; premium generation 5; utility tools 2; premium upscalers 4).<br><br>Signup credits (30) and bought credits persist and never expire. Daily credits (30) reset every day at 00:00 UTC — unused daily credits are lost and do not roll over. Visual AI Pro is an optional subscription with a higher daily allowance."
   },
   {
     "question": "Do unused credits expire?",
-    "answer": "Daily credits reset each day and do not roll over. Signup credits and purchased credits persist and never expire."
+    "answer": "Daily credits reset every day at 00:00 UTC and do not roll over. Signup credits and purchased credits persist and never expire."
   },
   {
     "question": "Can I use my generated images for commercial projects?",

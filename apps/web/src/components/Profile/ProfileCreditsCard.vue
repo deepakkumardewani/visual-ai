@@ -6,6 +6,7 @@ import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
 import LandingButton from '@/components/Landing/LandingButton.vue';
+import { dailyResetLabel } from '@/utils/dailyReset';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
@@ -23,6 +24,7 @@ const totalCredits = computed(() => (dailyCredits.value || 0) + (credits.value |
     <p class="profile-credits__meta">
       {{ dailyCredits || 0 }}/{{ dailyAllowance }} daily · {{ credits || 0 }} persistent
     </p>
+    <p class="profile-credits__meta" data-testid="profile-credits-reset">{{ dailyResetLabel() }}</p>
     <LandingButton
       variant="primary"
       size="md"

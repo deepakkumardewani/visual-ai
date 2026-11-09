@@ -1,6 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { createPinia, setActivePinia } from 'pinia';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import Pricing from '@/pages/Pricing.vue';
 
@@ -9,56 +8,27 @@ vi.mock('@/composables/usePageSeo', () => ({
 }));
 
 const stubs = {
-  FaqSection: { template: '<div class="faq-stub">FAQ Component</div>' },
-  PricingPacks: { template: '<div>Buy Credits</div>' },
-  LandingButton: { template: '<a href="#packs"><slot /></a>' },
+  PricingLayout: { template: '<div data-testid="pricing-layout" />' },
+  LandingFooter: { template: '<footer data-testid="site-footer" />' },
 };
 
-describe('Pricing', () => {
-  beforeEach(() => {
-    setActivePinia(createPinia());
+describe('Pricing page', () => {
+  it('renders the shared pricing layout', () => {
+    const wrapper = mount(Pricing, { global: { stubs } });
+
+    expect(wrapper.find('[data-testid="pricing-layout"]').exists()).toBe(true);
   });
 
-  it('renders the hero section with Free Forever title', () => {
-    const wrapper = mount(Pricing, {
-      global: { stubs },
-    });
+  it('renders the site footer after the layout', () => {
+    const wrapper = mount(Pricing, { global: { stubs } });
+    const html = wrapper.html();
 
-    expect(wrapper.text()).toContain('Free Forever, Always');
+    expect(html.indexOf('pricing-layout')).toBeLessThan(html.indexOf('site-footer'));
   });
 
-  it('displays the three credit cards in How Credits Work section', () => {
-    const wrapper = mount(Pricing, {
-      global: { stubs },
-    });
+  it('does not render a legacy price note', () => {
+    const wrapper = mount(Pricing, { global: { stubs } });
 
-    expect(wrapper.text()).toContain('Daily Credits');
-    expect(wrapper.text()).toContain('Persistent Credits');
-    expect(wrapper.text()).toContain('Pay Per Use');
-  });
-
-  it('displays the Model Credit Costs section', () => {
-    const wrapper = mount(Pricing, {
-      global: { stubs },
-    });
-
-    expect(wrapper.text()).toContain('Model Credit Costs');
-  });
-
-  it('displays the Buy Credits section with packs', () => {
-    const wrapper = mount(Pricing, {
-      global: { stubs },
-    });
-
-    expect(wrapper.text()).toContain('Buy Credits');
-    expect(wrapper.text()).toContain('Credits');
-  });
-
-  it('renders the FAQ component', () => {
-    const wrapper = mount(Pricing, {
-      global: { stubs },
-    });
-
-    expect(wrapper.find('.faq-stub').exists()).toBe(true);
+    expect(wrapper.text()).not.toContain('Approx. price');
   });
 });

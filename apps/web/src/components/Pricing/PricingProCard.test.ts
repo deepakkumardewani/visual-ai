@@ -1,13 +1,13 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { ref } from 'vue';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import PricingProCard from '@/components/Pricing/PricingProCard.vue';
 import { PAYMENT_TOAST } from '@/payments/constants';
 import { useUserStore } from '@/stores/user';
 import type { IUser } from '@/types';
-import { HISTORY_CAP, PLAN } from '@visual-ai/shared';
+import { HISTORY_CAP, MODEL_REGISTRY, PLAN, PREMIUM_MODEL_KEYS } from '@visual-ai/shared';
 
 const mocks = vi.hoisted(() => ({
   push: vi.fn(),
@@ -49,13 +49,19 @@ describe('PricingProCard', () => {
     expect(mocks.loadPrices).toHaveBeenCalledTimes(1);
     expect(wrapper.get('[data-testid="pro-price"]').text()).toBe('$5.00');
     expect(wrapper.text()).toContain(`${HISTORY_CAP[PLAN.PRO]} images`);
-    expect(wrapper.get('[data-testid="pro-price-note"]').text()).toContain('Approx. price');
+    expect(wrapper.find('[data-testid="pro-price-note"]').exists()).toBe(false);
+    expect(wrapper.text()).not.toContain('Approx. price');
+    for (const key of PREMIUM_MODEL_KEYS)
+      expect(wrapper.text()).toContain(MODEL_REGISTRY[key].label);
   });
 
   it('redirects a signed-out visitor to sign in without subscribing', async () => {
     const wrapper = mountCard();
     await wrapper.get('[data-testid="pro-subscribe"]').trigger('click');
-    expect(mocks.push).toHaveBeenCalledWith({ name: 'signin', query: { redirect: '/pricing' } });
+    expect(mocks.push).toHaveBeenCalledWith({
+      name: 'signin',
+      query: { redirect: '/pricing' },
+    });
     expect(mocks.subscribe).not.toHaveBeenCalled();
   });
 
@@ -105,5 +111,31 @@ describe('PricingProCard', () => {
 
   it('shows the default CTA label for a free user', () => {
     expect(mountCard().get('[data-testid="pro-subscribe"]').text()).toBe('Upgrade to Pro');
+  });
+});
+
+describe('PricingProCard premium perks', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia());
+    mocks.loadPrices.mockResolvedValue(undefined);
+  });
+
+  afterEach(() => {
+    vi.doUnmock('@visual-ai/shared');
+    vi.resetModules();
+  });
+
+  it('lists exactly the models in a changed PREMIUM_MODEL_KEYS', async () => {
+    const [first, second] = Object.keys(MODEL_REGISTRY) as (keyof typeof MODEL_REGISTRY)[];
+    vi.resetModules();
+    vi.doMock('@visual-ai/shared', async (importOriginal) => ({
+      ...(await importOriginal<typeof import('@visual-ai/shared')>()),
+      PREMIUM_MODEL_KEYS: [first],
+    }));
+    const { default: Card } = await import('@/components/Pricing/PricingProCard.vue');
+    const wrapper = mount(Card, { global: { stubs: { LandingButton } } });
+    const text = wrapper.text();
+    expect(text).toContain(`Premium models: ${MODEL_REGISTRY[first].label}`);
+    expect(text).not.toContain(MODEL_REGISTRY[second].label);
   });
 });

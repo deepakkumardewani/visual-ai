@@ -63,7 +63,7 @@ function expectUsdOnly(body: PricesBody) {
   for (const pack of body.packs) expect(pack.currency).toBe('USD');
 }
 
-test('@high a mocked country header shows local currency with the approx. note', async ({
+test('@high a mocked country header shows local currency as an estimate', async ({
   page,
   request,
   snap,
@@ -75,7 +75,7 @@ test('@high a mocked country header shows local currency with the approx. note',
   );
   expect(india.country).toBe('IN');
   expect(india.currency).toBe('INR');
-  expect(india.isEstimate).toBe(true); // drives the "approx." note in the UI
+  expect(india.isEstimate).toBe(true); // estimate flag from the API; the UI no longer shows an approx. note
   expect(india.pro.currency).toBe('INR');
   expect(india.pro.amountMinor).toBeGreaterThan(PRO_USD_MINOR);
   expect(india.packs.map((p) => p.amountMinor)).toEqual(INR_PACK_MINORS);
@@ -200,7 +200,8 @@ async function expectPagePackPrices(page: Page, pattern: RegExp) {
   await expect(page.getByRole('button', { name: 'Buy this pack' })).toHaveCount(
     INR_PACK_MINORS.length,
   );
-  await expect(page.getByText(pattern)).toHaveCount(INR_PACK_MINORS.length);
+  // Scoped to the packs section: the Pro card on the same page also shows a localized price.
+  await expect(page.locator('#packs').getByText(pattern)).toHaveCount(INR_PACK_MINORS.length);
 }
 
 async function gotoPricing(page: Page) {

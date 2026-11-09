@@ -1,7 +1,7 @@
 [
   {
     "question": "Can I use Visual AI for free?",
-    "answer": "Yes. Every new account gets 30 persistent credits that never expire, plus 30 daily credits that reset each day (unused daily credits do not roll over). You can generate, upscale, colorize, restore, and remove backgrounds with those credits — no card and no subscription required to start.<br><br>When you need more, buy credit packs on the pricing page. Purchased credits persist and never expire. There are no paid subscription tiers."
+    "answer": "Yes. Every new account gets 30 persistent credits that never expire, plus 30 daily credits that reset every day at 00:00 UTC (unused daily credits do not roll over). You can generate, upscale, colorize, restore, and remove backgrounds with those credits — no card and no subscription required to start.<br><br>When you need more, buy credit packs on the pricing page. Purchased credits persist and never expire. Visual AI Pro is an optional plan for a higher daily allowance and premium models."
   },
   {
     "question": "How quickly can I generate images?",
@@ -9,7 +9,7 @@
   },
   {
     "question": "How do credits work?",
-    "answer": "Each generation or edit spends credits. You get 30 persistent credits that stay on the account, plus 30 daily credits that reset unused at the end of the day. Purchased credits never expire."
+    "answer": "Each generation or edit spends credits. You get 30 persistent credits that stay on the account, plus 30 daily credits that reset every day at 00:00 UTC, unused ones included. Purchased credits never expire."
   },
   {
     "question": "Which models can I use?",
@@ -17,6 +17,6 @@
   },
   {
     "question": "Do I need a subscription?",
-    "answer": "No. Visual AI is credits only — there are no paid subscription tiers."
+    "answer": "No. You can use Visual AI on credits alone. Visual AI Pro is an optional subscription with a higher daily allowance, premium models, and private generations."
   }
 ]

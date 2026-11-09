@@ -210,14 +210,14 @@ test.describe('Pro tier UI', () => {
     const FREE_MAX_MODEL = { title: 'Flux 2 Max', company: 'Black Forest Labs' };
     const PREMIUM_CREDIT_COST = 5;
 
-    /** Opens the picker if needed and hovers the company row so its submenu lists the model. */
+    /** Opens the picker if needed; the flat list scrolls, so bring the model's row into view. */
     async function modelOption(page: Page, model: { title: string; company: string }) {
       if (!(await page.getByRole('listbox').isVisible())) await openModelPicker(page);
-      await page.getByText(model.company, { exact: true }).first().hover();
       const option = page
         .getByTestId('model-option')
         .filter({ has: page.getByText(model.title, { exact: true }) })
         .last();
+      await option.scrollIntoViewIfNeeded();
       await expect(option).toBeVisible();
       return option;
     }
@@ -425,7 +425,8 @@ test.describe('Pro tier UI', () => {
     await gotoStudio(page);
     const indiaDialog = await openPricingDialogFromLock(page);
     await expect(indiaDialog.getByTestId('pro-price')).toContainText('₹');
-    await expect(indiaDialog.getByTestId('pro-price-note')).toContainText('Approx.');
+    await expect(indiaDialog.getByTestId('pro-price-note')).toHaveCount(0);
+    await expect(indiaDialog.getByText('Approx. price')).toHaveCount(0);
     await snap('pricing-inr');
     await page.screenshot({ path: shotPath('pricing-inr'), fullPage: true });
   });

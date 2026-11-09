@@ -9,16 +9,16 @@ import { usePricingCatalog } from '@/composables/usePricingCatalog';
 import { PAYMENT_TOAST } from '@/payments/constants';
 import { usePurchase } from '@/payments/usePurchase';
 import { useUserStore } from '@/stores/user';
-import { HISTORY_CAP, PLAN } from '@visual-ai/shared';
+import { HISTORY_CAP, MODEL_REGISTRY, PLAN, PREMIUM_MODEL_KEYS } from '@visual-ai/shared';
+
+const PRO_MODEL_NAMES = PREMIUM_MODEL_KEYS.map((key) => MODEL_REGISTRY[key].label).join(', ');
 
 const PRO_PERKS = [
   `Keep up to ${HISTORY_CAP[PLAN.PRO]} images in your history`,
-  'Premium models: Nano Banana Pro, GPT Image 2, FLUX.2 Max',
+  `Premium models: ${PRO_MODEL_NAMES}`,
   'Your generations stay private, hidden from Explore',
   'Priority queue: your jobs start first',
 ] as const;
-
-const PRICE_NOTE = 'Approx. price; final amount in your currency is shown at checkout';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -54,7 +54,6 @@ async function upgrade() {
         <span data-testid="pro-price">{{ proPrice }}</span>
         <span class="pro-card__per">/ month</span>
       </p>
-      <p class="pro-card__note" data-testid="pro-price-note">{{ PRICE_NOTE }}</p>
     </div>
 
     <ul class="pro-card__perks">
@@ -84,8 +83,6 @@ async function upgrade() {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  margin: 0 auto 2rem;
-  max-width: 36rem;
   padding: 1.75rem;
   background: rgb(var(--tw-surface-3));
   border: 1px solid color-mix(in oklab, rgb(var(--tw-accent)) 45%, rgb(var(--tw-hairline)));
@@ -119,12 +116,6 @@ async function upgrade() {
   margin-left: 0.35rem;
   font-size: 0.95rem;
   font-weight: 400;
-  color: rgb(var(--tw-ink-muted));
-}
-
-.pro-card__note {
-  margin: 0.25rem 0 0;
-  font-size: 0.8rem;
   color: rgb(var(--tw-ink-muted));
 }
 
