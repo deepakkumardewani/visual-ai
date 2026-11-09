@@ -11,7 +11,9 @@ import { HISTORY_CAP, PLAN } from '@visual-ai/shared';
 
 vi.mock('@/utils/helpers', () => ({ downloadItemImage: vi.fn() }));
 
-const result = { images: ['https://replicate.example/out.png'] } as unknown as IImageObject;
+const result = {
+  images: ['https://replicate.example/out.png'],
+} as unknown as IImageObject;
 const mountNotice = () => mount(UnsavedResultNotice, { props: { result } });
 
 describe('UnsavedResultNotice', () => {
@@ -21,8 +23,38 @@ describe('UnsavedResultNotice', () => {
     document.body.innerHTML = '';
   });
 
-  it('warns the result is not saved and expires', () => {
-    expect(mountNotice().text()).toContain('Not saved to history');
+  it('explains the image was not saved with the real count and cap for a free user', () => {
+    const user = useUserStore();
+    user.history = Array.from(
+      { length: HISTORY_CAP[PLAN.FREE] },
+      (_, i) => ({ _id: String(i) }) as IImageObject,
+    );
+    expect(mountNotice().text()).toContain(
+      `History full (${HISTORY_CAP[PLAN.FREE]}/${HISTORY_CAP[PLAN.FREE]}) - this image wasn't saved. Download it within ~1 hour.`,
+    );
+  });
+
+  it('does not count an unsaved entry toward the saved count', () => {
+    const user = useUserStore();
+    user.history = [
+      ...Array.from({ length: 99 }, (_, i) => ({ _id: String(i) }) as IImageObject),
+      {} as IImageObject,
+    ];
+    expect(mountNotice().text()).toContain('History full (99/100)');
+  });
+
+  it('uses the Pro cap for a Pro user and drops the free-space action', () => {
+    const user = useUserStore();
+    user.plan = PLAN.PRO;
+    user.history = Array.from(
+      { length: HISTORY_CAP[PLAN.PRO] },
+      (_, i) => ({ _id: String(i) }) as IImageObject,
+    );
+    const wrapper = mountNotice();
+    expect(wrapper.text()).toContain(
+      `History full (${HISTORY_CAP[PLAN.PRO]}/${HISTORY_CAP[PLAN.PRO]})`,
+    );
+    expect(wrapper.text()).not.toContain('Delete images to free space');
   });
 
   it('shows the upgrade CTA with the Pro history cap for a free user', () => {
@@ -30,7 +62,6 @@ describe('UnsavedResultNotice', () => {
     expect(wrapper.get('[data-testid="unsaved-upgrade"]').text()).toContain(
       `${HISTORY_CAP[PLAN.PRO]} history`,
     );
-    expect(wrapper.find('[data-testid="unsaved-free-space"]').exists()).toBe(false);
   });
 
   it('opens the pricing dialog when a free user clicks upgrade', async () => {
@@ -39,32 +70,27 @@ describe('UnsavedResultNotice', () => {
     expect(useDialogStore().showPricingDialog).toBe(true);
   });
 
-  it('shows the free-space CTA instead of upgrade for a Pro user', () => {
+  it('shows no upgrade link for a Pro user', () => {
     useUserStore().plan = PLAN.PRO;
-    const wrapper = mountNotice();
-    expect(wrapper.find('[data-testid="unsaved-free-space"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="unsaved-upgrade"]').exists()).toBe(false);
+    expect(mountNotice().find('[data-testid="unsaved-upgrade"]').exists()).toBe(false);
   });
 
-  it('scrolls the history grid into view for a Pro user', async () => {
-    useUserStore().plan = PLAN.PRO;
-    const grid = document.createElement('div');
-    grid.dataset.testid = 'user-generations-grid';
-    const scrollIntoView = vi.fn();
-    grid.scrollIntoView = scrollIntoView;
-    document.body.appendChild(grid);
-
-    await mountNotice().get('[data-testid="unsaved-free-space"]').trigger('click');
-    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+  it('labels the icon buttons', () => {
+    const wrapper = mountNotice();
+    expect(wrapper.get('[data-testid="unsaved-download"]').attributes('aria-label')).toBe(
+      'Download image',
+    );
+    expect(wrapper.get('[data-testid="unsaved-dismiss"]').attributes('aria-label')).toBe('Dismiss');
   });
 
-  it('leaves the notice in place and emits nothing when the history grid is absent', async () => {
-    useUserStore().plan = PLAN.PRO;
+  it('offers no delete action', () => {
     const wrapper = mountNotice();
-    await wrapper.get('[data-testid="unsaved-free-space"]').trigger('click');
-    expect(wrapper.find('[data-testid="unsaved-result-notice"]').exists()).toBe(true);
-    expect(wrapper.emitted('dismiss')).toBeUndefined();
-    expect(useDialogStore().showPricingDialog).toBe(false);
+    expect(wrapper.findAll('button').map((b) => b.attributes('aria-label'))).toEqual([
+      undefined, // the free-plan upgrade link
+      'Download image',
+      'Dismiss',
+    ]);
+    expect(wrapper.html().toLowerCase()).not.toContain('delete');
   });
 
   it('downloads the result image', async () => {

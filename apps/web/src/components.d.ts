@@ -58,6 +58,7 @@ declare module 'vue' {
     GenerationErrorBanner: typeof import('./components/Dashboard/Canvas/GenerationErrorBanner.vue')['default']
     Heading: typeof import('./components/Dashboard/ModelPicker/Heading.vue')['default']
     History: typeof import('./components/History/History.vue')['default']
+    HistoryFullNote: typeof import('./components/Dashboard/Canvas/HistoryFullNote.vue')['default']
     IconCamera: typeof import('./components/icons/IconCamera.vue')['default']
     IconCameraDark: typeof import('./components/icons/IconCameraDark.vue')['default']
     IconCinematic: typeof import('./components/icons/sizes/IconCinematic.vue')['default']

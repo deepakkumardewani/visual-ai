@@ -475,7 +475,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** The not-saved notice explains why with real numbers and has icon buttons for Download and Dismiss. A persistent note near Generate warns when history is nearly full or full, with an Upgrade link for Free users.
 **Try in UI:** As Free with 100 images see "History full" near Generate ; as Pro with 500 see the same without an Upgrade link ; with under 90 images see nothing ; trigger a not-saved result and use the icon Download and X Dismiss buttons.
 
-### ☐ T8.1 UnsavedResultNotice copy and icon buttons
+### ✅ T8.1 UnsavedResultNotice copy and icon buttons
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dashboard/Canvas/UnsavedResultNotice.vue`
@@ -483,7 +483,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 8 notice requirements; Pro sees no upgrade link.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/Canvas/UnsavedResultNotice.test.ts`; `bun run check`.
 
-### ☐ T8.2 Persistent HistoryFullNote
+### ✅ T8.2 Persistent HistoryFullNote
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dashboard/Canvas/HistoryFullNote.vue`, `apps/web/src/components/Dashboard/Canvas/ResultCanvas.vue`, `apps/web/src/components/Dashboard/Composer/PromptBar.vue`, `apps/web/src/stores/history.ts`
@@ -491,7 +491,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 8: note appears at 90% and 100% for both plans, none under 90%, re-evaluates after generate and delete.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/Canvas src/stores/history.test.ts`; `bun run check`.
 
-### ☐ T8.3 Unit: notices
+### ✅ T8.3 Unit: notices
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Dashboard/Canvas/UnsavedResultNotice.vue`, `apps/web/src/components/Dashboard/Canvas/HistoryFullNote.vue`, `apps/web/src/stores/history.ts`
@@ -499,7 +499,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC item 8 unit criteria; files at least 80% across all metrics, target over 95%.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/Canvas/UnsavedResultNotice.test.ts src/components/Dashboard/Canvas/HistoryFullNote.test.ts src/stores/history.test.ts --coverage --coverage.include=src/components/Dashboard/Canvas/UnsavedResultNotice.vue,src/components/Dashboard/Canvas/HistoryFullNote.vue,src/stores/history.ts --coverage.reporter=text`
 
-### ☐ T8.4 E2E: history-full notices
+### ✅ T8.4 E2E: history-full notices
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` Free seeded at 100 shows the full note with an Upgrade link; `@critical` Pro seeded at 500 shows the full note without an Upgrade link; `@high` count at 90 shows the near-full wording; `@high` under 90 shows no note; `@high` a stubbed not-saved result shows the icon Download and X Dismiss and no delete button; `@medium` deleting images lowers the level without reload.
@@ -508,7 +508,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** Scenarios derived from SPEC item 8 browser criteria pass; seeding merges with working-tree edits; generation endpoints stubbed; `paidCallGuard` clean.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/history-full.spec.ts --repeat-each=3`
 
-### ☐ T8.5 Gate: Phase 8
+### ✅ T8.5 Gate: Phase 8
 
 - **Kind:** gate
 - **Files:** none

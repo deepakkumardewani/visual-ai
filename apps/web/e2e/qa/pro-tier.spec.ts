@@ -3,13 +3,17 @@ import { randomUUID } from 'node:crypto';
 import { clerk } from '@clerk/testing/playwright';
 import { mergeTests, type Locator, type Page } from '@playwright/test';
 
-import type { IImageObject } from '@visual-ai/shared';
-
 import { test as generationTest } from '../fixtures/generation';
 import { expect, test as qaTest } from '../fixtures/qa';
 import { API_URL, E2E_WEB_ORIGIN, requireEnv } from '../support/env';
 import { activateProViaWebhook } from '../support/proWebhook';
-import { deleteUsers, readPlan, seedExploreUsers, uniqueToken } from '../support/proPerksSeed';
+import {
+  deleteUsers,
+  readPlan,
+  seedExploreUsers,
+  stubUnsavedGeneration,
+  uniqueToken,
+} from '../support/proPerksSeed';
 import { gotoStudio } from '../support/studio';
 import { resetToFree } from '../support/subscriptionState';
 
@@ -17,17 +21,12 @@ const test = mergeTests(qaTest, generationTest);
 
 const E2E_USER_ID = requireEnv('E2E_CLERK_USER_ID');
 const RUN = randomUUID().slice(0, 8);
-const USER_PROFILE_URL = /\/users\/user_/;
 const PRICES_URL = /\/payments\/prices$/;
-const PROGRESS_URL = /\/progress\?jobId=/;
 const GEO_HEADER = 'cf-ipcountry';
 const HTTP_OK = 200;
 const HTTP_CONFLICT = 409;
 const PREMIUM_TITLE = 'Nano Banana Pro';
-const STUDIO_CREDITS = 500;
 const ALT_PREFIX_LENGTH = 60;
-const PNG_BASE64 =
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
 // Evidence PNGs land in the repo-level agent_docs/qa tree (playwright runs from apps/web).
 const shotPath = (name: string) => `../../agent_docs/qa/pro-tier/${name}.png`;
 
@@ -61,64 +60,6 @@ async function clerkBearerToken(page: Page): Promise<string> {
     const token = await window.Clerk.session?.getToken();
     if (!token) throw new Error('[e2e] Clerk session token unavailable');
     return token;
-  });
-}
-
-/** Stubs an at-cap generation's progress (POST /generate/image comes from generationStub): the API's completed payload with no _id and savedToHistory false. */
-async function stubUnsavedGeneration(page: Page, prompt: string) {
-  const replicateUrl = `https://replicate.delivery/e2e/${uniqueToken()}/out.png`;
-  await page.route(USER_PROFILE_URL, async (route) => {
-    if (route.request().method() !== 'GET') return route.continue();
-    const response = await route.fetch();
-    const user = (await response.json()) as Record<string, unknown>;
-    return route.fulfill({
-      response,
-      json: { ...user, credits: STUDIO_CREDITS, dailyCredits: 0 },
-    });
-  });
-  await page.route('https://replicate.delivery/**', (route) =>
-    route.fulfill({
-      status: 200,
-      contentType: 'image/png',
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: Buffer.from(PNG_BASE64, 'base64'),
-    }),
-  );
-  await page.route(PROGRESS_URL, (route) => {
-    const image: Omit<IImageObject, '_id' | 'createdAt' | 'featureType'> & {
-      featureType: string;
-      createdAt: string;
-    } = {
-      userId: E2E_USER_ID,
-      prompt,
-      featureType: 'image',
-      createdAt: new Date().toISOString(),
-      modelName: 'E2E Stub',
-      imageType: 'horizontal',
-      images: [
-        {
-          name: 'unsaved',
-          aiImageUrl: replicateUrl,
-          resolution: '1x1',
-          aspectRatio: '16:9',
-          width: 1,
-          height: 1,
-          format: 'png',
-          bytes: 70,
-        },
-      ],
-    };
-    const body = { status: 'completed', image, userCreditsRemaining: 10, savedToHistory: false };
-    return route.fulfill({
-      status: 200,
-      headers: {
-        'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
-        'Access-Control-Allow-Credentials': 'true',
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-      },
-      body: `data: ${JSON.stringify(body)}\n\n`,
-    });
   });
 }
 
@@ -347,7 +288,7 @@ test.describe('Pro tier UI', () => {
     });
   });
 
-  test('@high not-saved notice has Download and the correct CTA per plan', async ({
+  test('@high not-saved notice has icon Download and the correct CTA per plan', async ({
     page,
     generationStub, // stubs POST /generate/image so no real Replicate job is billed
     snap,
@@ -358,17 +299,18 @@ test.describe('Pro tier UI', () => {
     await gotoStudio(page);
     await generateUnsaved(page, prompt);
     const notice = page.getByTestId('unsaved-result-notice');
-    await expect(notice.getByRole('button', { name: 'Download' })).toBeVisible();
+    await expect(notice.getByRole('button', { name: 'Download image' })).toBeVisible();
     await expect(notice.getByTestId('unsaved-upgrade')).toContainText('Upgrade to Pro');
-    await expect(notice.getByTestId('unsaved-free-space')).toHaveCount(0);
+    await expect(notice.getByRole('button', { name: 'Dismiss' })).toBeVisible();
+    await expect(notice.getByText('Delete images to free space')).toHaveCount(0);
     await snap('unsaved-notice-free');
     await page.screenshot({ path: shotPath('unsaved-notice-free'), fullPage: true });
 
     await activatePro(page, 'notice');
     await gotoStudio(page);
     await generateUnsaved(page, prompt);
-    await expect(notice.getByRole('button', { name: 'Download' })).toBeVisible();
-    await expect(notice.getByTestId('unsaved-free-space')).toBeVisible();
+    await expect(notice.getByRole('button', { name: 'Download image' })).toBeVisible();
+    await expect(notice.getByText('Delete images to free space')).toHaveCount(0);
     await expect(notice.getByTestId('unsaved-upgrade')).toHaveCount(0);
     await page.screenshot({ path: shotPath('unsaved-notice-pro'), fullPage: true });
     expect(generationStub.generateRequestCount()).toBe(2);
