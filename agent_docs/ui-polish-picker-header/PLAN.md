@@ -1,0 +1,127 @@
+# Implementation Plan: ui-polish-picker-header
+
+Authoritative input: `SPEC.md` (reviewed, final). This plan adds no scope and writes no feature code. All paths are under `apps/web/` unless stated. Task format follows `~/.claude/docs/task-conventions.md` (TASKS.md is produced separately).
+
+## Overview
+
+Fourteen phases (0-13), each a vertical slice that leaves `bun run verify` and `bun run test` green. Order: baseline evidence, then the shared breakpoint/height constants (header, tabs, banner and sheet all depend on them), then header work (Upgrade out of CreditsChip, plan pill and perks dialog, tabs into the header, single-source header height), then the picker (data and company headers, search and keyboard, bottom sheet), then the three fixes (FAQ reveal, landing nav, Create audit), the analytics doc, and a final gate with walkthrough.
+
+## Grounding (current code, from reading apps/web)
+
+- Breakpoints today: `Header/AppHeader.vue:24` `useMediaQuery('(min-width: 600px)')` (`smAndUp`); `Header/ReferralOffer.vue:11` `(max-width: 600px)`; `pages/Dashboard.vue:37` `CREATE_SM_UP = 640` (also `tw-h-[calc(100vh-60px)]` at lines 146 and 154); `Dashboard/DashboardShell.vue:14` `calc(100vh-60px)` plus `@media (min-width: 640px)` at line 45; `Landing/LandingNav.vue:363` `@media (min-width: 900px)`; `Header/CreditsChip.vue` uses `sm:` for the Upgrade label. Out of scope but matched by a naive `600px` grep: `Header/Logo.vue:23` (logo size, recorded as an audit item) and `Dialogs/ImageDialog.vue:40`, so all `600px` greps are scoped to `AppHeader.vue` and `ReferralOffer.vue`.
+- `Header/` holds `AppHeader`, `CreditsChip`, `FeatureSelect`, `NavTabs`, `ReferralOffer`, `UserMenu`, `ThemeButton`, each with a co-located test. No `HeaderActions.vue` or breakpoint composable exists. Constants live in `utils/constants.ts` (there is no `src/constants/`). Composables live in `src/composables/`.
+- `Dashboard/ModelPicker/` has `ModelPicker`, `ModelPickerPanel`, `ModelOption`, `ModelPickerTrigger`, `PremiumLockBadge`, `Heading` (all with tests). `utils/models.ts` has `groupModelsByCompany` (no callers). `components/primitives/Popover.vue` (243 lines) is shared by ~9 consumers.
+- `PRO_PERKS` lives only in `Pricing/PricingProCard.vue`. `Dialogs/` has `PricingDialog.vue` but no perks dialog; `<PricingDialog />` is mounted only at the template root of `Header/UserMenu.vue` (with `ReferralDialog`, `ReferralCopyDialog`). `e2e/qa/pro-perks.spec.ts` (403 and history-cap checks) uses none of the changed selectors.
+- Existing e2e specs hit by changed selectors (grep): `upgrade-entry` (`upgrade-pill`, `pro-badge-header`, `pro-badge`) in P2/P3; `pricing-layout` (`upgrade-pill`) in P2; `plan-status`, `pro-tier` (`pro-badge`) in P3; `mods-referral-favicon` (`referral-offer-mobile`/`-desktop`) in P1; `model-menu`, `pro-tier` and non-QA `create-image`, `create-transforms` (picker) in P6-P8; `localized-prices` (`credits-chip`) as a P2 regression.
+
+## Architecture Decisions
+
+- One layout constants module, `utils/layout.ts` (new, next to `constants.ts`): `BREAKPOINT = { MOBILE_MAX: 768, DESKTOP_MIN: 1024 }`, `CREATE_LAYOUT_SM = 640` (D8, named only, behaviour unchanged), header heights, and `PICKER_SECTION`-style names stay in `utils/models.ts`. A `composables/useHeaderBreakpoint.ts` wraps `useMediaQuery` and returns `{ isMobile, isTablet, isDesktop }`. Every `600`/`640`/header-`md:` use for header, tabs, banner and sheet routes through it. Tailwind `md`/`lg` already equal 768/1024, so classes and the composable agree.
+- Header height single source: CSS custom properties (`--app-header-h`, plus the mobile row-2 height) defined once from the constants, consumed by `DashboardShell.vue` and `Dashboard.vue` via `calc(100dvh - var(...))`. Preferred shape: banner and row 1 scroll away on mobile, so the shell must not subtract them in a way that pushes the composer off-screen; the implementer proves it with the composer-bottom e2e assertion, not by calculation.
+- Popover changes are opt-in props only (for example `navigateOptionsFromInput`, `autofocusSelector`), defaults identical to today, existing `Popover.test.ts` untouched and passing.
+- Picker is one panel component at all widths; `ModelPicker.vue` chooses `Popover` (>=768) or `ModelPickerSheet.vue` (<768) via the composable. No new dependency.
+- Upgrade moves out of `CreditsChip` in a phase before the PRO chip is removed, so Pro users never lose their plan indicator at any commit: Phase 2 moves Upgrade, Phase 3 moves the PRO indicator to the avatar menu.
+- `PRO_PERKS` moves to a shared module (for example `utils/proPerks.ts`) consumed by `PricingProCard` and the new `ProPerksDialog`.
+- Tests: implementation tasks do not write specs. Each behavioural phase ends with `Unit:` tasks (which also update that phase's stale tests) then `E2E:` tasks, then the checkpoint. All paid/outbound calls (`POST /generate/image`, `/generate/video`, progress, result URLs, Dodo, email, pricing endpoints) are mocked via `page.route`; the harness fails un-intercepted paid calls and must not be bypassed. Never call real Replicate/Dodo-live/email.
+
+## Dependency Graph
+
+```
+P0 baseline screenshots + audit table (no code; evidence for P11/P13)
+ |
+P1 layout constants + useHeaderBreakpoint (+ banner/Earn gate switch to 768)
+ |--> P2 Upgrade out of CreditsChip -> HeaderActions (Earn, Upgrade, credits, avatar)
+ |      |--> P3 plan pill in UserMenu + ProPerksDialog + shared PRO_PERKS (removes PRO chip)
+ |      |--> P4 tabs into header (two-row mobile, centered tablet/desktop, compact FeatureSelect)
+ |             |--> P5 header height single source + DashboardShell dvh
+ |--> P6 picker data + company headers + row fix (desktop popover; P6-P7 need nothing from P1)
+        |--> P7 search + keyboard + Popover opt-in props
+        |--> P8 bottom sheet <768 (needs P1, P7)
+P9  FAQ v-reveal fix inside modal         (independent)
+P10 landing nav theme toggle             (independent)
+P11 Create responsiveness audit fixes    (needs P0, P4, P5, P8)
+P12 ANALYTICS.md research doc            (independent, docs only)
+P13 final e2e gate + walkthrough         (needs all)
+```
+
+Parallelizable: P6-P8 (picker) alongside P2-P5 (header): they share no files (P8 only imports P1's composable); P9, P10, P12 can run any time after P0. P2, P3, P4 all touch `Header/*` and `CreditsChip.vue`: sequential. P3 and P9 both touch pricing/modal files only lightly (P3 `PricingProCard.vue`, P9 `FaqSection.vue`/`PricingLayout.vue`): avoid running them concurrently.
+
+## Phases
+
+### Phase 0: Baseline screenshots and audit table (no code)
+- Capture baseline at 360, 390, 700, 768, 1024, 1440, light and dark, Free and Pro, for Create (with banner on mobile), Explore, Assets, picker open, and Upgrade dialog. Save under `agent_docs/qa/ui-polish-picker-header/baseline/`. Use `agent-browser` with `AGENT_BROWSER_SESSION=visual-ai` and `agent-browser close`.
+- Seed the audit table (width, element, symptom, fix) with the spec's known findings; later phases append fixes. The required `.gitignore` entries are already present.
+- Files: screenshots and `agent_docs/ui-polish-picker-header/AUDIT.md` only. Checkpoint: baseline set complete and the audit table has an entry per known finding. Test tasks: none (no behaviour). Pro screenshots: activate the QA user with `e2e/support/proWebhook.ts` (local signed test webhook) and restore with `e2e/support/subscriptionState.ts`.
+
+### Phase 1: Shared breakpoint constants and composable
+- Create `utils/layout.ts` and `composables/useHeaderBreakpoint.ts`; replace the 600px `smAndUp` in `AppHeader.vue` and the `(max-width: 600px)` in `ReferralOffer.vue` with the composable so the banner shows below 768 and the Earn pill hides below 768 together. Name (but do not change) the 640 in `Dashboard.vue`/`DashboardShell.vue` as `CREATE_LAYOUT_SM` (D8). Remove the `sm:` label rule in `CreditsChip` only in P2.
+- Vertical value: banner and Earn visibility already follow the new split. Known interim gap: 640-767 still has no mobile tabs until P4 (pre-existing bug, recorded in the audit).
+- Unit: `useHeaderBreakpoint` (three states, boundary at 767/768/1023/1024), `AppHeader.test.ts`, `ReferralOffer.test.ts`. E2E: banner visible at 390 and 700, absent at 768 (Earn pill present); update `mods-referral-favicon.spec.ts`. Checkpoint: no `smAndUp` anywhere and no `600px` in `AppHeader.vue`/`ReferralOffer.vue` (grep), tests green.
+
+### Phase 2: Upgrade out of CreditsChip, new right cluster order
+- New `Header/HeaderActions.vue` renders Earn, Upgrade (Free only), `CreditsChip`, avatar in that DOM order. `CreditsChip.vue` stops rendering Upgrade (`upgrade-pill`) and its `sm:` label rule; the `pro-badge-header` chip stays until P3. Register new icons (Earn `faUserPlus`, Upgrade `faGem`, finalised in the design pass, must differ from `faGift`/`faCrown`) in `plugins/icons.ts`.
+- >=1024 icon + label; 768-1023 icon-only with `aria-label` and `Tooltip`, tap target >=44px (Earn pill is `tw-h-9` today); <768 Upgrade icon button, Earn absent. Skeleton (`header-end-skeleton`) matches each breakpoint.
+- Unit: `HeaderActions`, `CreditsChip.test.ts` (stale: Upgrade assertions), `AppHeader.test.ts`. E2E: `e2e/qa/header-responsive.spec.ts` (order by bounding-box x at 1440/1024, icon-only at 768, aria-labels); update `upgrade-entry.spec.ts` and `pricing-layout.spec.ts` (`upgrade-pill`). Checkpoint: Free and Pro render correctly at 1440, 768, 390.
+
+### Phase 3: Plan pill in avatar menu and Pro perks dialog
+- Move `PRO_PERKS` to a shared module, used by `PricingProCard.vue` and new `Dialogs/ProPerksDialog.vue` (on `AppModal`, no buy CTA, no new copy). Mount the dialog in `Header/UserMenu.vue` next to `<PricingDialog />` and add a `showProPerks` action in `stores/dialog.ts`.
+- `UserMenu.vue`: replace `pro-badge` with a `button` pill (PRO gold, FREE muted), hidden until `userStore.isReady`; FREE opens `showPricing()`, PRO opens perks; menu closes on click. Remove `pro-badge-header` from `CreditsChip.vue`. `Profile/UserDetails.vue` untouched.
+- Unit: `UserMenu.test.ts` (stale; reactive flip, long-name truncation), `ProPerksDialog`, `PricingProCard.test.ts` (same perks), `CreditsChip.test.ts` (no chip), `dialog.test.ts` (`showProPerks`). E2E: `e2e/qa/plan-pill.spec.ts` (FREE opens pricing, PRO opens perks, Escape returns focus to avatar button); update `plan-status.spec.ts`, `pro-tier.spec.ts`, `upgrade-entry.spec.ts`. Checkpoint: no Pro indicator regressions, pill flips reactively after subscribe.
+
+### Phase 4: Tabs into the header
+- Move Create/Explore/Assets into `AppHeader`: centered at 768+, row 2 full-width equal-thirds segmented control below 768, sticky at viewport top while content scrolls. Remove `dashboard-mobile-tabs` from `pages/Dashboard.vue`. `NavTabs.vue` gets a segmented variant; skeleton matches.
+- `FeatureSelect.vue`: render at all widths on Create; icon + full title at 768-1023 (no truncation); compact on <768 (icon + chevron always visible, title may ellipsize).
+- Unit: `NavTabs.test.ts`, `FeatureSelect.test.ts`, `AppHeader.test.ts`, `Dashboard.test.ts` (stale `dashboard-mobile-tabs`). E2E: extend `header-responsive.spec.ts`: tabs at 700, 390/360 two rows with thirds within 1px, feature title `scrollWidth <= clientWidth` at 768 for the longest titles, tabs in viewport after scroll on Explore at 390, no horizontal scroll. Checkpoint: tabs visible at every width 360-1440.
+
+### Phase 5: Header height from a single source
+- Define `--app-header-h` (and mobile row heights) from the constants; replace `calc(100vh-60px)` in `DashboardShell.vue` and the two `Dashboard.vue` occurrences with `dvh` plus the variable; reconcile the 60px vs 64px mismatch and the banner/two-row mobile case.
+- Unit: `Dashboard.test.ts`, `DashboardShell.test.ts` (exists). E2E: `header-responsive.spec.ts`: composer bottom <= `innerHeight` on Create at 360/390 with banner, and at 1440. Checkpoint: no remaining `100vh-60px` (grep).
+
+### Phase 6: Picker grouping, company headers, row fix (desktop popover)
+- In `utils/models.ts` replace `groupModelsByCompany` with tier + company grouping (Featured keeps source order; Free/Pro from `PREMIUM_MODEL_KEYS`; companies alphabetical; sort cost asc then title, `creditCost ?? 1`; identity is `id` + `title`) plus pure `sortByCostThenName` and `PICKER_SECTION`. New `ModelCompanyHeader.vue` (logo logic per `git show f00a3ab^:.../ModelCompanyGroup.vue`), sticky tier then company headers with opaque backgrounds; `ModelPickerPanel.vue` renders them. `ModelOption.vue`: separate name/description elements with a gap, drop `NAME_SEPARATOR`, keep `tw-h-11` row, selected in both Featured and its group, unique keys per section.
+- Unit: `utils/models.test.ts`, `ModelPickerPanel.test.ts` (stale `model-section-*`), `ModelOption.test.ts` (stale text-node workaround). E2E: update `model-menu.spec.ts` (section order, company headers, pinned header on scroll, locks for Free incl. Featured Pro) and `pro-tier.spec.ts`; regression-run `create-image.spec.ts`, `create-transforms.spec.ts`. Checkpoint: desktop picker visually matches design pass; impeccable critique/layout findings logged.
+
+### Phase 7: Search and keyboard navigation (opt-in Popover props)
+- `ModelPickerSearch.vue` (sticky, trimmed case-insensitive match on title/company/`bestAt`/`description`, empty-section removal from DOM, "No models match" + echoed query + clear button, resets on close, autofocus only for `(hover: hover) and (pointer: fine)` and width >=768). Add the filter helper to `utils/models.ts`. Opt-in props on `Popover.vue` for input-to-option ArrowDown and Home/End handling; defaults identical.
+- Unit: `utils/models.test.ts` (search), `ModelPickerPanel.test.ts`, new `Popover.optIn.test.ts` for the new props; `Popover.test.ts` stays unmodified as proof that defaults are unchanged. E2E: `model-menu.spec.ts` (search "flux", nonsense query, ArrowDown/Enter at 1440). Checkpoint: other Popover consumers (`UpscaleModelPicker`, `PromptAiMenu`, `StylePicker`, etc.) pass their existing tests unmodified.
+
+### Phase 8: Bottom sheet below 768
+- `ModelPickerSheet.vue`: full-width, backdrop, rounded top, `max-height: 85dvh`, `env(safe-area-inset-bottom)`, body scroll lock, focus trap via `composables/useFocusTrap.ts`, focus returns to trigger, dismiss on backdrop/Escape/select, no drag, no animation under reduced motion (`useReducedMotion`). `ModelPicker.vue` selects Popover vs sheet by the composable and closes when crossing 768. Stacked sticky chrome leaves >=4 rows at 360x640.
+- Unit: `ModelPicker.test.ts`, sheet test. E2E: `model-menu.spec.ts` at 390: sheet width equals viewport, search not focused, Escape returns focus, row-count check at 360x640. Checkpoint: screenshots of picker open and searching, 360/390/768/1024/1440, both themes.
+
+### Phase 9: FAQ visibility in the Upgrade dialog
+- Reproduce first with `agent-browser` at 1440 and 390, then fix at the source (lead hypothesis: `v-reveal` in `Landing/FaqSection.vue` waits on a window ScrollTrigger while the fullscreen `AppModal` panel is the scroller; `directives/reveal.ts` needs a scroller option or the modal must disable it). Keep `/pricing` page and landing reveal animations working.
+- Unit: a test that fails before and passes after the fix (`FaqSection`/`reveal` directive, `PricingLayout.test.ts`). E2E: `e2e/qa/pricing-dialog-faq.spec.ts` (mocked prices; scroll panel to bottom, "Before you buy." and every question visible, computed opacity 1, answer expands); regression run of `pricing-layout.spec.ts`. Checkpoint: verified at 360/390/768/1440, both themes.
+
+### Phase 10: Landing nav theme toggle
+- `Landing/LandingNav.vue`: below 900px show `ThemeButton` in the bar beside the hamburger; >=900 only in `.nav__actions`; remove `nav__sheet-theme-btn` and its SCSS from the sheet. Tap target >=44px.
+- Unit: `LandingNav.test.ts` (no `ThemeButton` in sheet, exactly one toggle visible per width). E2E: `e2e/qa/landing-nav-theme.spec.ts` at 360/390/800/1440 (toggle visible with menu closed, theme attribute flips, no overflow at 360). Checkpoint: signed-out header `ThemeButton` and `user-menu-item-theme` unchanged.
+
+### Phase 11: Create page responsiveness audit and fixes
+- Compare against Phase 0 baselines, record each finding and fix in the audit table (width, element, symptom, fix): header, bottom-pinned composer, aside/options, picker trigger, generated grid, history, dialogs; include the 700px band for the unchanged 640 rail/composer split (revisit D8 only if it breaks, and ask first). Manual agent-browser check with the on-screen keyboard open, recorded.
+- Unit: only for fixes that change logic. E2E: `e2e/qa/create-responsive.spec.ts` (one assertion per fixed finding: no horizontal scroll at 360/390/700/768/1024/1440, tap targets >=44px, composer visible with banner) plus screenshots; side-by-side review at 1440 shows only intended header/picker diffs. Checkpoint: audit table fully resolved or reasoned.
+
+### Phase 12: ANALYTICS.md research doc (docs only)
+- Write `agent_docs/ui-polish-picker-header/ANALYTICS.md` answering the four spec questions with linked official sources (Simple Analytics per-user capability, PostHog/Umami/Plausible comparison, Mongo usage-ledger design incl. `models/image.ts` gaps, idempotency, refunds, indexes), one recommendation, effort estimate. No code, schema or API changes.
+- Tasks: two `dod` tasks (docs-only, so the dashboard linter requires `dod` rather than `implementation`): write the doc (snapshot `git status --short apps packages` first, since the tree already carries unrelated uncommitted edits) and a `dod` check that diffs against that snapshot; no Unit/E2E. Checkpoint: doc present, each question answered with citations, the snapshot diff shows no code touched by this phase.
+
+### Phase 13: Final gate and walkthrough
+- Gate: `bun run verify`, `bun run test`, `bunx playwright test e2e/qa/<new and updated specs> --repeat-each=2` (mocks only; the paid-call guard spec stays green), final stale-test sweep over every file named in the spec's Testing Strategy, grep checks (no `600px` in `AppHeader.vue`/`ReferralOffer.vue`; none of `smAndUp`, `upgrade-pill`, `100vh-60px`, `dashboard-mobile-tabs`, `pro-badge-header`, `NAME_SEPARATOR`, `nav__sheet-theme-btn`).
+- Walkthrough: final screenshots 360/390/768/1024/1440, light and dark, Free and Pro, saved under `agent_docs/qa/ui-polish-picker-header/`; reviewed against the spec's per-part success criteria; impeccable/layout findings resolved or recorded. Checkpoint: all spec success criteria met.
+
+## Risks and Mitigations
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| Switching header/banner to 768 while Create layout stays at 640 leaves a 640-767 band with odd composer/rail layout | Med | D8 kept; P0 captures a 700px baseline, P11 audits it; ask before changing the 640 split |
+| `Popover.vue` change regresses ~9 consumers | High | Opt-in props only; existing `Popover.test.ts` and all consumer tests must pass unmodified at P7 |
+| Header height variable pushes composer off-screen with banner + two-row header | High | Composer-bottom e2e assertion at 360/390 in P5, re-checked in P11/P13 |
+| Pro users briefly lose plan indicator between phases | Med | P2 moves Upgrade only; P3 adds the pill and removes the chip in one commit |
+| Same-`id` model variants collide in keys/selection | Med | Identity is `id` + `title` everywhere; dedicated unit cases in P6 |
+| `v-reveal` fix breaks landing/`/pricing` animations | Med | Scroller option opt-in; regression e2e in P9 |
+| Hover-only tooltips unusable on touch for icon-only buttons | Low | `aria-label` always present; tooltip on focus too |
+| Accidental real paid calls in e2e | High | All paid endpoints mocked via `page.route`; rely on the harness paid-call guard; ask the user before any real call |
+| Many unit-test files go stale across phases | Med | Each phase's `Unit:` task updates its stale tests; P13 sweeps the full list |
+
+## Open Questions
+None blocking. Revisit D8 (640 split) only if the P11 700px audit shows it breaking under the new header.
