@@ -1,8 +1,8 @@
-import { Img, Section, Text } from '@react-email/components';
+import { Section, Text } from '@react-email/components';
 
-import { COLORS, EMAIL_IMAGE_BASE_URL } from '../constants.js';
-
-export const HIGHLIGHT_IMAGE_WIDTH = 540;
+import { COLORS, FONT_SIZE, SPACE } from '../constants.js';
+import { ScreenshotPanel } from './ScreenshotPanel.js';
+import { eyebrowStyle } from './styles.js';
 
 export interface HighlightProps {
   /** File name under the public /email folder, e.g. "models.png". */
@@ -10,29 +10,32 @@ export interface HighlightProps {
   alt: string;
   title: string;
   description: string;
+  /** Short label above the title, e.g. "01". */
+  eyebrow: string;
 }
 
-export function Highlight({ image, alt, title, description }: HighlightProps) {
+const highlightTitleStyle = {
+  fontSize: `${FONT_SIZE.title}px`,
+  lineHeight: '26px',
+  fontWeight: 700,
+  color: COLORS.text,
+  margin: `0 0 ${SPACE.xxs}px`,
+} as const;
+const highlightDescriptionStyle = {
+  fontSize: `${FONT_SIZE.body}px`,
+  lineHeight: '24px',
+  color: COLORS.muted,
+  margin: 0,
+} as const;
+export function Highlight({ image, alt, title, description, eyebrow }: HighlightProps) {
   return (
-    <Section style={{ marginBottom: '24px' }}>
-      <Img
-        src={`${EMAIL_IMAGE_BASE_URL}/${image}`}
-        alt={alt}
-        width={HIGHLIGHT_IMAGE_WIDTH}
-        style={{
-          width: '100%',
-          maxWidth: `${HIGHLIGHT_IMAGE_WIDTH}px`,
-          height: 'auto',
-          borderRadius: '8px',
-          display: 'block',
-        }}
-      />
-      <Text style={{ fontSize: '18px', fontWeight: 700, color: COLORS.text, margin: '12px 0 4px' }}>
-        {title}
-      </Text>
-      <Text style={{ fontSize: '15px', lineHeight: '22px', color: COLORS.muted, margin: 0 }}>
+    <Section style={{ marginBottom: `${SPACE.xl}px` }}>
+      <Text style={{ ...eyebrowStyle, margin: `0 0 ${SPACE.xxs}px` }}>{eyebrow}</Text>
+      <Text style={highlightTitleStyle}>{title}</Text>
+      <Text style={{ ...highlightDescriptionStyle, marginBottom: `${SPACE.sm}px` }}>
         {description}
       </Text>
+      <ScreenshotPanel image={image} alt={alt} />
     </Section>
   );
 }
