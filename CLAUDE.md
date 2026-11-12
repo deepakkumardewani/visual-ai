@@ -70,3 +70,13 @@ When spawning subagents (Agent/Task tool), the routing block is automatically in
 | `ctx stats`   | Call the `ctx_stats` MCP tool and display the full output verbatim                    |
 | `ctx doctor`  | Call the `ctx_doctor` MCP tool, run the returned shell command, display as checklist  |
 | `ctx upgrade` | Call the `ctx_upgrade` MCP tool, run the returned shell command, display as checklist |
+
+# No real paid or outbound API calls — mock only
+
+Agents, subagents, tests and e2e runs must NEVER call real third-party APIs that cost money or reach real people: Replicate (billed per prediction), Dodo live mode (live keys, products, charges), email sends, or any other paid/outbound service. The always-running local API holds the live `REPLICATE_API_TOKEN`, so anything that reaches it un-intercepted is a real, billed call.
+
+- Mock or stub every paid endpoint in tests. For e2e, that includes `POST /generate/image` and `/generate/video`, not only `/progress` or the result URLs. Stubbing the response stream is not enough.
+- The API serves a fake Replicate client to the e2e Clerk user (`E2E_USER_IDS`), and the e2e harness fails any un-intercepted paid call. Do not bypass or opt out of either to "just try it".
+- If a real call is ever genuinely needed, do not make it. Ask the user first via AskUserQuestion, state the endpoint, the expected cost and the call count, and wait for an explicit yes. Approval covers that one call only.
+- The user making real Replicate calls from their own manual UI sessions is expected and fine; this rule is about agent and test traffic.
+- Dodo stays on test-mode keys; never create live products or charges, and never trigger real email sends from tests.

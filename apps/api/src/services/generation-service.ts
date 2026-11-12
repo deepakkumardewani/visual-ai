@@ -9,7 +9,7 @@ import { buildModelInput, getModelReplicateId, validateModelParams } from "../li
 import { BadRequestError } from "../lib/errors.js"
 import { preparePrompt } from "../lib/prompt-pipeline.js"
 import { isContentSafetyError, PromptModerationError } from "../lib/prompt-moderation.js"
-import { replicate } from "../lib/replicate.js"
+import { runReplicate } from "../lib/replicate.js"
 import { ImageModel as Image } from "../models/image.js"
 import { UserModel as User } from "../models/user.js"
 import { RedisService } from "../services/redis-service.js"
@@ -258,17 +258,18 @@ async function runGenerationJob(
 
     try {
         let lastReplicateStatus: string | undefined
-        const output = (await replicate.run(
-            model as `${string}/${string}`,
-            { input },
-            (p: Prediction) => {
+        const output = (await runReplicate({
+            userId,
+            model: model as `${string}/${string}`,
+            input,
+            onProgress: (p: Prediction) => {
                 if (p.status === lastReplicateStatus) return
                 lastReplicateStatus = p.status
                 // Skip noisy "starting" — processing/succeeded are enough
                 if (p.status === "starting") return
                 logger.info(`gen progress job=${jid} replicate=${p.status} +${elapsed()}`)
             },
-        )) as string[] | string
+        })) as string[] | string
 
         if (!output) {
             logger.error(`gen failed   job=${jid} reason=no_output +${elapsed()}`)

@@ -12,11 +12,20 @@ const replicateState = vi.hoisted(() => {
     return { run, constructed, Replicate }
 })
 
+const envState = vi.hoisted(() => ({ E2E_USER_IDS: [] as string[], REPLICATE_API_TOKEN: "tok" }))
+
+vi.mock("../config/env.js", () => ({ env: envState }))
+
+vi.mock("./logger.js", () => ({
+    createLogger: () => ({ warn: vi.fn(), info: vi.fn(), error: vi.fn(), debug: vi.fn() }),
+}))
+
 vi.mock("replicate", () => ({
     default: replicateState.Replicate,
 }))
 
-const { replicate, buildModelInput, getModelReplicateId } = await import("./replicate.js")
+const { replicate, runReplicate, FAKE_REPLICATE_OUTPUT_URL, buildModelInput, getModelReplicateId } =
+    await import("./replicate.js")
 
 const BASE_PARAMS = {
     prompt: "a photo of a cat",
@@ -42,6 +51,53 @@ describe("replicate client wrapper", () => {
             replicate.run("owner/model" as never, { input: { prompt: "x" } }),
         ).resolves.toEqual(["https://out.png"])
         expect(replicateState.run).toHaveBeenCalled()
+    })
+})
+
+describe("runReplicate", () => {
+    const base = { model: "owner/model" as const, input: { prompt: "x" } }
+
+    beforeEach(() => {
+        vi.clearAllMocks()
+        envState.E2E_USER_IDS = []
+    })
+
+    it("returns the fixture and never calls Replicate for an e2e user", async () => {
+        envState.E2E_USER_IDS = ["user_e2e"]
+        await expect(runReplicate({ ...base, userId: "user_e2e" })).resolves.toEqual([
+            FAKE_REPLICATE_OUTPUT_URL,
+        ])
+        expect(replicateState.run).not.toHaveBeenCalled()
+    })
+
+    it("matches any id in a multi-id list", async () => {
+        envState.E2E_USER_IDS = ["user_a", "user_b"]
+        await runReplicate({ ...base, userId: "user_b" })
+        expect(replicateState.run).not.toHaveBeenCalled()
+    })
+
+    it("uses the real client for non-listed users", async () => {
+        envState.E2E_USER_IDS = ["user_e2e"]
+        const onProgress = vi.fn()
+        await expect(runReplicate({ ...base, userId: "owner", onProgress })).resolves.toEqual([
+            "https://out.png",
+        ])
+        expect(replicateState.run).toHaveBeenCalledWith(
+            "owner/model",
+            { input: { prompt: "x" } },
+            onProgress,
+        )
+    })
+
+    it("uses the real client when the list is empty", async () => {
+        await runReplicate({ ...base, userId: "user_e2e" })
+        expect(replicateState.run).toHaveBeenCalledTimes(1)
+    })
+
+    it("never treats an empty userId as a test user", async () => {
+        envState.E2E_USER_IDS = [""]
+        await runReplicate({ ...base, userId: "" })
+        expect(replicateState.run).toHaveBeenCalledTimes(1)
     })
 })
 
