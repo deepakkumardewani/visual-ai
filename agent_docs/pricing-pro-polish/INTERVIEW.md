@@ -1,6 +1,7 @@
 # pricing-pro-polish — confirmed interview restate (user said explicit "Yes" on 2026-11-06)
 
 ## Outcome
+
 1. **Upgrade entry point**: "Upgrade to Pro" pill in the dashboard header next to the credits balance, shown to Free users only; Pro users see a Pro badge instead. Also an "Upgrade to Pro" link/cross-sell inside the Buy-more-credits dialog. (Today Pro is only reachable via `apps/web/src/components/Header/UserMenu.vue`.)
 2. **Buy-more-credits dialog** (`apps/web/src/components/Dialogs/BuyMoreCreditsDialog.vue`, backdrop via `AppModal`):
    - Backdrop ~60% dim + blur, not fully dark (applies to AppModal backdrop generally unless that breaks other dialogs — spec decides; default: shared AppModal backdrop).
@@ -20,7 +21,7 @@
    - Remove text "Approx. price; final amount in your currency is shown at checkout".
    - Pro perks list the updated Pro model set (currently hardcoded "Premium models: Nano Banana Pro, GPT Image 2, FLUX.2 Max" in `PricingProCard.vue:20` — derive from shared constants).
    - Redesign layout using impeccable/layout skills.
-6. **Daily credits**: Pro gets **50** daily credits, Free stays **30**. Today `DAILY_CREDITS = 30` in `packages/shared/src/models/credits.ts`; cron `apps/api/src/utils/cronJobs.ts` does `User.updateMany({}, {dailyCredits: DAILY_CREDITS})` at "0 0 * * *" server time.
+6. **Daily credits**: Pro gets **50** daily credits, Free stays **30**. Today `DAILY_CREDITS = 30` in `packages/shared/src/models/credits.ts`; cron `apps/api/src/utils/cronJobs.ts` does `User.updateMany({}, {dailyCredits: DAILY_CREDITS})` at "0 0 \* \* \*" server time.
    - Cron resets per plan (Pro users → 50, others → 30), using the same isPro definition as `apps/api/src/lib/isPro.ts`.
    - When a user becomes Pro mid-day (subscription activation webhook), daily balance is topped up to 50 (max(current, 50)). When Pro lapses, the next reset gives 30 (no immediate claw-back).
    - Reset time stated explicitly in copy, shown in the user's local time (pin cron timezone, e.g. UTC, so it is deterministic).
@@ -37,22 +38,28 @@
    - New persistent inline note near the Generate button / history header, for both plans, shown when history is ≥90% of cap and (stronger wording) at 100%: "History full — new creations won't be saved. Delete old images to make room." Free users also get an Upgrade link in that note.
 
 ## User
+
 Free users deciding whether to upgrade to Pro or buy a credit pack; Pro users managing their history.
 
 ## Why now
+
 Pro + localized pricing just shipped (cloudinary-cost-and-pro phases 6–10); discoverability and clarity gaps hurt conversion.
 
 ## Success
+
 Every item above is verifiable in the browser; server gating and credit costs match the table in item 7; unit (vitest) and e2e (Playwright) tests green; no real paid calls.
 
 ## Constraints
+
 - Mock-only: never call real Replicate, Dodo live mode, or email in tests/agents (see project CLAUDE.md; e2e paid-call guard exists at `apps/web/e2e/support/paidCallGuard.ts`).
 - One source of truth for tier and cost lists in `@visual-ai/shared`; no duplicated model lists in web copy.
 - Vue 3 + Pinia + Tailwind (`tw-` prefix) frontend; Express/Mongo API; Bun monorepo.
 - Never run the dev server (always running).
 
 ## Out of scope
+
 Changing the Pro price ($5/mo), new credit packs or pack prices, Dodo checkout UI, production geo/CDN infrastructure changes, video models.
 
 ## Screenshots (user-provided)
+
 ~/Desktop/screenshots/visualai-dev/Screenshot 2026-11-06 at 7.36.30 PM.png, 7.37.08 PM.png, 7.45.30 PM.png, 7.41.15 PM.png, 7.41.24 PM.png, 7.40.32 PM.png — buy-credits dialog, model menu, Pro card, empty pricing section, footer-before-FAQ, full pricing modal.

@@ -1,0 +1,1322 @@
+[
+ {
+  "file": "1/T1.10-1.png",
+  "taskId": "T1.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Profile card shows 30/30 daily for Free",
+  "annotations": [],
+  "at": "2026-11-07T13:22:42.322Z"
+ },
+ {
+  "file": "1/T1.10-2.png",
+  "taskId": "T1.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Low-credits dialog: plan refreshes 30 credits every day",
+  "annotations": [],
+  "at": "2026-11-07T13:22:42.374Z"
+ },
+ {
+  "file": "1/T1.10-3.png",
+  "taskId": "T1.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pricing page: 30 daily credits, 1-5 cost copy",
+  "annotations": [],
+  "at": "2026-11-07T13:22:42.428Z"
+ },
+ {
+  "file": "1/T1.10-4.png",
+  "taskId": "T1.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Landing: 30 daily credits copy",
+  "annotations": [],
+  "at": "2026-11-07T13:22:42.481Z"
+ },
+ {
+  "file": "1/T1.5-1.png",
+  "taskId": "T1.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Landing teaser and final CTA show 30 daily credits",
+  "annotations": [],
+  "at": "2026-11-07T13:22:42.533Z"
+ },
+ {
+  "file": "1/T1.5-2.png",
+  "taskId": "T1.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pricing hero shows 30 daily credits",
+  "annotations": [],
+  "at": "2026-11-07T13:22:42.586Z"
+ },
+ {
+  "file": "1/T1.5-3.png",
+  "taskId": "T1.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Low-credits dialog shows Free daily amount (30)",
+  "annotations": [],
+  "at": "2026-11-07T13:22:42.640Z"
+ },
+ {
+  "file": "1/T1.6-1.png",
+  "taskId": "T1.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Profile credits card shows 30/30 daily",
+  "annotations": [],
+  "at": "2026-11-07T13:22:42.693Z"
+ },
+ {
+  "file": "1/T1.6-2.png",
+  "taskId": "T1.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pricing credit story: 30 daily, 1-5 cost range",
+  "annotations": [],
+  "at": "2026-11-07T13:22:42.747Z"
+ },
+ {
+  "file": "1/T1.5-4.png",
+  "taskId": "T1.5",
+  "kind": "proof",
+  "step": "PricingTeaser renders DAILY_CREDITS.free",
+  "attempt": 2,
+  "caption": "Landing pricing teaser shows 30 daily credits for Free (verifier retake)",
+  "annotations": [
+   {
+    "x": 10.7,
+    "y": 45.1,
+    "w": 35.8,
+    "h": 2.8,
+    "label": "30 daily credits (unused reset)"
+   },
+   {
+    "x": 26,
+    "y": 8.5,
+    "w": 48,
+    "h": 6,
+    "label": "Start with 30 persistent credits and 30 daily"
+   }
+  ],
+  "at": "2026-11-07T13:34:39.455Z"
+ },
+ {
+  "file": "2/T2.5-1.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free: Pro-only models locked with PRO badge",
+  "annotations": [],
+  "at": "2026-11-07T13:53:30.435Z"
+ },
+ {
+  "file": "2/T2.5-2.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free: Flux 2 Max unlocked, cost 5",
+  "annotations": [],
+  "at": "2026-11-07T13:53:30.512Z"
+ },
+ {
+  "file": "2/T2.5-3.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pro: no locks in model picker",
+  "annotations": [],
+  "at": "2026-11-07T13:53:30.570Z"
+ },
+ {
+  "file": "2/T2.5-4.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pricing cost table 5-credit group",
+  "annotations": [],
+  "at": "2026-11-07T13:53:30.629Z"
+ },
+ {
+  "file": "2/T2.5-5.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": "Free can select FLUX.2 Max with no lock and cost shows 5",
+  "attempt": 1,
+  "caption": "Non-Pro picker (signed-out session, Free rules): Flux 2 Max has no lock and costs 5, while Flux Kontext Pro shows the PRO lock",
+  "annotations": [
+   {
+    "x": 35.8,
+    "y": 89.3,
+    "w": 29.2,
+    "h": 7.6,
+    "label": "Flux 2 Max unlocked, cost 5"
+   },
+   {
+    "x": 35.8,
+    "y": 79,
+    "w": 29.2,
+    "h": 8.5,
+    "label": "Flux Kontext Pro locked with PRO badge"
+   }
+  ],
+  "at": "2026-11-07T14:03:50.357Z"
+ },
+ {
+  "file": "2/T2.2-1.png",
+  "taskId": "T2.2",
+  "kind": "proof",
+  "step": "cost table matches SPEC item 7",
+  "attempt": 2,
+  "caption": "Cost table blurb now reads \"A few flagship models cost 5.\"",
+  "annotations": [
+   {
+    "x": 10,
+    "y": 47,
+    "w": 19,
+    "h": 6,
+    "label": "blurb shows 5, not \"4 or 5\""
+   }
+  ],
+  "at": "2026-11-07T14:10:56.125Z"
+ },
+ {
+  "file": "2/T2.5-6.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free: lock and PRO badge on Pro-only models",
+  "annotations": [],
+  "at": "2026-11-07T14:21:06.618Z"
+ },
+ {
+  "file": "2/T2.5-7.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free: Flux 2 Max visible, unlocked, cost 5",
+  "annotations": [],
+  "at": "2026-11-07T14:21:06.694Z"
+ },
+ {
+  "file": "2/T2.5-8.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Clicking a locked model opens the Pro upsell dialog",
+  "annotations": [],
+  "at": "2026-11-07T14:21:06.757Z"
+ },
+ {
+  "file": "2/T2.5-9.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Stale Flux Realism selection: 403 opens upsell, no raw error",
+  "annotations": [],
+  "at": "2026-11-07T14:21:06.816Z"
+ },
+ {
+  "file": "2/T2.5-10.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pro: no locks in the picker",
+  "annotations": [],
+  "at": "2026-11-07T14:21:06.876Z"
+ },
+ {
+  "file": "2/T2.5-11.png",
+  "taskId": "T2.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pricing cost table: flat 5-credit premium band",
+  "annotations": [],
+  "at": "2026-11-07T14:21:06.937Z"
+ },
+ {
+  "file": "3/T3.6-1.png",
+  "taskId": "T3.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free profile card shows 30/30 daily",
+  "annotations": [],
+  "at": "2026-11-07T15:03:25.177Z"
+ },
+ {
+  "file": "3/T3.6-2.png",
+  "taskId": "T3.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Credits chip shows 50 daily after the signed activation webhook",
+  "annotations": [],
+  "at": "2026-11-07T15:03:25.266Z"
+ },
+ {
+  "file": "3/T3.6-3.png",
+  "taskId": "T3.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pro profile card shows 50/50 daily",
+  "annotations": [],
+  "at": "2026-11-07T15:03:25.337Z"
+ },
+ {
+  "file": "4/T4.5-1.png",
+  "taskId": "T4.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pricing page packs in rupees (cf-ipcountry IN)",
+  "annotations": [],
+  "at": "2026-11-07T15:35:30.017Z"
+ },
+ {
+  "file": "4/T4.5-2.png",
+  "taskId": "T4.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Buy dialog packs in rupees (cf-ipcountry IN)",
+  "annotations": [],
+  "at": "2026-11-07T15:35:30.152Z"
+ },
+ {
+  "file": "4/T4.5-3.png",
+  "taskId": "T4.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pricing page packs in USD with no country header",
+  "annotations": [],
+  "at": "2026-11-07T15:35:30.265Z"
+ },
+ {
+  "file": "4/T4.5-4.png",
+  "taskId": "T4.5",
+  "kind": "proof",
+  "step": "@critical cf-ipcountry IN shows rupee prices in the buy dialog",
+  "attempt": 1,
+  "caption": "Buy more credits dialog showing all four packs in rupees (cf-ipcountry IN, prod build)",
+  "annotations": [
+   {
+    "x": 22.5,
+    "y": 16.2,
+    "w": 55,
+    "h": 67.7,
+    "label": "Buy dialog pack prices in INR (130.00 to 900.00 rupees)"
+   }
+  ],
+  "at": "2026-11-07T15:46:03.760Z"
+ },
+ {
+  "file": "5/T5.4-2.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "All model rows share one height",
+  "annotations": [],
+  "at": "2026-11-07T16:09:17.050Z"
+ },
+ {
+  "file": "5/T5.4-3.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Reference icon tooltip: Up to 8 reference images",
+  "annotations": [],
+  "at": "2026-11-07T16:09:17.141Z"
+ },
+ {
+  "file": "5/T5.4-4.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free user sees Pro locks in Featured and Pro",
+  "annotations": [],
+  "at": "2026-11-07T16:09:17.234Z"
+ },
+ {
+  "file": "5/T5.4-6.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Desktop width, no overflow",
+  "annotations": [],
+  "at": "2026-11-07T16:09:17.418Z"
+ },
+ {
+  "file": "5/T5.4-7.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Mobile width, no overflow",
+  "annotations": [],
+  "at": "2026-11-07T16:09:17.511Z"
+ },
+ {
+  "file": "5/T5.4-1.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Menu sections in order Featured, Free, Pro",
+  "annotations": [],
+  "at": "2026-11-07T16:13:22.382Z"
+ },
+ {
+  "file": "5/T5.4-8.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "All rows share one height",
+  "annotations": [],
+  "at": "2026-11-07T16:13:22.498Z"
+ },
+ {
+  "file": "5/T5.4-9.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Reference icon tooltip",
+  "annotations": [],
+  "at": "2026-11-07T16:13:22.590Z"
+ },
+ {
+  "file": "5/T5.4-10.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free user lock badges",
+  "annotations": [],
+  "at": "2026-11-07T16:13:22.682Z"
+ },
+ {
+  "file": "5/T5.4-5.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pro user sees no locks",
+  "annotations": [],
+  "at": "2026-11-07T16:13:22.773Z"
+ },
+ {
+  "file": "5/T5.4-11.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Desktop menu no overflow",
+  "annotations": [],
+  "at": "2026-11-07T16:13:22.865Z"
+ },
+ {
+  "file": "5/T5.4-12.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Mobile menu no overflow",
+  "annotations": [],
+  "at": "2026-11-07T16:13:22.961Z"
+ },
+ {
+  "file": "5/T5.1-1.png",
+  "taskId": "T5.1",
+  "kind": "after",
+  "step": "rows have identical height",
+  "attempt": null,
+  "caption": "Model rows are single-line with identical height",
+  "annotations": [],
+  "at": "2026-11-07T16:15:07.369Z"
+ },
+ {
+  "file": "5/T5.1-2.png",
+  "taskId": "T5.1",
+  "kind": "after",
+  "step": "icon only for ref-capable, exact tooltip",
+  "attempt": null,
+  "caption": "Reference-image icon shows tooltip \"Up to N reference images\" only for ref-capable models",
+  "annotations": [],
+  "at": "2026-11-07T16:15:07.464Z"
+ },
+ {
+  "file": "5/T5.1-3.png",
+  "taskId": "T5.1",
+  "kind": "after",
+  "step": "PRO lock for non-Pro",
+  "attempt": null,
+  "caption": "Free viewer sees PRO lock on Pro-only models",
+  "annotations": [],
+  "at": "2026-11-07T16:15:07.556Z"
+ },
+ {
+  "file": "5/T5.1-4.png",
+  "taskId": "T5.1",
+  "kind": "after",
+  "step": "Pro users see no lock",
+  "attempt": null,
+  "caption": "Pro viewer sees no lock badges",
+  "annotations": [],
+  "at": "2026-11-07T16:15:07.651Z"
+ },
+ {
+  "file": "5/T5.2-1.png",
+  "taskId": "T5.2",
+  "kind": "after",
+  "step": "sections in that order",
+  "attempt": null,
+  "caption": "Sections appear in order Featured, Free, Pro",
+  "annotations": [],
+  "at": "2026-11-07T16:15:07.743Z"
+ },
+ {
+  "file": "5/T5.2-2.png",
+  "taskId": "T5.2",
+  "kind": "after",
+  "step": "Pro section locks for Free",
+  "attempt": null,
+  "caption": "Pro section shows locks for Free users",
+  "annotations": [],
+  "at": "2026-11-07T16:15:07.835Z"
+ },
+ {
+  "file": "5/T5.2-3.png",
+  "taskId": "T5.2",
+  "kind": "after",
+  "step": "Pro viewer, no locks",
+  "attempt": null,
+  "caption": "Pro users see the Pro section without locks",
+  "annotations": [],
+  "at": "2026-11-07T16:15:07.924Z"
+ },
+ {
+  "file": "5/T5.2-4.png",
+  "taskId": "T5.2",
+  "kind": "after",
+  "step": "Pro section shows locks for Free users",
+  "attempt": 2,
+  "caption": "Free viewer: Pro section heading with PRO lock on Flux Realism (bottom of the scrolled menu)",
+  "annotations": [
+   {
+    "x": 2,
+    "y": 66,
+    "w": 34,
+    "h": 7,
+    "label": "Pro section with PRO lock badge"
+   }
+  ],
+  "at": "2026-11-07T16:20:52.896Z"
+ },
+ {
+  "file": "5/T5.1-5.png",
+  "taskId": "T5.1",
+  "kind": "after",
+  "step": "Single-line row: name plus description, ref icon, PRO lock, credits",
+  "attempt": 3,
+  "caption": "Each model row shows the name and its description separated by a space, on one uniform-height line",
+  "annotations": [
+   {
+    "x": 2.2,
+    "y": 30,
+    "w": 33,
+    "h": 3.5,
+    "label": "Name and description separated (Z-Image Turbo Super-fast 6B model)"
+   },
+   {
+    "x": 2.2,
+    "y": 68.5,
+    "w": 33,
+    "h": 3.5,
+    "label": "Flux Lightning Fastest generation, gap restored"
+   },
+   {
+    "x": 27.7,
+    "y": 53,
+    "w": 4.5,
+    "h": 3.5,
+    "label": "PRO lock for Free viewer"
+   }
+  ],
+  "at": "2026-11-07T16:25:47.484Z"
+ },
+ {
+  "file": "5/T5.2-5.png",
+  "taskId": "T5.2",
+  "kind": "after",
+  "step": "Pro section shows locks for Free users",
+  "attempt": 3,
+  "caption": "Menu scrolled to the Pro section: seven Pro-only models, each with a PRO lock badge for a Free user.",
+  "annotations": [
+   {
+    "x": 1.3,
+    "y": 36.9,
+    "w": 34.4,
+    "h": 36.6,
+    "label": "Pro section rows all carry PRO lock badges"
+   }
+  ],
+  "at": "2026-11-07T16:28:41.968Z"
+ },
+ {
+  "file": "5/T5.2-6.png",
+  "taskId": "T5.2",
+  "kind": "after",
+  "step": "Sections in order Featured, Free, Pro",
+  "attempt": 3,
+  "caption": "Top of the model menu showing Featured then Free sections, ahead of the Pro section.",
+  "annotations": [],
+  "at": "2026-11-07T16:28:42.082Z"
+ },
+ {
+  "file": "6/T6.7-1.png",
+  "taskId": "T6.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free header shows Upgrade to Pro pill beside credits",
+  "annotations": [],
+  "at": "2026-11-09T10:38:52.853Z"
+ },
+ {
+  "file": "6/T6.7-2.png",
+  "taskId": "T6.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pro (webhook-activated) header shows Pro badge, no pill",
+  "annotations": [],
+  "at": "2026-11-09T10:38:52.978Z"
+ },
+ {
+  "file": "6/T6.7-3.png",
+  "taskId": "T6.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Buy dialog: Upgrade link, equal-height cards, per-100 and image estimates",
+  "annotations": [],
+  "at": "2026-11-09T10:38:53.079Z"
+ },
+ {
+  "file": "6/T6.7-4.png",
+  "taskId": "T6.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Mobile 375px header without horizontal overflow",
+  "annotations": [],
+  "at": "2026-11-09T10:38:53.179Z"
+ },
+ {
+  "file": "6/T6.1-1.png",
+  "taskId": "T6.1",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free user sees Upgrade to Pro pill (note: clipped under avatar at 1280px)",
+  "annotations": [],
+  "at": "2026-11-09T10:38:53.280Z"
+ },
+ {
+  "file": "6/T6.1-2.png",
+  "taskId": "T6.1",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pro user sees badge, no pill",
+  "annotations": [],
+  "at": "2026-11-09T10:38:53.379Z"
+ },
+ {
+  "file": "6/T6.4-1.png",
+  "taskId": "T6.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Buy more credits dialog layout for Free user",
+  "annotations": [],
+  "at": "2026-11-09T10:38:53.479Z"
+ },
+ {
+  "file": "6/T6.8-1.png",
+  "taskId": "T6.8",
+  "kind": "after",
+  "step": "Upgrade entry point, no overlap",
+  "attempt": null,
+  "caption": "Free user at 1280px: Upgrade to Pro pill sits fully left of the avatar, label intact.",
+  "annotations": [
+   {
+    "x": 81.3,
+    "y": 2.8,
+    "w": 10.2,
+    "h": 7.6,
+    "label": "Upgrade pill with full label"
+   }
+  ],
+  "at": "2026-11-09T10:44:24.981Z"
+ },
+ {
+  "file": "6/T6.8-2.png",
+  "taskId": "T6.8",
+  "kind": "after",
+  "step": "Buy dialog polished",
+  "attempt": null,
+  "caption": "Buy credits dialog: equal-height cards, per-100-credits text, Upgrade to Pro link, blurred backdrop.",
+  "annotations": [
+   {
+    "x": 24.5,
+    "y": 33.5,
+    "w": 51,
+    "h": 30,
+    "label": "Pack cards with per 100 credits"
+   },
+   {
+    "x": 24.5,
+    "y": 66,
+    "w": 15,
+    "h": 3.5,
+    "label": "Upgrade to Pro link"
+   }
+  ],
+  "at": "2026-11-09T10:44:25.120Z"
+ },
+ {
+  "file": "6/T6.8-3.png",
+  "taskId": "T6.8",
+  "kind": "after",
+  "step": "Pro badge",
+  "attempt": null,
+  "caption": "Pro user sees the Pro badge and no upgrade pill.",
+  "annotations": [
+   {
+    "x": 81,
+    "y": 2.8,
+    "w": 8,
+    "h": 7.6,
+    "label": "Pro badge"
+   }
+  ],
+  "at": "2026-11-09T10:44:25.226Z"
+ },
+ {
+  "file": "6/T6.1-3.png",
+  "taskId": "T6.1",
+  "kind": "after",
+  "step": "Pill for Free, no overlap",
+  "attempt": null,
+  "caption": "Free user at 1280px (prod build): Upgrade to Pro pill beside the credits balance, fully left of the avatar.",
+  "annotations": [
+   {
+    "x": 81.3,
+    "y": 1.7,
+    "w": 10.9,
+    "h": 5.6,
+    "label": "Upgrade to Pro pill"
+   }
+  ],
+  "at": "2026-11-09T10:52:25.189Z"
+ },
+ {
+  "file": "6/T6.2-1.png",
+  "taskId": "T6.2",
+  "kind": "after",
+  "step": "Backdrop about 60% dim plus blur",
+  "attempt": null,
+  "caption": "Buy credits dialog over a dimmed, blurred page (shared AppModal backdrop).",
+  "annotations": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 22,
+    "h": 100,
+    "label": "Page behind is blurred and dimmed, still visible"
+   }
+  ],
+  "at": "2026-11-09T10:52:25.321Z"
+ },
+ {
+  "file": "6/T6.4-2.png",
+  "taskId": "T6.4",
+  "kind": "after",
+  "step": "SPEC item 2: equal-height cards, no hole",
+  "attempt": 2,
+  "caption": "Buy dialog cards stack from the top: 200 card has no empty band, equal heights",
+  "annotations": [
+   {
+    "x": 23,
+    "y": 34,
+    "w": 52,
+    "h": 28,
+    "label": "four package cards, content stacked from top"
+   }
+  ],
+  "at": "2026-11-09T10:54:46.810Z"
+ },
+ {
+  "file": "6/T6.7-5.png",
+  "taskId": "T6.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free user header with the Upgrade pill left of the avatar",
+  "annotations": [],
+  "at": "2026-11-09T10:57:04.297Z"
+ },
+ {
+  "file": "6/T6.7-6.png",
+  "taskId": "T6.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pro user header with the PRO badge and no Upgrade pill",
+  "annotations": [],
+  "at": "2026-11-09T10:57:04.434Z"
+ },
+ {
+  "file": "6/T6.7-7.png",
+  "taskId": "T6.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Buy credits dialog for Free: four equal-height cards, per-100 text, Upgrade link",
+  "annotations": [],
+  "at": "2026-11-09T10:57:04.541Z"
+ },
+ {
+  "file": "6/T6.7-8.png",
+  "taskId": "T6.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "375px header with icon-only upgrade pill, no overflow",
+  "annotations": [],
+  "at": "2026-11-09T10:57:04.645Z"
+ },
+ {
+  "file": "6/T6.8-4.png",
+  "taskId": "T6.8",
+  "kind": "proof",
+  "step": "SPEC item 2: cards equal height, no hole",
+  "attempt": null,
+  "caption": "Buy-credits dialog: four equal-height cards, content stacked from the top with no empty band, per-100-credit text, Upgrade to Pro link, dimmed and blurred backdrop.",
+  "annotations": [
+   {
+    "x": 24,
+    "y": 34,
+    "w": 52,
+    "h": 32,
+    "label": "equal-height pack cards without a gap"
+   }
+  ],
+  "at": "2026-11-09T10:58:37.874Z"
+ },
+ {
+  "file": "6/T6.8-5.png",
+  "taskId": "T6.8",
+  "kind": "proof",
+  "step": "SPEC item 1: upgrade entry point",
+  "attempt": null,
+  "caption": "Free user header: Upgrade to Pro pill sits left of the avatar, credits chip beside it.",
+  "annotations": [
+   {
+    "x": 81,
+    "y": 2,
+    "w": 12,
+    "h": 6,
+    "label": "Upgrade to Pro pill"
+   }
+  ],
+  "at": "2026-11-09T10:58:38.011Z"
+ },
+ {
+  "file": "6/T6.4-3.png",
+  "taskId": "T6.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": 2,
+  "caption": "Verifier a2 (prod build): four equal-height cards, rows stacked with no inner gap, no $0.00, per-100 text, Upgrade to Pro link; spare height sits below the 200 card estimate",
+  "annotations": [
+   {
+    "x": 24.5,
+    "y": 33.5,
+    "w": 12.5,
+    "h": 30.5,
+    "label": "200 card, no Save line, no inner hole"
+   },
+   {
+    "x": 24.5,
+    "y": 67.5,
+    "w": 16.5,
+    "h": 2.8,
+    "label": "Upgrade to Pro link"
+   }
+  ],
+  "at": "2026-11-09T11:01:06.204Z"
+ },
+ {
+  "file": "7/T7.1-1.png",
+  "taskId": "T7.1",
+  "kind": "proof",
+  "step": "Unified layout on /pricing",
+  "attempt": null,
+  "caption": "/pricing hero with Free-to-Pro copy; comparison follows",
+  "annotations": [
+   {
+    "x": 4,
+    "y": 18,
+    "w": 50,
+    "h": 55,
+    "label": "new hero, no Free Forever"
+   }
+  ],
+  "at": "2026-11-09T11:43:15.885Z"
+ },
+ {
+  "file": "7/T7.7-1.png",
+  "taskId": "T7.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pricing modal: comparison, packs, costs, FAQ order, no footer",
+  "annotations": [],
+  "at": "2026-11-09T11:49:15.929Z"
+ },
+ {
+  "file": "7/T7.7-2.png",
+  "taskId": "T7.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "/pricing page section order",
+  "annotations": [],
+  "at": "2026-11-09T11:49:16.091Z"
+ },
+ {
+  "file": "7/T7.7-3.png",
+  "taskId": "T7.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "/pricing footer after FAQ",
+  "annotations": [],
+  "at": "2026-11-09T11:49:16.224Z"
+ },
+ {
+  "file": "7/T7.7-4.png",
+  "taskId": "T7.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "30 vs 50 daily, 100 vs 500 history",
+  "annotations": [],
+  "at": "2026-11-09T11:49:16.355Z"
+ },
+ {
+  "file": "7/T7.7-5.png",
+  "taskId": "T7.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pro card lists six premium models",
+  "annotations": [],
+  "at": "2026-11-09T11:49:16.508Z"
+ },
+ {
+  "file": "7/T7.7-6.png",
+  "taskId": "T7.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "375px stacked comparison, no overflow",
+  "annotations": [],
+  "at": "2026-11-09T11:49:16.638Z"
+ },
+ {
+  "file": "7/T7.2-1.png",
+  "taskId": "T7.2",
+  "kind": "proof",
+  "step": "Comparison numbers derive from DAILY_CREDITS and HISTORY_CAP",
+  "attempt": null,
+  "caption": "Free | Pro comparison side by side: 30 vs 50 daily credits, 100 vs 500 history, models, queue, privacy",
+  "annotations": [
+   {
+    "x": 5,
+    "y": 24,
+    "w": 44,
+    "h": 76,
+    "label": "Free column, 30 per day and 100 images"
+   },
+   {
+    "x": 51,
+    "y": 24,
+    "w": 44,
+    "h": 76,
+    "label": "Pro column, 50 per day and 500 images"
+   }
+  ],
+  "at": "2026-11-09T12:37:14.758Z"
+ },
+ {
+  "file": "7/T7.2-2.png",
+  "taskId": "T7.2",
+  "kind": "proof",
+  "step": "Packs framed \"Top up any plan\"",
+  "attempt": null,
+  "caption": "Packs section reframed as \"Top up any plan\" for Free or Pro",
+  "annotations": [
+   {
+    "x": 5,
+    "y": 46,
+    "w": 45,
+    "h": 8,
+    "label": "Top up any plan heading"
+   },
+   {
+    "x": 5,
+    "y": 57,
+    "w": 31,
+    "h": 14,
+    "label": "copy says packs work on Free or Pro"
+   }
+  ],
+  "at": "2026-11-09T12:37:14.893Z"
+ },
+ {
+  "file": "7/T7.3-1.png",
+  "taskId": "T7.3",
+  "kind": "proof",
+  "step": "Perks list the six Pro models; removed note absent",
+  "attempt": null,
+  "caption": "Pro card at $5.00/month lists the six premium models and has no Approx. price note",
+  "annotations": [
+   {
+    "x": 7,
+    "y": 36,
+    "w": 10,
+    "h": 5,
+    "label": "$5.00 / month, no approx note below"
+   },
+   {
+    "x": 7,
+    "y": 50,
+    "w": 59,
+    "h": 4,
+    "label": "six premium models from PREMIUM_MODEL_KEYS"
+   }
+  ],
+  "at": "2026-11-09T12:37:14.994Z"
+ },
+ {
+  "file": "7/T7.4-1.png",
+  "taskId": "T7.4",
+  "kind": "proof",
+  "step": "Reset time shown explicitly in local time",
+  "attempt": null,
+  "caption": "Credit story shows the reset time in local time (5:30 AM in Asia/Kolkata for 00:00 UTC)",
+  "annotations": [
+   {
+    "x": 38,
+    "y": 41,
+    "w": 57,
+    "h": 19,
+    "label": "Resets daily at 5:30 AM in your local time"
+   }
+  ],
+  "at": "2026-11-09T12:37:15.092Z"
+ },
+ {
+  "file": "7/T7.4-2.png",
+  "taskId": "T7.4",
+  "kind": "proof",
+  "step": "Free profile 30/day with local-time reset text",
+  "attempt": null,
+  "caption": "Free profile card: 30/30 daily and \"Resets daily at 5:30 AM\" in local time (prod e2e run, Asia/Kolkata)",
+  "annotations": [
+   {
+    "x": 64,
+    "y": 16,
+    "w": 11,
+    "h": 7,
+    "label": "30/30 daily and Resets daily at 5:30 AM"
+   }
+  ],
+  "at": "2026-11-09T12:42:22.787Z"
+ },
+ {
+  "file": "7/T7.4-3.png",
+  "taskId": "T7.4",
+  "kind": "proof",
+  "step": "Pro profile 50/day",
+  "attempt": null,
+  "caption": "Pro profile card: 50/50 daily and the same local-time reset line",
+  "annotations": [
+   {
+    "x": 64,
+    "y": 16,
+    "w": 11,
+    "h": 7,
+    "label": "50/50 daily and Resets daily at 5:30 AM"
+   }
+  ],
+  "at": "2026-11-09T12:42:22.914Z"
+ },
+ {
+  "file": "8/T8.4-1.png",
+  "taskId": "T8.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "history-full free-full",
+  "annotations": [],
+  "at": "2026-11-09T13:32:00.781Z"
+ },
+ {
+  "file": "8/T8.4-2.png",
+  "taskId": "T8.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "history-full pro-full",
+  "annotations": [],
+  "at": "2026-11-09T13:32:00.954Z"
+ },
+ {
+  "file": "8/T8.4-3.png",
+  "taskId": "T8.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "history-full free-near",
+  "annotations": [],
+  "at": "2026-11-09T13:32:01.091Z"
+ },
+ {
+  "file": "8/T8.4-4.png",
+  "taskId": "T8.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "history-full unsaved-notice",
+  "annotations": [],
+  "at": "2026-11-09T13:32:01.228Z"
+ },
+ {
+  "file": "8/T8.5-1.png",
+  "taskId": "T8.5",
+  "kind": "proof",
+  "step": "Free at 100/100 shows the full note with an Upgrade link",
+  "attempt": null,
+  "caption": "Free at 100/100 shows the full note with an Upgrade link",
+  "annotations": [],
+  "at": "2026-11-09T13:35:52.432Z"
+ },
+ {
+  "file": "8/T8.5-2.png",
+  "taskId": "T8.5",
+  "kind": "proof",
+  "step": "Pro at 500/500 shows the full note with no Upgrade link",
+  "attempt": null,
+  "caption": "Pro at 500/500 shows the full note with no Upgrade link",
+  "annotations": [],
+  "at": "2026-11-09T13:35:52.605Z"
+ },
+ {
+  "file": "8/T8.5-3.png",
+  "taskId": "T8.5",
+  "kind": "proof",
+  "step": "Free at 90/100 shows the near-full wording",
+  "attempt": null,
+  "caption": "Free at 90/100 shows the near-full wording",
+  "annotations": [],
+  "at": "2026-11-09T13:35:52.742Z"
+ },
+ {
+  "file": "8/T8.5-4.png",
+  "taskId": "T8.5",
+  "kind": "proof",
+  "step": "Not-saved result shows icon Download and Dismiss, no delete button",
+  "attempt": null,
+  "caption": "Not-saved result shows icon Download and Dismiss, no delete button",
+  "annotations": [],
+  "at": "2026-11-09T13:35:52.878Z"
+ },
+ {
+  "file": "8/T8.1-1.png",
+  "taskId": "T8.1",
+  "kind": "after",
+  "step": "Notice with icon Download and Dismiss",
+  "attempt": null,
+  "caption": "Unsaved-result notice shows 100/100 with visible download and dismiss icons",
+  "annotations": [
+   {
+    "x": 92,
+    "y": 38,
+    "w": 6,
+    "h": 6,
+    "label": "Download icon renders"
+   },
+   {
+    "x": 95.5,
+    "y": 38,
+    "w": 3,
+    "h": 6,
+    "label": "Dismiss icon renders"
+   }
+  ],
+  "at": "2026-11-09T13:44:33.593Z"
+ },
+ {
+  "file": "8/T8.2-1.png",
+  "taskId": "T8.2",
+  "kind": "after",
+  "step": "Full note with count from saved entries",
+  "attempt": null,
+  "caption": "Free user at 100 sees the history-full note with info icon and Upgrade",
+  "annotations": [
+   {
+    "x": 23,
+    "y": 29,
+    "w": 48,
+    "h": 5,
+    "label": "History full note with icon and Upgrade"
+   }
+  ],
+  "at": "2026-11-09T13:44:33.721Z"
+ },
+ {
+  "file": "8/T8.4-5.png",
+  "taskId": "T8.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Unsaved-result notice at 100/100 with SVG Download and Dismiss icon buttons",
+  "annotations": [],
+  "at": "2026-11-09T13:45:34.065Z"
+ },
+ {
+  "file": "9/T9.3-1.png",
+  "taskId": "T9.3",
+  "kind": "proof",
+  "step": "pricing layout",
+  "attempt": null,
+  "caption": "/pricing shows the Free vs Pro comparison first.",
+  "annotations": [
+   {
+    "x": 10,
+    "y": 15,
+    "w": 80,
+    "h": 40,
+    "label": "comparison section"
+   }
+  ],
+  "at": "2026-11-09T14:29:02.221Z"
+ },
+ {
+  "file": "9/T9.3-2.png",
+  "taskId": "T9.3",
+  "kind": "proof",
+  "step": "Upgrade/buy modal",
+  "attempt": null,
+  "caption": "Buy more credits modal for Free user: 4 equal-height packs, per-100 text, Upgrade to Pro link.",
+  "annotations": [
+   {
+    "x": 25.6,
+    "y": 18.6,
+    "w": 48.9,
+    "h": 62.9,
+    "label": "Buy modal with equal-height pack cards and Upgrade to Pro link"
+   }
+  ],
+  "at": "2026-11-09T14:30:20.123Z"
+ },
+ {
+  "file": "9/T9.3-3.png",
+  "taskId": "T9.3",
+  "kind": "proof",
+  "step": "Header pill",
+  "attempt": null,
+  "caption": "Header shows the gold Upgrade to Pro pill for a Free user.",
+  "annotations": [
+   {
+    "x": 83.3,
+    "y": 1.2,
+    "w": 9.6,
+    "h": 4.7,
+    "label": "Upgrade to Pro pill"
+   }
+  ],
+  "at": "2026-11-09T14:30:20.261Z"
+ },
+ {
+  "file": "9/T9.3-4.png",
+  "taskId": "T9.3",
+  "kind": "proof",
+  "step": "Model menu",
+  "attempt": null,
+  "caption": "Model menu: Featured, then Free sections; Pro-only models show a PRO lock for Free.",
+  "annotations": [
+   {
+    "x": 1.1,
+    "y": 21.9,
+    "w": 30.7,
+    "h": 45.3,
+    "label": "Sectioned model menu with uniform rows and PRO badges"
+   }
+  ],
+  "at": "2026-11-09T14:30:20.395Z"
+ },
+ {
+  "file": "9/T9.3-5.png",
+  "taskId": "T9.3",
+  "kind": "proof",
+  "step": "pricing layout: comparison first",
+  "attempt": 1,
+  "caption": "/pricing shows the Free or Pro comparison right after the hero: 30 vs 50 daily, 100 vs 500 history (verifier retake).",
+  "annotations": [
+   {
+    "x": 10,
+    "y": 8.9,
+    "w": 80,
+    "h": 66.5,
+    "label": "Free or Pro comparison section"
+   }
+  ],
+  "at": "2026-11-09T14:51:52.289Z"
+ }
+]
