@@ -24,34 +24,37 @@
 - G6: `blockSec` is added to the pricing unit for Autocaption.
 - G7: one HTMLAudioElement is shared with wavesurfer.
 - G8: StudioPlaceholder renders until a page ships.
-- G9: the four new Mongo collections need owner approval (first task).
-- G10: VIDEO_WATERMARK_PLACEMENT · default: read-only from the model's published source or public example outputs (never a paid run); if neither states it, the constant is `null`, the preview draws the text with no position claim and the fixed-position caption · alternatives: owner supplies a sample output; one approved paid run.
+- G9 (RESOLVED, owner approved 2026-11-16): the four new Mongo collections MediaAsset, MediaUpload, Voice and VoiceConsent are approved; T0.1 records the approval.
+- G10 (RESOLVED 2026-11-16): VIDEO_WATERMARK_PLACEMENT is sourced in two steps. Step 1 (free): read the model's published source and public example outputs. Step 2, only if step 1 does not determine the position: exactly ONE owner-approved real paid run of charlesmccarthy/addwatermark, maximum one call ever. Only the main orchestrator session may make it (never a test, an e2e run or an automated retry); immediately before making it the orchestrator tells the user the endpoint/model, the expected cost and that it is call 1 of 1; the observed position is then written into the constant and the result is recorded in the task. If step 1 answers it, no paid call is made. The mock-only rule stays intact for every test and e2e task.
 - G11: FeatureType.SKETCH is for routing, nav and labels only; sketch results are written exactly like a normal image (image type, existing image feature) and appear under the Images history filter.
 - G12: lyrics section and condense are multiplexed on POST /prompt/lyrics.
 - G13: the existing runGenerationJob order is kept and matches SPEC R-INF-6: run on Replicate, persist the record, deduct once, copy to Cloudinary, complete.
-- G14: Song empty-state sample loop (R-SONG-8) · default: the sample row renders only when SONG_SAMPLE_LOOP_URL is set; until the owner supplies a royalty-free loop it is hidden and the 3 example ideas still show · alternatives: owner-made loop from a manual generation; licensed stock loop.
+- G14 (RESOLVED, default accepted 2026-11-16): the Song sample loop row (R-SONG-8) renders only when SONG_SAMPLE_LOOP_URL is set and stays hidden until then; the 3 example ideas still show.
 - G15: Shared unit command · default: `bunx vp test run packages/shared/<spec>` from the root (no test script in packages/shared) · alternatives: add a `test` script to packages/shared (ask first).
 - G16: Page file names follow SPEC section 1 (`Music.vue`, `Speech.vue`, `Video.vue`, `Tool*.vue`) · default applied in all three docs · alternatives: `*Studio.vue` naming.
 - TipTap is user-approved: install exactly `@tiptap/vue-3`, `@tiptap/core`, `@tiptap/pm`, `@tiptap/extension-document`, `@tiptap/extension-paragraph`, `@tiptap/extension-text`, `@tiptap/extension-history`, `@tiptap/extension-placeholder`, `@tiptap/extension-character-count`, `@tiptap/suggestion`; never `@tiptap/starter-kit`.
-- Ask first: wavesurfer.js (before the waveform task), @breezystack/lamejs (before the export task), collections MediaAsset, MediaUpload, Voice and VoiceConsent.
+- Approved 2026-11-16 (no longer ask-first): wavesurfer.js and @breezystack/lamejs (the waveform and export tasks just install them), and the collections MediaAsset, MediaUpload, Voice and VoiceConsent.
+- Q5 (RESOLVED 2026-11-16): exactly ONE owner-approved paid voice-clone test call is allowed, made by the main orchestrator only, before Phase 3 work that depends on it (see T3.7). R-TTS-10 and the "no longer available, re-clone" state stay regardless of the result.
+- Q6 (RESOLVED, default accepted 2026-11-16): credits only, every media model has `tier: 'standard'`, no Pro gating.
+- Q8 (RESOLVED, default accepted 2026-11-16): the drafted commercial-use copy and voice-cloning consent sentence ship as written; legal may revise later without a spec change.
 
 ## Phase 0: Shared media infrastructure
 
 **Adds:** Adds the shared plumbing every audio, video and tool surface uses: one model registry and credit function, a safe paid-call-free e2e harness, the job pipeline with charge-on-success, uploads and asset storage, the new header menus and routes, a persistent mini-player, media in History, and shortcuts. Users see the new Video, Audio and Tools menus (each opening an honest coming-soon page) and, once a generation exists, media in History with a player that survives navigation.
 **Try in UI:** Open the header and see Image, Video, Audio and Tools ; open Audio with the keyboard and press Escape ; open /audio/song and read the coming-soon page ; open History at 375px width
 
-### ☐ T0.1 Record ask-first approvals for new collections
+### ☐ T0.1 Record owner approvals for new collections and libraries
 
 - **Kind:** dod
 - **Files:** `agent_docs/media-studio/APPROVALS.md` (new)
 - **Spec:** R-INF-5, R-INF-14, R-INF-17, R-TTS-11 (collections), PLAN section 2
-- **Do:** Before any model file is written, ask the owner through AskUserQuestion (recommended option first) to approve the four new Mongo collections MediaAsset, MediaUpload (24h TTL), Voice and VoiceConsent (append-only) and record the answer, date and any changes in APPROVALS.md. Also list the two npm packages needing approval later (wavesurfer.js before the waveform task, @breezystack/lamejs before the export task) with status pending, and the open questions G1 to G13 with their default and answer. If the owner declines a collection, stop and report; do not start tasks that need it.
+- **Do:** Create APPROVALS.md recording that the owner approved, on 2026-11-16, the four new Mongo collections MediaAsset, MediaUpload (24h TTL), Voice and VoiceConsent (append-only), and the two npm packages wavesurfer.js and @breezystack/lamejs. No question is asked and no later task waits on an answer. Also record the open questions G1 to G13 with their default or resolution (G9, G10 and G14 resolved 2026-11-16), and Q5, Q6 and Q8 as resolved 2026-11-16.
 - **Acceptance:**
-  - AC1: APPROVALS.md lists MediaAsset, MediaUpload, Voice and VoiceConsent each with an approved or declined line and a date.
-  - AC2: APPROVALS.md lists wavesurfer.js and @breezystack/lamejs as pending, and G1 to G13 each with the default applied.
+  - AC1: APPROVALS.md lists MediaAsset, MediaUpload, Voice and VoiceConsent each with an approved line dated 2026-11-16.
+  - AC2: APPROVALS.md lists wavesurfer.js and @breezystack/lamejs as approved 2026-11-16, and G1 to G13 each with the default or resolution applied.
   - AC3: No file other than APPROVALS.md changed in this task.
 - **Verify:**
-  - V1: `grep -c -E 'MediaAsset|MediaUpload|Voice|VoiceConsent' agent_docs/media-studio/APPROVALS.md` is at least 4 and each line contains approved or declined
+  - V1: `grep -c -E 'MediaAsset|MediaUpload|Voice|VoiceConsent' agent_docs/media-studio/APPROVALS.md` is at least 4 and each line contains approved and 2026-11-16
   - V2: `grep -c -E '^- G(1[0-3]|[1-9]):' agent_docs/media-studio/APPROVALS.md` equals 13 and `grep -c -E 'wavesurfer|lamejs' agent_docs/media-studio/APPROVALS.md` is at least 2
   - V3: `git status --short` lists only agent_docs/media-studio/APPROVALS.md as new from this task
 
@@ -65,7 +68,7 @@
 - **Risk:** high
 - **Surfaces:** logic
 - **Spec:** R-INF-1, R-INF-2, R-INF-3, R-INF-6, R-INF-7
-- **Do:** Copy the pattern of `packages/shared/src/models/image-limits.ts`. Create media-limits.ts as the only home of media limits and named constants (EXPENSIVE_JOB_CREDITS = 150, MAX_VOICES_PER_USER = 10, upload byte caps and second caps from SPEC section 5 and 11, P_VIDEO_MAX_SEC = 20, EXPORT_PCM_CAP_BYTES, EDITOR_PEAK_BUCKETS, lyrics and prompt limits); no magic numbers elsewhere. In credits.ts add MEDIA_CREDITS_PER_USD = 200, MIN_JOB_CREDITS = 1 and the pure function getMediaCreditCost(modelKey, input) = max(MIN_JOB_CREDITS, ceil(round6(usd * 200) - 1e-9)) for the 5 MediaCostInput variants (file, chars, seconds with resolution and draft, run, blocks of 30 s). In types.ts add ModelKind ('image'|'music'|'song'|'tts'|'video'|'tool'), the media field types, MediaPricing (unit file|second|kChars|kTokens|run plus optional blockSec, gap G6) and the new CatalogModelKey members from PLAN 1.3; getModelKind defaults legacy entries to image. In domain.ts extend FeatureType with SONG, MUSIC, SPEECH, VIDEO, WATERMARK_IMAGE, WATERMARK_VIDEO, AUTOCAPTION, SKETCH (SKETCH is for routing and labels only, G11) and extend JobStatus with optional stage, elapsedMs, assetId, asset, credits and the noCharge failure reason union. Functions stay under 30 lines. Tests are not written here: T0.4, T0.29 cover Unit: table test regenerates every SPEC section 8 row from the constant and asserts the exact credits; Unit: chars 0 -> 1, 1, 1000, 2000, 10000 and blocks 30, 31, 120 s boundary cases; Unit: registry test asserts getModelKind is image for all legacy keys.
+- **Do:** Copy the pattern of `packages/shared/src/models/image-limits.ts`. Create media-limits.ts as the only home of media limits and named constants (EXPENSIVE_JOB_CREDITS = 150, MAX_VOICES_PER_USER = 10, upload byte caps and second caps from SPEC section 5 and 11, P_VIDEO_MAX_SEC = 20, EXPORT_PCM_CAP_BYTES, EDITOR_PEAK_BUCKETS, lyrics and prompt limits); no magic numbers elsewhere. In credits.ts add MEDIA_CREDITS_PER_USD = 200, MIN_JOB_CREDITS = 1 and the pure function getMediaCreditCost(modelKey, input) = max(MIN_JOB_CREDITS, ceil(round6(usd \* 200) - 1e-9)) for the 5 MediaCostInput variants (file, chars, seconds with resolution and draft, run, blocks of 30 s). In types.ts add ModelKind ('image'|'music'|'song'|'tts'|'video'|'tool'), the media field types, MediaPricing (unit file|second|kChars|kTokens|run plus optional blockSec, gap G6) and the new CatalogModelKey members from PLAN 1.3; getModelKind defaults legacy entries to image. In domain.ts extend FeatureType with SONG, MUSIC, SPEECH, VIDEO, WATERMARK_IMAGE, WATERMARK_VIDEO, AUTOCAPTION, SKETCH (SKETCH is for routing and labels only, G11) and extend JobStatus with optional stage, elapsedMs, assetId, asset, credits and the noCharge failure reason union. Functions stay under 30 lines. Tests are not written here: T0.4, T0.29 cover Unit: table test regenerates every SPEC section 8 row from the constant and asserts the exact credits; Unit: chars 0 -> 1, 1, 1000, 2000, 10000 and blocks 30, 31, 120 s boundary cases; Unit: registry test asserts getModelKind is image for all legacy keys.
 - **Acceptance:**
   - AC1: getMediaCreditCost returns the integer credits of every SPEC section 8 row, for example 5 credits for 0.025 USD, never 6 from float error.
   - AC2: A zero-character TTS input costs MIN_JOB_CREDITS (1).
@@ -125,7 +128,7 @@
 - **Risk:** high
 - **Surfaces:** security,logic
 - **Spec:** R-INF-9
-- **Do:** Read replicate.ts and paidCallGuard.ts first. Extend the existing FAKE_REPLICATE_OUTPUT_URL branch (taken when the authed user is in env.E2E_USER_IDS) so it returns FAKE_REPLICATE_AUDIO_URL, FAKE_REPLICATE_VIDEO_URL, FAKE_REPLICATE_TRANSCRIPT_URL or FAKE_VOICE_ID by model kind and key; non-e2e users still use the real client. Create lyrics-generator.ts with only the fake branch for e2e users (fixed fake sections, no DeepSeek call); the real generator arrives in the lyrics task. Export PAID_PATH_PATTERN and broaden it to POST /generate/audio/*, /generate/tools/*, /prompt/lyrics and /generate/audio/voices (it already covers /generate/video). The guard is only ever broadened, never narrowed or opted out of. Extend cloudinaryMock.ts so mock uploads can return audio and video shaped assets. Tests are not written here: T0.7, T0.29 cover Unit: e2e user returns each fake URL by kind and the spy for the real client has zero calls; Unit: non-e2e user selects the real client path with the spy only inspected; Unit: isPaidCall table for song, music, speech, voices, tools, video, lyrics and GET variants; Unit: existing paidCallGuard tests still pass unchanged.
+- **Do:** Read replicate.ts and paidCallGuard.ts first. Extend the existing FAKE*REPLICATE_OUTPUT_URL branch (taken when the authed user is in env.E2E_USER_IDS) so it returns FAKE_REPLICATE_AUDIO_URL, FAKE_REPLICATE_VIDEO_URL, FAKE_REPLICATE_TRANSCRIPT_URL or FAKE_VOICE_ID by model kind and key; non-e2e users still use the real client. Create lyrics-generator.ts with only the fake branch for e2e users (fixed fake sections, no DeepSeek call); the real generator arrives in the lyrics task. Export PAID_PATH_PATTERN and broaden it to POST /generate/audio/*, /generate/tools/\_, /prompt/lyrics and /generate/audio/voices (it already covers /generate/video). The guard is only ever broadened, never narrowed or opted out of. Extend cloudinaryMock.ts so mock uploads can return audio and video shaped assets. Tests are not written here: T0.7, T0.29 cover Unit: e2e user returns each fake URL by kind and the spy for the real client has zero calls; Unit: non-e2e user selects the real client path with the spy only inspected; Unit: isPaidCall table for song, music, speech, voices, tools, video, lyrics and GET variants; Unit: existing paidCallGuard tests still pass unchanged.
 - **Acceptance:**
   - AC1: For an E2E_USER_IDS user the media kinds return their fake URL and the real Replicate client is never invoked.
   - AC2: For any other user the real client is selected (asserted with an injected spy, never called for real).
@@ -372,7 +375,7 @@
 - **Risk:** medium
 - **Surfaces:** ui
 - **Spec:** R-INF-10, R-QOL-2, R-QOL-3
-- **Do:** Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look (no gradient hero, no emoji icons, no uniform rounded-card grid); obey Standing UI rules in the header. Design intent (PLAN 1.12): the header reads as Image, Video, Audio with a caret, Tools with a caret, with no layout shift when the credits chip grows. Read NavTabs.vue, AppHeader.vue and primitives/Popover.vue first. NavMenuGroup wraps Popover: opens on click or Enter, Space or ArrowDown, ArrowUp and ArrowDown move, Home and End jump, Enter activates, Escape closes and returns focus to the trigger, Tab closes, hover never opens; each item is a 16 px icon, a label and a one-line muted description truncated to one line. Audio items: Song, Music, Speech. Tools items: Image watermark, Video watermark, Autocaption, Sketch to image. NavMobileAccordion (below 768 px, inside the existing mobile menu) has items at least 44 px. Add the new route names to APP_SURFACE and APP_SURFACE_TAB so Audio highlights on any /audio/* and Tools on any /tools/*. The Image tab keeps its destination and behaviour. Tests are not written here: T0.28, T0.29 cover Component: NavMenuGroup open keys; Component: arrows, Home, End, Enter, hover-does-not-open; Component: Escape focus return and Tab close; Unit: tabFromRouteName returns Audio and Tools for each new route name; Component: existing NavTabs and AppHeader tests unchanged for the Image tab; E2E spec: 375px viewport accordion item heights and scrollWidth; Component: truncation class asserted; T0.29 chip-growth shift check; Component: aria attributes and reduced-motion media query.
+- **Do:** Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look (no gradient hero, no emoji icons, no uniform rounded-card grid); obey Standing UI rules in the header. Design intent (PLAN 1.12): the header reads as Image, Video, Audio with a caret, Tools with a caret, with no layout shift when the credits chip grows. Read NavTabs.vue, AppHeader.vue and primitives/Popover.vue first. NavMenuGroup wraps Popover: opens on click or Enter, Space or ArrowDown, ArrowUp and ArrowDown move, Home and End jump, Enter activates, Escape closes and returns focus to the trigger, Tab closes, hover never opens; each item is a 16 px icon, a label and a one-line muted description truncated to one line. Audio items: Song, Music, Speech. Tools items: Image watermark, Video watermark, Autocaption, Sketch to image. NavMobileAccordion (below 768 px, inside the existing mobile menu) has items at least 44 px. Add the new route names to APP*SURFACE and APP_SURFACE_TAB so Audio highlights on any /audio/* and Tools on any /tools/\_. The Image tab keeps its destination and behaviour. Tests are not written here: T0.28, T0.29 cover Component: NavMenuGroup open keys; Component: arrows, Home, End, Enter, hover-does-not-open; Component: Escape focus return and Tab close; Unit: tabFromRouteName returns Audio and Tools for each new route name; Component: existing NavTabs and AppHeader tests unchanged for the Image tab; E2E spec: 375px viewport accordion item heights and scrollWidth; Component: truncation class asserted; T0.29 chip-growth shift check; Component: aria attributes and reduced-motion media query.
 - **Acceptance:**
   - AC1: The header shows Image, Video, Audio and Tools, and Audio and Tools show a caret.
   - AC2: Pressing Enter on Audio opens a menu with Song, Music and Speech; ArrowDown moves through items, Home and End jump, Enter navigates.
@@ -610,7 +613,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; readCredits from support/proPerksSeed.ts proves balance changes.
   - AC2: paidCallGuard stays on and no real Replicate, Dodo or email call is made.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts --repeat-each=3`
   - V2: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts --grep @critical` shows the guard self-test scenario passing
@@ -625,7 +628,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass using the media stub and sample.mp3 as the audio source.
   - AC2: No test starts the server and no un-intercepted paid call occurs.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/media-nav-player.spec.ts --repeat-each=3`
   - V2: `cd apps/web && bunx playwright test e2e/qa/media-nav-player.spec.ts --grep @critical`
@@ -652,14 +655,14 @@
 **Adds:** Users write lyrics (or have AI draft them), pick a style and generate a full song with Minimax Music 2.6, then play it, edit the waveform and export a new version. Every result lands in History.
 **Try in UI:** Open Audio then Song ; type a style and lyrics and press Generate ; play the result and trim a region ; export an MP3 and find it in History
 
-### ☐ T1.1 Record wavesurfer.js approval (ask first)
+### ☐ T1.1 Record wavesurfer.js approval (approved)
 
 - **Kind:** dod
 - **Files:** `agent_docs/media-studio/APPROVALS.md` (edit)
 - **Spec:** R-EDIT-1
-- **Do:** Ask the owner through AskUserQuestion (recommended option first) to approve adding wavesurfer.js (waveform rendering, regions, timeline). Record the answer and date in APPROVALS.md. If declined, the editor tasks use the fallback of a canvas waveform and stop for the owner. Do not install anything in this task.
+- **Do:** Record in APPROVALS.md that the owner approved wavesurfer.js (waveform rendering, regions, timeline) on 2026-11-16; no question is asked. Do not install anything in this task; the waveform task installs it.
 - **Acceptance:**
-  - AC1: APPROVALS.md has a wavesurfer.js line marked approved or declined with a date.
+  - AC1: APPROVALS.md has a wavesurfer.js line marked approved 2026-11-16.
   - AC2: No package.json or lockfile changed in this task.
 - **Verify:**
   - V1: `grep -n wavesurfer agent_docs/media-studio/APPROVALS.md`
@@ -743,7 +746,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/song.spec.ts --repeat-each=3`
 
@@ -815,7 +818,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/lyrics.spec.ts --repeat-each=3`
 
@@ -829,7 +832,7 @@
 - **Risk:** medium
 - **Surfaces:** ui,logic,security
 - **Spec:** R-EDIT-1, R-EDIT-2, R-EDIT-4, R-EDIT-5, R-INF-12
-- **Do:** Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look; obey Standing UI rules in the header. Only after the wavesurfer.js approval is recorded, install it with bun add in apps/web. audioEditMath is pure: trim, cut, fade in and out, normalize and undo/redo over a segments model, with EDIT_HISTORY_LIMIT = 100 and EDITOR_PEAK_BUCKETS = 2000 as named constants. useAudioEditor owns the region state and history and uses the player store's single audio element through the wavesurfer media option (gap G7). WaveformEditor draws the waveform with region handles, a timeline and zoom, never autoplays and keeps handles at least 44px wide on touch. Edits are non-destructive until export. Functions stay under 30 lines. Tests are not written here: T1.13, T1.18 cover Unit (editor unit task): trim, cut, fade, normalize math with exact sample counts; Unit: history cap at 101 operations; Component: undo and redo keys and the typing-context suppression; Unit: single element shared (no second Audio constructed); Component: region keys; Unit: peak bucket cap; E2E editor spec at 375px: handle width and scrollWidth.
+- **Do:** Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look; obey Standing UI rules in the header. Install wavesurfer.js (approved 2026-11-16) with bun add in apps/web. audioEditMath is pure: trim, cut, fade in and out, normalize and undo/redo over a segments model, with EDIT_HISTORY_LIMIT = 100 and EDITOR_PEAK_BUCKETS = 2000 as named constants. useAudioEditor owns the region state and history and uses the player store's single audio element through the wavesurfer media option (gap G7). WaveformEditor draws the waveform with region handles, a timeline and zoom, never autoplays and keeps handles at least 44px wide on touch. Edits are non-destructive until export. Functions stay under 30 lines. Tests are not written here: T1.13, T1.18 cover Unit (editor unit task): trim, cut, fade, normalize math with exact sample counts; Unit: history cap at 101 operations; Component: undo and redo keys and the typing-context suppression; Unit: single element shared (no second Audio constructed); Component: region keys; Unit: peak bucket cap; E2E editor spec at 375px: handle width and scrollWidth.
 - **Acceptance:**
   - AC1: Trim to a region keeps only that range and cut removes it; the displayed duration updates.
   - AC2: Undo and redo step through edits and the stack never exceeds 100 entries.
@@ -877,15 +880,15 @@
 - **Verify:**
   - V1: `cd apps/web && npx vitest run src/utils/audioEditMath.test.ts src/composables/useAudioEditor.test.ts src/components/Audio/WaveformEditor.test.ts src/components/Audio/EditorToolbar.test.ts --coverage --coverage.include=src/utils/audioEditMath.ts --coverage.include=src/composables/useAudioEditor.ts --coverage.include=src/components/Audio/WaveformEditor.vue --coverage.include=src/components/Audio/EditorToolbar.vue --coverage.reporter=text`
 
-### ☐ T1.14 Record @breezystack/lamejs approval (ask first)
+### ☐ T1.14 Record @breezystack/lamejs approval (approved)
 
 - **Kind:** dod
 - **Files:** `agent_docs/media-studio/APPROVALS.md` (edit)
 - **Depends on:** T1.13
 - **Spec:** R-EDIT-3
-- **Do:** Ask the owner through AskUserQuestion (recommended option first) to approve adding @breezystack/lamejs for in-browser MP3 encoding. Record answer and date. If declined, export is WAV only and the MP3 acceptance criteria are marked out of scope by the owner. Install nothing here.
+- **Do:** Record in APPROVALS.md that the owner approved @breezystack/lamejs (in-browser MP3 encoding) on 2026-11-16; no question is asked. Install nothing here; the export task installs it.
 - **Acceptance:**
-  - AC1: APPROVALS.md has an @breezystack/lamejs line marked approved or declined with a date.
+  - AC1: APPROVALS.md has an @breezystack/lamejs line marked approved 2026-11-16.
   - AC2: No dependency file changed in this task.
 - **Verify:**
   - V1: `grep -n lamejs agent_docs/media-studio/APPROVALS.md`
@@ -901,7 +904,7 @@
 - **Risk:** medium
 - **Surfaces:** logic,security
 - **Spec:** R-EDIT-3, R-EDIT-4, R-EDIT-7
-- **Do:** After approval install @breezystack/lamejs in apps/web. encodeWav writes a valid 16-bit PCM header. The MP3 encode runs in a Web Worker so the UI never blocks and stops with an error when decoded PCM would exceed EXPORT_PCM_CAP_BYTES = 200MB, with the copy "This audio is too long to export in the browser.". useAudioExport renders edits to PCM, reports progress and exposes cancel; worker errors are surfaced with context, never swallowed. Tests are not written here: T1.17, T1.18 cover Unit (export unit task): WAV header and sample bytes; Unit: MP3 round trip with a fake worker and a real small encode; Unit: cap check; Unit: cancel terminates worker; Unit: progress events with fake timers.
+- **Do:** Install @breezystack/lamejs (approved 2026-11-16) in apps/web. encodeWav writes a valid 16-bit PCM header. The MP3 encode runs in a Web Worker so the UI never blocks and stops with an error when decoded PCM would exceed EXPORT_PCM_CAP_BYTES = 200MB, with the copy "This audio is too long to export in the browser.". useAudioExport renders edits to PCM, reports progress and exposes cancel; worker errors are surfaced with context, never swallowed. Tests are not written here: T1.17, T1.18 cover Unit (export unit task): WAV header and sample bytes; Unit: MP3 round trip with a fake worker and a real small encode; Unit: cap check; Unit: cancel terminates worker; Unit: progress events with fake timers.
 - **Acceptance:**
   - AC1: encodeWav of a known buffer has a correct RIFF header, byte length and sample values.
   - AC2: Exporting the 5 second fixture to MP3 yields a decodable file of about the expected duration.
@@ -959,7 +962,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/editor.spec.ts --repeat-each=3`
 
@@ -1085,7 +1088,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/music.spec.ts --repeat-each=3`
 
@@ -1249,19 +1252,20 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T3.7 Record the voice collections and consent copy approvals
+### ☐ T3.7 Record the voice collections and consent copy approvals, and run the one voice-clone expiry test
 
 - **Kind:** dod
 - **Files:** `agent_docs/media-studio/APPROVALS.md` (edit)
 - **Depends on:** T3.6
 - **Spec:** R-TTS-11, R-TTS-12
-- **Do:** Confirm in APPROVALS.md that the Voice and VoiceConsent collections are approved (from the Phase 0 approval task); if not, ask via AskUserQuestion with a recommended option first and stop if declined. Record the final CLONE_CONSENT_TEXT wording and CURRENT_CONSENT_VERSION chosen with the owner, and the retention rule for VoiceConsent after a voice is deleted (gap G4: retained). Make no code change.
+- **Do:** Confirm in APPROVALS.md that the Voice and VoiceConsent collections are approved (owner, 2026-11-16, from T0.1); no question is asked. Record the final CLONE_CONSENT_TEXT wording and CURRENT_CONSENT_VERSION (the drafted copy ships as written, Q8 accepted 2026-11-16) and the retention rule for VoiceConsent after a voice is deleted (gap G4: retained). Q5 (RESOLVED 2026-11-16): exactly ONE owner-approved paid voice-clone test call is allowed, to confirm whether cloned voice ids expire vendor-side, before any Phase 3 work that depends on the answer (T3.8 onward). Maximum one call ever; only the main orchestrator session makes it (never a test, an e2e run or an automated retry); immediately before it the orchestrator tells the user the endpoint/model (minimax/voice-cloning), the expected cost and that it is call 1 of 1. Record the finding (expired or not, and when checked) in APPROVALS.md. R-TTS-10 and the "no longer available, re-clone" state stay in the design regardless of the result. Make no code change.
 - **Acceptance:**
   - AC1: APPROVALS.md records Voice and VoiceConsent as approved with a date.
   - AC2: The consent text and version are recorded.
   - AC3: Gap G4 (retain consent on delete) and G5 (10 voices) show the default applied or the owner's answer.
+  - AC4: APPROVALS.md records the Q5 test call as call 1 of 1 with its finding, or states that the orchestrator has not yet made it and T3.8 is blocked until it does; no second call exists.
 - **Verify:**
-  - V1: `grep -n -E 'Voice|VoiceConsent|CLONE_CONSENT|G4|G5' agent_docs/media-studio/APPROVALS.md`
+  - V1: `grep -n -E 'Voice|VoiceConsent|CLONE_CONSENT|G4|G5|Q5|call 1 of 1' agent_docs/media-studio/APPROVALS.md`
   - V2: `git status --short` shows only APPROVALS.md changed by this task
 
 ### ☐ T3.8 Voice clone endpoint, consent audit and voice models (S3.5a)
@@ -1367,7 +1371,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/speech.spec.ts --repeat-each=3`
 
@@ -1381,7 +1385,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/voice-clone.spec.ts --repeat-each=3`
 
@@ -1534,7 +1538,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/video.spec.ts --repeat-each=3`
 
@@ -1594,11 +1598,11 @@
 - **Risk:** high
 - **Surfaces:** security,ui,logic
 - **Spec:** R-TOOL-VW-1, R-TOOL-VW-2, R-INF-4, R-INF-17
-- **Do:** Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look; obey Standing UI rules in the header. Video is limited to MAX_TOOL_VIDEO_SECONDS = 120 and MAX_TOOL_VIDEO_BYTES = 100MB and billed from the stored upload duration. Gap G10: record VIDEO_WATERMARK_PLACEMENT in media-limits.ts read-only from the model's published source or public example outputs, never from a paid run; if neither states it, set it to null and the preview draws the text with no position claim. The preview overlays the text on a frame of the user's video and the size slider (1 to 500, default 40) scales it; the caption reads exactly "Position is fixed by this tool; you can change the text and size."; no drag, opacity, colour or logo control exists; the default text FULLJOURNEY.AI is never sent and empty text disables Generate. Route copy: POST /generate/tools/video-watermark follows the music route order (auth, Zod, 402, jobId, enqueue). Duration comes from the Cloudinary-reported value, never the client. Empty state copy: "Add a video and the text for your watermark.". Tests are not written here: T5.6, T5.8 cover Unit (tools unit task): limit boundaries; Unit: duration source; E2E tools spec: over-limit copy; E2E tools spec: 402 and failure; E2E tools spec at 375px.
+- **Do:** Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look; obey Standing UI rules in the header. Video is limited to MAX_TOOL_VIDEO_SECONDS = 120 and MAX_TOOL_VIDEO_BYTES = 100MB and billed from the stored upload duration. Gap G10 (RESOLVED 2026-11-16): record VIDEO_WATERMARK_PLACEMENT in media-limits.ts, first by reading the model's published source and public example outputs (no cost). Only if that does not determine the position, exactly ONE owner-approved real paid run of charlesmccarthy/addwatermark is allowed: maximum one call ever, made only by the main orchestrator session (never by a test, e2e run or automated retry), which tells the user the endpoint/model, expected cost and that it is call 1 of 1 immediately before; write the observed position into the constant and record the result in this task. If the read step answers it, no paid call is made. The preview overlays the text on a frame of the user's video and the size slider (1 to 500, default 40) scales it; the caption reads exactly "Position is fixed by this tool; you can change the text and size."; no drag, opacity, colour or logo control exists; the default text FULLJOURNEY.AI is never sent and empty text disables Generate. Route copy: POST /generate/tools/video-watermark follows the music route order (auth, Zod, 402, jobId, enqueue). Duration comes from the Cloudinary-reported value, never the client. Empty state copy: "Add a video and the text for your watermark.". Tests are not written here: T5.6, T5.8 cover Unit (tools unit task): limit boundaries; Unit: duration source; E2E tools spec: over-limit copy; E2E tools spec: 402 and failure; E2E tools spec at 375px.
 - **Acceptance:**
   - AC1: A video over 120 seconds or 100MB is rejected with specific limit copy and nothing is billed.
   - AC2: Cost uses the stored upload duration and is charged once on success.
-  - AC3: VIDEO_WATERMARK_PLACEMENT is a named constant (or null with the no-position preview), no paid run was made to obtain it, and the caption "Position is fixed by this tool; you can change the text and size." is shown.
+  - AC3: VIDEO_WATERMARK_PLACEMENT is a named constant sourced per gap G10 (no paid call if the read step answered it; otherwise the single approved run is recorded as call 1 of 1), no test or e2e run made a paid call, and the caption "Position is fixed by this tool; you can change the text and size." is shown.
   - AC4: 402 and failure states match the shared components.
   - AC5: At 375px width there is no horizontal scroll and tap targets are at least 44px high. Every interactive element has a visible focus ring and an accessible name and works by keyboard alone.
 - **Verify:**
@@ -1710,7 +1714,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/tools.spec.ts --repeat-each=3`
 

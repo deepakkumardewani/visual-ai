@@ -21,3 +21,11 @@
 {"at":"2026-11-16T02:52:57.514Z","type":"question","tasks":[],"id":"Q21","text":"Q6: Pro gating for media?","default":"Credits only; all media tier standard","alternatives":"Pro-only for Wan 3, Music 2.6 and voice cloning"}
 {"at":"2026-11-16T02:52:57.576Z","type":"question","tasks":[],"id":"Q22","text":"Q7: Expose Chatterbox reference_audio zero-shot cloning?","default":"Not in v1","alternatives":"Expose it with the same consent flow"}
 {"at":"2026-11-16T02:52:57.638Z","type":"question","tasks":[],"id":"Q23","text":"Q8: Final legal copy for commercial use and the cloning consent sentence?","default":"Drafted copy ships; legal can revise without a spec change","alternatives":"Hold voice cloning until legal signs off"}
+{"at":"2026-11-16T03:09:22.943Z","type":"answered","tasks":[],"id":"Q9","text":"Approved by owner 2026-11-16: all four collections"}
+{"at":"2026-11-16T03:09:23.018Z","type":"answered","tasks":[],"id":"Q10","text":"Read the public source first; only if that fails, one owner-approved paid run (call 1 of 1, main session only, announced with cost first)"}
+{"at":"2026-11-16T03:09:23.078Z","type":"answered","tasks":[],"id":"Q14","text":"Default accepted: hidden until SONG_SAMPLE_LOOP_URL is set"}
+{"at":"2026-11-16T03:09:23.130Z","type":"answered","tasks":[],"id":"Q17","text":"Approved by owner 2026-11-16"}
+{"at":"2026-11-16T03:09:23.183Z","type":"answered","tasks":[],"id":"Q18","text":"Approved by owner 2026-11-16"}
+{"at":"2026-11-16T03:09:23.235Z","type":"answered","tasks":[],"id":"Q20","text":"One owner-approved paid voice-clone test call before Phase 3 (call 1 of 1, main session only, announced with cost first); gate is T3.7"}
+{"at":"2026-11-16T03:09:23.289Z","type":"answered","tasks":[],"id":"Q21","text":"Default accepted: credits only, all media tier standard"}
+{"at":"2026-11-16T03:09:23.343Z","type":"answered","tasks":[],"id":"Q23","text":"Default accepted: drafted copy ships"}

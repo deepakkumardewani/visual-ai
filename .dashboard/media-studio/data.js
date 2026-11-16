@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-16T02:52:57.655Z",
+ "generatedAt": "2026-11-16T03:18:36.492Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "media-studio",
@@ -44,8 +44,8 @@ window.DASHBOARD = {
   {
    "id": "0",
    "name": "Shared media infrastructure",
-   "startLine": 38,
-   "endLine": 649,
+   "startLine": 41,
+   "endLine": 652,
    "adds": "Adds the shared plumbing every audio, video and tool surface uses: one model registry and credit function, a safe paid-call-free e2e harness, the job pipeline with charge-on-success, uploads and asset storage, the new header menus and routes, a persistent mini-player, media in History, and shortcuts. Users see the new Video, Audio and Tools menus (each opening an honest coming-soon page) and, once a generation exists, media in History with a player that survives navigation.",
    "tryInUi": [
     "Open the header and see Image, Video, Audio and Tools",
@@ -55,7 +55,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 0",
-    "line": 648,
+    "line": 651,
     "items": [
      "registry, credits, mocked e2e harness, pipeline, assets, uploads, nav and mini-player all verified by unit tests, the mocked media-pipeline and nav-player QA specs, and `bun run check` plus `bun run test`."
     ]
@@ -63,7 +63,7 @@ window.DASHBOARD = {
    "tasks": [
     {
      "id": "T0.1",
-     "title": "Record ask-first approvals for new collections",
+     "title": "Record owner approvals for new collections and libraries",
      "done": false,
      "kind": "dod",
      "depends": [],
@@ -71,20 +71,20 @@ window.DASHBOARD = {
       "agent_docs/media-studio/APPROVALS.md"
      ],
      "gherkin": null,
-     "do": "Before any model file is written, ask the owner through AskUserQuestion (recommended option first) to approve the four new Mongo collections MediaAsset, MediaUpload (24h TTL), Voice and VoiceConsent (append-only) and record the answer, date and any changes in APPROVALS.md. Also list the two npm packages needing approval later (wavesurfer.js before the waveform task, @breezystack/lamejs before the export task) with status pending, and the open questions G1 to G13 with their default and answer. If the owner declines a collection, stop and report; do not start tasks that need it.",
+     "do": "Create APPROVALS.md recording that the owner approved, on 2026-11-16, the four new Mongo collections MediaAsset, MediaUpload (24h TTL), Voice and VoiceConsent (append-only), and the two npm packages wavesurfer.js and @breezystack/lamejs. No question is asked and no later task waits on an answer. Also record the open questions G1 to G13 with their default or resolution (G9, G10 and G14 resolved 2026-11-16), and Q5, Q6 and Q8 as resolved 2026-11-16.",
      "spec": "R-INF-5, R-INF-14, R-INF-17, R-TTS-11 (collections), PLAN section 2",
      "filesDeclared": true,
      "acceptance": [
-      "AC1: APPROVALS.md lists MediaAsset, MediaUpload, Voice and VoiceConsent each with an approved or declined line and a date.",
-      "AC2: APPROVALS.md lists wavesurfer.js and @breezystack/lamejs as pending, and G1 to G13 each with the default applied.",
+      "AC1: APPROVALS.md lists MediaAsset, MediaUpload, Voice and VoiceConsent each with an approved line dated 2026-11-16.",
+      "AC2: APPROVALS.md lists wavesurfer.js and @breezystack/lamejs as approved 2026-11-16, and G1 to G13 each with the default or resolution applied.",
       "AC3: No file other than APPROVALS.md changed in this task."
      ],
      "verify": [
-      "V1: `grep -c -E 'MediaAsset|MediaUpload|Voice|VoiceConsent' agent_docs/media-studio/APPROVALS.md` is at least 4 and each line contains approved or declined",
+      "V1: `grep -c -E 'MediaAsset|MediaUpload|Voice|VoiceConsent' agent_docs/media-studio/APPROVALS.md` is at least 4 and each line contains approved and 2026-11-16",
       "V2: `grep -c -E '^- G(1[0-3]|[1-9]):' agent_docs/media-studio/APPROVALS.md` equals 13 and `grep -c -E 'wavesurfer|lamejs' agent_docs/media-studio/APPROVALS.md` is at least 2",
       "V3: `git status --short` lists only agent_docs/media-studio/APPROVALS.md as new from this task"
      ],
-     "line": 43,
+     "line": 46,
      "ui": false,
      "status": "ready",
      "updatedAt": null,
@@ -130,7 +130,7 @@ window.DASHBOARD = {
       "V3: `bunx vp test run packages/shared` (existing shared tests stay green)",
       "V4: `cd apps/api && bun run type-check`"
      ],
-     "line": 58,
+     "line": 61,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -189,7 +189,7 @@ window.DASHBOARD = {
       "V4: `cd apps/api && bun run test` (existing api tests stay green)",
       "V5: `cd apps/web && bun run test` (existing web tests stay green)"
      ],
-     "line": 81,
+     "line": 84,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -242,7 +242,7 @@ window.DASHBOARD = {
       "V1: `bunx vp test run packages/shared/src/models/credits.test.ts packages/shared/src/models/registry.test.ts packages/shared/src/models/media-limits.test.ts --coverage --coverage.include=packages/shared/src/models/credits.ts --coverage.include=packages/shared/src/models/media-limits.ts --coverage.include=packages/shared/src/models/registry.ts --coverage.reporter=text`",
       "V2: `cd apps/web && npx vitest run src/utils/models.test.ts --coverage --coverage.include=src/utils/models.ts --coverage.reporter=text`"
      ],
-     "line": 105,
+     "line": 108,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -289,7 +289,7 @@ window.DASHBOARD = {
       "V4: `cd apps/web && npx vitest run e2e/support/paidCallGuard.test.ts e2e/support/cloudinaryMock.test.ts` (existing harness tests stay green)",
       "V5: `bun run check`"
      ],
-     "line": 118,
+     "line": 121,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -343,7 +343,7 @@ window.DASHBOARD = {
       "V2: `cd apps/web && npx vitest run e2e/support/paidCallGuard.test.ts e2e/support/cloudinaryMock.test.ts` (existing harness tests stay green)",
       "V3: `bun run check`"
      ],
-     "line": 142,
+     "line": 145,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -396,7 +396,7 @@ window.DASHBOARD = {
       "V1: `cd apps/api && npx vitest run src/lib/replicate.test.ts src/lib/lyrics-generator.test.ts --coverage --coverage.include=src/lib/replicate.ts --coverage.include=src/lib/lyrics-generator.ts --coverage.reporter=text`",
       "V2: `cd apps/web && npx vitest run e2e/support/paidCallGuard.test.ts --coverage --coverage.include=e2e/support/paidCallGuard.ts --coverage.reporter=text`"
      ],
-     "line": 162,
+     "line": 165,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -442,7 +442,7 @@ window.DASHBOARD = {
       "V4: `cd apps/api && bun run test` (existing api tests stay green)",
       "V5: `bun run check`"
      ],
-     "line": 175,
+     "line": 178,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -499,7 +499,7 @@ window.DASHBOARD = {
       "V4: `cd apps/api && bun run test` (existing api tests stay green)",
       "V5: `bun run check`"
      ],
-     "line": 198,
+     "line": 201,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -556,7 +556,7 @@ window.DASHBOARD = {
       "V2: `cd apps/api && bun run test` (existing api tests stay green)",
       "V3: `bun run check`"
      ],
-     "line": 221,
+     "line": 224,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -611,7 +611,7 @@ window.DASHBOARD = {
       "V1: `cd apps/api && npx vitest run src/lib/credit-deduction.test.ts src/lib/media-input.test.ts src/services/media-service.test.ts src/routes/media.test.ts src/queue/generation-queue.test.ts --coverage --coverage.include=src/lib/credit-deduction.ts --coverage.include=src/lib/media-input.ts --coverage.include=src/services/media-service.ts --coverage.include=src/routes/media.ts --coverage.include=src/queue/generation-queue.ts --coverage.reporter=text`",
       "V2: `cd apps/api && npx vitest run src/services/generation-service.test.ts src/queue/generation-worker.test.ts`"
      ],
-     "line": 244,
+     "line": 247,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -659,7 +659,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run test` (existing api tests stay green)",
       "V4: `bun run check`"
      ],
-     "line": 257,
+     "line": 260,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -713,7 +713,7 @@ window.DASHBOARD = {
       "V2: `cd apps/api && bun run test` (existing api tests stay green)",
       "V3: `bun run check`"
      ],
-     "line": 280,
+     "line": 283,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -765,7 +765,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/services/media-asset-service.test.ts src/services/cloudinary-service.test.ts src/utils/cloudinary.test.ts src/routes/media.test.ts --coverage --coverage.include=src/services/media-asset-service.ts --coverage.include=src/services/cloudinary-service.ts --coverage.include=src/utils/cloudinary.ts --coverage.include=src/routes/media.ts --coverage.reporter=text`"
      ],
-     "line": 301,
+     "line": 304,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -810,7 +810,7 @@ window.DASHBOARD = {
       "V2: `cd apps/api && bun run test` (existing api tests stay green)",
       "V3: `bun run check`"
      ],
-     "line": 312,
+     "line": 315,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -862,7 +862,7 @@ window.DASHBOARD = {
       "V2: `cd apps/api && bun run test` (existing api tests stay green)",
       "V3: `bun run check`"
      ],
-     "line": 334,
+     "line": 337,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -914,7 +914,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/lib/media-upload.test.ts src/middlewares/multer.test.ts src/utils/cronJobs.test.ts src/routes/media.test.ts --coverage --coverage.include=src/lib/media-upload.ts --coverage.include=src/middlewares/multer.ts --coverage.include=src/utils/cronJobs.ts --coverage.include=src/routes/media.ts --coverage.reporter=text`"
      ],
-     "line": 354,
+     "line": 357,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -963,7 +963,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /create path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 365,
+     "line": 368,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1024,7 +1024,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 390,
+     "line": 393,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1089,7 +1089,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: Visual check: no page mounts this yet; the agent-browser pass happens in T0.21"
      ],
-     "line": 413,
+     "line": 416,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1152,7 +1152,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /assets path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 436,
+     "line": 439,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1217,7 +1217,7 @@ window.DASHBOARD = {
       "V3: `bun run check`",
       "V4: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /assets path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 460,
+     "line": 463,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1284,7 +1284,7 @@ window.DASHBOARD = {
       "V2: `cd apps/web && bun run test` (existing web tests stay green)",
       "V3: `bun run check`"
      ],
-     "line": 485,
+     "line": 488,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -1345,7 +1345,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: Visual check: no page mounts this yet; the agent-browser pass happens in T1.3"
      ],
-     "line": 508,
+     "line": 511,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1415,7 +1415,7 @@ window.DASHBOARD = {
       "V4: `bun run check`",
       "V5: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 533,
+     "line": 536,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1474,7 +1474,7 @@ window.DASHBOARD = {
       "V2: `cd apps/web && bun run test` (existing web tests stay green)",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /pricing path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 558,
+     "line": 561,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1535,7 +1535,7 @@ window.DASHBOARD = {
       "V1: `cd apps/web && npx vitest run src/stores/player.test.ts src/stores/history.test.ts src/composables/useMediaJob.test.ts src/composables/useMediaDraft.test.ts src/composables/useGlobalShortcuts.test.ts --coverage --coverage.include=src/stores/player.ts --coverage.include=src/stores/history.ts --coverage.include=src/composables/useMediaJob.ts --coverage.include=src/composables/useMediaDraft.ts --coverage.include=src/composables/useGlobalShortcuts.ts --coverage.reporter=text`",
       "V2: `cd apps/web && npx vitest run src/stores src/composables`"
      ],
-     "line": 577,
+     "line": 580,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -1578,7 +1578,7 @@ window.DASHBOARD = {
       "V1: `cd apps/web && npx vitest run src/utils/generationCredits.test.ts src/composables/useMediaCost.test.ts src/utils/dashboardRoutes.test.ts src/components/Studio/StudioActionBar.test.ts src/components/Header/NavMenuGroup.test.ts --coverage --coverage.include=src/utils/generationCredits.ts --coverage.include=src/composables/useMediaCost.ts --coverage.include=src/utils/dashboardRoutes.ts --coverage.include=src/components/Studio/StudioActionBar.vue --coverage.include=src/components/Header/NavMenuGroup.vue --coverage.reporter=text`",
       "V2: `cd apps/web && npx vitest run src/components/Audio src/components/Studio src/components/Header`"
      ],
-     "line": 590,
+     "line": 593,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1617,7 +1617,7 @@ window.DASHBOARD = {
       "V1: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts --repeat-each=3`",
       "V2: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts --grep @critical` shows the guard self-test scenario passing"
      ],
-     "line": 603,
+     "line": 606,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1654,7 +1654,7 @@ window.DASHBOARD = {
       "V1: `cd apps/web && bunx playwright test e2e/qa/media-nav-player.spec.ts --repeat-each=3`",
       "V2: `cd apps/web && bunx playwright test e2e/qa/media-nav-player.spec.ts --grep @critical`"
      ],
-     "line": 618,
+     "line": 621,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1693,7 +1693,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts e2e/qa/media-nav-player.spec.ts --repeat-each=2`"
      ],
-     "line": 633,
+     "line": 636,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -1718,8 +1718,8 @@ window.DASHBOARD = {
   {
    "id": "1",
    "name": "Song studio",
-   "startLine": 650,
-   "endLine": 981,
+   "startLine": 653,
+   "endLine": 984,
    "adds": "Users write lyrics (or have AI draft them), pick a style and generate a full song with Minimax Music 2.6, then play it, edit the waveform and export a new version. Every result lands in History.",
    "tryInUi": [
     "Open Audio then Song",
@@ -1729,7 +1729,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 1",
-    "line": 980,
+    "line": 983,
     "items": [
      "song generation, lyrics help, waveform editor and export verified by unit tests and the mocked song and editor QA specs."
     ]
@@ -1737,7 +1737,7 @@ window.DASHBOARD = {
    "tasks": [
     {
      "id": "T1.1",
-     "title": "Record wavesurfer.js approval (ask first)",
+     "title": "Record wavesurfer.js approval (approved)",
      "done": false,
      "kind": "dod",
      "depends": [],
@@ -1745,18 +1745,18 @@ window.DASHBOARD = {
       "agent_docs/media-studio/APPROVALS.md"
      ],
      "gherkin": null,
-     "do": "Ask the owner through AskUserQuestion (recommended option first) to approve adding wavesurfer.js (waveform rendering, regions, timeline). Record the answer and date in APPROVALS.md. If declined, the editor tasks use the fallback of a canvas waveform and stop for the owner. Do not install anything in this task.",
+     "do": "Record in APPROVALS.md that the owner approved wavesurfer.js (waveform rendering, regions, timeline) on 2026-11-16; no question is asked. Do not install anything in this task; the waveform task installs it.",
      "spec": "R-EDIT-1",
      "filesDeclared": true,
      "acceptance": [
-      "AC1: APPROVALS.md has a wavesurfer.js line marked approved or declined with a date.",
+      "AC1: APPROVALS.md has a wavesurfer.js line marked approved 2026-11-16.",
       "AC2: No package.json or lockfile changed in this task."
      ],
      "verify": [
       "V1: `grep -n wavesurfer agent_docs/media-studio/APPROVALS.md`",
       "V2: `git diff --name-only -- package.json apps/web/package.json bun.lock` returns nothing from this task"
      ],
-     "line": 655,
+     "line": 658,
      "ui": false,
      "status": "ready",
      "updatedAt": null,
@@ -1800,7 +1800,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run test` (existing api tests stay green)",
       "V4: `bun run check`"
      ],
-     "line": 668,
+     "line": 671,
      "ui": false,
      "status": "ready",
      "updatedAt": null,
@@ -1860,7 +1860,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 690,
+     "line": 693,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1916,7 +1916,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/components/Song src/composables/useMediaDraft.test.ts --coverage --coverage.include=src/components/Song/SongComposer.vue --coverage.include=src/components/Song/LyricsEditor.vue --coverage.include=src/components/Song/StylePresets.vue --coverage.include=src/composables/useMediaDraft.ts --coverage.reporter=text`"
      ],
-     "line": 714,
+     "line": 717,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1955,7 +1955,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/routes/media.test.ts src/services/media-service.test.ts src/lib/media-input.test.ts --coverage --coverage.include=src/routes/media.ts --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.reporter=text`"
      ],
-     "line": 725,
+     "line": 728,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -1991,7 +1991,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/song.spec.ts --repeat-each=3`"
      ],
-     "line": 736,
+     "line": 739,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2038,7 +2038,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run test` (existing api tests stay green)",
       "V4: `bun run check`"
      ],
-     "line": 750,
+     "line": 753,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2096,7 +2096,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 774,
+     "line": 777,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2151,7 +2151,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/lib/lyrics-generator.test.ts src/routes/prompt.test.ts src/middlewares/rate-limit.test.ts --coverage --coverage.include=src/lib/lyrics-generator.ts --coverage.include=src/routes/prompt.ts --coverage.include=src/middlewares/rate-limit.ts --coverage.reporter=text`"
      ],
-     "line": 797,
+     "line": 800,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2187,7 +2187,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/lyrics.spec.ts --repeat-each=3`"
      ],
-     "line": 808,
+     "line": 811,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2218,7 +2218,7 @@ window.DASHBOARD = {
       "apps/web/package.json"
      ],
      "gherkin": null,
-     "do": "Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look; obey Standing UI rules in the header. Only after the wavesurfer.js approval is recorded, install it with bun add in apps/web. audioEditMath is pure: trim, cut, fade in and out, normalize and undo/redo over a segments model, with EDIT_HISTORY_LIMIT = 100 and EDITOR_PEAK_BUCKETS = 2000 as named constants. useAudioEditor owns the region state and history and uses the player store's single audio element through the wavesurfer media option (gap G7). WaveformEditor draws the waveform with region handles, a timeline and zoom, never autoplays and keeps handles at least 44px wide on touch. Edits are non-destructive until export. Functions stay under 30 lines. Tests are not written here: T1.13, T1.18 cover Unit (editor unit task): trim, cut, fade, normalize math with exact sample counts; Unit: history cap at 101 operations; Component: undo and redo keys and the typing-context suppression; Unit: single element shared (no second Audio constructed); Component: region keys; Unit: peak bucket cap; E2E editor spec at 375px: handle width and scrollWidth.",
+     "do": "Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look; obey Standing UI rules in the header. Install wavesurfer.js (approved 2026-11-16) with bun add in apps/web. audioEditMath is pure: trim, cut, fade in and out, normalize and undo/redo over a segments model, with EDIT_HISTORY_LIMIT = 100 and EDITOR_PEAK_BUCKETS = 2000 as named constants. useAudioEditor owns the region state and history and uses the player store's single audio element through the wavesurfer media option (gap G7). WaveformEditor draws the waveform with region handles, a timeline and zoom, never autoplays and keeps handles at least 44px wide on touch. Edits are non-destructive until export. Functions stay under 30 lines. Tests are not written here: T1.13, T1.18 cover Unit (editor unit task): trim, cut, fade, normalize math with exact sample counts; Unit: history cap at 101 operations; Component: undo and redo keys and the typing-context suppression; Unit: single element shared (no second Audio constructed); Component: region keys; Unit: peak bucket cap; E2E editor spec at 375px: handle width and scrollWidth.",
      "spec": "R-EDIT-1, R-EDIT-2, R-EDIT-4, R-EDIT-5, R-INF-12",
      "filesDeclared": true,
      "acceptance": [
@@ -2235,7 +2235,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 822,
+     "line": 825,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2301,7 +2301,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 846,
+     "line": 849,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2356,7 +2356,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/utils/audioEditMath.test.ts src/composables/useAudioEditor.test.ts src/components/Audio/WaveformEditor.test.ts src/components/Audio/EditorToolbar.test.ts --coverage --coverage.include=src/utils/audioEditMath.ts --coverage.include=src/composables/useAudioEditor.ts --coverage.include=src/components/Audio/WaveformEditor.vue --coverage.include=src/components/Audio/EditorToolbar.vue --coverage.reporter=text`"
      ],
-     "line": 869,
+     "line": 872,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2373,7 +2373,7 @@ window.DASHBOARD = {
     },
     {
      "id": "T1.14",
-     "title": "Record @breezystack/lamejs approval (ask first)",
+     "title": "Record @breezystack/lamejs approval (approved)",
      "done": false,
      "kind": "dod",
      "depends": [
@@ -2383,18 +2383,18 @@ window.DASHBOARD = {
       "agent_docs/media-studio/APPROVALS.md"
      ],
      "gherkin": null,
-     "do": "Ask the owner through AskUserQuestion (recommended option first) to approve adding @breezystack/lamejs for in-browser MP3 encoding. Record answer and date. If declined, export is WAV only and the MP3 acceptance criteria are marked out of scope by the owner. Install nothing here.",
+     "do": "Record in APPROVALS.md that the owner approved @breezystack/lamejs (in-browser MP3 encoding) on 2026-11-16; no question is asked. Install nothing here; the export task installs it.",
      "spec": "R-EDIT-3",
      "filesDeclared": true,
      "acceptance": [
-      "AC1: APPROVALS.md has an @breezystack/lamejs line marked approved or declined with a date.",
+      "AC1: APPROVALS.md has an @breezystack/lamejs line marked approved 2026-11-16.",
       "AC2: No dependency file changed in this task."
      ],
      "verify": [
       "V1: `grep -n lamejs agent_docs/media-studio/APPROVALS.md`",
       "V2: `git diff --name-only -- package.json apps/web/package.json bun.lock` shows nothing from this task"
      ],
-     "line": 880,
+     "line": 883,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2424,7 +2424,7 @@ window.DASHBOARD = {
       "apps/web/package.json"
      ],
      "gherkin": null,
-     "do": "After approval install @breezystack/lamejs in apps/web. encodeWav writes a valid 16-bit PCM header. The MP3 encode runs in a Web Worker so the UI never blocks and stops with an error when decoded PCM would exceed EXPORT_PCM_CAP_BYTES = 200MB, with the copy \"This audio is too long to export in the browser.\". useAudioExport renders edits to PCM, reports progress and exposes cancel; worker errors are surfaced with context, never swallowed. Tests are not written here: T1.17, T1.18 cover Unit (export unit task): WAV header and sample bytes; Unit: MP3 round trip with a fake worker and a real small encode; Unit: cap check; Unit: cancel terminates worker; Unit: progress events with fake timers.",
+     "do": "Install @breezystack/lamejs (approved 2026-11-16) in apps/web. encodeWav writes a valid 16-bit PCM header. The MP3 encode runs in a Web Worker so the UI never blocks and stops with an error when decoded PCM would exceed EXPORT_PCM_CAP_BYTES = 200MB, with the copy \"This audio is too long to export in the browser.\". useAudioExport renders edits to PCM, reports progress and exposes cancel; worker errors are surfaced with context, never swallowed. Tests are not written here: T1.17, T1.18 cover Unit (export unit task): WAV header and sample bytes; Unit: MP3 round trip with a fake worker and a real small encode; Unit: cap check; Unit: cancel terminates worker; Unit: progress events with fake timers.",
      "spec": "R-EDIT-3, R-EDIT-4, R-EDIT-7",
      "filesDeclared": true,
      "acceptance": [
@@ -2438,7 +2438,7 @@ window.DASHBOARD = {
       "V1: `cd apps/web && bun run test` (existing web tests stay green)",
       "V2: `bun run check`"
      ],
-     "line": 894,
+     "line": 897,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2500,7 +2500,7 @@ window.DASHBOARD = {
       "V4: `bun run check`",
       "V5: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 915,
+     "line": 918,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2561,7 +2561,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/utils/wavEncoder.test.ts src/workers/mp3-encoder.worker.test.ts src/composables/useAudioExport.test.ts src/components/Audio/ExportDialog.test.ts --coverage --coverage.include=src/utils/wavEncoder.ts --coverage.include=src/workers/mp3-encoder.worker.ts --coverage.include=src/composables/useAudioExport.ts --coverage.include=src/components/Audio/ExportDialog.vue --coverage.reporter=text`"
      ],
-     "line": 941,
+     "line": 944,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2597,7 +2597,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/editor.spec.ts --repeat-each=3`"
      ],
-     "line": 952,
+     "line": 955,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2637,7 +2637,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/song.spec.ts e2e/qa/lyrics.spec.ts e2e/qa/editor.spec.ts --repeat-each=2`"
      ],
-     "line": 966,
+     "line": 969,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2662,8 +2662,8 @@ window.DASHBOARD = {
   {
    "id": "2",
    "name": "Music studio",
-   "startLine": 982,
-   "endLine": 1107,
+   "startLine": 985,
+   "endLine": 1110,
    "adds": "Users make instrumental music from a prompt with Lyria 2 or Stable Audio 2.5 and Minimax instrumental mode, with duration where the model supports it, and play and edit the result like a song.",
    "tryInUi": [
     "Open Audio then Music",
@@ -2673,7 +2673,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 2",
-    "line": 1106,
+    "line": 1109,
     "items": [
      "music generation across models verified by unit tests and the mocked music QA spec."
     ]
@@ -2708,7 +2708,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run test` (existing api tests stay green)",
       "V4: `bun run check`"
      ],
-     "line": 987,
+     "line": 990,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2768,7 +2768,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/music path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1009,
+     "line": 1012,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2831,7 +2831,7 @@ window.DASHBOARD = {
       "V5: `bun run check`",
       "V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/music path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1033,
+     "line": 1036,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2890,7 +2890,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/components/Music --coverage --coverage.include=src/components/Music/MusicComposer.vue --coverage.include=src/components/Music/MusicModelSelect.vue --coverage.include=src/components/Music/DurationControl.vue --coverage.reporter=text`"
      ],
-     "line": 1056,
+     "line": 1059,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2929,7 +2929,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/lib/media-input.test.ts src/services/media-service.test.ts --coverage --coverage.include=src/lib/media-input.ts --coverage.include=src/services/media-service.ts --coverage.reporter=text`"
      ],
-     "line": 1067,
+     "line": 1070,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2965,7 +2965,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/music.spec.ts --repeat-each=3`"
      ],
-     "line": 1078,
+     "line": 1081,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3003,7 +3003,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/music.spec.ts e2e/qa/song.spec.ts --repeat-each=2`"
      ],
-     "line": 1092,
+     "line": 1095,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3028,8 +3028,8 @@ window.DASHBOARD = {
   {
    "id": "3",
    "name": "Speech studio",
-   "startLine": 1108,
-   "endLine": 1403,
+   "startLine": 1111,
+   "endLine": 1407,
    "adds": "Users turn text into speech with Inworld or Minimax voices, mark up pauses and emotion with tag chips, clone their own voice with recorded consent, and get advice on length and cost.",
    "tryInUi": [
     "Open Audio then Speech",
@@ -3039,7 +3039,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 3",
-    "line": 1402,
+    "line": 1406,
     "items": [
      "speech, tags, model switching, the advisor and voice cloning verified by unit tests and the mocked speech QA specs."
     ]
@@ -3077,7 +3077,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run test` (existing api tests stay green)",
       "V4: `bun run check`"
      ],
-     "line": 1113,
+     "line": 1116,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3134,7 +3134,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run type-check`",
       "V4: `bun run check`"
      ],
-     "line": 1137,
+     "line": 1140,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3188,7 +3188,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1160,
+     "line": 1163,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3252,7 +3252,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1183,
+     "line": 1186,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3318,7 +3318,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1207,
+     "line": 1210,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3378,7 +3378,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1230,
+     "line": 1233,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3411,7 +3411,7 @@ window.DASHBOARD = {
     },
     {
      "id": "T3.7",
-     "title": "Record the voice collections and consent copy approvals",
+     "title": "Record the voice collections and consent copy approvals, and run the one voice-clone expiry test",
      "done": false,
      "kind": "dod",
      "depends": [
@@ -3421,19 +3421,20 @@ window.DASHBOARD = {
       "agent_docs/media-studio/APPROVALS.md"
      ],
      "gherkin": null,
-     "do": "Confirm in APPROVALS.md that the Voice and VoiceConsent collections are approved (from the Phase 0 approval task); if not, ask via AskUserQuestion with a recommended option first and stop if declined. Record the final CLONE_CONSENT_TEXT wording and CURRENT_CONSENT_VERSION chosen with the owner, and the retention rule for VoiceConsent after a voice is deleted (gap G4: retained). Make no code change.",
+     "do": "Confirm in APPROVALS.md that the Voice and VoiceConsent collections are approved (owner, 2026-11-16, from T0.1); no question is asked. Record the final CLONE_CONSENT_TEXT wording and CURRENT_CONSENT_VERSION (the drafted copy ships as written, Q8 accepted 2026-11-16) and the retention rule for VoiceConsent after a voice is deleted (gap G4: retained). Q5 (RESOLVED 2026-11-16): exactly ONE owner-approved paid voice-clone test call is allowed, to confirm whether cloned voice ids expire vendor-side, before any Phase 3 work that depends on the answer (T3.8 onward). Maximum one call ever; only the main orchestrator session makes it (never a test, an e2e run or an automated retry); immediately before it the orchestrator tells the user the endpoint/model (minimax/voice-cloning), the expected cost and that it is call 1 of 1. Record the finding (expired or not, and when checked) in APPROVALS.md. R-TTS-10 and the \"no longer available, re-clone\" state stay in the design regardless of the result. Make no code change.",
      "spec": "R-TTS-11, R-TTS-12",
      "filesDeclared": true,
      "acceptance": [
       "AC1: APPROVALS.md records Voice and VoiceConsent as approved with a date.",
       "AC2: The consent text and version are recorded.",
-      "AC3: Gap G4 (retain consent on delete) and G5 (10 voices) show the default applied or the owner's answer."
+      "AC3: Gap G4 (retain consent on delete) and G5 (10 voices) show the default applied or the owner's answer.",
+      "AC4: APPROVALS.md records the Q5 test call as call 1 of 1 with its finding, or states that the orchestrator has not yet made it and T3.8 is blocked until it does; no second call exists."
      ],
      "verify": [
-      "V1: `grep -n -E 'Voice|VoiceConsent|CLONE_CONSENT|G4|G5' agent_docs/media-studio/APPROVALS.md`",
+      "V1: `grep -n -E 'Voice|VoiceConsent|CLONE_CONSENT|G4|G5|Q5|call 1 of 1' agent_docs/media-studio/APPROVALS.md`",
       "V2: `git status --short` shows only APPROVALS.md changed by this task"
      ],
-     "line": 1252,
+     "line": 1255,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3481,7 +3482,7 @@ window.DASHBOARD = {
       "V2: `cd apps/api && bun run test` (existing api tests stay green)",
       "V3: `bun run check`"
      ],
-     "line": 1267,
+     "line": 1271,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3542,7 +3543,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1291,
+     "line": 1295,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3601,7 +3602,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/composables/useTtsEditor.test.ts src/composables/useTtsAdvice.test.ts --coverage --coverage.include=src/composables/useTtsEditor.ts --coverage.include=src/composables/useTtsAdvice.ts --coverage.reporter=text`"
      ],
-     "line": 1316,
+     "line": 1320,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3638,7 +3639,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `bunx vp test run packages/shared/src/models/tts-tags.test.ts --coverage --coverage.include=packages/shared/src/models/tts-tags.ts --coverage.reporter=text`"
      ],
-     "line": 1327,
+     "line": 1331,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3679,7 +3680,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/components/Speech src/stores/voices.test.ts --coverage --coverage.include=src/components/Speech/SpeechComposer.vue --coverage.include=src/components/Speech/ConvertTagsDialog.vue --coverage.include=src/components/Speech/VoiceCloneDialog.vue --coverage.include=src/stores/voices.ts --coverage.include=src/components/Speech/TextAdvisor.vue --coverage.reporter=text`"
      ],
-     "line": 1338,
+     "line": 1342,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3719,7 +3720,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/services/voice-service.test.ts src/routes/voices.test.ts src/services/media-service.test.ts src/lib/media-input.test.ts --coverage --coverage.include=src/services/voice-service.ts --coverage.include=src/routes/voices.ts --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.reporter=text`"
      ],
-     "line": 1349,
+     "line": 1353,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3755,7 +3756,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/speech.spec.ts --repeat-each=3`"
      ],
-     "line": 1360,
+     "line": 1364,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3791,7 +3792,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/voice-clone.spec.ts --repeat-each=3`"
      ],
-     "line": 1374,
+     "line": 1378,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3829,7 +3830,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/speech.spec.ts e2e/qa/voice-clone.spec.ts --repeat-each=2`"
      ],
-     "line": 1388,
+     "line": 1392,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3854,8 +3855,8 @@ window.DASHBOARD = {
   {
    "id": "4",
    "name": "Video studio",
-   "startLine": 1404,
-   "endLine": 1556,
+   "startLine": 1408,
+   "endLine": 1560,
    "adds": "Users generate short videos from text, from an image, or with their own audio, using P-Video or Wan 3, with a draft mode for cheap previews first.",
    "tryInUi": [
     "Open Video",
@@ -3865,7 +3866,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 4",
-    "line": 1555,
+    "line": 1559,
     "items": [
      "video generation, image and audio inputs and draft-first verified by unit tests and the mocked video QA spec."
     ]
@@ -3902,7 +3903,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run test` (existing api tests stay green)",
       "V4: `bun run check`"
      ],
-     "line": 1409,
+     "line": 1413,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3962,7 +3963,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1432,
+     "line": 1436,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4029,7 +4030,7 @@ window.DASHBOARD = {
       "V5: `bun run check`",
       "V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1456,
+     "line": 1460,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4094,7 +4095,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1483,
+     "line": 1487,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4151,7 +4152,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/components/Video src/composables/useToolVideoUpload.test.ts --coverage --coverage.include=src/components/Video/VideoComposer.vue --coverage.include=src/components/Video/ImageInput.vue --coverage.include=src/components/Video/AudioInput.vue --coverage.include=src/components/Video/DraftToggle.vue --coverage.include=src/composables/useToolVideoUpload.ts --coverage.reporter=text`"
      ],
-     "line": 1505,
+     "line": 1509,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4190,7 +4191,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/services/media-service.test.ts src/lib/media-input.test.ts src/routes/media.test.ts --coverage --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.include=src/routes/media.ts --coverage.reporter=text`"
      ],
-     "line": 1516,
+     "line": 1520,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -4226,7 +4227,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/video.spec.ts --repeat-each=3`"
      ],
-     "line": 1527,
+     "line": 1531,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4264,7 +4265,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/video.spec.ts e2e/qa/media-nav-player.spec.ts --repeat-each=2`"
      ],
-     "line": 1541,
+     "line": 1545,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -4289,8 +4290,8 @@ window.DASHBOARD = {
   {
    "id": "5",
    "name": "Tools",
-   "startLine": 1557,
-   "endLine": 1733,
+   "startLine": 1561,
+   "endLine": 1737,
    "adds": "Users get four utilities: add a watermark to an image or video, create captions for a video, and turn a sketch into an image, each priced and shown before running, with handoffs to the other studios.",
    "tryInUi": [
     "Open Tools then Image watermark",
@@ -4300,7 +4301,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 5",
-    "line": 1732,
+    "line": 1736,
     "items": [
      "all four tools and handoffs verified by unit tests and the mocked tools QA specs."
     ]
@@ -4340,7 +4341,7 @@ window.DASHBOARD = {
       "V4: `bun run check`",
       "V5: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/image-watermark path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1562,
+     "line": 1566,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4393,13 +4394,13 @@ window.DASHBOARD = {
       "apps/web/src/router/index.ts"
      ],
      "gherkin": null,
-     "do": "Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look; obey Standing UI rules in the header. Video is limited to MAX_TOOL_VIDEO_SECONDS = 120 and MAX_TOOL_VIDEO_BYTES = 100MB and billed from the stored upload duration. Gap G10: record VIDEO_WATERMARK_PLACEMENT in media-limits.ts read-only from the model's published source or public example outputs, never from a paid run; if neither states it, set it to null and the preview draws the text with no position claim. The preview overlays the text on a frame of the user's video and the size slider (1 to 500, default 40) scales it; the caption reads exactly \"Position is fixed by this tool; you can change the text and size.\"; no drag, opacity, colour or logo control exists; the default text FULLJOURNEY.AI is never sent and empty text disables Generate. Route copy: POST /generate/tools/video-watermark follows the music route order (auth, Zod, 402, jobId, enqueue). Duration comes from the Cloudinary-reported value, never the client. Empty state copy: \"Add a video and the text for your watermark.\". Tests are not written here: T5.6, T5.8 cover Unit (tools unit task): limit boundaries; Unit: duration source; E2E tools spec: over-limit copy; E2E tools spec: 402 and failure; E2E tools spec at 375px.",
+     "do": "Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look; obey Standing UI rules in the header. Video is limited to MAX_TOOL_VIDEO_SECONDS = 120 and MAX_TOOL_VIDEO_BYTES = 100MB and billed from the stored upload duration. Gap G10 (RESOLVED 2026-11-16): record VIDEO_WATERMARK_PLACEMENT in media-limits.ts, first by reading the model's published source and public example outputs (no cost). Only if that does not determine the position, exactly ONE owner-approved real paid run of charlesmccarthy/addwatermark is allowed: maximum one call ever, made only by the main orchestrator session (never by a test, e2e run or automated retry), which tells the user the endpoint/model, expected cost and that it is call 1 of 1 immediately before; write the observed position into the constant and record the result in this task. If the read step answers it, no paid call is made. The preview overlays the text on a frame of the user's video and the size slider (1 to 500, default 40) scales it; the caption reads exactly \"Position is fixed by this tool; you can change the text and size.\"; no drag, opacity, colour or logo control exists; the default text FULLJOURNEY.AI is never sent and empty text disables Generate. Route copy: POST /generate/tools/video-watermark follows the music route order (auth, Zod, 402, jobId, enqueue). Duration comes from the Cloudinary-reported value, never the client. Empty state copy: \"Add a video and the text for your watermark.\". Tests are not written here: T5.6, T5.8 cover Unit (tools unit task): limit boundaries; Unit: duration source; E2E tools spec: over-limit copy; E2E tools spec: 402 and failure; E2E tools spec at 375px.",
      "spec": "R-TOOL-VW-1, R-TOOL-VW-2, R-INF-4, R-INF-17",
      "filesDeclared": true,
      "acceptance": [
       "AC1: A video over 120 seconds or 100MB is rejected with specific limit copy and nothing is billed.",
       "AC2: Cost uses the stored upload duration and is charged once on success.",
-      "AC3: VIDEO_WATERMARK_PLACEMENT is a named constant (or null with the no-position preview), no paid run was made to obtain it, and the caption \"Position is fixed by this tool; you can change the text and size.\" is shown.",
+      "AC3: VIDEO_WATERMARK_PLACEMENT is a named constant sourced per gap G10 (no paid call if the read step answered it; otherwise the single approved run is recorded as call 1 of 1), no test or e2e run made a paid call, and the caption \"Position is fixed by this tool; you can change the text and size.\" is shown.",
       "AC4: 402 and failure states match the shared components.",
       "AC5: At 375px width there is no horizontal scroll and tap targets are at least 44px high. Every interactive element has a visible focus ring and an accessible name and works by keyboard alone."
      ],
@@ -4411,7 +4412,7 @@ window.DASHBOARD = {
       "V5: `bun run check`",
       "V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/video-watermark path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1587,
+     "line": 1591,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4482,7 +4483,7 @@ window.DASHBOARD = {
       "V5: `bun run check`",
       "V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/autocaption path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1612,
+     "line": 1616,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4549,7 +4550,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/sketch path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1637,
+     "line": 1641,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4615,7 +4616,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1659,
+     "line": 1663,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4675,7 +4676,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/services/media-service.test.ts src/routes/media.test.ts src/lib/media-input.test.ts --coverage --coverage.include=src/services/media-service.ts --coverage.include=src/routes/media.ts --coverage.include=src/lib/media-input.ts --coverage.reporter=text`"
      ],
-     "line": 1681,
+     "line": 1685,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -4716,7 +4717,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/components/Tools src/composables/useSketchCanvas.test.ts src/composables/useStudioHandoff.test.ts src/components/Studio/HandoffMenu.test.ts --coverage --coverage.include=src/components/Tools/WatermarkForm.vue --coverage.include=src/components/Tools/CaptionResult.vue --coverage.include=src/composables/useSketchCanvas.ts --coverage.include=src/composables/useStudioHandoff.ts --coverage.include=src/components/Studio/HandoffMenu.vue --coverage.reporter=text`"
      ],
-     "line": 1692,
+     "line": 1696,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4752,7 +4753,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/tools.spec.ts --repeat-each=3`"
      ],
-     "line": 1703,
+     "line": 1707,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4791,7 +4792,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts e2e/qa/media-nav-player.spec.ts e2e/qa/song.spec.ts e2e/qa/lyrics.spec.ts e2e/qa/editor.spec.ts e2e/qa/music.spec.ts e2e/qa/speech.spec.ts e2e/qa/voice-clone.spec.ts e2e/qa/video.spec.ts e2e/qa/tools.spec.ts --repeat-each=2`"
      ],
-     "line": 1717,
+     "line": 1721,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -4913,8 +4914,8 @@ window.DASHBOARD = {
    "text": "G9: Approve four new Mongo collections: MediaAsset, MediaUpload, Voice, VoiceConsent?",
    "default": "Planned as the first task, built only after owner approval",
    "alternatives": "Reuse existing collections with a type field",
-   "answer": null,
-   "answeredAt": null
+   "answer": "Approved by owner 2026-11-16: all four collections",
+   "answeredAt": "2026-11-16T03:09:22.943Z"
   },
   {
    "at": "2026-11-16T02:52:56.762Z",
@@ -4924,8 +4925,8 @@ window.DASHBOARD = {
    "text": "G10: Where does VIDEO_WATERMARK_PLACEMENT come from (never an unapproved paid run)?",
    "default": "Public model source or example outputs; else null and the preview makes no position claim",
    "alternatives": "Owner supplies a sample output; one approved paid run",
-   "answer": null,
-   "answeredAt": null
+   "answer": "Read the public source first; only if that fails, one owner-approved paid run (call 1 of 1, main session only, announced with cost first)",
+   "answeredAt": "2026-11-16T03:09:23.018Z"
   },
   {
    "at": "2026-11-16T02:52:56.846Z",
@@ -4968,8 +4969,8 @@ window.DASHBOARD = {
    "text": "G14: Song empty-state sample loop (R-SONG-8): which audio?",
    "default": "Hidden until SONG_SAMPLE_LOOP_URL is set; the 3 example ideas still show",
    "alternatives": "Owner-made loop from a manual generation; licensed stock loop",
-   "answer": null,
-   "answeredAt": null
+   "answer": "Default accepted: hidden until SONG_SAMPLE_LOOP_URL is set",
+   "answeredAt": "2026-11-16T03:09:23.078Z"
   },
   {
    "at": "2026-11-16T02:52:57.132Z",
@@ -5001,8 +5002,8 @@ window.DASHBOARD = {
    "text": "Approve installing wavesurfer.js for the waveform editor?",
    "default": "Planned; ask before the waveform task",
    "alternatives": "Hand-rolled canvas waveform; another library",
-   "answer": null,
-   "answeredAt": null
+   "answer": "Approved by owner 2026-11-16",
+   "answeredAt": "2026-11-16T03:09:23.130Z"
   },
   {
    "at": "2026-11-16T02:52:57.320Z",
@@ -5012,8 +5013,8 @@ window.DASHBOARD = {
    "text": "Approve installing @breezystack/lamejs for MP3 export?",
    "default": "Planned; ask before the export task",
    "alternatives": "WAV export only; another encoder",
-   "answer": null,
-   "answeredAt": null
+   "answer": "Approved by owner 2026-11-16",
+   "answeredAt": "2026-11-16T03:09:23.183Z"
   },
   {
    "at": "2026-11-16T02:52:57.387Z",
@@ -5034,8 +5035,8 @@ window.DASHBOARD = {
    "text": "Q5: Do cloned voice ids expire vendor-side (cloning trains with speech-02-hd)?",
    "default": "Assume they can: R-TTS-10 plus a \"no longer available, re-clone\" state",
    "alternatives": "One owner-approved paid test call before Phase 3",
-   "answer": null,
-   "answeredAt": null
+   "answer": "One owner-approved paid voice-clone test call before Phase 3 (call 1 of 1, main session only, announced with cost first); gate is T3.7",
+   "answeredAt": "2026-11-16T03:09:23.235Z"
   },
   {
    "at": "2026-11-16T02:52:57.514Z",
@@ -5045,8 +5046,8 @@ window.DASHBOARD = {
    "text": "Q6: Pro gating for media?",
    "default": "Credits only; all media tier standard",
    "alternatives": "Pro-only for Wan 3, Music 2.6 and voice cloning",
-   "answer": null,
-   "answeredAt": null
+   "answer": "Default accepted: credits only, all media tier standard",
+   "answeredAt": "2026-11-16T03:09:23.289Z"
   },
   {
    "at": "2026-11-16T02:52:57.576Z",
@@ -5067,8 +5068,8 @@ window.DASHBOARD = {
    "text": "Q8: Final legal copy for commercial use and the cloning consent sentence?",
    "default": "Drafted copy ships; legal can revise without a spec change",
    "alternatives": "Hold voice cloning until legal signs off",
-   "answer": null,
-   "answeredAt": null
+   "answer": "Default accepted: drafted copy ships",
+   "answeredAt": "2026-11-16T03:09:23.343Z"
   }
  ],
  "stuck": [],
@@ -5077,6 +5078,62 @@ window.DASHBOARD = {
  "deliverables": [],
  "advisories": [],
  "activity": [
+  {
+   "at": "2026-11-16T03:09:23.343Z",
+   "type": "answered",
+   "tasks": [],
+   "id": "Q23",
+   "text": "Default accepted: drafted copy ships"
+  },
+  {
+   "at": "2026-11-16T03:09:23.289Z",
+   "type": "answered",
+   "tasks": [],
+   "id": "Q21",
+   "text": "Default accepted: credits only, all media tier standard"
+  },
+  {
+   "at": "2026-11-16T03:09:23.235Z",
+   "type": "answered",
+   "tasks": [],
+   "id": "Q20",
+   "text": "One owner-approved paid voice-clone test call before Phase 3 (call 1 of 1, main session only, announced with cost first); gate is T3.7"
+  },
+  {
+   "at": "2026-11-16T03:09:23.183Z",
+   "type": "answered",
+   "tasks": [],
+   "id": "Q18",
+   "text": "Approved by owner 2026-11-16"
+  },
+  {
+   "at": "2026-11-16T03:09:23.130Z",
+   "type": "answered",
+   "tasks": [],
+   "id": "Q17",
+   "text": "Approved by owner 2026-11-16"
+  },
+  {
+   "at": "2026-11-16T03:09:23.078Z",
+   "type": "answered",
+   "tasks": [],
+   "id": "Q14",
+   "text": "Default accepted: hidden until SONG_SAMPLE_LOOP_URL is set"
+  },
+  {
+   "at": "2026-11-16T03:09:23.018Z",
+   "type": "answered",
+   "tasks": [],
+   "id": "Q10",
+   "text": "Read the public source first; only if that fails, one owner-approved paid run (call 1 of 1, main session only, announced with cost first)"
+  },
+  {
+   "at": "2026-11-16T03:09:22.943Z",
+   "type": "answered",
+   "tasks": [],
+   "id": "Q9",
+   "text": "Approved by owner 2026-11-16: all four collections"
+  },
   {
    "at": "2026-11-16T02:52:57.638Z",
    "type": "question",
