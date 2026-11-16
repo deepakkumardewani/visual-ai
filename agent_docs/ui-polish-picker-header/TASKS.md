@@ -11,7 +11,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** No product change. Captures baseline screenshots of today's UI and seeds the responsiveness audit table that later phases compare against.
 **Try in UI:** No UI change ; run `ls agent_docs/qa/ui-polish-picker-header/baseline | wc -l` and confirm the set is present ; open `agent_docs/ui-polish-picker-header/AUDIT.md` and confirm a row per known finding.
 
-### ☐ T0.1 Capture baseline screenshots
+### ✅ T0.1 Capture baseline screenshots
 
 - **Kind:** dod
 - **Files:** `agent_docs/qa/ui-polish-picker-header/baseline/` (screenshots only)
@@ -19,7 +19,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 4c baseline requirement met: every route/width/theme/plan combination above has a screenshot; the QA user is back on Free; none overwritten later.
 - **Verify:** `for w in 360 390 700 768 1024 1440; do echo "$w $(ls agent_docs/qa/ui-polish-picker-header/baseline | grep -c -- "-$w-")"; done` (every width non-zero); `ls agent_docs/qa/ui-polish-picker-header/baseline | grep -c -- '-dark-'`; `ls agent_docs/qa/ui-polish-picker-header/baseline | grep -c -- '-pro'`.
 
-### ☐ T0.2 Seed audit table
+### ✅ T0.2 Seed audit table
 
 - **Kind:** dod
 - **Files:** `agent_docs/ui-polish-picker-header/AUDIT.md`

@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-11T13:53:51.373Z",
+ "generatedAt": "2026-11-16T09:43:36.386Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -8,6 +8,11 @@ window.DASHBOARD = {
  "tasksFile": "agent_docs/ui-polish-picker-header/TASKS.md",
  "projectRoot": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai",
  "docs": [
+  {
+   "name": "AUDIT",
+   "href": "docs/AUDIT.html",
+   "source": "agent_docs/ui-polish-picker-header/AUDIT.md"
+  },
   {
    "name": "PLAN",
    "href": "docs/PLAN.html",
@@ -24,11 +29,18 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
+ "costUsd": 1.0166,
+ "elapsedMs": 749638,
+ "costByRole": {
+  "builder": 0.5934,
+  "verifier": 0.4232
+ },
  "totals": {
   "phases": 14,
   "tasks": 61,
   "byStatus": {
-   "ready": 61
+   "verified": 2,
+   "ready": 59
   }
  },
  "phases": [
@@ -54,11 +66,11 @@ window.DASHBOARD = {
     {
      "id": "T0.1",
      "title": "Capture baseline screenshots",
-     "done": false,
+     "done": true,
      "kind": "dod",
      "depends": [],
      "files": [
-      "agent_docs/qa/ui-polish-picker-header/baseline/ (screenshots only)"
+      "agent_docs/qa/ui-polish-picker-header/baseline/"
      ],
      "gherkin": null,
      "do": "With `agent-browser` (session `visual-ai`) capture Create (banner showing on mobile), Explore, Assets, the model picker open, and the Upgrade dialog (Free only) at 360, 390, 700, 768, 1024, 1440, light and dark, Free and Pro. Sign in as the seeded e2e QA user; for Pro, activate it with `activateProViaWebhook` from `apps/web/e2e/support/proWebhook.ts` (signed local test webhook, no Dodo call) and restore it afterwards with `resetToFree` from `apps/web/e2e/support/subscriptionState.ts`. Name files `<route>-<width>-<theme>-<plan>.png`. End with `agent-browser close`.",
@@ -74,13 +86,38 @@ window.DASHBOARD = {
      ],
      "line": 14,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-11-16T09:43:36.375Z",
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": [],
+     "reviewers": [],
+     "attempts": [
+      {
+       "n": 1,
+       "gate": null,
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5083,
+     "costApprox": true,
+     "elapsedMs": 749637,
+     "summary": []
     },
     {
      "id": "T0.2",
      "title": "Seed audit table",
-     "done": false,
+     "done": true,
      "kind": "dod",
      "depends": [],
      "files": [
@@ -98,13 +135,33 @@ window.DASHBOARD = {
      ],
      "line": 22,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null
+     "status": "verified",
+     "updatedAt": "2026-11-16T09:43:36.375Z",
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": [],
+     "reviewers": [],
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5083,
+     "costApprox": true,
+     "elapsedMs": 749638,
+     "summary": []
     }
    ],
-   "verified": 0,
+   "verified": 2,
    "total": 2,
-   "complete": false
+   "complete": true,
+   "costUsd": 1.0166,
+   "elapsedMs": 749638
   },
   {
    "id": "1",
@@ -154,7 +211,17 @@ window.DASHBOARD = {
      "line": 37,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T1.2",
@@ -180,7 +247,17 @@ window.DASHBOARD = {
      "line": 45,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T1.3",
@@ -205,7 +282,17 @@ window.DASHBOARD = {
      "line": 53,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T1.4",
@@ -231,12 +318,24 @@ window.DASHBOARD = {
      "line": 62,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 4,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   },
   {
    "id": "2",
@@ -285,7 +384,17 @@ window.DASHBOARD = {
      "line": 77,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T2.2",
@@ -311,7 +420,17 @@ window.DASHBOARD = {
      "line": 85,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T2.3",
@@ -321,7 +440,7 @@ window.DASHBOARD = {
      "depends": [],
      "files": [
       "apps/web/e2e/qa/upgrade-entry.spec.ts",
-      "apps/web/e2e/qa/pricing-layout.spec.ts (both select upgrade-pill)"
+      "apps/web/e2e/qa/pricing-layout.spec.ts"
      ],
      "gherkin": null,
      "do": null,
@@ -336,7 +455,17 @@ window.DASHBOARD = {
      "line": 93,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T2.4",
@@ -360,12 +489,24 @@ window.DASHBOARD = {
      "line": 102,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 4,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   },
   {
    "id": "3",
@@ -413,7 +554,17 @@ window.DASHBOARD = {
      "line": 117,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T3.2",
@@ -440,7 +591,17 @@ window.DASHBOARD = {
      "line": 125,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T3.3",
@@ -467,7 +628,17 @@ window.DASHBOARD = {
      "line": 133,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T3.4",
@@ -494,7 +665,17 @@ window.DASHBOARD = {
      "line": 141,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T3.5",
@@ -519,12 +700,24 @@ window.DASHBOARD = {
      "line": 150,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 5,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   },
   {
    "id": "4",
@@ -572,7 +765,17 @@ window.DASHBOARD = {
      "line": 165,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T4.2",
@@ -599,7 +802,17 @@ window.DASHBOARD = {
      "line": 173,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T4.3",
@@ -621,7 +834,17 @@ window.DASHBOARD = {
      "line": 181,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T4.4",
@@ -645,12 +868,24 @@ window.DASHBOARD = {
      "line": 190,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 4,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   },
   {
    "id": "5",
@@ -698,7 +933,17 @@ window.DASHBOARD = {
      "line": 205,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T5.2",
@@ -724,7 +969,17 @@ window.DASHBOARD = {
      "line": 213,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T5.3",
@@ -746,7 +1001,17 @@ window.DASHBOARD = {
      "line": 221,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T5.4",
@@ -771,12 +1036,24 @@ window.DASHBOARD = {
      "line": 230,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 4,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   },
   {
    "id": "6",
@@ -821,7 +1098,17 @@ window.DASHBOARD = {
      "line": 245,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T6.2",
@@ -848,7 +1135,17 @@ window.DASHBOARD = {
      "line": 253,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T6.3",
@@ -874,7 +1171,17 @@ window.DASHBOARD = {
      "line": 261,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T6.4",
@@ -900,7 +1207,17 @@ window.DASHBOARD = {
      "line": 269,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T6.5",
@@ -924,7 +1241,17 @@ window.DASHBOARD = {
      "line": 277,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T6.6",
@@ -950,7 +1277,17 @@ window.DASHBOARD = {
      "line": 285,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T6.7",
@@ -959,7 +1296,7 @@ window.DASHBOARD = {
      "kind": "e2e",
      "depends": [],
      "files": [
-      "apps/web/e2e/qa/pro-tier.spec.ts (drives the model picker)"
+      "apps/web/e2e/qa/pro-tier.spec.ts"
      ],
      "gherkin": null,
      "do": null,
@@ -974,7 +1311,17 @@ window.DASHBOARD = {
      "line": 293,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T6.8",
@@ -998,12 +1345,24 @@ window.DASHBOARD = {
      "line": 302,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 8,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   },
   {
    "id": "7",
@@ -1049,7 +1408,17 @@ window.DASHBOARD = {
      "line": 317,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T7.2",
@@ -1077,7 +1446,17 @@ window.DASHBOARD = {
      "line": 325,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T7.3",
@@ -1101,7 +1480,17 @@ window.DASHBOARD = {
      "line": 333,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T7.4",
@@ -1128,7 +1517,17 @@ window.DASHBOARD = {
      "line": 341,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T7.5",
@@ -1150,7 +1549,17 @@ window.DASHBOARD = {
      "line": 349,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T7.6",
@@ -1175,12 +1584,24 @@ window.DASHBOARD = {
      "line": 358,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 6,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   },
   {
    "id": "8",
@@ -1227,7 +1648,17 @@ window.DASHBOARD = {
      "line": 373,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T8.2",
@@ -1252,7 +1683,17 @@ window.DASHBOARD = {
      "line": 381,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T8.3",
@@ -1274,7 +1715,17 @@ window.DASHBOARD = {
      "line": 389,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T8.4",
@@ -1299,12 +1750,24 @@ window.DASHBOARD = {
      "line": 398,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 4,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   },
   {
    "id": "9",
@@ -1348,7 +1811,17 @@ window.DASHBOARD = {
      "line": 413,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T9.2",
@@ -1376,7 +1849,17 @@ window.DASHBOARD = {
      "line": 421,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T9.3",
@@ -1402,7 +1885,17 @@ window.DASHBOARD = {
      "line": 429,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T9.4",
@@ -1426,7 +1919,17 @@ window.DASHBOARD = {
      "line": 437,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T9.5",
@@ -1450,12 +1953,24 @@ window.DASHBOARD = {
      "line": 446,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 5,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   },
   {
    "id": "10",
@@ -1500,7 +2015,17 @@ window.DASHBOARD = {
      "line": 461,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T10.2",
@@ -1524,7 +2049,17 @@ window.DASHBOARD = {
      "line": 469,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T10.3",
@@ -1546,7 +2081,17 @@ window.DASHBOARD = {
      "line": 477,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T10.4",
@@ -1570,12 +2115,24 @@ window.DASHBOARD = {
      "line": 486,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 4,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   },
   {
    "id": "11",
@@ -1604,7 +2161,7 @@ window.DASHBOARD = {
      "depends": [],
      "files": [
       "agent_docs/ui-polish-picker-header/AUDIT.md",
-      "agent_docs/qa/ui-polish-picker-header/after/ (screenshots only)"
+      "agent_docs/qa/ui-polish-picker-header/after/"
      ],
      "gherkin": null,
      "do": "Re-capture the Phase 0 matrix into `after/`, compare, and record each finding (width, element, symptom, fix) for header, bottom-pinned composer, aside/options, picker trigger, generated grid, history and dialogs, including the 700px band for the unchanged 640 split. Record a manual keyboard-open check. If the 700px band breaks, stop and ask the owner before touching the 640 split (D8).",
@@ -1620,7 +2177,17 @@ window.DASHBOARD = {
      "line": 501,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T11.2",
@@ -1648,7 +2215,17 @@ window.DASHBOARD = {
      "line": 509,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T11.3",
@@ -1673,7 +2250,17 @@ window.DASHBOARD = {
      "line": 517,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T11.4",
@@ -1695,7 +2282,17 @@ window.DASHBOARD = {
      "line": 525,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T11.5",
@@ -1719,12 +2316,24 @@ window.DASHBOARD = {
      "line": 534,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 5,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   },
   {
    "id": "12",
@@ -1768,7 +2377,17 @@ window.DASHBOARD = {
      "line": 549,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T12.2",
@@ -1791,12 +2410,24 @@ window.DASHBOARD = {
      "line": 557,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 2,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   },
   {
    "id": "13",
@@ -1840,7 +2471,17 @@ window.DASHBOARD = {
      "line": 572,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T13.2",
@@ -1864,7 +2505,17 @@ window.DASHBOARD = {
      "line": 580,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T13.3",
@@ -1873,7 +2524,7 @@ window.DASHBOARD = {
      "kind": "walkthrough",
      "depends": [],
      "files": [
-      "agent_docs/qa/ui-polish-picker-header/ (screenshots only)"
+      "agent_docs/qa/ui-polish-picker-header/"
      ],
      "gherkin": null,
      "do": "Walk SPEC Parts 1 to 4 as Free and Pro using the seeded QA specs as evidence; capture final screenshots at 360/390/768/1024/1440, light and dark, for Create/Explore/Assets, picker open and searching, open avatar menu, Upgrade dialog FAQ and landing nav; `agent-browser` (session `visual-ai`, ended with `agent-browser close`) is for layout polish only, never sole evidence. Resolve or record impeccable/layout findings.",
@@ -1890,7 +2541,17 @@ window.DASHBOARD = {
      "line": 588,
      "ui": true,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     },
     {
      "id": "T13.4",
@@ -1916,16 +2577,28 @@ window.DASHBOARD = {
      "line": 596,
      "ui": false,
      "status": "ready",
-     "updatedAt": null
+     "updatedAt": null,
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": null,
+     "reviewers": [],
+     "attempts": [],
+     "costUsd": null,
+     "costApprox": false,
+     "elapsedMs": null,
+     "summary": []
     }
    ],
    "verified": 0,
    "total": 4,
-   "complete": false
+   "complete": false,
+   "costUsd": null,
+   "elapsedMs": null
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 0",
+ "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 1",
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -1970,14 +2643,225 @@ window.DASHBOARD = {
    "alternatives": "faGift / faWandMagicSparkles",
    "answer": null,
    "answeredAt": null
+  },
+  {
+   "at": "2026-11-16T09:36:51.718Z",
+   "type": "question",
+   "tasks": [
+    "T0.1"
+   ],
+   "id": "Q5",
+   "text": "Local MongoDB down (ECONNREFUSED 27017); baseline screenshots cannot be captured. Needs mongod started.",
+   "answer": "Builder may start mongod manually against /opt/homebrew/var/mongodb",
+   "answeredAt": "2026-11-16T09:39:12.598Z"
   }
  ],
  "stuck": [],
  "commits": [],
  "shots": [],
- "deliverables": [],
- "advisories": [],
+ "deliverables": [
+  {
+   "at": "2026-11-16T09:43:36.375Z",
+   "type": "deliverable",
+   "tasks": [
+    "T0.1",
+    "T0.2"
+   ],
+   "text": "108 baseline screenshots captured and AUDIT.md with 9 open rows",
+   "files": [
+    "agent_docs/ui-polish-picker-header/AUDIT.md"
+   ]
+  }
+ ],
+ "advisories": [
+  {
+   "at": "2026-11-16T09:43:07.190Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.2"
+   ],
+   "text": "AUDIT row \"Feature name truncated AI I...\" cites create-360-light-free.png, which shows no feature name at all (dropdown hidden); recheck evidence in P4"
+  },
+  {
+   "at": "2026-11-16T09:43:07.121Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.1"
+   ],
+   "text": "Baseline captured with a temporary Playwright spec instead of agent-browser as Do specified; shots and naming meet AC"
+  }
+ ],
  "activity": [
+  {
+   "at": "2026-11-16T09:43:36.375Z",
+   "type": "deliverable",
+   "tasks": [
+    "T0.1",
+    "T0.2"
+   ],
+   "text": "108 baseline screenshots captured and AUDIT.md with 9 open rows",
+   "files": [
+    "agent_docs/ui-polish-picker-header/AUDIT.md"
+   ]
+  },
+  {
+   "at": "2026-11-16T09:43:31.908Z",
+   "tasks": [
+    "T0.2"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "AUDIT.md exists with the 5 required columns; grep -c '| open |' = 9 (>= 9); one row per SPEC 4c known finding plus 700px band, keyboard-open and Logo 600px rows, each citing a baseline file",
+   "fingerprint": "252d241e51d220cf6c8d2c3e0aefff49bc5149e64de54bc98f566bbe63a289cf",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-16T09:43:31.907Z",
+   "tasks": [
+    "T0.1"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "baseline/ has 108 PNGs, 18 per width (360/390/700/768/1024/1440), dark 54, pro 48; all 108 expected <route>-<width>-<theme>-<plan> combos present (upgrade Free only), no extras, no duplicate hashes, sizes 15-141 KB; 6 shots opened and match their names (mobile banner, picker open, upgrade dialog, Pro badge); Mongo check: QA user plan=free, no subscription",
+   "fingerprint": "22b09b7a87540306279266f8e5051aa8e5f7ea3724fcb6b5b6c8b05764231a27",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-16T09:43:07.190Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.2"
+   ],
+   "text": "AUDIT row \"Feature name truncated AI I...\" cites create-360-light-free.png, which shows no feature name at all (dropdown hidden); recheck evidence in P4"
+  },
+  {
+   "at": "2026-11-16T09:43:07.121Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.1"
+   ],
+   "text": "Baseline captured with a temporary Playwright spec instead of agent-browser as Do specified; shots and naming meet AC"
+  },
+  {
+   "at": "2026-11-16T09:42:14.570Z",
+   "type": "verify_started",
+   "tasks": [
+    "T0.1",
+    "T0.2"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-16T09:42:12.289Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T0.2"
+   ],
+   "fingerprint": "252d241e51d220cf6c8d2c3e0aefff49bc5149e64de54bc98f566bbe63a289cf"
+  },
+  {
+   "at": "2026-11-16T09:42:12.289Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T0.1"
+   ],
+   "fingerprint": "22b09b7a87540306279266f8e5051aa8e5f7ea3724fcb6b5b6c8b05764231a27"
+  },
+  {
+   "at": "2026-11-16T09:42:12.064Z",
+   "type": "task_built",
+   "tasks": [
+    "T0.1"
+   ],
+   "text": "108 baseline shots captured",
+   "files": [
+    "agent_docs/qa/ui-polish-picker-header/baseline/"
+   ]
+  },
+  {
+   "at": "2026-11-16T09:39:12.707Z",
+   "type": "task_started",
+   "tasks": [
+    "T0.1"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-16T09:39:12.654Z",
+   "type": "build_started",
+   "tasks": [
+    "T0.1"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-16T09:39:12.598Z",
+   "type": "answered",
+   "tasks": [],
+   "id": "Q5",
+   "text": "Builder may start mongod manually against /opt/homebrew/var/mongodb"
+  },
+  {
+   "at": "2026-11-16T09:36:51.718Z",
+   "type": "question",
+   "tasks": [
+    "T0.1"
+   ],
+   "id": "Q5",
+   "text": "Local MongoDB down (ECONNREFUSED 27017); baseline screenshots cannot be captured. Needs mongod started."
+  },
+  {
+   "at": "2026-11-16T09:36:47.986Z",
+   "type": "task_built",
+   "tasks": [
+    "T0.2"
+   ],
+   "text": "AUDIT.md created with 9 open rows",
+   "files": [
+    "agent_docs/ui-polish-picker-header/AUDIT.md"
+   ]
+  },
+  {
+   "at": "2026-11-16T09:36:47.914Z",
+   "type": "task_failed",
+   "tasks": [
+    "T0.1"
+   ],
+   "attempt": "1",
+   "text": "No baseline shots: local MongoDB not running (ECONNREFUSED localhost:27017), API /users/:id 500, Playwright auth setup times out",
+   "unblock": "Start local MongoDB (fix sh.brew.mongodb-community launch agent or run mongod --dbpath /opt/homebrew/var/mongodb)"
+  },
+  {
+   "at": "2026-11-16T09:31:02.270Z",
+   "type": "task_started",
+   "tasks": [
+    "T0.1",
+    "T0.2"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T09:31:02.180Z",
+   "type": "build_started",
+   "tasks": [
+    "T0.1",
+    "T0.2"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T09:30:56.766Z",
+   "type": "run_started",
+   "tasks": [
+    "T0.1",
+    "T0.2"
+   ],
+   "pipeline": 2,
+   "baseline": {
+    "head": "1b789df7e19b85dbf19217376a2c411b83fadf93",
+    "status": ""
+   }
+  },
   {
    "at": "2026-11-11T13:53:51.370Z",
    "type": "question",
