@@ -40,7 +40,7 @@ test.afterEach(async () => {
 
 async function openPricingModal(page: Page): Promise<Locator> {
   await gotoStudio(page);
-  await page.getByTestId('upgrade-pill').click();
+  await page.getByTestId('upgrade-button').click();
   const dialog = pricingDialog(page);
   await expect(dialog).toBeVisible();
   await expect(dialog.getByTestId('pricing-layout')).toBeVisible();

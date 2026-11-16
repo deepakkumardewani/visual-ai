@@ -140,14 +140,14 @@ describe('CreditsChip', () => {
         },
       });
 
-    it('shows the upgrade pill and no Pro badge for a ready Free user', () => {
+    it('renders neither the upgrade pill nor a Pro badge for a ready Free user', () => {
       const userStore = useUserStore();
       userStore.isReady = true;
       userStore.plan = PLAN.FREE;
 
       const wrapper = mountChip();
 
-      expect(wrapper.find('[data-testid="upgrade-pill"]').exists()).toBe(true);
+      expect(wrapper.find('[data-testid="upgrade-pill"]').exists()).toBe(false);
       expect(wrapper.find('[data-testid="pro-badge-header"]').exists()).toBe(false);
     });
 
@@ -171,23 +171,6 @@ describe('CreditsChip', () => {
 
       expect(wrapper.find('[data-testid="upgrade-pill"]').exists()).toBe(false);
       expect(wrapper.find('[data-testid="pro-badge-header"]').exists()).toBe(false);
-    });
-
-    it('opens the pricing dialog and closes the menu when the pill is clicked', async () => {
-      const userStore = useUserStore();
-      userStore.isReady = true;
-      userStore.plan = PLAN.FREE;
-      const { useDialogStore } = await import('@/stores/dialog');
-      const dialogStore = useDialogStore();
-      const showPricing = vi.spyOn(dialogStore, 'showPricing');
-
-      const wrapper = mountChip();
-      await wrapper.get('[data-testid="credits-chip"]').trigger('click');
-      expect(wrapper.find('[data-testid="credits-chip-menu"]').exists()).toBe(true);
-      await wrapper.get('[data-testid="upgrade-pill"]').trigger('click');
-
-      expect(showPricing).toHaveBeenCalledTimes(1);
-      expect(wrapper.find('[data-testid="credits-chip-menu"]').exists()).toBe(false);
     });
 
     it('closes the open menu when clicking outside', async () => {

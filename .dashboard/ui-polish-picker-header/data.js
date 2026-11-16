@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-16T10:17:41.687Z",
+ "generatedAt": "2026-11-16T10:51:41.900Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -29,20 +29,20 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
- "costUsd": 4.7142,
- "elapsedMs": 2300156,
+ "costUsd": 8.0986,
+ "elapsedMs": 3822879,
  "costByRole": {
-  "builder": 1.2825,
-  "verifier": 3.0911,
-  "unit": 0.1865,
-  "e2e": 0.1541
+  "builder": 1.7736,
+  "verifier": 5.3275,
+  "unit": 0.6113,
+  "e2e": 0.3862
  },
  "totals": {
   "phases": 14,
   "tasks": 61,
   "byStatus": {
-   "verified": 6,
-   "ready": 55
+   "verified": 10,
+   "ready": 51
   }
  },
  "phases": [
@@ -215,7 +215,7 @@ window.DASHBOARD = {
      "line": 37,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-16T10:17:41.673Z",
+     "updatedAt": "2026-11-16T10:18:01.900Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -273,7 +273,7 @@ window.DASHBOARD = {
      "line": 45,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-16T10:17:41.673Z",
+     "updatedAt": "2026-11-16T10:18:01.900Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -316,7 +316,7 @@ window.DASHBOARD = {
      "line": 53,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-16T10:17:41.673Z",
+     "updatedAt": "2026-11-16T10:18:01.900Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -360,7 +360,7 @@ window.DASHBOARD = {
      "line": 62,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-16T10:17:41.673Z",
+     "updatedAt": "2026-11-16T10:18:01.900Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -409,7 +409,7 @@ window.DASHBOARD = {
     {
      "id": "T2.1",
      "title": "HeaderActions and new icons",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -417,7 +417,8 @@ window.DASHBOARD = {
       "apps/web/src/components/Header/AppHeader.vue",
       "apps/web/src/components/Header/CreditsChip.vue",
       "apps/web/src/plugins/icons.ts",
-      "apps/web/src/components/Header/ReferralOffer.vue"
+      "apps/web/src/components/Header/ReferralOffer.vue",
+      "apps/web/src/components.d.ts"
      ],
      "gherkin": null,
      "do": "New `HeaderActions.vue` renders Earn, Upgrade (Free only), `CreditsChip`, avatar in that DOM order; Earn hidden below 768. Icon-only with `aria-label` and `Tooltip` (focus and hover) at 768-1023, labels at >=1024, Upgrade icon button below 768; tap targets >=44px. `CreditsChip.vue` stops rendering `upgrade-pill` and its `sm:` label rule; `pro-badge-header` stays until P3. Register new FA icons (proposal `faUserPlus` Earn, `faGem` Upgrade; must differ from `faGift`/`faCrown`) in `plugins/icons.ts`. `AppHeader.vue` uses `HeaderActions`; `header-end-skeleton` matches each breakpoint. Update existing assertions on `upgrade-pill`.",
@@ -433,29 +434,39 @@ window.DASHBOARD = {
      ],
      "line": 77,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T10:51:41.886Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.7699,
+     "costApprox": true,
+     "elapsedMs": 1414221,
      "summary": []
     },
     {
      "id": "T2.2",
      "title": "Unit: header actions and credits chip",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
       "apps/web/src/components/Header/HeaderActions.vue",
       "apps/web/src/components/Header/CreditsChip.vue",
-      "apps/web/src/components/Header/AppHeader.vue"
+      "apps/web/src/components/Header/AppHeader.vue",
+      "apps/web/src/components/Header/ReferralOffer.vue",
+      "apps/web/src/components/Header/ReferralOffer.test.ts"
      ],
      "gherkin": null,
      "do": "Add `HeaderActions.test.ts`; update `CreditsChip.test.ts` (no Upgrade) and `AppHeader.test.ts`: DOM order Earn, Upgrade, credits, avatar; Free vs Pro (Pro has no Upgrade); icon-only buttons have `aria-label` and tooltip; Earn absent below 768; skeleton renders.",
@@ -469,23 +480,45 @@ window.DASHBOARD = {
      ],
      "line": 85,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T10:51:41.886Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "FAIL",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.2752,
+     "costApprox": true,
+     "elapsedMs": 1435663,
      "summary": []
     },
     {
      "id": "T2.3",
      "title": "E2E: right cluster order and icon-only",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [],
      "files": [
@@ -504,23 +537,38 @@ window.DASHBOARD = {
      ],
      "line": 93,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T10:51:41.886Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "FAIL",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.7275,
+     "costApprox": true,
+     "elapsedMs": 1227065,
      "summary": []
     },
     {
      "id": "T2.4",
      "title": "Gate: Phase 2",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -538,25 +586,40 @@ window.DASHBOARD = {
      ],
      "line": 102,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T10:51:41.886Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "FAIL",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6119,
+     "costApprox": true,
+     "elapsedMs": 772112,
      "summary": []
     }
    ],
-   "verified": 0,
+   "verified": 4,
    "total": 4,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 3.3845,
+   "elapsedMs": 1522723
   },
   {
    "id": "3",
@@ -2648,7 +2711,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 2",
+ "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 3",
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -2708,6 +2771,32 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-16T10:18:01.900Z",
+   "ok": true,
+   "phase": "1",
+   "tasks": [
+    "T1.1",
+    "T1.2",
+    "T1.3",
+    "T1.4"
+   ],
+   "attempt": "3",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 58/58 prod x3, unit lowest file 100% lines",
+   "error": null,
+   "sha": "d205a96912d42a30d27227aaf922cf8920cac285",
+   "shortSha": "d205a96",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/d205a96912d42a30d27227aaf922cf8920cac285",
+   "subject": "feat(web): shared header breakpoint at 768",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-16T15:47:54+05:30",
+   "filesChanged": 15,
+   "added": 1193,
+   "removed": 211
+  },
   {
    "at": "2026-11-16T09:43:49.155Z",
    "ok": true,
@@ -2855,9 +2944,200 @@ window.DASHBOARD = {
    "file": "1/T1.3-4.png",
    "phase": "1",
    "href": "shots/1/T1.3-4.png"
+  },
+  {
+   "taskId": "T2.1",
+   "kind": "proof",
+   "step": "Order Earn, Upgrade, credits, avatar; labels at >=1024",
+   "attempt": 1,
+   "caption": "Free user at 1440: Earn credits and Upgrade to Pro show icon plus label, left of the credits pill and avatar",
+   "annotations": [
+    {
+     "x": 69.4,
+     "y": 1.1,
+     "w": 8.2,
+     "h": 4.9,
+     "label": "Earn credits (faUserPlus) first"
+    },
+    {
+     "x": 78.4,
+     "y": 1.1,
+     "w": 9.3,
+     "h": 4.9,
+     "label": "Upgrade to Pro (faGem) second"
+    },
+    {
+     "x": 88.6,
+     "y": 1.1,
+     "w": 4.3,
+     "h": 4.9,
+     "label": "Credits pill third"
+    },
+    {
+     "x": 93.75,
+     "y": 1.3,
+     "w": 4.6,
+     "h": 4.4,
+     "label": "Avatar menu last"
+    }
+   ],
+   "at": "2026-11-16T10:46:12.512Z",
+   "file": "2/T2.1-1.png",
+   "phase": "2",
+   "href": "shots/2/T2.1-1.png"
+  },
+  {
+   "taskId": "T2.1",
+   "kind": "proof",
+   "step": "Icon-only with aria-label and tooltip at 768-1023, 44px targets",
+   "attempt": 1,
+   "caption": "Free user at 768: Earn and Upgrade are 44x44 icon-only buttons; keyboard focus on Upgrade shows the Upgrade to Pro tooltip",
+   "annotations": [
+    {
+     "x": 66.6,
+     "y": 1.1,
+     "w": 5.7,
+     "h": 4.9,
+     "label": "Earn icon-only, 44x44"
+    },
+    {
+     "x": 73.4,
+     "y": 1.1,
+     "w": 5.7,
+     "h": 4.9,
+     "label": "Upgrade icon-only, 44x44, focused"
+    },
+    {
+     "x": 67.9,
+     "y": 6.9,
+     "w": 16.7,
+     "h": 3.6,
+     "label": "Tooltip on focus"
+    }
+   ],
+   "at": "2026-11-16T10:46:12.607Z",
+   "file": "2/T2.1-2.png",
+   "phase": "2",
+   "href": "shots/2/T2.1-2.png"
+  },
+  {
+   "taskId": "T2.1",
+   "kind": "proof",
+   "step": "Below 768: Upgrade icon button, Earn only in the banner",
+   "attempt": 1,
+   "caption": "Free user at 390: the header has an icon-only Upgrade button and no Earn pill; Earn lives in the top referral banner",
+   "annotations": [
+    {
+     "x": 47.6,
+     "y": 5.1,
+     "w": 11.3,
+     "h": 4.9,
+     "label": "Upgrade icon button, 44x44"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "w": 100,
+     "h": 4,
+     "label": "Referral banner replaces Earn"
+    }
+   ],
+   "at": "2026-11-16T10:46:12.686Z",
+   "file": "2/T2.1-3.png",
+   "phase": "2",
+   "href": "shots/2/T2.1-3.png"
+  },
+  {
+   "taskId": "T2.1",
+   "kind": "proof",
+   "step": "Upgrade shown to Free users only",
+   "attempt": 1,
+   "caption": "Pro user at 768: no Upgrade button; Earn icon, credits, PRO badge (stays until P3) and avatar",
+   "annotations": [
+    {
+     "x": 64.2,
+     "y": 1.1,
+     "w": 5.7,
+     "h": 4.9,
+     "label": "Earn icon-only"
+    },
+    {
+     "x": 70.9,
+     "y": 1.1,
+     "w": 8.1,
+     "h": 4.9,
+     "label": "Credits pill directly after Earn, no Upgrade"
+    }
+   ],
+   "at": "2026-11-16T10:46:12.767Z",
+   "file": "2/T2.1-4.png",
+   "phase": "2",
+   "href": "shots/2/T2.1-4.png"
+  },
+  {
+   "taskId": "T2.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Header cluster-1440",
+   "annotations": [],
+   "at": "2026-11-16T10:36:50.497Z",
+   "file": "2/T2.3-1.png",
+   "phase": "2",
+   "href": "shots/2/T2.3-1.png"
+  },
+  {
+   "taskId": "T2.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Header cluster-1024",
+   "annotations": [],
+   "at": "2026-11-16T10:36:50.582Z",
+   "file": "2/T2.3-2.png",
+   "phase": "2",
+   "href": "shots/2/T2.3-2.png"
+  },
+  {
+   "taskId": "T2.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Header icon-only-768",
+   "annotations": [],
+   "at": "2026-11-16T10:36:50.664Z",
+   "file": "2/T2.3-3.png",
+   "phase": "2",
+   "href": "shots/2/T2.3-3.png"
+  },
+  {
+   "taskId": "T2.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Header upgrade-icon-390",
+   "annotations": [],
+   "at": "2026-11-16T10:36:50.746Z",
+   "file": "2/T2.3-4.png",
+   "phase": "2",
+   "href": "shots/2/T2.3-4.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-16T10:51:41.886Z",
+   "type": "deliverable",
+   "tasks": [
+    "T2.1",
+    "T2.2",
+    "T2.3",
+    "T2.4"
+   ],
+   "text": "Header right cluster: Earn, Upgrade, credits, avatar; icon-only at 768; unit+e2e+gate green",
+   "files": [
+    "apps/web/src/components/Header/HeaderActions.vue"
+   ]
+  },
   {
    "at": "2026-11-16T10:17:41.673Z",
    "type": "deliverable",
@@ -2886,6 +3166,46 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-16T10:46:42.591Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.4"
+   ],
+   "text": "[flaky-env] untracked node-jiti/ at repo root (jiti cache of tailwind config written by vitest/lint) fails vp check formatting; gitignore it"
+  },
+  {
+   "at": "2026-11-16T10:46:42.497Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.3"
+   ],
+   "text": "[evidence] T2.3 proof shots have step null, no annotations and filename captions; verifier added annotated T2.1 shots"
+  },
+  {
+   "at": "2026-11-16T10:46:42.400Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.2"
+   ],
+   "text": "[evidence] T2.2-unit-a1.md per-file test counts (CreditsChip 13, AppHeader 14) do not match the run (10 and 17); total 34 matches"
+  },
+  {
+   "at": "2026-11-16T10:46:42.280Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.2"
+   ],
+   "text": "[test-quality] CreditsChip.test.ts:150-172 only asserts the retired upgrade-pill id is absent; also assert no Upgrade to Pro button/text so a renamed id cannot slip back in"
+  },
+  {
+   "at": "2026-11-16T10:46:42.149Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.2"
+   ],
+   "text": "[type-lint] HeaderActions.test.ts:116 await on dispatchEvent (boolean) triggers typescript-eslint await-thenable warning; drop the await"
+  },
   {
    "at": "2026-11-16T10:17:11.026Z",
    "type": "advisory",
@@ -2952,6 +3272,458 @@ window.DASHBOARD = {
   }
  ],
  "activity": [
+  {
+   "at": "2026-11-16T10:51:41.886Z",
+   "type": "deliverable",
+   "tasks": [
+    "T2.1",
+    "T2.2",
+    "T2.3",
+    "T2.4"
+   ],
+   "text": "Header right cluster: Earn, Upgrade, credits, avatar; icon-only at 768; unit+e2e+gate green",
+   "files": [
+    "apps/web/src/components/Header/HeaderActions.vue"
+   ]
+  },
+  {
+   "at": "2026-11-16T10:51:39.120Z",
+   "tasks": [
+    "T2.2"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "a4 BLOCKING resolved: ReferralOffer.test.ts now 13 tests incl. 5 iconOnly cases (aria-label \"Earn credits\" + empty text, tooltip null before and \"Earn credits\" after hover and after focusin, click sets referralOfferDialog, mobile precedence); ReferralOffer.vue 100/100/100/100. Verify command 34/34 passed, HeaderActions/CreditsChip/AppHeader.vue 100% all metrics; src/components/Header shuffled 11 f",
+   "fingerprint": "1c27f7366c07cb6abe1cbc5ef92116727488e613c95f44ecb3b6f03a08499382",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a6.md"
+  },
+  {
+   "at": "2026-11-16T10:50:33.694Z",
+   "type": "verify_started",
+   "tasks": [
+    "T2.2"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-16T10:50:31.830Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.2"
+   ],
+   "fingerprint": "1c27f7366c07cb6abe1cbc5ef92116727488e613c95f44ecb3b6f03a08499382"
+  },
+  {
+   "at": "2026-11-16T10:50:26.847Z",
+   "type": "task_built",
+   "tasks": [
+    "T2.2"
+   ],
+   "text": "unit: iconOnly tests added; Header 101 pass, 100% combined",
+   "files": [
+    "apps/web/src/components/Header/ReferralOffer.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-16T10:49:56.038Z",
+   "type": "task_started",
+   "tasks": [
+    "T2.2"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-11-16T10:49:55.950Z",
+   "type": "build_started",
+   "tasks": [
+    "T2.2"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-11-16T10:49:50.618Z",
+   "tasks": [
+    "T2.4"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "e2e 4 specs x3 (>= x2) 106/106 on prod build incl. localized-prices 8x3; bun run test 300 files / 2732 tests passed; vp lint 0 errors; type-aware check 0 errors; Free and Pro screenshots at 1440/768/390 inspected (evidence/phase-2/free-*.png, pro-*.png) and render the expected cluster",
+   "fingerprint": "dfafee2b7e7279cd311c1dcc67cf67c73d4d1b49eb7d761b3cb67b1849af3c88",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-16T10:49:50.618Z",
+   "tasks": [
+    "T2.3"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "E2E_SERVER=prod fresh build, header-responsive + upgrade-entry + pricing-layout (+ localized-prices) --repeat-each=3: 106 passed, 0 failed/flaky (header-responsive 13 tests x3 incl. 5 new scenarios); scenarios match Scenarios: list; upgrade-pill -> upgrade-button in both specs with assertions unchanged; no skip/only/fixme/waitForTimeout; console guard intact; paidCallGuard is an auto fixture in e2",
+   "fingerprint": "cff20612eca076a60323cc7e5add2941b79cbf3c86da9a28e0a8463772320e09",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-16T10:49:50.618Z",
+   "tasks": [
+    "T2.1"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "vitest src/components/Header 96/96 (11 files); vp check --no-fmt 0 errors (53 warnings, none blocking), fmt on apps/web/src+e2e 605 files clean; grep upgrade-pill CreditsChip.vue empty; prod probe: order Earn<Upgrade<credits<avatar by x at 1440 (999/1129/1276/1350), 768 icon-only Earn and Upgrade 44x44 with aria-label, focus tooltip \"Upgrade to Pro\" shown, 390 Upgrade 44x44 and no Earn pill (banne",
+   "fingerprint": "cf5222fe3739bb750aa351736d653e41b972715ad2b860a7abf24588b49fa3eb",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-16T10:49:50.618Z",
+   "tasks": [
+    "T2.2"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "test-quality",
+   "text": "[test-quality] · SPEC Part 2 unit criterion \"icon-only buttons have aria-label and tooltip\" (SPEC names ReferralOffer.test.ts) · the new icon-only Earn branch in ReferralOffer.vue:42-53 (aria-label \"Earn credits\", Tooltip, faUserPlus) has no unit test: HeaderActions.test.ts mocks ReferralOffer and only checks the iconOnly prop; ReferralOffer.test.ts run with coverage gives 83.33% lines / 66.66% fu",
+   "files": [
+    "ReferralOffer.test.ts"
+   ],
+   "sigs": [
+    "T2.2|test-quality|ReferralOffer.test.ts"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-16T10:46:42.591Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.4"
+   ],
+   "text": "[flaky-env] untracked node-jiti/ at repo root (jiti cache of tailwind config written by vitest/lint) fails vp check formatting; gitignore it"
+  },
+  {
+   "at": "2026-11-16T10:46:42.497Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.3"
+   ],
+   "text": "[evidence] T2.3 proof shots have step null, no annotations and filename captions; verifier added annotated T2.1 shots"
+  },
+  {
+   "at": "2026-11-16T10:46:42.400Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.2"
+   ],
+   "text": "[evidence] T2.2-unit-a1.md per-file test counts (CreditsChip 13, AppHeader 14) do not match the run (10 and 17); total 34 matches"
+  },
+  {
+   "at": "2026-11-16T10:46:42.280Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.2"
+   ],
+   "text": "[test-quality] CreditsChip.test.ts:150-172 only asserts the retired upgrade-pill id is absent; also assert no Upgrade to Pro button/text so a renamed id cannot slip back in"
+  },
+  {
+   "at": "2026-11-16T10:46:42.149Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.2"
+   ],
+   "text": "[type-lint] HeaderActions.test.ts:116 await on dispatchEvent (boolean) triggers typescript-eslint await-thenable warning; drop the await"
+  },
+  {
+   "at": "2026-11-16T10:40:02.793Z",
+   "type": "verify_started",
+   "tasks": [
+    "T2.1",
+    "T2.2",
+    "T2.3",
+    "T2.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T10:40:00.159Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.1"
+   ],
+   "fingerprint": "cf5222fe3739bb750aa351736d653e41b972715ad2b860a7abf24588b49fa3eb"
+  },
+  {
+   "at": "2026-11-16T10:39:58.042Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.4"
+   ],
+   "fingerprint": "dfafee2b7e7279cd311c1dcc67cf67c73d4d1b49eb7d761b3cb67b1849af3c88"
+  },
+  {
+   "at": "2026-11-16T10:39:58.042Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.3"
+   ],
+   "fingerprint": "cff20612eca076a60323cc7e5add2941b79cbf3c86da9a28e0a8463772320e09"
+  },
+  {
+   "at": "2026-11-16T10:39:58.042Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.2"
+   ],
+   "fingerprint": "78814281d2e0dd0b1b49e30d14a2a8f354708938c054db832d4dd77dc2f7f5a1"
+  },
+  {
+   "at": "2026-11-16T10:39:57.879Z",
+   "type": "task_built",
+   "tasks": [
+    "T2.2",
+    "T2.3",
+    "T2.4"
+   ],
+   "text": "stray components.d.ts declared in T2.1 Files; preflight PASS",
+   "files": [
+    "agent_docs/ui-polish-picker-header/TASKS.md"
+   ]
+  },
+  {
+   "at": "2026-11-16T10:39:52.546Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.4"
+   ],
+   "fingerprint": "dfafee2b7e7279cd311c1dcc67cf67c73d4d1b49eb7d761b3cb67b1849af3c88"
+  },
+  {
+   "at": "2026-11-16T10:39:52.546Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.3"
+   ],
+   "fingerprint": "cff20612eca076a60323cc7e5add2941b79cbf3c86da9a28e0a8463772320e09"
+  },
+  {
+   "at": "2026-11-16T10:39:52.546Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.2"
+   ],
+   "fingerprint": "78814281d2e0dd0b1b49e30d14a2a8f354708938c054db832d4dd77dc2f7f5a1"
+  },
+  {
+   "at": "2026-11-16T10:39:39.227Z",
+   "type": "task_started",
+   "tasks": [
+    "T2.2",
+    "T2.3",
+    "T2.4"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-16T10:39:39.143Z",
+   "type": "build_started",
+   "tasks": [
+    "T2.2",
+    "T2.3",
+    "T2.4"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-16T10:39:35.464Z",
+   "type": "task_failed",
+   "tasks": [
+    "T2.4"
+   ],
+   "attempt": "1",
+   "text": "stray modified tracked file outside scope files: apps/web/src/components.d.ts",
+   "unblock": "declare components.d.ts in scope Files (auto-generated by the running dev server) or revert",
+   "files": [
+    "apps/web/src/components.d.ts"
+   ],
+   "sigs": [
+    "T2.4|preflight|stray"
+   ]
+  },
+  {
+   "at": "2026-11-16T10:39:35.380Z",
+   "type": "task_failed",
+   "tasks": [
+    "T2.3"
+   ],
+   "attempt": "1",
+   "text": "stray modified tracked file outside scope files: apps/web/src/components.d.ts",
+   "unblock": "declare components.d.ts in scope Files (auto-generated by the running dev server) or revert",
+   "files": [
+    "apps/web/src/components.d.ts"
+   ],
+   "sigs": [
+    "T2.3|preflight|stray"
+   ]
+  },
+  {
+   "at": "2026-11-16T10:39:35.294Z",
+   "type": "task_failed",
+   "tasks": [
+    "T2.2"
+   ],
+   "attempt": "1",
+   "text": "stray modified tracked file outside scope files: apps/web/src/components.d.ts",
+   "unblock": "declare components.d.ts in scope Files (auto-generated by the running dev server) or revert",
+   "files": [
+    "apps/web/src/components.d.ts"
+   ],
+   "sigs": [
+    "T2.2|preflight|stray"
+   ]
+  },
+  {
+   "at": "2026-11-16T10:39:26.072Z",
+   "type": "task_built",
+   "tasks": [
+    "T2.4"
+   ],
+   "text": "playwright 71/71, verify 0, test 2732 pass",
+   "files": []
+  },
+  {
+   "at": "2026-11-16T10:39:13.480Z",
+   "type": "task_built",
+   "tasks": [
+    "T2.4"
+   ],
+   "text": "gate green: pw 71 passed, verify 0, vitest 2732 passed",
+   "files": []
+  },
+  {
+   "at": "2026-11-16T10:36:58.506Z",
+   "type": "task_started",
+   "tasks": [
+    "T2.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T10:36:56.392Z",
+   "type": "task_built",
+   "tasks": [
+    "T2.3"
+   ],
+   "text": "e2e: 14/14 scenarios, flake x3 clean",
+   "files": [
+    "apps/web/e2e/qa/header-responsive.spec.ts",
+    "apps/web/e2e/qa/upgrade-entry.spec.ts",
+    "apps/web/e2e/qa/pricing-layout.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-16T10:29:23.553Z",
+   "type": "task_started",
+   "tasks": [
+    "T2.3"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T10:29:23.467Z",
+   "type": "task_built",
+   "tasks": [
+    "T2.2"
+   ],
+   "text": "unit: lowest file 100% lines, shuffle clean",
+   "files": [
+    "apps/web/src/components/Header"
+   ]
+  },
+  {
+   "at": "2026-11-16T10:27:43.457Z",
+   "type": "task_started",
+   "tasks": [
+    "T2.2"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T10:27:43.375Z",
+   "type": "build_started",
+   "tasks": [
+    "T2.2",
+    "T2.3",
+    "T2.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T10:27:39.272Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.1"
+   ],
+   "fingerprint": "2a0cf2fbce91e211604315cbaaf13600a0ffe94cfc014a1140ea9f7570f873ef"
+  },
+  {
+   "at": "2026-11-16T10:27:26.862Z",
+   "type": "task_built",
+   "tasks": [
+    "T2.1"
+   ],
+   "text": "HeaderActions added; upgrade-pill removed from CreditsChip; vitest Header 85 pass; verify 0 errors",
+   "files": [
+    "apps/web/src/components/Header/HeaderActions.vue",
+    "apps/web/src/components/Header/AppHeader.vue",
+    "apps/web/src/components/Header/CreditsChip.vue",
+    "apps/web/src/components/Header/ReferralOffer.vue",
+    "apps/web/src/plugins/icons.ts"
+   ]
+  },
+  {
+   "at": "2026-11-16T10:26:16.397Z",
+   "type": "task_started",
+   "tasks": [
+    "T2.1"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T10:26:16.313Z",
+   "type": "build_started",
+   "tasks": [
+    "T2.1"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T10:26:14.137Z",
+   "type": "run_started",
+   "tasks": [
+    "T2.1",
+    "T2.2",
+    "T2.3",
+    "T2.4"
+   ],
+   "pipeline": 2,
+   "baseline": {
+    "head": "d205a96912d42a30d27227aaf922cf8920cac285",
+    "status": " M .dashboard/media-studio/data.js\u0000 M .dashboard/media-studio/docs/PLAN.html\u0000 M .dashboard/media-studio/docs/REPO_MAP.html\u0000 M .dashboard/media-studio/docs/SPEC.html\u0000 M .dashboard/media-studio/docs/TASKS.html\u0000 M .dashboard/media-studio/index.html\u0000 M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000 M .dashboard/ui-polish-picker-header/index.html\u0000 M agent_docs/ui-polish-picker-header/AUDIT.md\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000"
+   }
+  },
+  {
+   "at": "2026-11-16T10:18:01.900Z",
+   "type": "commit",
+   "tasks": [
+    "T1.1",
+    "T1.2",
+    "T1.3",
+    "T1.4"
+   ],
+   "attempt": "3",
+   "text": "feat(web): shared header breakpoint at 768",
+   "sha": "d205a96912d42a30d27227aaf922cf8920cac285",
+   "branch": "feature-enhancement",
+   "pushed": "yes",
+   "evidence": "e2e 58/58 prod x3, unit lowest file 100% lines"
+  },
   {
    "at": "2026-11-16T10:17:41.673Z",
    "type": "deliverable",
@@ -3113,457 +3885,6 @@ window.DASHBOARD = {
     "apps/web/src/App.vue",
     "apps/web/e2e/qa/header-responsive.spec.ts"
    ]
-  },
-  {
-   "at": "2026-11-16T10:06:06.936Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.1"
-   ],
-   "fingerprint": "82faf6ddd63af5f7a99737723bdb2f96aab0d60dc4011d0e9ee3b1e01e3c5803"
-  },
-  {
-   "at": "2026-11-16T10:04:46.535Z",
-   "type": "task_started",
-   "tasks": [
-    "T1.1"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-16T10:04:46.465Z",
-   "type": "build_started",
-   "tasks": [
-    "T1.1"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-16T10:04:43.684Z",
-   "tasks": [
-    "T1.4"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "gate re-run: e2e x3 prod clean (covers x2); bun run test 299 files / 2722 tests pass; vp lint + vp check 0 errors (8 pre-existing warnings, none in scope); 600px grep empty; repo-wide smAndUp grep NOT empty but only test-local names in files predating the phase (advisory)",
-   "fingerprint": "04b3236de5d4b78d4c3b78093bd05fef5b08158088a6a207f3c9950301560e64",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-16T10:04:43.684Z",
-   "tasks": [
-    "T1.3"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod (fresh build) header-responsive + mods-referral-favicon --repeat-each=3: 28 passed (9 tests x3 + setup), 0 flaky; all Scenarios present; referral helper now strict by width (stronger than old isVisible fallback); paidCallGuard fixture untouched; 4 proof shots show their ACs",
-   "fingerprint": "5e9bd02048acb694a09f4d56e84d1d97cbba867786ab724206850b2bc8edd45e",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-16T10:04:43.684Z",
-   "tasks": [
-    "T1.2"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "27 tests pass across 3 files; coverage 100% stmts/branches/funcs/lines for useHeaderBreakpoint.ts, AppHeader.vue, ReferralOffer.vue (skipFull=false run); 767/768/1023/1024 tier boundaries asserted with literal expectations; no it.fails/skip/only",
-   "fingerprint": "e3cc4c2f0fe910a4d141fc267ed5ba27b3dec7506ffcaf16d7d35aa4001fb1d9",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-16T10:04:43.683Z",
-   "tasks": [
-    "T1.1"
-   ],
-   "attempt": "1",
-   "type": "verify_failed",
-   "category": "code-bug",
-   "text": "[code-bug] · AC \"640 split unchanged (D8)\" + AUDIT row \"700px band for the unchanged 640 split\", AppHeader.vue:61 (`header-v2--dashboard-mobile` now gated on isMobile <768) · at 640-767 the mobile header treatment (banner + header made position:relative, in flow) stacks on App.vue `tw-pt-14` and the sm desktop layout: prod shot at 700 shows header ending y~100 and sidebar/composer starting y~155 (",
-   "files": [
-    "AppHeader.vue"
-   ],
-   "sigs": [
-    "T1.1|code-bug|AppHeader.vue"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-16T10:04:31.219Z",
-   "type": "advisory",
-   "tasks": [
-    "T1.2"
-   ],
-   "text": "ReferralOffer.test width cases set mobile = width < 768 on mocked useMediaQuery; 767/768 labels cosmetic"
-  },
-  {
-   "at": "2026-11-16T10:01:10.369Z",
-   "type": "advisory",
-   "tasks": [
-    "T1.1"
-   ],
-   "text": "vitest/playwright create untracked node-jiti/ and playwright-transform-cache-502/ at repo root; vp check fails formatting on node-jiti; gitignore them"
-  },
-  {
-   "at": "2026-11-16T10:01:10.301Z",
-   "type": "advisory",
-   "tasks": [
-    "T1.3"
-   ],
-   "text": "Proof shots lack --step and --annotate boxes; captions generic"
-  },
-  {
-   "at": "2026-11-16T10:01:10.227Z",
-   "type": "advisory",
-   "tasks": [
-    "T1.4"
-   ],
-   "text": "Verify grep smAndUp in apps/web/src hits only test-local smAndUpRef names; scope grep to AppHeader.vue/ReferralOffer.vue, rename AppHeader.test smAndUpRef"
-  },
-  {
-   "at": "2026-11-16T09:57:13.305Z",
-   "type": "verify_started",
-   "tasks": [
-    "T1.1",
-    "T1.2",
-    "T1.3",
-    "T1.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T09:57:11.099Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.4"
-   ],
-   "fingerprint": "04b3236de5d4b78d4c3b78093bd05fef5b08158088a6a207f3c9950301560e64"
-  },
-  {
-   "at": "2026-11-16T09:57:11.099Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.3"
-   ],
-   "fingerprint": "5e9bd02048acb694a09f4d56e84d1d97cbba867786ab724206850b2bc8edd45e"
-  },
-  {
-   "at": "2026-11-16T09:57:11.099Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.2"
-   ],
-   "fingerprint": "e3cc4c2f0fe910a4d141fc267ed5ba27b3dec7506ffcaf16d7d35aa4001fb1d9"
-  },
-  {
-   "at": "2026-11-16T09:57:08.980Z",
-   "type": "task_built",
-   "tasks": [
-    "T1.2",
-    "T1.3",
-    "T1.4"
-   ],
-   "text": "Preflight stray cleared after correcting T1.3 Files field (parenthetical broke parsing); no code change",
-   "files": [
-    "apps/web/e2e/qa/header-responsive.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-16T09:56:59.855Z",
-   "type": "task_failed",
-   "tasks": [
-    "T1.4"
-   ],
-   "attempt": "1",
-   "text": "stray modified tracked file outside scope files: apps/web/e2e/qa/mods-referral-favicon.spec.ts",
-   "files": [
-    "apps/web/e2e/qa/mods-referral-favicon.spec.ts"
-   ],
-   "sigs": [
-    "T1.4|preflight|stray"
-   ]
-  },
-  {
-   "at": "2026-11-16T09:56:59.784Z",
-   "type": "task_failed",
-   "tasks": [
-    "T1.3"
-   ],
-   "attempt": "1",
-   "text": "stray modified tracked file outside scope files: apps/web/e2e/qa/mods-referral-favicon.spec.ts",
-   "files": [
-    "apps/web/e2e/qa/mods-referral-favicon.spec.ts"
-   ],
-   "sigs": [
-    "T1.3|preflight|stray"
-   ]
-  },
-  {
-   "at": "2026-11-16T09:56:59.711Z",
-   "type": "task_failed",
-   "tasks": [
-    "T1.2"
-   ],
-   "attempt": "1",
-   "text": "stray modified tracked file outside scope files: apps/web/e2e/qa/mods-referral-favicon.spec.ts",
-   "files": [
-    "apps/web/e2e/qa/mods-referral-favicon.spec.ts"
-   ],
-   "sigs": [
-    "T1.2|preflight|stray"
-   ]
-  },
-  {
-   "at": "2026-11-16T09:56:56.311Z",
-   "type": "task_built",
-   "tasks": [
-    "T1.4"
-   ],
-   "text": "gate: verify 0 errors, unit 2722/2722, playwright 19/19",
-   "files": [
-    "agent_docs/ui-polish-picker-header/TASKS.md"
-   ]
-  },
-  {
-   "at": "2026-11-16T09:56:42.211Z",
-   "type": "task_built",
-   "tasks": [
-    "T1.4"
-   ],
-   "text": "verify 0 errors; vitest 2722 pass; playwright 19/19 x2; no smAndUp in source, no 600px"
-  },
-  {
-   "at": "2026-11-16T09:55:41.555Z",
-   "type": "task_started",
-   "tasks": [
-    "T1.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T09:55:39.874Z",
-   "type": "task_built",
-   "tasks": [
-    "T1.3"
-   ],
-   "text": "e2e 5/5 new + 4 referral pass, flake x3 clean",
-   "files": [
-    "apps/web/e2e/qa/header-responsive.spec.ts",
-    "apps/web/e2e/qa/mods-referral-favicon.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-16T09:53:38.486Z",
-   "type": "task_started",
-   "tasks": [
-    "T1.3"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T09:53:38.413Z",
-   "type": "task_built",
-   "tasks": [
-    "T1.2"
-   ],
-   "text": "unit tests pass, lowest file 100% lines",
-   "files": [
-    "apps/web/src/composables/useHeaderBreakpoint.ts"
-   ]
-  },
-  {
-   "at": "2026-11-16T09:52:42.345Z",
-   "type": "task_started",
-   "tasks": [
-    "T1.2"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T09:52:40.143Z",
-   "type": "task_built",
-   "tasks": [
-    "T1.1"
-   ],
-   "text": "layout.ts + useHeaderBreakpoint added; header split 600->768; vitest 82 pass",
-   "files": [
-    "apps/web/src/utils/layout.ts",
-    "apps/web/src/composables/useHeaderBreakpoint.ts"
-   ]
-  },
-  {
-   "at": "2026-11-16T09:52:37.945Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.1"
-   ],
-   "fingerprint": "557acb9610daa32071aa7ca019718fa2c351a3c9832ab9521cc5c87768a85bf6"
-  },
-  {
-   "at": "2026-11-16T09:52:29.464Z",
-   "type": "task_built",
-   "tasks": [
-    "T1.1"
-   ],
-   "text": "layout.ts + useHeaderBreakpoint; 768 split in header/referral; vitest 82 pass; verify green",
-   "files": [
-    "apps/web/src/utils/layout.ts",
-    "apps/web/src/composables/useHeaderBreakpoint.ts",
-    "apps/web/src/components/Header/AppHeader.vue",
-    "apps/web/src/components/Header/ReferralOffer.vue",
-    "apps/web/src/pages/Dashboard.vue",
-    "apps/web/src/components/Header/AppHeader.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-16T09:51:47.851Z",
-   "type": "task_started",
-   "tasks": [
-    "T1.1"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T09:51:47.787Z",
-   "type": "build_started",
-   "tasks": [
-    "T1.1",
-    "T1.2",
-    "T1.3",
-    "T1.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T09:51:43.631Z",
-   "type": "run_started",
-   "tasks": [
-    "T1.1",
-    "T1.2",
-    "T1.3",
-    "T1.4"
-   ],
-   "pipeline": 2,
-   "baseline": {
-    "head": "a4f94c9da1c3d950c22e642112c160b1f4ae25fb",
-    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000"
-   }
-  },
-  {
-   "at": "2026-11-16T09:43:49.155Z",
-   "type": "commit",
-   "tasks": [
-    "T0.1",
-    "T0.2"
-   ],
-   "attempt": "2",
-   "text": "docs(ui-polish-picker-header): phase 0 baseline screenshots and audit table",
-   "sha": "a4f94c9da1c3d950c22e642112c160b1f4ae25fb",
-   "branch": "feature-enhancement",
-   "pushed": "yes",
-   "evidence": "no e2e/unit in scope; 108 shots verified"
-  },
-  {
-   "at": "2026-11-16T09:43:36.375Z",
-   "type": "deliverable",
-   "tasks": [
-    "T0.1",
-    "T0.2"
-   ],
-   "text": "108 baseline screenshots captured and AUDIT.md with 9 open rows",
-   "files": [
-    "agent_docs/ui-polish-picker-header/AUDIT.md"
-   ]
-  },
-  {
-   "at": "2026-11-16T09:43:31.908Z",
-   "tasks": [
-    "T0.2"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "AUDIT.md exists with the 5 required columns; grep -c '| open |' = 9 (>= 9); one row per SPEC 4c known finding plus 700px band, keyboard-open and Logo 600px rows, each citing a baseline file",
-   "fingerprint": "252d241e51d220cf6c8d2c3e0aefff49bc5149e64de54bc98f566bbe63a289cf",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-16T09:43:31.907Z",
-   "tasks": [
-    "T0.1"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "baseline/ has 108 PNGs, 18 per width (360/390/700/768/1024/1440), dark 54, pro 48; all 108 expected <route>-<width>-<theme>-<plan> combos present (upgrade Free only), no extras, no duplicate hashes, sizes 15-141 KB; 6 shots opened and match their names (mobile banner, picker open, upgrade dialog, Pro badge); Mongo check: QA user plan=free, no subscription",
-   "fingerprint": "22b09b7a87540306279266f8e5051aa8e5f7ea3724fcb6b5b6c8b05764231a27",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-16T09:43:07.190Z",
-   "type": "advisory",
-   "tasks": [
-    "T0.2"
-   ],
-   "text": "AUDIT row \"Feature name truncated AI I...\" cites create-360-light-free.png, which shows no feature name at all (dropdown hidden); recheck evidence in P4"
-  },
-  {
-   "at": "2026-11-16T09:43:07.121Z",
-   "type": "advisory",
-   "tasks": [
-    "T0.1"
-   ],
-   "text": "Baseline captured with a temporary Playwright spec instead of agent-browser as Do specified; shots and naming meet AC"
-  },
-  {
-   "at": "2026-11-16T09:42:14.570Z",
-   "type": "verify_started",
-   "tasks": [
-    "T0.1",
-    "T0.2"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-16T09:42:12.289Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T0.2"
-   ],
-   "fingerprint": "252d241e51d220cf6c8d2c3e0aefff49bc5149e64de54bc98f566bbe63a289cf"
-  },
-  {
-   "at": "2026-11-16T09:42:12.289Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T0.1"
-   ],
-   "fingerprint": "22b09b7a87540306279266f8e5051aa8e5f7ea3724fcb6b5b6c8b05764231a27"
-  },
-  {
-   "at": "2026-11-16T09:42:12.064Z",
-   "type": "task_built",
-   "tasks": [
-    "T0.1"
-   ],
-   "text": "108 baseline shots captured",
-   "files": [
-    "agent_docs/qa/ui-polish-picker-header/baseline/"
-   ]
-  },
-  {
-   "at": "2026-11-16T09:39:12.707Z",
-   "type": "task_started",
-   "tasks": [
-    "T0.1"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-16T09:39:12.654Z",
-   "type": "build_started",
-   "tasks": [
-    "T0.1"
-   ],
-   "attempt": "2"
   }
  ]
 };

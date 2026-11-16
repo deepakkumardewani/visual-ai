@@ -11,8 +11,8 @@ import { useUserStore } from '@/stores/user';
 import CustomButton from '@/components/CustomButton.vue';
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue';
 import ReferralOfferDialog from '@/components/Dialogs/ReferralOfferDialog.vue';
-import CreditsChip from '@/components/Header/CreditsChip.vue';
 import FeatureSelect from '@/components/Header/FeatureSelect.vue';
+import HeaderActions from '@/components/Header/HeaderActions.vue';
 import Logo from '@/components/Header/Logo.vue';
 import NavTabs from '@/components/Header/NavTabs.vue';
 import ReferralOffer from '@/components/Header/ReferralOffer.vue';
@@ -98,11 +98,15 @@ const showEndSkeleton = computed(() => {
           >
             <div
               v-if="isDashboard"
-              class="tw-h-9 tw-w-[4.5rem] tw-animate-pulse tw-rounded-chip tw-bg-surface-2"
+              class="tw-hidden tw-h-11 tw-w-11 tw-animate-pulse tw-rounded-full tw-bg-surface-2 md:tw-block lg:tw-w-32"
             />
             <div
               v-if="isDashboard"
-              class="tw-h-9 tw-w-[4.75rem] tw-animate-pulse tw-rounded-chip tw-bg-surface-2"
+              class="tw-h-11 tw-w-11 tw-animate-pulse tw-rounded-full tw-bg-surface-2 lg:tw-w-40"
+            />
+            <div
+              v-if="isDashboard"
+              class="tw-h-11 tw-w-[4.75rem] tw-animate-pulse tw-rounded-full tw-bg-surface-2"
             />
             <div class="tw-h-9 tw-w-9 tw-animate-pulse tw-rounded-full tw-bg-surface-2" />
           </div>
@@ -127,10 +131,11 @@ const showEndSkeleton = computed(() => {
             </SignedOut>
 
             <SignedIn>
-              <ReferralOffer v-if="!isMobile && isDashboard" />
-              <CreditsChip v-if="isDashboard" />
-              <CustomButton v-if="!isDashboard" title="Dashboard" />
-              <UserMenu />
+              <HeaderActions v-if="isDashboard" />
+              <template v-else>
+                <CustomButton title="Dashboard" />
+                <UserMenu />
+              </template>
             </SignedIn>
           </div>
         </div>

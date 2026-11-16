@@ -16,7 +16,10 @@ vi.mock('vue-router', () => ({
 vi.mock('@/composables/useHeaderBreakpoint', async () => {
   const vue = await import('vue');
   return {
-    useHeaderBreakpoint: () => ({ isMobile: vue.computed(() => !smAndUpRef.value) }),
+    useHeaderBreakpoint: () => ({
+      isMobile: vue.computed(() => !smAndUpRef.value),
+      isTablet: vue.computed(() => false),
+    }),
   };
 });
 
@@ -69,6 +72,7 @@ vi.mock('@/components/Dialogs/ReferralOfferDialog.vue', () => ({
 
 import AppHeader from '@/components/Header/AppHeader.vue';
 import { useUserStore } from '@/stores/user';
+import { PLAN } from '@visual-ai/shared';
 
 describe('AppHeader', () => {
   beforeEach(() => {
@@ -224,5 +228,64 @@ describe('AppHeader', () => {
       const wrapper = mountHeader();
       expect(wrapper.find('[data-testid="referral-offer-stub"]').exists()).toBe(false);
     }
+  });
+  describe('right cluster', () => {
+    const mountWithPlan = (plan: string) => {
+      const pinia = createPinia();
+      setActivePinia(pinia);
+      const userStore = useUserStore();
+      userStore.isReady = true;
+      userStore.plan = plan as typeof userStore.plan;
+      return mount(AppHeader, {
+        global: {
+          plugins: [pinia],
+          stubs: {
+            'router-link': { template: '<a><slot /></a>' },
+            'font-awesome-icon': true,
+          },
+        },
+      });
+    };
+
+    const clusterOrder = (wrapper: ReturnType<typeof mountWithPlan>) =>
+      Array.from(
+        wrapper
+          .get('#export-area [data-testid="signed-in"]')
+          .element.querySelectorAll('[data-testid]'),
+      ).map((el) => el.getAttribute('data-testid'));
+
+    it('orders Earn, Upgrade, credits, avatar for a Free user on the dashboard', () => {
+      const order = clusterOrder(mountWithPlan(PLAN.FREE));
+
+      expect(order).toEqual([
+        'referral-offer-stub',
+        'upgrade-button',
+        'credits-chip-stub',
+        'user-menu-stub',
+      ]);
+    });
+
+    it('omits Upgrade for a Pro user on the dashboard', () => {
+      const order = clusterOrder(mountWithPlan(PLAN.PRO));
+
+      expect(order).toEqual(['referral-offer-stub', 'credits-chip-stub', 'user-menu-stub']);
+    });
+
+    it('omits Earn below 768 while keeping Upgrade', () => {
+      smAndUpRef.value = false;
+      const order = clusterOrder(mountWithPlan(PLAN.FREE));
+
+      expect(order).toEqual(['upgrade-button', 'credits-chip-stub', 'user-menu-stub']);
+    });
+
+    it('shows no Upgrade or credits off the dashboard', () => {
+      routePathRef.value = '/pricing';
+      routeNameRef.value = 'pricing';
+      const wrapper = mountWithPlan(PLAN.FREE);
+
+      expect(wrapper.find('[data-testid="upgrade-button"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="credits-chip-stub"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="user-menu-stub"]').exists()).toBe(true);
+    });
   });
 });

@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { faGift } from '@/plugins/icons';
+import { faGift, faUserPlus } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
+
+import Tooltip from '@/components/primitives/Tooltip.vue';
 
 import { useHeaderBreakpoint } from '@/composables/useHeaderBreakpoint';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
+
+withDefaults(defineProps<{ iconOnly?: boolean }>(), { iconOnly: false });
 
 const dialogStore = useDialogStore();
 const { isMobile } = useHeaderBreakpoint();
@@ -35,14 +39,26 @@ watch(
       Refer a friend and earn credits
     </button>
 
+    <Tooltip v-else-if="iconOnly" text="Earn credits" placement="bottom">
+      <button
+        type="button"
+        data-testid="referral-offer-desktop"
+        aria-label="Earn credits"
+        class="referral-offer--desktop tw-inline-flex tw-h-11 tw-w-11 tw-items-center tw-justify-center tw-rounded-full tw-border tw-border-gold/40 tw-bg-gold/10 tw-text-sm tw-text-gold tw-transition-colors tw-duration-fast hover:tw-border-gold/60 hover:tw-bg-gold/15 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-gold"
+        @click="dialogStore.showReferralOffer()"
+      >
+        <font-awesome-icon :icon="faUserPlus" aria-hidden="true" />
+      </button>
+    </Tooltip>
+
     <button
       v-else
       type="button"
       data-testid="referral-offer-desktop"
-      class="referral-offer--desktop tw-inline-flex tw-h-9 tw-items-center tw-gap-1.5 tw-rounded-full tw-border tw-border-gold/40 tw-bg-gold/10 tw-px-3 tw-text-sm tw-font-medium tw-text-gold tw-transition-colors tw-duration-fast hover:tw-border-gold/60 hover:tw-bg-gold/15 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-gold"
+      class="referral-offer--desktop tw-inline-flex tw-h-11 tw-items-center tw-gap-1.5 tw-rounded-full tw-border tw-border-gold/40 tw-bg-gold/10 tw-px-3 tw-text-sm tw-font-medium tw-text-gold tw-transition-colors tw-duration-fast hover:tw-border-gold/60 hover:tw-bg-gold/15 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-gold"
       @click="dialogStore.showReferralOffer()"
     >
-      <font-awesome-icon :icon="faGift" class="tw-text-xs" aria-hidden="true" />
+      <font-awesome-icon :icon="faUserPlus" class="tw-text-xs" aria-hidden="true" />
       Earn credits
     </button>
   </template>

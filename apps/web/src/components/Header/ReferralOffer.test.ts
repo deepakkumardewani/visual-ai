@@ -1,6 +1,6 @@
 import { createPinia, setActivePinia } from 'pinia';
 import { mount } from '@vue/test-utils';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mobileState = vi.hoisted(() => ({ mobile: false }));
 
@@ -82,5 +82,63 @@ describe('ReferralOffer', () => {
     userStore.userDetails = { firstName: 'Ada' } as never;
     await wrapper.vm.$nextTick();
     expect(wrapper.find('[data-testid="referral-offer-desktop"]').exists()).toBe(true);
+  });
+  describe('iconOnly', () => {
+    const mountIconOnly = () => {
+      useUserStore().userDetails = { firstName: 'Ada' } as never;
+      return mount(ReferralOffer, {
+        props: { iconOnly: true },
+        attachTo: document.body,
+        global: { stubs: { 'font-awesome-icon': true } },
+      });
+    };
+    const getTip = () => document.body.querySelector('[role="tooltip"]');
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('renders an icon-only button with an aria-label and no visible text', () => {
+      const wrapper = mountIconOnly();
+      const chip = wrapper.get('[data-testid="referral-offer-desktop"]');
+      expect(chip.attributes('aria-label')).toBe('Earn credits');
+      expect(chip.text()).toBe('');
+      wrapper.unmount();
+    });
+
+    it('shows the tooltip on hover', async () => {
+      vi.useFakeTimers();
+      const wrapper = mountIconOnly();
+      const chip = wrapper.get('[data-testid="referral-offer-desktop"]');
+      expect(getTip()).toBeNull();
+      chip.element.parentElement!.dispatchEvent(new MouseEvent('mouseenter'));
+      await vi.advanceTimersByTimeAsync(300);
+      expect(getTip()?.textContent?.trim()).toBe('Earn credits');
+      wrapper.unmount();
+    });
+
+    it('shows the tooltip on keyboard focus', async () => {
+      vi.useFakeTimers();
+      const wrapper = mountIconOnly();
+      const chip = wrapper.get('[data-testid="referral-offer-desktop"]');
+      chip.element.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+      await vi.advanceTimersByTimeAsync(300);
+      expect(getTip()?.textContent?.trim()).toBe('Earn credits');
+      wrapper.unmount();
+    });
+
+    it('opens the referral dialog on click', async () => {
+      const wrapper = mountIconOnly();
+      await wrapper.get('[data-testid="referral-offer-desktop"]').trigger('click');
+      expect(useDialogStore().referralOfferDialog).toBe(true);
+      wrapper.unmount();
+    });
+
+    it('keeps the mobile CTA on small screens even when iconOnly', () => {
+      mobileState.mobile = true;
+      const wrapper = mountIconOnly();
+      expect(wrapper.find('[data-testid="referral-offer-mobile"]').exists()).toBe(true);
+      wrapper.unmount();
+    });
   });
 });

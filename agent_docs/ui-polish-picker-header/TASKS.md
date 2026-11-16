@@ -74,23 +74,23 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** Header right cluster reads Earn, Upgrade, credits, avatar. Below 1024 Earn and Upgrade become icon-only buttons with tooltips and new icons; the Upgrade button no longer lives inside the credits chip.
 **Try in UI:** At 1440 see "Earn credits" and "Upgrade to Pro" labels left of credits ; at 900 see icon-only buttons and hover for tooltips ; at 390 see only the Upgrade icon, with Earn in the top banner.
 
-### ☐ T2.1 HeaderActions and new icons
+### ✅ T2.1 HeaderActions and new icons
 
 - **Kind:** implementation
-- **Files:** `apps/web/src/components/Header/HeaderActions.vue`, `apps/web/src/components/Header/AppHeader.vue`, `apps/web/src/components/Header/CreditsChip.vue`, `apps/web/src/plugins/icons.ts`, `apps/web/src/components/Header/ReferralOffer.vue`
+- **Files:** `apps/web/src/components/Header/HeaderActions.vue`, `apps/web/src/components/Header/AppHeader.vue`, `apps/web/src/components/Header/CreditsChip.vue`, `apps/web/src/plugins/icons.ts`, `apps/web/src/components/Header/ReferralOffer.vue`, `apps/web/src/components.d.ts`
 - **Do:** New `HeaderActions.vue` renders Earn, Upgrade (Free only), `CreditsChip`, avatar in that DOM order; Earn hidden below 768. Icon-only with `aria-label` and `Tooltip` (focus and hover) at 768-1023, labels at >=1024, Upgrade icon button below 768; tap targets >=44px. `CreditsChip.vue` stops rendering `upgrade-pill` and its `sm:` label rule; `pro-badge-header` stays until P3. Register new FA icons (proposal `faUserPlus` Earn, `faGem` Upgrade; must differ from `faGift`/`faCrown`) in `plugins/icons.ts`. `AppHeader.vue` uses `HeaderActions`; `header-end-skeleton` matches each breakpoint. Update existing assertions on `upgrade-pill`.
 - **Acceptance:** SPEC Part 2 order, icon-only tooltip and aria-label, Free-only Upgrade, >=44px targets, new icons differ from `faGift`/`faCrown` (D7); skeleton matches layout.
 - **Verify:** `cd apps/web && npx vitest run src/components/Header`; `bun run verify`; `grep -rn "upgrade-pill" apps/web/src/components/Header/CreditsChip.vue` (empty).
 
-### ☐ T2.2 Unit: header actions and credits chip
+### ✅ T2.2 Unit: header actions and credits chip
 
 - **Kind:** unit
-- **Files:** `apps/web/src/components/Header/HeaderActions.vue`, `apps/web/src/components/Header/CreditsChip.vue`, `apps/web/src/components/Header/AppHeader.vue`
+- **Files:** `apps/web/src/components/Header/HeaderActions.vue`, `apps/web/src/components/Header/CreditsChip.vue`, `apps/web/src/components/Header/AppHeader.vue`, `apps/web/src/components/Header/ReferralOffer.vue`, `apps/web/src/components/Header/ReferralOffer.test.ts`
 - **Do:** Add `HeaderActions.test.ts`; update `CreditsChip.test.ts` (no Upgrade) and `AppHeader.test.ts`: DOM order Earn, Upgrade, credits, avatar; Free vs Pro (Pro has no Upgrade); icon-only buttons have `aria-label` and tooltip; Earn absent below 768; skeleton renders.
 - **Acceptance:** SPEC Part 2 unit criteria; every file at least 80% across all metrics, target over 95%; no `it.fails`.
 - **Verify:** `cd apps/web && npx vitest run src/components/Header/HeaderActions.test.ts src/components/Header/CreditsChip.test.ts src/components/Header/AppHeader.test.ts --coverage --coverage.include=src/components/Header/HeaderActions.vue --coverage.include=src/components/Header/CreditsChip.vue --coverage.include=src/components/Header/AppHeader.vue --coverage.reporter=text`
 
-### ☐ T2.3 E2E: right cluster order and icon-only
+### ✅ T2.3 E2E: right cluster order and icon-only
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` at 1440 and 1024 labels visible and order Earn, Upgrade, credits, avatar by bounding-box x; `@critical` at 768 buttons icon-only with `aria-label` and tooltip on hover; `@high` Pro user has no Upgrade; `@high` at 390 Upgrade icon visible and Earn absent; `@medium` Upgrade click opens pricing dialog (mocked prices).
@@ -99,7 +99,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** Scenarios from SPEC Part 2 criteria pass; stale `upgrade-pill` selectors in both existing specs updated without weakening; `paidCallGuard` clean.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/header-responsive.spec.ts e2e/qa/upgrade-entry.spec.ts e2e/qa/pricing-layout.spec.ts --repeat-each=3`
 
-### ☐ T2.4 Gate: Phase 2
+### ✅ T2.4 Gate: Phase 2
 
 - **Kind:** gate
 - **Files:** none

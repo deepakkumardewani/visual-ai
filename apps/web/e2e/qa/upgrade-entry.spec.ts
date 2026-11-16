@@ -51,7 +51,7 @@ async function openBuyDialog(page: Page) {
 
 test('@critical Free shows the pill and click opens pricing', async ({ page, snap }) => {
   await gotoStudio(page);
-  const pill = page.getByTestId('upgrade-pill');
+  const pill = page.getByTestId('upgrade-button');
   await expect(pill).toBeVisible();
   await expect(page.getByTestId('pro-badge-header')).toHaveCount(0);
   await snap('free-pill');
@@ -70,7 +70,7 @@ test('@critical Pro (activated by signed test webhook) shows the badge and no pi
 
   await gotoStudio(page);
   await expect(page.getByTestId('pro-badge-header')).toBeVisible();
-  await expect(page.getByTestId('upgrade-pill')).toHaveCount(0);
+  await expect(page.getByTestId('upgrade-button')).toHaveCount(0);
   await snap('pro-badge');
   await page.screenshot({ path: shotPath('pro-badge') });
 
@@ -141,7 +141,7 @@ test('@high backdrop is blurred and dim', async ({ page, snap }) => {
 test('@medium mobile width has no horizontal overflow', async ({ page, snap }) => {
   await page.setViewportSize(MOBILE_VIEWPORT);
   await gotoStudio(page);
-  await expect(page.getByTestId('upgrade-pill')).toBeVisible();
+  await expect(page.getByTestId('upgrade-button')).toBeVisible();
 
   const hasOverflow = () =>
     page.evaluate(
@@ -175,17 +175,17 @@ test('@medium no pill flash while loading', async ({ page }) => {
   await page.goto('/create/image', { waitUntil: 'domcontentloaded' });
   await profileRequested;
   await expect(page.getByRole('banner')).toBeVisible();
-  await expect(page.getByTestId('upgrade-pill')).toHaveCount(0);
+  await expect(page.getByTestId('upgrade-button')).toHaveCount(0);
   await expect(page.getByTestId('pro-badge-header')).toHaveCount(0);
 
   release();
   await expect(page.getByTestId('pro-badge-header')).toBeVisible();
-  await expect(page.getByTestId('upgrade-pill')).toHaveCount(0);
+  await expect(page.getByTestId('upgrade-button')).toHaveCount(0);
 });
 
 test('@medium desktop pill does not overlap the user menu', async ({ page }) => {
   await gotoStudio(page);
-  const pill = await page.getByTestId('upgrade-pill').boundingBox();
+  const pill = await page.getByTestId('upgrade-button').boundingBox();
   const avatar = await page.getByTestId('user-menu-trigger').boundingBox();
   expect(pill!.x + pill!.width).toBeLessThanOrEqual(avatar!.x);
 });

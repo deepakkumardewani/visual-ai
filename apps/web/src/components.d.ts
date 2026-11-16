@@ -60,6 +60,7 @@ declare module 'vue' {
     GlHeroWall: typeof import('./components/LandingV3/GlHeroWall.vue')['default']
     GlShowcaseMedia: typeof import('./components/LandingV3/GlShowcaseMedia.vue')['default']
     GlTransition: typeof import('./components/LandingV3/GlTransition.vue')['default']
+    HeaderActions: typeof import('./components/Header/HeaderActions.vue')['default']
     Heading: typeof import('./components/Dashboard/ModelPicker/Heading.vue')['default']
     HeroCopy: typeof import('./components/LandingV2/HeroCopy.vue')['default']
     HeroPrompt: typeof import('./components/LandingV2/HeroPrompt.vue')['default']
