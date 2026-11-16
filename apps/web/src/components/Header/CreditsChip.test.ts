@@ -148,17 +148,19 @@ describe('CreditsChip', () => {
       const wrapper = mountChip();
 
       expect(wrapper.find('[data-testid="upgrade-pill"]').exists()).toBe(false);
-      expect(wrapper.find('[data-testid="pro-badge-header"]').exists()).toBe(false);
     });
 
-    it('shows the Pro badge and no pill for a ready Pro user', () => {
+    it('shows no pill and no Pro badge for a ready Pro user', () => {
       const userStore = useUserStore();
       userStore.isReady = true;
       userStore.plan = PLAN.PRO;
 
       const wrapper = mountChip();
 
-      expect(wrapper.get('[data-testid="pro-badge-header"]').text()).toBe('Pro');
+      expect(wrapper.text()).not.toMatch(/pro/i);
+      const icons = wrapper.findAll('font-awesome-icon-stub').map((i) => i.attributes('icon'));
+      expect(icons.length).toBeGreaterThan(0);
+      expect(icons.join(' ')).not.toMatch(/crown/i);
       expect(wrapper.find('[data-testid="upgrade-pill"]').exists()).toBe(false);
     });
 
@@ -170,7 +172,6 @@ describe('CreditsChip', () => {
       const wrapper = mountChip();
 
       expect(wrapper.find('[data-testid="upgrade-pill"]').exists()).toBe(false);
-      expect(wrapper.find('[data-testid="pro-badge-header"]').exists()).toBe(false);
     });
 
     it('closes the open menu when clicking outside', async () => {

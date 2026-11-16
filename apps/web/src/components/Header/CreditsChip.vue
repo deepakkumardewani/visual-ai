@@ -10,7 +10,7 @@ import AnimatedCounter from '@/components/Header/AnimatedCounter.vue';
 
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
-const { credits, dailyCredits, hasJustSubscribed, isPro, isReady } = storeToRefs(userStore);
+const { credits, dailyCredits, hasJustSubscribed } = storeToRefs(userStore);
 
 const isOpen = ref(false);
 const rootRef = ref<HTMLElement | null>(null);
@@ -64,15 +64,6 @@ function buyCredits() {
       />
       <AnimatedCounter :number="totalCredits" :animate="hasJustSubscribed" />
     </button>
-
-    <span
-      v-if="isReady && isPro"
-      data-testid="pro-badge-header"
-      class="tw-inline-flex tw-min-h-9 tw-shrink-0 tw-items-center tw-gap-1.5 tw-rounded-full tw-bg-gold/15 tw-px-2.5 tw-py-1 tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gold"
-    >
-      <font-awesome-icon icon="fa-solid fa-crown" aria-hidden="true" />
-      Pro
-    </span>
 
     <transition name="credits-chip-fade">
       <div

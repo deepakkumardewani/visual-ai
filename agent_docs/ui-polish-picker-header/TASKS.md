@@ -114,7 +114,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** The PRO chip leaves the header. The avatar menu shows a gold PRO or muted FREE pill; FREE opens the upgrade dialog and PRO opens a new Pro perks dialog.
 **Try in UI:** As a Pro user open the avatar menu and click PRO to see the perks dialog ; as a Free user click FREE to see the Upgrade dialog ; confirm no PRO chip beside credits.
 
-### ☐ T3.1 Shared PRO_PERKS and ProPerksDialog
+### ✅ T3.1 Shared PRO_PERKS and ProPerksDialog
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/proPerks.ts`, `apps/web/src/components/Pricing/PricingProCard.vue`, `apps/web/src/components/Dialogs/ProPerksDialog.vue`, `apps/web/src/stores/dialog.ts`
@@ -122,15 +122,15 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 3 D1: one `PRO_PERKS` source used by card and dialog; no new perk copy; dialog has no buy CTA.
 - **Verify:** `cd apps/web && npx vitest run src/components/Pricing src/stores/dialog.test.ts`; `bun run verify`; `grep -rn "PRO_PERKS =" apps/web/src` (one hit).
 
-### ☐ T3.2 UserMenu pill and chip removal
+### ✅ T3.2 UserMenu pill and chip removal
 
 - **Kind:** implementation
-- **Files:** `apps/web/src/components/Header/UserMenu.vue`, `apps/web/src/components/Header/CreditsChip.vue`
+- **Files:** `apps/web/src/components/Header/UserMenu.vue`, `apps/web/src/components/Header/CreditsChip.vue`, `apps/web/src/components/Header/CreditsChip.test.ts`
 - **Do:** In `UserMenu.vue` replace `pro-badge` with a `button` pill (PRO `tw-bg-gold/15 tw-text-gold`, FREE muted), rendered only when `userStore.isReady`; FREE calls `dialogStore.showPricing()`, PRO calls `showProPerks`; menu closes on click; long names truncate without hiding the pill. Mount `<ProPerksDialog />` at the template root of `UserMenu.vue` next to the existing `<PricingDialog />` (the only `PricingDialog` mount in the app, beside `ReferralDialog` and `ReferralCopyDialog`). Remove `pro-badge-header` from `CreditsChip.vue`. `Profile/UserDetails.vue` untouched.
 - **Acceptance:** SPEC Part 3: no PRO chip in header; pill by plan, nothing before ready; correct dialog opens; `profile-pro-status` unchanged; pill flips reactively after subscribe.
 - **Verify:** `cd apps/web && npx vitest run src/components/Header src/components/Dialogs`; `bun run verify`; `grep -rn "pro-badge-header" apps/web/src --include=*.vue` (empty).
 
-### ☐ T3.3 Unit: plan pill and perks dialog
+### ✅ T3.3 Unit: plan pill and perks dialog
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Header/UserMenu.vue`, `apps/web/src/components/Dialogs/ProPerksDialog.vue`, `apps/web/src/components/Pricing/PricingProCard.vue`, `apps/web/src/stores/dialog.ts`
@@ -138,16 +138,16 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 3 unit criteria; every file at least 80% across metrics, target over 95%; no `it.fails`.
 - **Verify:** `cd apps/web && npx vitest run src/components/Header/UserMenu.test.ts src/components/Dialogs/ProPerksDialog.test.ts src/components/Pricing/PricingProCard.test.ts src/components/Header/CreditsChip.test.ts src/stores/dialog.test.ts --coverage --coverage.include=src/components/Header/UserMenu.vue --coverage.include=src/components/Dialogs/ProPerksDialog.vue --coverage.include=src/components/Pricing/PricingProCard.vue --coverage.include=src/stores/dialog.ts --coverage.reporter=text`
 
-### ☐ T3.4 E2E: plan pill
+### ✅ T3.4 E2E: plan pill
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` Free clicks FREE and the pricing dialog opens; `@critical` Pro clicks PRO and the perks dialog opens with no buy button; `@high` Escape closes and focus returns to the avatar button; `@high` no PRO chip in the header; `@medium` pill absent until user data ready; `@medium` open menu at 360 and 1440 light/dark via `snap`.
 - **Spec:** `apps/web/e2e/qa/plan-pill.spec.ts`
-- **Files:** `apps/web/e2e/qa/plan-status.spec.ts`, `apps/web/e2e/qa/pro-tier.spec.ts`, `apps/web/e2e/qa/upgrade-entry.spec.ts` (all select `pro-badge`; `upgrade-entry` also `pro-badge-header`)
+- **Files:** `apps/web/e2e/qa/plan-status.spec.ts`, `apps/web/e2e/qa/pro-tier.spec.ts`, `apps/web/e2e/qa/upgrade-entry.spec.ts`, `apps/web/e2e/qa/header-responsive.spec.ts`, `apps/web/e2e/support/planPill.ts` (the first three select pro-badge and upgrade-entry also pro-badge-header. header-responsive asserts the header PRO chip is gone. planPill is the shared plan-pill helper)
 - **Acceptance:** SPEC Part 3 e2e criteria pass; stale `pro-badge`/`pro-badge-header` selectors in the three existing specs updated without weakening; mocked APIs only.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/plan-pill.spec.ts e2e/qa/plan-status.spec.ts e2e/qa/pro-tier.spec.ts e2e/qa/upgrade-entry.spec.ts --repeat-each=3`
 
-### ☐ T3.5 Gate: Phase 3
+### ✅ T3.5 Gate: Phase 3
 
 - **Kind:** gate
 - **Files:** none

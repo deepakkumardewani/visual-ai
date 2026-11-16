@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import PricingProCard from '@/components/Pricing/PricingProCard.vue';
 import { PAYMENT_TOAST } from '@/payments/constants';
 import { useUserStore } from '@/stores/user';
+import { PRO_PERKS } from '@/utils/proPerks';
 import type { IUser } from '@/types';
 import { HISTORY_CAP, MODEL_REGISTRY, PLAN, PREMIUM_MODEL_KEYS } from '@visual-ai/shared';
 
@@ -53,6 +54,15 @@ describe('PricingProCard', () => {
     expect(wrapper.text()).not.toContain('Approx. price');
     for (const key of PREMIUM_MODEL_KEYS)
       expect(wrapper.text()).toContain(MODEL_REGISTRY[key].label);
+  });
+
+  it('lists every shared Pro perk as its own list item', () => {
+    const items = mountCard()
+      .findAll('li')
+      .map((li) => li.text());
+    expect(PRO_PERKS.length).toBeGreaterThan(0);
+    for (const perk of PRO_PERKS) expect(items).toContain(perk);
+    expect(items).toContain('Priority queue: your jobs start first');
   });
 
   it('redirects a signed-out visitor to sign in without subscribing', async () => {

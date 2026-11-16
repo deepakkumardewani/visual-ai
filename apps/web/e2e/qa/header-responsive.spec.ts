@@ -4,6 +4,7 @@ import type { Page } from '@playwright/test';
 
 import { test, expect } from '../fixtures/qa';
 import { requireEnv } from '../support/env';
+import { expectPlanPill, headerPlanChip } from '../support/planPill';
 import { activateProViaWebhook } from '../support/proWebhook';
 import { gotoStudio } from '../support/studio';
 import { resetToFree } from '../support/subscriptionState';
@@ -205,7 +206,8 @@ test.describe('header responsive banner and Earn pill', () => {
 
     await openStudioAt(page, 1440);
     await expect(page.getByTestId('credits-chip')).toBeVisible();
-    await expect(page.getByTestId('pro-badge-header')).toBeVisible();
+    await expect(headerPlanChip(page)).toHaveCount(0);
+    await expectPlanPill(page, 'Pro');
     await expect(page.getByTestId('upgrade-button')).toHaveCount(0);
     await snap('header-pro-1440');
   });

@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import type { Page } from '@playwright/test';
 
 import { expect, test } from '../fixtures/qa';
+import { expectPlanPill, headerPlanChip } from '../support/planPill';
 import { activateProViaWebhook } from '../support/proWebhook';
 import { requireEnv } from '../support/env';
 import { gotoStudio } from '../support/studio';
@@ -53,7 +54,7 @@ test('@critical Free shows the pill and click opens pricing', async ({ page, sna
   await gotoStudio(page);
   const pill = page.getByTestId('upgrade-button');
   await expect(pill).toBeVisible();
-  await expect(page.getByTestId('pro-badge-header')).toHaveCount(0);
+  await expect(headerPlanChip(page)).toHaveCount(0);
   await snap('free-pill');
   await page.screenshot({ path: shotPath('free-pill') });
 
@@ -69,7 +70,7 @@ test('@critical Pro (activated by signed test webhook) shows the badge and no pi
   expect(res.status()).toBe(HTTP_OK);
 
   await gotoStudio(page);
-  await expect(page.getByTestId('pro-badge-header')).toBeVisible();
+  await expectPlanPill(page, 'Pro');
   await expect(page.getByTestId('upgrade-button')).toHaveCount(0);
   await snap('pro-badge');
   await page.screenshot({ path: shotPath('pro-badge') });
@@ -176,10 +177,10 @@ test('@medium no pill flash while loading', async ({ page }) => {
   await profileRequested;
   await expect(page.getByRole('banner')).toBeVisible();
   await expect(page.getByTestId('upgrade-button')).toHaveCount(0);
-  await expect(page.getByTestId('pro-badge-header')).toHaveCount(0);
+  await expect(headerPlanChip(page)).toHaveCount(0);
 
   release();
-  await expect(page.getByTestId('pro-badge-header')).toBeVisible();
+  await expectPlanPill(page, 'Pro');
   await expect(page.getByTestId('upgrade-button')).toHaveCount(0);
 });
 

@@ -392,18 +392,18 @@ test.describe('Pro tier UI', () => {
     expect(((await profile.json()) as { plan: string }).plan).toBe('pro');
   });
 
-  test('@medium Pro badge persists after reload', async ({ page, snap }) => {
+  test('@medium Pro plan pill persists after reload', async ({ page, snap }) => {
     await gotoStudio(page);
     await activatePro(page, 'badge');
     await gotoStudio(page);
     await openUserMenu(page);
-    await expect(page.getByTestId('pro-badge')).toBeVisible();
+    await expect(page.getByTestId('plan-pill')).toHaveText('Pro');
     await page.getByTestId('user-menu-panel').screenshot({ path: shotPath('pro-badge') });
 
     await page.reload();
     await expect(page.getByTestId('composer-textarea-input')).toBeVisible();
     await openUserMenu(page);
-    await expect(page.getByTestId('pro-badge')).toBeVisible();
+    await expect(page.getByTestId('plan-pill')).toHaveText('Pro');
     await snap('pro-badge-after-reload');
     await page
       .getByTestId('user-menu-panel')

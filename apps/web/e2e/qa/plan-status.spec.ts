@@ -48,8 +48,9 @@ test('@critical a free user sees no Pro badge and /users/me reports plan free', 
   const body = await openStudioAndReadOwnProfile(page);
 
   expectFreeStatus(body);
-  await expect(page.getByTestId('pro-badge')).toHaveCount(0);
   await expect(page.getByText('Pro', { exact: true })).toHaveCount(0);
+  await page.getByTestId('user-menu-trigger').click();
+  await expect(page.getByTestId('plan-pill')).toHaveText('Free');
   await snap('free-user-studio');
 });
 
@@ -82,7 +83,8 @@ test('@medium plan state persists after reload', async ({ page, snap }) => {
   await expect(page.getByTestId('composer-textarea-input')).toBeVisible();
 
   expectFreeStatus((await reloaded.json()) as PlanStatus);
-  await expect(page.getByTestId('pro-badge')).toHaveCount(0);
+  await page.getByTestId('user-menu-trigger').click();
+  await expect(page.getByTestId('plan-pill')).toHaveText('Free');
   await snap('free-user-after-reload');
 });
 

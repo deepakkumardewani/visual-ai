@@ -24,6 +24,7 @@ import { useUserStore } from '@/stores/user';
 import { useIntro } from '@/composables/useIntro';
 
 import PricingDialog from '@/components/Dialogs/PricingDialog.vue';
+import ProPerksDialog from '@/components/Dialogs/ProPerksDialog.vue';
 import ReferralCopyDialog from '@/components/Dialogs/ReferralCopyDialog.vue';
 import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue';
 
@@ -35,7 +36,7 @@ const intro = useIntro();
 const dialogStore = useDialogStore();
 const appStore = useAppStore();
 const userStore = useUserStore();
-const { userDetails, isPro } = storeToRefs(userStore);
+const { userDetails, isPro, isReady } = storeToRefs(userStore);
 const { isDark } = storeToRefs(appStore);
 const { signOut } = useClerk();
 
@@ -156,6 +157,12 @@ async function showWhatsNew() {
   intro.open();
 }
 
+function onPlanPillClick() {
+  closeMenu();
+  if (isPro.value) dialogStore.showProPerks();
+  else dialogStore.showPricing();
+}
+
 function handleSignOut() {
   closeMenu();
   signOut({ redirectUrl: '/' });
@@ -219,20 +226,27 @@ function setItemRef(index: number) {
             <span v-else aria-hidden="true">{{ userInitials }}</span>
           </span>
           <span class="tw-min-w-0 tw-flex-1">
-            <span class="tw-flex tw-items-center tw-gap-2">
-              <span class="tw-truncate tw-text-sm tw-font-semibold tw-text-ink-primary">{{
-                fullName || 'Your account'
-              }}</span>
-              <span
-                v-if="isPro"
-                data-testid="pro-badge"
-                class="user-menu__badge user-menu__badge--pro tw-inline-flex tw-shrink-0 tw-items-center tw-rounded-full tw-bg-gold/15 tw-px-2 tw-py-0.5 tw-text-[0.625rem] tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gold"
-                >Pro</span
-              >
-            </span>
+            <span class="tw-block tw-truncate tw-text-sm tw-font-semibold tw-text-ink-primary">{{
+              fullName || 'Your account'
+            }}</span>
             <span v-if="email" class="tw-block tw-truncate tw-text-xs tw-text-ink-muted">{{
               email
             }}</span>
+            <button
+              v-if="isReady"
+              type="button"
+              data-testid="plan-pill"
+              :aria-label="isPro ? 'Pro plan: view perks' : 'Free plan: upgrade to Pro'"
+              class="user-menu__badge tw-mt-1 tw-inline-flex tw-items-center tw-rounded-full tw-border-0 tw-px-2 tw-py-0.5 tw-text-[0.625rem] tw-font-semibold tw-uppercase tw-tracking-wide focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
+              :class="
+                isPro
+                  ? 'user-menu__badge--pro tw-bg-gold/15 tw-text-gold'
+                  : 'tw-bg-surface-3 tw-text-ink-muted'
+              "
+              @click="onPlanPillClick"
+            >
+              {{ isPro ? 'Pro' : 'Free' }}
+            </button>
           </span>
         </div>
 
@@ -318,6 +332,7 @@ function setItemRef(index: number) {
   </div>
   <ReferralDialog />
   <PricingDialog />
+  <ProPerksDialog />
   <ReferralCopyDialog />
 </template>
 
