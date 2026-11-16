@@ -11,7 +11,7 @@ import WhatsNewModal from '@/components/Intro/WhatsNewModal.vue';
 <template>
   <div
     data-testid="dashboard-shell"
-    class="dashboard-shell tw-h-[calc(100vh-60px)] tw-max-h-[calc(100vh-60px)] tw-min-h-0 tw-overflow-hidden tw-bg-canvas"
+    class="dashboard-shell tw-h-[calc(100vh-60px)] tw-max-h-[calc(100vh-60px)] sm:max-md:tw-h-auto sm:max-md:tw-max-h-none sm:max-md:tw-flex-1 tw-min-h-0 tw-overflow-hidden tw-bg-canvas"
   >
     <div class="dashboard-shell__grid tw-grid tw-h-full tw-min-h-0">
       <aside

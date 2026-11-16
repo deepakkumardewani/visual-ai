@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useMediaQuery } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { SignedIn, SignedOut, useAuth } from 'vue-clerk';
 import { useRoute } from 'vue-router';
 
+import { useHeaderBreakpoint } from '@/composables/useHeaderBreakpoint';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
@@ -21,7 +21,7 @@ import UserMenu from '@/components/Header/UserMenu.vue';
 
 import { APP_SURFACE, isAppShellRoute } from '@/utils/dashboardRoutes';
 
-const smAndUp = useMediaQuery('(min-width: 600px)');
+const { isMobile } = useHeaderBreakpoint();
 const { isLoaded: isAuthLoaded } = useAuth();
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
@@ -35,7 +35,7 @@ const isThemeButtonVisible = computed(() => {
   return route.path !== '/privacy' && route.path !== '/terms' && route.path !== '/refund';
 });
 
-const showDesktopNavTabs = computed(() => smAndUp.value && isDashboard.value);
+const showDesktopNavTabs = computed(() => !isMobile.value && isDashboard.value);
 
 /** Dashboard is auth-gated — show tabs once Clerk is loaded (don't wait for SignedIn). */
 const showNavTabs = computed(() => Boolean(isAuthLoaded.value) && isDashboard.value);
@@ -54,11 +54,11 @@ const showEndSkeleton = computed(() => {
 <template>
   <div data-testid="app-header-v2">
     <SignedIn>
-      <ReferralOffer v-if="!smAndUp && isDashboard" />
+      <ReferralOffer v-if="isMobile && isDashboard" />
     </SignedIn>
     <header
       class="header-v2 tw-fixed tw-left-0 tw-right-0 tw-top-0 tw-z-50 tw-h-16 tw-bg-surface-1/80 tw-backdrop-blur-[14px]"
-      :class="{ 'header-v2--dashboard-mobile': !smAndUp && isDashboard }"
+      :class="{ 'header-v2--dashboard-mobile': isMobile && isDashboard }"
     >
       <div
         class="header-v2__inner tw-mx-auto tw-flex tw-h-16 tw-w-full tw-items-center tw-gap-3 tw-px-4 lg:tw-gap-5 lg:tw-px-6"
@@ -127,7 +127,7 @@ const showEndSkeleton = computed(() => {
             </SignedOut>
 
             <SignedIn>
-              <ReferralOffer v-if="smAndUp && isDashboard" />
+              <ReferralOffer v-if="!isMobile && isDashboard" />
               <CreditsChip v-if="isDashboard" />
               <CustomButton v-if="!isDashboard" title="Dashboard" />
               <UserMenu />

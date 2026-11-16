@@ -88,9 +88,17 @@ const isFooterVisible = computed(() => {
     route.path !== '/signup'
   );
 });
+
+/** At 640-767px the dashboard header is in flow (banner + header): drop the fixed-header offset and let the h-dvh column let the shell flex-fill the remaining space. */
+const isHeaderInFlowBand = computed(
+  () => isHeaderVisible.value && isAppShellRoute(route) && !isExploreViewer.value,
+);
 </script>
 <template>
-  <div class="tw-flex tw-min-h-dvh tw-flex-col tw-bg-canvas tw-font-body">
+  <div
+    class="tw-flex tw-min-h-dvh tw-flex-col tw-bg-canvas tw-font-body"
+    :class="{ 'sm:max-md:tw-h-dvh': isHeaderInFlowBand }"
+  >
     <AppHeader v-if="isHeaderVisible" />
     <div
       class="tw-flex-1"
@@ -99,6 +107,8 @@ const isFooterVisible = computed(() => {
         'tw-h-[100dvh] tw-overflow-hidden': isExploreViewer,
         'tw-pt-0': isMarketingShell || isExploreViewer,
         'tw-pt-14': isHeaderVisible && !isMarketingShell && !isExploreViewer,
+        'sm:max-md:tw-flex sm:max-md:tw-h-auto sm:max-md:tw-min-h-0 sm:max-md:tw-flex-col sm:max-md:tw-pt-0 sm:max-md:[&>div]:tw-flex sm:max-md:[&>div]:tw-min-h-0 sm:max-md:[&>div]:tw-flex-1 sm:max-md:[&>div]:tw-flex-col':
+          isHeaderInFlowBand,
       }"
     >
       <router-view />

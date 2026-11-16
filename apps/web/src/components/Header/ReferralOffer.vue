@@ -2,13 +2,13 @@
 import { faGift } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
-import { useMediaQuery } from '@vueuse/core';
 
+import { useHeaderBreakpoint } from '@/composables/useHeaderBreakpoint';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
 const dialogStore = useDialogStore();
-const isMobile = useMediaQuery('(max-width: 600px)');
+const { isMobile } = useHeaderBreakpoint();
 const userStore = useUserStore();
 
 const isUserDataLoaded = ref(false);

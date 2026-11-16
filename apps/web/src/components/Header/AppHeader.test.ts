@@ -13,11 +13,10 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ push: vi.fn() }),
 }));
 
-vi.mock('@vueuse/core', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@vueuse/core')>();
+vi.mock('@/composables/useHeaderBreakpoint', async () => {
+  const vue = await import('vue');
   return {
-    ...actual,
-    useMediaQuery: () => smAndUpRef,
+    useHeaderBreakpoint: () => ({ isMobile: vue.computed(() => !smAndUpRef.value) }),
   };
 });
 
@@ -197,5 +196,33 @@ describe('AppHeader', () => {
     routeNameRef.value = 'pricing';
     const wrapper = mountHeader();
     expect(wrapper.find('[data-testid="header-end-skeleton"]').exists()).toBe(false);
+  });
+
+  it('shows the banner above the header and no Earn chip below 768', () => {
+    smAndUpRef.value = false;
+    const wrapper = mountHeader();
+    const root = wrapper.get('[data-testid="app-header-v2"]');
+
+    expect(root.findAll('[data-testid="referral-offer-stub"]')).toHaveLength(1);
+    expect(root.find('header [data-testid="referral-offer-stub"]').exists()).toBe(false);
+  });
+
+  it('shows the Earn chip inside the header and no banner at 768 and above', () => {
+    smAndUpRef.value = true;
+    const wrapper = mountHeader();
+    const root = wrapper.get('[data-testid="app-header-v2"]');
+
+    expect(root.findAll('[data-testid="referral-offer-stub"]')).toHaveLength(1);
+    expect(root.find('header [data-testid="referral-offer-stub"]').exists()).toBe(true);
+  });
+
+  it('renders neither referral slot off the dashboard', () => {
+    routePathRef.value = '/pricing';
+    routeNameRef.value = 'pricing';
+    for (const wide of [false, true]) {
+      smAndUpRef.value = wide;
+      const wrapper = mountHeader();
+      expect(wrapper.find('[data-testid="referral-offer-stub"]').exists()).toBe(false);
+    }
   });
 });

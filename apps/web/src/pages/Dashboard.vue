@@ -32,14 +32,12 @@ import {
   resolveCreateFeature,
   tabFromRouteName,
 } from '@/utils/dashboardRoutes';
-
-/** Match DashboardShell / Tailwind `sm` (640px). */
-const CREATE_SM_UP = 640;
+import { CREATE_LAYOUT_SM } from '@/utils/layout';
 
 const appStore = useAppStore();
 const { tab, feature } = storeToRefs(appStore);
 const route = useRoute();
-const isSmUp = useMediaQuery(`(min-width: ${CREATE_SM_UP}px)`);
+const isSmUp = useMediaQuery(`(min-width: ${CREATE_LAYOUT_SM}px)`);
 
 useComposerPersistence();
 useGlobalShortcuts();

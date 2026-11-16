@@ -34,15 +34,15 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** One source of truth for the 768/1024 breakpoints. The referral banner and the header Earn pill now switch at 768 together instead of 600.
 **Try in UI:** Open Create at 700px wide and see the referral banner ; widen to 768px and see the banner gone and the Earn pill in the header ; run `grep -n "smAndUp\|600px" apps/web/src/components/Header/AppHeader.vue apps/web/src/components/Header/ReferralOffer.vue` and confirm nothing remains.
 
-### ☐ T1.1 layout.ts and useHeaderBreakpoint
+### ✅ T1.1 layout.ts and useHeaderBreakpoint
 
 - **Kind:** implementation
-- **Files:** `apps/web/src/utils/layout.ts`, `apps/web/src/composables/useHeaderBreakpoint.ts`, `apps/web/src/components/Header/AppHeader.vue`, `apps/web/src/components/Header/ReferralOffer.vue`, `apps/web/src/pages/Dashboard.vue`
+- **Files:** `apps/web/src/utils/layout.ts`, `apps/web/src/composables/useHeaderBreakpoint.ts`, `apps/web/src/components/Header/AppHeader.vue`, `apps/web/src/components/Header/ReferralOffer.vue`, `apps/web/src/pages/Dashboard.vue`, `apps/web/src/App.vue`, `apps/web/src/components/Dashboard/DashboardShell.vue`
 - **Do:** Create `layout.ts` with `BREAKPOINT = { MOBILE_MAX: 768, DESKTOP_MIN: 1024 }` and `CREATE_LAYOUT_SM = 640` (D8, named only). Create `useHeaderBreakpoint()` over `useMediaQuery` returning `{ isMobile, isTablet, isDesktop }`. Replace `smAndUp` (600px) in `AppHeader.vue` and `(max-width: 600px)` in `ReferralOffer.vue` with it; use `CREATE_LAYOUT_SM` for the 640 in `Dashboard.vue` without changing behaviour. Update existing assertions that encode 600.
 - **Acceptance:** SPEC Part 2 breakpoint requirement: banner shows below 768 and Earn pill hides below 768 together; 640 split unchanged (D8); no `600px`/`smAndUp` left in `AppHeader.vue` or `ReferralOffer.vue` (`Logo.vue` and `ImageDialog.vue` keep theirs; see AUDIT.md).
 - **Verify:** `cd apps/web && npx vitest run src/components/Header src/pages/Dashboard.test.ts`; `grep -rn "smAndUp" apps/web/src` (empty); `grep -n "600px" apps/web/src/components/Header/AppHeader.vue apps/web/src/components/Header/ReferralOffer.vue` (empty); `bun run verify`.
 
-### ☐ T1.2 Unit: breakpoint composable and banner gate
+### ✅ T1.2 Unit: breakpoint composable and banner gate
 
 - **Kind:** unit
 - **Files:** `apps/web/src/composables/useHeaderBreakpoint.ts`, `apps/web/src/components/Header/AppHeader.vue`, `apps/web/src/components/Header/ReferralOffer.vue`
@@ -50,16 +50,16 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 2 unit criteria for banner/Earn gating; every file at least 80% lines/branches/functions/statements, target over 95%; no `it.fails`.
 - **Verify:** `cd apps/web && npx vitest run src/composables/useHeaderBreakpoint.test.ts src/components/Header/AppHeader.test.ts src/components/Header/ReferralOffer.test.ts --coverage --coverage.include=src/composables/useHeaderBreakpoint.ts --coverage.include=src/components/Header/ReferralOffer.vue --coverage.include=src/components/Header/AppHeader.vue --coverage.reporter=text`
 
-### ☐ T1.3 E2E: banner and Earn breakpoint
+### ✅ T1.3 E2E: banner and Earn breakpoint
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` banner visible at 390 and 700, Earn pill absent; `@critical` banner absent and Earn pill present at 768 and 1024; `@medium` no horizontal page scroll at 700.
 - **Spec:** `apps/web/e2e/qa/header-responsive.spec.ts`
-- **Files:** `apps/web/e2e/qa/mods-referral-favicon.spec.ts` (asserts `referral-offer-mobile`/`referral-offer-desktop`, whose split moves from 600 to 768)
+- **Files:** `apps/web/e2e/qa/mods-referral-favicon.spec.ts`, `apps/web/e2e/qa/header-responsive.spec.ts`
 - **Acceptance:** Scenarios derived from SPEC Part 2 banner criteria pass with mocked user/credits; `mods-referral-favicon.spec.ts` updated to the 768 split without weakening; `paidCallGuard` clean.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/header-responsive.spec.ts e2e/qa/mods-referral-favicon.spec.ts --repeat-each=3`
 
-### ☐ T1.4 Gate: Phase 1
+### ✅ T1.4 Gate: Phase 1
 
 - **Kind:** gate
 - **Files:** none

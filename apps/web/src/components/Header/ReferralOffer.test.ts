@@ -57,4 +57,30 @@ describe('ReferralOffer', () => {
     await chip.trigger('click');
     expect(dialogStore.referralOfferDialog).toBe(true);
   });
+
+  it.each([
+    [390, 'referral-offer-mobile', 'referral-offer-desktop'],
+    [767, 'referral-offer-mobile', 'referral-offer-desktop'],
+    [768, 'referral-offer-desktop', 'referral-offer-mobile'],
+    [1024, 'referral-offer-desktop', 'referral-offer-mobile'],
+  ])('at %ipx only renders %s', (width, shown, hidden) => {
+    mobileState.mobile = width < 768;
+    useUserStore().userDetails = { firstName: 'Ada' } as never;
+    const wrapper = mount(ReferralOffer, {
+      global: { stubs: { 'font-awesome-icon': true } },
+    });
+    expect(wrapper.find(`[data-testid="${shown}"]`).exists()).toBe(true);
+    expect(wrapper.find(`[data-testid="${hidden}"]`).exists()).toBe(false);
+  });
+
+  it('appears once user details arrive after mount', async () => {
+    const userStore = useUserStore();
+    const wrapper = mount(ReferralOffer, {
+      global: { stubs: { 'font-awesome-icon': true } },
+    });
+    expect(wrapper.find('[data-testid="referral-offer-desktop"]').exists()).toBe(false);
+    userStore.userDetails = { firstName: 'Ada' } as never;
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[data-testid="referral-offer-desktop"]').exists()).toBe(true);
+  });
 });

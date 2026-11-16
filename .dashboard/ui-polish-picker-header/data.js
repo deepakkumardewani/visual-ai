@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-16T09:43:36.386Z",
+ "generatedAt": "2026-11-16T10:17:41.687Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -29,18 +29,20 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
- "costUsd": 1.0166,
- "elapsedMs": 749638,
+ "costUsd": 4.7142,
+ "elapsedMs": 2300156,
  "costByRole": {
-  "builder": 0.5934,
-  "verifier": 0.4232
+  "builder": 1.2825,
+  "verifier": 3.0911,
+  "unit": 0.1865,
+  "e2e": 0.1541
  },
  "totals": {
   "phases": 14,
   "tasks": 61,
   "byStatus": {
-   "verified": 2,
-   "ready": 59
+   "verified": 6,
+   "ready": 55
   }
  },
  "phases": [
@@ -87,7 +89,7 @@ window.DASHBOARD = {
      "line": 14,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-16T09:43:36.375Z",
+     "updatedAt": "2026-11-16T09:43:49.155Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -136,7 +138,7 @@ window.DASHBOARD = {
      "line": 22,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-16T09:43:36.375Z",
+     "updatedAt": "2026-11-16T09:43:49.155Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -185,7 +187,7 @@ window.DASHBOARD = {
     {
      "id": "T1.1",
      "title": "layout.ts and useHeaderBreakpoint",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -193,7 +195,9 @@ window.DASHBOARD = {
       "apps/web/src/composables/useHeaderBreakpoint.ts",
       "apps/web/src/components/Header/AppHeader.vue",
       "apps/web/src/components/Header/ReferralOffer.vue",
-      "apps/web/src/pages/Dashboard.vue"
+      "apps/web/src/pages/Dashboard.vue",
+      "apps/web/src/App.vue",
+      "apps/web/src/components/Dashboard/DashboardShell.vue"
      ],
      "gherkin": null,
      "do": "Create `layout.ts` with `BREAKPOINT = { MOBILE_MAX: 768, DESKTOP_MIN: 1024 }` and `CREATE_LAYOUT_SM = 640` (D8, named only). Create `useHeaderBreakpoint()` over `useMediaQuery` returning `{ isMobile, isTablet, isDesktop }`. Replace `smAndUp` (600px) in `AppHeader.vue` and `(max-width: 600px)` in `ReferralOffer.vue` with it; use `CREATE_LAYOUT_SM` for the 640 in `Dashboard.vue` without changing behaviour. Update existing assertions that encode 600.",
@@ -210,23 +214,45 @@ window.DASHBOARD = {
      ],
      "line": 37,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T10:17:41.673Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.5575,
+     "costApprox": true,
+     "elapsedMs": 1550517,
      "summary": []
     },
     {
      "id": "T1.2",
      "title": "Unit: breakpoint composable and banner gate",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
@@ -246,28 +272,36 @@ window.DASHBOARD = {
      ],
      "line": 45,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T10:17:41.673Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5344,
+     "costApprox": true,
+     "elapsedMs": 721339,
      "summary": []
     },
     {
      "id": "T1.3",
      "title": "E2E: banner and Earn breakpoint",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [],
      "files": [
-      "apps/web/e2e/qa/mods-referral-favicon.spec.ts (asserts referral-offer-mobile/referral-offer-desktop",
-      "whose split moves from 600 to 768)"
+      "apps/web/e2e/qa/mods-referral-favicon.spec.ts",
+      "apps/web/e2e/qa/header-responsive.spec.ts"
      ],
      "gherkin": null,
      "do": null,
@@ -281,23 +315,31 @@ window.DASHBOARD = {
      ],
      "line": 53,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T10:17:41.673Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.1402,
+     "costApprox": true,
+     "elapsedMs": 1439883,
      "summary": []
     },
     {
      "id": "T1.4",
      "title": "Gate: Phase 1",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -317,25 +359,33 @@ window.DASHBOARD = {
      ],
      "line": 62,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T10:17:41.673Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4655,
+     "costApprox": true,
+     "elapsedMs": 542129,
      "summary": []
     }
    ],
-   "verified": 0,
+   "verified": 4,
    "total": 4,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 3.6976,
+   "elapsedMs": 1550518
   },
   {
    "id": "2",
@@ -2598,7 +2648,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 1",
+ "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 2",
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -2657,9 +2707,171 @@ window.DASHBOARD = {
   }
  ],
  "stuck": [],
- "commits": [],
- "shots": [],
+ "commits": [
+  {
+   "at": "2026-11-16T09:43:49.155Z",
+   "ok": true,
+   "phase": "0",
+   "tasks": [
+    "T0.1",
+    "T0.2"
+   ],
+   "attempt": "2",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "no e2e/unit in scope; 108 shots verified",
+   "error": null,
+   "sha": "a4f94c9da1c3d950c22e642112c160b1f4ae25fb",
+   "shortSha": "a4f94c9",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/a4f94c9da1c3d950c22e642112c160b1f4ae25fb",
+   "subject": "docs(ui-polish-picker-header): phase 0 baseline screenshots and audit table",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-16T15:13:42+05:30",
+   "filesChanged": 9,
+   "added": 1361,
+   "removed": 166
+  }
+ ],
+ "shots": [
+  {
+   "taskId": "T1.1",
+   "kind": "proof",
+   "step": "Banner below 768; 640 split unchanged",
+   "attempt": 1,
+   "caption": "At 700px the banner shows and Earn is gone, but a ~55px empty band sits between header and content and the page grows to 996px in a 900px viewport",
+   "annotations": [
+    {
+     "x": 0,
+     "y": 0,
+     "w": 100,
+     "h": 3.6,
+     "label": "Referral banner shown below 768"
+    },
+    {
+     "x": 0,
+     "y": 10,
+     "w": 100,
+     "h": 5.5,
+     "label": "New empty band (in-flow mobile header + pt-14 stacked on sm layout)"
+    }
+   ],
+   "at": "2026-11-16T10:04:05.486Z",
+   "file": "1/T1.1-1.png",
+   "phase": "1",
+   "href": "shots/1/T1.1-1.png"
+  },
+  {
+   "taskId": "T1.1",
+   "kind": "proof",
+   "step": "Earn pill shown from 768",
+   "attempt": 1,
+   "caption": "At 768px no banner and the Earn credits chip is in the header; content sits directly under the header",
+   "annotations": [
+    {
+     "x": 45.2,
+     "y": 1.6,
+     "w": 15,
+     "h": 3.8,
+     "label": "Earn credits chip in header"
+    }
+   ],
+   "at": "2026-11-16T10:04:05.562Z",
+   "file": "1/T1.1-2.png",
+   "phase": "1",
+   "href": "shots/1/T1.1-2.png"
+  },
+  {
+   "taskId": "T1.1",
+   "kind": "after",
+   "step": "Banner below 768; 640 split unchanged, nothing cut off",
+   "attempt": 3,
+   "caption": "At 700x600 (640-767 band) the banner shows, Earn is absent, the shell starts right under the header and the options rail scrolled to its end shows the Format row fully inside the viewport",
+   "annotations": [
+    {
+     "x": 0,
+     "y": 0,
+     "w": 100,
+     "h": 6,
+     "label": "Referral banner below 768, no Earn pill"
+    },
+    {
+     "x": 0,
+     "y": 87,
+     "w": 37,
+     "h": 12,
+     "label": "Last rail control (Format) fully visible, not clipped"
+    }
+   ],
+   "at": "2026-11-16T10:16:40.881Z",
+   "file": "1/T1.1-3.png",
+   "phase": "1",
+   "href": "shots/1/T1.1-3.png"
+  },
+  {
+   "taskId": "T1.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Header at banner-390",
+   "annotations": [],
+   "at": "2026-11-16T09:55:34.276Z",
+   "file": "1/T1.3-1.png",
+   "phase": "1",
+   "href": "shots/1/T1.3-1.png"
+  },
+  {
+   "taskId": "T1.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Header at banner-700",
+   "annotations": [],
+   "at": "2026-11-16T09:55:34.370Z",
+   "file": "1/T1.3-2.png",
+   "phase": "1",
+   "href": "shots/1/T1.3-2.png"
+  },
+  {
+   "taskId": "T1.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Header at earn-pill-768",
+   "annotations": [],
+   "at": "2026-11-16T09:55:34.451Z",
+   "file": "1/T1.3-3.png",
+   "phase": "1",
+   "href": "shots/1/T1.3-3.png"
+  },
+  {
+   "taskId": "T1.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Header at earn-pill-1024",
+   "annotations": [],
+   "at": "2026-11-16T09:55:34.530Z",
+   "file": "1/T1.3-4.png",
+   "phase": "1",
+   "href": "shots/1/T1.3-4.png"
+  }
+ ],
  "deliverables": [
+  {
+   "at": "2026-11-16T10:17:41.673Z",
+   "type": "deliverable",
+   "tasks": [
+    "T1.1",
+    "T1.2",
+    "T1.3",
+    "T1.4"
+   ],
+   "text": "Shared breakpoint constants + useHeaderBreakpoint; header/banner split moved 600->768; 640-767 shell sizing fixed; unit + e2e coverage",
+   "files": [
+    "apps/web/src/utils/layout.ts"
+   ]
+  },
   {
    "at": "2026-11-16T09:43:36.375Z",
    "type": "deliverable",
@@ -2674,6 +2886,54 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-16T10:17:11.026Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.1"
+   ],
+   "text": "smAndUp remains only as test variable names (15 hits in *.test.ts); Verify grep apps/web/src is not literally empty"
+  },
+  {
+   "at": "2026-11-16T10:10:20.440Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.1"
+   ],
+   "text": "header-responsive 700 band test cannot detect clipping under overflow-hidden; assert .dashboard-shell bottom <= viewport"
+  },
+  {
+   "at": "2026-11-16T10:04:31.219Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.2"
+   ],
+   "text": "ReferralOffer.test width cases set mobile = width < 768 on mocked useMediaQuery; 767/768 labels cosmetic"
+  },
+  {
+   "at": "2026-11-16T10:01:10.369Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.1"
+   ],
+   "text": "vitest/playwright create untracked node-jiti/ and playwright-transform-cache-502/ at repo root; vp check fails formatting on node-jiti; gitignore them"
+  },
+  {
+   "at": "2026-11-16T10:01:10.301Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.3"
+   ],
+   "text": "Proof shots lack --step and --annotate boxes; captions generic"
+  },
+  {
+   "at": "2026-11-16T10:01:10.227Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.4"
+   ],
+   "text": "Verify grep smAndUp in apps/web/src hits only test-local smAndUpRef names; scope grep to AppHeader.vue/ReferralOffer.vue, rename AppHeader.test smAndUpRef"
+  },
   {
    "at": "2026-11-16T09:43:07.190Z",
    "type": "advisory",
@@ -2692,6 +2952,517 @@ window.DASHBOARD = {
   }
  ],
  "activity": [
+  {
+   "at": "2026-11-16T10:17:41.673Z",
+   "type": "deliverable",
+   "tasks": [
+    "T1.1",
+    "T1.2",
+    "T1.3",
+    "T1.4"
+   ],
+   "text": "Shared breakpoint constants + useHeaderBreakpoint; header/banner split moved 600->768; 640-767 shell sizing fixed; unit + e2e coverage",
+   "files": [
+    "apps/web/src/utils/layout.ts"
+   ]
+  },
+  {
+   "at": "2026-11-16T10:17:38.369Z",
+   "tasks": [
+    "T1.3"
+   ],
+   "attempt": "3",
+   "type": "verify_passed",
+   "evidence": "E2E_SERVER=prod (fresh build) header-responsive + mods-referral-favicon --repeat-each=3 all green (58 passed incl. setup and verifier probe, 0 flaky). The new 700x600/700x900 tests assert shell bottom <= viewport, content box scrollHeight <= clientHeight and rail end <= viewport, so they would fail on the a5 clipping",
+   "fingerprint": "9ab92bb7aebe7ebe6e80c3af2953714d6f190e9b9c47f1d21800c89a16f051d4",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a7.md"
+  },
+  {
+   "at": "2026-11-16T10:17:38.368Z",
+   "tasks": [
+    "T1.1"
+   ],
+   "attempt": "3",
+   "type": "verify_passed",
+   "evidence": "previous BLOCKING fixed. Prod probe at 700x600: shell 100..600 (header bottom 100), content box client 500 = scroll 500, doc 600, both rail and main scroller end at 600 when scrolled to the end. Format row fully visible. Same fit on Explore/Assets and at 640x600, 767x600 and 700x900. 390, 768, 1024 and 1440 identical to round a5 (768/1024 shell 56..596; 390 pre-existing doc scroll). Unit 96/96, sm",
+   "fingerprint": "83e8b155de28431034a50c53e5577b121b2971069ee202447a459a2c08177d23",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a7.md"
+  },
+  {
+   "at": "2026-11-16T10:17:11.026Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.1"
+   ],
+   "text": "smAndUp remains only as test variable names (15 hits in *.test.ts); Verify grep apps/web/src is not literally empty"
+  },
+  {
+   "at": "2026-11-16T10:13:10.521Z",
+   "type": "verify_started",
+   "tasks": [
+    "T1.1",
+    "T1.3"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-11-16T10:13:10.424Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.3"
+   ],
+   "fingerprint": "9ab92bb7aebe7ebe6e80c3af2953714d6f190e9b9c47f1d21800c89a16f051d4"
+  },
+  {
+   "at": "2026-11-16T10:13:08.139Z",
+   "type": "task_built",
+   "tasks": [
+    "T1.1"
+   ],
+   "text": "Removed clipping; shell sized for 640-767 in App.vue/DashboardShell.vue; meaningful 700 e2e; 12 e2e pass",
+   "files": [
+    "apps/web/src/App.vue",
+    "apps/web/src/components/Dashboard/DashboardShell.vue"
+   ]
+  },
+  {
+   "at": "2026-11-16T10:13:08.075Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.1"
+   ],
+   "fingerprint": "83e8b155de28431034a50c53e5577b121b2971069ee202447a459a2c08177d23"
+  },
+  {
+   "at": "2026-11-16T10:10:34.467Z",
+   "type": "task_started",
+   "tasks": [
+    "T1.1"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-11-16T10:10:34.403Z",
+   "type": "build_started",
+   "tasks": [
+    "T1.1"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-11-16T10:10:32.500Z",
+   "tasks": [
+    "T1.3"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "E2E_SERVER=prod (fresh build, dist 15:37) header-responsive + mods-referral-favicon --repeat-each=3: 31 passed (10 tests x3 + setup), 0 flaky/retries; Scenarios 390/700 banner, 768/1024 Earn, 700 no horizontal scroll all present and green; referral helper strict by width (not weakened); paidCallGuard fixture untouched",
+   "fingerprint": "78391f6aa7d98e2427d6ef55f6859abf8c224987c20788304a49255a2b77f71d",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a5.md"
+  },
+  {
+   "at": "2026-11-16T10:10:32.499Z",
+   "tasks": [
+    "T1.1"
+   ],
+   "attempt": "2",
+   "type": "verify_failed",
+   "category": "code-bug",
+   "text": "[code-bug] · AC \"640 split unchanged (D8)\" / previous BLOCKING (700 dead band), App.vue:97-112 + DashboardShell.vue:14 · the gap is gone and the document is no longer taller than the viewport, but only because App.vue now sets `sm:max-md:tw-overflow-hidden` on a content box sized to viewport minus the in-flow banner+header (~100px), while DashboardShell keeps `tw-h-[calc(100vh-60px)]`. The shell i",
+   "files": [
+    "App.vue"
+   ],
+   "sigs": [
+    "T1.1|code-bug|App.vue"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a5.md"
+  },
+  {
+   "at": "2026-11-16T10:10:20.440Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.1"
+   ],
+   "text": "header-responsive 700 band test cannot detect clipping under overflow-hidden; assert .dashboard-shell bottom <= viewport"
+  },
+  {
+   "at": "2026-11-16T10:06:13.228Z",
+   "type": "verify_started",
+   "tasks": [
+    "T1.1",
+    "T1.3"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-16T10:06:11.478Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.3"
+   ],
+   "fingerprint": "78391f6aa7d98e2427d6ef55f6859abf8c224987c20788304a49255a2b77f71d"
+  },
+  {
+   "at": "2026-11-16T10:06:09.092Z",
+   "type": "task_built",
+   "tasks": [
+    "T1.1"
+   ],
+   "text": "Fixed 640-767 dead band in App.vue; e2e 700px check added; 11 e2e pass",
+   "files": [
+    "apps/web/src/App.vue",
+    "apps/web/e2e/qa/header-responsive.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-16T10:06:06.936Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.1"
+   ],
+   "fingerprint": "82faf6ddd63af5f7a99737723bdb2f96aab0d60dc4011d0e9ee3b1e01e3c5803"
+  },
+  {
+   "at": "2026-11-16T10:04:46.535Z",
+   "type": "task_started",
+   "tasks": [
+    "T1.1"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-16T10:04:46.465Z",
+   "type": "build_started",
+   "tasks": [
+    "T1.1"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-16T10:04:43.684Z",
+   "tasks": [
+    "T1.4"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "gate re-run: e2e x3 prod clean (covers x2); bun run test 299 files / 2722 tests pass; vp lint + vp check 0 errors (8 pre-existing warnings, none in scope); 600px grep empty; repo-wide smAndUp grep NOT empty but only test-local names in files predating the phase (advisory)",
+   "fingerprint": "04b3236de5d4b78d4c3b78093bd05fef5b08158088a6a207f3c9950301560e64",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-16T10:04:43.684Z",
+   "tasks": [
+    "T1.3"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "E2E_SERVER=prod (fresh build) header-responsive + mods-referral-favicon --repeat-each=3: 28 passed (9 tests x3 + setup), 0 flaky; all Scenarios present; referral helper now strict by width (stronger than old isVisible fallback); paidCallGuard fixture untouched; 4 proof shots show their ACs",
+   "fingerprint": "5e9bd02048acb694a09f4d56e84d1d97cbba867786ab724206850b2bc8edd45e",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-16T10:04:43.684Z",
+   "tasks": [
+    "T1.2"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "27 tests pass across 3 files; coverage 100% stmts/branches/funcs/lines for useHeaderBreakpoint.ts, AppHeader.vue, ReferralOffer.vue (skipFull=false run); 767/768/1023/1024 tier boundaries asserted with literal expectations; no it.fails/skip/only",
+   "fingerprint": "e3cc4c2f0fe910a4d141fc267ed5ba27b3dec7506ffcaf16d7d35aa4001fb1d9",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-16T10:04:43.683Z",
+   "tasks": [
+    "T1.1"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "code-bug",
+   "text": "[code-bug] · AC \"640 split unchanged (D8)\" + AUDIT row \"700px band for the unchanged 640 split\", AppHeader.vue:61 (`header-v2--dashboard-mobile` now gated on isMobile <768) · at 640-767 the mobile header treatment (banner + header made position:relative, in flow) stacks on App.vue `tw-pt-14` and the sm desktop layout: prod shot at 700 shows header ending y~100 and sidebar/composer starting y~155 (",
+   "files": [
+    "AppHeader.vue"
+   ],
+   "sigs": [
+    "T1.1|code-bug|AppHeader.vue"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-16T10:04:31.219Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.2"
+   ],
+   "text": "ReferralOffer.test width cases set mobile = width < 768 on mocked useMediaQuery; 767/768 labels cosmetic"
+  },
+  {
+   "at": "2026-11-16T10:01:10.369Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.1"
+   ],
+   "text": "vitest/playwright create untracked node-jiti/ and playwright-transform-cache-502/ at repo root; vp check fails formatting on node-jiti; gitignore them"
+  },
+  {
+   "at": "2026-11-16T10:01:10.301Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.3"
+   ],
+   "text": "Proof shots lack --step and --annotate boxes; captions generic"
+  },
+  {
+   "at": "2026-11-16T10:01:10.227Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.4"
+   ],
+   "text": "Verify grep smAndUp in apps/web/src hits only test-local smAndUpRef names; scope grep to AppHeader.vue/ReferralOffer.vue, rename AppHeader.test smAndUpRef"
+  },
+  {
+   "at": "2026-11-16T09:57:13.305Z",
+   "type": "verify_started",
+   "tasks": [
+    "T1.1",
+    "T1.2",
+    "T1.3",
+    "T1.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T09:57:11.099Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.4"
+   ],
+   "fingerprint": "04b3236de5d4b78d4c3b78093bd05fef5b08158088a6a207f3c9950301560e64"
+  },
+  {
+   "at": "2026-11-16T09:57:11.099Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.3"
+   ],
+   "fingerprint": "5e9bd02048acb694a09f4d56e84d1d97cbba867786ab724206850b2bc8edd45e"
+  },
+  {
+   "at": "2026-11-16T09:57:11.099Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.2"
+   ],
+   "fingerprint": "e3cc4c2f0fe910a4d141fc267ed5ba27b3dec7506ffcaf16d7d35aa4001fb1d9"
+  },
+  {
+   "at": "2026-11-16T09:57:08.980Z",
+   "type": "task_built",
+   "tasks": [
+    "T1.2",
+    "T1.3",
+    "T1.4"
+   ],
+   "text": "Preflight stray cleared after correcting T1.3 Files field (parenthetical broke parsing); no code change",
+   "files": [
+    "apps/web/e2e/qa/header-responsive.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-16T09:56:59.855Z",
+   "type": "task_failed",
+   "tasks": [
+    "T1.4"
+   ],
+   "attempt": "1",
+   "text": "stray modified tracked file outside scope files: apps/web/e2e/qa/mods-referral-favicon.spec.ts",
+   "files": [
+    "apps/web/e2e/qa/mods-referral-favicon.spec.ts"
+   ],
+   "sigs": [
+    "T1.4|preflight|stray"
+   ]
+  },
+  {
+   "at": "2026-11-16T09:56:59.784Z",
+   "type": "task_failed",
+   "tasks": [
+    "T1.3"
+   ],
+   "attempt": "1",
+   "text": "stray modified tracked file outside scope files: apps/web/e2e/qa/mods-referral-favicon.spec.ts",
+   "files": [
+    "apps/web/e2e/qa/mods-referral-favicon.spec.ts"
+   ],
+   "sigs": [
+    "T1.3|preflight|stray"
+   ]
+  },
+  {
+   "at": "2026-11-16T09:56:59.711Z",
+   "type": "task_failed",
+   "tasks": [
+    "T1.2"
+   ],
+   "attempt": "1",
+   "text": "stray modified tracked file outside scope files: apps/web/e2e/qa/mods-referral-favicon.spec.ts",
+   "files": [
+    "apps/web/e2e/qa/mods-referral-favicon.spec.ts"
+   ],
+   "sigs": [
+    "T1.2|preflight|stray"
+   ]
+  },
+  {
+   "at": "2026-11-16T09:56:56.311Z",
+   "type": "task_built",
+   "tasks": [
+    "T1.4"
+   ],
+   "text": "gate: verify 0 errors, unit 2722/2722, playwright 19/19",
+   "files": [
+    "agent_docs/ui-polish-picker-header/TASKS.md"
+   ]
+  },
+  {
+   "at": "2026-11-16T09:56:42.211Z",
+   "type": "task_built",
+   "tasks": [
+    "T1.4"
+   ],
+   "text": "verify 0 errors; vitest 2722 pass; playwright 19/19 x2; no smAndUp in source, no 600px"
+  },
+  {
+   "at": "2026-11-16T09:55:41.555Z",
+   "type": "task_started",
+   "tasks": [
+    "T1.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T09:55:39.874Z",
+   "type": "task_built",
+   "tasks": [
+    "T1.3"
+   ],
+   "text": "e2e 5/5 new + 4 referral pass, flake x3 clean",
+   "files": [
+    "apps/web/e2e/qa/header-responsive.spec.ts",
+    "apps/web/e2e/qa/mods-referral-favicon.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-16T09:53:38.486Z",
+   "type": "task_started",
+   "tasks": [
+    "T1.3"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T09:53:38.413Z",
+   "type": "task_built",
+   "tasks": [
+    "T1.2"
+   ],
+   "text": "unit tests pass, lowest file 100% lines",
+   "files": [
+    "apps/web/src/composables/useHeaderBreakpoint.ts"
+   ]
+  },
+  {
+   "at": "2026-11-16T09:52:42.345Z",
+   "type": "task_started",
+   "tasks": [
+    "T1.2"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T09:52:40.143Z",
+   "type": "task_built",
+   "tasks": [
+    "T1.1"
+   ],
+   "text": "layout.ts + useHeaderBreakpoint added; header split 600->768; vitest 82 pass",
+   "files": [
+    "apps/web/src/utils/layout.ts",
+    "apps/web/src/composables/useHeaderBreakpoint.ts"
+   ]
+  },
+  {
+   "at": "2026-11-16T09:52:37.945Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.1"
+   ],
+   "fingerprint": "557acb9610daa32071aa7ca019718fa2c351a3c9832ab9521cc5c87768a85bf6"
+  },
+  {
+   "at": "2026-11-16T09:52:29.464Z",
+   "type": "task_built",
+   "tasks": [
+    "T1.1"
+   ],
+   "text": "layout.ts + useHeaderBreakpoint; 768 split in header/referral; vitest 82 pass; verify green",
+   "files": [
+    "apps/web/src/utils/layout.ts",
+    "apps/web/src/composables/useHeaderBreakpoint.ts",
+    "apps/web/src/components/Header/AppHeader.vue",
+    "apps/web/src/components/Header/ReferralOffer.vue",
+    "apps/web/src/pages/Dashboard.vue",
+    "apps/web/src/components/Header/AppHeader.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-16T09:51:47.851Z",
+   "type": "task_started",
+   "tasks": [
+    "T1.1"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T09:51:47.787Z",
+   "type": "build_started",
+   "tasks": [
+    "T1.1",
+    "T1.2",
+    "T1.3",
+    "T1.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-16T09:51:43.631Z",
+   "type": "run_started",
+   "tasks": [
+    "T1.1",
+    "T1.2",
+    "T1.3",
+    "T1.4"
+   ],
+   "pipeline": 2,
+   "baseline": {
+    "head": "a4f94c9da1c3d950c22e642112c160b1f4ae25fb",
+    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000"
+   }
+  },
+  {
+   "at": "2026-11-16T09:43:49.155Z",
+   "type": "commit",
+   "tasks": [
+    "T0.1",
+    "T0.2"
+   ],
+   "attempt": "2",
+   "text": "docs(ui-polish-picker-header): phase 0 baseline screenshots and audit table",
+   "sha": "a4f94c9da1c3d950c22e642112c160b1f4ae25fb",
+   "branch": "feature-enhancement",
+   "pushed": "yes",
+   "evidence": "no e2e/unit in scope; 108 shots verified"
+  },
   {
    "at": "2026-11-16T09:43:36.375Z",
    "type": "deliverable",
@@ -2793,110 +3564,6 @@ window.DASHBOARD = {
     "T0.1"
    ],
    "attempt": "2"
-  },
-  {
-   "at": "2026-11-16T09:39:12.598Z",
-   "type": "answered",
-   "tasks": [],
-   "id": "Q5",
-   "text": "Builder may start mongod manually against /opt/homebrew/var/mongodb"
-  },
-  {
-   "at": "2026-11-16T09:36:51.718Z",
-   "type": "question",
-   "tasks": [
-    "T0.1"
-   ],
-   "id": "Q5",
-   "text": "Local MongoDB down (ECONNREFUSED 27017); baseline screenshots cannot be captured. Needs mongod started."
-  },
-  {
-   "at": "2026-11-16T09:36:47.986Z",
-   "type": "task_built",
-   "tasks": [
-    "T0.2"
-   ],
-   "text": "AUDIT.md created with 9 open rows",
-   "files": [
-    "agent_docs/ui-polish-picker-header/AUDIT.md"
-   ]
-  },
-  {
-   "at": "2026-11-16T09:36:47.914Z",
-   "type": "task_failed",
-   "tasks": [
-    "T0.1"
-   ],
-   "attempt": "1",
-   "text": "No baseline shots: local MongoDB not running (ECONNREFUSED localhost:27017), API /users/:id 500, Playwright auth setup times out",
-   "unblock": "Start local MongoDB (fix sh.brew.mongodb-community launch agent or run mongod --dbpath /opt/homebrew/var/mongodb)"
-  },
-  {
-   "at": "2026-11-16T09:31:02.270Z",
-   "type": "task_started",
-   "tasks": [
-    "T0.1",
-    "T0.2"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T09:31:02.180Z",
-   "type": "build_started",
-   "tasks": [
-    "T0.1",
-    "T0.2"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T09:30:56.766Z",
-   "type": "run_started",
-   "tasks": [
-    "T0.1",
-    "T0.2"
-   ],
-   "pipeline": 2,
-   "baseline": {
-    "head": "1b789df7e19b85dbf19217376a2c411b83fadf93",
-    "status": ""
-   }
-  },
-  {
-   "at": "2026-11-11T13:53:51.370Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q4",
-   "text": "Earn/Upgrade icons",
-   "default": "faUserPlus (Earn) and faGem (Upgrade), final pick in design pass",
-   "alternatives": "faGift / faWandMagicSparkles"
-  },
-  {
-   "at": "2026-11-11T13:53:51.328Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q3",
-   "text": "T11.2 file list unknown until audit",
-   "default": "Dashboard.vue + DashboardShell.vue; replace from T11.1 findings, split into T11.2b if >5 files",
-   "alternatives": "Re-plan Phase 11 after audit"
-  },
-  {
-   "at": "2026-11-11T13:53:51.285Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q2",
-   "text": "How does Phase 0 capture Pro baselines?",
-   "default": "Flip QA user via activateProViaWebhook (local signed test webhook, no Dodo call), then resetToFree",
-   "alternatives": "Skip Pro baselines"
-  },
-  {
-   "at": "2026-11-11T13:53:51.240Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q1",
-   "text": "Logo.vue still switches size at 600px — align to 768/1024?",
-   "default": "Leave out of scope; record as AUDIT.md row decided in Phase 11",
-   "alternatives": "Align to 768 now"
   }
  ]
 };
