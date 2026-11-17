@@ -9,6 +9,7 @@ import {
   dashboardRedirectLocation,
   isValidFeatureParam,
 } from '@/utils/dashboardRoutes';
+import { toSafeInternalPath } from '@/utils/safeRedirect';
 
 const Compare = () => import('@/pages/Compare.vue');
 const Contact = () => import('@/pages/Contact.vue');
@@ -120,6 +121,8 @@ const routes: RouteRecordRaw[] = [
     path: '/signin/:pathMatch(.*)*',
     name: 'signin',
     component: Signin,
+    // Only a validated same-origin path reaches Clerk as the post-sign-in destination.
+    props: (route) => ({ redirect: toSafeInternalPath(route.query.redirect) }),
   },
   {
     path: '/signup/:pathMatch(.*)*',
@@ -175,9 +178,9 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  scrollBehavior(to, from, savedPosition) {
-    // always scroll to top
+  scrollBehavior(to) {
+    // Land on in-page anchors such as /pricing#packs; everything else starts at the top.
+    if (to.hash) return { el: to.hash };
     return { top: 0 };
   },
 });

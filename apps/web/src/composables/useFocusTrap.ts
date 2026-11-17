@@ -39,8 +39,11 @@ export function useFocusTrap(containerRef: Ref<HTMLElement | null>, active: Ref<
 
         const first = elements[0];
         const last = elements[elements.length - 1];
+        // A focused container (e.g. a tabindex=-1 dialog panel) is an edge too:
+        // without this, Shift+Tab from it would leave the trap.
+        const onContainer = document.activeElement === container;
 
-        if (event.shiftKey && document.activeElement === first) {
+        if (event.shiftKey && (document.activeElement === first || onContainer)) {
           event.preventDefault();
           last.focus();
         } else if (!event.shiftKey && document.activeElement === last) {
