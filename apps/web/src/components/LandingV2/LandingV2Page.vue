@@ -42,7 +42,7 @@ useScrollTriggerHygiene();
       <ShowcaseScene :media="showcaseMedia" />
       <ModelsScene />
       <PricingScene />
-      <FaqSection />
+      <FaqSection centered />
       <FinalCtaScene />
     </main>
     <LandingFooter />
@@ -62,11 +62,11 @@ useScrollTriggerHygiene();
 /*
  * The FAQ is shared with the live landing and not edited here, so its block
  * rhythm and left edge are brought in line with the scenes from the outside:
- * same half-gap padding, and its column starts on the container's left edge
- * instead of sitting centred.
+ * same half-gap padding. The column stays centred, so only the gutters are
+ * set as margin; a left --lv2-edge margin pushed it right on wide screens.
  */
 .lv2 :deep(.faq) {
-  margin: 0 var(--lv2-gutter) 0 var(--lv2-edge);
+  margin: 0 var(--lv2-gutter);
   padding: var(--lv2-section-y) 0;
 }
 </style>

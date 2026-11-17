@@ -74,12 +74,6 @@ function cardStyle(card: ClusterCard) {
   z-index: 1;
 }
 
-/* Hung prints sit flatter on the wall: lighter shadow, tighter corners. */
-.cluster--rise .cluster__card {
-  border-radius: 4px;
-  box-shadow: 0 14px 36px rgb(0 0 0 / 0.45);
-}
-
 .cluster__img {
   display: block;
   width: 100%;

@@ -12,6 +12,8 @@ const POINTER_EASE = 0.06;
 const LIGHT_EASE = 0.14;
 /** Per-frame share by which the light fades in after the first move. */
 const LIGHT_LEVEL_EASE = 0.04;
+/** Movement within this window counts as the cursor being in use; the prompt's spotlight yields to it. */
+const CURSOR_IDLE_MS = 1400;
 
 export interface PointerSample {
   /** -1..1 from the viewport centre, for parallax. */
@@ -20,6 +22,8 @@ export interface PointerSample {
   readonly client: WallPointer;
   /** 0 until the pointer first moves, easing to 1. */
   readonly level: number;
+  /** True while the pointer has moved within the last `CURSOR_IDLE_MS`. */
+  readonly moving: boolean;
 }
 
 export interface HeroPointer {
@@ -41,12 +45,15 @@ export function trackHeroPointer(): HeroPointer {
   const client = { ...target };
   let moved = false;
   let level = 0;
+  let lastMoveAt = Number.NEGATIVE_INFINITY;
+  const isMoving = (): boolean => performance.now() - lastMoveAt < CURSOR_IDLE_MS;
 
   const onMove = (event: PointerEvent): void => {
     target.x = event.clientX;
     target.y = event.clientY;
     if (!moved) Object.assign(client, target);
     moved = true;
+    lastMoveAt = performance.now();
   };
   const fine = window.matchMedia(POINTER_FINE_QUERY).matches;
   if (fine) window.addEventListener('pointermove', onMove, { passive: true });
@@ -62,13 +69,13 @@ export function trackHeroPointer(): HeroPointer {
     client.x = approach(client.x, target.x, LIGHT_EASE);
     client.y = approach(client.y, target.y, LIGHT_EASE);
     level = approach(level, moved ? 1 : 0, LIGHT_LEVEL_EASE);
-    return { parallax, client, level };
+    return { parallax, client, level, moving: isMoving() };
   };
 
   const settle = (): PointerSample => {
     Object.assign(parallax, toParallax());
     Object.assign(client, target);
-    return { parallax, client, level };
+    return { parallax, client, level, moving: isMoving() };
   };
 
   return {

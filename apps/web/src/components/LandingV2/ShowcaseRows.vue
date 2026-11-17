@@ -6,6 +6,7 @@ import { useSceneMotion } from '@/components/LandingV2/composables/useSceneMotio
 import ShowcaseLabel from '@/components/LandingV2/ShowcaseLabel.vue';
 import ShowcaseTile from '@/components/LandingV2/ShowcaseTile.vue';
 import { startRowDrift, type DriftRowEls } from '@/components/LandingV2/showcaseDrift';
+import { bindRowScrub } from '@/components/LandingV2/showcaseScrub';
 import {
   aspectValue,
   rowAspectSum,
@@ -16,19 +17,25 @@ import {
 
 const props = defineProps<ShowcaseMediaProps>();
 
+const emit = defineEmits<{
+  open: [index: number, trigger: HTMLElement];
+}>();
+
 const root = ref<HTMLElement | null>(null);
 const reduced = useReducedMotion();
 const active = shallowRef<ShowcaseEntry | null>(null);
 const rows = computed(() => splitRows(props.items));
 const idleEntry = computed(() => rows.value[0].entries[0] ?? null);
 
-/** Static layout sizes each row to fit the container exactly, so nothing is clipped. */
-const rowFitStyles = computed(() =>
-  rows.value.map((row) => ({
-    '--row-aspect': rowAspectSum(row.entries),
-    '--row-gap-count': Math.max(0, row.entries.length - 1),
-  })),
-);
+/**
+ * Static layout gives every row one height, sized so the widest row (most
+ * aspect, most gaps) fits the container exactly. Narrower rows then end short
+ * instead of growing taller, so the rows read as a matched set.
+ */
+const staticFitStyle = computed(() => ({
+  '--row-aspect': Math.max(...rows.value.map((row) => rowAspectSum(row.entries))),
+  '--row-gap-count': Math.max(...rows.value.map((row) => Math.max(0, row.entries.length - 1))),
+}));
 
 const viewportEls: HTMLElement[] = [];
 const focusEls: HTMLElement[] = [];
@@ -49,9 +56,16 @@ function driftRows(): DriftRowEls[] {
   });
 }
 
+/** Drift plus drag and sideways-wheel input; the static reduced-motion layout needs neither. */
 useSceneMotion(root, ({ isDesktop, motionOk }, el) => {
   if (!isDesktop || !motionOk) return;
-  return startRowDrift({ rows: driftRows(), root: el, getProgress: props.getProgress });
+  const drift = driftRows();
+  const control = startRowDrift({ rows: drift, root: el, getProgress: props.getProgress });
+  const unbindScrub = bindRowScrub({ viewports: drift.map((row) => row.viewport), control });
+  return () => {
+    unbindScrub();
+    control.stop();
+  };
 });
 
 onBeforeUpdate(() => {
@@ -62,7 +76,7 @@ onBeforeUpdate(() => {
 </script>
 
 <template>
-  <div ref="root" class="rows" :class="{ 'is-static': reduced }">
+  <div ref="root" class="rows" :class="{ 'is-static': reduced }" :style="staticFitStyle">
     <template v-for="(row, rowIndex) in rows" :key="row.direction">
       <ShowcaseLabel
         v-if="rowIndex === 1 && idleEntry"
@@ -74,7 +88,6 @@ onBeforeUpdate(() => {
         :ref="collect(viewportEls, rowIndex)"
         class="rows__viewport"
         :class="`rows__viewport--${rowIndex === 0 ? 'tall' : 'short'}`"
-        :style="rowFitStyles[rowIndex]"
       >
         <div :ref="collect(focusEls, rowIndex)" class="rows__focus">
           <ul :ref="collect(trackEls, rowIndex)" class="rows__track" role="list">
@@ -89,6 +102,7 @@ onBeforeUpdate(() => {
                 variant="row"
                 :active="active?.index === entry.index"
                 @activate="active = entry"
+                @open="(trigger) => emit('open', entry.index, trigger)"
               />
             </li>
           </ul>
@@ -121,6 +135,24 @@ onBeforeUpdate(() => {
   margin-block: calc(-1 * var(--lv2-space-lg));
   overflow: clip;
   container-type: inline-size;
+  /* Sideways touch moves the row (showcaseScrub.ts); vertical touch still scrolls the page. */
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+/* Set by showcaseScrub.ts while a drag is in progress. */
+.rows__viewport.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+
+  :deep(.tile__media) {
+    cursor: grabbing;
+  }
+}
+
+.rows.is-static .rows__viewport {
+  touch-action: auto;
+  cursor: auto;
 }
 
 .rows__viewport--tall {
@@ -151,18 +183,43 @@ onBeforeUpdate(() => {
   height: 100%;
 }
 
-/* Spotlight: the looked-at tile leads while its neighbours stay recognisable. */
-.rows:has(.tile--row:hover, .tile--row:focus-within)
-  .tile--row:not(:hover, :focus-within)
-  :deep(.tile__img) {
+/*
+ * Spotlight: the looked-at tile leads while its neighbours stay recognisable.
+ * The pointer wins over keyboard focus, so a row never shows two leads; the
+ * focused tile keeps its copper ring either way.
+ */
+.rows:has(.tile--row:hover) :deep(.tile--row:not(:hover) .tile__img),
+.rows:not(:has(.tile--row:hover)):has(.tile--row :focus-visible)
+  :deep(.tile--row:not(:has(:focus-visible)) .tile__img) {
   opacity: 0.62;
+}
+
+@media (hover: hover) {
+  .rows:has(.tile--row:hover) :deep(.tile--row:not(:hover)) {
+    z-index: auto;
+    transform: none;
+
+    &::after {
+      opacity: 0;
+    }
+
+    .tile__img {
+      transform: none;
+    }
+
+    .tile__copy {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
 }
 
 /*
  * Reduced motion: no drift, so each row is laid out inside the page container
- * with nothing clipped. Wide screens fit the row on one line (height = free
- * width / sum of aspect ratios); below the height floor the row wraps, and
- * each line is justified by growing tiles in proportion to their ratio.
+ * with nothing clipped. Wide screens fit every row on one line at one shared
+ * height (free width / the widest row's sum of aspect ratios); below the
+ * height floor rows wrap, and each line is justified by growing tiles in
+ * proportion to their ratio.
  */
 .rows.is-static .rows__track {
   --fit-width: min(100cqi - 2 * var(--lv2-gutter), var(--lv2-max-width));

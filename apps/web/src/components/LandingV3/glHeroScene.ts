@@ -5,7 +5,10 @@
 import type { Mesh, Program, Texture, Transform } from 'ogl';
 
 import {
+  isRaised,
+  spotlightShare,
   tileFrame,
+  type TileFrame,
   type WallPointer,
   type WallProgress,
   type WallTile,
@@ -15,12 +18,15 @@ import {
   coverScale,
   exitDirection,
   parseAspect,
+  quadContains,
   shadowPadding,
   tileQuad,
   tileShadow,
+  type TileQuad,
   type TileShadow,
 } from '@/components/LandingV3/glHeroGeometry';
 import { HERO_FRAGMENT, HERO_VERTEX } from '@/components/LandingV3/glHeroShaders';
+import { createSpotlightYield } from '@/components/LandingV3/glSpotlightYield';
 import type { GlStage, GlStageSize } from '@/components/LandingV3/glStage';
 
 /** Enough vertices for the exit bow to read as a curve rather than a fold. */
@@ -37,6 +43,26 @@ const LIGHT_STRENGTH = 0.16;
 /** The brand amber (`--tw-accent`) lifted toward paper white, so the light warms rather than tints. */
 const LIGHT_COLOR = [1, 0.86, 0.7] as const;
 const MIN_VISIBLE_OPACITY = 0.001;
+/**
+ * Warm wash over the spotlit tile, aimed at its centre. Kept below the cursor
+ * light: the rim and the dim mark the tile, and more wash bleaches bright skies
+ * the DOM wall leaves alone.
+ */
+const SPOTLIGHT_LIGHT = 0.1;
+/** Extra bulge on the spotlit tile, matching the cursor's hover bulge. */
+const BULGE_SPOTLIGHT = BULGE_HOVER;
+/**
+ * The rim at full spotlight, matching HeroWall's `.wall__tile::after` insets:
+ * a 1.5px ring at 0.85 over a 32px blurred glow at 0.3 (a CSS blur is two
+ * gaussian sigmas, hence 16px). Its colour is the `--tw-accent` token, read by
+ * the session.
+ */
+const RIM_STRENGTH = 0.85;
+const RIM_WIDTH_PX = 1.5;
+const RIM_GLOW = 0.3;
+const RIM_GLOW_SIGMA_PX = 16;
+/** Above every layer's draw order (see drawOrder), so the lit tile's rim is never cut. */
+const RAISED_ORDER = Number.MAX_SAFE_INTEGER;
 
 /** One frame of input for the whole wall. */
 export interface HeroFrameState {
@@ -47,6 +73,8 @@ export interface HeroFrameState {
   readonly lightAt: WallPointer;
   /** 0..1 how present the cursor light is (0 until the pointer first moves). */
   readonly lightLevel: number;
+  /** The pointer moved recently; over a tile, the cursor light takes over from the spotlight. */
+  readonly cursorMoving: boolean;
   readonly time: number;
   /** 0..1 master gain on the shader effects; 0 draws the plain DOM look. */
   readonly effect: number;
@@ -68,13 +96,15 @@ interface TileSource {
 
 interface TileEntry extends TileSource {
   readonly mesh: Mesh;
+  /** Layer draw order, restored once the tile is no longer lit. */
+  readonly order: number;
   /** This frame's uniforms, computed in `render` and applied just before the draw call. */
   uniforms: Partial<UniformMap>;
 }
 
 type UniformMap = Program['uniforms'];
 
-function createProgram(stage: GlStage): Program {
+function createProgram(stage: GlStage, rimColor: RgbColor): Program {
   return new stage.ogl.Program(stage.gl, {
     vertex: HERO_VERTEX,
     fragment: HERO_FRAGMENT,
@@ -101,6 +131,13 @@ function createProgram(stage: GlStage): Program {
       uLightRadius: { value: LIGHT_RADIUS_PX },
       uLight: { value: 0 },
       uLightColor: { value: [...LIGHT_COLOR] },
+      uDim: { value: 1 },
+      uRim: { value: 0 },
+      uRimWidth: { value: RIM_WIDTH_PX },
+      uRimColor: { value: [...rimColor] },
+      uRimStrength: { value: RIM_STRENGTH },
+      uRimGlow: { value: RIM_GLOW },
+      uRimGlowSigma: { value: RIM_GLOW_SIGMA_PX },
     },
   });
 }
@@ -126,8 +163,40 @@ function createSource(
 }
 
 interface TileDraw {
+  readonly quad: TileQuad;
   readonly opacity: number;
+  readonly raised: boolean;
   readonly uniforms: Partial<UniformMap>;
+}
+
+/**
+ * Light, bulge, rim and dim for one tile. The cursor light gives way as the
+ * spotlight rises, and on the spotlit tile the light swings to its centre.
+ */
+function lightUniforms(
+  quad: TileQuad,
+  frame: TileFrame,
+  state: HeroFrameState,
+): Partial<UniformMap> {
+  const cursor = state.lightLevel * (1 - spotlightShare(state.progress));
+  const hover = Math.exp(
+    -((quad.centerX - state.lightAt.x) ** 2 + (quad.centerY - state.lightAt.y) ** 2) /
+      LIGHT_RADIUS_PX ** 2,
+  );
+  const aim = {
+    x: state.lightAt.x + (quad.centerX - state.lightAt.x) * frame.glow,
+    y: state.lightAt.y + (quad.centerY - state.lightAt.y) * frame.glow,
+  };
+  const bulge = BULGE_REST + BULGE_HOVER * hover * cursor + BULGE_SPOTLIGHT * frame.glow;
+  const light = LIGHT_STRENGTH * cursor + SPOTLIGHT_LIGHT * frame.glow;
+  return {
+    uBulge: { value: bulge * state.effect },
+    uPointer: { value: [aim.x, aim.y] },
+    uLight: { value: light * state.effect },
+    uRim: { value: frame.glow * state.effect },
+    // Not ramped by `effect`: the DOM wall dims too, so the handover shows no jump.
+    uDim: { value: frame.brightness },
+  };
 }
 
 /** Per-tile uniforms for one frame. */
@@ -139,10 +208,6 @@ function tileDraw(entry: TileSource, state: HeroFrameState, size: GlStageSize): 
   });
   const quad = tileQuad(entry.tile, frame, size);
   const exit = state.progress.scroll * state.effect;
-  const hover = Math.exp(
-    -((quad.centerX - state.lightAt.x) ** 2 + (quad.centerY - state.lightAt.y) ** 2) /
-      LIGHT_RADIUS_PX ** 2,
-  );
   const uniforms: Partial<UniformMap> = {
     tMap: { value: entry.texture },
     uResolution: { value: [size.width, size.height] },
@@ -156,11 +221,9 @@ function tileDraw(entry: TileSource, state: HeroFrameState, size: GlStageSize): 
     uAlpha: { value: quad.opacity },
     uShadow: { value: [entry.shadow.offsetY, entry.shadow.blur, entry.shadow.alpha] },
     uSplit: { value: SPLIT_MAX * exit },
-    uBulge: { value: (BULGE_REST + BULGE_HOVER * hover * state.lightLevel) * state.effect },
-    uPointer: { value: [state.lightAt.x, state.lightAt.y] },
-    uLight: { value: LIGHT_STRENGTH * state.lightLevel * state.effect },
+    ...lightUniforms(quad, frame, state),
   };
-  return { opacity: quad.opacity, uniforms };
+  return { quad, opacity: quad.opacity, raised: isRaised(frame), uniforms };
 }
 
 function buildMesh(stage: GlStage, parts: { program: Program; order: number }): Mesh {
@@ -183,8 +246,9 @@ function buildEntries(
     const image = parts.images[index];
     if (!image) throw new Error(`GlHeroWall: missing image for tile ${index}`);
     const source = createSource(stage, { tile, image });
-    const mesh = buildMesh(stage, { program: parts.program, order: orders[index] ?? index });
-    const entry: TileEntry = { ...source, mesh, uniforms: {} };
+    const order = orders[index] ?? index;
+    const mesh = buildMesh(stage, { program: parts.program, order });
+    const entry: TileEntry = { ...source, mesh, order, uniforms: {} };
     // A shared program draws every tile, so each mesh swaps its own values in before drawing.
     mesh.onBeforeRender(() => Object.assign(parts.program.uniforms, entry.uniforms));
     mesh.setParent(parts.scene);
@@ -197,24 +261,37 @@ function drawOrder(tiles: readonly WallTile[]): readonly number[] {
   return tiles.map((tile, index) => tile.layer * tiles.length + index);
 }
 
+/** 0..1 RGB. */
+export type RgbColor = readonly [number, number, number];
+
 export interface SceneParts {
   readonly tiles: readonly WallTile[];
   /** Decoded images, one per tile, in tile order. */
   readonly images: readonly HTMLImageElement[];
+  /** The spotlight rim's colour, the same accent token the DOM rim uses. */
+  readonly rimColor: RgbColor;
 }
 
 export function createHeroScene(stage: GlStage, parts: SceneParts): HeroScene {
-  const program = createProgram(stage);
+  const program = createProgram(stage, parts.rimColor);
   const scene: Transform = new stage.ogl.Transform();
   const entries = buildEntries(stage, { ...parts, program, scene });
+  const spotlightYield = createSpotlightYield();
+  // From the previous frame: the hit test needs this frame's quads, which need the yield.
+  let cursorOnTile = false;
 
   return {
     render: (state) => {
       const size = stage.getSize();
+      const cursorInUse = state.cursorMoving && cursorOnTile;
+      const frameState = { ...state, progress: spotlightYield.apply(state.progress, cursorInUse) };
+      cursorOnTile = false;
       entries.forEach((entry) => {
-        const draw = tileDraw(entry, state, size);
+        const draw = tileDraw(entry, frameState, size);
         entry.uniforms = draw.uniforms;
         entry.mesh.visible = draw.opacity > MIN_VISIBLE_OPACITY;
+        entry.mesh.renderOrder = draw.raised ? RAISED_ORDER : entry.order;
+        if (entry.mesh.visible && quadContains(draw.quad, state.lightAt)) cursorOnTile = true;
       });
       stage.renderer.render({ scene });
     },

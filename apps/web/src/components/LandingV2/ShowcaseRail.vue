@@ -7,6 +7,10 @@ defineProps<{
   items: readonly GalleryItem[];
 }>();
 
+const emit = defineEmits<{
+  open: [index: number, trigger: HTMLElement];
+}>();
+
 const CELL_SELECTOR = '.rail__cell';
 
 const reduced = useReducedMotion();
@@ -35,8 +39,13 @@ function revealFocusedCell(event: FocusEvent): void {
     aria-label="Showcase images and their prompts"
     @focusin="revealFocusedCell"
   >
-    <li v-for="item in items" :key="item.url" class="rail__cell">
-      <ShowcaseTile :item="item" variant="rail" />
+    <li v-for="(item, index) in items" :key="item.url" class="rail__cell">
+      <ShowcaseTile
+        :item="item"
+        variant="rail"
+        :open-label="`View image ${index + 1} of ${items.length} larger`"
+        @open="(trigger) => emit('open', index, trigger)"
+      />
     </li>
   </ul>
 </template>

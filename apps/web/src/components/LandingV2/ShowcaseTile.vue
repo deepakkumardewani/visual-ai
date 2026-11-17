@@ -15,13 +15,37 @@ const props = withDefaults(
     variant: 'row' | 'rail';
     /** Holds the reveal open after a tap, for touch screens with no hover. */
     active?: boolean;
+    /**
+     * Accessible name for the image button when its image is not described by
+     * an alt (rail tiles), so each button in a list of them is distinct.
+     */
+    openLabel?: string;
   }>(),
-  { active: false },
+  { active: false, openLabel: undefined },
 );
 
 const emit = defineEmits<{
   activate: [];
+  /** Asks for the enlarged view; `trigger` gets focus back when it closes. */
+  open: [trigger: HTMLElement];
 }>();
+
+/**
+ * Only keyboard focus picks a tile. Chromium also focuses a button on
+ * mousedown, and treating that as a choice would keep a clicked tile raised
+ * while the pointer lifts another.
+ */
+function onFocus(event: FocusEvent): void {
+  if (event.target instanceof HTMLElement && event.target.matches(':focus-visible')) {
+    emit('activate');
+  }
+}
+
+function requestOpen(event: MouseEvent): void {
+  if (!(event.currentTarget instanceof HTMLElement)) return;
+  emit('activate');
+  emit('open', event.currentTarget);
+}
 
 const { state: copyState, label: copyLabel, copy } = useShowcaseCopy();
 
@@ -39,20 +63,25 @@ const ratio = computed(() =>
     :class="[`tile--${variant}`, { 'is-active': active }]"
     :style="{ '--tile-ratio': ratio }"
   >
+    <!-- Row tiles name the image by its prompt; rail tiles print it below, so the button says what it does and which one it is. -->
     <button
-      v-if="variant === 'row'"
       type="button"
       class="tile__media"
-      :aria-pressed="active"
+      aria-haspopup="dialog"
+      :aria-label="openLabel"
       @pointerenter="emit('activate')"
-      @focus="emit('activate')"
-      @click="emit('activate')"
+      @focus="onFocus"
+      @click="requestOpen"
     >
-      <img class="tile__img" :src="item.url" :alt="item.prompt" loading="lazy" decoding="async" />
+      <img
+        class="tile__img"
+        :src="item.url"
+        :alt="variant === 'row' ? item.prompt : ''"
+        loading="lazy"
+        decoding="async"
+        draggable="false"
+      />
     </button>
-    <div v-else class="tile__media">
-      <img class="tile__img" :src="item.url" alt="" loading="lazy" decoding="async" />
-    </div>
 
     <figcaption v-if="variant === 'rail'" class="tile__caption">{{ item.prompt }}</figcaption>
 
@@ -60,7 +89,7 @@ const ratio = computed(() =>
       type="button"
       class="tile__copy"
       :class="`tile__copy--${copyState}`"
-      @focus="emit('activate')"
+      @focus="onFocus"
       @click="copy(item.prompt)"
     >
       {{ copyLabel }}
@@ -84,6 +113,7 @@ const ratio = computed(() =>
   border-radius: 12px;
   background-color: rgb(var(--tw-surface-2));
   aspect-ratio: var(--tile-ratio);
+  cursor: zoom-in;
 }
 
 .tile__img {
@@ -136,7 +166,6 @@ const ratio = computed(() =>
 
   .tile__media {
     height: 100%;
-    cursor: pointer;
   }
 
   /* Shadow on a pseudo element so the lift animates opacity, never box-shadow. */
@@ -165,8 +194,9 @@ const ratio = computed(() =>
     transform: translateY(6px);
   }
 
+  /* Keyboard focus only: a mouse press also focuses, and must not hold the reveal. */
   &:hover,
-  &:focus-within,
+  &:has(:focus-visible),
   &.is-active {
     .tile__copy {
       opacity: 1;
@@ -175,7 +205,7 @@ const ratio = computed(() =>
   }
 
   &:hover,
-  &:focus-within {
+  &:has(:focus-visible) {
     z-index: 1;
     transform: translateY(-10px);
 
@@ -220,13 +250,13 @@ const ratio = computed(() =>
 @media (prefers-reduced-motion: reduce) {
   .tile--row,
   .tile--row:hover,
-  .tile--row:focus-within {
+  .tile--row:has(:focus-visible) {
     transform: none;
   }
 
   .tile__img,
   .tile--row:hover .tile__img,
-  .tile--row:focus-within .tile__img {
+  .tile--row:has(:focus-visible) .tile__img {
     transform: none;
   }
 }

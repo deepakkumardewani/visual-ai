@@ -3,15 +3,44 @@ import { scrollToSection } from '@/composables/useLenis';
 
 import { usePrimaryCta } from '@/components/LandingV2/composables/usePrimaryCta';
 import HeroPrompt from '@/components/LandingV2/HeroPrompt.vue';
+import { FREE_CREDITS_COPY } from '@/utils/landing';
+import { createLogger } from '@/utils/logger';
 import LandingButton from '@/components/Landing/LandingButton.vue';
 
 defineProps<{
   prompt: string;
   typed: number;
+  /** Every prompt the hero can show; the prompt box reserves room for the tallest. */
+  promptSizes: readonly string[];
+  /** The prompt rotates on its own; its box shows a pause control. */
+  promptRotating: boolean;
+  promptPaused: boolean;
 }>();
 
+const emit = defineEmits<{
+  togglePromptPause: [];
+  promptReading: [reading: boolean];
+}>();
+
+const log = createLogger('LandingV2:HeroCopy');
 const TOOLS_ANCHOR = '#tools';
+/** Takes focus after the scroll, so keyboard users continue from the tools, not the faded hero. */
+const TOOLS_HEADING = '#tools-title';
 const { label: ctaLabel, to: ctaTo } = usePrimaryCta();
+
+function focusToolsHeading(): void {
+  const heading = document.querySelector<HTMLElement>(TOOLS_HEADING);
+  if (!heading) {
+    log.warn(`See the tools: ${TOOLS_HEADING} is not mounted; focus stays on the button`);
+    return;
+  }
+  // preventScroll: the scroll has already landed; focusing must not nudge it.
+  heading.focus({ preventScroll: true });
+}
+
+function seeTheTools(): void {
+  scrollToSection(TOOLS_ANCHOR, { onComplete: focusToolsHeading });
+}
 </script>
 
 <template>
@@ -25,19 +54,23 @@ const { label: ctaLabel, to: ctaTo } = usePrimaryCta();
 
     <p class="lv2-lede copy__sub">
       Generate from a prompt with models from several labs, then upscale, colorize, restore old
-      photos or remove the background without switching apps. Start free, then buy credits.
+      photos or remove the background without switching apps. {{ FREE_CREDITS_COPY }}
     </p>
 
-    <HeroPrompt class="copy__prompt" :prompt="prompt" :typed="typed" />
+    <HeroPrompt
+      class="copy__prompt"
+      :prompt="prompt"
+      :typed="typed"
+      :sizes="promptSizes"
+      :rotating="promptRotating"
+      :paused="promptPaused"
+      @toggle-pause="emit('togglePromptPause')"
+      @reading="emit('promptReading', $event)"
+    />
 
     <div class="copy__ctas">
       <LandingButton :to="ctaTo" size="lg">{{ ctaLabel }}</LandingButton>
-      <LandingButton
-        variant="ghost"
-        size="lg"
-        :href="TOOLS_ANCHOR"
-        @click.prevent="scrollToSection(TOOLS_ANCHOR)"
-      >
+      <LandingButton variant="ghost" size="lg" :href="TOOLS_ANCHOR" @click.prevent="seeTheTools">
         See the tools
       </LandingButton>
     </div>

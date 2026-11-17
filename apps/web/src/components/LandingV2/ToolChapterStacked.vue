@@ -4,6 +4,7 @@ import type { ToolChapter } from '@/utils/landing';
 import BeforeAfter from '@/components/Landing/BeforeAfter.vue';
 import ToolChapterCopy from '@/components/LandingV2/ToolChapterCopy.vue';
 import ToolCluster from '@/components/LandingV2/ToolCluster.vue';
+import ToolCutoutCards from '@/components/LandingV2/ToolCutoutCards.vue';
 
 import { STAGE_ASPECT_RATIO } from '@/components/LandingV2/toolsMedia';
 
@@ -24,6 +25,7 @@ defineProps<{
       >
         <BeforeAfter :before="tool.media.before" :after="tool.media.after" fill />
       </div>
+      <ToolCutoutCards v-else-if="tool.media.kind === 'cutout'" :pairs="tool.media.pairs" />
       <ToolCluster v-else :tool="tool" />
     </div>
     <ToolChapterCopy class="stacked__copy" :tool="tool" :index="index" data-stacked-part />

@@ -30,6 +30,20 @@ interface RowDriftOptions {
   readonly getProgress: () => number;
 }
 
+/** Lets direct input (drag, sideways wheel) move a row on top of the scroll drift. */
+export interface RowDriftControl {
+  /** Moves row `index` by `dx` px and holds it there until `release`. */
+  readonly scrubBy: (index: number, dx: number) => void;
+  /** Lets row `index` drift again with the scroll, from where it was left. */
+  readonly release: (index: number) => void;
+  readonly stop: () => void;
+}
+
+/** Below this many px of travel a row cannot move, so input is ignored. */
+const MIN_SPAN_PX = 1;
+
+const clamp01 = (value: number): number => Math.min(1, Math.max(0, value));
+
 function measureRange(row: DriftRowEls): DriftRange {
   return rowDriftRange(
     row.direction,
@@ -39,29 +53,51 @@ function measureRange(row: DriftRowEls): DriftRange {
 }
 
 /**
- * Drifts each row between its measured range as the scene scrolls. Ranges are
- * function-based tween values, re-read on every ScrollTrigger refresh and
- * resize. Call inside a `useSceneMotion` setup so matchMedia reverts the tweens.
+ * Where each row sits, in drift progress (0 = range.from, 1 = range.to). A row
+ * follows the shared scroll drift plus its own `bias`, the distance the visitor
+ * moved it. While input is active the row is `held` at a fixed progress.
  */
-export function startRowDrift({ rows, root, getProgress }: RowDriftOptions): () => void {
-  const ranges = rows.map(measureRange);
-  const tweens = rows.map((row, index) =>
-    gsap.fromTo(
-      row.track,
-      { x: () => ranges[index]?.from ?? 0 },
-      { x: () => ranges[index]?.to ?? 0, ease: 'none', paused: true },
-    ),
-  );
-  let drift = getProgress();
+function createRowState(count: number, getDrift: () => number) {
+  const bias = Array.from({ length: count }, () => 0);
+  const held: (number | null)[] = Array.from({ length: count }, () => null);
 
-  const render = (): void => tweens.forEach((tween) => tween.progress(drift));
+  const progressOf = (index: number): number => held[index] ?? clamp01(getDrift() + bias[index]);
+  // Keep bias inside [0, 1] so scrolling back moves the row at once, with no dead zone.
+  const normalize = (): void =>
+    bias.forEach((value, index) => (bias[index] = clamp01(getDrift() + value) - getDrift()));
+  const hold = (index: number, progress: number): void => void (held[index] = clamp01(progress));
+  const release = (index: number): void => {
+    const progress = held[index];
+    if (progress === null) return;
+    bias[index] = progress - getDrift();
+    held[index] = null;
+  };
+  return { progressOf, normalize, hold, release };
+}
+
+/**
+ * Drifts each row through its measured range as the scene scrolls, and lets
+ * drag or wheel input push a row along that same range. Ranges are re-read on
+ * every ScrollTrigger refresh and resize. Call inside a `useSceneMotion` setup.
+ */
+export function startRowDrift({ rows, root, getProgress }: RowDriftOptions): RowDriftControl {
+  const ranges = rows.map(measureRange);
+  const setters = rows.map((row) => gsap.quickSetter(row.track, 'x', 'px'));
+  let drift = getProgress();
+  const state = createRowState(rows.length, () => drift);
+
+  const render = (): void =>
+    setters.forEach((setX, index) => {
+      const range = ranges[index];
+      if (range) setX(gsap.utils.interpolate(range.from, range.to, state.progressOf(index)));
+    });
   const refresh = (): void => {
     rows.forEach((row, index) => (ranges[index] = measureRange(row)));
-    tweens.forEach((tween) => tween.invalidate());
     render();
   };
   const tick = (): void => {
     drift += (getProgress() - drift) * DRIFT_EASE;
+    state.normalize();
     render();
   };
 
@@ -72,11 +108,24 @@ export function startRowDrift({ rows, root, getProgress }: RowDriftOptions): () 
   rows.forEach((row) => [row.viewport, row.track].forEach((el) => resize.observe(el)));
   ScrollTrigger.addEventListener('refresh', refresh);
 
-  return () => {
-    ScrollTrigger.removeEventListener('refresh', refresh);
-    resize.disconnect();
-    stopLoop();
-    stopFocus();
+  const scrubBy = (index: number, dx: number): void => {
+    const range = ranges[index];
+    const span = range ? range.to - range.from : 0;
+    if (Math.abs(span) < MIN_SPAN_PX) return;
+    state.hold(index, state.progressOf(index) + dx / span);
+    render();
+  };
+
+  return {
+    scrubBy,
+    release: state.release,
+    stop: () => {
+      ScrollTrigger.removeEventListener('refresh', refresh);
+      resize.disconnect();
+      stopLoop();
+      stopFocus();
+      rows.forEach((row) => gsap.set(row.track, { clearProps: 'transform' }));
+    },
   };
 }
 

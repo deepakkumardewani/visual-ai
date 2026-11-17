@@ -14,7 +14,7 @@ import {
   styleCanvas,
 } from '@/components/LandingV3/glHeroDom';
 import { trackHeroPointer, type HeroPointer } from '@/components/LandingV3/glHeroPointer';
-import { createHeroScene, type HeroScene } from '@/components/LandingV3/glHeroScene';
+import { createHeroScene, type HeroScene, type RgbColor } from '@/components/LandingV3/glHeroScene';
 import { loadImage, runVisibleLoop } from '@/components/LandingV3/glRuntime';
 import { createGlStage, type GlStage } from '@/components/LandingV3/glStage';
 
@@ -24,6 +24,10 @@ const log = createLogger(`LandingV3:${LOG_OWNER}`);
 /** Shader effects ease in after the crossfade, so the handover itself shows the plain DOM look. */
 const EFFECT_RAMP_MS = 900;
 const MS_PER_SECOND = 1000;
+/** The DOM rim's colour token (space-separated 0-255 channels), so both walls share one copper. */
+const ACCENT_TOKEN = '--tw-accent';
+const CHANNEL_MAX = 255;
+const RGB_CHANNELS = 3;
 
 export interface HeroSessionOptions {
   /** GlHeroWall's root; it holds the DOM HeroWall. */
@@ -45,6 +49,17 @@ interface Running {
 
 const clamp01 = (value: number): number => Math.min(1, Math.max(0, value));
 
+/** The accent token as 0..1 RGB; throws (so the DOM wall stays) if the token is missing. */
+function readAccentColor(root: HTMLElement): RgbColor {
+  const raw = getComputedStyle(root).getPropertyValue(ACCENT_TOKEN).trim();
+  const channels = raw.split(/\s+/).map(Number);
+  if (channels.length !== RGB_CHANNELS || channels.some((value) => !Number.isFinite(value))) {
+    throw new Error(`${LOG_OWNER}: ${ACCENT_TOKEN} is not three channels: "${raw}"`);
+  }
+  const [r = 0, g = 0, b = 0] = channels.map((value) => value / CHANNEL_MAX);
+  return [r, g, b];
+}
+
 /** Frame loop, paused while offscreen; returns a stop function. */
 function runLoop({ stage, scene, options, pointer, onError }: Running): () => void {
   const handOverAt = performance.now();
@@ -57,6 +72,7 @@ function runLoop({ stage, scene, options, pointer, onError }: Running): () => vo
       pointer: sample.parallax,
       lightAt: { x: sample.client.x - rect.left, y: sample.client.y - rect.top },
       lightLevel: sample.level,
+      cursorMoving: sample.moving,
       time: now / MS_PER_SECOND,
       effect: clamp01((now - handOverAt - CROSSFADE_MS) / EFFECT_RAMP_MS),
     });
@@ -75,6 +91,7 @@ function goLive(running: Running): () => void {
     pointer: sample.parallax,
     lightAt: { x: 0, y: 0 },
     lightLevel: 0,
+    cursorMoving: false,
     time: performance.now() / MS_PER_SECOND,
     effect: 0,
   });
@@ -121,7 +138,7 @@ export function startHeroSession(options: HeroSessionOptions): () => void {
       onContextLost: showDom,
     });
     if (!stage || abort.signal.aborted) return teardown();
-    scene = createHeroScene(stage, { tiles, images });
+    scene = createHeroScene(stage, { tiles, images, rimColor: readAccentColor(options.root) });
     stopLive = goLive({ stage, scene, options, pointer, onError: fail });
   };
 

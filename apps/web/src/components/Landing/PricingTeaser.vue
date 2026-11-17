@@ -2,34 +2,17 @@
 import { DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
 
 import LandingButton from '@/components/Landing/LandingButton.vue';
+import { CREDIT_PACKS_PLAN, FREE_PLAN } from '@/utils/pricingPlans';
 
+// Price strings stay local: they are v1's fixed rupee display, not the localized catalog.
 const plans = [
+  { ...FREE_PLAN, price: '₹0', cadence: 'forever', featured: false },
   {
-    name: 'Free',
-    price: '₹0',
-    cadence: 'forever',
-    featured: false,
-    points: [
-      `${SIGNUP_CREDITS} persistent credits at signup`,
-      `${DAILY_CREDITS.free} daily credits (unused reset)`,
-      'Access to all models',
-      'Everyday models cost 1 credit',
-    ],
-    cta: 'Start free',
-    to: '/signin',
-  },
-  {
+    ...CREDIT_PACKS_PLAN,
     name: 'Buy Credits',
     price: 'From ₹99',
     cadence: 'one-time',
     featured: true,
-    points: [
-      'Purchased credits never expire',
-      'Combine with daily allowance',
-      'Larger packs save up to 31%',
-    ],
-    cta: 'See packs',
-    to: '/pricing#packs',
   },
 ] as const;
 </script>

@@ -11,7 +11,7 @@ const props = defineProps<{
   total: number;
 }>();
 
-const HINT = 'Point at or tab to any image to read its prompt.';
+const HINT = 'Point at or tab to an image to read its prompt. Click it to see it larger.';
 
 const shown = computed(() => props.entry ?? props.idleEntry);
 const isIdle = computed(() => props.entry === null);

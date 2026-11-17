@@ -9,9 +9,11 @@ import {
   HIDDEN_INPUT,
   STILL_INPUT,
   frameToTransform,
+  isRaised,
   tileFrame,
   toCssAspectRatio,
   type HeroWallProps,
+  type TileFrame,
   type WallBand,
   type WallInput,
   type WallTile,
@@ -23,6 +25,10 @@ const POINTER_FINE_QUERY = '(pointer: fine)';
 /** Per-frame share of the gap closed toward the real pointer; lower is lazier. */
 const POINTER_EASE = 0.06;
 const BAND_ORDER: readonly WallBand[] = ['full', 'top', 'bottom'];
+/** Custom property the tile's rim reads; see `.wall__tile::after`. */
+const GLOW_VAR = '--tile-glow';
+/** Above the near layer (z-index 2), so the lit tile's rim is never cut by a neighbour. */
+const RAISED_Z_INDEX = '3';
 
 const root = ref<HTMLElement | null>(null);
 const reduced = useReducedMotion();
@@ -54,6 +60,15 @@ function setTileEl(el: Element | ComponentPublicInstance | null, index: number):
   if (el instanceof HTMLElement) tileEls[index] = el;
 }
 
+/** The spotlight: a warm rim on the lit tile, raised above the rest, which are dimmed. */
+function paintSpotlight(el: HTMLElement, frame: TileFrame): void {
+  el.style.setProperty(GLOW_VAR, frame.glow.toFixed(3));
+  // Cleared, not reset, so the layer class sets the order again.
+  el.style.zIndex = isRaised(frame) ? RAISED_Z_INDEX : '';
+  // Cleared at full brightness so an unlit wall carries no filter layer at all.
+  el.style.filter = frame.brightness < 1 ? `brightness(${frame.brightness.toFixed(3)})` : '';
+}
+
 /** The single place tile DOM is written. */
 function paint(input: WallInput): void {
   props.tiles.forEach((tile, index) => {
@@ -62,6 +77,7 @@ function paint(input: WallInput): void {
     const frame = tileFrame(tile, input);
     el.style.transform = frameToTransform(frame);
     el.style.opacity = frame.opacity.toFixed(3);
+    paintSpotlight(el, frame);
   });
 }
 
@@ -254,6 +270,19 @@ watch(
   z-index: 2;
   border-radius: 16px;
   box-shadow: 0 30px 80px rgb(0 0 0 / 0.6);
+}
+
+/* The spotlight rim, drawn inside the tile so its rounded clip keeps it neat. */
+.wall__tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1.5px rgb(var(--tw-accent) / 0.85),
+    inset 0 0 32px rgb(var(--tw-accent) / 0.3);
+  opacity: var(--tile-glow, 0);
+  pointer-events: none;
 }
 
 .wall__img {

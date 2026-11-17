@@ -69,7 +69,9 @@ defineProps<{
   flex-direction: column;
   margin: var(--lv2-space-lg) 0 0;
   padding: 0;
-  max-width: 30rem;
+  /* Body width, so the hairlines are one length in every chapter instead of each list's longest line. */
+  align-self: stretch;
+  max-width: 34rem;
   list-style: none;
 }
 

@@ -50,6 +50,14 @@ export function parseAspect(ratio: string): number {
  * Mirrors HeroWall's CSS: the slot's top-left sits at (x, y) of the band, and
  * `translate(frame - 50%) scale(frame.scale)` around the centre moves it from there.
  */
+/** Whether a canvas-pixel point falls inside the quad's (unrotated) box. */
+export function quadContains(quad: TileQuad, point: WallPointer): boolean {
+  return (
+    Math.abs(point.x - quad.centerX) <= quad.width / 2 &&
+    Math.abs(point.y - quad.centerY) <= quad.height / 2
+  );
+}
+
 export function tileQuad(tile: WallTile, frame: TileFrame, size: GlStageSize): TileQuad {
   if (tile.band !== 'full')
     throw new Error(`GlHeroWall only lays out full-band tiles: ${tile.band}`);

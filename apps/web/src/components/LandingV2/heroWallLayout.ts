@@ -26,6 +26,19 @@ export interface WallSlot {
   readonly layer: WallLayer;
   /** Bloom sequence position; 0 blooms first. */
   readonly order: number;
+  /** Leave through the copy's half instead of flying outward; see `WallCrossing`. */
+  readonly crossing?: WallCrossing;
+}
+
+/**
+ * An exit that sweeps through the left half once the copy has mostly faded, so
+ * the half the copy vacates is never empty while the rest of the wall leaves.
+ */
+export interface WallCrossing {
+  /** Band point (0-1) the tile aims through; it keeps going until it leaves the band. */
+  readonly toward: WallPointer;
+  /** Share of the scroll exit at which it sets off; it holds its slot until then. */
+  readonly start: number;
 }
 
 /** A slot resolved to its real gallery image: the "layout item" renderers consume. */
@@ -45,6 +58,10 @@ export interface WallProgress {
   readonly bloom: number;
   /** Scroll exit, 0 (resting) to 1 (end of the exit); every tile is gone a little before 1. */
   readonly scroll: number;
+  /** `HERO_ITEMS` index of the tile the rotating prompt describes; `NO_SPOTLIGHT` for none. */
+  readonly spotlight: number;
+  /** 0 (no spotlight) to 1 (the spotlit tile lifted, every other tile dimmed). */
+  readonly spotlightLevel: number;
 }
 
 export interface WallInput extends WallProgress {
@@ -68,6 +85,10 @@ export interface TileFrame {
   readonly y: number;
   readonly scale: number;
   readonly opacity: number;
+  /** 0-1 warm rim on the spotlit tile; renderers draw it their own way. */
+  readonly glow: number;
+  /** 0-1 brightness multiplier; below 1 while another tile holds the spotlight. */
+  readonly brightness: number;
 }
 
 interface LayerStyle {
@@ -75,7 +96,7 @@ interface LayerStyle {
   readonly parallax: number;
   readonly drift: number;
   /**
-   * Share of the scroll exit at which this layer is fully gone. Near tiles pass
+   * Share of the radial exit (see RADIAL_EXIT_SHARE) at which this layer is fully gone. Near tiles pass
    * the camera first and far tiles trail, so the wall thins out rather than vanishing at once.
    */
   readonly exitEnd: number;
@@ -119,10 +140,49 @@ const EXPO_FACTOR = -10;
 const MIN_BAND_ASPECT = 4 / 3;
 /** Extra travel (tile sizes) on top of the edge distance, covering drift and pointer parallax. */
 const EXIT_SLACK = 0.25;
+/**
+ * Share of the scroll exit by which the outward-flying (radial) wall is gone,
+ * scaling every layer's `exitEnd`. HeroScene's exit lasts about 1.7 viewports
+ * and its pin about 0.9, so the far layer finishes near the pin's end. After
+ * that the hero rises and its bottom clip edge is on screen, where it would
+ * cut flat any tile still flying down through it; the crossing tiles, which
+ * never reach that edge, carry the rest of the exit.
+ */
+export const RADIAL_EXIT_SHARE = 0.55;
+/**
+ * Share of the scroll exit at which the first crossing tile sets off: about
+ * 0.78 viewport into HeroScene's exit (about 1.7 viewports), just past the
+ * copy's half-faded point (see COPY_HOLD_SHARE there). The copy is near a
+ * quarter opacity by then, so no tile reaches its column while the text is
+ * still readable.
+ */
+const CROSSING_START = 0.45;
+/** Gap between crossing tiles' starts, so they sweep across one after another. */
+const CROSSING_STAGGER = 0.03;
+/** Share of the scroll exit by which every crossing tile is gone; they carry the hand-over. */
+const CROSSING_END = 1;
+/**
+ * Crossing tiles pass beside the camera rather than through it: a near tile
+ * growing threefold would bury the whole left half under one image.
+ */
+const CROSSING_GROW = 0.35;
+/** Share of a crossing tile's own path after which it fades, as it nears the left edge. */
+const CROSSING_FADE_START = 0.7;
+
+/** `WallProgress.spotlight` when no tile is lit. */
+export const NO_SPOTLIGHT = -1;
+/** Extra scale on the spotlit tile: a lift, small enough to stay clear of its neighbours. */
+const SPOTLIGHT_LIFT = 0.06;
+/** Rise of the spotlit tile, in tile heights, so the lift reads as coming forward. */
+const SPOTLIGHT_RISE = 0.025;
+/** Brightness of every other tile at full spotlight. */
+const SPOTLIGHT_DIM = 0.7;
 
 export const STILL_INPUT: WallInput = {
   bloom: 1,
   scroll: 0,
+  spotlight: NO_SPOTLIGHT,
+  spotlightLevel: 0,
   time: 0,
   pointer: { x: 0, y: 0 },
 };
@@ -161,14 +221,66 @@ function axisClearance(centre: number, dir: number, size: number, scale: number)
   return (toEdge / size + scale / 2) / Math.abs(dir);
 }
 
-/** How far (in tile sizes) a tile must fly along `dir` to sit wholly outside its band. */
-function exitDistance(tile: WallTile, dir: WallPointer): number {
+/** Tile height as a fraction of its band's height, against the narrowest band. */
+function heightShare(tile: WallTile): number {
   const [ratioWidth, ratioHeight] = parseRatio(tile.image.aspectRatio);
-  const heightShare = (tile.width * MIN_BAND_ASPECT * ratioHeight) / ratioWidth;
-  const endScale = 1 + LAYER_STYLES[tile.layer].grow;
+  return (tile.width * MIN_BAND_ASPECT * ratioHeight) / ratioWidth;
+}
+
+/** How far (in tile sizes) a tile grown by `grow` must fly along `dir` to sit wholly outside its band. */
+function exitDistance(tile: WallTile, dir: WallPointer, grow: number): number {
+  const endScale = 1 + grow;
   const across = axisClearance(tile.x, dir.x, tile.width, endScale);
-  const down = axisClearance(tile.y, dir.y, heightShare, endScale);
+  const down = axisClearance(tile.y, dir.y, heightShare(tile), endScale);
   return Math.min(across, down) + EXIT_SLACK;
+}
+
+/** One frame of a tile's exit: where it heads, how far along it is, and what that does to it. */
+interface ExitMotion {
+  readonly dir: WallPointer;
+  /** Distance travelled, in tile sizes. */
+  readonly travel: number;
+  /** Extra scale gained so far. */
+  readonly growth: number;
+  /** 0 (fully shown) to 1 (faded out). */
+  readonly fade: number;
+}
+
+/** The default exit: fly outward from the band origin, eased in, nearer layers first. */
+function radialExit(tile: WallTile, scroll: number): ExitMotion {
+  const layer = LAYER_STYLES[tile.layer];
+  const dir = exitDirection(tile);
+  const share = clamp01(scroll / (layer.exitEnd * RADIAL_EXIT_SHARE));
+  // Eased in, so tiles leave slowly at first and are fastest as they pass the edge.
+  const eased = share * share;
+  return {
+    dir,
+    travel: exitDistance(tile, dir, layer.grow) * eased,
+    growth: layer.grow * eased,
+    fade: smoothstep(layer.fadeStart, 1, share),
+  };
+}
+
+/** Unit direction (in tile sizes) from the tile's slot toward a band point. */
+function crossingDirection(tile: WallTile, toward: WallPointer): WallPointer {
+  const dx = (toward.x - tile.x) / tile.width;
+  const dy = (toward.y - tile.y) / heightShare(tile);
+  const length = Math.hypot(dx, dy);
+  if (length === 0) return { x: -1, y: 0 };
+  return { x: dx / length, y: dy / length };
+}
+
+/** Hold the slot until `crossing.start`, then sweep at an even pace through the left half and out. */
+function crossingExit(tile: WallTile, crossing: WallCrossing, scroll: number): ExitMotion {
+  const dir = crossingDirection(tile, crossing.toward);
+  // Linear, not eased in: the point is to be seen crossing, not to dart past.
+  const share = clamp01((scroll - crossing.start) / (CROSSING_END - crossing.start));
+  return {
+    dir,
+    travel: exitDistance(tile, dir, CROSSING_GROW) * share,
+    growth: CROSSING_GROW * share,
+    fade: smoothstep(CROSSING_FADE_START, 1, share),
+  };
 }
 
 /** The tile's own 0-1 share of the global bloom, eased. */
@@ -177,23 +289,78 @@ function tileBloom(tile: WallSlot, bloom: number): number {
   return expoOut(clamp01((bloom - start) / BLOOM_SPAN));
 }
 
+/**
+ * The spotlight's share for this frame. It is off once the scroll exit starts:
+ * the exit's travel maths (`exitDistance`) assumes the resting scale, and a
+ * lifted tile would reach the hero's clip edge before it had faded.
+ */
+export function spotlightShare(input: WallProgress): number {
+  return input.scroll > 0 ? 0 : clamp01(input.spotlightLevel);
+}
+
+/** Lifts the spotlit tile to full opacity and dims every other tile. */
+function withSpotlight(frame: TileFrame, tile: WallTile, input: WallInput): TileFrame {
+  const level = spotlightShare(input);
+  if (level === 0) return frame;
+  if (tile.item !== input.spotlight) {
+    return { ...frame, brightness: 1 - (1 - SPOTLIGHT_DIM) * level };
+  }
+  // Mid-layer tiles rest at 0.72 opacity; the lit one must out-read every dimmed near tile.
+  const layerOpacity = LAYER_STYLES[tile.layer].opacity;
+  const lifted = layerOpacity + (1 - layerOpacity) * level;
+  return {
+    ...frame,
+    y: frame.y - SPOTLIGHT_RISE * level,
+    scale: frame.scale * (1 + SPOTLIGHT_LIFT * level),
+    opacity: frame.opacity * (lifted / layerOpacity),
+    glow: level,
+  };
+}
+
+/**
+ * Glow from which the lit tile draws above every other tile, so no neighbour
+ * cuts its rim. Mid-ramp, so the order swap lands inside the lift and rim
+ * change rather than on a still tile. Glow is 0 once the scroll exit starts,
+ * so the exit keeps its layer order.
+ */
+const RAISE_GLOW = 0.5;
+
+export function isRaised(frame: TileFrame): boolean {
+  return frame.glow >= RAISE_GLOW;
+}
+
 /** Where a tile sits and how it looks for one frame. Pure: same input, same frame. */
 export function tileFrame(tile: WallTile, input: WallInput): TileFrame {
+  return withSpotlight(placeTile(tile, input), tile, input);
+}
+
+/** Bloom, drift, parallax and exit: the tile's frame before any spotlight. */
+function placeTile(tile: WallTile, input: WallInput): TileFrame {
   const layer = LAYER_STYLES[tile.layer];
-  const dir = exitDirection(tile);
+  const exit = tile.crossing
+    ? crossingExit(tile, tile.crossing, input.scroll)
+    : radialExit(tile, input.scroll);
+  // The bloom always opens outward from the origin, whichever way the tile later leaves.
+  const bloomDir = exitDirection(tile);
   const bloomed = tileBloom(tile, input.bloom);
-  const exitShare = clamp01(input.scroll / layer.exitEnd);
-  // Eased in, so tiles leave slowly at first and are fastest as they pass the edge.
-  const exit = exitShare * exitShare;
-  const phase = tile.order * DRIFT_PHASE_STEP + input.time * DRIFT_SPEED;
   const pull = BLOOM_PULL * (1 - bloomed);
-  const travel = exitDistance(tile, dir) * exit - pull;
+  const phase = tile.order * DRIFT_PHASE_STEP + input.time * DRIFT_SPEED;
 
   return {
-    x: dir.x * travel + Math.sin(phase) * layer.drift - input.pointer.x * layer.parallax,
-    y: dir.y * travel + Math.cos(phase * 0.8) * layer.drift - input.pointer.y * layer.parallax,
-    scale: (BLOOM_START_SCALE + (1 - BLOOM_START_SCALE) * bloomed) * (1 + layer.grow * exit),
-    opacity: layer.opacity * bloomed * (1 - smoothstep(layer.fadeStart, 1, exitShare)),
+    x:
+      exit.dir.x * exit.travel -
+      bloomDir.x * pull +
+      Math.sin(phase) * layer.drift -
+      input.pointer.x * layer.parallax,
+    y:
+      exit.dir.y * exit.travel -
+      bloomDir.y * pull +
+      Math.cos(phase * 0.8) * layer.drift -
+      input.pointer.y * layer.parallax,
+    scale: (BLOOM_START_SCALE + (1 - BLOOM_START_SCALE) * bloomed) * (1 + exit.growth),
+    opacity: layer.opacity * bloomed * (1 - exit.fade),
+    glow: 0,
+    brightness: 1,
   };
 }
 
@@ -213,18 +380,79 @@ export function toCssAspectRatio(ratio: string): string {
 /** Index (within HERO_ITEMS) of the prompt that types out and blooms first. */
 export const HERO_PROMPT_ITEM = 11;
 
+/**
+ * The hero prompt's rotation, as HERO_ITEMS indices, in order. Each is a
+ * desktop near or mid tile, and consecutive ones sit in different parts of the
+ * wall so the spotlight visibly moves: the bloom image (centre right), the
+ * pirate ship (top), the crystal cave (top right), the garden (low right) and
+ * the alien planet (top, beside the copy). Every gallery prompt runs 160-190
+ * characters; these are as short as the wall allows.
+ */
+const HERO_PROMPT_CYCLE_ITEMS: readonly number[] = [HERO_PROMPT_ITEM, 12, 16, 13, 0];
+
 /*
  * Desktop: the copy owns the left half (x < 0.5, y 0.2-0.86) and the fixed nav's
  * links own the top right strip, so no tile centres sit there. Near tiles crowd
  * the right half around the prompt's image; far tiles only peek in at the edges.
+ * Five tiles cross the copy's half on the way out, each aimed at a different
+ * height. The outer ones set off first and the two beside the copy after them,
+ * so every tile reaches the copy's column only as the text finishes fading.
+ * The low right tile goes last: the unpinned hero rises while it crosses, and
+ * sitting low in the box it stays on screen longest. It travels up and left,
+ * away from the hero's bottom clip edge, so that edge never cuts it.
  */
 const DESKTOP_SLOTS: readonly WallSlot[] = [
-  { item: HERO_PROMPT_ITEM, band: 'full', x: 0.7, y: 0.53, width: 0.235, layer: 2, order: 0 },
+  {
+    item: HERO_PROMPT_ITEM,
+    band: 'full',
+    x: 0.7,
+    y: 0.53,
+    width: 0.235,
+    layer: 2,
+    order: 0,
+    crossing: { toward: { x: 0.22, y: 0.52 }, start: CROSSING_START },
+  },
   { item: 16, band: 'full', x: 0.925, y: 0.24, width: 0.14, layer: 2, order: 1 },
-  { item: 13, band: 'full', x: 0.905, y: 0.86, width: 0.18, layer: 2, order: 2 },
-  { item: 0, band: 'full', x: 0.555, y: 0.17, width: 0.11, layer: 1, order: 3 },
-  { item: 7, band: 'full', x: 0.535, y: 0.83, width: 0.075, layer: 1, order: 4 },
-  { item: 12, band: 'full', x: 0.78, y: 0.15, width: 0.12, layer: 1, order: 5 },
+  {
+    item: 13,
+    band: 'full',
+    x: 0.905,
+    y: 0.86,
+    width: 0.18,
+    layer: 2,
+    order: 2,
+    crossing: { toward: { x: 0.3, y: 0.82 }, start: CROSSING_START + 4 * CROSSING_STAGGER },
+  },
+  {
+    item: 0,
+    band: 'full',
+    x: 0.555,
+    y: 0.17,
+    width: 0.11,
+    layer: 1,
+    order: 3,
+    crossing: { toward: { x: 0.2, y: 0.28 }, start: CROSSING_START + 3 * CROSSING_STAGGER },
+  },
+  {
+    item: 7,
+    band: 'full',
+    x: 0.535,
+    y: 0.83,
+    width: 0.075,
+    layer: 1,
+    order: 4,
+    crossing: { toward: { x: 0.2, y: 0.74 }, start: CROSSING_START + 2 * CROSSING_STAGGER },
+  },
+  {
+    item: 12,
+    band: 'full',
+    x: 0.78,
+    y: 0.15,
+    width: 0.12,
+    layer: 1,
+    order: 5,
+    crossing: { toward: { x: 0.3, y: 0.4 }, start: CROSSING_START + CROSSING_STAGGER },
+  },
   { item: 4, band: 'full', x: 0.985, y: 0.555, width: 0.085, layer: 1, order: 6 },
   { item: 2, band: 'full', x: 0.2, y: 0.96, width: 0.16, layer: 0, order: 7 },
   { item: 15, band: 'full', x: 0.52, y: 0.5, width: 0.06, layer: 0, order: 8 },
@@ -255,4 +483,13 @@ const resolveSlot = (slot: WallSlot): WallTile => ({ ...slot, image: heroItem(sl
 
 export const DESKTOP_WALL: readonly WallTile[] = DESKTOP_SLOTS.map(resolveSlot);
 export const MOBILE_WALL: readonly WallTile[] = MOBILE_SLOTS.map(resolveSlot);
-export const HERO_PROMPT: GalleryItem = heroItem(HERO_PROMPT_ITEM);
+/** One stop of the prompt rotation: the tile to light and the text that describes it. */
+export interface HeroPromptStop {
+  readonly item: number;
+  readonly prompt: string;
+}
+
+export const HERO_PROMPT_CYCLE: readonly HeroPromptStop[] = HERO_PROMPT_CYCLE_ITEMS.map((item) => ({
+  item,
+  prompt: heroItem(item).prompt,
+}));

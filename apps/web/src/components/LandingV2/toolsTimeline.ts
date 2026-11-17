@@ -4,42 +4,51 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { clusterLayout, deckOffset } from '@/components/LandingV2/toolsMedia';
 import type { ToolChapter } from '@/utils/landing';
 
-/** Scroll length of one chapter, in viewport heights. */
-const VIEWPORTS_PER_CHAPTER = 1;
+/**
+ * Scroll length of one chapter, in viewport heights: five chapters fit in about
+ * two and a half screens, so the section reads as one scene, not five.
+ */
+const VIEWPORTS_PER_CHAPTER = 0.5;
 /** Timeline time per chapter; 1 so a chapter's share reads directly as progress. */
 const CHAPTER = 1;
 /** Share of a chapter spent handing over from the previous one. */
-const SWAP = 0.22;
-/** The incoming chapter starts while the outgoing one is still leaving. */
-const SWAP_OVERLAP = 0.08;
+const SWAP = 0.2;
+/** The incoming chapter starts while the outgoing one is still leaving; its copy lands at 2 * SWAP - SWAP_OVERLAP. */
+const SWAP_OVERLAP = 0.06;
 const COPY_SHIFT = 28;
 const LAYER_EXIT_SCALE = 0.96;
 const LAYER_ENTER_SCALE = 1.04;
-/** Wipe is centred on the chapter midpoint: starts once the copy has landed, then the full after is held to the chapter end. */
-const WIPE_START = 0.34;
-const WIPE_DURATION = 0.32;
+/**
+ * The wipe starts as the copy lands and ends at 0.68 of the chapter, like the
+ * fan, so every chapter finishes by about 70% and holds briefly before the next.
+ */
+const WIPE_START = 0.32;
+const WIPE_DURATION = 0.36;
 /** The after image settles from a slight push-in as it is revealed. */
 const WIPE_SETTLE_SCALE = 1.06;
 /**
  * Share of a chapter at which the incoming copy overtakes the outgoing one in
- * opacity; the rail's number changes here, not at the chapter boundary.
+ * opacity (just after it starts at SWAP - SWAP_OVERLAP); the rail's number
+ * changes here, not at the chapter boundary.
  */
 const RAIL_SWITCH = 0.15;
-const FAN_DURATION = 0.45;
-const FAN_STAGGER = 0.06;
+/** Fan starts at SWAP; the last card lands at SWAP + FAN_DURATION + 2 * FAN_STAGGER = 0.68. */
+const FAN_DURATION = 0.38;
+const FAN_STAGGER = 0.05;
 const RISE_SHIFT_PERCENT = 18;
 const TAIL_PROPERTY = '--tools-tail';
 
 /**
- * The pin is a full viewport tall with the stage centred in it, so once it
- * unpins the empty half below the stage is dead space before the next scene.
- * Publish that height so the section can pull the next scene up by it.
+ * The pin is a full viewport tall with its content centred, so once it unpins
+ * the space below the lowest of the copy column and the stage is dead space
+ * before the next scene. Publish that height so the section can pull the next
+ * scene up by it. Layout boxes only: the scrubbed transforms inside do not count.
  */
 function measureTail(pin: HTMLElement): number {
-  const frame = pin.firstElementChild;
-  if (!(frame instanceof HTMLElement)) return 0;
-  const navInset = Number.parseFloat(getComputedStyle(pin).paddingTop) || 0;
-  return Math.max(0, (pin.clientHeight - navInset - frame.offsetHeight) / 2);
+  const content = queryAll(pin, '[data-stage-copy-column], [data-stage-media]');
+  if (content.length === 0) return 0;
+  const contentBottom = Math.max(...content.map((el) => el.getBoundingClientRect().bottom));
+  return Math.max(0, pin.getBoundingClientRect().bottom - contentBottom);
 }
 
 export function clearTail(pin: HTMLElement): void {

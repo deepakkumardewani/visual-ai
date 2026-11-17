@@ -2,6 +2,7 @@
 import type { ToolChapter } from '@/utils/landing';
 
 import ToolCluster from '@/components/LandingV2/ToolCluster.vue';
+import ToolCutoutCards from '@/components/LandingV2/ToolCutoutCards.vue';
 import ToolWipe from '@/components/LandingV2/ToolWipe.vue';
 
 import { STAGE_ASPECT_RATIO } from '@/components/LandingV2/toolsMedia';
@@ -27,6 +28,11 @@ defineProps<{
         :before="tool.media.before"
         :after="tool.media.after"
         :label="tool.eyebrow"
+      />
+      <ToolCutoutCards
+        v-else-if="tool.media.kind === 'cutout'"
+        :pairs="tool.media.pairs"
+        layout="stage"
       />
       <ToolCluster v-else :tool="tool" />
     </div>

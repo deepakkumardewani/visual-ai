@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { gsap } from 'gsap';
-import { DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
 import { ref } from 'vue';
 
 import { useMagnetic } from '@/composables/useMagnetic';
+import { FREE_CREDITS_COPY } from '@/utils/landing';
 
 import LandingButton from '@/components/Landing/LandingButton.vue';
 import {
@@ -17,6 +17,7 @@ import {
 } from '@/components/LandingV2/finalCtaLayout';
 import { usePrimaryCta } from '@/components/LandingV2/composables/usePrimaryCta';
 import { useSceneMotion } from '@/components/LandingV2/composables/useSceneMotion';
+import { bindCursorLight } from '@/components/LandingV2/useCursorLight';
 
 const MAGNET_STRENGTH = 0.25;
 const FINE_POINTER_QUERY = '(pointer: fine)';
@@ -28,7 +29,9 @@ const SCRUB_LAG = 1.6;
 
 const { label: ctaLabel, to: ctaTo } = usePrimaryCta();
 const root = ref<HTMLElement | null>(null);
+const stage = ref<HTMLElement | null>(null);
 const wall = ref<HTMLElement | null>(null);
+const light = ref<HTMLElement | null>(null);
 // Magnetic needs a DOM node; the button is a component, so the wrapper span is what moves.
 const magnet = ref<HTMLElement | null>(null);
 
@@ -75,8 +78,12 @@ useSceneMotion(root, ({ isDesktop, motionOk }) => {
     },
   });
 
+  const unbindLight =
+    light.value && stage.value ? bindCursorLight(stage.value, light.value) : undefined;
+
   // Matching media reverts tweens, not inline styles, so hand tiles back composed.
   return () => {
+    unbindLight?.();
     applyProgress(tiles, CTA_COMPOSED);
   };
 });
@@ -84,31 +91,28 @@ useSceneMotion(root, ({ isDesktop, motionOk }) => {
 
 <template>
   <section id="final-cta" ref="root" class="lv2-section cta" aria-labelledby="final-cta-title">
-    <div class="cta__stage">
+    <div ref="stage" class="cta__stage">
       <div ref="wall" class="cta__wall cta__wall--desktop" aria-hidden="true">
-        <img
+        <div
           v-for="tile in DESKTOP_CTA_TILES"
           :key="tile.image.url"
-          :src="tile.image.url"
-          alt=""
           class="cta__tile"
           :style="tileStyle(tile, true)"
-          loading="lazy"
-          decoding="async"
-        />
+        >
+          <img :src="tile.image.url" alt="" class="cta__img" loading="lazy" decoding="async" />
+        </div>
+        <div ref="light" class="cta__light" />
       </div>
 
       <div class="cta__wall cta__wall--mobile" aria-hidden="true">
-        <img
+        <div
           v-for="tile in MOBILE_CTA_TILES"
           :key="tile.image.url"
-          :src="tile.image.url"
-          alt=""
           class="cta__tile cta__tile--static"
           :style="tileStyle(tile, false)"
-          loading="lazy"
-          decoding="async"
-        />
+        >
+          <img :src="tile.image.url" alt="" class="cta__img" loading="lazy" decoding="async" />
+        </div>
       </div>
 
       <div class="cta__copy">
@@ -117,8 +121,7 @@ useSceneMotion(root, ({ isDesktop, motionOk }) => {
           Your next image is one prompt away.
         </h2>
         <p class="lv2-lede cta__sub">
-          Generate, upscale, colorize and revive. {{ SIGNUP_CREDITS }} persistent credits with a new
-          account, plus {{ DAILY_CREDITS.free }} daily credits.
+          Generate, upscale, colorize and revive. {{ FREE_CREDITS_COPY }}
         </p>
         <div class="cta__actions">
           <span ref="magnet" class="cta__magnet">
@@ -164,13 +167,37 @@ useSceneMotion(root, ({ isDesktop, motionOk }) => {
 
 .cta__tile {
   position: absolute;
-  display: block;
-  object-fit: cover;
+  overflow: hidden;
   border-radius: 12px;
   border: 1px solid rgb(var(--tw-hairline));
   box-shadow: 0 18px 40px rgb(0 0 0 / 0.5);
   background-color: rgb(var(--tw-surface-2));
   will-change: transform, opacity;
+}
+
+.cta__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Sits above the tiles but below the copy (the copy has its own z-index), moved by transform only. */
+.cta__light {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 34rem;
+  height: 34rem;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgb(var(--tw-accent) / 0.2),
+    rgb(var(--tw-accent) / 0.08) 35%,
+    transparent 68%
+  );
+  opacity: 0;
+  pointer-events: none;
 }
 
 .cta__tile--static {
@@ -225,6 +252,49 @@ useSceneMotion(root, ({ isDesktop, motionOk }) => {
   justify-content: center;
   gap: var(--lv2-space-md);
   margin-top: var(--lv2-space-xl);
+}
+
+/*
+ * Desktop wall, fine pointer, motion allowed: tiles lift and gain a warm rim.
+ * `translate` composes with the scrub's inline `transform`, and the rim is an
+ * opacity fade, so nothing animates but transform and opacity. The wall sits
+ * under the copy, so buttons keep every click.
+ */
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
+  .cta__wall--desktop {
+    pointer-events: auto;
+  }
+
+  .cta__wall--desktop .cta__tile::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow:
+      inset 0 0 0 1px rgb(var(--tw-accent) / 0.75),
+      inset 0 0 24px rgb(var(--tw-accent) / 0.3);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .cta__wall--desktop .cta__tile {
+    --tile-lift: -10px;
+    transition: translate 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .cta__wall--desktop .cta__tile::after {
+    transition: opacity 0.35s ease-out;
+  }
+
+  .cta__wall--desktop .cta__tile:hover {
+    translate: 0 var(--tile-lift);
+  }
+
+  .cta__wall--desktop .cta__tile:hover::after {
+    opacity: 1;
+  }
 }
 
 @media (min-width: 900px) {

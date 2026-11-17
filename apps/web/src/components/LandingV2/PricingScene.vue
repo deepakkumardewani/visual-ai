@@ -1,20 +1,26 @@
 <script setup lang="ts">
-import { CREDIT_PACKS, DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
+import { CREDIT_PACKS } from '@visual-ai/shared';
 import { computed, onMounted, ref } from 'vue';
 
-import LandingButton from '@/components/Landing/LandingButton.vue';
-import RollingNumber from '@/components/LandingV2/RollingNumber.vue';
+import PricingPlanCard from '@/components/LandingV2/PricingPlanCard.vue';
 import { usePricingCatalog } from '@/composables/usePricingCatalog';
 import { usePrimaryCta } from '@/components/LandingV2/composables/usePrimaryCta';
+import { CREDIT_PACKS_PLAN, FREE_PLAN, PRO_PLAN } from '@/utils/pricingPlans';
 
 const primaryCta = usePrimaryCta();
-const { formatPackPrice, loadPrices } = usePricingCatalog();
+const { formatPackPrice, hasServerPrices, loadPrices, proPrice } = usePricingCatalog();
 
 const cheapestPack = CREDIT_PACKS.reduce((lowest, pack) =>
   pack.priceMinor < lowest.priceMinor ? pack : lowest,
 );
 const fromPrice = computed(() => formatPackPrice(cheapestPack));
-const bestSavingPercent = Math.max(...CREDIT_PACKS.map((pack) => pack.savingsPercent));
+const FREE_FIGURE = 'Free';
+const CADENCE_FREE = 'No card needed';
+const CADENCE_PRO = 'per month';
+const CADENCE_PACKS = `${cheapestPack.credits} credits, one-time`;
+const PRICE_LEAD = 'From';
+// Fallback prices mix USD (Pro) and INR (packs), so none are shown rather than a misleading pair.
+const PRICE_NOTE = 'See current prices';
 
 const root = ref<HTMLElement | null>(null);
 
@@ -29,6 +35,8 @@ onMounted(async () => {
     priceResolved.value = true;
   }
 });
+const priceHidden = computed(() => !priceResolved.value);
+const showNote = computed(() => priceResolved.value && !hasServerPrices.value);
 </script>
 
 <template>
@@ -39,41 +47,37 @@ onMounted(async () => {
         <h2 id="pricing-title" class="lv2-display">Free to start. Credits when you need more.</h2>
       </header>
 
-      <div class="pricing__columns">
-        <div class="col col--free">
-          <h3 class="col__name">Free</h3>
-          <p class="col__figure col__figure--gold">
-            <RollingNumber :value="SIGNUP_CREDITS" />
-          </p>
-          <p class="col__caption">persistent credits when you sign up</p>
-          <p class="col__figure col__figure--small">
-            <RollingNumber :value="DAILY_CREDITS.free" />
-          </p>
-          <p class="col__caption">daily credits, reset if unused</p>
-          <LandingButton :to="primaryCta.to.value" size="lg">
-            {{ primaryCta.label.value }}
-          </LandingButton>
-        </div>
-
-        <div class="col col--buy">
-          <h3 class="col__name">Buy credits</h3>
-          <p class="col__figure">
-            <RollingNumber :value="bestSavingPercent" /><span class="col__unit" aria-hidden="true"
-              >%</span
-            ><span class="sr-only">%</span>
-          </p>
-          <p class="col__caption">most you save, on the larger packs</p>
-          <p class="col__line">
-            Packs start at
-            <strong class="col__strong" :class="{ 'col__strong--pending': !priceResolved }">{{
-              fromPrice
-            }}</strong>
-            for {{ cheapestPack.credits }} credits.
-          </p>
-          <LandingButton to="/pricing#packs" variant="ghost" size="lg"
-            >See credit packs</LandingButton
-          >
-        </div>
+      <div class="pricing__cards">
+        <PricingPlanCard
+          lead
+          :name="FREE_PLAN.name"
+          :price="FREE_FIGURE"
+          :cadence="CADENCE_FREE"
+          :points="FREE_PLAN.points"
+          :cta="primaryCta.label.value"
+          :to="primaryCta.to.value"
+        />
+        <PricingPlanCard
+          :name="PRO_PLAN.name"
+          :price="showNote ? PRICE_NOTE : proPrice"
+          :price-note="showNote"
+          :price-hidden="priceHidden"
+          :cadence="CADENCE_PRO"
+          :points="PRO_PLAN.points"
+          :cta="PRO_PLAN.cta"
+          :to="PRO_PLAN.to"
+        />
+        <PricingPlanCard
+          :name="CREDIT_PACKS_PLAN.name"
+          :price-lead="showNote ? undefined : PRICE_LEAD"
+          :price="showNote ? PRICE_NOTE : fromPrice"
+          :price-note="showNote"
+          :price-hidden="priceHidden"
+          :cadence="CADENCE_PACKS"
+          :points="CREDIT_PACKS_PLAN.points"
+          :cta="CREDIT_PACKS_PLAN.cta"
+          :to="CREDIT_PACKS_PLAN.to"
+        />
       </div>
     </div>
   </section>
@@ -82,7 +86,7 @@ onMounted(async () => {
 <style scoped lang="scss">
 .pricing__inner {
   display: grid;
-  gap: var(--lv2-space-4xl);
+  gap: var(--lv2-space-3xl);
 }
 
 .pricing__head {
@@ -91,90 +95,16 @@ onMounted(async () => {
   max-width: 40rem;
 }
 
-.pricing__columns {
+.pricing__cards {
   display: grid;
-  gap: var(--lv2-space-4xl);
-}
-
-.col {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--lv2-space-sm);
-}
-
-.col__name {
-  margin: 0 0 var(--lv2-space-md);
-  color: var(--lv2-copper-text);
-  font-size: var(--lv2-text-label);
-  font-weight: 600;
-  letter-spacing: var(--lv2-tracking-label);
-  text-transform: uppercase;
-}
-
-.col__figure {
-  margin: 0;
-  font-family: var(--lv2-font-display);
-  font-size: clamp(5rem, 3rem + 10vw, 11rem);
-  line-height: 1;
-  letter-spacing: var(--lv2-tracking-display);
-}
-
-/* The one solid-gold moment in this scene. */
-.col__figure--gold {
-  color: var(--lv2-gold);
-}
-
-.col__caption {
-  margin: 0 0 var(--lv2-space-lg);
-  color: rgb(var(--tw-ink-muted));
-  font-size: var(--lv2-text-lede);
-}
-
-.col__figure--small {
-  font-size: clamp(3.5rem, 2rem + 6vw, 6.5rem);
-}
-
-.col__unit {
-  font-size: 0.5em;
-  vertical-align: top;
-  margin-left: 0.08em;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-}
-
-.col__line {
-  margin: 0 0 var(--lv2-space-lg);
-  max-width: 24ch;
-  text-wrap: balance;
-  font-family: var(--lv2-font-display);
-  font-size: var(--lv2-text-title);
-  line-height: 1.2;
-  color: rgb(var(--tw-ink-secondary));
-}
-
-.col__strong {
-  font-weight: 400;
-  color: rgb(var(--tw-ink-primary));
-  transition: opacity 0.4s var(--lv2-ease-out);
-}
-
-/* Space stays reserved; the figure fades in once the localized price has resolved. */
-.col__strong--pending {
-  opacity: 0;
+  gap: var(--lv2-space-lg);
+  grid-template-columns: 1fr;
 }
 
 @media (min-width: 900px) {
-  .pricing__columns {
-    grid-template-columns: 1.4fr 1fr;
-    align-items: start;
+  .pricing__cards {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--lv2-space-xl);
   }
 }
 </style>

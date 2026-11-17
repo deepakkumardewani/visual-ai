@@ -1,6 +1,8 @@
 import { computed, onBeforeUnmount, ref } from 'vue';
 
 import { useShareActions } from '@/composables/useShareActions';
+import { createLogger } from '@/utils/logger';
+import { copyText } from '@/utils/share';
 
 export type CopyState = 'idle' | 'copied' | 'failed';
 
@@ -13,27 +15,39 @@ const COPY_LABELS: Record<CopyState, string> = {
   failed: "Couldn't copy",
 };
 
+const FAILURE_TOAST = 'Could not copy prompt';
+
+const log = createLogger('showcase-copy');
+
 /**
- * Copy one prompt with inline feedback on the button itself. The global toast
- * and error logging come from `useShareActions`, so a failed copy is shown to
- * the visitor twice (toast and button label) and logged once.
+ * Copy one prompt with feedback on the button itself. Success is confirmed by
+ * the label alone; a second, louder toast would compete with it. A failure
+ * also raises the app toast and is logged, since the visitor may need to copy
+ * by hand.
  */
 export function useShowcaseCopy() {
-  const { copyPrompt } = useShareActions();
+  const { showToast } = useShareActions();
   const state = ref<CopyState>('idle');
   const label = computed(() => COPY_LABELS[state.value]);
   let resetTimer: ReturnType<typeof setTimeout> | undefined;
 
+  function reset(): void {
+    clearTimeout(resetTimer);
+    state.value = 'idle';
+  }
+
   async function copy(prompt: string): Promise<void> {
-    const ok = await copyPrompt(prompt);
+    const ok = await copyText(prompt.trim());
+    if (!ok) {
+      log.error('copy prompt failed', { promptLength: prompt.length });
+      showToast(FAILURE_TOAST);
+    }
     state.value = ok ? 'copied' : 'failed';
     clearTimeout(resetTimer);
-    resetTimer = setTimeout(() => {
-      state.value = 'idle';
-    }, FEEDBACK_MS);
+    resetTimer = setTimeout(reset, FEEDBACK_MS);
   }
 
   onBeforeUnmount(() => clearTimeout(resetTimer));
 
-  return { state, label, copy };
+  return { state, label, copy, reset };
 }

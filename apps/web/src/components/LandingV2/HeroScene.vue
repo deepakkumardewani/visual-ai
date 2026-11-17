@@ -10,10 +10,12 @@ import { DESKTOP_QUERY, useSceneMotion } from '@/components/LandingV2/composable
 import HeroCopy from '@/components/LandingV2/HeroCopy.vue';
 import HeroWall from '@/components/LandingV2/HeroWall.vue';
 
+import { useHeroPrompt } from '@/components/LandingV2/composables/useHeroPrompt';
+import type { PromptCycle } from '@/components/LandingV2/heroPromptCycle';
 import {
   DESKTOP_WALL,
-  HERO_PROMPT,
   MOBILE_WALL,
+  RADIAL_EXIT_SHARE,
   type WallProgress,
 } from '@/components/LandingV2/heroWallLayout';
 
@@ -22,28 +24,34 @@ const props = defineProps<{
   wall?: Component;
 }>();
 
-/** Seconds to type the whole prompt; prompts run ~180 characters, so this is brisk on purpose. */
-const TYPE_DURATION = 1.7;
 const BLOOM_DURATION = 2.4;
 /** The prompt's image starts blooming just before the last characters land. */
 const BLOOM_OVERLAP = 0.25;
 /**
- * Desktop pin length, in viewport heights. Kept short so the Tools heading
- * (about 0.1 viewport below the hero) enters while the wall is still leaving.
+ * Desktop pin length, in viewport heights. Long enough that the copy holds
+ * while the outer wall leaves and then hands its half to the crossing tiles.
  */
-const PIN_VIEWPORTS = 0.55;
+const PIN_VIEWPORTS = 0.9;
 /**
- * Desktop wall exit length, in viewport heights. It outruns the pin, so the
- * last far tiles are still leaving as the unpinned hero scrolls up and the
- * Tools heading comes in below; the screen is never empty between the two.
- * The hero clips its tiles, so they can never cover that heading.
+ * The next scene's heading. The wall's exit runs until the hero's bottom edge
+ * has risen to where this heading rests in its own pin, so tiles fill the
+ * upper screen for as long as the unpinned hero box is still there.
  */
-const EXIT_VIEWPORTS = 1;
-/** Share of the pin over which the copy fades out. */
-const COPY_FADE_SHARE = 0.45;
+const NEXT_HEADING_SELECTOR = '#tools-title';
+const NEXT_SCENE_SELECTOR = '#tools';
+/**
+ * Share of the pin the copy stays fully visible; it fades over the rest. With
+ * a symmetric ease it is half faded at 0.8 of the pin (0.72 viewport), and
+ * heroWallLayout's CROSSING_START sends tiles into its half just after that
+ * (the pin is about half the wall's exit; see wallExitLength).
+ */
+const COPY_HOLD_SHARE = 0.6;
+/** Symmetric, so the half-faded point sits mid-fade where the crossing timing expects it. */
+const COPY_FADE_EASE = 'sine.inOut';
 const COPY_EXIT_LIFT = 48;
 
-const PROMPT = HERO_PROMPT.prompt;
+/** Timeline label at the moment the first prompt's last character lands. */
+const INTRO_TYPED = 'typed';
 
 const root = ref<HTMLElement | null>(null);
 const copy = ref<HTMLElement | null>(null);
@@ -51,44 +59,78 @@ const reduced = useReducedMotion();
 const isDesktop = useMediaQuery(DESKTOP_QUERY);
 const tiles = computed(() => (isDesktop.value ? DESKTOP_WALL : MOBILE_WALL));
 const wallComponent = computed(() => props.wall ?? HeroWall);
-const typed = ref(reduced.value ? PROMPT.length : 0);
+const heroPrompt = useHeroPrompt({ startTyped: reduced.value });
+const { prompt, typed, texts: promptTexts } = heroPrompt;
 
 // Plain object, not a ref: the wall reads it every frame through getProgress.
 const progress: { bloom: number; scroll: number } = { bloom: reduced.value ? 1 : 0, scroll: 0 };
-const getProgress = (): WallProgress => progress;
+const getProgress = (): WallProgress => ({ ...progress, ...heroPrompt.spotlight() });
 let introPlayed = false;
+let cycle: PromptCycle | null = null;
+/** Only the desktop, full-motion hero rotates its prompt (and so offers a pause). */
+const rotating = ref(false);
+/** Outlives the cycle, which is rebuilt whenever the scene's setup re-runs. */
+const userPaused = ref(false);
+let reading = false;
 
-function settleIntro(): void {
-  progress.bloom = 1;
-  typed.value = PROMPT.length;
+function togglePromptPause(): void {
+  userPaused.value = !userPaused.value;
+  cycle?.setUserPaused(userPaused.value);
 }
 
-function playIntro(): void {
+function setPromptReading(value: boolean): void {
+  reading = value;
+  cycle?.setReading(value);
+}
+
+/** Composed wall and the current prompt in full; `lit` puts its tile in the spotlight. */
+function settleIntro(lit: boolean): void {
+  progress.bloom = 1;
+  heroPrompt.settle(lit);
+}
+
+/** Types the first prompt and blooms the wall; callers hang more on `INTRO_TYPED`. */
+function playIntro(): gsap.core.Timeline {
   introPlayed = true;
-  const typing = { chars: 0 };
-  gsap
+  return gsap
     .timeline()
-    .to(typing, {
-      chars: PROMPT.length,
-      duration: TYPE_DURATION,
-      ease: 'none',
-      onUpdate: () => {
-        typed.value = Math.round(typing.chars);
-      },
-    })
+    .add(heroPrompt.typeIn())
+    .addLabel(INTRO_TYPED)
     .to(progress, { bloom: 1, duration: BLOOM_DURATION, ease: 'none' }, `-=${BLOOM_OVERLAP}`);
 }
 
 function trackScroll(self: ScrollTrigger): void {
   progress.scroll = self.progress;
+  cycle?.setExitStarted(self.progress > 0);
 }
 
-/** Desktop: hold the hero while the copy lifts away; the wall's exit runs a little past the pin. */
+/** Distance from the next scene's top to its heading; constant while that scene is pinned. */
+function nextHeadingOffset(): number {
+  const scene = document.querySelector<HTMLElement>(NEXT_SCENE_SELECTOR);
+  const heading = document.querySelector<HTMLElement>(NEXT_HEADING_SELECTOR);
+  if (!scene || !heading) {
+    throw new Error(`HeroScene: ${NEXT_SCENE_SELECTOR} or ${NEXT_HEADING_SELECTOR} is not mounted`);
+  }
+  return heading.getBoundingClientRect().top - scene.getBoundingClientRect().top;
+}
+
+/**
+ * Scroll distance of the wall's exit. With pin spacing, the hero box stays on
+ * screen for the pin plus its own height (and its height can exceed the
+ * viewport through `min-height`). The exit ends once its bottom edge has risen
+ * to the heading's resting offset: the heading is then in the upper half, so
+ * from there on the heading fills the screen instead of the tiles.
+ */
+function wallExitLength(section: HTMLElement): number {
+  return window.innerHeight * PIN_VIEWPORTS + section.offsetHeight - nextHeadingOffset();
+}
+
+/** Desktop: hold the hero while the copy lifts away; the wall keeps leaving while the hero rises. */
 function pinExit(section: HTMLElement, copyEl: HTMLElement): void {
   ScrollTrigger.create({
     trigger: section,
     start: 'top top',
-    end: () => `+=${window.innerHeight * EXIT_VIEWPORTS}`,
+    end: () => `+=${wallExitLength(section)}`,
     invalidateOnRefresh: true,
     onUpdate: trackScroll,
   });
@@ -108,37 +150,76 @@ function pinExit(section: HTMLElement, copyEl: HTMLElement): void {
     })
     .to(
       copyEl,
-      { autoAlpha: 0, y: -COPY_EXIT_LIFT, ease: 'power1.in', duration: COPY_FADE_SHARE },
-      0,
+      {
+        autoAlpha: 0,
+        y: -COPY_EXIT_LIFT,
+        ease: COPY_FADE_EASE,
+        duration: 1 - COPY_HOLD_SHARE,
+      },
+      COPY_HOLD_SHARE,
     )
-    // Stretch the timeline to exactly 1 so COPY_FADE_SHARE reads as a share of the pin.
+    // Stretch the timeline to exactly 1 so COPY_HOLD_SHARE reads as a share of the pin.
     .set({}, {}, 1);
 }
 
-/** Mobile: no pin; the tiles spread as the hero scrolls out of view. */
+/**
+ * Mobile: no pin; the tiles spread as the hero scrolls out of view. The mobile
+ * wall has no crossing tiles, so its whole scroll-out maps onto the radial
+ * share of the exit and the tiles keep spreading until the hero is gone.
+ */
 function spreadExit(section: HTMLElement): void {
   ScrollTrigger.create({
     trigger: section,
     start: 'top top',
     end: 'bottom top',
-    onUpdate: trackScroll,
+    onUpdate: (self) => {
+      progress.scroll = self.progress * RADIAL_EXIT_SHARE;
+    },
   });
 }
 
+/**
+ * Desktop: intro, then the rotation once the first prompt's tile has lit. The
+ * mobile wall lacks most of the rotation's tiles, so its prompt stays still.
+ */
+function runDesktopPrompt(section: HTMLElement): PromptCycle {
+  const running = heroPrompt.startCycle(section);
+  running.setUserPaused(userPaused.value);
+  running.setReading(reading);
+  if (introPlayed) {
+    settleIntro(true);
+    running.begin();
+    return running;
+  }
+  // Inside the intro timeline, so the scene's gsap context reverts the light with it.
+  const light = heroPrompt.lightIn().eventCallback('onComplete', running.begin);
+  playIntro().add(light, INTRO_TYPED);
+  return running;
+}
+
 useSceneMotion(root, ({ isDesktop: desktop, motionOk }, section) => {
+  // Reduced motion and mobile: no rotation, the first prompt in full, no spotlight.
+  rotating.value = motionOk && desktop;
+  heroPrompt.resetFor(rotating.value);
   if (!motionOk) {
-    settleIntro();
+    settleIntro(false);
     return;
   }
-  if (introPlayed) settleIntro();
-  else playIntro();
 
   const copyEl = copy.value;
   if (!copyEl) throw new Error('HeroScene: copy element is not mounted');
-  if (desktop) pinExit(section, copyEl);
-  else spreadExit(section);
+  if (desktop) {
+    cycle = runDesktopPrompt(section);
+    pinExit(section, copyEl);
+  } else {
+    if (introPlayed) settleIntro(false);
+    else playIntro();
+    spreadExit(section);
+  }
 
   return () => {
+    cycle?.stop();
+    cycle = null;
     progress.scroll = 0;
   };
 });
@@ -148,7 +229,15 @@ useSceneMotion(root, ({ isDesktop: desktop, motionOk }, section) => {
   <section ref="root" class="hero" aria-labelledby="hero-title">
     <component :is="wallComponent" :tiles="tiles" :get-progress="getProgress" />
     <div ref="copy" class="hero__copy">
-      <HeroCopy :prompt="PROMPT" :typed="typed" />
+      <HeroCopy
+        :prompt="prompt"
+        :typed="typed"
+        :prompt-sizes="promptTexts"
+        :prompt-rotating="rotating"
+        :prompt-paused="userPaused"
+        @toggle-prompt-pause="togglePromptPause"
+        @prompt-reading="setPromptReading"
+      />
     </div>
   </section>
 </template>

@@ -50,6 +50,13 @@ uniform vec2 uPointer;
 uniform float uLightRadius;
 uniform float uLight;
 uniform vec3 uLightColor;
+uniform float uDim;
+uniform float uRim;
+uniform float uRimWidth;
+uniform vec3 uRimColor;
+uniform float uRimStrength;
+uniform float uRimGlow;
+uniform float uRimGlowSigma;
 
 varying vec2 vLocal;
 varying vec2 vPx;
@@ -82,9 +89,18 @@ void main() {
   float shadowEdge = roundedBox(vLocal - vec2(0.0, uShadow.x), halfSize, uRadius);
   float shadow = uShadow.z * (1.0 - smoothstep(-uShadow.y, uShadow.y, shadowEdge));
 
-  vec3 color = sampleSplit(bulge(vLocal / uSize));
+  vec3 color = sampleSplit(bulge(vLocal / uSize)) * uDim;
   vec2 toLight = (vPx - uPointer) / uLightRadius;
   color += uLightColor * uLight * exp(-dot(toLight, toLight));
+  // Spotlight rim, as the DOM wall's two inset shadows: a soft copper glow, then
+  // a crisp ring over it. Blended toward copper, not added, so a bright or cool
+  // image cannot push the rim to white or cyan.
+  float inset = max(-edge, 0.0);
+  // An edge blurred by a gaussian sits at half strength on the edge itself.
+  float halo = 0.5 * exp(-0.5 * (inset * inset) / (uRimGlowSigma * uRimGlowSigma));
+  float ring = 1.0 - smoothstep(uRimWidth - 0.5, uRimWidth + 0.5, inset);
+  color = mix(color, uRimColor, uRim * uRimGlow * halo);
+  color = mix(color, uRimColor, uRim * uRimStrength * ring);
 
   // Premultiplied output: the tile over its own black shadow.
   float alpha = inside + shadow * (1.0 - inside);

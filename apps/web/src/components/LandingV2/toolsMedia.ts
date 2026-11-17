@@ -1,4 +1,4 @@
-import type { GalleryItem, ToolChapter } from '@/utils/landing';
+import type { CutoutPair, GalleryItem, ToolChapter } from '@/utils/landing';
 
 import { GALLERY_RANGES, sliceGallery } from '@/components/LandingV2/galleryRanges';
 import { toCssAspectRatio } from '@/components/LandingV2/heroWallLayout';
@@ -14,7 +14,7 @@ export const STAGE_ASPECT_RATIO = `${STAGE_RATIO_WIDTH} / ${STAGE_RATIO_HEIGHT}`
 const PERCENT = 100;
 const CENTER_PERCENT = 50;
 
-/** How a gallery chapter's images arrive on the desktop stage. */
+/** How a cluster chapter's media arrives on the desktop stage. */
 export type ClusterEntrance = 'deal' | 'rise';
 
 /** A card's resting place, in percent of the stage box. */
@@ -37,26 +37,40 @@ export interface ClusterLayout {
   readonly cards: readonly ClusterCard[];
 }
 
-/** Generate: a loose hand of prints, as if just dealt from the deck. */
+/**
+ * Generate: a loose hand of prints, as if just dealt from the deck. It spans
+ * the stage edge to edge (3% to 98% across, 0 to 94% down), so it carries the
+ * same weight as the full-bleed before/after frames of the other chapters.
+ */
 const DEAL_SLOTS: readonly ClusterSlot[] = [
-  { left: 6, top: 14, width: 26, rotation: -6 },
-  { left: 33, top: 4, width: 26, rotation: 2 },
-  { left: 53, top: 42, width: 41, rotation: 4 },
+  { left: 3, top: 10, width: 29, rotation: -6 },
+  { left: 33, top: 0, width: 29, rotation: 2 },
+  { left: 49, top: 42, width: 49, rotation: 4 },
 ];
 
-/**
- * Remove background: plain prints hung square at stepped heights. No cutout
- * styling on purpose; public/landing has no real background-removal pair.
- */
-const HUNG_SLOTS: readonly ClusterSlot[] = [
+/** Remove background: three cutout cards hung square at stepped heights. */
+const CUTOUT_SLOTS: readonly ClusterSlot[] = [
   { left: 4, top: 24, width: 28, rotation: 0 },
   { left: 36, top: 8, width: 28, rotation: 0 },
   { left: 68, top: 30, width: 28, rotation: 0 },
 ];
 
-const ENTRANCE_SLOTS: Record<ClusterEntrance, readonly ClusterSlot[]> = {
-  deal: DEAL_SLOTS,
-  rise: HUNG_SLOTS,
+/**
+ * The same three cards on the pinned desktop stage: wider and centred on the
+ * stage (4% to 90% down), so they fill it like the other chapters' media.
+ */
+const STAGE_CUTOUT_SLOTS: readonly ClusterSlot[] = [
+  { left: 1, top: 16, width: 31, rotation: 0 },
+  { left: 34.5, top: 4, width: 31, rotation: 0 },
+  { left: 68, top: 28, width: 31, rotation: 0 },
+];
+
+/** 'stage' is the pinned desktop stage; 'spread' everywhere else (stacked list, v1 pages). */
+export type CutoutLayout = 'spread' | 'stage';
+
+const CUTOUT_LAYOUTS: Record<CutoutLayout, readonly ClusterSlot[]> = {
+  spread: CUTOUT_SLOTS,
+  stage: STAGE_CUTOUT_SLOTS,
 };
 
 const TOOL_ITEMS = sliceGallery(GALLERY_RANGES.tools);
@@ -69,18 +83,36 @@ export function galleryItemFor(url: string): GalleryItem {
 }
 
 export function clusterLayout(tool: ToolChapter): ClusterLayout {
-  if (tool.media.kind !== 'gallery') {
-    throw new Error(`toolsMedia: "${tool.id}" is not a gallery chapter`);
+  if (tool.media.kind === 'cutout') {
+    // Cutout cards only rise in; the timeline reads no per-card geometry for that.
+    return { entrance: 'rise', cards: [] };
   }
-  const entrance: ClusterEntrance = tool.id === 'generate' ? 'deal' : 'rise';
-  const slots = ENTRANCE_SLOTS[entrance];
+  if (tool.media.kind !== 'gallery') {
+    throw new Error(`toolsMedia: "${tool.id}" is not a cluster chapter`);
+  }
   const cards = tool.media.images.map((url, index) => {
-    const slot = slots[index];
+    const slot = DEAL_SLOTS[index];
     if (!slot) throw new Error(`toolsMedia: no slot ${index} for "${tool.id}"`);
     const item = galleryItemFor(url);
     return { ...slot, item, aspectRatio: toCssAspectRatio(item.aspectRatio) };
   });
-  return { entrance, cards };
+  return { entrance: 'deal', cards };
+}
+
+export interface CutoutCard extends ClusterSlot {
+  readonly pair: CutoutPair;
+}
+
+export function cutoutCards(
+  pairs: readonly CutoutPair[],
+  layout: CutoutLayout = 'spread',
+): CutoutCard[] {
+  const slots = CUTOUT_LAYOUTS[layout];
+  return pairs.map((pair, index) => {
+    const slot = slots[index];
+    if (!slot) throw new Error(`toolsMedia: no cutout slot ${index}`);
+    return { ...slot, pair };
+  });
 }
 
 function ratioOf(aspectRatio: string): number {

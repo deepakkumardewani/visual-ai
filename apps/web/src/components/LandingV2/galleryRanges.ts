@@ -10,12 +10,13 @@ export interface GalleryRange {
 
 /**
  * Which slice of `gallery.json` each /v2 scene may use. Kept disjoint so no
- * image repeats between the hero and the scenes right after it. Tools (0-5)
- * and showcase (0-11) are already fixed by `TOOLS` and `SHOWCASE` in
- * `utils/landing.ts` and are listed here only to document the reservation.
+ * image repeats between the hero and the scenes right after it. Tools (0-2,
+ * the generate chapter only; remove-bg uses its own cutout assets) and showcase
+ * (0-11) are already fixed by `TOOLS` and `SHOWCASE` in `utils/landing.ts` and
+ * are listed here only to document the reservation.
  */
 export const GALLERY_RANGES = {
-  tools: { start: 0, end: 5 },
+  tools: { start: 0, end: 2 },
   showcase: { start: 0, end: 11 },
   hero: { start: 12, end: 31 },
   finalCta: { start: 32, end: 43 },
