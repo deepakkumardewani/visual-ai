@@ -174,4 +174,46 @@ describe('FeatureSelect', () => {
     await last.trigger('keydown', { key: ' ' });
     expect(push).toHaveBeenCalled();
   });
+
+  it('always renders the icon, title and chevron in the trigger, with a truncating title', () => {
+    const wrapper = mount(FeatureSelect, { global: { plugins: [createPinia()], stubs } });
+    const trigger = wrapper.get('[data-testid="feature-select-trigger"]');
+
+    expect(trigger.find('.feature-select__icon').exists()).toBe(true);
+    expect(trigger.get('.feature-select__label').text()).not.toBe('');
+    expect(trigger.get('.feature-select__label').classes()).toContain('tw-truncate');
+    expect(trigger.findComponent({ name: 'font-awesome-icon' }).exists()).toBe(true);
+  });
+
+  it('moves focus through options with ArrowUp, Home and End and closes on Escape', async () => {
+    const wrapper = mount(FeatureSelect, {
+      attachTo: document.body,
+      global: { plugins: [createPinia()], stubs },
+    });
+    await wrapper.get('[data-testid="feature-select-trigger"]').trigger('click');
+    const options = wrapper.findAll('[role="option"]');
+    const last = options.length - 1;
+
+    await options[0].trigger('keydown', { key: 'ArrowUp' });
+    expect(document.activeElement).toBe(options[last].element);
+    await options[last].trigger('keydown', { key: 'Home' });
+    expect(document.activeElement).toBe(options[0].element);
+    await options[0].trigger('keydown', { key: 'End' });
+    expect(document.activeElement).toBe(options[last].element);
+    await options[last].trigger('keydown', { key: 'Escape' });
+    expect(wrapper.find('[data-testid="feature-select-menu"]').exists()).toBe(false);
+    expect(document.activeElement).toBe(
+      wrapper.get('[data-testid="feature-select-trigger"]').element,
+    );
+    wrapper.unmount();
+  });
+
+  it('selects the focused option with Enter', async () => {
+    const wrapper = mount(FeatureSelect, { global: { plugins: [createPinia()], stubs } });
+    await wrapper.get('[data-testid="feature-select-trigger"]').trigger('click');
+    await wrapper.findAll('[role="option"]')[1].trigger('keydown', { key: 'Enter' });
+
+    expect(push).toHaveBeenCalledTimes(1);
+    expect(wrapper.find('[data-testid="feature-select-menu"]').exists()).toBe(false);
+  });
 });

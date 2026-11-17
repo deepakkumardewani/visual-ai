@@ -36,6 +36,7 @@ const isThemeButtonVisible = computed(() => {
 });
 
 const showDesktopNavTabs = computed(() => !isMobile.value && isDashboard.value);
+const showMobileNavTabs = computed(() => isMobile.value && isDashboard.value);
 
 /** Dashboard is auth-gated — show tabs once Clerk is loaded (don't wait for SignedIn). */
 const showNavTabs = computed(() => Boolean(isAuthLoaded.value) && isDashboard.value);
@@ -52,13 +53,13 @@ const showEndSkeleton = computed(() => {
 </script>
 
 <template>
-  <div data-testid="app-header-v2">
+  <div data-testid="app-header-v2" :class="{ 'header-v2-root--mobile': showMobileNavTabs }">
     <SignedIn>
       <ReferralOffer v-if="isMobile && isDashboard" />
     </SignedIn>
     <header
-      class="header-v2 tw-fixed tw-left-0 tw-right-0 tw-top-0 tw-z-50 tw-h-16 tw-bg-surface-1/80 tw-backdrop-blur-[14px]"
-      :class="{ 'header-v2--dashboard-mobile': isMobile && isDashboard }"
+      class="header-v2 tw-fixed tw-left-0 tw-right-0 tw-top-0 tw-z-50 tw-bg-surface-1/80 tw-backdrop-blur-[14px]"
+      :class="isMobile && isDashboard ? 'header-v2--dashboard-mobile' : 'tw-h-16'"
     >
       <div
         class="header-v2__inner tw-mx-auto tw-flex tw-h-16 tw-w-full tw-items-center tw-gap-3 tw-px-4 lg:tw-gap-5 lg:tw-px-6"
@@ -69,7 +70,7 @@ const showEndSkeleton = computed(() => {
           <Logo />
           <div
             v-if="isCreateSurface"
-            class="tw-relative tw-hidden tw-min-w-0 tw-flex-1 md:tw-block lg:tw-flex-none"
+            class="tw-relative tw-min-w-0 tw-flex-1 md:tw-max-w-[17rem] md:tw-flex-none"
           >
             <FeatureSelect />
           </div>
@@ -77,7 +78,7 @@ const showEndSkeleton = computed(() => {
 
         <div
           v-if="showDesktopNavTabs"
-          class="header-v2__center tw-hidden tw-flex-1 tw-justify-center md:tw-flex"
+          class="header-v2__center tw-flex tw-flex-1 tw-justify-center"
         >
           <div
             v-if="!showNavTabs"
@@ -140,6 +141,18 @@ const showEndSkeleton = computed(() => {
           </div>
         </div>
       </div>
+      <div
+        v-if="showMobileNavTabs"
+        data-testid="header-mobile-tabs"
+        class="header-v2__tabs-row tw-border-b tw-border-border tw-bg-surface-1 tw-px-4 tw-py-2"
+      >
+        <div
+          v-if="!showNavTabs"
+          aria-hidden="true"
+          class="tw-h-11 tw-w-full tw-animate-pulse tw-rounded-full tw-bg-surface-2"
+        />
+        <NavTabs v-else variant="segmented" />
+      </div>
     </header>
     <BuyMoreCreditsDialog />
     <ReferralOfferDialog />
@@ -152,8 +165,15 @@ const showEndSkeleton = computed(() => {
   border-image: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.35), transparent) 1;
 }
 
+/* Lets the sticky header stick against the app column, not this wrapper. */
+.header-v2-root--mobile {
+  display: contents;
+}
+
 .header-v2--dashboard-mobile {
-  position: relative !important;
+  position: sticky !important;
+  /* Park the 64px top bar off-screen so only the tabs row stays pinned. */
+  top: -4rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

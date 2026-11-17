@@ -42,7 +42,8 @@ vi.mock('@/components/Dashboard/DashboardShell.vue', () => ({
 vi.mock('@/components/Dashboard/MobileSettingsSheet.vue', () => ({
   default: {
     props: ['modelValue'],
-    template: '<div data-testid="mobile-settings-sheet-stub"><slot /></div>',
+    template:
+      '<div data-testid="mobile-settings-sheet-stub" :data-open="String(modelValue)"><slot /></div>',
   },
 }));
 
@@ -122,14 +123,14 @@ describe('Dashboard', () => {
     expect(wrapper.find('[data-testid="history-stub"]').exists()).toBe(true);
   });
 
-  it('shows mobile nav tab strip only on xs viewports on app shell routes', async () => {
+  it('does not render its own mobile tab strip (tabs live in the header)', () => {
     smAndUpRef.value = false;
     routeName.value = 'create';
 
     const wrapper = mount(Dashboard);
 
-    expect(wrapper.find('[data-testid="dashboard-mobile-tabs"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="dashboard-mobile-tabs"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(false);
   });
 
   it('does not render v-tabs-window or v-divider', () => {
@@ -137,5 +138,56 @@ describe('Dashboard', () => {
 
     expect(wrapper.html()).not.toMatch(/<v-tabs-window/i);
     expect(wrapper.html()).not.toMatch(/<v-divider/i);
+  });
+
+  it('shows only the explore panel on the explore route', async () => {
+    routeName.value = 'explore';
+    const wrapper = mount(Dashboard);
+    await wrapper.vm.$nextTick();
+
+    expect(useAppStore().tab).toBe(2);
+    expect(panelIsShown(wrapper, 'dashboard-explore-panel')).toBe(true);
+    expect(panelIsShown(wrapper, 'dashboard-generate-panel')).toBe(false);
+    expect(panelIsShown(wrapper, 'dashboard-assets-panel')).toBe(false);
+    expect(wrapper.find('[data-testid="explore-feed-stub"]').exists()).toBe(true);
+  });
+
+  it('docks the composer and settings trigger below the sm breakpoint without tabs', () => {
+    smAndUpRef.value = false;
+    const wrapper = mount(Dashboard);
+
+    expect(wrapper.find('[data-testid="mobile-composer-dock"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="mobile-settings-trigger"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="dashboard-mobile-tabs"]').exists()).toBe(false);
+  });
+
+  it('keeps the desktop prompt on top and no dock at sm and above', () => {
+    smAndUpRef.value = true;
+    const wrapper = mount(Dashboard);
+
+    expect(wrapper.find('[data-testid="mobile-composer-dock"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="prompt-bar-stub"]').exists()).toBe(true);
+  });
+
+  it('syncs the feature from the route params on create', () => {
+    routeParams.value = { feature: 'upscale' };
+    mount(Dashboard);
+
+    expect(useAppStore().feature).not.toBe('image');
+  });
+
+  it('opens the settings sheet from the dock and closes it when the viewport grows', async () => {
+    smAndUpRef.value = false;
+    const wrapper = mount(Dashboard);
+    const isOpen = () =>
+      wrapper.get('[data-testid="mobile-settings-sheet-stub"]').attributes('data-open');
+
+    expect(isOpen()).toBe('false');
+    await wrapper.get('[data-testid="mobile-settings-trigger"]').trigger('click');
+    expect(isOpen()).toBe('true');
+
+    smAndUpRef.value = true;
+    await wrapper.vm.$nextTick();
+    expect(isOpen()).toBe('false');
   });
 });

@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-16T10:51:41.900Z",
+ "generatedAt": "2026-11-17T09:36:32.743Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -29,20 +29,20 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
- "costUsd": 8.0986,
- "elapsedMs": 3822879,
+ "costUsd": 16.1946,
+ "elapsedMs": 82318252,
  "costByRole": {
-  "builder": 1.7736,
-  "verifier": 5.3275,
-  "unit": 0.6113,
-  "e2e": 0.3862
+  "e2e": 1.3006,
+  "builder": 3.3126,
+  "verifier": 10.2231,
+  "unit": 1.3584
  },
  "totals": {
   "phases": 14,
   "tasks": 61,
   "byStatus": {
-   "verified": 10,
-   "ready": 51
+   "verified": 19,
+   "ready": 42
   }
  },
  "phases": [
@@ -435,7 +435,7 @@ window.DASHBOARD = {
      "line": 77,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-16T10:51:41.886Z",
+     "updatedAt": "2026-11-16T10:52:01.187Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -481,7 +481,7 @@ window.DASHBOARD = {
      "line": 85,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-16T10:51:41.886Z",
+     "updatedAt": "2026-11-16T10:52:01.187Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -538,7 +538,7 @@ window.DASHBOARD = {
      "line": 93,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-16T10:51:41.886Z",
+     "updatedAt": "2026-11-16T10:52:01.187Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -587,7 +587,7 @@ window.DASHBOARD = {
      "line": 102,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-16T10:51:41.886Z",
+     "updatedAt": "2026-11-16T10:52:01.187Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -643,7 +643,7 @@ window.DASHBOARD = {
     {
      "id": "T3.1",
      "title": "Shared PRO_PERKS and ProPerksDialog",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -666,28 +666,56 @@ window.DASHBOARD = {
      ],
      "line": 117,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T12:09:41.677Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "FAIL",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "FAIL",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.7108,
+     "costApprox": true,
+     "elapsedMs": 1364374,
+     "summary": [
+      "T3.1: `PRO_PERKS` moved to `apps/web/src/utils/proPerks.ts` (single hit for `PRO_PERKS =`), `ProPerksDialog.vue` on AppModal (no CTA), `showProPerksDialog`/`showProPerks`/`hideProPerks` in `stores/dia",
+      "T3.2: `UserMenu.vue` plan pill (`data-testid=\"plan-pill\"`, gold PRO / muted FREE, only when `isReady`, closes menu, FREE -> showPricing, PRO -> showProPerks), `<ProPerksDialog />` mounted beside `<Pri",
+      "Tests updated: `UserMenu.test.ts` (pill/ready/dialogs; stubbed PricingDialog), `CreditsChip.test.ts`.",
+      "Evidence: `npx vitest run src/components/Header src/components/Dialogs src/components/Pricing src/stores` 40 files / 392 tests pass; `bun run verify` exit 0."
+     ]
     },
     {
      "id": "T3.2",
      "title": "UserMenu pill and chip removal",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
       "apps/web/src/components/Header/UserMenu.vue",
-      "apps/web/src/components/Header/CreditsChip.vue"
+      "apps/web/src/components/Header/CreditsChip.vue",
+      "apps/web/src/components/Header/CreditsChip.test.ts"
      ],
      "gherkin": null,
      "do": "In `UserMenu.vue` replace `pro-badge` with a `button` pill (PRO `tw-bg-gold/15 tw-text-gold`, FREE muted), rendered only when `userStore.isReady`; FREE calls `dialogStore.showPricing()`, PRO calls `showProPerks`; menu closes on click; long names truncate without hiding the pill. Mount `<ProPerksDialog />` at the template root of `UserMenu.vue` next to the existing `<PricingDialog />` (the only `PricingDialog` mount in the app, beside `ReferralDialog` and `ReferralCopyDialog`). Remove `pro-badge-header` from `CreditsChip.vue`. `Profile/UserDetails.vue` untouched.",
@@ -703,23 +731,50 @@ window.DASHBOARD = {
      ],
      "line": 125,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T12:09:41.677Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "FAIL",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "FAIL",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.8969,
+     "costApprox": true,
+     "elapsedMs": 1955771,
+     "summary": [
+      "T3.1: `PRO_PERKS` moved to `apps/web/src/utils/proPerks.ts` (single hit for `PRO_PERKS =`), `ProPerksDialog.vue` on AppModal (no CTA), `showProPerksDialog`/`showProPerks`/`hideProPerks` in `stores/dia",
+      "T3.2: `UserMenu.vue` plan pill (`data-testid=\"plan-pill\"`, gold PRO / muted FREE, only when `isReady`, closes menu, FREE -> showPricing, PRO -> showProPerks), `<ProPerksDialog />` mounted beside `<Pri",
+      "Tests updated: `UserMenu.test.ts` (pill/ready/dialogs; stubbed PricingDialog), `CreditsChip.test.ts`.",
+      "Evidence: `npx vitest run src/components/Header src/components/Dialogs src/components/Pricing src/stores` 40 files / 392 tests pass; `bun run verify` exit 0."
+     ]
     },
     {
      "id": "T3.3",
      "title": "Unit: plan pill and perks dialog",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
@@ -740,30 +795,51 @@ window.DASHBOARD = {
      ],
      "line": 133,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T12:09:41.677Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.9352,
+     "costApprox": true,
+     "elapsedMs": 1814193,
+     "summary": [
+      "T3.1: `PRO_PERKS` moved to `apps/web/src/utils/proPerks.ts` (single hit for `PRO_PERKS =`), `ProPerksDialog.vue` on AppModal (no CTA), `showProPerksDialog`/`showProPerks`/`hideProPerks` in `stores/dia",
+      "T3.2: `UserMenu.vue` plan pill (`data-testid=\"plan-pill\"`, gold PRO / muted FREE, only when `isReady`, closes menu, FREE -> showPricing, PRO -> showProPerks), `<ProPerksDialog />` mounted beside `<Pri",
+      "Tests updated: `UserMenu.test.ts` (pill/ready/dialogs; stubbed PricingDialog), `CreditsChip.test.ts`.",
+      "Evidence: `npx vitest run src/components/Header src/components/Dialogs src/components/Pricing src/stores` 40 files / 392 tests pass; `bun run verify` exit 0."
+     ]
     },
     {
      "id": "T3.4",
      "title": "E2E: plan pill",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [],
      "files": [
       "apps/web/e2e/qa/plan-status.spec.ts",
       "apps/web/e2e/qa/pro-tier.spec.ts",
-      "apps/web/e2e/qa/upgrade-entry.spec.ts (all select pro-badge",
-      "upgrade-entry also pro-badge-header)"
+      "apps/web/e2e/qa/upgrade-entry.spec.ts",
+      "apps/web/e2e/qa/header-responsive.spec.ts",
+      "apps/web/e2e/support/planPill.ts"
      ],
      "gherkin": null,
      "do": null,
@@ -777,23 +853,43 @@ window.DASHBOARD = {
      ],
      "line": 141,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T12:09:41.677Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.9919,
+     "costApprox": true,
+     "elapsedMs": 1744854,
+     "summary": [
+      "T3.1: `PRO_PERKS` moved to `apps/web/src/utils/proPerks.ts` (single hit for `PRO_PERKS =`), `ProPerksDialog.vue` on AppModal (no CTA), `showProPerksDialog`/`showProPerks`/`hideProPerks` in `stores/dia",
+      "T3.2: `UserMenu.vue` plan pill (`data-testid=\"plan-pill\"`, gold PRO / muted FREE, only when `isReady`, closes menu, FREE -> showPricing, PRO -> showProPerks), `<ProPerksDialog />` mounted beside `<Pri",
+      "Tests updated: `UserMenu.test.ts` (pill/ready/dialogs; stubbed PricingDialog), `CreditsChip.test.ts`.",
+      "Evidence: `npx vitest run src/components/Header src/components/Dialogs src/components/Pricing src/stores` 40 files / 392 tests pass; `bun run verify` exit 0."
+     ]
     },
     {
      "id": "T3.5",
      "title": "Gate: Phase 3",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -812,25 +908,45 @@ window.DASHBOARD = {
      ],
      "line": 150,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-16T12:09:41.677Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.7151,
+     "costApprox": true,
+     "elapsedMs": 1394836,
+     "summary": [
+      "T3.1: `PRO_PERKS` moved to `apps/web/src/utils/proPerks.ts` (single hit for `PRO_PERKS =`), `ProPerksDialog.vue` on AppModal (no CTA), `showProPerksDialog`/`showProPerks`/`hideProPerks` in `stores/dia",
+      "T3.2: `UserMenu.vue` plan pill (`data-testid=\"plan-pill\"`, gold PRO / muted FREE, only when `isReady`, closes menu, FREE -> showPricing, PRO -> showProPerks), `<ProPerksDialog />` mounted beside `<Pri",
+      "Tests updated: `UserMenu.test.ts` (pill/ready/dialogs; stubbed PricingDialog), `CreditsChip.test.ts`.",
+      "Evidence: `npx vitest run src/components/Header src/components/Dialogs src/components/Pricing src/stores` 40 files / 392 tests pass; `bun run verify` exit 0."
+     ]
     }
    ],
-   "verified": 0,
+   "verified": 5,
    "total": 5,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 4.2499,
+   "elapsedMs": 1955772
   },
   {
    "id": "4",
@@ -854,14 +970,15 @@ window.DASHBOARD = {
     {
      "id": "T4.1",
      "title": "Header tabs, segmented variant, FeatureSelect",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
       "apps/web/src/components/Header/AppHeader.vue",
       "apps/web/src/components/Header/NavTabs.vue",
       "apps/web/src/components/Header/FeatureSelect.vue",
-      "apps/web/src/pages/Dashboard.vue"
+      "apps/web/src/pages/Dashboard.vue",
+      "apps/web/src/components.d.ts"
      ],
      "gherkin": null,
      "do": "Render tabs in `AppHeader` using `useHeaderBreakpoint`: centered at >=768; below 768 a row-2 full-width equal-thirds segmented control (`NavTabs` segmented variant), sticky at the viewport top. Remove `dashboard-mobile-tabs` from `Dashboard.vue`. `FeatureSelect` renders at all widths on Create: icon + full title at 768-1023, compact below 768 (icon and chevron never hidden, title ellipsizes). Tabs skeleton matches. Update stale `dashboard-mobile-tabs` assertions.",
@@ -877,30 +994,46 @@ window.DASHBOARD = {
      ],
      "line": 165,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-17T09:36:32.726Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 5,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.0039,
+     "costApprox": true,
+     "elapsedMs": 76539600,
      "summary": []
     },
     {
      "id": "T4.2",
      "title": "Unit: tabs and feature select",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
       "apps/web/src/components/Header/NavTabs.vue",
       "apps/web/src/components/Header/FeatureSelect.vue",
       "apps/web/src/components/Header/AppHeader.vue",
-      "apps/web/src/pages/Dashboard.vue"
+      "apps/web/src/pages/Dashboard.vue",
+      "apps/web/src/components.d.ts"
      ],
      "gherkin": null,
      "do": "Update `NavTabs.test.ts`, `FeatureSelect.test.ts`, `AppHeader.test.ts`, `Dashboard.test.ts`: segmented variant below 768, centered at 768+, `dashboard-mobile-tabs` absent, feature select on Create at all widths and absent on Explore/Assets, tabs skeleton.",
@@ -914,23 +1047,31 @@ window.DASHBOARD = {
      ],
      "line": 173,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-17T09:36:32.726Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.0307,
+     "costApprox": true,
+     "elapsedMs": 76449077,
      "summary": []
     },
     {
      "id": "T4.3",
      "title": "E2E: tabs and feature select across widths",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [],
      "files": [],
@@ -946,23 +1087,38 @@ window.DASHBOARD = {
      ],
      "line": 181,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-17T09:36:32.726Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 5,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.1413,
+     "costApprox": true,
+     "elapsedMs": 76350404,
      "summary": []
     },
     {
      "id": "T4.4",
      "title": "Gate: Phase 4",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -980,25 +1136,40 @@ window.DASHBOARD = {
      ],
      "line": 190,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-17T09:36:32.726Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": null,
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6704,
+     "costApprox": true,
+     "elapsedMs": 1036618,
      "summary": []
     }
    ],
-   "verified": 0,
+   "verified": 4,
    "total": 4,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 3.8463,
+   "elapsedMs": 76539601
   },
   {
    "id": "5",
@@ -2711,7 +2882,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 3",
+ "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 5",
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -2767,10 +2938,87 @@ window.DASHBOARD = {
    "text": "Local MongoDB down (ECONNREFUSED 27017); baseline screenshots cannot be captured. Needs mongod started.",
    "answer": "Builder may start mongod manually against /opt/homebrew/var/mongodb",
    "answeredAt": "2026-11-16T09:39:12.598Z"
+  },
+  {
+   "at": "2026-11-16T12:44:50.663Z",
+   "type": "question",
+   "tasks": [
+    "T4.1",
+    "T4.3"
+   ],
+   "id": "Q6",
+   "text": "SPEC conflict at 1024: tabs centered (SPEC:116) vs Earn/Upgrade labelled (SPEC:125). Built: centered in free slot (86px left of midpoint). Choose: (a) accept free-slot centering and reword SPEC/AUDIT, (b) viewport-center where it fits (fix at 1440, 1024 exempt), (c) icon-only Earn/Upgrade up to wider breakpoint.",
+   "answer": null,
+   "answeredAt": null
+  },
+  {
+   "at": "2026-11-16T16:28:23.804Z",
+   "type": "question",
+   "tasks": [
+    "T4.1",
+    "T4.3"
+   ],
+   "id": "Q7",
+   "text": "spec_issue: SPEC:116 centered tabs vs SPEC:125 labelled Earn/Upgrade at 1024; tabs 86px left of midpoint at 1024, 34px at 1440. See reports/phase-4-verifier-a4.md",
+   "answer": "Re Q7: option (a) free-slot centering accepted; SPEC/AUDIT reworded. Free-slot e2e assertion is correct.",
+   "answeredAt": "2026-11-17T09:31:20.441Z"
   }
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-16T12:09:41.677Z",
+   "ok": true,
+   "phase": "3",
+   "tasks": [
+    "T3.1",
+    "T3.2",
+    "T3.3",
+    "T3.4",
+    "T3.5"
+   ],
+   "attempt": "5",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 145/145, unit 58 tests, lowest coverage 87.5% branches (98.41% lines)",
+   "error": null,
+   "sha": "0b2ee6aa03feb851e8656de382e79f57e694aee0",
+   "shortSha": "0b2ee6a",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/0b2ee6aa03feb851e8656de382e79f57e694aee0",
+   "subject": "feat(web): plan pill in avatar menu and Pro perks dialog",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-16T17:39:35+05:30",
+   "filesChanged": 18,
+   "added": 529,
+   "removed": 60
+  },
+  {
+   "at": "2026-11-16T10:52:01.187Z",
+   "ok": true,
+   "phase": "2",
+   "tasks": [
+    "T2.1",
+    "T2.2",
+    "T2.3",
+    "T2.4"
+   ],
+   "attempt": "2",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 106/106 x3, unit lowest 100%",
+   "error": null,
+   "sha": "481d16fa9dbf04d53d7ae25b9b6b4e57b537860c",
+   "shortSha": "481d16f",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/481d16fa9dbf04d53d7ae25b9b6b4e57b537860c",
+   "subject": "feat(web): header right cluster with Upgrade and Earn",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-16T16:21:53+05:30",
+   "filesChanged": 17,
+   "added": 1289,
+   "removed": 459
+  },
   {
    "at": "2026-11-16T10:18:01.900Z",
    "ok": true,
@@ -3121,9 +3369,525 @@ window.DASHBOARD = {
    "file": "2/T2.3-4.png",
    "phase": "2",
    "href": "shots/2/T2.3-4.png"
+  },
+  {
+   "taskId": "T3.1",
+   "kind": "proof",
+   "step": "One PRO_PERKS source; dialog has no buy CTA",
+   "attempt": 4,
+   "caption": "Pro perks dialog lists the four shared PRO_PERKS items and offers only a Close button, no buy CTA.",
+   "annotations": [
+    {
+     "x": 33.3,
+     "y": 35.6,
+     "w": 33.3,
+     "h": 28.9,
+     "label": "Perks dialog: 4 perks, only Close control"
+    }
+   ],
+   "at": "2026-11-16T11:56:01.885Z",
+   "file": "3/T3.1-1.png",
+   "phase": "3",
+   "href": "shots/3/T3.1-1.png"
+  },
+  {
+   "taskId": "T3.2",
+   "kind": "proof",
+   "step": "No PRO chip in header",
+   "attempt": 4,
+   "caption": "Pro user at 1440: header right cluster shows Earn credits, credits and avatar only, with no PRO chip and no Upgrade pill.",
+   "annotations": [
+    {
+     "x": 79.2,
+     "y": 0.8,
+     "w": 19.2,
+     "h": 6,
+     "label": "No PRO chip beside credits"
+    }
+   ],
+   "at": "2026-11-16T11:56:02.002Z",
+   "file": "3/T3.2-1.png",
+   "phase": "3",
+   "href": "shots/3/T3.2-1.png"
+  },
+  {
+   "taskId": "T3.2",
+   "kind": "proof",
+   "step": "Pill by plan: PRO",
+   "attempt": 4,
+   "caption": "Pro user opens the avatar menu and sees the gold PRO pill under their email.",
+   "annotations": [
+    {
+     "x": 83,
+     "y": 12.7,
+     "w": 2.7,
+     "h": 2.4,
+     "label": "Gold PRO pill"
+    }
+   ],
+   "at": "2026-11-16T11:56:02.092Z",
+   "file": "3/T3.2-2.png",
+   "phase": "3",
+   "href": "shots/3/T3.2-2.png"
+  },
+  {
+   "taskId": "T3.2",
+   "kind": "proof",
+   "step": "Pill by plan: FREE",
+   "attempt": 4,
+   "caption": "Free user opens the avatar menu and sees the muted FREE pill under their email.",
+   "annotations": [
+    {
+     "x": 83,
+     "y": 12.7,
+     "w": 2.9,
+     "h": 2.4,
+     "label": "Muted FREE pill"
+    }
+   ],
+   "at": "2026-11-16T11:56:02.179Z",
+   "file": "3/T3.2-3.png",
+   "phase": "3",
+   "href": "shots/3/T3.2-3.png"
+  },
+  {
+   "taskId": "T3.2",
+   "kind": "proof",
+   "step": "FREE opens pricing dialog",
+   "attempt": 4,
+   "caption": "Clicking FREE closes the menu and opens the existing Upgrade to Pro pricing dialog.",
+   "annotations": [
+    {
+     "x": 22.9,
+     "y": 7.8,
+     "w": 54.2,
+     "h": 6.7,
+     "label": "Pricing dialog title"
+    }
+   ],
+   "at": "2026-11-16T11:56:02.269Z",
+   "file": "3/T3.2-4.png",
+   "phase": "3",
+   "href": "shots/3/T3.2-4.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill menu-360-light",
+   "annotations": [],
+   "at": "2026-11-16T11:45:59.977Z",
+   "file": "3/T3.4-1.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-1.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill menu-360-dark",
+   "annotations": [],
+   "at": "2026-11-16T11:46:00.077Z",
+   "file": "3/T3.4-2.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-2.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill menu-1440-light",
+   "annotations": [],
+   "at": "2026-11-16T11:46:00.170Z",
+   "file": "3/T3.4-3.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-3.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill menu-1440-dark",
+   "annotations": [],
+   "at": "2026-11-16T11:46:00.265Z",
+   "file": "3/T3.4-4.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-4.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill pro-perks-dialog",
+   "annotations": [],
+   "at": "2026-11-16T12:01:59.240Z",
+   "file": "3/T3.4-5.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-5.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": "Pro clicks PRO and the perks dialog opens with no buy button",
+   "attempt": 4,
+   "caption": "Replaces the mid-fade pro-perks-dialog shot: clicking PRO opens the settled perks dialog with only a Close button.",
+   "annotations": [
+    {
+     "x": 33.3,
+     "y": 35.6,
+     "w": 33.3,
+     "h": 28.9,
+     "label": "Perks dialog, no buy button"
+    }
+   ],
+   "at": "2026-11-16T11:56:02.360Z",
+   "file": "3/T3.4-6.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-6.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill menu-free-1440-dark",
+   "annotations": [],
+   "at": "2026-11-16T12:01:58.466Z",
+   "file": "3/T3.4-7.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-7.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill menu-free-1440-light",
+   "annotations": [],
+   "at": "2026-11-16T12:01:58.572Z",
+   "file": "3/T3.4-8.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-8.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill menu-free-360-dark",
+   "annotations": [],
+   "at": "2026-11-16T12:01:58.668Z",
+   "file": "3/T3.4-9.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-9.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill menu-free-360-light",
+   "annotations": [],
+   "at": "2026-11-16T12:01:58.764Z",
+   "file": "3/T3.4-10.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-10.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill menu-pro-1440-dark",
+   "annotations": [],
+   "at": "2026-11-16T12:01:58.859Z",
+   "file": "3/T3.4-11.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-11.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill menu-pro-1440-light",
+   "annotations": [],
+   "at": "2026-11-16T12:01:58.954Z",
+   "file": "3/T3.4-12.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-12.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill menu-pro-360-dark",
+   "annotations": [],
+   "at": "2026-11-16T12:01:59.050Z",
+   "file": "3/T3.4-13.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-13.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "plan pill menu-pro-360-light",
+   "annotations": [],
+   "at": "2026-11-16T12:01:59.146Z",
+   "file": "3/T3.4-14.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-14.png"
+  },
+  {
+   "taskId": "T4.1",
+   "kind": "after",
+   "step": "Tabs at every width including 640-767",
+   "attempt": 1,
+   "caption": "At 700px (the old 640-767 gap) Create, Explore and Assets render as the full-width row 2 under the header.",
+   "annotations": [
+    {
+     "x": 2.3,
+     "y": 12,
+     "w": 95.4,
+     "h": 6,
+     "label": "tabs row visible at 700"
+    }
+   ],
+   "at": "2026-11-16T12:43:54.928Z",
+   "file": "4/T4.1-1.png",
+   "phase": "4",
+   "href": "shots/4/T4.1-1.png"
+  },
+  {
+   "taskId": "T4.1",
+   "kind": "after",
+   "step": "Sticky row 2 below 768; feature select on Create at all widths",
+   "attempt": 1,
+   "caption": "At 390px: banner, row 1 with compact feature select, row 2 equal-thirds segmented tabs.",
+   "annotations": [
+    {
+     "x": 14.9,
+     "y": 5.7,
+     "w": 29.6,
+     "h": 4.7,
+     "label": "compact feature select on Create"
+    },
+    {
+     "x": 0,
+     "y": 11.8,
+     "w": 100,
+     "h": 8.4,
+     "label": "row 2 segmented tabs"
+    }
+   ],
+   "at": "2026-11-16T12:43:55.041Z",
+   "file": "4/T4.1-2.png",
+   "phase": "4",
+   "href": "shots/4/T4.1-2.png"
+  },
+  {
+   "taskId": "T4.1",
+   "kind": "after",
+   "step": "Row 2 stays at the viewport top while content scrolls",
+   "attempt": 1,
+   "caption": "Explore at 390px after scrolling: row 1 and banner scrolled away, tabs row pinned at y=0.",
+   "annotations": [
+    {
+     "x": 0,
+     "y": 0,
+     "w": 100,
+     "h": 8.4,
+     "label": "tabs pinned at top after scroll"
+    }
+   ],
+   "at": "2026-11-16T12:43:55.145Z",
+   "file": "4/T4.1-3.png",
+   "phase": "4",
+   "href": "shots/4/T4.1-3.png"
+  },
+  {
+   "taskId": "T4.1",
+   "kind": "after",
+   "step": "Tabs centered at 768+ (spec-issue evidence)",
+   "attempt": 1,
+   "caption": "At 1024px the tabs center sits at x=426, 86px left of the viewport midpoint (512): same as the baseline left-shift.",
+   "annotations": [
+    {
+     "x": 28.1,
+     "y": 0.6,
+     "w": 26.9,
+     "h": 6,
+     "label": "tabs center 86px left of midpoint"
+    }
+   ],
+   "at": "2026-11-16T12:43:55.251Z",
+   "file": "4/T4.1-4.png",
+   "phase": "4",
+   "href": "shots/4/T4.1-4.png"
+  },
+  {
+   "taskId": "T4.1",
+   "kind": "after",
+   "step": "Tabs centered at 768+ (spec-issue evidence)",
+   "attempt": 1,
+   "caption": "At 1440px the tabs center sits at x=686, 34px left of the viewport midpoint (720).",
+   "annotations": [
+    {
+     "x": 32.1,
+     "y": 0.6,
+     "w": 31.1,
+     "h": 6,
+     "label": "tabs center 34px left of midpoint"
+    }
+   ],
+   "at": "2026-11-16T12:43:55.354Z",
+   "file": "4/T4.1-5.png",
+   "phase": "4",
+   "href": "shots/4/T4.1-5.png"
+  },
+  {
+   "taskId": "T4.1",
+   "kind": "proof",
+   "step": "Centered at 768+ (in the free space between feature select and right cluster, Q7 option a)",
+   "attempt": 7,
+   "caption": "At 768px (prod build, signed-in Free user) the tabs sit centered between the feature select and the Earn icon button, gaps about 9px and 12px.",
+   "annotations": [
+    {
+     "x": 34.3,
+     "y": 0.6,
+     "w": 30.7,
+     "h": 6,
+     "label": "tabs centered in the free slot"
+    },
+    {
+     "x": 8,
+     "y": 1.3,
+     "w": 25.3,
+     "h": 4.6,
+     "label": "feature select, left edge of slot"
+    },
+    {
+     "x": 66.6,
+     "y": 1.3,
+     "w": 6,
+     "h": 4.6,
+     "label": "Earn button, right edge of slot"
+    }
+   ],
+   "at": "2026-11-17T09:35:48.667Z",
+   "file": "4/T4.1-6.png",
+   "phase": "4",
+   "href": "shots/4/T4.1-6.png"
+  },
+  {
+   "taskId": "T4.1",
+   "kind": "proof",
+   "step": "Centered at 768+ (in the free space between feature select and right cluster, Q7 option a)",
+   "attempt": 7,
+   "caption": "At 1024px the tabs sit centered between the feature select and the labelled Earn credits button, gaps about 25px and 20px (within the 4px e2e tolerance of the slot center).",
+   "annotations": [
+    {
+     "x": 28.1,
+     "y": 0.6,
+     "w": 26.9,
+     "h": 6,
+     "label": "tabs centered in the free slot"
+    },
+    {
+     "x": 6.8,
+     "y": 1.3,
+     "w": 18.9,
+     "h": 4.6,
+     "label": "feature select, left edge of slot"
+    },
+    {
+     "x": 57,
+     "y": 1.3,
+     "w": 13,
+     "h": 4.6,
+     "label": "Earn credits, right edge of slot"
+    }
+   ],
+   "at": "2026-11-17T09:35:48.770Z",
+   "file": "4/T4.1-7.png",
+   "phase": "4",
+   "href": "shots/4/T4.1-7.png"
+  },
+  {
+   "taskId": "T4.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "390px: two rows, equal thirds, feature select, banner",
+   "annotations": [],
+   "at": "2026-11-16T12:27:23.209Z",
+   "file": "4/T4.3-1.png",
+   "phase": "4",
+   "href": "shots/4/T4.3-1.png"
+  },
+  {
+   "taskId": "T4.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "360px: two rows, equal thirds, feature select, banner",
+   "annotations": [],
+   "at": "2026-11-16T12:27:23.335Z",
+   "file": "4/T4.3-2.png",
+   "phase": "4",
+   "href": "shots/4/T4.3-2.png"
+  },
+  {
+   "taskId": "T4.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "360px with 4-digit credits, no horizontal scroll",
+   "annotations": [],
+   "at": "2026-11-16T12:27:23.440Z",
+   "file": "4/T4.3-3.png",
+   "phase": "4",
+   "href": "shots/4/T4.3-3.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-17T09:36:32.726Z",
+   "type": "deliverable",
+   "tasks": [
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4"
+   ],
+   "text": "Tabs moved into the header: centered in free space at 768+, pinned segmented row 2 below 768",
+   "files": [
+    "apps/web/src/components/Header/AppHeader.vue"
+   ]
+  },
+  {
+   "at": "2026-11-16T12:09:25.138Z",
+   "type": "deliverable",
+   "tasks": [
+    "T3.1",
+    "T3.2",
+    "T3.3",
+    "T3.4",
+    "T3.5"
+   ],
+   "text": "Plan pill in avatar menu, Pro perks dialog, header PRO chip removed, unit and e2e coverage",
+   "files": [
+    "apps/web/src/components/Header/UserMenu.vue"
+   ]
+  },
   {
    "at": "2026-11-16T10:51:41.886Z",
    "type": "deliverable",
@@ -3166,6 +3930,126 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-17T09:35:56.425Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.3"
+   ],
+   "text": "Engineer report T4.3-e2e-a11.md named in the brief does not exist; verified by re-running the spec instead."
+  },
+  {
+   "at": "2026-11-17T09:35:56.327Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.1"
+   ],
+   "text": "Shots 4/T4.1-4 and -5 frame 1024/1440 as spec-issue offsets from the viewport midpoint; superseded by 4/T4.1-6 and -7 under Q7 option a."
+  },
+  {
+   "at": "2026-11-17T09:35:56.231Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.1"
+   ],
+   "text": "Dashboard.vue working-tree diff also carries useStudioPromptPrefill wiring from the unrelated prefill work (3eb3a20); commit it with that work, not as phase 4."
+  },
+  {
+   "at": "2026-11-17T09:35:56.128Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.1"
+   ],
+   "text": "Root bun run test: useLenis.test.ts fails deterministically (expects scrollTo offset only; source from commit 3eb3a20 now passes onComplete). Outside phase 4 files; fix the stale test."
+  },
+  {
+   "at": "2026-11-16T12:44:00.693Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.4"
+   ],
+   "text": "[flaky-env] prod build regenerated apps/web/src/components.d.ts (+ProPerksDialog entry); left in place for the orchestrator"
+  },
+  {
+   "at": "2026-11-16T12:44:00.587Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.3"
+   ],
+   "text": "[test-quality] 4-digit credits test writes the shared e2e user credits to Mongo (restored in finally) instead of mocking the credits response"
+  },
+  {
+   "at": "2026-11-16T12:44:00.467Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.4"
+   ],
+   "text": "[flaky-env] vp check (no --fix) fails on formatting of untracked node-jiti/ cache files; phase files check clean; add node-jiti/ to .gitignore"
+  },
+  {
+   "at": "2026-11-16T12:08:48.489Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.2"
+   ],
+   "text": "components.d.ts regenerates a ProPerksDialog entry on build/test; verifier reverted it; decide whether to commit"
+  },
+  {
+   "at": "2026-11-16T12:08:48.393Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.5"
+   ],
+   "text": "Untracked node-jiti/ cache is the only vp check format failure; gitignore it"
+  },
+  {
+   "at": "2026-11-16T12:08:48.298Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.4"
+   ],
+   "text": "Engineer report T3.4-e2e-a5.md was never written; verified from the spec and a fresh prod run instead"
+  },
+  {
+   "at": "2026-11-16T12:08:48.186Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.4"
+   ],
+   "text": "Stale attempt-null shots T3.4-1..4 (Free-only, pre-settle) still in manifest; superseded by T3.4-7..14 and T3.4-5"
+  },
+  {
+   "at": "2026-11-16T11:58:31.540Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.2"
+   ],
+   "text": "components.d.ts regenerates with a ProPerksDialog entry on build; decide whether to commit it (verifier reverted its own regeneration)"
+  },
+  {
+   "at": "2026-11-16T11:58:31.446Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.4"
+   ],
+   "text": "plan-pill.spec.ts:118 pill-absent-until-ready asserts pill count 0 while the menu is closed; also assert header-end-skeleton visible or user-menu-trigger hidden while gated"
+  },
+  {
+   "at": "2026-11-16T11:58:31.351Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.5"
+   ],
+   "text": "AUDIT.md diff is whitespace-only table reformatting (vp check --fix), outside T3 Files; revert or accept"
+  },
+  {
+   "at": "2026-11-16T11:58:31.237Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.5"
+   ],
+   "text": "node-jiti/ (untracked jiti cache at repo root) is the only vp check format failure; add it to .gitignore"
+  },
   {
    "at": "2026-11-16T10:46:42.591Z",
    "type": "advisory",
@@ -3273,618 +4157,588 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
-   "at": "2026-11-16T10:51:41.886Z",
+   "at": "2026-11-17T09:36:32.726Z",
    "type": "deliverable",
    "tasks": [
-    "T2.1",
-    "T2.2",
-    "T2.3",
-    "T2.4"
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4"
    ],
-   "text": "Header right cluster: Earn, Upgrade, credits, avatar; icon-only at 768; unit+e2e+gate green",
+   "text": "Tabs moved into the header: centered in free space at 768+, pinned segmented row 2 below 768",
    "files": [
-    "apps/web/src/components/Header/HeaderActions.vue"
+    "apps/web/src/components/Header/AppHeader.vue"
    ]
   },
   {
-   "at": "2026-11-16T10:51:39.120Z",
+   "at": "2026-11-17T09:36:28.065Z",
    "tasks": [
-    "T2.2"
+    "T4.3"
    ],
-   "attempt": "2",
+   "attempt": "7",
    "type": "verify_passed",
-   "evidence": "a4 BLOCKING resolved: ReferralOffer.test.ts now 13 tests incl. 5 iconOnly cases (aria-label \"Earn credits\" + empty text, tooltip null before and \"Earn credits\" after hover and after focusin, click sets referralOfferDialog, mobile precedence); ReferralOffer.vue 100/100/100/100. Verify command 34/34 passed, HeaderActions/CreditsChip/AppHeader.vue 100% all metrics; src/components/Header shuffled 11 f",
-   "fingerprint": "1c27f7366c07cb6abe1cbc5ef92116727488e613c95f44ecb3b6f03a08499382",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a6.md"
+   "evidence": "`E2E_SERVER=prod` header-responsive.spec.ts --repeat-each=3 gives 73 passed, 0 failed, 0 flaky, exit 0. The @medium centering test now also checks |leftGap-rightGap| <= 8px, so it would fail on a layout where the tabs hug the select. That matches the amended SPEC:116.",
+   "fingerprint": "8ed39a2d73f3d4377a9ed8f9a62a6a968c6eb2decd08291022b6e9397083d2dd",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a13.md"
   },
   {
-   "at": "2026-11-16T10:50:33.694Z",
+   "at": "2026-11-17T09:36:28.065Z",
+   "tasks": [
+    "T4.2"
+   ],
+   "attempt": "7",
+   "type": "verify_passed",
+   "evidence": "4 specs, 61/61 pass. Coverage (lines/branches/funcs): AppHeader.vue 100/100/100; NavTabs.vue 100/92.3/100; FeatureSelect.vue 96.25/83.33/95.45 (lines 34-36 are dead code); Dashboard.vue 96.55/95.65/81.81 (line 124 is the stubbed sheet's v-model). The lowest metric is 81.81% funcs, above the 80% floor. No it.fails, skip or only markers.",
+   "fingerprint": "3abf53154ac4396019024adc3e22efe6658939ed7dd6e311d7222b5b51b8cdd4",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a13.md"
+  },
+  {
+   "at": "2026-11-17T09:36:28.064Z",
+   "tasks": [
+    "T4.1"
+   ],
+   "attempt": "7",
+   "type": "verify_passed",
+   "evidence": "The Q7 spec issue is resolved by the owner's choice of option (a). SPEC:116 and AUDIT:9 now say \"centered in the free space\". On the prod build, the tabs sit centered in the slot between the feature select and the Earn button: about 9/12px gaps at 768 and 25/20px at 1024 (shots 4/T4.1-6, 4/T4.1-7). All other ACs were re-proven by the e2e run: tabs show at 700, row 2 stays pinned on Explore at 390,",
+   "fingerprint": "fd36ea1363ecda7da3c6baa2b63f587d664499440733c4c5073c5d5f12ab079a",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a13.md"
+  },
+  {
+   "at": "2026-11-17T09:35:56.425Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.3"
+   ],
+   "text": "Engineer report T4.3-e2e-a11.md named in the brief does not exist; verified by re-running the spec instead."
+  },
+  {
+   "at": "2026-11-17T09:35:56.327Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.1"
+   ],
+   "text": "Shots 4/T4.1-4 and -5 frame 1024/1440 as spec-issue offsets from the viewport midpoint; superseded by 4/T4.1-6 and -7 under Q7 option a."
+  },
+  {
+   "at": "2026-11-17T09:35:56.231Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.1"
+   ],
+   "text": "Dashboard.vue working-tree diff also carries useStudioPromptPrefill wiring from the unrelated prefill work (3eb3a20); commit it with that work, not as phase 4."
+  },
+  {
+   "at": "2026-11-17T09:35:56.128Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.1"
+   ],
+   "text": "Root bun run test: useLenis.test.ts fails deterministically (expects scrollTo offset only; source from commit 3eb3a20 now passes onComplete). Outside phase 4 files; fix the stale test."
+  },
+  {
+   "at": "2026-11-17T09:32:29.943Z",
    "type": "verify_started",
    "tasks": [
-    "T2.2"
+    "T4.1",
+    "T4.2",
+    "T4.3"
    ],
-   "attempt": "2"
+   "attempt": "7"
   },
   {
-   "at": "2026-11-16T10:50:31.830Z",
+   "at": "2026-11-17T09:32:27.737Z",
    "type": "preflight_passed",
    "tasks": [
-    "T2.2"
+    "T4.3"
    ],
-   "fingerprint": "1c27f7366c07cb6abe1cbc5ef92116727488e613c95f44ecb3b6f03a08499382"
+   "fingerprint": "8ed39a2d73f3d4377a9ed8f9a62a6a968c6eb2decd08291022b6e9397083d2dd"
   },
   {
-   "at": "2026-11-16T10:50:26.847Z",
+   "at": "2026-11-17T09:32:27.441Z",
    "type": "task_built",
    "tasks": [
-    "T2.2"
+    "T4.3"
    ],
-   "text": "unit: iconOnly tests added; Header 101 pass, 100% combined",
+   "text": "Tabs-centered 768/1024 free-slot tests pass 2/2 (repeat-each=3), plus equal-gap check",
    "files": [
-    "apps/web/src/components/Header/ReferralOffer.test.ts"
+    "apps/web/e2e/qa/header-responsive.spec.ts"
    ]
   },
   {
-   "at": "2026-11-16T10:49:56.038Z",
-   "type": "task_started",
-   "tasks": [
-    "T2.2"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-11-16T10:49:55.950Z",
+   "at": "2026-11-17T09:31:47.062Z",
    "type": "build_started",
    "tasks": [
-    "T2.2"
+    "T4.3"
    ],
-   "attempt": "3"
+   "attempt": "6"
   },
   {
-   "at": "2026-11-16T10:49:50.618Z",
+   "at": "2026-11-17T09:31:43.874Z",
+   "type": "preflight_passed",
    "tasks": [
-    "T2.4"
+    "T4.2"
+   ],
+   "fingerprint": "3abf53154ac4396019024adc3e22efe6658939ed7dd6e311d7222b5b51b8cdd4"
+  },
+  {
+   "at": "2026-11-17T09:31:43.874Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T4.1"
+   ],
+   "fingerprint": "fd36ea1363ecda7da3c6baa2b63f587d664499440733c4c5073c5d5f12ab079a"
+  },
+  {
+   "at": "2026-11-17T09:31:43.709Z",
+   "type": "task_started",
+   "tasks": [
+    "T4.1",
+    "T4.3"
+   ],
+   "attempt": "5"
+  },
+  {
+   "at": "2026-11-17T09:31:26.744Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T4.2"
+   ],
+   "fingerprint": "3abf53154ac4396019024adc3e22efe6658939ed7dd6e311d7222b5b51b8cdd4"
+  },
+  {
+   "at": "2026-11-17T09:31:20.441Z",
+   "type": "answered",
+   "tasks": [
+    "T4.1",
+    "T4.3"
+   ],
+   "id": "Q7",
+   "text": "Re Q7: option (a) free-slot centering accepted; SPEC/AUDIT reworded. Free-slot e2e assertion is correct."
+  },
+  {
+   "at": "2026-11-17T09:31:16.913Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T4.2"
+   ],
+   "fingerprint": "3abf53154ac4396019024adc3e22efe6658939ed7dd6e311d7222b5b51b8cdd4"
+  },
+  {
+   "at": "2026-11-17T09:18:18.253Z",
+   "type": "answered",
+   "tasks": [],
+   "id": "Q7",
+   "text": "Re Q7: option (a) - tabs centered in free space between feature select and right cluster; SPEC and AUDIT reworded."
+  },
+  {
+   "at": "2026-11-16T16:28:23.804Z",
+   "type": "question",
+   "tasks": [
+    "T4.1",
+    "T4.3"
+   ],
+   "id": "Q7",
+   "text": "spec_issue: SPEC:116 centered tabs vs SPEC:125 labelled Earn/Upgrade at 1024; tabs 86px left of midpoint at 1024, 34px at 1440. See reports/phase-4-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-16T12:44:50.663Z",
+   "type": "question",
+   "tasks": [
+    "T4.1",
+    "T4.3"
+   ],
+   "id": "Q6",
+   "text": "SPEC conflict at 1024: tabs centered (SPEC:116) vs Earn/Upgrade labelled (SPEC:125). Built: centered in free slot (86px left of midpoint). Choose: (a) accept free-slot centering and reword SPEC/AUDIT, (b) viewport-center where it fits (fix at 1440, 1024 exempt), (c) icon-only Earn/Upgrade up to wider breakpoint."
+  },
+  {
+   "at": "2026-11-16T12:44:47.805Z",
+   "tasks": [
+    "T4.4"
    ],
    "attempt": "1",
    "type": "verify_passed",
-   "evidence": "e2e 4 specs x3 (>= x2) 106/106 on prod build incl. localized-prices 8x3; bun run test 300 files / 2732 tests passed; vp lint 0 errors; type-aware check 0 errors; Free and Pro screenshots at 1440/768/390 inspected (evidence/phase-2/free-*.png, pro-*.png) and render the expected cluster",
-   "fingerprint": "dfafee2b7e7279cd311c1dcc67cf67c73d4d1b49eb7d761b3cb67b1849af3c88",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a4.md"
+   "evidence": "prod build plus header-responsive.spec.ts --repeat-each=3: 73 passed, 0 failed, 0 flaky (the Verify line asks for 2). The 700px \"Shell fits under the in-flow header\" tests that the e2e engineer reported failing now pass. Root `bun run test`: 301 files, 2769/2769 pass. `vp lint`: 0 errors. `vp check --no-fmt` (includes the type check): 0 errors. vp check on the phase files: exit 0. The full `vp che",
+   "fingerprint": "d58c51e9ac3aaa4fefea819fa495a2005b2a88985d896b9a1d35fc77a450147a",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a4.md"
   },
   {
-   "at": "2026-11-16T10:49:50.618Z",
+   "at": "2026-11-16T12:44:47.805Z",
    "tasks": [
-    "T2.3"
+    "T4.2"
    ],
    "attempt": "1",
    "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod fresh build, header-responsive + upgrade-entry + pricing-layout (+ localized-prices) --repeat-each=3: 106 passed, 0 failed/flaky (header-responsive 13 tests x3 incl. 5 new scenarios); scenarios match Scenarios: list; upgrade-pill -> upgrade-button in both specs with assertions unchanged; no skip/only/fixme/waitForTimeout; console guard intact; paidCallGuard is an auto fixture in e2",
-   "fingerprint": "cff20612eca076a60323cc7e5add2941b79cbf3c86da9a28e0a8463772320e09",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a4.md"
+   "evidence": "4 specs, 61/61 pass. Coverage (lines/branches/funcs): AppHeader.vue 100/100/100; NavTabs.vue 100/92.3/100; FeatureSelect.vue 96.25/83.33/95.45 (the uncovered lines 34-36 are dead `iconComponent` code); Dashboard.vue 96.42/95.65/81.81 (the uncovered line 122 is the v-model handler of the stubbed sheet). Lowest metric is 81.81% funcs. Tests cover every SPEC:124 criterion for this phase: feature sele",
+   "fingerprint": "dfa0d5b9b3c55b509d12dac352670b450f34b84ae69264c6ea9a6b4e0365ee4f",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a4.md"
   },
   {
-   "at": "2026-11-16T10:49:50.618Z",
+   "at": "2026-11-16T12:44:47.805Z",
    "tasks": [
-    "T2.1"
+    "T4.3"
    ],
    "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "vitest src/components/Header 96/96 (11 files); vp check --no-fmt 0 errors (53 warnings, none blocking), fmt on apps/web/src+e2e 605 files clean; grep upgrade-pill CreditsChip.vue empty; prod probe: order Earn<Upgrade<credits<avatar by x at 1440 (999/1129/1276/1350), 768 icon-only Earn and Upgrade 44x44 with aria-label, focus tooltip \"Upgrade to Pro\" shown, 390 Upgrade 44x44 and no Earn pill (banne",
-   "fingerprint": "cf5222fe3739bb750aa351736d653e41b972715ad2b860a7abf24588b49fa3eb",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a4.md"
+   "type": "blocked",
+   "category": "spec-issue",
+   "text": "[spec-issue] · The @medium \"Tabs are centered at 768/1024\" test measures against the free slot between the feature select and the Earn pill (+/-4px). It would also pass on the baseline layout that SPEC:116 calls left-shifted. Whether it is correct depends on the owner's answer for T4.1. Every other scenario passes: header-responsive.spec.ts 73/73 x3 on E2E_SERVER=prod.",
+   "fingerprint": "fe403363d5fd204644017745dadeda1350375148aec7d167fca45069f17477cb",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a4.md"
   },
   {
-   "at": "2026-11-16T10:49:50.618Z",
+   "at": "2026-11-16T12:44:47.805Z",
    "tasks": [
-    "T2.2"
+    "T4.1"
    ],
    "attempt": "1",
-   "type": "verify_failed",
-   "category": "test-quality",
-   "text": "[test-quality] · SPEC Part 2 unit criterion \"icon-only buttons have aria-label and tooltip\" (SPEC names ReferralOffer.test.ts) · the new icon-only Earn branch in ReferralOffer.vue:42-53 (aria-label \"Earn credits\", Tooltip, faUserPlus) has no unit test: HeaderActions.test.ts mocks ReferralOffer and only checks the iconOnly prop; ReferralOffer.test.ts run with coverage gives 83.33% lines / 66.66% fu",
-   "files": [
-    "ReferralOffer.test.ts"
-   ],
-   "sigs": [
-    "T2.2|test-quality|ReferralOffer.test.ts"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a4.md"
+   "type": "blocked",
+   "category": "spec-issue",
+   "text": "[spec-issue] · SPEC:116 says \"Tabs centered at 768-1023 and >=1024 (today left-shifted)\" and AUDIT:9 names the baseline 1024 layout as the defect. SPEC:125 also requires the labelled Earn and Upgrade buttons at 1024. At 1024 on the prod build the free slot runs from x=263.3 to x=583.4. Centering on the viewport midpoint (512) leaves only about 142px for the tabs, which need about 236px, so the two",
+   "fingerprint": "2c5ec544ddb5a9f0bf475d9d0b9b437be428c44095936b2c019e833d7fdd4954",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a4.md"
   },
   {
-   "at": "2026-11-16T10:46:42.591Z",
+   "at": "2026-11-16T12:44:00.693Z",
    "type": "advisory",
    "tasks": [
-    "T2.4"
+    "T4.4"
    ],
-   "text": "[flaky-env] untracked node-jiti/ at repo root (jiti cache of tailwind config written by vitest/lint) fails vp check formatting; gitignore it"
+   "text": "[flaky-env] prod build regenerated apps/web/src/components.d.ts (+ProPerksDialog entry); left in place for the orchestrator"
   },
   {
-   "at": "2026-11-16T10:46:42.497Z",
+   "at": "2026-11-16T12:44:00.587Z",
    "type": "advisory",
    "tasks": [
-    "T2.3"
+    "T4.3"
    ],
-   "text": "[evidence] T2.3 proof shots have step null, no annotations and filename captions; verifier added annotated T2.1 shots"
+   "text": "[test-quality] 4-digit credits test writes the shared e2e user credits to Mongo (restored in finally) instead of mocking the credits response"
   },
   {
-   "at": "2026-11-16T10:46:42.400Z",
+   "at": "2026-11-16T12:44:00.467Z",
    "type": "advisory",
    "tasks": [
-    "T2.2"
+    "T4.4"
    ],
-   "text": "[evidence] T2.2-unit-a1.md per-file test counts (CreditsChip 13, AppHeader 14) do not match the run (10 and 17); total 34 matches"
+   "text": "[flaky-env] vp check (no --fix) fails on formatting of untracked node-jiti/ cache files; phase files check clean; add node-jiti/ to .gitignore"
   },
   {
-   "at": "2026-11-16T10:46:42.280Z",
-   "type": "advisory",
-   "tasks": [
-    "T2.2"
-   ],
-   "text": "[test-quality] CreditsChip.test.ts:150-172 only asserts the retired upgrade-pill id is absent; also assert no Upgrade to Pro button/text so a renamed id cannot slip back in"
-  },
-  {
-   "at": "2026-11-16T10:46:42.149Z",
-   "type": "advisory",
-   "tasks": [
-    "T2.2"
-   ],
-   "text": "[type-lint] HeaderActions.test.ts:116 await on dispatchEvent (boolean) triggers typescript-eslint await-thenable warning; drop the await"
-  },
-  {
-   "at": "2026-11-16T10:40:02.793Z",
+   "at": "2026-11-16T12:33:40.808Z",
    "type": "verify_started",
    "tasks": [
-    "T2.1",
-    "T2.2",
-    "T2.3",
-    "T2.4"
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-11-16T10:40:00.159Z",
+   "at": "2026-11-16T12:33:38.116Z",
    "type": "preflight_passed",
    "tasks": [
-    "T2.1"
+    "T4.4"
    ],
-   "fingerprint": "cf5222fe3739bb750aa351736d653e41b972715ad2b860a7abf24588b49fa3eb"
+   "fingerprint": "d58c51e9ac3aaa4fefea819fa495a2005b2a88985d896b9a1d35fc77a450147a"
   },
   {
-   "at": "2026-11-16T10:39:58.042Z",
+   "at": "2026-11-16T12:33:38.116Z",
    "type": "preflight_passed",
    "tasks": [
-    "T2.4"
+    "T4.3"
    ],
-   "fingerprint": "dfafee2b7e7279cd311c1dcc67cf67c73d4d1b49eb7d761b3cb67b1849af3c88"
+   "fingerprint": "fe403363d5fd204644017745dadeda1350375148aec7d167fca45069f17477cb"
   },
   {
-   "at": "2026-11-16T10:39:58.042Z",
+   "at": "2026-11-16T12:33:38.116Z",
    "type": "preflight_passed",
    "tasks": [
-    "T2.3"
+    "T4.2"
    ],
-   "fingerprint": "cff20612eca076a60323cc7e5add2941b79cbf3c86da9a28e0a8463772320e09"
+   "fingerprint": "dfa0d5b9b3c55b509d12dac352670b450f34b84ae69264c6ea9a6b4e0365ee4f"
   },
   {
-   "at": "2026-11-16T10:39:58.042Z",
+   "at": "2026-11-16T12:33:38.116Z",
    "type": "preflight_passed",
    "tasks": [
-    "T2.2"
+    "T4.1"
    ],
-   "fingerprint": "78814281d2e0dd0b1b49e30d14a2a8f354708938c054db832d4dd77dc2f7f5a1"
+   "fingerprint": "2c5ec544ddb5a9f0bf475d9d0b9b437be428c44095936b2c019e833d7fdd4954"
   },
   {
-   "at": "2026-11-16T10:39:57.879Z",
+   "at": "2026-11-16T12:33:35.610Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T4.4"
+   ],
+   "fingerprint": "d58c51e9ac3aaa4fefea819fa495a2005b2a88985d896b9a1d35fc77a450147a"
+  },
+  {
+   "at": "2026-11-16T12:33:35.419Z",
    "type": "task_built",
    "tasks": [
-    "T2.2",
-    "T2.3",
-    "T2.4"
+    "T4.4"
    ],
-   "text": "stray components.d.ts declared in T2.1 Files; preflight PASS",
+   "text": "49 e2e pass x2, verify 0 errors, 2769 unit pass; fixed shell gap at 700 by moving tabs row inside header",
    "files": [
-    "agent_docs/ui-polish-picker-header/TASKS.md"
+    "apps/web/src/components/Header/AppHeader.vue",
+    "apps/web/src/components/Header/AppHeader.test.ts"
    ]
   },
   {
-   "at": "2026-11-16T10:39:52.546Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T2.4"
-   ],
-   "fingerprint": "dfafee2b7e7279cd311c1dcc67cf67c73d4d1b49eb7d761b3cb67b1849af3c88"
-  },
-  {
-   "at": "2026-11-16T10:39:52.546Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T2.3"
-   ],
-   "fingerprint": "cff20612eca076a60323cc7e5add2941b79cbf3c86da9a28e0a8463772320e09"
-  },
-  {
-   "at": "2026-11-16T10:39:52.546Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T2.2"
-   ],
-   "fingerprint": "78814281d2e0dd0b1b49e30d14a2a8f354708938c054db832d4dd77dc2f7f5a1"
-  },
-  {
-   "at": "2026-11-16T10:39:39.227Z",
+   "at": "2026-11-16T12:29:51.595Z",
    "type": "task_started",
    "tasks": [
-    "T2.2",
-    "T2.3",
-    "T2.4"
+    "T4.4"
    ],
    "attempt": "2"
   },
   {
-   "at": "2026-11-16T10:39:39.143Z",
+   "at": "2026-11-16T12:29:51.486Z",
    "type": "build_started",
    "tasks": [
-    "T2.2",
-    "T2.3",
-    "T2.4"
+    "T4.4"
    ],
    "attempt": "2"
   },
   {
-   "at": "2026-11-16T10:39:35.464Z",
+   "at": "2026-11-16T12:29:47.093Z",
    "type": "task_failed",
    "tasks": [
-    "T2.4"
+    "T4.4"
    ],
    "attempt": "1",
-   "text": "stray modified tracked file outside scope files: apps/web/src/components.d.ts",
-   "unblock": "declare components.d.ts in scope Files (auto-generated by the running dev server) or revert",
+   "text": "header-responsive \"Shell fits under in-flow header\" 700x600/700x900 fails (shell 71px below header, passes at HEAD): regression from Phase 4 working tree",
+   "unblock": "fix header/shell layout at 700 so shell sits under header",
    "files": [
-    "apps/web/src/components.d.ts"
-   ],
-   "sigs": [
-    "T2.4|preflight|stray"
+    "apps/web/src/components/Header/AppHeader.vue"
    ]
   },
   {
-   "at": "2026-11-16T10:39:35.380Z",
-   "type": "task_failed",
-   "tasks": [
-    "T2.3"
-   ],
-   "attempt": "1",
-   "text": "stray modified tracked file outside scope files: apps/web/src/components.d.ts",
-   "unblock": "declare components.d.ts in scope Files (auto-generated by the running dev server) or revert",
-   "files": [
-    "apps/web/src/components.d.ts"
-   ],
-   "sigs": [
-    "T2.3|preflight|stray"
-   ]
-  },
-  {
-   "at": "2026-11-16T10:39:35.294Z",
-   "type": "task_failed",
-   "tasks": [
-    "T2.2"
-   ],
-   "attempt": "1",
-   "text": "stray modified tracked file outside scope files: apps/web/src/components.d.ts",
-   "unblock": "declare components.d.ts in scope Files (auto-generated by the running dev server) or revert",
-   "files": [
-    "apps/web/src/components.d.ts"
-   ],
-   "sigs": [
-    "T2.2|preflight|stray"
-   ]
-  },
-  {
-   "at": "2026-11-16T10:39:26.072Z",
-   "type": "task_built",
-   "tasks": [
-    "T2.4"
-   ],
-   "text": "playwright 71/71, verify 0, test 2732 pass",
-   "files": []
-  },
-  {
-   "at": "2026-11-16T10:39:13.480Z",
-   "type": "task_built",
-   "tasks": [
-    "T2.4"
-   ],
-   "text": "gate green: pw 71 passed, verify 0, vitest 2732 passed",
-   "files": []
-  },
-  {
-   "at": "2026-11-16T10:36:58.506Z",
+   "at": "2026-11-16T12:27:31.187Z",
    "type": "task_started",
    "tasks": [
-    "T2.4"
+    "T4.4"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-11-16T10:36:56.392Z",
+   "at": "2026-11-16T12:27:31.070Z",
    "type": "task_built",
    "tasks": [
-    "T2.3"
+    "T4.3"
    ],
-   "text": "e2e: 14/14 scenarios, flake x3 clean",
+   "text": "13/13 new tests pass, flake x3 clean, app bugs: 0",
    "files": [
-    "apps/web/e2e/qa/header-responsive.spec.ts",
-    "apps/web/e2e/qa/upgrade-entry.spec.ts",
-    "apps/web/e2e/qa/pricing-layout.spec.ts"
+    "apps/web/e2e/qa/header-responsive.spec.ts"
    ]
   },
   {
-   "at": "2026-11-16T10:29:23.553Z",
+   "at": "2026-11-16T12:23:57.661Z",
    "type": "task_started",
    "tasks": [
-    "T2.3"
+    "T4.3"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-11-16T10:29:23.467Z",
+   "at": "2026-11-16T12:23:57.540Z",
    "type": "task_built",
    "tasks": [
-    "T2.2"
+    "T4.2"
    ],
-   "text": "unit: lowest file 100% lines, shuffle clean",
+   "text": "lowest file 96.25% lines (FeatureSelect), shuffle clean",
    "files": [
     "apps/web/src/components/Header"
    ]
   },
   {
-   "at": "2026-11-16T10:27:43.457Z",
+   "at": "2026-11-16T12:22:18.988Z",
    "type": "task_started",
    "tasks": [
-    "T2.2"
+    "T4.2"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-11-16T10:27:43.375Z",
+   "at": "2026-11-16T12:22:18.879Z",
    "type": "build_started",
    "tasks": [
-    "T2.2",
-    "T2.3",
-    "T2.4"
+    "T4.2",
+    "T4.3",
+    "T4.4"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-11-16T10:27:39.272Z",
+   "at": "2026-11-16T12:22:14.990Z",
    "type": "preflight_passed",
    "tasks": [
-    "T2.1"
+    "T4.1"
    ],
-   "fingerprint": "2a0cf2fbce91e211604315cbaaf13600a0ffe94cfc014a1140ea9f7570f873ef"
+   "fingerprint": "3002df3690dbffb34e9e4d1c7466a0495e5e1d9c29197aa01a0beab67bfdf1c0"
   },
   {
-   "at": "2026-11-16T10:27:26.862Z",
+   "at": "2026-11-16T12:21:58.516Z",
    "type": "task_built",
    "tasks": [
-    "T2.1"
+    "T4.1"
    ],
-   "text": "HeaderActions added; upgrade-pill removed from CreditsChip; vitest Header 85 pass; verify 0 errors",
+   "text": "tabs in AppHeader (sticky segmented row <768), mobile-tabs removed from Dashboard; vitest 110 pass, verify 0 errors",
    "files": [
-    "apps/web/src/components/Header/HeaderActions.vue",
     "apps/web/src/components/Header/AppHeader.vue",
-    "apps/web/src/components/Header/CreditsChip.vue",
-    "apps/web/src/components/Header/ReferralOffer.vue",
-    "apps/web/src/plugins/icons.ts"
+    "apps/web/src/components/Header/NavTabs.vue",
+    "apps/web/src/components/Header/FeatureSelect.vue",
+    "apps/web/src/pages/Dashboard.vue"
    ]
   },
   {
-   "at": "2026-11-16T10:26:16.397Z",
+   "at": "2026-11-16T12:20:48.464Z",
    "type": "task_started",
    "tasks": [
-    "T2.1"
+    "T4.1"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-11-16T10:26:16.313Z",
+   "at": "2026-11-16T12:20:48.356Z",
    "type": "build_started",
    "tasks": [
-    "T2.1"
+    "T4.1"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-11-16T10:26:14.137Z",
+   "at": "2026-11-16T12:20:45.774Z",
    "type": "run_started",
    "tasks": [
-    "T2.1",
-    "T2.2",
-    "T2.3",
-    "T2.4"
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4"
    ],
    "pipeline": 2,
    "baseline": {
-    "head": "d205a96912d42a30d27227aaf922cf8920cac285",
-    "status": " M .dashboard/media-studio/data.js\u0000 M .dashboard/media-studio/docs/PLAN.html\u0000 M .dashboard/media-studio/docs/REPO_MAP.html\u0000 M .dashboard/media-studio/docs/SPEC.html\u0000 M .dashboard/media-studio/docs/TASKS.html\u0000 M .dashboard/media-studio/index.html\u0000 M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000 M .dashboard/ui-polish-picker-header/index.html\u0000 M agent_docs/ui-polish-picker-header/AUDIT.md\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000"
+    "head": "0b2ee6aa03feb851e8656de382e79f57e694aee0",
+    "status": " M .dashboard/media-studio/data.js\u0000 M .dashboard/media-studio/docs/PLAN.html\u0000 M .dashboard/media-studio/docs/REPO_MAP.html\u0000 M .dashboard/media-studio/docs/SPEC.html\u0000 M .dashboard/media-studio/docs/TASKS.html\u0000 M .dashboard/media-studio/index.html\u0000 M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000 M agent_docs/ui-polish-picker-header/AUDIT.md\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000?? agent_docs/landing-v3-polish/PLAN.md\u0000?? node-jiti/web-tailwind.config.js.1a66b445.js\u0000?? node-jiti/web-tailwind.semantic-plugin.js.2cc2c8a3.js\u0000"
    }
   },
   {
-   "at": "2026-11-16T10:18:01.900Z",
+   "at": "2026-11-16T12:09:41.677Z",
    "type": "commit",
    "tasks": [
-    "T1.1",
-    "T1.2",
-    "T1.3",
-    "T1.4"
+    "T3.1",
+    "T3.2",
+    "T3.3",
+    "T3.4",
+    "T3.5"
    ],
-   "attempt": "3",
-   "text": "feat(web): shared header breakpoint at 768",
-   "sha": "d205a96912d42a30d27227aaf922cf8920cac285",
+   "attempt": "5",
+   "text": "feat(web): plan pill in avatar menu and Pro perks dialog",
+   "sha": "0b2ee6aa03feb851e8656de382e79f57e694aee0",
    "branch": "feature-enhancement",
    "pushed": "yes",
-   "evidence": "e2e 58/58 prod x3, unit lowest file 100% lines"
+   "evidence": "e2e 145/145, unit 58 tests, lowest coverage 87.5% branches (98.41% lines)"
   },
   {
-   "at": "2026-11-16T10:17:41.673Z",
+   "at": "2026-11-16T12:09:25.138Z",
    "type": "deliverable",
    "tasks": [
-    "T1.1",
-    "T1.2",
-    "T1.3",
-    "T1.4"
+    "T3.1",
+    "T3.2",
+    "T3.3",
+    "T3.4",
+    "T3.5"
    ],
-   "text": "Shared breakpoint constants + useHeaderBreakpoint; header/banner split moved 600->768; 640-767 shell sizing fixed; unit + e2e coverage",
+   "text": "Plan pill in avatar menu, Pro perks dialog, header PRO chip removed, unit and e2e coverage",
    "files": [
-    "apps/web/src/utils/layout.ts"
+    "apps/web/src/components/Header/UserMenu.vue"
    ]
   },
   {
-   "at": "2026-11-16T10:17:38.369Z",
+   "at": "2026-11-16T12:09:22.085Z",
    "tasks": [
-    "T1.3"
+    "T3.5"
    ],
-   "attempt": "3",
+   "attempt": "5",
    "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod (fresh build) header-responsive + mods-referral-favicon --repeat-each=3 all green (58 passed incl. setup and verifier probe, 0 flaky). The new 700x600/700x900 tests assert shell bottom <= viewport, content box scrollHeight <= clientHeight and rail end <= viewport, so they would fail on the a5 clipping",
-   "fingerprint": "9ab92bb7aebe7ebe6e80c3af2953714d6f190e9b9c47f1d21800c89a16f051d4",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a7.md"
+   "evidence": "e2e above covers --repeat-each=2; bun run test 301 files/2749 tests pass; vp lint 0 errors; vp check --no-fmt exit 0; src+e2e formatting clean (610 files); grep pro-badge-header src+e2e empty",
+   "fingerprint": "d7cd82fc2cf7da226de81149e6ee8f4172b45736410ee5297783fd6ea23f1249",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a6.md"
   },
   {
-   "at": "2026-11-16T10:17:38.368Z",
+   "at": "2026-11-16T12:09:22.085Z",
    "tasks": [
-    "T1.1"
+    "T3.4"
    ],
-   "attempt": "3",
+   "attempt": "5",
    "type": "verify_passed",
-   "evidence": "previous BLOCKING fixed. Prod probe at 700x600: shell 100..600 (header bottom 100), content box client 500 = scroll 500, doc 600, both rail and main scroller end at 600 when scrolled to the end. Format row fully visible. Same fit on Explore/Assets and at 640x600, 767x600 and 700x900. 390, 768, 1024 and 1440 identical to round a5 (768/1024 shell 56..596; 390 pre-existing doc scroll). Unit 96/96, sm",
-   "fingerprint": "83e8b155de28431034a50c53e5577b121b2971069ee202447a459a2c08177d23",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a7.md"
+   "evidence": "E2E_SERVER=prod, plan-pill+plan-status+pro-tier+upgrade-entry+header-responsive --repeat-each=3 -> 145/145 passed (3.1m), exit 0; matrix covers Free and Pro at 360/1440 light/dark with animations settled; shots T3.4-5 (settled perks dialog, Close only) and T3.4-7..14 confirmed",
+   "fingerprint": "664898d799b8bc0ba00ea4d377f09ad17fb89c4f398db2c2d13fac303fe890ba",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a6.md"
   },
   {
-   "at": "2026-11-16T10:17:11.026Z",
+   "at": "2026-11-16T12:09:22.084Z",
+   "tasks": [
+    "T3.3"
+   ],
+   "attempt": "5",
+   "type": "verify_passed",
+   "evidence": "5 files/58 tests pass; coverage UserMenu.vue 100/96.25/100/100, ProPerksDialog.vue 100, PricingProCard.vue 100, dialog.ts 96.87/87.5/96/98.41 (all >=80, lowest 87.5% branches); CreditsChip Pro test checks text and icons by content, Pro pill test asserts menu closed, not-ready test starts isReady=false; no it.fails/skip",
+   "fingerprint": "f3c7aa9f20711e6293e795d3f38f7613c711c0130ec3dfed764017573bab5a4f",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a6.md"
+  },
+  {
+   "at": "2026-11-16T12:09:22.084Z",
+   "tasks": [
+    "T3.2"
+   ],
+   "attempt": "5",
+   "type": "verify_passed",
+   "evidence": "no pro-badge-header in src or e2e (grep empty); vitest Header+Dialogs 24 files/215 tests pass; prod e2e \"no PRO chip in the header\" and Pro/Free pill tests pass x3; shots T3.4-8/9/11/14 show FREE muted / PRO gold pill in the menu and no header PRO chip",
+   "fingerprint": "82d6c1be277a5afe333043d38de98ec12ee4adc034c4ff4aae39f13b7c767e61",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a6.md"
+  },
+  {
+   "at": "2026-11-16T12:08:48.489Z",
    "type": "advisory",
    "tasks": [
-    "T1.1"
+    "T3.2"
    ],
-   "text": "smAndUp remains only as test variable names (15 hits in *.test.ts); Verify grep apps/web/src is not literally empty"
+   "text": "components.d.ts regenerates a ProPerksDialog entry on build/test; verifier reverted it; decide whether to commit"
   },
   {
-   "at": "2026-11-16T10:13:10.521Z",
-   "type": "verify_started",
-   "tasks": [
-    "T1.1",
-    "T1.3"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-11-16T10:13:10.424Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.3"
-   ],
-   "fingerprint": "9ab92bb7aebe7ebe6e80c3af2953714d6f190e9b9c47f1d21800c89a16f051d4"
-  },
-  {
-   "at": "2026-11-16T10:13:08.139Z",
-   "type": "task_built",
-   "tasks": [
-    "T1.1"
-   ],
-   "text": "Removed clipping; shell sized for 640-767 in App.vue/DashboardShell.vue; meaningful 700 e2e; 12 e2e pass",
-   "files": [
-    "apps/web/src/App.vue",
-    "apps/web/src/components/Dashboard/DashboardShell.vue"
-   ]
-  },
-  {
-   "at": "2026-11-16T10:13:08.075Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.1"
-   ],
-   "fingerprint": "83e8b155de28431034a50c53e5577b121b2971069ee202447a459a2c08177d23"
-  },
-  {
-   "at": "2026-11-16T10:10:34.467Z",
-   "type": "task_started",
-   "tasks": [
-    "T1.1"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-11-16T10:10:34.403Z",
-   "type": "build_started",
-   "tasks": [
-    "T1.1"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-11-16T10:10:32.500Z",
-   "tasks": [
-    "T1.3"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod (fresh build, dist 15:37) header-responsive + mods-referral-favicon --repeat-each=3: 31 passed (10 tests x3 + setup), 0 flaky/retries; Scenarios 390/700 banner, 768/1024 Earn, 700 no horizontal scroll all present and green; referral helper strict by width (not weakened); paidCallGuard fixture untouched",
-   "fingerprint": "78391f6aa7d98e2427d6ef55f6859abf8c224987c20788304a49255a2b77f71d",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-16T10:10:32.499Z",
-   "tasks": [
-    "T1.1"
-   ],
-   "attempt": "2",
-   "type": "verify_failed",
-   "category": "code-bug",
-   "text": "[code-bug] · AC \"640 split unchanged (D8)\" / previous BLOCKING (700 dead band), App.vue:97-112 + DashboardShell.vue:14 · the gap is gone and the document is no longer taller than the viewport, but only because App.vue now sets `sm:max-md:tw-overflow-hidden` on a content box sized to viewport minus the in-flow banner+header (~100px), while DashboardShell keeps `tw-h-[calc(100vh-60px)]`. The shell i",
-   "files": [
-    "App.vue"
-   ],
-   "sigs": [
-    "T1.1|code-bug|App.vue"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-1-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-16T10:10:20.440Z",
+   "at": "2026-11-16T12:08:48.393Z",
    "type": "advisory",
    "tasks": [
-    "T1.1"
+    "T3.5"
    ],
-   "text": "header-responsive 700 band test cannot detect clipping under overflow-hidden; assert .dashboard-shell bottom <= viewport"
+   "text": "Untracked node-jiti/ cache is the only vp check format failure; gitignore it"
   },
   {
-   "at": "2026-11-16T10:06:13.228Z",
+   "at": "2026-11-16T12:08:48.298Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.4"
+   ],
+   "text": "Engineer report T3.4-e2e-a5.md was never written; verified from the spec and a fresh prod run instead"
+  },
+  {
+   "at": "2026-11-16T12:08:48.186Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.4"
+   ],
+   "text": "Stale attempt-null shots T3.4-1..4 (Free-only, pre-settle) still in manifest; superseded by T3.4-7..14 and T3.4-5"
+  },
+  {
+   "at": "2026-11-16T12:04:43.843Z",
    "type": "verify_started",
    "tasks": [
-    "T1.1",
-    "T1.3"
+    "T3.2",
+    "T3.3",
+    "T3.4",
+    "T3.5"
    ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-16T10:06:11.478Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.3"
-   ],
-   "fingerprint": "78391f6aa7d98e2427d6ef55f6859abf8c224987c20788304a49255a2b77f71d"
-  },
-  {
-   "at": "2026-11-16T10:06:09.092Z",
-   "type": "task_built",
-   "tasks": [
-    "T1.1"
-   ],
-   "text": "Fixed 640-767 dead band in App.vue; e2e 700px check added; 11 e2e pass",
-   "files": [
-    "apps/web/src/App.vue",
-    "apps/web/e2e/qa/header-responsive.spec.ts"
-   ]
+   "attempt": "5"
   }
  ]
 };

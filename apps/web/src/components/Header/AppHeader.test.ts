@@ -139,7 +139,8 @@ describe('AppHeader', () => {
 
     expect(shell.classes()).toContain('header-v2--dashboard-mobile');
     expect(wrapper.find('[data-testid="referral-offer-stub"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="header-mobile-tabs"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(true);
   });
 
   it('shows a nav skeleton until Clerk finishes loading', () => {
@@ -286,6 +287,83 @@ describe('AppHeader', () => {
       expect(wrapper.find('[data-testid="upgrade-button"]').exists()).toBe(false);
       expect(wrapper.find('[data-testid="credits-chip-stub"]').exists()).toBe(false);
       expect(wrapper.find('[data-testid="user-menu-stub"]').exists()).toBe(true);
+    });
+  });
+
+  describe('layout across widths', () => {
+    const navTabsCalls = (wrapper: ReturnType<typeof mountHeader>) =>
+      wrapper.findAll('[data-testid="nav-tabs-stub"]');
+
+    it('shows the feature select on Create at desktop and mobile widths', () => {
+      for (const wide of [true, false]) {
+        smAndUpRef.value = wide;
+        expect(mountHeader().find('[data-testid="feature-select-stub"]').exists()).toBe(true);
+      }
+    });
+
+    it('hides the feature select on Explore and Assets at all widths', () => {
+      for (const name of ['explore', 'assets']) {
+        for (const wide of [true, false]) {
+          routeNameRef.value = name;
+          routePathRef.value = `/${name}`;
+          smAndUpRef.value = wide;
+          expect(mountHeader().find('[data-testid="feature-select-stub"]').exists()).toBe(false);
+        }
+      }
+    });
+
+    it('renders tabs once in the centered slot at 768+ and no mobile tabs row', () => {
+      smAndUpRef.value = true;
+      const wrapper = mountHeader();
+
+      expect(navTabsCalls(wrapper)).toHaveLength(1);
+      expect(wrapper.find('.header-v2__center [data-testid="nav-tabs-stub"]').exists()).toBe(true);
+      expect(wrapper.find('[data-testid="header-mobile-tabs"]').exists()).toBe(false);
+      expect(wrapper.get('[data-testid="app-header-v2"]').classes()).not.toContain(
+        'header-v2-root--mobile',
+      );
+    });
+
+    it('renders tabs once, in a second row inside the sticky header, below 768', () => {
+      smAndUpRef.value = false;
+      const wrapper = mountHeader();
+      const row = wrapper.get('[data-testid="header-mobile-tabs"]');
+
+      expect(navTabsCalls(wrapper)).toHaveLength(1);
+      expect(row.find('[data-testid="nav-tabs-stub"]').exists()).toBe(true);
+      expect(wrapper.get('header.header-v2').element.contains(row.element)).toBe(true);
+      expect(wrapper.get('header.header-v2').classes()).toContain('header-v2--dashboard-mobile');
+      expect(wrapper.find('.header-v2__center').exists()).toBe(false);
+      expect(wrapper.get('[data-testid="app-header-v2"]').classes()).toContain(
+        'header-v2-root--mobile',
+      );
+    });
+
+    it('shows a tabs skeleton in the centered slot at 768+ while Clerk loads', () => {
+      isAuthLoaded.value = false;
+      smAndUpRef.value = true;
+      const wrapper = mountHeader();
+      const skeleton = wrapper.get('.header-v2__center [aria-hidden="true"]');
+
+      expect(skeleton.classes()).toContain('tw-animate-pulse');
+      expect(navTabsCalls(wrapper)).toHaveLength(0);
+    });
+
+    it('shows a tabs skeleton in the mobile row while Clerk loads', () => {
+      isAuthLoaded.value = false;
+      smAndUpRef.value = false;
+      const wrapper = mountHeader();
+      const skeleton = wrapper.get('[data-testid="header-mobile-tabs"] [aria-hidden="true"]');
+
+      expect(skeleton.classes()).toContain('tw-animate-pulse');
+      expect(navTabsCalls(wrapper)).toHaveLength(0);
+    });
+
+    it('shows no tabs row on non-dashboard pages below 768', () => {
+      routePathRef.value = '/pricing';
+      routeNameRef.value = 'pricing';
+      smAndUpRef.value = false;
+      expect(mountHeader().find('[data-testid="header-mobile-tabs"]').exists()).toBe(false);
     });
   });
 });

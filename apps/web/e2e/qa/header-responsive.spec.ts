@@ -6,6 +6,7 @@ import { test, expect } from '../fixtures/qa';
 import { requireEnv } from '../support/env';
 import { expectPlanPill, headerPlanChip } from '../support/planPill';
 import { activateProViaWebhook } from '../support/proWebhook';
+import { readCredits, withUsers } from '../support/proPerksSeed';
 import { gotoStudio } from '../support/studio';
 import { resetToFree } from '../support/subscriptionState';
 
@@ -20,6 +21,11 @@ const CHECKOUT_URL = /\/payments\/(checkout|subscribe)(\/|$|\?)/;
 const API_ORIGIN_PREFIX = /^https:\/\/api\./;
 const UPGRADE_LABEL = 'Upgrade to Pro';
 const EARN_LABEL = 'Earn credits';
+const TAB_NAMES = ['create', 'explore', 'assets'] as const;
+const WIDTH_TOLERANCE_PX = 1;
+const CENTER_TOLERANCE_PX = 4;
+const FOUR_DIGIT_CREDITS = 1234;
+const SCROLL_PROBE_PX = 4000;
 // Evidence PNGs land in the repo-level agent_docs/qa tree (playwright runs from apps/web).
 const shotPath = (name: string) => `../../agent_docs/qa/header-responsive/${name}.png`;
 
@@ -244,4 +250,183 @@ test.describe('header responsive banner and Earn pill', () => {
       await snap('header-upgrade-dialog');
     },
   );
+
+  async function tabBoxes(page: Page) {
+    const boxes = [];
+    for (const name of TAB_NAMES) {
+      const box = await page.getByTestId(`nav-tab-${name}`).boundingBox();
+      expect(box, `nav-tab-${name} has a bounding box`).not.toBeNull();
+      boxes.push(box!);
+    }
+    return boxes;
+  }
+
+  async function noHorizontalOverflow(page: Page) {
+    return page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  }
+
+  test('Tabs visible at 700px', { tag: ['@critical'] }, async ({ page, snap }) => {
+    await openStudioAt(page, 700);
+    for (const name of TAB_NAMES) {
+      await expect(page.getByTestId(`nav-tab-${name}`)).toBeVisible();
+    }
+    const boxes = await tabBoxes(page);
+    for (const box of boxes) {
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(700);
+    }
+    await snap('header-tabs-700');
+  });
+
+  for (const width of [390, 360]) {
+    test(
+      `Two-row header with equal segmented thirds at ${width}px`,
+      { tag: ['@critical'] },
+      async ({ page, snap }) => {
+        await openStudioAt(page, width);
+
+        const trigger = page.getByTestId('feature-select-trigger');
+        await expect(trigger).toBeVisible();
+        await expect(page.getByTestId('referral-offer-mobile')).toBeVisible();
+        await expect(page.getByTestId('referral-offer-desktop')).toHaveCount(0);
+        await expect(page.getByTestId('header-mobile-tabs')).toBeVisible();
+
+        const boxes = await tabBoxes(page);
+        const triggerBox = (await trigger.boundingBox())!;
+        // Row 2 sits fully below row 1 (feature select).
+        for (const box of boxes)
+          expect(box.y).toBeGreaterThanOrEqual(triggerBox.y + triggerBox.height);
+        const [first, ...rest] = boxes;
+        for (const box of rest) {
+          expect(Math.abs(box.width - first.width)).toBeLessThanOrEqual(WIDTH_TOLERANCE_PX);
+        }
+        for (const box of boxes) {
+          expect(box.x).toBeGreaterThanOrEqual(0);
+          expect(box.x + box.width).toBeLessThanOrEqual(width);
+        }
+        await snap(`header-two-rows-${width}`);
+        await page.screenshot({ path: shotPath(`two-rows-${width}`) });
+      },
+    );
+  }
+
+  for (const title of ['AI Image Generator', 'Remove Background']) {
+    test(
+      `Feature title "${title}" is not truncated at 768px`,
+      { tag: ['@critical'] },
+      async ({ page, snap }) => {
+        await openStudioAt(page, 768);
+        const trigger = page.getByTestId('feature-select-trigger');
+        if (title !== 'AI Image Generator') {
+          await trigger.click();
+          await page
+            .getByTestId('feature-select-menu')
+            .getByRole('option', { name: title })
+            .click();
+        }
+        const label = trigger.getByText(title, { exact: true });
+        await expect(label).toBeVisible();
+        const sizes = await label.evaluate((el) => ({
+          scrollWidth: el.scrollWidth,
+          clientWidth: el.clientWidth,
+        }));
+        expect(sizes.clientWidth).toBeGreaterThan(0);
+        expect(sizes.scrollWidth).toBeLessThanOrEqual(sizes.clientWidth);
+        await snap(`header-feature-title-${title.replace(/\W+/g, '-').toLowerCase()}-768`);
+      },
+    );
+  }
+
+  test(
+    'Explore at 390px keeps tabs at the viewport top after scrolling',
+    { tag: ['@high'] },
+    async ({ page, snap }) => {
+      await page.setViewportSize({ width: 390, height: HEIGHT });
+      await page.goto('/explore', { waitUntil: 'domcontentloaded' });
+      const tabs = page.getByTestId('header-mobile-tabs');
+      await expect(tabs).toBeVisible();
+      await expect(page.getByTestId('nav-tab-explore')).toHaveAttribute('aria-selected', 'true');
+
+      // Scroll the window and every scrollable ancestor so the test holds whichever one owns the scroll.
+      const scrolled = await page.evaluate((probe) => {
+        let moved = 0;
+        const nodes = [
+          document.scrollingElement,
+          ...Array.from(document.querySelectorAll<HTMLElement>('*')),
+        ];
+        for (const node of nodes) {
+          if (!node || node.scrollHeight <= node.clientHeight) continue;
+          node.scrollTop = probe;
+          moved += node.scrollTop;
+        }
+        return moved;
+      }, SCROLL_PROBE_PX);
+      expect(scrolled, 'something actually scrolled').toBeGreaterThan(0);
+
+      await expect(tabs).toBeInViewport();
+      const box = (await tabs.boundingBox())!;
+      expect(box.y).toBeGreaterThanOrEqual(0);
+      expect(box.y).toBeLessThanOrEqual(1);
+      await snap('header-explore-scrolled-390');
+    },
+  );
+
+  for (const width of [390, 360]) {
+    test(`No horizontal page scroll at ${width}px`, { tag: ['@high'] }, async ({ page }) => {
+      await openStudioAt(page, width);
+      await expect(page.getByTestId('credits-chip')).toBeVisible();
+      expect(await noHorizontalOverflow(page)).toBeLessThanOrEqual(0);
+    });
+  }
+
+  test(
+    'No horizontal page scroll at 360px with a 4-digit credit balance',
+    { tag: ['@high'] },
+    async ({ page, snap }) => {
+      const original = await readCredits(E2E_USER_ID);
+      // The chip shows daily + persistent credits, so zero daily makes the total exactly 1234.
+      await withUsers((users) =>
+        users.updateOne(
+          { userId: E2E_USER_ID },
+          { $set: { credits: FOUR_DIGIT_CREDITS, dailyCredits: 0 } },
+        ),
+      );
+      try {
+        await openStudioAt(page, 360);
+        await expect(page.getByTestId('credits-chip')).toContainText(String(FOUR_DIGIT_CREDITS));
+        await expect(page.getByTestId('user-menu-trigger')).toBeVisible();
+        expect(await noHorizontalOverflow(page)).toBeLessThanOrEqual(0);
+        await snap('header-4digit-360');
+        await page.screenshot({ path: shotPath('four-digit-360') });
+      } finally {
+        await withUsers((users) =>
+          users.updateOne(
+            { userId: E2E_USER_ID },
+            { $set: { credits: original.credits, dailyCredits: original.dailyCredits } },
+          ),
+        );
+      }
+    },
+  );
+
+  for (const width of [768, 1024]) {
+    test(`Tabs are centered at ${width}px`, { tag: ['@medium'] }, async ({ page, snap }) => {
+      await openStudioAt(page, width);
+      // Centered in the free slot between the start cluster (logo + feature select) and the Earn pill,
+      // which is where the header lays the tabs out; the right cluster is wider so this is not the viewport midpoint.
+      const tabs = (await page.getByTestId('nav-tabs').boundingBox())!;
+      const select = (await page.getByTestId('feature-select-trigger').boundingBox())!;
+      const earn = (await page.getByTestId('referral-offer-desktop').boundingBox())!;
+      const slotCenter = (select.x + select.width + earn.x) / 2;
+      expect(Math.abs(tabs.x + tabs.width / 2 - slotCenter)).toBeLessThanOrEqual(
+        CENTER_TOLERANCE_PX,
+      );
+      // A left-shifted baseline (tabs hugging the select) leaves a gap on the right only: the slot is wider than the
+      // tabs by >=20px at both widths, so the two gaps would differ by that much and this would fail.
+      const leftGap = tabs.x - (select.x + select.width);
+      const rightGap = earn.x - (tabs.x + tabs.width);
+      expect(Math.abs(leftGap - rightGap)).toBeLessThanOrEqual(CENTER_TOLERANCE_PX * 2);
+      await snap(`header-tabs-centered-${width}`);
+    });
+  }
 });

@@ -101,4 +101,72 @@ describe('NavTabs', () => {
     const location = push.mock.calls.at(-1)?.[0];
     expect(location).toBeTruthy();
   });
+
+  it('uses the equal-thirds segmented layout only for the segmented variant', () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const segmented = mount(NavTabs, {
+      props: { variant: 'segmented' },
+      global: { plugins: [pinia] },
+    });
+    const pill = mountNavTabs();
+
+    expect(segmented.get('[data-testid="nav-tabs"]').classes()).toContain('nav-tabs--segmented');
+    expect(segmented.get('[data-testid="nav-tabs"]').classes()).not.toContain('tw-max-w-md');
+    expect(pill.get('[data-testid="nav-tabs"]').classes()).not.toContain('nav-tabs--segmented');
+    expect(pill.get('[data-testid="nav-tabs"]').classes()).toContain('tw-max-w-md');
+    for (const tab of segmented.findAll('[role="tab"]')) {
+      expect(tab.classes()).toContain('tw-flex-1');
+      expect(tab.classes()).toContain('tw-basis-0');
+    }
+  });
+
+  it('offsets the slider by one tab width per index', async () => {
+    routeName.value = 'assets';
+    const wrapper = mountNavTabs();
+    const style = wrapper.get('.nav-tabs__slider').attributes('style') ?? '';
+
+    expect(style).toContain('translateX(200%)');
+  });
+
+  it('exposes only the active tab in the tab order', () => {
+    routeName.value = 'explore';
+    const wrapper = mountNavTabs();
+
+    expect(wrapper.get('[data-testid="nav-tab-explore"]').attributes('tabindex')).toBe('0');
+    expect(wrapper.get('[data-testid="nav-tab-create"]').attributes('tabindex')).toBe('-1');
+    expect(wrapper.get('[data-testid="nav-tab-assets"]').attributes('tabindex')).toBe('-1');
+  });
+
+  it('moves focus along with keyboard selection and wraps at both ends', async () => {
+    routeName.value = 'assets';
+    const wrapper = mount(NavTabs, {
+      attachTo: document.body,
+      global: { plugins: [createPinia()] },
+    });
+
+    await wrapper.get('[data-testid="nav-tab-assets"]').trigger('keydown', { key: 'ArrowRight' });
+    expect(push).toHaveBeenLastCalledWith(
+      expect.objectContaining({ name: expect.stringMatching(/create/) }),
+    );
+    expect(document.activeElement).toBe(wrapper.get('[data-testid="nav-tab-create"]').element);
+
+    await wrapper.get('[data-testid="nav-tab-create"]').trigger('keydown', { key: 'End' });
+    expect(push).toHaveBeenLastCalledWith({ name: APP_SURFACE.ASSETS });
+    expect(document.activeElement).toBe(wrapper.get('[data-testid="nav-tab-assets"]').element);
+
+    await wrapper.get('[data-testid="nav-tab-assets"]').trigger('keydown', { key: 'ArrowLeft' });
+    expect(push).toHaveBeenLastCalledWith({ name: APP_SURFACE.EXPLORE });
+    expect(document.activeElement).toBe(wrapper.get('[data-testid="nav-tab-explore"]').element);
+
+    await wrapper.get('[data-testid="nav-tab-explore"]').trigger('keydown', { key: 'Home' });
+    expect(document.activeElement).toBe(wrapper.get('[data-testid="nav-tab-create"]').element);
+    wrapper.unmount();
+  });
+
+  it('ignores unrelated keys', async () => {
+    const wrapper = mountNavTabs();
+    await wrapper.get('[data-testid="nav-tab-create"]').trigger('keydown', { key: 'a' });
+    expect(push).not.toHaveBeenCalled();
+  });
 });

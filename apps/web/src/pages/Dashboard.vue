@@ -10,6 +10,7 @@ import { useAppStore } from '@/stores/app';
 import { useComposerPersistence } from '@/composables/useComposerPersistence';
 import { useGlobalShortcuts } from '@/composables/useGlobalShortcuts';
 import { usePageSeo } from '@/composables/usePageSeo';
+import { useStudioPromptPrefill } from '@/composables/useStudioPromptPrefill';
 
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue';
 import LowCreditsDialog from '@/components/Dialogs/LowCreditsDialog.vue';
@@ -19,7 +20,6 @@ import DashboardShell from '@/components/Dashboard/DashboardShell.vue';
 import MobileSettingsSheet from '@/components/Dashboard/MobileSettingsSheet.vue';
 import ExploreFeed from '@/components/Dashboard/Feed/ExploreFeed.vue';
 import DashboardSidebar from '@/components/Dashboard/Sidebar/DashboardSidebar.vue';
-import NavTabs from '@/components/Header/NavTabs.vue';
 import History from '@/components/History/History.vue';
 import SignupDialog from '@/components/Dialogs/SignupDialog.vue';
 
@@ -28,7 +28,6 @@ import { faSliders } from '@/plugins/icons';
 import {
   APP_SURFACE,
   APP_SURFACE_TAB,
-  isAppShellRoute,
   resolveCreateFeature,
   tabFromRouteName,
 } from '@/utils/dashboardRoutes';
@@ -40,6 +39,7 @@ const route = useRoute();
 const isSmUp = useMediaQuery(`(min-width: ${CREATE_LAYOUT_SM}px)`);
 
 useComposerPersistence();
+useStudioPromptPrefill();
 useGlobalShortcuts();
 
 const isImageFeature = computed(() => !feature.value || feature.value === FeatureType.IMAGE);
@@ -78,14 +78,6 @@ usePageSeo(() => ({
 </script>
 
 <template>
-  <div
-    v-if="isAppShellRoute(route) && !isSmUp"
-    data-testid="dashboard-mobile-tabs"
-    class="tw-mt-1 tw-bg-surface-1"
-  >
-    <NavTabs />
-  </div>
-
   <div v-show="tab === APP_SURFACE_TAB.create" data-testid="dashboard-generate-panel">
     <DashboardShell>
       <template #rail>
