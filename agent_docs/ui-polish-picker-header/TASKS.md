@@ -498,7 +498,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** Create page works cleanly from 360 to 1440: no horizontal scroll, no clipped controls, 44px tap targets, composer always visible.
 **Try in UI:** Open Create at 360, 390, 700, 768 and 1024 and scroll for horizontal overflow ; open the composer with the on-screen keyboard emulated and see it stay visible ; compare 1440 to the baseline and see only header and picker changes.
 
-### ☐ T11.1 Audit against baseline and record
+### ✅ T11.1 Audit against baseline and record
 
 - **Kind:** implementation
 - **Files:** `agent_docs/ui-polish-picker-header/AUDIT.md`, `agent_docs/qa/ui-polish-picker-header/after/` (screenshots only)
@@ -506,23 +506,32 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 4c: every audited element has a recorded finding or an explicit "no issue"; D8 respected.
 - **Verify:** `grep -c '^|' agent_docs/ui-polish-picker-header/AUDIT.md`; `ls agent_docs/qa/ui-polish-picker-header/after | wc -l`.
 
-### ☐ T11.2 Fix audit findings
+### ✅ T11.2 Fix audit findings
 
 - **Kind:** implementation
-- **Files:** `apps/web/src/pages/Dashboard.vue`, `apps/web/src/components/Dashboard/DashboardShell.vue`, `agent_docs/ui-polish-picker-header/AUDIT.md`
-- **Do:** The files depend on what T11.1 finds, so `Dashboard.vue` and `DashboardShell.vue` are only the expected set. Before coding, rewrite this task's **Files** line with the real files from the open `AUDIT.md` rows; if more than 5 are needed, add a `T11.2b` task for the remainder and extend T11.3 accordingly. Fix each open finding and set its status to `fixed` (with the change), `no issue` or `wontfix` (with a reason).
+- **Files:** `apps/web/src/pages/Dashboard.vue`, `apps/web/src/components/Header/FeatureSelect.vue`, `apps/web/src/components/Header/UserMenu.vue`, `apps/web/src/components/Header/ReferralOffer.vue`, `apps/web/src/components/Header/Logo.vue`, `apps/web/src/components/Header/AppHeader.vue`, `agent_docs/ui-polish-picker-header/AUDIT.md`
+- **Do:** The files depend on what T11.1 finds, so `Dashboard.vue` and `DashboardShell.vue` are only the expected set. Before coding, rewrite this task's **Files** line with the real files from the open `AUDIT.md` rows; if more than 5 are needed, add a `T11.3` task for the remainder and extend the unit task accordingly. Fix each open finding and set its status to `fixed` (with the change), `no issue` or `wontfix` (with a reason).
 - **Acceptance:** SPEC Part 4c: no horizontal scroll at audited widths, no clipped/overlapping controls, tap targets >=44px, composer fully visible with banner; audit table fully resolved or reasoned.
 - **Verify:** `cd apps/web && npx vitest run src/pages src/components/Dashboard`; `bun run verify`; `grep -c '| open |' agent_docs/ui-polish-picker-header/AUDIT.md` (0).
 
-### ☐ T11.3 Unit: logic-changing fixes
+### ✅ T11.3 Fix remaining audit findings (composer toolbar and sidebar chips)
+
+- **Kind:** implementation
+- **deps:** T11.2
+- **Files:** `apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue`, `apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue`, `apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.vue`, `apps/web/src/components/Dashboard/Composer/GenerateCTA.vue`, `apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.vue`, `apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.vue`, `agent_docs/ui-polish-picker-header/AUDIT.md`
+- **Do:** Resolve the two `open` AUDIT rows left by T11.2: composer toolbar tap targets (reference trigger 32px, mic 36px, AI-actions 36px, Generate 38px) and the sidebar option chips (SD/HD, count, format 28px, More sizes 36px; scope the shared sidebar component first and rewrite this Files line, split again if over 5). Reach 44px on mobile (below 768 / in the Settings sheet) without changing the 1440 look. Set each row to `fixed`, `no issue` or `wontfix` with a reason.
+- **Acceptance:** SPEC Part 4c: tap targets >=44px on mobile; `grep -c '| open |' AUDIT.md` is 0.
+- **Verify:** `cd apps/web && npx vitest run src/components/Dashboard`; `bun run verify`; `grep -c '| open |' agent_docs/ui-polish-picker-header/AUDIT.md` (0).
+
+### ✅ T11.4 Unit: logic-changing fixes
 
 - **Kind:** unit
-- **Files:** `apps/web/src/pages/Dashboard.vue`, `apps/web/src/components/Dashboard/DashboardShell.vue`
-- **Do:** Add or update tests only for the T11.2 fixes that change logic (classes/conditions); if a fix is CSS-only, assert its class/attribute contract.
+- **Files:** `apps/web/src/pages/Dashboard.vue`, `apps/web/src/components/Dashboard/DashboardShell.vue`, `apps/web/src/components/Header/Logo.test.ts`, `apps/web/src/components/Header/FeatureSelect.test.ts`, `apps/web/src/components/Header/UserMenu.test.ts`, `apps/web/src/components/Header/ReferralOffer.test.ts`, `apps/web/src/components/Header/AppHeader.test.ts`, `apps/web/src/components/Dashboard/Composer/ReferenceImageControl.test.ts`, `apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.test.ts`, `apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.test.ts`, `apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.test.ts`, `apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.test.ts`
+- **Do:** Add or update tests only for the T11.2 and T11.3 fixes that change logic (include their touched component files in Files) (classes/conditions); if a fix is CSS-only, assert its class/attribute contract.
 - **Acceptance:** Each logic-changing fix has a test; every file at least 80% across metrics; no `it.fails`.
 - **Verify:** `cd apps/web && npx vitest run src/pages/Dashboard.test.ts src/components/Dashboard/DashboardShell.test.ts --coverage --coverage.include=src/pages/Dashboard.vue --coverage.include=src/components/Dashboard/DashboardShell.vue --coverage.reporter=text`
 
-### ☐ T11.4 E2E: Create responsiveness
+### ✅ T11.5 E2E: Create responsiveness
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` no horizontal scroll at 360, 390, 700, 768, 1024, 1440; `@critical` composer bottom within the viewport with the banner showing at 360/390; `@high` interactive controls >=44px tall on mobile; `@high` one assertion per fixed audit finding (feature dropdown, tab placement, picker trigger, 700px band); `@medium` screenshots via `snap` at each width.
@@ -531,7 +540,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 4c e2e criteria pass with mocked generation and credits; `paidCallGuard` clean.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/create-responsive.spec.ts --repeat-each=3`
 
-### ☐ T11.5 Gate: Phase 11
+### ✅ T11.6 Gate: Phase 11
 
 - **Kind:** gate
 - **Files:** none

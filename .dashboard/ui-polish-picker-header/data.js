@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-18T14:51:17.354Z",
+ "generatedAt": "2026-11-18T15:42:17.779Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -29,20 +29,20 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
- "costUsd": 33.2902,
- "elapsedMs": 182086853,
+ "costUsd": 37.372,
+ "elapsedMs": 185082478,
  "costByRole": {
-  "builder": 7.5597,
-  "verifier": 19.0974,
-  "unit": 3.1871,
-  "e2e": 3.446
+  "builder": 8.796,
+  "verifier": 21.0959,
+  "unit": 3.6938,
+  "e2e": 3.7863
  },
  "totals": {
   "phases": 14,
-  "tasks": 61,
+  "tasks": 62,
   "byStatus": {
-   "verified": 50,
-   "ready": 11
+   "verified": 56,
+   "ready": 6
   }
  },
  "phases": [
@@ -2631,7 +2631,7 @@ window.DASHBOARD = {
      "line": 461,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T14:51:17.319Z",
+     "updatedAt": "2026-11-18T14:51:33.376Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2673,7 +2673,7 @@ window.DASHBOARD = {
      "line": 469,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T14:51:17.319Z",
+     "updatedAt": "2026-11-18T14:51:33.376Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2713,7 +2713,7 @@ window.DASHBOARD = {
      "line": 477,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T14:51:17.319Z",
+     "updatedAt": "2026-11-18T14:51:33.376Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2755,7 +2755,7 @@ window.DASHBOARD = {
      "line": 486,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T14:51:17.319Z",
+     "updatedAt": "2026-11-18T14:51:33.376Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2786,7 +2786,7 @@ window.DASHBOARD = {
    "id": "11",
    "name": "Create page responsiveness audit and fixes",
    "startLine": 496,
-   "endLine": 543,
+   "endLine": 552,
    "adds": "Create page works cleanly from 360 to 1440: no horizontal scroll, no clipped controls, 44px tap targets, composer always visible.",
    "tryInUi": [
     "Open Create at 360, 390, 700, 768 and 1024 and scroll for horizontal overflow",
@@ -2795,7 +2795,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 11",
-    "line": 542,
+    "line": 551,
     "items": [
      "audit table resolved and Create is responsive at every audited width."
     ]
@@ -2804,7 +2804,7 @@ window.DASHBOARD = {
     {
      "id": "T11.1",
      "title": "Audit against baseline and record",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -2824,32 +2824,46 @@ window.DASHBOARD = {
      ],
      "line": 501,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T15:42:17.758Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5962,
+     "costApprox": true,
+     "elapsedMs": 2995624,
+     "summary": [
+      "AUDIT.md blank line added; T11.2b refs renamed to T11.3; bun run verify 0 errors."
+     ]
     },
     {
      "id": "T11.2",
      "title": "Fix audit findings",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
       "apps/web/src/pages/Dashboard.vue",
-      "apps/web/src/components/Dashboard/DashboardShell.vue",
+      "apps/web/src/components/Header/FeatureSelect.vue",
+      "apps/web/src/components/Header/UserMenu.vue",
+      "apps/web/src/components/Header/ReferralOffer.vue",
+      "apps/web/src/components/Header/Logo.vue",
+      "apps/web/src/components/Header/AppHeader.vue",
       "agent_docs/ui-polish-picker-header/AUDIT.md"
      ],
      "gherkin": null,
-     "do": "The files depend on what T11.1 finds, so `Dashboard.vue` and `DashboardShell.vue` are only the expected set. Before coding, rewrite this task's **Files** line with the real files from the open `AUDIT.md` rows; if more than 5 are needed, add a `T11.2b` task for the remainder and extend T11.3 accordingly. Fix each open finding and set its status to `fixed` (with the change), `no issue` or `wontfix` (with a reason).",
+     "do": "The files depend on what T11.1 finds, so `Dashboard.vue` and `DashboardShell.vue` are only the expected set. Before coding, rewrite this task's **Files** line with the real files from the open `AUDIT.md` rows; if more than 5 are needed, add a `T11.3` task for the remainder and extend the unit task accordingly. Fix each open finding and set its status to `fixed` (with the change), `no issue` or `wontfix` (with a reason).",
      "spec": null,
      "filesDeclared": true,
      "acceptance": [
@@ -2862,31 +2876,103 @@ window.DASHBOARD = {
      ],
      "line": 509,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T15:42:17.758Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5962,
+     "costApprox": true,
+     "elapsedMs": 2995624,
+     "summary": [
+      "AUDIT.md blank line added; T11.2b refs renamed to T11.3; bun run verify 0 errors."
+     ]
     },
     {
      "id": "T11.3",
+     "title": "Fix remaining audit findings (composer toolbar and sidebar chips)",
+     "done": true,
+     "kind": "implementation",
+     "depends": [],
+     "files": [
+      "apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue",
+      "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue",
+      "apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.vue",
+      "apps/web/src/components/Dashboard/Composer/GenerateCTA.vue",
+      "apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.vue",
+      "apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.vue",
+      "agent_docs/ui-polish-picker-header/AUDIT.md"
+     ],
+     "gherkin": null,
+     "do": "Resolve the two `open` AUDIT rows left by T11.2: composer toolbar tap targets (reference trigger 32px, mic 36px, AI-actions 36px, Generate 38px) and the sidebar option chips (SD/HD, count, format 28px, More sizes 36px; scope the shared sidebar component first and rewrite this Files line, split again if over 5). Reach 44px on mobile (below 768 / in the Settings sheet) without changing the 1440 look. Set each row to `fixed`, `no issue` or `wontfix` with a reason.",
+     "spec": null,
+     "filesDeclared": true,
+     "acceptance": [
+      "SPEC Part 4c: tap targets >=44px on mobile; `grep -c '| open |' AUDIT.md` is 0."
+     ],
+     "verify": [
+      "cd apps/web && npx vitest run src/components/Dashboard",
+      "bun run verify",
+      "`grep -c '| open |' agent_docs/ui-polish-picker-header/AUDIT.md` (0)."
+     ],
+     "line": 517,
+     "ui": true,
+     "status": "verified",
+     "updatedAt": "2026-11-18T15:42:17.758Z",
+     "verifierRouted": true,
+     "pending": [],
+     "risk": null,
+     "surfaces": [],
+     "reviewers": [],
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.542,
+     "costApprox": true,
+     "elapsedMs": 2546978,
+     "summary": [
+      "AUDIT.md blank line added; T11.2b refs renamed to T11.3; bun run verify 0 errors."
+     ]
+    },
+    {
+     "id": "T11.4",
      "title": "Unit: logic-changing fixes",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
       "apps/web/src/pages/Dashboard.vue",
-      "apps/web/src/components/Dashboard/DashboardShell.vue"
+      "apps/web/src/components/Dashboard/DashboardShell.vue",
+      "apps/web/src/components/Header/Logo.test.ts",
+      "apps/web/src/components/Header/FeatureSelect.test.ts",
+      "apps/web/src/components/Header/UserMenu.test.ts",
+      "apps/web/src/components/Header/ReferralOffer.test.ts",
+      "apps/web/src/components/Header/AppHeader.test.ts",
+      "apps/web/src/components/Dashboard/Composer/ReferenceImageControl.test.ts",
+      "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.test.ts",
+      "apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.test.ts",
+      "apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.test.ts",
+      "apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.test.ts"
      ],
      "gherkin": null,
-     "do": "Add or update tests only for the T11.2 fixes that change logic (classes/conditions); if a fix is CSS-only, assert its class/attribute contract.",
+     "do": "Add or update tests only for the T11.2 and T11.3 fixes that change logic (include their touched component files in Files) (classes/conditions); if a fix is CSS-only, assert its class/attribute contract.",
      "spec": null,
      "filesDeclared": true,
      "acceptance": [
@@ -2895,25 +2981,42 @@ window.DASHBOARD = {
      "verify": [
       "cd apps/web && npx vitest run src/pages/Dashboard.test.ts src/components/Dashboard/DashboardShell.test.ts --coverage --coverage.include=src/pages/Dashboard.vue --coverage.include=src/components/Dashboard/DashboardShell.vue --coverage.reporter=text"
      ],
-     "line": 517,
+     "line": 526,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T15:42:17.758Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.8397,
+     "costApprox": true,
+     "elapsedMs": 2470225,
+     "summary": [
+      "AUDIT.md blank line added; T11.2b refs renamed to T11.3; bun run verify 0 errors."
+     ]
     },
     {
-     "id": "T11.4",
+     "id": "T11.5",
      "title": "E2E: Create responsiveness",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [],
      "files": [],
@@ -2927,25 +3030,35 @@ window.DASHBOARD = {
      "verify": [
       "cd apps/web && bunx playwright test e2e/qa/create-responsive.spec.ts --repeat-each=3"
      ],
-     "line": 525,
+     "line": 534,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T15:42:17.758Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6733,
+     "costApprox": true,
+     "elapsedMs": 2410003,
+     "summary": [
+      "AUDIT.md blank line added; T11.2b refs renamed to T11.3; bun run verify 0 errors."
+     ]
     },
     {
-     "id": "T11.5",
+     "id": "T11.6",
      "title": "Gate: Phase 11",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -2961,33 +3074,50 @@ window.DASHBOARD = {
       "bun run verify",
       "`bun run test`."
      ],
-     "line": 534,
+     "line": 543,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T15:42:17.758Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
      "surfaces": null,
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": null,
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": null,
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.8342,
+     "costApprox": true,
+     "elapsedMs": 1924323,
+     "summary": [
+      "AUDIT.md blank line added; T11.2b refs renamed to T11.3; bun run verify 0 errors."
+     ]
     }
    ],
-   "verified": 0,
-   "total": 5,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "verified": 6,
+   "total": 6,
+   "complete": true,
+   "costUsd": 4.0816,
+   "elapsedMs": 2995625
   },
   {
    "id": "12",
    "name": "Analytics research doc",
-   "startLine": 544,
-   "endLine": 566,
+   "startLine": 553,
+   "endLine": 575,
    "adds": "A research document (no code) on per-user analytics options with a single recommendation and effort estimate.",
    "tryInUi": [
     "No UI",
@@ -2996,7 +3126,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 12",
-    "line": 565,
+    "line": 574,
     "items": [
      "analytics research delivered with a recommendation."
     ]
@@ -3022,7 +3152,7 @@ window.DASHBOARD = {
       "`grep -c \"http\" agent_docs/ui-polish-picker-header/ANALYTICS.md` (links present)",
       "`grep -n -i \"recommend\" agent_docs/ui-polish-picker-header/ANALYTICS.md`."
      ],
-     "line": 549,
+     "line": 558,
      "ui": false,
      "status": "ready",
      "updatedAt": null,
@@ -3055,7 +3185,7 @@ window.DASHBOARD = {
       "`git status --short apps packages | diff /tmp/ui-polish-p12-before.txt -` (no output)",
       "`ls agent_docs/ui-polish-picker-header/ANALYTICS.md`."
      ],
-     "line": 557,
+     "line": 566,
      "ui": false,
      "status": "ready",
      "updatedAt": null,
@@ -3080,8 +3210,8 @@ window.DASHBOARD = {
   {
    "id": "13",
    "name": "Final gate and walkthrough",
-   "startLine": 567,
-   "endLine": 605,
+   "startLine": 576,
+   "endLine": 614,
    "adds": "Final proof that header, picker, plan pill and fixes work together with zero real paid calls, plus final screenshots.",
    "tryInUi": [
     "Run `cd apps/web && bunx playwright test e2e/qa/paid-call-guard.spec.ts` and confirm green",
@@ -3090,7 +3220,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 13",
-    "line": 604,
+    "line": 613,
     "items": [
      "all SPEC parts verified; no real paid calls; owner review."
     ]
@@ -3116,7 +3246,7 @@ window.DASHBOARD = {
       "bun run verify",
       "`bun run test`."
      ],
-     "line": 572,
+     "line": 581,
      "ui": false,
      "status": "ready",
      "updatedAt": null,
@@ -3150,7 +3280,7 @@ window.DASHBOARD = {
       "cd apps/web && bun run test:e2e",
       "`cd apps/web && E2E_SERVER=prod bun run test:e2e`."
      ],
-     "line": 580,
+     "line": 589,
      "ui": false,
      "status": "ready",
      "updatedAt": null,
@@ -3186,7 +3316,7 @@ window.DASHBOARD = {
       "bun run test",
       "`bun run verify`."
      ],
-     "line": 588,
+     "line": 597,
      "ui": true,
      "status": "ready",
      "updatedAt": null,
@@ -3222,7 +3352,7 @@ window.DASHBOARD = {
       "cd apps/web && E2E_SERVER=prod bun run test:e2e",
       "`ls agent_docs/ui-polish-picker-header/ANALYTICS.md`."
      ],
-     "line": 596,
+     "line": 605,
      "ui": false,
      "status": "ready",
      "updatedAt": null,
@@ -3246,7 +3376,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 11",
+ "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 12",
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -3341,6 +3471,32 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-18T14:51:33.376Z",
+   "ok": true,
+   "phase": "10",
+   "tasks": [
+    "T10.1",
+    "T10.2",
+    "T10.3",
+    "T10.4"
+   ],
+   "attempt": "1",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 22/22 (x3), lowest unit coverage 95.45% lines",
+   "error": null,
+   "sha": "2d66022a54473a336b6737df2f23e1d4caa7b6cc",
+   "shortSha": "2d66022",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/2d66022a54473a336b6737df2f23e1d4caa7b6cc",
+   "subject": "feat(web): landing nav theme toggle in the bar",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-18T20:21:25+05:30",
+   "filesChanged": 7,
+   "added": 749,
+   "removed": 381
+  },
   {
    "at": "2026-11-18T14:21:50.014Z",
    "ok": true,
@@ -5235,9 +5391,154 @@ window.DASHBOARD = {
    "file": "10/T10.3-2.png",
    "phase": "10",
    "href": "shots/10/T10.3-2.png"
+  },
+  {
+   "taskId": "T11.2",
+   "kind": "after",
+   "step": "Tap targets >=44px on mobile (header and Settings)",
+   "attempt": 1,
+   "caption": "At 360px (prod build) the referral banner, logo, feature select, credits, user menu and Settings trigger are all at least 44px tall",
+   "annotations": [
+    {
+     "x": 0,
+     "y": 0,
+     "w": 100,
+     "h": 4.9,
+     "label": "Referral banner min-h 44px"
+    },
+    {
+     "x": 3,
+     "y": 6,
+     "w": 93,
+     "h": 5,
+     "label": "Logo, feature select, user menu 44px"
+    },
+    {
+     "x": 3,
+     "y": 62.8,
+     "w": 27,
+     "h": 4.9,
+     "label": "Settings trigger 44px"
+    }
+   ],
+   "at": "2026-11-18T15:32:04.275Z",
+   "file": "11/T11.2-1.png",
+   "phase": "11",
+   "href": "shots/11/T11.2-1.png"
+  },
+  {
+   "taskId": "T11.3",
+   "kind": "after",
+   "step": "Composer toolbar tap targets >=44px below 768",
+   "attempt": 1,
+   "caption": "At 360px the composer toolbar controls (reference, mic, AI actions, Generate) reach 44px",
+   "annotations": [
+    {
+     "x": 5.8,
+     "y": 69.6,
+     "w": 12.5,
+     "h": 5,
+     "label": "Reference-image trigger 44x44"
+    },
+    {
+     "x": 29,
+     "y": 93,
+     "w": 66,
+     "h": 5,
+     "label": "Mic, AI actions and Generate 44px tall"
+    }
+   ],
+   "at": "2026-11-18T15:32:04.444Z",
+   "file": "11/T11.3-1.png",
+   "phase": "11",
+   "href": "shots/11/T11.3-1.png"
+  },
+  {
+   "taskId": "T11.3",
+   "kind": "after",
+   "step": "Sidebar chips and More sizes >=44px on mobile",
+   "attempt": 1,
+   "caption": "In the 360px Settings sheet the More sizes trigger is 44px tall (count and format chips measured >=44px by the e2e spec)",
+   "annotations": [
+    {
+     "x": 3.6,
+     "y": 90,
+     "w": 93,
+     "h": 5,
+     "label": "More sizes trigger 44px"
+    }
+   ],
+   "at": "2026-11-18T15:32:04.608Z",
+   "file": "11/T11.3-2.png",
+   "phase": "11",
+   "href": "shots/11/T11.3-2.png"
+  },
+  {
+   "taskId": "T11.5",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Create at 360px, no horizontal scroll",
+   "annotations": [],
+   "at": "2026-11-18T15:10:03.389Z",
+   "file": "11/T11.5-1.png",
+   "phase": "11",
+   "href": "shots/11/T11.5-1.png"
+  },
+  {
+   "taskId": "T11.5",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Create at 390px, no horizontal scroll",
+   "annotations": [],
+   "at": "2026-11-18T15:10:03.590Z",
+   "file": "11/T11.5-2.png",
+   "phase": "11",
+   "href": "shots/11/T11.5-2.png"
+  },
+  {
+   "taskId": "T11.5",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Create at 700px, no horizontal scroll",
+   "annotations": [],
+   "at": "2026-11-18T15:10:03.783Z",
+   "file": "11/T11.5-3.png",
+   "phase": "11",
+   "href": "shots/11/T11.5-3.png"
+  },
+  {
+   "taskId": "T11.5",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Create at 1440px, no horizontal scroll",
+   "annotations": [],
+   "at": "2026-11-18T15:10:03.978Z",
+   "file": "11/T11.5-4.png",
+   "phase": "11",
+   "href": "shots/11/T11.5-4.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-18T15:42:17.758Z",
+   "type": "deliverable",
+   "tasks": [
+    "T11.1",
+    "T11.2",
+    "T11.3",
+    "T11.4",
+    "T11.5",
+    "T11.6"
+   ],
+   "text": "Create page audited and fixed: 44px tap targets in header, composer toolbar and sidebar chips; no overflow 360-1440; unit and e2e coverage",
+   "files": [
+    "agent_docs/ui-polish-picker-header/AUDIT.md"
+   ]
+  },
   {
    "at": "2026-11-18T14:51:17.319Z",
    "type": "deliverable",
@@ -5408,6 +5709,70 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-18T15:41:38.390Z",
+   "type": "advisory",
+   "tasks": [
+    "T11.6"
+   ],
+   "text": "vue-tsc --noEmit shows pre-existing errors outside phase-11 hunks; vue-tsc is not in bun run verify"
+  },
+  {
+   "at": "2026-11-18T15:41:38.219Z",
+   "type": "advisory",
+   "tasks": [
+    "T11.6"
+   ],
+   "text": "header-responsive.spec.ts:388 pre-existing committed test.fail (Explore tabs at 390) from an earlier phase"
+  },
+  {
+   "at": "2026-11-18T15:41:38.046Z",
+   "type": "advisory",
+   "tasks": [
+    "T11.5"
+   ],
+   "text": "TASKS.md T11.5 Files reads \"none, <10 unit test files>\": the test files belong to T11.4 Files, T11.5 should stay \"none\""
+  },
+  {
+   "at": "2026-11-18T15:34:55.371Z",
+   "type": "advisory",
+   "tasks": [
+    "T11.6"
+   ],
+   "text": "vue-tsc --noEmit reports 33 pre-existing errors (none on phase-11 changed lines); project gate vp check has no tsc step"
+  },
+  {
+   "at": "2026-11-18T15:32:17.219Z",
+   "type": "advisory",
+   "tasks": [
+    "T11.3"
+   ],
+   "text": "AUDIT row 22/23 fix text still reads \"moved to T11.2b Fixed in T11.3\" (stale renumbering text, missing separator)"
+  },
+  {
+   "at": "2026-11-18T15:32:17.053Z",
+   "type": "advisory",
+   "tasks": [
+    "T11.6"
+   ],
+   "text": "header-responsive.spec.ts:388 keeps a pre-existing test.fail (Explore header does not park tabs at y<=1 at 390); known app gap from an earlier phase"
+  },
+  {
+   "at": "2026-11-18T15:32:16.887Z",
+   "type": "advisory",
+   "tasks": [
+    "T11.4"
+   ],
+   "text": "CSS-only header/composer 44px fixes outside Dashboard.vue have no unit class-contract test; covered only by create-responsive e2e measurements"
+  },
+  {
+   "at": "2026-11-18T15:32:16.715Z",
+   "type": "advisory",
+   "tasks": [
+    "T11.6"
+   ],
+   "text": "AUDIT.md fails vp check (missing blank line before list under \"Intended diffs\" in the 1440 section); bun run verify --fix repairs it, run it before commit"
+  },
   {
    "at": "2026-11-18T14:51:00.826Z",
    "type": "advisory",
@@ -5827,619 +6192,669 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
-   "at": "2026-11-18T14:51:17.319Z",
+   "at": "2026-11-18T15:42:17.758Z",
    "type": "deliverable",
    "tasks": [
-    "T10.1",
-    "T10.2",
-    "T10.3",
-    "T10.4"
+    "T11.1",
+    "T11.2",
+    "T11.3",
+    "T11.4",
+    "T11.5",
+    "T11.6"
    ],
-   "text": "Landing nav theme toggle moved into the bar (<900) and actions (>=900); removed from the sheet",
+   "text": "Create page audited and fixed: 44px tap targets in header, composer toolbar and sidebar chips; no overflow 360-1440; unit and e2e coverage",
    "files": [
-    "apps/web/src/components/Landing/LandingNav.vue",
-    "apps/web/src/components/Landing/LandingNav.test.ts",
-    "apps/web/e2e/qa/landing-nav-theme.spec.ts"
+    "agent_docs/ui-polish-picker-header/AUDIT.md"
    ]
   },
   {
-   "at": "2026-11-18T14:51:12.924Z",
+   "at": "2026-11-18T15:42:13.100Z",
    "tasks": [
-    "T10.4"
+    "T11.6"
    ],
-   "attempt": "1",
+   "attempt": "2",
    "type": "verify_passed",
-   "evidence": "e2e prod x3 clean (superset of x2); root bun run test 306 files / 2897 tests passed; vp lint + vp check 0 errors (run without --fix); git diff touches no UserMenu/AppHeader files, /pricing signed-out ThemeButton e2e passes",
-   "fingerprint": "52dd12e79f7d278e515eddfb85f4bcd5a9496689e3d4e3fb5deb0f2f717e271f",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+   "evidence": "a5 BLOCKING item resolved. `bunx vp check` exits 0 and `bun run verify` exits 0 (0 errors, 10 warnings). `bun run test`: 306 files / 2913 tests, exit 0. `E2E_SERVER=prod playwright create-responsive + header-responsive --repeat-each=2`: 107 passed in 2.9m, exit 0, no flakes.",
+   "fingerprint": "e617b36009fd65822f4aa1f423f91ccc4b06f92c2500e37a84979d0027387f97",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
   },
   {
-   "at": "2026-11-18T14:51:12.924Z",
+   "at": "2026-11-18T15:42:13.100Z",
    "tasks": [
-    "T10.3"
+    "T11.5"
    ],
-   "attempt": "1",
+   "attempt": "2",
    "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod (fresh build via webServer) landing-nav-theme.spec.ts --repeat-each=3: 22 passed (7 tests x3 + setup), 0 flaky; scenarios @critical 390/800, @high 44px, @high 360 overflow, @medium 1440, @medium /pricing all covered; shots T10.3-1/2 show toggle beside burger with menu closed",
-   "fingerprint": "b95a5f44aa327d335b37a4b884884b7f2c2f0633d09a7296d955a597df22f3a3",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+   "evidence": "spec unchanged since a5 (75/75 x3 there). It passes again inside the gate's prod run below.",
+   "fingerprint": "30512242b7f6aa242fbbe5b66176bef570438773efaa2fe07ec49df51a0ad0cf",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
   },
   {
-   "at": "2026-11-18T14:51:12.924Z",
+   "at": "2026-11-18T15:42:13.100Z",
    "tasks": [
-    "T10.2"
+    "T11.4"
    ],
-   "attempt": "1",
+   "attempt": "2",
    "type": "verify_passed",
-   "evidence": "LandingNav.test.ts 11/11 pass; coverage LandingNav.vue stmts 95.83 branch 100 funcs 92.3 lines 95.45 (>=80 all); no it.fails/skip/only; asserts no ThemeButton in open sheet, bar toggle outside actions, actions toggle inside",
-   "fingerprint": "2c84cd61caa1fa633910eb88b0eb1eb429aa3e334fe2b437006486763cd9d1b3",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+   "evidence": "a5 BLOCKING item resolved. The 10 class-contract tests are present and specific: Logo: width/height 34 plus tw-min-h-11/min-w-11.; FeatureSelect and UserMenu: tw-h-11 and not tw-h-10.; ReferralOffer: tw-min-h-11.; AppHeader: md:tw-flex-none and not lg:.; ReferenceImageControl (disabled and enabled), MicButton (idle, cancel and accept) and PromptAiMenu: max-md:tw-*-11.; ImageGenerateAside quality/c",
+   "fingerprint": "cafa7c31b635819187877ce60237fccaf23af3f71133ca3793edc6a135fb95bb",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
   },
   {
-   "at": "2026-11-18T14:51:12.924Z",
+   "at": "2026-11-18T15:42:13.100Z",
    "tasks": [
-    "T10.1"
+    "T11.3"
    ],
-   "attempt": "1",
+   "attempt": "2",
    "type": "verify_passed",
-   "evidence": "grep nav__sheet-theme-btn in apps/web/src + e2e empty; live DOM 390 open menu: sheet present, 0 toggles in sheet, 1 visible toggle 44x44 in bar; 360: overflow 0, toggle x236 left of burger x292; 1440: 1 visible toggle, inside .nav__actions; shots T10.1-1..3 recorded; vp lint 0 errors, vp check 0 errors",
-   "fingerprint": "dd39c31ef0a62842af4d7a66373da940f980134421d1eeb16cf4b35e0622819b",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+   "evidence": "source is unchanged since a5. The prod e2e tap-target measurements pass again (see T11.6). Proof shots 11/T11.3-1 and 11/T11.3-2 still apply.",
+   "fingerprint": "417057db37a513c3d6441fb0b5c32a0fa0da9655d3ddc1d5010a540610e167f3",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
   },
   {
-   "at": "2026-11-18T14:51:00.826Z",
+   "at": "2026-11-18T15:42:13.099Z",
+   "tasks": [
+    "T11.2"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "source is unchanged since a5 (all mtimes before the a5 report). `vitest run src/pages src/components/Dashboard`: 63 files / 430 tests pass. `bun run verify` exits 0 and open rows are 0. Proof shot 11/T11.2-1 still applies.",
+   "fingerprint": "816b4c3bf450ae9fb4a543556f7636c4eb2d4b717180a2f6659279bf90e64661",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
+  },
+  {
+   "at": "2026-11-18T15:42:13.099Z",
+   "tasks": [
+    "T11.1"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "no change since a5. AUDIT.md has 27 table lines and 0 open rows, after/ holds 39 shots. The stale \"T11.2b\" references are gone (grep finds 0).",
+   "fingerprint": "9bec572a4e839a49c7532c4689761a57d062926a39437af39a9700c4992aaea5",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
+  },
+  {
+   "at": "2026-11-18T15:42:05.232Z",
+   "tasks": [
+    "T11.6"
+   ],
+   "attempt": "2",
+   "type": "verify_inconclusive",
+   "text": "unparseable-report",
+   "sigs": [
+    "T11.6|inconclusive|unparseable-report"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
+  },
+  {
+   "at": "2026-11-18T15:42:05.232Z",
+   "tasks": [
+    "T11.5"
+   ],
+   "attempt": "2",
+   "type": "verify_inconclusive",
+   "text": "unparseable-report",
+   "sigs": [
+    "T11.5|inconclusive|unparseable-report"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
+  },
+  {
+   "at": "2026-11-18T15:42:05.232Z",
+   "tasks": [
+    "T11.4"
+   ],
+   "attempt": "2",
+   "type": "verify_inconclusive",
+   "text": "unparseable-report",
+   "sigs": [
+    "T11.4|inconclusive|unparseable-report"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
+  },
+  {
+   "at": "2026-11-18T15:42:05.231Z",
+   "tasks": [
+    "T11.3"
+   ],
+   "attempt": "2",
+   "type": "verify_inconclusive",
+   "text": "unparseable-report",
+   "sigs": [
+    "T11.3|inconclusive|unparseable-report"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
+  },
+  {
+   "at": "2026-11-18T15:42:05.231Z",
+   "tasks": [
+    "T11.2"
+   ],
+   "attempt": "2",
+   "type": "verify_inconclusive",
+   "text": "unparseable-report",
+   "sigs": [
+    "T11.2|inconclusive|unparseable-report"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
+  },
+  {
+   "at": "2026-11-18T15:42:05.231Z",
+   "tasks": [
+    "T11.1"
+   ],
+   "attempt": "2",
+   "type": "verify_inconclusive",
+   "text": "unparseable-report",
+   "sigs": [
+    "T11.1|inconclusive|unparseable-report"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
+  },
+  {
+   "at": "2026-11-18T15:41:38.390Z",
    "type": "advisory",
    "tasks": [
-    "T10.3"
+    "T11.6"
    ],
-   "text": "landing-nav-theme.spec.ts writes PNGs to agent_docs/qa/landing-nav-theme/ instead of the TASKS convention agent_docs/qa/ui-polish-picker-header/"
+   "text": "vue-tsc --noEmit shows pre-existing errors outside phase-11 hunks; vue-tsc is not in bun run verify"
   },
   {
-   "at": "2026-11-18T14:48:02.077Z",
+   "at": "2026-11-18T15:41:38.219Z",
+   "type": "advisory",
+   "tasks": [
+    "T11.6"
+   ],
+   "text": "header-responsive.spec.ts:388 pre-existing committed test.fail (Explore tabs at 390) from an earlier phase"
+  },
+  {
+   "at": "2026-11-18T15:41:38.046Z",
+   "type": "advisory",
+   "tasks": [
+    "T11.5"
+   ],
+   "text": "TASKS.md T11.5 Files reads \"none, <10 unit test files>\": the test files belong to T11.4 Files, T11.5 should stay \"none\""
+  },
+  {
+   "at": "2026-11-18T15:37:24.544Z",
    "type": "verify_started",
    "tasks": [
-    "T10.1",
-    "T10.2",
-    "T10.3",
-    "T10.4"
+    "T11.1",
+    "T11.2",
+    "T11.3",
+    "T11.4",
+    "T11.5",
+    "T11.6"
    ],
-   "attempt": "1"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-18T14:47:58.384Z",
+   "at": "2026-11-18T15:37:21.835Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T11.5"
+   ],
+   "fingerprint": "5059263e7c6a894ce3dbcfb3ef37c325919cc4c0a23be412b893e301d1cb2620"
+  },
+  {
+   "at": "2026-11-18T15:37:21.835Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T11.3"
+   ],
+   "fingerprint": "417057db37a513c3d6441fb0b5c32a0fa0da9655d3ddc1d5010a540610e167f3"
+  },
+  {
+   "at": "2026-11-18T15:37:21.835Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T11.2"
+   ],
+   "fingerprint": "816b4c3bf450ae9fb4a543556f7636c4eb2d4b717180a2f6659279bf90e64661"
+  },
+  {
+   "at": "2026-11-18T15:37:21.835Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T11.1"
+   ],
+   "fingerprint": "9bec572a4e839a49c7532c4689761a57d062926a39437af39a9700c4992aaea5"
+  },
+  {
+   "at": "2026-11-18T15:37:18.478Z",
    "type": "dirty_snapshot",
    "tasks": [],
    "hashes": {
-    "apps/web/src/components/Landing/LandingNav.test.ts": "9c10e5f017383c91b8c08c14687b5fd7846006d7",
-    "apps/web/src/components/Landing/LandingNav.vue": "c3d50dd382ac4dcace01c24cb1bd5133f2494838",
-    "apps/web/src/components/LandingV2/LandingV2Page.vue": "d6cfca3bfd5d7acdf60050bcebe649d1ed5a332a",
-    "apps/web/e2e/qa/landing-nav-theme.spec.ts": "13a0bb57fff4437b83f4d401a4c801194019eddb"
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "9d3a2545903f6fa604392d8a2b3ce016f3a55f02",
+    "agent_docs/ui-polish-picker-header/TASKS.md": "5d73744e22f5e5635539bc66f4bb22e24fae9812",
+    "apps/web/src/components/Dashboard/Composer/GenerateCTA.vue": "da19976eb0c7149a12c8cc4cae1648f6d0b052d0",
+    "apps/web/src/components/Dashboard/Composer/ReferenceImageControl.test.ts": "c08ad484acbf67ea875ff7afa750b91a23e99f72",
+    "apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue": "0787eae35bd920418b35235bd7ac10e761108dff",
+    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.test.ts": "b5bb081513d793d235307ddfdc0b68d4b435d130",
+    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue": "f0618587606b932890a63bec07fa2b6748c576e8",
+    "apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.test.ts": "f3ddc0f4de77dc89944e9a9c9620b24348206423",
+    "apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.vue": "c14d80ebcb95febbbc351a59f82999a283314558",
+    "apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.test.ts": "07a9232f9daa036f9418b6ac8a6f282104c54630",
+    "apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.vue": "ac8a863d58f294cd4de7fe31abb5f43b631d1831",
+    "apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.test.ts": "92324a83f328dfa6c2c08264a294fda8b425e61c",
+    "apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.vue": "e325c2618973a73d67720a99aa73e5e57efcb067",
+    "apps/web/src/components/Header/AppHeader.test.ts": "d7d782009a796ed561b02c79c3b55acb054fcda6",
+    "apps/web/src/components/Header/AppHeader.vue": "3198f5f579d97627b77b1c03c3d256daeb6b4b4a",
+    "apps/web/src/components/Header/FeatureSelect.test.ts": "fd0e537af37dda20d9b2ebf27e00169c9b5564c0",
+    "apps/web/src/components/Header/FeatureSelect.vue": "eed431088e104176d9874448b7abe7d0f3fd87dd",
+    "apps/web/src/components/Header/Logo.test.ts": "6862f5a1801793cf5e8b931d3784a69bc76723bc",
+    "apps/web/src/components/Header/Logo.vue": "ad44871981aa276df6635ea92468abf16dad7ff5",
+    "apps/web/src/components/Header/ReferralOffer.test.ts": "5f32d85aca66f1055280a6fed917de2c991a6c6c",
+    "apps/web/src/components/Header/ReferralOffer.vue": "0683237fb12693cccd3ecc09351b508f3942c81a",
+    "apps/web/src/components/Header/UserMenu.test.ts": "b1713749faed607fe768dbc93b1e89daba7e0ba5",
+    "apps/web/src/components/Header/UserMenu.vue": "86e49050489cf87a0e87097b4b46dc52f66b5ead",
+    "apps/web/src/pages/Dashboard.test.ts": "5a613093a2dd4d683f56a7f43dc976ff9771c686",
+    "apps/web/src/pages/Dashboard.vue": "0d412bcef07fa997ac930fedbc62bf1f5d96aa81",
+    "apps/web/e2e/qa/create-responsive.spec.ts": "31e7918bd0abd6364085ec79a11f240df6fa28b0"
    }
   },
   {
-   "at": "2026-11-18T14:47:58.114Z",
+   "at": "2026-11-18T15:37:18.320Z",
    "type": "preflight_passed",
    "tasks": [
-    "T10.4"
+    "T11.4"
    ],
-   "fingerprint": "52dd12e79f7d278e515eddfb85f4bcd5a9496689e3d4e3fb5deb0f2f717e271f"
+   "fingerprint": "cafa7c31b635819187877ce60237fccaf23af3f71133ca3793edc6a135fb95bb"
   },
   {
-   "at": "2026-11-18T14:47:58.114Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T10.3"
-   ],
-   "fingerprint": "b95a5f44aa327d335b37a4b884884b7f2c2f0633d09a7296d955a597df22f3a3"
-  },
-  {
-   "at": "2026-11-18T14:47:58.114Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T10.2"
-   ],
-   "fingerprint": "2c84cd61caa1fa633910eb88b0eb1eb429aa3e334fe2b437006486763cd9d1b3"
-  },
-  {
-   "at": "2026-11-18T14:47:57.707Z",
+   "at": "2026-11-18T15:37:18.000Z",
    "type": "task_built",
    "tasks": [
-    "T10.4"
+    "T11.6"
    ],
-   "text": "spec 15/15, verify 0 errors, full suite 306 files pass (1 unrelated FeatureLanding ECONNREFUSED flake)",
+   "text": "AUDIT.md formatting fixed, bun run verify 0 errors",
    "files": [
-    "agent_docs/ui-polish-picker-header/TASKS.md"
+    "agent_docs/ui-polish-picker-header/AUDIT.md"
    ]
   },
   {
-   "at": "2026-11-18T14:47:50.302Z",
-   "type": "task_built",
-   "tasks": [
-    "T10.4"
-   ],
-   "text": "spec 15/15 x2; verify 0; test 306 files/2897 pass (1 flaky FeatureLanding ECONNREFUSED, 1 of 3 runs)",
-   "files": []
-  },
-  {
-   "at": "2026-11-18T14:45:13.147Z",
+   "at": "2026-11-18T15:36:50.789Z",
    "type": "task_started",
    "tasks": [
-    "T10.4"
+    "T11.6"
    ],
-   "attempt": "1"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-18T14:45:12.819Z",
+   "at": "2026-11-18T15:36:48.264Z",
    "type": "task_built",
    "tasks": [
-    "T10.3"
+    "T11.4"
    ],
-   "text": "e2e 8/8, 22/22 repeat-each=3, flake clean",
+   "text": "unit PASS: class-contract tests added for T11.2/T11.3 fixes, 309 related tests pass",
    "files": [
-    "e2e"
+    "apps/web/src/components/Header/Logo.test.ts"
    ]
   },
   {
-   "at": "2026-11-18T14:40:30.619Z",
+   "at": "2026-11-18T15:35:12.460Z",
    "type": "task_started",
    "tasks": [
-    "T10.3"
+    "T11.4"
    ],
-   "attempt": "1"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-18T14:40:30.180Z",
-   "type": "task_built",
-   "tasks": [
-    "T10.2"
-   ],
-   "text": "LandingNav.test.ts 11 tests, lowest file 95.45% lines, shuffle clean",
-   "files": [
-    "apps/web/src/components/Landing/LandingNav.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T14:39:48.317Z",
-   "type": "task_started",
-   "tasks": [
-    "T10.2"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T14:39:43.564Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "apps/web/src/components/Landing/LandingNav.vue": "c3d50dd382ac4dcace01c24cb1bd5133f2494838",
-    "apps/web/src/components/LandingV2/LandingV2Page.vue": "d6cfca3bfd5d7acdf60050bcebe649d1ed5a332a"
-   }
-  },
-  {
-   "at": "2026-11-18T14:39:43.299Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T10.1"
-   ],
-   "fingerprint": "dd39c31ef0a62842af4d7a66373da940f980134421d1eeb16cf4b35e0622819b"
-  },
-  {
-   "at": "2026-11-18T14:39:36.611Z",
-   "type": "task_built",
-   "tasks": [
-    "T10.1"
-   ],
-   "text": "bar ThemeButton <900, actions >=900, sheet toggle removed, 44px",
-   "files": [
-    "apps/web/src/components/Landing/LandingNav.vue",
-    "apps/web/src/components/LandingV2/LandingV2Page.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T14:38:57.389Z",
-   "type": "task_started",
-   "tasks": [
-    "T10.1"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T14:38:57.043Z",
+   "at": "2026-11-18T15:35:12.232Z",
    "type": "build_started",
    "tasks": [
-    "T10.1",
-    "T10.2",
-    "T10.3",
-    "T10.4"
+    "T11.4",
+    "T11.6"
    ],
-   "attempt": "1"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-18T14:38:53.348Z",
-   "type": "run_started",
+   "at": "2026-11-18T15:35:08.190Z",
    "tasks": [
-    "T10.1",
-    "T10.2",
-    "T10.3",
-    "T10.4"
+    "T11.5"
    ],
-   "pipeline": 2,
-   "baseline": {
-    "head": "df57d37c68c2957a18422bcb5b17cebc53059beb",
-    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000"
-   }
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "E2E_SERVER=prod, create-responsive 25 tests x3 = 75/75 clean, no retries. Scenarios match the task, paidCallGuard is on, and the test-quality grep is clean.",
+   "fingerprint": "30512242b7f6aa242fbbe5b66176bef570438773efaa2fe07ec49df51a0ad0cf",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a5.md"
   },
   {
-   "at": "2026-11-18T14:21:50.014Z",
-   "type": "commit",
+   "at": "2026-11-18T15:35:08.190Z",
    "tasks": [
-    "T9.1",
-    "T9.2",
-    "T9.3",
-    "T9.4",
-    "T9.5"
+    "T11.3"
    ],
-   "attempt": "2",
-   "text": "fix(web): FAQ visible in the Upgrade dialog",
-   "sha": "df57d37c68c2957a18422bcb5b17cebc53059beb",
-   "branch": "feature-enhancement",
-   "pushed": "yes",
-   "evidence": "e2e 37/37 x3 prod, unit 18/18 100% on changed files"
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "on the prod build (x3), reference, mic, AI actions, Generate, count/format chips and More sizes measure >=44px at 360/390/700, and the 1440 chips stay <44px. The 700 rail shot shows SD/HD at 44px. Open rows 0. Proof shots 11/T11.3-1 and 11/T11.3-2.",
+   "fingerprint": "c54259d485547e9356e0867c70303f206ac3846c76856c3d994a2a1511bbf60c",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a5.md"
   },
   {
-   "at": "2026-11-18T14:21:32.683Z",
-   "type": "deliverable",
+   "at": "2026-11-18T15:35:08.189Z",
    "tasks": [
-    "T9.1",
-    "T9.2",
-    "T9.3",
-    "T9.4",
-    "T9.5"
+    "T11.2"
    ],
-   "text": "FAQ in Upgrade dialog reveals: v-reveal takes a scroller, AppModal provides its panel",
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "`vitest run src/pages src/components/Dashboard` 63 files / 423 tests pass. `vp check --no-fmt` 0 errors, open rows 0. On the prod build, logo, feature select, user menu, banner and Settings trigger measure >=44px at 360/390/700 (x3). Header tabs stay centered at 768/1024 (x3). Proof shot 11/T11.2-1.",
+   "fingerprint": "775f23c23f2c20eb4bc7e82d79ec333b09441120f6bd90cb7ec057fbe4209e24",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a5.md"
+  },
+  {
+   "at": "2026-11-18T15:35:08.189Z",
+   "tasks": [
+    "T11.1"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "AUDIT.md has 27 table lines and after/ has 39 shots (create/picker at 6 widths x themes, plus keyboard emulation at 360/390/700). Every Part 4c element (header, composer, aside, picker trigger, grid/history/dialogs, 700 band, keyboard) has a finding or \"no issue\". The 700 band row leaves the 640 split untouched (D8).",
+   "fingerprint": "88891488b782e4f632008b5282841839144ac814a45852a4a2d8edc41b14eb44",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a5.md"
+  },
+  {
+   "at": "2026-11-18T15:35:08.188Z",
+   "tasks": [
+    "T11.6"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "type-lint",
+   "text": "[type-lint] · agent_docs/ui-polish-picker-header/AUDIT.md:39 · `vp check` exits 1: formatting, with no blank line before the \"Intended diffs\" list in the 1440 section added after the gate's own verify run. HEAD's version is clean. · Add the blank line, or run `bun run verify`, and re-run `vp check` to exit 0.",
    "files": [
-    "apps/web/src/directives/reveal.ts",
-    "apps/web/src/components/Landing/FaqSection.vue",
-    "apps/web/src/components/AppModal.vue",
-    "apps/web/e2e/qa/pricing-layout.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T14:21:28.912Z",
-   "tasks": [
-    "T9.4"
+    "agent_docs/ui-polish-picker-header/audit.md"
    ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod pricing-layout.spec.ts --repeat-each=3: 37/37 passed, 0 flaky, exit 0. The round-2 BLOCKING item is fixed. expectFaqItemsRevealed asserts listitem count == FAQ_QUESTIONS.length and polls computed opacity 1 plus in-viewport on every li.faq__item (the reveal target), in both the @critical dialog test and the @high 390 test. Isolated mutation on the prod build (dialog open, not scroll",
-   "fingerprint": "b0f45c9a18e3103fb5fb284695f7099784d72f6466d867e4a82acd03cab59402",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-18T14:17:56.461Z",
-   "type": "verify_started",
-   "tasks": [
-    "T9.4"
+   "sigs": [
+    "T11.6|type-lint|agent_docs/ui-polish-picker-header/audit.md"
    ],
-   "attempt": "2"
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a5.md"
   },
   {
-   "at": "2026-11-18T14:17:54.190Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "051c8fdf64b4c185ed7c2e6a1a0121117c254b50",
-    "apps/web/e2e/qa/pricing-layout.spec.ts": "b4dad823f1e3f8b04aaf7cb657149573e04b286d",
-    "apps/web/src/components/AppModal.vue": "b769af17f28d087d059d654c6865fbf6fff1dee2",
-    "apps/web/src/components/Landing/FaqSection.test.ts": "046c7722186c7fc24628e703c161fd5e389aa364",
-    "apps/web/src/components/Landing/FaqSection.vue": "1f191ecd6a5337878db6aed00790f018009c2bd8",
-    "apps/web/src/directives/reveal.test.ts": "4a315854e12a5677b6847cd4bd332a1ec2bdb32a",
-    "apps/web/src/directives/reveal.ts": "e52551aac75d9369e88245c259f3fcbfb1a4b307"
-   }
-  },
-  {
-   "at": "2026-11-18T14:17:54.032Z",
-   "type": "preflight_passed",
+   "at": "2026-11-18T15:35:08.187Z",
    "tasks": [
-    "T9.4"
-   ],
-   "fingerprint": "b0f45c9a18e3103fb5fb284695f7099784d72f6466d867e4a82acd03cab59402"
-  },
-  {
-   "at": "2026-11-18T14:17:53.808Z",
-   "type": "task_built",
-   "tasks": [
-    "T9.4"
-   ],
-   "attempt": "2",
-   "text": "e2e: 12/12, flake x3 clean, per-li opacity assertions",
-   "files": [
-    "apps/web/e2e/qa/pricing-layout.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T14:15:12.059Z",
-   "type": "task_started",
-   "tasks": [
-    "T9.4"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T14:15:11.886Z",
-   "type": "build_started",
-   "tasks": [
-    "T9.4"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T14:15:08.490Z",
-   "tasks": [
-    "T9.5"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod pricing-layout + localized-prices --repeat-each=3: 61/61 passed, 0 flaky; vp lint/check 0 errors; bun run test 2890/2890; landing and /pricing reveal tests green; /pricing and landing FAQ h2 carry v-reveal directly so those heading assertions are real; T9.5 is a gate (Files: none), so its own shots do not gate it",
-   "fingerprint": "1245637eea06edd708d6963ff1952a7939e71004484ce05b58c377219f805576",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
-  },
-  {
-   "at": "2026-11-18T14:15:08.490Z",
-   "tasks": [
-    "T9.3"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "scoped coverage run 18/18, reveal.ts / FaqSection.vue / PricingLayout.vue 100% stmts/branches/funcs/lines; modal-scroller test asserts every reveal trigger (2 + items) uses the panel, so it fails pre-fix; window default covered; no it.fails/skip/only",
-   "fingerprint": "2bca24ce90f22f9b478c592b81f5f60b37974838c43659f4439a5f1fd310b087",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
-  },
-  {
-   "at": "2026-11-18T14:15:08.490Z",
-   "tasks": [
-    "T9.2"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "AppModal provides panel as REVEAL_SCROLLER_KEY, FaqSection passes it to v-reveal (default window unchanged); verifier browser check on prod build: heading + 5 items computed opacity 1 and in viewport at 360/390/768/1440 dark and light; vitest directives/Landing/Pricing 18/18, full suite 306 files 2890/2890; vp lint + vp check 0 errors",
-   "fingerprint": "02ef906ecf052e5d1f8594d01d0969ec7b240a0b679f0f9abd9b44bb5143f884",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
-  },
-  {
-   "at": "2026-11-18T14:15:08.490Z",
-   "tasks": [
-    "T9.1"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "AUDIT.md:26 FAQ row states root cause (window ScrollTrigger vs AppModal panel scroller; :deep(.faq) and dvh ruled out); faq-repro-1440.png and faq-repro-390.png exist and show the FAQ missing below the credit table",
-   "fingerprint": "208b1e7c9c8210b19a4f03f3a88148de15cc02e1d862740a9dbf92e75ce16e75",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
-  },
-  {
-   "at": "2026-11-18T14:15:08.489Z",
-   "tasks": [
-    "T9.4"
+    "T11.4"
    ],
    "attempt": "1",
    "type": "verify_failed",
    "category": "test-quality",
-   "text": "[test-quality] · pricing-layout.spec.ts:226-229,262-265,284-285 (expectRevealed on question buttons) · v-reveal sits on li.faq__item, and CSS opacity is not inherited, so getComputedStyle(button).opacity is always 1. Playwright's toBeVisible also passes at opacity 0. On the prod build, with the dialog open and not scrolled, all 5 items read li opacity 0 / button opacity 1. The \"every question comp",
+   "text": "[test-quality] · Do: \"if a fix is CSS-only, assert its class/attribute contract (include their touched component files in Files)\"; AC \"each logic-changing fix has a test\" · Only Dashboard.vue's Settings trigger has a class-contract test. Logo.vue dropped its useMediaQuery 30/34 conditional for a constant 34 plus tw-min-h-11/min-w-11, and Logo.test.ts asserts neither the size nor the classes. Featu",
    "files": [
-    "pricing-layout.spec.ts"
+    "do: \"if a fix is css-only, assert its class/attribute contra"
    ],
    "sigs": [
-    "T9.4|test-quality|pricing-layout.spec.ts"
+    "T11.4|test-quality|do: \"if a fix is css-only, assert its class/attribute contra"
    ],
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a5.md"
   },
   {
-   "at": "2026-11-18T14:14:54.683Z",
+   "at": "2026-11-18T15:34:55.371Z",
    "type": "advisory",
    "tasks": [
-    "T9.5"
+    "T11.6"
    ],
-   "text": "Manifest shot 9/T9.5-2.png is also a connection-refused page (captioned /pricing FAQ at 1440); drop T9.5-1 and T9.5-2"
+   "text": "vue-tsc --noEmit reports 33 pre-existing errors (none on phase-11 changed lines); project gate vp check has no tsc step"
   },
   {
-   "at": "2026-11-18T14:13:38.988Z",
+   "at": "2026-11-18T15:32:17.219Z",
    "type": "advisory",
    "tasks": [
-    "T9.5"
+    "T11.3"
    ],
-   "text": "Manifest shot 9/T9.5-1.png is a connection-refused page captioned as /pricing FAQ; verifier added T9.5-3..5 dialog shots (360 light, 768 dark, 1440 light); drop T9.5-1"
+   "text": "AUDIT row 22/23 fix text still reads \"moved to T11.2b Fixed in T11.3\" (stale renumbering text, missing separator)"
   },
   {
-   "at": "2026-11-18T14:13:38.823Z",
+   "at": "2026-11-18T15:32:17.053Z",
    "type": "advisory",
    "tasks": [
-    "T9.3"
+    "T11.6"
    ],
-   "text": "FaqSection.test.ts tests without global vReveal print \"Failed to resolve directive: reveal\"; register the directive in a shared mount helper"
+   "text": "header-responsive.spec.ts:388 keeps a pre-existing test.fail (Explore header does not park tabs at y<=1 at 390); known app gap from an earlier phase"
   },
   {
-   "at": "2026-11-18T14:13:38.658Z",
+   "at": "2026-11-18T15:32:16.887Z",
    "type": "advisory",
    "tasks": [
-    "T9.4"
+    "T11.4"
    ],
-   "text": "pricing-layout.spec.ts:275 expect(dialog.filter({visible:true}).last()).toBeVisible() is near-vacuous; drop it"
+   "text": "CSS-only header/composer 44px fixes outside Dashboard.vue have no unit class-contract test; covered only by create-responsive e2e measurements"
   },
   {
-   "at": "2026-11-18T14:13:38.483Z",
+   "at": "2026-11-18T15:32:16.715Z",
    "type": "advisory",
    "tasks": [
-    "T9.4"
+    "T11.6"
    ],
-   "text": "Spec path pricing-dialog-faq.spec.ts does not exist; scenarios live in e2e/qa/pricing-layout.spec.ts, so the Verify command names a missing file"
+   "text": "AUDIT.md fails vp check (missing blank line before list under \"Intended diffs\" in the 1440 section); bun run verify --fix repairs it, run it before commit"
   },
   {
-   "at": "2026-11-18T14:08:27.935Z",
+   "at": "2026-11-18T15:24:33.235Z",
    "type": "verify_started",
    "tasks": [
-    "T9.1",
-    "T9.2",
-    "T9.3",
-    "T9.4",
-    "T9.5"
+    "T11.1",
+    "T11.2",
+    "T11.3",
+    "T11.4",
+    "T11.5",
+    "T11.6"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-11-18T14:08:24.958Z",
+   "at": "2026-11-18T15:24:29.133Z",
    "type": "dirty_snapshot",
    "tasks": [],
    "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "051c8fdf64b4c185ed7c2e6a1a0121117c254b50",
-    "apps/web/e2e/qa/pricing-layout.spec.ts": "3596bc82bf1d8b654b15b45e5472ad6c597a75a1",
-    "apps/web/src/components/AppModal.vue": "b769af17f28d087d059d654c6865fbf6fff1dee2",
-    "apps/web/src/components/Landing/FaqSection.test.ts": "046c7722186c7fc24628e703c161fd5e389aa364",
-    "apps/web/src/components/Landing/FaqSection.vue": "1f191ecd6a5337878db6aed00790f018009c2bd8",
-    "apps/web/src/directives/reveal.test.ts": "4a315854e12a5677b6847cd4bd332a1ec2bdb32a",
-    "apps/web/src/directives/reveal.ts": "e52551aac75d9369e88245c259f3fcbfb1a4b307"
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "f95e79bb6fdc3c2b18b6804e8edd025bd44e01ce",
+    "agent_docs/ui-polish-picker-header/TASKS.md": "ec3734094fd3a5003dcf32a327e2efea67a0022c",
+    "apps/web/src/components/Dashboard/Composer/GenerateCTA.vue": "da19976eb0c7149a12c8cc4cae1648f6d0b052d0",
+    "apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue": "0787eae35bd920418b35235bd7ac10e761108dff",
+    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue": "f0618587606b932890a63bec07fa2b6748c576e8",
+    "apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.vue": "c14d80ebcb95febbbc351a59f82999a283314558",
+    "apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.vue": "ac8a863d58f294cd4de7fe31abb5f43b631d1831",
+    "apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.vue": "e325c2618973a73d67720a99aa73e5e57efcb067",
+    "apps/web/src/components/Header/AppHeader.vue": "3198f5f579d97627b77b1c03c3d256daeb6b4b4a",
+    "apps/web/src/components/Header/FeatureSelect.vue": "eed431088e104176d9874448b7abe7d0f3fd87dd",
+    "apps/web/src/components/Header/Logo.test.ts": "90cecaa393f85d5b25f8cb1d9030ebe2a301c5ee",
+    "apps/web/src/components/Header/Logo.vue": "ad44871981aa276df6635ea92468abf16dad7ff5",
+    "apps/web/src/components/Header/ReferralOffer.vue": "0683237fb12693cccd3ecc09351b508f3942c81a",
+    "apps/web/src/components/Header/UserMenu.vue": "86e49050489cf87a0e87097b4b46dc52f66b5ead",
+    "apps/web/src/pages/Dashboard.test.ts": "5a613093a2dd4d683f56a7f43dc976ff9771c686",
+    "apps/web/src/pages/Dashboard.vue": "0d412bcef07fa997ac930fedbc62bf1f5d96aa81",
+    "apps/web/e2e/qa/create-responsive.spec.ts": "31e7918bd0abd6364085ec79a11f240df6fa28b0"
    }
   },
   {
-   "at": "2026-11-18T14:08:24.801Z",
+   "at": "2026-11-18T15:24:28.967Z",
    "type": "preflight_passed",
    "tasks": [
-    "T9.5"
+    "T11.5"
    ],
-   "fingerprint": "1245637eea06edd708d6963ff1952a7939e71004484ce05b58c377219f805576"
+   "fingerprint": "30512242b7f6aa242fbbe5b66176bef570438773efaa2fe07ec49df51a0ad0cf"
   },
   {
-   "at": "2026-11-18T14:08:24.801Z",
+   "at": "2026-11-18T15:24:28.967Z",
    "type": "preflight_passed",
    "tasks": [
-    "T9.4"
+    "T11.4"
    ],
-   "fingerprint": "9b9d9735190ab446c3dd3a1522512e62fc50e17b575bff3399aed2a67b4479e8"
+   "fingerprint": "b606a766c1f08ed315b3787e83120a2b0d7da55eb567be05a418dff867e5579b"
   },
   {
-   "at": "2026-11-18T14:08:24.801Z",
+   "at": "2026-11-18T15:24:28.967Z",
    "type": "preflight_passed",
    "tasks": [
-    "T9.3"
+    "T11.3"
    ],
-   "fingerprint": "2bca24ce90f22f9b478c592b81f5f60b37974838c43659f4439a5f1fd310b087"
+   "fingerprint": "c54259d485547e9356e0867c70303f206ac3846c76856c3d994a2a1511bbf60c"
   },
   {
-   "at": "2026-11-18T14:08:24.509Z",
+   "at": "2026-11-18T15:24:28.967Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T11.2"
+   ],
+   "fingerprint": "775f23c23f2c20eb4bc7e82d79ec333b09441120f6bd90cb7ec057fbe4209e24"
+  },
+  {
+   "at": "2026-11-18T15:24:28.967Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T11.1"
+   ],
+   "fingerprint": "88891488b782e4f632008b5282841839144ac814a45852a4a2d8edc41b14eb44"
+  },
+  {
+   "at": "2026-11-18T15:24:23.546Z",
    "type": "task_built",
    "tasks": [
-    "T9.5"
+    "T11.6"
    ],
-   "text": "gate: playwright 41/41 x2, verify 0 errors, unit 2890 pass",
+   "text": "gate: e2e 107 pass, verify 0 err, 2901 unit pass; 1440 review recorded",
    "files": [
-    "agent_docs/ui-polish-picker-header/TASKS.md"
+    "agent_docs/ui-polish-picker-header/AUDIT.md",
+    "apps/web/src/components/Header/AppHeader.vue"
    ]
   },
   {
-   "at": "2026-11-18T14:08:17.642Z",
+   "at": "2026-11-18T15:23:05.452Z",
    "type": "task_built",
    "tasks": [
-    "T9.5"
+    "T11.6"
    ],
-   "text": "playwright 41 passed x2; verify 0 errors; vitest 2890 passed",
-   "files": []
+   "text": "gate green: pw 107 pass, verify 0 errors, test 2901 pass; fixed 768 tab centering",
+   "files": [
+    "apps/web/src/components/Header/AppHeader.vue"
+   ]
   },
   {
-   "at": "2026-11-18T14:05:33.105Z",
+   "at": "2026-11-18T15:10:08.777Z",
    "type": "task_started",
    "tasks": [
-    "T9.5"
+    "T11.6"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-11-18T14:05:28.735Z",
+   "at": "2026-11-18T15:10:08.575Z",
    "type": "task_built",
    "tasks": [
-    "T9.4"
+    "T11.5"
    ],
-   "text": "e2e: 5/5 new scenarios, 37/37 in file, flake x3 clean",
+   "text": "e2e 25/25, repeat x3 clean",
    "files": [
-    "apps/web/e2e/qa/pricing-layout.spec.ts"
+    "apps/web/e2e/qa/create-responsive.spec.ts"
    ]
   },
   {
-   "at": "2026-11-18T13:59:13.719Z",
+   "at": "2026-11-18T15:02:03.097Z",
    "type": "task_started",
    "tasks": [
-    "T9.4"
+    "T11.5"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-11-18T13:59:13.371Z",
+   "at": "2026-11-18T15:02:02.890Z",
    "type": "task_built",
    "tasks": [
-    "T9.3"
+    "T11.4"
    ],
-   "text": "unit: lowest file 100% lines, shuffle clean",
+   "text": "unit PASS, lowest 95.65% branches, 100% lines",
    "files": [
-    "apps/web/src/directives/reveal.ts"
+    "apps/web/src/pages/Dashboard.test.ts"
    ]
   },
   {
-   "at": "2026-11-18T13:58:00.174Z",
+   "at": "2026-11-18T15:01:02.875Z",
    "type": "task_started",
    "tasks": [
-    "T9.3"
+    "T11.4"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-11-18T13:57:55.706Z",
+   "at": "2026-11-18T15:01:00.162Z",
    "type": "dirty_snapshot",
    "tasks": [],
    "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "051c8fdf64b4c185ed7c2e6a1a0121117c254b50",
-    "apps/web/src/components/AppModal.vue": "b769af17f28d087d059d654c6865fbf6fff1dee2",
-    "apps/web/src/components/Landing/FaqSection.vue": "1f191ecd6a5337878db6aed00790f018009c2bd8",
-    "apps/web/src/directives/reveal.ts": "e52551aac75d9369e88245c259f3fcbfb1a4b307"
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "384ab0f33802798f8957ecbad1da9739b641fe1c",
+    "agent_docs/ui-polish-picker-header/TASKS.md": "7e68dbb6f42b9a114651bb25eb1f08ba7743aea2",
+    "apps/web/src/components/Dashboard/Composer/GenerateCTA.vue": "da19976eb0c7149a12c8cc4cae1648f6d0b052d0",
+    "apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue": "0787eae35bd920418b35235bd7ac10e761108dff",
+    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue": "f0618587606b932890a63bec07fa2b6748c576e8",
+    "apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.vue": "c14d80ebcb95febbbc351a59f82999a283314558",
+    "apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.vue": "ac8a863d58f294cd4de7fe31abb5f43b631d1831",
+    "apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.vue": "e325c2618973a73d67720a99aa73e5e57efcb067",
+    "apps/web/src/components/Header/FeatureSelect.vue": "eed431088e104176d9874448b7abe7d0f3fd87dd",
+    "apps/web/src/components/Header/Logo.test.ts": "90cecaa393f85d5b25f8cb1d9030ebe2a301c5ee",
+    "apps/web/src/components/Header/Logo.vue": "ad44871981aa276df6635ea92468abf16dad7ff5",
+    "apps/web/src/components/Header/ReferralOffer.vue": "0683237fb12693cccd3ecc09351b508f3942c81a",
+    "apps/web/src/components/Header/UserMenu.vue": "86e49050489cf87a0e87097b4b46dc52f66b5ead",
+    "apps/web/src/pages/Dashboard.vue": "0d412bcef07fa997ac930fedbc62bf1f5d96aa81"
    }
   },
   {
-   "at": "2026-11-18T13:57:55.508Z",
+   "at": "2026-11-18T15:00:59.974Z",
    "type": "preflight_passed",
    "tasks": [
-    "T9.2"
+    "T11.3"
    ],
-   "fingerprint": "02ef906ecf052e5d1f8594d01d0969ec7b240a0b679f0f9abd9b44bb5143f884"
+   "fingerprint": "3f72a162dc2c59f72a45a7e3163b91d194c177f7bb3e0fd452b4d661b21f512d"
   },
   {
-   "at": "2026-11-18T13:57:55.508Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T9.1"
-   ],
-   "fingerprint": "208b1e7c9c8210b19a4f03f3a88148de15cc02e1d862740a9dbf92e75ce16e75"
-  },
-  {
-   "at": "2026-11-18T13:57:45.447Z",
+   "at": "2026-11-18T15:00:51.960Z",
    "type": "task_built",
    "tasks": [
-    "T9.2"
+    "T11.3"
    ],
-   "text": "AppModal provides scroller, FaqSection passes it; FAQ opacity 1 at 1440/390; vitest 90 pass",
+   "text": "max-md 44px on composer toolbar + sidebar chips; AUDIT open=0; vitest Dashboard 374 pass; verify ok",
    "files": [
-    "apps/web/src/directives/reveal.ts",
-    "apps/web/src/components/Landing/FaqSection.vue",
-    "apps/web/src/components/AppModal.vue"
+    "apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue",
+    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue",
+    "apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.vue",
+    "apps/web/src/components/Dashboard/Composer/GenerateCTA.vue",
+    "apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.vue",
+    "apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.vue"
    ]
   },
   {
-   "at": "2026-11-18T13:57:45.252Z",
-   "type": "task_built",
+   "at": "2026-11-18T14:59:46.122Z",
+   "type": "task_started",
    "tasks": [
-    "T9.1"
+    "T11.3"
    ],
-   "text": "FAQ repro 1440/390: reveal targets opacity 0; root cause window ScrollTrigger vs modal scroller",
-   "files": [
-    "agent_docs/ui-polish-picker-header/AUDIT.md"
-   ]
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T14:59:24.404Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "b2304801164db579771c3915ef0c4667d3f34d22",
+    "agent_docs/ui-polish-picker-header/TASKS.md": "742af16f687f8e39b37e1cd4665446a893e5bc69",
+    "apps/web/src/components/Header/FeatureSelect.vue": "eed431088e104176d9874448b7abe7d0f3fd87dd",
+    "apps/web/src/components/Header/Logo.test.ts": "90cecaa393f85d5b25f8cb1d9030ebe2a301c5ee",
+    "apps/web/src/components/Header/Logo.vue": "ad44871981aa276df6635ea92468abf16dad7ff5",
+    "apps/web/src/components/Header/ReferralOffer.vue": "0683237fb12693cccd3ecc09351b508f3942c81a",
+    "apps/web/src/components/Header/UserMenu.vue": "86e49050489cf87a0e87097b4b46dc52f66b5ead",
+    "apps/web/src/pages/Dashboard.vue": "0d412bcef07fa997ac930fedbc62bf1f5d96aa81"
+   }
+  },
+  {
+   "at": "2026-11-18T14:59:24.193Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T11.2"
+   ],
+   "fingerprint": "7e2c8cb017532169a026336ec538119f196089fd9474089d2e9d94f2071f3ad2"
+  },
+  {
+   "at": "2026-11-18T14:59:24.193Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T11.1"
+   ],
+   "fingerprint": "e2245ca5d9aab0113040fb5ead45d53ba1cb422241cbb99c01b66084057a3858"
   }
  ]
 };

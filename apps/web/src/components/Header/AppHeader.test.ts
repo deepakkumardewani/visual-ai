@@ -366,4 +366,11 @@ describe('AppHeader', () => {
       expect(mountHeader().find('[data-testid="header-mobile-tabs"]').exists()).toBe(false);
     });
   });
+
+  it('stops the start cluster from stretching from the md breakpoint', () => {
+    const classes = mountHeader().get('.header-v2__start').classes();
+    expect(classes).toContain('md:tw-flex-none');
+    expect(classes).toContain('tw-flex-1');
+    expect(classes).not.toContain('lg:tw-flex-none');
+  });
 });

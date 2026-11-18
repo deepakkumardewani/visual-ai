@@ -28,8 +28,12 @@ vi.mock('vue-clerk', () => ({
   useUser: () => ({ user: ref(null) }),
 }));
 
+const seoGetters: Array<() => Record<string, unknown>> = [];
+
 vi.mock('@/composables/usePageSeo', () => ({
-  usePageSeo: () => undefined,
+  usePageSeo: (getter: () => Record<string, unknown>) => {
+    seoGetters.push(getter);
+  },
 }));
 
 vi.mock('@/components/Dashboard/DashboardShell.vue', () => ({
@@ -42,8 +46,9 @@ vi.mock('@/components/Dashboard/DashboardShell.vue', () => ({
 vi.mock('@/components/Dashboard/MobileSettingsSheet.vue', () => ({
   default: {
     props: ['modelValue'],
+    emits: ['update:modelValue'],
     template:
-      '<div data-testid="mobile-settings-sheet-stub" :data-open="String(modelValue)"><slot /></div>',
+      '<div data-testid="mobile-settings-sheet-stub" :data-open="String(modelValue)"><button data-testid="sheet-close" @click="$emit(\'update:modelValue\', false)" /><slot /></div>',
   },
 }));
 
@@ -162,6 +167,34 @@ describe('Dashboard', () => {
     expect(wrapper.find('[data-testid="dashboard-mobile-tabs"]').exists()).toBe(false);
   });
 
+  it('gives the settings trigger a 44px minimum touch target', () => {
+    smAndUpRef.value = false;
+    const classes = mount(Dashboard).get('[data-testid="mobile-settings-trigger"]').classes();
+
+    expect(classes).toContain('tw-min-h-11');
+    expect(classes).toContain('tw-min-w-11');
+  });
+
+  it('mounts the settings sidebar inside the sheet only below the sm breakpoint', () => {
+    smAndUpRef.value = false;
+    const below = mount(Dashboard);
+    expect(
+      below
+        .get('[data-testid="mobile-settings-sheet-stub"]')
+        .find('[data-testid="dashboard-sidebar-stub"]')
+        .exists(),
+    ).toBe(true);
+
+    smAndUpRef.value = true;
+    const above = mount(Dashboard);
+    expect(
+      above
+        .get('[data-testid="mobile-settings-sheet-stub"]')
+        .find('[data-testid="dashboard-sidebar-stub"]')
+        .exists(),
+    ).toBe(false);
+  });
+
   it('keeps the desktop prompt on top and no dock at sm and above', () => {
     smAndUpRef.value = true;
     const wrapper = mount(Dashboard);
@@ -190,6 +223,30 @@ describe('Dashboard', () => {
     smAndUpRef.value = true;
     await wrapper.vm.$nextTick();
     expect(isOpen()).toBe('false');
+  });
+
+  it('closes the settings sheet when the sheet emits update:modelValue', async () => {
+    smAndUpRef.value = false;
+    const wrapper = mount(Dashboard);
+    const isOpen = () =>
+      wrapper.get('[data-testid="mobile-settings-sheet-stub"]').attributes('data-open');
+
+    await wrapper.get('[data-testid="mobile-settings-trigger"]').trigger('click');
+    expect(isOpen()).toBe('true');
+    await wrapper.get('[data-testid="sheet-close"]').trigger('click');
+    expect(isOpen()).toBe('false');
+  });
+
+  it('registers noindex page SEO for the current route path', () => {
+    seoGetters.length = 0;
+    routeName.value = 'create';
+    mount(Dashboard);
+
+    expect(seoGetters[0]?.()).toMatchObject({
+      title: 'Create with Visual AI',
+      path: '/create',
+      robots: 'noindex, follow',
+    });
   });
 
   it.each(['dashboard-explore-panel', 'dashboard-assets-panel'])(

@@ -108,7 +108,7 @@ usePageSeo(() => ({
               <button
                 type="button"
                 data-testid="mobile-settings-trigger"
-                class="tw-inline-flex tw-min-h-10 tw-min-w-10 tw-items-center tw-gap-2 tw-rounded-lg tw-border tw-border-hairline tw-bg-surface-2 tw-px-3 tw-text-sm tw-font-medium tw-text-ink focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent"
+                class="tw-inline-flex tw-min-h-11 tw-min-w-11 tw-items-center tw-gap-2 tw-rounded-lg tw-border tw-border-hairline tw-bg-surface-2 tw-px-3 tw-text-sm tw-font-medium tw-text-ink focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent"
                 @click="settingsOpen = true"
               >
                 <font-awesome-icon :icon="faSliders" class="tw-h-3.5 tw-w-3.5" aria-hidden="true" />

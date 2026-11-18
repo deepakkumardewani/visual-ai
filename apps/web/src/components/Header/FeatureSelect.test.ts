@@ -216,4 +216,12 @@ describe('FeatureSelect', () => {
     expect(push).toHaveBeenCalledTimes(1);
     expect(wrapper.find('[data-testid="feature-select-menu"]').exists()).toBe(false);
   });
+
+  it('keeps the trigger at the 44px tap-target height', () => {
+    const classes = mount(FeatureSelect, { global: { stubs } })
+      .get('[data-testid="feature-select-trigger"]')
+      .classes();
+    expect(classes).toContain('tw-h-11');
+    expect(classes).not.toContain('tw-h-10');
+  });
 });

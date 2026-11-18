@@ -97,7 +97,7 @@ onBeforeUnmount(() => document.documentElement.style.removeProperty(APP_HEADER_H
         class="header-v2__inner tw-mx-auto tw-flex tw-h-16 tw-w-full tw-items-center tw-gap-3 tw-px-4 lg:tw-gap-5 lg:tw-px-6"
       >
         <div
-          class="header-v2__start tw-flex tw-min-w-0 tw-flex-1 tw-items-center tw-gap-3 lg:tw-flex-none lg:tw-basis-1/4"
+          class="header-v2__start tw-flex tw-min-w-0 tw-flex-1 tw-items-center tw-gap-3 md:tw-flex-none lg:tw-basis-1/4"
         >
           <Logo />
           <div

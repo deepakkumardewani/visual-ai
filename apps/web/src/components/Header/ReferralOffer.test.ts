@@ -141,4 +141,14 @@ describe('ReferralOffer', () => {
       wrapper.unmount();
     });
   });
+
+  it('gives the mobile CTA a 44px minimum height', () => {
+    mobileState.mobile = true;
+    useUserStore().userDetails = { firstName: 'Ada' } as never;
+    const wrapper = mount(ReferralOffer, {
+      global: { stubs: { 'font-awesome-icon': true } },
+    });
+    const chip = wrapper.get('[data-testid="referral-offer-mobile"]');
+    expect(chip.classes()).toContain('tw-min-h-11');
+  });
 });

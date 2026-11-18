@@ -137,7 +137,7 @@ void iconComponent;
       data-testid="feature-select-trigger"
       aria-haspopup="listbox"
       :aria-expanded="isOpen"
-      class="feature-select__trigger tw-flex tw-h-10 tw-w-full tw-items-center tw-gap-2 tw-rounded-md tw-border tw-border-border/60 tw-bg-surface-1/50 tw-pl-2.5 tw-pr-1.5 md:tw-pl-3 md:tw-pr-2 tw-text-left tw-transition-colors tw-duration-fast hover:tw-border-accent/40 hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
+      class="feature-select__trigger tw-flex tw-h-11 tw-w-full tw-items-center tw-gap-2 tw-rounded-md tw-border tw-border-border/60 tw-bg-surface-1/50 tw-pl-2.5 tw-pr-1.5 md:tw-pl-3 md:tw-pr-2 tw-text-left tw-transition-colors tw-duration-fast hover:tw-border-accent/40 hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
       @click="toggle"
       @keydown="onTriggerKeydown"
     >

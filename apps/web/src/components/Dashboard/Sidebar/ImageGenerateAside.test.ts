@@ -161,4 +161,19 @@ describe('ImageGenerateAside section visibility', () => {
     expect(aside.aspectRatio.title).not.toBe('not-a-ratio');
     expect(aside.imageFormat.title).not.toBe('TIFF');
   });
+
+  it('shares one 44px-below-md chip class across quality, count and format segments', async () => {
+    const { wrapper, pinia } = mount_();
+    setActivePinia(pinia);
+    useAsideStore().mode = findByModelKey('FLUX_BASIC');
+    await wrapper.vm.$nextTick();
+
+    for (const label of ['Output quality', 'Number of images', 'Output format']) {
+      const buttons = wrapper.get(`[aria-label="${label}"]`).findAll('button');
+      expect(buttons.length).toBeGreaterThan(0);
+      for (const button of buttons) {
+        expect(button.classes()).toEqual(expect.arrayContaining(['tw-h-7', 'max-md:tw-h-11']));
+      }
+    }
+  });
 });
