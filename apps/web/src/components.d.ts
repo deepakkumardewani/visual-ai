@@ -127,6 +127,7 @@ declare module 'vue' {
     ModelOption: typeof import('./components/Dashboard/ModelPicker/ModelOption.vue')['default']
     ModelPicker: typeof import('./components/Dashboard/ModelPicker/ModelPicker.vue')['default']
     ModelPickerPanel: typeof import('./components/Dashboard/ModelPicker/ModelPickerPanel.vue')['default']
+    ModelPickerSearch: typeof import('./components/Dashboard/ModelPicker/ModelPickerSearch.vue')['default']
     ModelPickerTrigger: typeof import('./components/Dashboard/ModelPicker/ModelPickerTrigger.vue')['default']
     ModelsScene: typeof import('./components/LandingV2/ModelsScene.vue')['default']
     NavTabs: typeof import('./components/Header/NavTabs.vue')['default']

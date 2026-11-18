@@ -1,13 +1,16 @@
 import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { nextTick } from 'vue';
 import { PREMIUM_MODEL_KEYS, type ModelKey } from '@visual-ai/shared';
 
 import ModelPickerPanel from '@/components/Dashboard/ModelPicker/ModelPickerPanel.vue';
 import { MODELS } from '@/utils/models';
 
 const mountPanel = () =>
-  mount(ModelPickerPanel, { props: { models: MODELS, selectedModel: MODELS[0] } });
+  mount(ModelPickerPanel, {
+    props: { models: MODELS, selectedModel: MODELS[0] },
+  });
 
 const idsIn = (wrapper: ReturnType<typeof mountPanel>, section: string) =>
   wrapper.get(`[data-testid="model-section-${section}"]`).findAll('[data-testid="model-option"]')
@@ -103,5 +106,84 @@ describe('ModelPickerPanel', () => {
       .filter((o) => o.attributes('aria-selected') === 'true');
     expect(selected.length).toBeGreaterThan(0);
     for (const o of selected) expect(o.text()).toContain(MODELS[0].title);
+  });
+  describe('search', () => {
+    const search = async (wrapper: ReturnType<typeof mountPanel>, value: string) => {
+      await wrapper.get('[data-testid="model-search-input"]').setValue(value);
+    };
+    const titles = (wrapper: ReturnType<typeof mountPanel>) =>
+      wrapper.findAll('[data-testid="model-option"]').map((o) => o.text());
+
+    it('renders every section and no empty state with an empty query', () => {
+      const wrapper = mountPanel();
+      expect(wrapper.find('[data-testid="model-search-empty"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="model-search-clear"]').exists()).toBe(false);
+    });
+
+    it('typing a model title keeps only matching options', async () => {
+      const wrapper = mountPanel();
+      const target = MODELS[0].title;
+      await search(wrapper, target.toUpperCase());
+      const rendered = titles(wrapper);
+      expect(rendered.length).toBeGreaterThan(0);
+      expect(rendered.length).toBeLessThan(MODELS.length);
+      for (const text of rendered) expect(text).toContain(target);
+    });
+
+    it('removes section and company headers that have no matches', async () => {
+      const wrapper = mountPanel();
+      const freeOnly = MODELS.find((m) => !PREMIUM_MODEL_KEYS.includes(m.id as ModelKey))!;
+      await search(wrapper, freeOnly.title);
+      const hasPremiumMatch = MODELS.some(
+        (m) =>
+          PREMIUM_MODEL_KEYS.includes(m.id as ModelKey) &&
+          m.title.toLowerCase().includes(freeOnly.title.toLowerCase()),
+      );
+      expect(wrapper.find('[data-testid="model-section-free"]').exists()).toBe(true);
+      expect(wrapper.find('[data-testid="model-section-pro"]').exists()).toBe(hasPremiumMatch);
+      const headers = wrapper.findAll('[data-testid="model-company-header"]');
+      expect(headers.length).toBeGreaterThan(0);
+      expect(headers.length).toBeLessThan(
+        new Set(MODELS.map((m) => m.companyName ?? m.provider)).size * 2,
+      );
+    });
+
+    it('shows the empty state with the trimmed query when nothing matches', async () => {
+      const wrapper = mountPanel();
+      await search(wrapper, '  zzzz-no-such-model  ');
+      const empty = wrapper.get('[data-testid="model-search-empty"]');
+      expect(empty.text()).toContain('No models match');
+      expect(empty.text()).toContain('\u201Czzzz-no-such-model\u201D');
+      expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+      expect(wrapper.findAll('h3')).toHaveLength(0);
+    });
+
+    it('the empty-state clear button resets the query and restores every section', async () => {
+      const wrapper = mountPanel();
+      await search(wrapper, 'zzzz-no-such-model');
+      await wrapper.get('[data-testid="model-search-empty-clear"]').trigger('click');
+      expect(
+        (wrapper.get('[data-testid="model-search-input"]').element as HTMLInputElement).value,
+      ).toBe('');
+      expect(wrapper.findAll('h3').map((h) => h.text())).toEqual(['Featured', 'Free', 'Pro']);
+    });
+
+    it('the input clear button resets the query', async () => {
+      const wrapper = mountPanel();
+      await search(wrapper, MODELS[0].title);
+      await wrapper.get('[data-testid="model-search-clear"]').trigger('click');
+      await nextTick();
+      expect(wrapper.findAll('[data-testid="model-option"]').length).toBeGreaterThan(
+        MODELS.length - 1,
+      );
+    });
+
+    it('selecting a filtered option emits that model', async () => {
+      const wrapper = mountPanel();
+      const target = MODELS.find((m) => !PREMIUM_MODEL_KEYS.includes(m.id as ModelKey))!;
+      await search(wrapper, target.title);
+      await wrapper.get('[data-testid="model-option"]').trigger('click');
+      expect(wrapper.emitted('selectModel')).toHaveLength(1);
+    });
   });
 });

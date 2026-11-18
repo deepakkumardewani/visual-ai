@@ -327,7 +327,10 @@ export interface CompanyGroup {
 
 export type PickerSectionGroup =
   | { section: typeof PICKER_SECTION.FEATURED; models: Model[] }
-  | { section: typeof PICKER_SECTION.FREE | typeof PICKER_SECTION.PRO; companies: CompanyGroup[] };
+  | {
+      section: typeof PICKER_SECTION.FREE | typeof PICKER_SECTION.PRO;
+      companies: CompanyGroup[];
+    };
 
 const DEFAULT_CREDIT_COST = 1;
 
@@ -370,6 +373,20 @@ export function groupModelsByCompany(models: Model[] = MODELS): PickerSectionGro
     { section: PICKER_SECTION.PRO, companies: groupByCompany(pro) },
   ];
   return sections.filter((s) => ('models' in s ? s.models.length : s.companies.length) > 0);
+}
+
+/**
+ * Models whose title, company, `bestAt` or description contain the trimmed query
+ * (case-insensitive). A blank query returns the input unchanged.
+ */
+export function filterModelsBySearch(models: Model[], query: string): Model[] {
+  const needle = query.trim().toLowerCase();
+  if (!needle) return models;
+  return models.filter((model) =>
+    [model.title, model.companyName ?? model.provider, model.bestAt, model.description].some(
+      (field) => field?.toLowerCase().includes(needle),
+    ),
+  );
 }
 
 export function getModelLogoUrl(iconUrl?: string): string | null {

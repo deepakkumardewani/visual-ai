@@ -60,3 +60,4 @@ apps/web/playwright-report/
 # QA evidence screenshots written by e2e/qa specs
 agent_docs/qa/
 node-jiti/
+playwright-transform-cache-*/

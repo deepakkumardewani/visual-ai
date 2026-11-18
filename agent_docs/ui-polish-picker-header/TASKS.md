@@ -314,7 +314,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** A sticky search box filters models by name, company and description, with a "No models match" state, and arrow keys move through visible options.
 **Try in UI:** Open the picker and type "flux" to see only matching rows ; type nonsense to see "No models match" and clear it ; press ArrowDown from the input then Enter to select.
 
-### ☐ T7.1 Search filter helper and component
+### ✅ T7.1 Search filter helper and component
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/models.ts`, `apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue`
@@ -322,7 +322,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 req 6 and edge cases (spaces-only is empty, company-name match shows all that company's models in the tier).
 - **Verify:** `cd apps/web && npx vitest run src/utils/models.test.ts src/components/Dashboard/ModelPicker`; `bun run verify`.
 
-### ☐ T7.2 Popover opt-in keyboard props
+### ✅ T7.2 Popover opt-in keyboard props
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/primitives/Popover.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue`
@@ -330,7 +330,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 req 7; with props unset all ~9 `Popover` consumers behave identically and their tests pass unmodified.
 - **Verify:** `cd apps/web && npx vitest run src/components/primitives src/components/Dashboard`; `bun run verify`; `git diff --stat -- apps/web/src/components/primitives/Popover.test.ts` (no changes).
 
-### ☐ T7.3 Unit: search helper
+### ✅ T7.3 Unit: search helper
 
 - **Kind:** unit
 - **Files:** `apps/web/src/utils/models.ts`
@@ -338,15 +338,15 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 unit criteria for search; the filter helper at least 90% line coverage, target over 95%, `models.ts` at least 80% across metrics; no `it.fails`.
 - **Verify:** `cd apps/web && npx vitest run src/utils/models.test.ts --coverage --coverage.include=src/utils/models.ts --coverage.reporter=text`
 
-### ☐ T7.4 Unit: search panel and Popover
+### ✅ T7.4 Unit: search panel and Popover
 
 - **Kind:** unit
-- **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.vue`, `apps/web/src/components/primitives/Popover.vue`
+- **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.vue`, `apps/web/src/components/primitives/Popover.vue`, `apps/web/src/components/primitives/Popover.optIn.test.ts`
 - **Do:** Update `ModelPickerPanel.test.ts` (typing filters and removes empty headers, "No models match" with query, clear resets, ArrowDown from input focuses first visible option, Enter selects after filtering, autofocus only when desktop media query matches); add `ModelPickerSearch.test.ts`; put the new opt-in prop cases in a new `Popover.optIn.test.ts` and leave `Popover.test.ts` byte-for-byte unchanged (it is the proof that defaults are unchanged).
 - **Acceptance:** SPEC Part 1 unit criteria for panel and Popover; `Popover.test.ts` unmodified and passing; every file at least 80% across metrics, target over 95%; no `it.fails`.
 - **Verify:** `git diff --stat -- apps/web/src/components/primitives/Popover.test.ts` (empty); `cd apps/web && npx vitest run src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts src/components/Dashboard/ModelPicker/ModelPickerSearch.test.ts src/components/primitives/Popover.test.ts src/components/primitives/Popover.optIn.test.ts --coverage --coverage.include=src/components/Dashboard/ModelPicker/ModelPickerPanel.vue --coverage.include=src/components/Dashboard/ModelPicker/ModelPickerSearch.vue --coverage.include=src/components/primitives/Popover.vue --coverage.reporter=text`
 
-### ☐ T7.5 E2E: search and keyboard
+### ✅ T7.5 E2E: search and keyboard
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` search "flux" shows only matching rows; `@critical` nonsense query shows "No models match" and clear restores the list; `@high` keyboard ArrowDown then Enter selects at 1440; `@high` query resets after close and reopen; `@medium` company-name query shows all that company's models in the tier.
@@ -355,7 +355,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 e2e criteria for search/keyboard pass with mocked APIs.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/model-menu.spec.ts --repeat-each=3`
 
-### ☐ T7.6 Gate: Phase 7
+### ✅ T7.6 Gate: Phase 7
 
 - **Kind:** gate
 - **Files:** none

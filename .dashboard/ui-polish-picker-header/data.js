@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-18T12:20:36.042Z",
+ "generatedAt": "2026-11-18T12:56:20.108Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -29,20 +29,20 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
- "costUsd": 24.1608,
- "elapsedMs": 176329606,
+ "costUsd": 26.9798,
+ "elapsedMs": 178115710,
  "costByRole": {
-  "e2e": 2.1863,
-  "builder": 5.6783,
-  "verifier": 14.2896,
-  "unit": 2.0066
+  "builder": 6.3279,
+  "verifier": 15.6297,
+  "unit": 2.4983,
+  "e2e": 2.524
  },
  "totals": {
   "phases": 14,
   "tasks": 61,
   "byStatus": {
-   "verified": 31,
-   "ready": 30
+   "verified": 37,
+   "ready": 24
   }
  },
  "phases": [
@@ -1468,7 +1468,7 @@ window.DASHBOARD = {
      "line": 245,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:20:36.024Z",
+     "updatedAt": "2026-11-18T12:20:53.134Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1513,7 +1513,7 @@ window.DASHBOARD = {
      "line": 253,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:20:36.024Z",
+     "updatedAt": "2026-11-18T12:20:53.134Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1557,7 +1557,7 @@ window.DASHBOARD = {
      "line": 261,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:20:36.024Z",
+     "updatedAt": "2026-11-18T12:20:53.134Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1601,7 +1601,7 @@ window.DASHBOARD = {
      "line": 269,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:20:36.024Z",
+     "updatedAt": "2026-11-18T12:20:53.134Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1650,7 +1650,7 @@ window.DASHBOARD = {
      "line": 277,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:20:36.024Z",
+     "updatedAt": "2026-11-18T12:20:53.134Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1694,7 +1694,7 @@ window.DASHBOARD = {
      "line": 285,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:20:36.024Z",
+     "updatedAt": "2026-11-18T12:20:53.134Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1743,7 +1743,7 @@ window.DASHBOARD = {
      "line": 293,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:20:36.024Z",
+     "updatedAt": "2026-11-18T12:20:53.134Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1792,7 +1792,7 @@ window.DASHBOARD = {
      "line": 302,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:20:36.024Z",
+     "updatedAt": "2026-11-18T12:20:53.134Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1848,7 +1848,7 @@ window.DASHBOARD = {
     {
      "id": "T7.1",
      "title": "Search filter helper and component",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -1869,23 +1869,34 @@ window.DASHBOARD = {
      ],
      "line": 317,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:56:20.087Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4359,
+     "costApprox": true,
+     "elapsedMs": 1663297,
+     "summary": [
+      "T7.1: `filterModelsBySearch` in utils/models.ts; new ModelPickerSearch.vue (sticky, clear button, inline SVG icon because the magnifier is not registered in plugins/icons.ts); panel filters, drops emp",
+      "T7.2: Popover opt-in props `navigateOptionsFromInput`, `autofocusSelector` (defaults identical). Picker passes both; autofocus only when `(hover: hover) and (pointer: fine) and (min-width: 768px)` via"
+     ]
     },
     {
      "id": "T7.2",
      "title": "Popover opt-in keyboard props",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -1907,23 +1918,34 @@ window.DASHBOARD = {
      ],
      "line": 325,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:56:20.087Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4359,
+     "costApprox": true,
+     "elapsedMs": 1663297,
+     "summary": [
+      "T7.1: `filterModelsBySearch` in utils/models.ts; new ModelPickerSearch.vue (sticky, clear button, inline SVG icon because the magnifier is not registered in plugins/icons.ts); panel filters, drops emp",
+      "T7.2: Popover opt-in props `navigateOptionsFromInput`, `autofocusSelector` (defaults identical). Picker passes both; autofocus only when `(hover: hover) and (pointer: fine) and (min-width: 768px)` via"
+     ]
     },
     {
      "id": "T7.3",
      "title": "Unit: search helper",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
@@ -1941,29 +1963,41 @@ window.DASHBOARD = {
      ],
      "line": 333,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:56:20.087Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.2949,
+     "costApprox": true,
+     "elapsedMs": 1479478,
+     "summary": [
+      "T7.1: `filterModelsBySearch` in utils/models.ts; new ModelPickerSearch.vue (sticky, clear button, inline SVG icon because the magnifier is not registered in plugins/icons.ts); panel filters, drops emp",
+      "T7.2: Popover opt-in props `navigateOptionsFromInput`, `autofocusSelector` (defaults identical). Picker passes both; autofocus only when `(hover: hover) and (pointer: fine) and (min-width: 768px)` via"
+     ]
     },
     {
      "id": "T7.4",
      "title": "Unit: search panel and Popover",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
       "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue",
       "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.vue",
-      "apps/web/src/components/primitives/Popover.vue"
+      "apps/web/src/components/primitives/Popover.vue",
+      "apps/web/src/components/primitives/Popover.optIn.test.ts"
      ],
      "gherkin": null,
      "do": "Update `ModelPickerPanel.test.ts` (typing filters and removes empty headers, \"No models match\" with query, clear resets, ArrowDown from input focuses first visible option, Enter selects after filtering, autofocus only when desktop media query matches); add `ModelPickerSearch.test.ts`; put the new opt-in prop cases in a new `Popover.optIn.test.ts` and leave `Popover.test.ts` byte-for-byte unchanged (it is the proof that defaults are unchanged).",
@@ -1978,23 +2012,41 @@ window.DASHBOARD = {
      ],
      "line": 341,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:56:20.087Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.855,
+     "costApprox": true,
+     "elapsedMs": 1602285,
+     "summary": [
+      "T7.1: `filterModelsBySearch` in utils/models.ts; new ModelPickerSearch.vue (sticky, clear button, inline SVG icon because the magnifier is not registered in plugins/icons.ts); panel filters, drops emp",
+      "T7.2: Popover opt-in props `navigateOptionsFromInput`, `autofocusSelector` (defaults identical). Picker passes both; autofocus only when `(hover: hover) and (pointer: fine) and (min-width: 768px)` via"
+     ]
     },
     {
      "id": "T7.5",
      "title": "E2E: search and keyboard",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [],
      "files": [],
@@ -2010,23 +2062,34 @@ window.DASHBOARD = {
      ],
      "line": 349,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:56:20.087Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5081,
+     "costApprox": true,
+     "elapsedMs": 1402183,
+     "summary": [
+      "T7.1: `filterModelsBySearch` in utils/models.ts; new ModelPickerSearch.vue (sticky, clear button, inline SVG icon because the magnifier is not registered in plugins/icons.ts); panel filters, drops emp",
+      "T7.2: Popover opt-in props `navigateOptionsFromInput`, `autofocusSelector` (defaults identical). Picker passes both; autofocus only when `(hover: hover) and (pointer: fine) and (min-width: 768px)` via"
+     ]
     },
     {
      "id": "T7.6",
      "title": "Gate: Phase 7",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -2045,25 +2108,36 @@ window.DASHBOARD = {
      ],
      "line": 358,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:56:20.087Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.2892,
+     "costApprox": true,
+     "elapsedMs": 874039,
+     "summary": [
+      "T7.1: `filterModelsBySearch` in utils/models.ts; new ModelPickerSearch.vue (sticky, clear button, inline SVG icon because the magnifier is not registered in plugins/icons.ts); panel filters, drops emp",
+      "T7.2: Popover opt-in props `navigateOptionsFromInput`, `autofocusSelector` (defaults identical). Picker passes both; autofocus only when `(hover: hover) and (pointer: fine) and (min-width: 768px)` via"
+     ]
     }
    ],
-   "verified": 0,
+   "verified": 6,
    "total": 6,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 2.819,
+   "elapsedMs": 1786104
   },
   {
    "id": "8",
@@ -3060,7 +3134,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 7",
+ "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 8",
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -3155,6 +3229,36 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-18T12:20:53.134Z",
+   "ok": true,
+   "phase": "6",
+   "tasks": [
+    "T6.1",
+    "T6.2",
+    "T6.3",
+    "T6.4",
+    "T6.5",
+    "T6.6",
+    "T6.7",
+    "T6.8"
+   ],
+   "attempt": "2",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 154/154 prod x3, unit 100% cov on picker files, 2813 tests",
+   "error": null,
+   "sha": "4f9798a4309150edf65c461a9f1be11a8acf30f4",
+   "shortSha": "4f9798a",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/4f9798a4309150edf65c461a9f1be11a8acf30f4",
+   "subject": "feat(web): picker grouped by company with pinned company headers",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-18T17:50:46+05:30",
+   "filesChanged": 16,
+   "added": 1978,
+   "removed": 513
+  },
   {
    "at": "2026-11-18T11:38:21.190Z",
    "ok": true,
@@ -4439,9 +4543,160 @@ window.DASHBOARD = {
    "file": "6/T6.7-3.png",
    "phase": "6",
    "href": "shots/6/T6.7-3.png"
+  },
+  {
+   "taskId": "T7.1",
+   "kind": "proof",
+   "step": "Search filters by title/company/description",
+   "attempt": 1,
+   "caption": "Typing \"flux\" in the sticky search leaves only Flux-matching rows; Nano Banana and GPT Image are gone",
+   "annotations": [
+    {
+     "x": 2,
+     "y": 24,
+     "w": 29,
+     "h": 4.5,
+     "label": "sticky search input with query"
+    },
+    {
+     "x": 1.2,
+     "y": 29,
+     "w": 30.6,
+     "h": 39,
+     "label": "only matching rows remain"
+    }
+   ],
+   "at": "2026-11-18T12:53:33.592Z",
+   "file": "7/T7.1-1.png",
+   "phase": "7",
+   "href": "shots/7/T7.1-1.png"
+  },
+  {
+   "taskId": "T7.1",
+   "kind": "proof",
+   "step": "Zero matches shows the empty state",
+   "attempt": 1,
+   "caption": "A nonsense query shows \"No models match\" with the echoed query and a Clear search button",
+   "annotations": [
+    {
+     "x": 1.2,
+     "y": 31.5,
+     "w": 30.6,
+     "h": 8.5,
+     "label": "empty state copy, echoed query and clear button"
+    }
+   ],
+   "at": "2026-11-18T12:53:33.849Z",
+   "file": "7/T7.1-2.png",
+   "phase": "7",
+   "href": "shots/7/T7.1-2.png"
+  },
+  {
+   "taskId": "T7.1",
+   "kind": "proof",
+   "step": "Company-name match shows all that company models",
+   "attempt": 1,
+   "caption": "Searching the company name \"Black Forest Labs\" keeps every one of its models in the tier",
+   "annotations": [
+    {
+     "x": 1.2,
+     "y": 41,
+     "w": 30.6,
+     "h": 26,
+     "label": "all Black Forest Labs models under Free"
+    }
+   ],
+   "at": "2026-11-18T12:53:34.052Z",
+   "file": "7/T7.1-3.png",
+   "phase": "7",
+   "href": "shots/7/T7.1-3.png"
+  },
+  {
+   "taskId": "T7.2",
+   "kind": "proof",
+   "step": "ArrowDown from the search input moves to the first visible option",
+   "attempt": 1,
+   "caption": "After filtering to \"schnell\", ArrowDown moved focus out of the input to the first visible option (asserted toBeFocused in e2e)",
+   "annotations": [
+    {
+     "x": 2.5,
+     "y": 35,
+     "w": 28.5,
+     "h": 5,
+     "label": "first visible option receives focus"
+    }
+   ],
+   "at": "2026-11-18T12:53:34.222Z",
+   "file": "7/T7.2-1.png",
+   "phase": "7",
+   "href": "shots/7/T7.2-1.png"
+  },
+  {
+   "taskId": "T7.5",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Search 'flux' shows only matching rows",
+   "annotations": [],
+   "at": "2026-11-18T12:39:30.398Z",
+   "file": "7/T7.5-1.png",
+   "phase": "7",
+   "href": "shots/7/T7.5-1.png"
+  },
+  {
+   "taskId": "T7.5",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "No models match empty state with Clear search",
+   "annotations": [],
+   "at": "2026-11-18T12:39:30.570Z",
+   "file": "7/T7.5-2.png",
+   "phase": "7",
+   "href": "shots/7/T7.5-2.png"
+  },
+  {
+   "taskId": "T7.5",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "ArrowDown moves focus from search to first row",
+   "annotations": [],
+   "at": "2026-11-18T12:39:30.722Z",
+   "file": "7/T7.5-3.png",
+   "phase": "7",
+   "href": "shots/7/T7.5-3.png"
+  },
+  {
+   "taskId": "T7.5",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Company-name query keeps all of that company's models",
+   "annotations": [],
+   "at": "2026-11-18T12:39:30.889Z",
+   "file": "7/T7.5-4.png",
+   "phase": "7",
+   "href": "shots/7/T7.5-4.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-18T12:56:20.087Z",
+   "type": "deliverable",
+   "tasks": [
+    "T7.1",
+    "T7.2",
+    "T7.3",
+    "T7.4",
+    "T7.5",
+    "T7.6"
+   ],
+   "text": "Picker search with sticky bar, filtering by title/company/bestAt/description, empty state, opt-in Popover keyboard navigation from input, desktop-only autofocus; unit and e2e coverage",
+   "files": [
+    "apps/web/src/utils/models.ts"
+   ]
+  },
   {
    "at": "2026-11-18T12:20:36.024Z",
    "type": "deliverable",
@@ -4546,6 +4801,46 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-18T12:56:05.836Z",
+   "type": "advisory",
+   "tasks": [
+    "T7.4"
+   ],
+   "text": "T7.4 Verify coverage command exits 1 on global 90% branch threshold (aggregate 87.62%) though each file meets 80%"
+  },
+  {
+   "at": "2026-11-18T12:56:05.678Z",
+   "type": "advisory",
+   "tasks": [
+    "T7.4"
+   ],
+   "text": "ModelPicker.test.ts Enter test uses focused.click() after a no-op dialog keydown; assert tagName BUTTON"
+  },
+  {
+   "at": "2026-11-18T12:53:40.332Z",
+   "type": "advisory",
+   "tasks": [
+    "T7.2"
+   ],
+   "text": "Keyboard-focused model option shows no visible focus ring in the 1440 e2e shot (keyboard-first-row-focused.png)"
+  },
+  {
+   "at": "2026-11-18T12:53:40.187Z",
+   "type": "advisory",
+   "tasks": [
+    "T7.6"
+   ],
+   "text": "untracked playwright-transform-cache-502/ is not gitignored and makes repo-wide vp check exit 1 (format); src+e2e scoped vp check exits 0"
+  },
+  {
+   "at": "2026-11-18T12:53:40.032Z",
+   "type": "advisory",
+   "tasks": [
+    "T7.1"
+   ],
+   "text": "Touch/narrow open focuses the first [role=option] (often a Featured row), SPEC req 6 says selected option or panel; input is never focused so no keyboard pops"
+  },
   {
    "at": "2026-11-18T12:03:19.921Z",
    "type": "advisory",
@@ -4852,6 +5147,712 @@ window.DASHBOARD = {
   }
  ],
  "activity": [
+  {
+   "at": "2026-11-18T12:56:20.087Z",
+   "type": "deliverable",
+   "tasks": [
+    "T7.1",
+    "T7.2",
+    "T7.3",
+    "T7.4",
+    "T7.5",
+    "T7.6"
+   ],
+   "text": "Picker search with sticky bar, filtering by title/company/bestAt/description, empty state, opt-in Popover keyboard navigation from input, desktop-only autofocus; unit and e2e coverage",
+   "files": [
+    "apps/web/src/utils/models.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T12:56:16.596Z",
+   "tasks": [
+    "T7.4"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "a3 BLOCKING fixed: ModelPicker.test.ts adds matchMedia-false test (search input exists, not focused) and filter -> ArrowDown -> Enter test emitting FLUX_1_1_PRO; ModelPicker.vue branches 62.5% -> 75% (false side of canAutofocusSearch now covered; 48-58 left are template chip branches); Verify run 4 files 45/45 pass, ModelPickerPanel.vue 100/100/100/100, ModelPickerSearch.vue 100/100/100/100, Popov",
+   "fingerprint": "7d95af16c7f1bd67b590cf1b1955b78e308717c2a892792bdacdf314d0af3dca",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a5.md"
+  },
+  {
+   "at": "2026-11-18T12:56:05.836Z",
+   "type": "advisory",
+   "tasks": [
+    "T7.4"
+   ],
+   "text": "T7.4 Verify coverage command exits 1 on global 90% branch threshold (aggregate 87.62%) though each file meets 80%"
+  },
+  {
+   "at": "2026-11-18T12:56:05.678Z",
+   "type": "advisory",
+   "tasks": [
+    "T7.4"
+   ],
+   "text": "ModelPicker.test.ts Enter test uses focused.click() after a no-op dialog keydown; assert tagName BUTTON"
+  },
+  {
+   "at": "2026-11-18T12:54:56.267Z",
+   "type": "verify_started",
+   "tasks": [
+    "T7.4"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-18T12:54:54.186Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    ".gitignore": "dd11c6efc2670c25746d4020c2b196fa08dd81b8",
+    "agent_docs/ui-polish-picker-header/TASKS.md": "2971ca6d3cab23c18e523273a8540ff9599a1de1",
+    "apps/web/e2e/qa/model-menu.spec.ts": "1a13cc5f8a424f9f8b393bf5ad2b77b28c2b5b68",
+    "apps/web/src/components.d.ts": "47c37ce4f80bddb74b0819c476374b2ecf76f53b",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.test.ts": "5594ab93424035aa57247cc8555ef91bc9c1c52f",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue": "6903896b2ac2a2ff52157ad2e95022d73be25522",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts": "1e4f8475bcad9ffcf858753ef82e8f5785864bd0",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "0ec8ed94daa5c9ab5af7764193fc1d114a70d031",
+    "apps/web/src/components/primitives/Popover.vue": "a9496f003946a1ed16de86af321552f4cc0c046e",
+    "apps/web/src/utils/models.test.ts": "a72b12c33efca840a323d4e327ec6271d201e593",
+    "apps/web/src/utils/models.ts": "4247f7e87a819d5b51ce0e7925f142c3e22f7833",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.test.ts": "8ed423ec268ca955ab8820399a8d63bc5d9bd859",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.vue": "e9e4b6711d3936e88bee2a48df2c145a3700490b",
+    "apps/web/src/components/primitives/Popover.optIn.test.ts": "9c3cc663bfdcf0dd794c2b3d62abc13f805c49d6"
+   }
+  },
+  {
+   "at": "2026-11-18T12:54:54.053Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T7.4"
+   ],
+   "fingerprint": "7d95af16c7f1bd67b590cf1b1955b78e308717c2a892792bdacdf314d0af3dca"
+  },
+  {
+   "at": "2026-11-18T12:54:53.790Z",
+   "type": "task_built",
+   "tasks": [
+    "T7.4"
+   ],
+   "attempt": "2",
+   "text": "unit PASS: media-query-false and filter/ArrowDown/Enter tests added, 123 tests clean",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T12:54:16.877Z",
+   "type": "task_started",
+   "tasks": [
+    "T7.4"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-18T12:54:13.789Z",
+   "tasks": [
+    "T7.6"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "E2E_SERVER=prod model-menu + pro-tier + create-image + create-transforms --repeat-each=3 (stricter than x2) 169/169 passed; root bun run test 305 files/2854 tests pass; vp lint 0 errors; scoped vp check 0 errors; protected git diff --stat empty",
+   "fingerprint": "a6fa0ecca58931679620f3de205c390deb1f48d5aa072c4d637f6b09e47c977c",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-18T12:54:13.789Z",
+   "tasks": [
+    "T7.5"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "E2E_SERVER=prod model-menu.spec.ts x3 (inside the 169/169 run, 4.7m), all 5 new search/keyboard scenarios pass 3/3, no flaky; paidCallGuard untouched",
+   "fingerprint": "7aa9e8619327a9af9dfe1d8476cd2bce9b8c8517ab7f3964a8e3489c37583e90",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-18T12:54:13.789Z",
+   "tasks": [
+    "T7.3"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "models.test.ts 46 passed; models.ts 100/100/100/100 (stmts/branch/funcs/lines); 15 new filterModelsBySearch cases cover title, company, bestAt, description, case, trim, blank/spaces-only, no-match, dropped sections/companies, company-name-only; no skip/fails markers",
+   "fingerprint": "8438d7b2b50263a51bb89717aaa43c9b4c0869eb79bfa40fe1e6a64da6873edf",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-18T12:54:13.789Z",
+   "tasks": [
+    "T7.2"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "Popover opt-in navigateOptionsFromInput/autofocusSelector default false/undefined; ArrowDown from input to first option, ArrowUp/Home/End not intercepted in input, buttons skipped; Popover.test.ts git diff empty and passing; protected consumer tests diff empty; prod e2e ArrowDown+Enter selects at 1440 3/3",
+   "fingerprint": "78b3913fa1df6af04a331ec031b123b414017d83a2faca854b1246a9708c4eee",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-18T12:54:13.789Z",
+   "tasks": [
+    "T7.1"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "filterModelsBySearch (trim, case-insensitive, title/company/bestAt/description) + ModelPickerSearch sticky with clear, empty sections removed via v-if, \"No models match\" + echoed query + Clear search, query resets on close (e2e), autofocus gated by (hover: hover) and (pointer: fine) and (min-width: 768px); vitest utils+Dashboard+primitives 56 files/445 tests pass; vp lint 0 errors, vp check apps/w",
+   "fingerprint": "2abe829d12b3eaaff7aaee138334e24037d2a5e95765ae3bf25f8e6574876b92",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-18T12:54:13.788Z",
+   "tasks": [
+    "T7.4"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "test-quality",
+   "text": "[test-quality] · SPEC Part 1 unit criteria \"autofocus only when the desktop media query matches\" and \"Enter selects after filtering\" · no test stubs matchMedia/useMediaQuery to false: ModelPicker.vue branch coverage 62.5% (false side of canAutofocusSearch uncovered, lines 45-58); ModelPicker.test.ts only asserts the happy-dom desktop case; panel \"selecting a filtered option\" uses click, no Enter k",
+   "files": [
+    "spec part 1 unit criteria \"autofocus only when the desktop m"
+   ],
+   "sigs": [
+    "T7.4|test-quality|spec part 1 unit criteria \"autofocus only when the desktop m"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-18T12:53:40.332Z",
+   "type": "advisory",
+   "tasks": [
+    "T7.2"
+   ],
+   "text": "Keyboard-focused model option shows no visible focus ring in the 1440 e2e shot (keyboard-first-row-focused.png)"
+  },
+  {
+   "at": "2026-11-18T12:53:40.187Z",
+   "type": "advisory",
+   "tasks": [
+    "T7.6"
+   ],
+   "text": "untracked playwright-transform-cache-502/ is not gitignored and makes repo-wide vp check exit 1 (format); src+e2e scoped vp check exits 0"
+  },
+  {
+   "at": "2026-11-18T12:53:40.032Z",
+   "type": "advisory",
+   "tasks": [
+    "T7.1"
+   ],
+   "text": "Touch/narrow open focuses the first [role=option] (often a Featured row), SPEC req 6 says selected option or panel; input is never focused so no keyboard pops"
+  },
+  {
+   "at": "2026-11-18T12:44:44.251Z",
+   "type": "verify_started",
+   "tasks": [
+    "T7.1",
+    "T7.2",
+    "T7.3",
+    "T7.4",
+    "T7.5",
+    "T7.6"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T12:44:41.244Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/TASKS.md": "2971ca6d3cab23c18e523273a8540ff9599a1de1",
+    "apps/web/e2e/qa/model-menu.spec.ts": "1a13cc5f8a424f9f8b393bf5ad2b77b28c2b5b68",
+    "apps/web/src/components.d.ts": "47c37ce4f80bddb74b0819c476374b2ecf76f53b",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.test.ts": "b46eb97fe137472ea0c02c9fd25e47b9bd15d5ff",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue": "6903896b2ac2a2ff52157ad2e95022d73be25522",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts": "1e4f8475bcad9ffcf858753ef82e8f5785864bd0",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "0ec8ed94daa5c9ab5af7764193fc1d114a70d031",
+    "apps/web/src/components/primitives/Popover.vue": "a9496f003946a1ed16de86af321552f4cc0c046e",
+    "apps/web/src/utils/models.test.ts": "a72b12c33efca840a323d4e327ec6271d201e593",
+    "apps/web/src/utils/models.ts": "4247f7e87a819d5b51ce0e7925f142c3e22f7833",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.test.ts": "8ed423ec268ca955ab8820399a8d63bc5d9bd859",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.vue": "e9e4b6711d3936e88bee2a48df2c145a3700490b",
+    "apps/web/src/components/primitives/Popover.optIn.test.ts": "9c3cc663bfdcf0dd794c2b3d62abc13f805c49d6",
+    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
+    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
+    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
+    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
+    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
+    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
+    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
+    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
+    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
+    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
+    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
+    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
+    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
+    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
+    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
+    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
+    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
+    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
+    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
+    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
+    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
+    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
+    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
+    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
+    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
+    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
+    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.js": "01e02583f03c6be8b6c463bf003c3df5b1de6373",
+    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.map": "b542d09ea1db9f3a5ad91eb0f4be0314c62bfa08",
+    "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
+    "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
+    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
+    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
+    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
+    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
+    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
+    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
+    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
+    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
+    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
+    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
+    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
+    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
+    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
+    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
+    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.js": "b590046e70cb6aedf9e7da97ddb189da58a59506",
+    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.map": "0d46d79d810c7c7b6648df14cf718cb06e83a2a0",
+    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
+    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
+    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
+    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
+    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
+    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
+    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.js": "6878d7314683cb3371f2b029d4d0398215876165",
+    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.map": "667f1570d94bb5683f55eb38382883c128a60b1a",
+    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
+    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
+    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
+    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
+    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
+    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
+    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
+    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
+    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.js": "521d6faf8ecbbd8448168797384520ce4c62443c",
+    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.map": "c9ba0d7b3b066fcc3a9b37fe911ee7d80f84e17a",
+    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
+    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
+    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
+    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
+    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.js": "4cd1dfa0f3d2521dcd67689b6f45d1620dd9ea6c",
+    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.map": "42ac2c9a8a58ed2d3de64774aecf298b12b26cba",
+    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
+    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
+    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
+    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
+    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
+    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
+    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
+    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
+    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
+    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
+    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
+    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
+    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
+    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
+   }
+  },
+  {
+   "at": "2026-11-18T12:44:41.116Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T7.6"
+   ],
+   "fingerprint": "a6fa0ecca58931679620f3de205c390deb1f48d5aa072c4d637f6b09e47c977c"
+  },
+  {
+   "at": "2026-11-18T12:44:41.116Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T7.5"
+   ],
+   "fingerprint": "7aa9e8619327a9af9dfe1d8476cd2bce9b8c8517ab7f3964a8e3489c37583e90"
+  },
+  {
+   "at": "2026-11-18T12:44:41.116Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T7.4"
+   ],
+   "fingerprint": "7d95af16c7f1bd67b590cf1b1955b78e308717c2a892792bdacdf314d0af3dca"
+  },
+  {
+   "at": "2026-11-18T12:44:41.116Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T7.3"
+   ],
+   "fingerprint": "8438d7b2b50263a51bb89717aaa43c9b4c0869eb79bfa40fe1e6a64da6873edf"
+  },
+  {
+   "at": "2026-11-18T12:44:30.690Z",
+   "type": "task_built",
+   "tasks": [
+    "T7.6"
+   ],
+   "text": "gate PASS: playwright 113 tests x2, verify 0, unit 1628 pass, protected diff empty"
+  },
+  {
+   "at": "2026-11-18T12:44:17.802Z",
+   "type": "task_built",
+   "tasks": [
+    "T7.6"
+   ],
+   "text": "e2e 113 pass x2, verify ok, 1628 unit pass, consumer diff empty",
+   "files": []
+  },
+  {
+   "at": "2026-11-18T12:39:39.750Z",
+   "type": "task_started",
+   "tasks": [
+    "T7.6"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T12:39:37.612Z",
+   "type": "task_built",
+   "tasks": [
+    "T7.5"
+   ],
+   "text": "e2e PASS: 5/5 scenarios, 46/46 in file, repeat-each=3 clean",
+   "files": [
+    "apps/web/e2e/qa/model-menu.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T12:30:51.606Z",
+   "type": "task_started",
+   "tasks": [
+    "T7.5"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T12:30:49.427Z",
+   "type": "task_built",
+   "tasks": [
+    "T7.4"
+   ],
+   "text": "unit PASS: Panel/Search 100%, Popover 96% lines, 45 tests",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.test.ts",
+    "apps/web/src/components/primitives/Popover.optIn.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T12:30:07.213Z",
+   "type": "task_built",
+   "tasks": [
+    "T7.3"
+   ],
+   "text": "unit PASS: models.ts 100% lines, 46 tests, shuffle clean",
+   "files": [
+    "apps/web/src/utils/models.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T12:29:34.311Z",
+   "type": "task_started",
+   "tasks": [
+    "T7.3",
+    "T7.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T12:29:27.116Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "apps/web/src/components.d.ts": "47c37ce4f80bddb74b0819c476374b2ecf76f53b",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.test.ts": "b46eb97fe137472ea0c02c9fd25e47b9bd15d5ff",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue": "6903896b2ac2a2ff52157ad2e95022d73be25522",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "0ec8ed94daa5c9ab5af7764193fc1d114a70d031",
+    "apps/web/src/components/primitives/Popover.vue": "a9496f003946a1ed16de86af321552f4cc0c046e",
+    "apps/web/src/utils/models.ts": "4247f7e87a819d5b51ce0e7925f142c3e22f7833",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.vue": "e9e4b6711d3936e88bee2a48df2c145a3700490b",
+    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
+    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
+    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
+    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
+    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
+    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
+    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
+    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
+    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
+    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
+    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
+    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
+    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
+    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
+    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
+    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
+    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
+    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
+    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
+    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
+    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
+    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
+    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
+    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
+    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
+    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
+    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.js": "01e02583f03c6be8b6c463bf003c3df5b1de6373",
+    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.map": "b542d09ea1db9f3a5ad91eb0f4be0314c62bfa08",
+    "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
+    "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
+    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
+    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
+    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
+    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
+    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
+    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
+    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
+    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
+    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
+    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
+    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
+    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
+    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
+    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
+    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.js": "b590046e70cb6aedf9e7da97ddb189da58a59506",
+    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.map": "0d46d79d810c7c7b6648df14cf718cb06e83a2a0",
+    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
+    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
+    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
+    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
+    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
+    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
+    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.js": "6878d7314683cb3371f2b029d4d0398215876165",
+    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.map": "667f1570d94bb5683f55eb38382883c128a60b1a",
+    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
+    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
+    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
+    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
+    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
+    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
+    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
+    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
+    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.js": "521d6faf8ecbbd8448168797384520ce4c62443c",
+    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.map": "c9ba0d7b3b066fcc3a9b37fe911ee7d80f84e17a",
+    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
+    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
+    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
+    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
+    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.js": "4cd1dfa0f3d2521dcd67689b6f45d1620dd9ea6c",
+    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.map": "42ac2c9a8a58ed2d3de64774aecf298b12b26cba",
+    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
+    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
+    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
+    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
+    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
+    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
+    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
+    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
+    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
+    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
+    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
+    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
+    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
+    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
+   }
+  },
+  {
+   "at": "2026-11-18T12:29:26.983Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T7.2"
+   ],
+   "fingerprint": "78b3913fa1df6af04a331ec031b123b414017d83a2faca854b1246a9708c4eee"
+  },
+  {
+   "at": "2026-11-18T12:29:26.983Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T7.1"
+   ],
+   "fingerprint": "2abe829d12b3eaaff7aaee138334e24037d2a5e95765ae3bf25f8e6574876b92"
+  },
+  {
+   "at": "2026-11-18T12:29:04.035Z",
+   "type": "task_built",
+   "tasks": [
+    "T7.2"
+   ],
+   "text": "opt-in Popover props wired; Popover.test.ts unchanged",
+   "files": [
+    "apps/web/src/components/primitives/Popover.vue",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue"
+   ]
+  },
+  {
+   "at": "2026-11-18T12:29:03.854Z",
+   "type": "task_built",
+   "tasks": [
+    "T7.1"
+   ],
+   "text": "search helper+ModelPickerSearch+panel empty state; vitest green",
+   "files": [
+    "apps/web/src/utils/models.ts",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.vue",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
+   ]
+  },
+  {
+   "at": "2026-11-18T12:26:30.492Z",
+   "type": "task_started",
+   "tasks": [
+    "T7.1",
+    "T7.2"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T12:26:30.332Z",
+   "type": "build_started",
+   "tasks": [
+    "T7.1",
+    "T7.2",
+    "T7.3",
+    "T7.4",
+    "T7.5",
+    "T7.6"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T12:26:26.595Z",
+   "type": "run_started",
+   "tasks": [
+    "T7.1",
+    "T7.2",
+    "T7.3",
+    "T7.4",
+    "T7.5",
+    "T7.6"
+   ],
+   "pipeline": 2,
+   "baseline": {
+    "head": "4f9798a4309150edf65c461a9f1be11a8acf30f4",
+    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000?? playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js\u0000?? playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map\u0000?? playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js\u0000?? playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map\u0000?? playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js\u0000?? playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map\u0000?? playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js\u0000?? playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map\u0000?? playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js\u0000?? playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map\u0000?? playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js\u0000?? playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map\u0000?? playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js\u0000?? playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map\u0000?? playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js\u0000?? playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map\u0000?? playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js\u0000?? playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map\u0000?? playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js\u0000?? playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map\u0000?? playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js\u0000?? playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map\u0000?? playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js\u0000?? playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map\u0000?? playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js\u0000?? playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map\u0000?? playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.js\u0000?? playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.map\u0000?? playwright-transform-cache-502/59/591cda456e_098774c_collections.js\u0000?? playwright-transform-cache-502/59/591cda456e_098774c_collections.map\u0000?? playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js\u0000?? playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map\u0000?? playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js\u0000?? playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map\u0000?? playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js\u0000?? playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map\u0000?? playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js\u0000?? playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map\u0000?? playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js\u0000?? playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map\u0000?? playwright-transform-cache-502/93/932854853d_d2b8c99_index.js\u0000?? playwright-transform-cache-502/93/932854853d_d2b8c99_index.map\u0000?? playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js\u0000?? playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map\u0000?? playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.js\u0000?? playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.map\u0000?? playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js\u0000?? playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map\u0000?? playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js\u0000?? playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map\u0000?? playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js\u0000?? playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map\u0000?? playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.js\u0000?? playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.map\u0000?? playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js\u0000?? playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map\u0000?? playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js\u0000?? playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map\u0000?? playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js\u0000?? playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map\u0000?? playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js\u0000?? playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map\u0000?? playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.js\u0000?? playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.map\u0000?? playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js\u0000?? playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map\u0000?? playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js\u0000?? playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map\u0000?? playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.js\u0000?? playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.map\u0000?? playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js\u0000?? playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map\u0000?? playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js\u0000?? playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map\u0000?? playwright-transform-cache-502/f0/f025738821_5a62be4_index.js\u0000?? playwright-transform-cache-502/f0/f025738821_5a62be4_index.map\u0000?? playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js\u0000?? playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map\u0000?? playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js\u0000?? playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map\u0000?? playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js\u0000?? playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map\u0000?? playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js\u0000?? playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map\u0000",
+    "hashes": {
+     "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
+     "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
+     "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
+     "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
+     "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
+     "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
+     "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
+     "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
+     "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
+     "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
+     "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
+     "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
+     "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
+     "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
+     "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
+     "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
+     "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
+     "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
+     "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
+     "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
+     "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
+     "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
+     "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
+     "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
+     "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
+     "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
+     "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.js": "01e02583f03c6be8b6c463bf003c3df5b1de6373",
+     "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.map": "b542d09ea1db9f3a5ad91eb0f4be0314c62bfa08",
+     "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
+     "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
+     "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
+     "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
+     "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
+     "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
+     "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
+     "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
+     "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
+     "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
+     "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
+     "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
+     "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
+     "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
+     "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
+     "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
+     "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.js": "b590046e70cb6aedf9e7da97ddb189da58a59506",
+     "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.map": "0d46d79d810c7c7b6648df14cf718cb06e83a2a0",
+     "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
+     "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
+     "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
+     "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
+     "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
+     "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
+     "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.js": "6878d7314683cb3371f2b029d4d0398215876165",
+     "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.map": "667f1570d94bb5683f55eb38382883c128a60b1a",
+     "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
+     "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
+     "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
+     "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
+     "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
+     "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
+     "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
+     "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
+     "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.js": "521d6faf8ecbbd8448168797384520ce4c62443c",
+     "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.map": "c9ba0d7b3b066fcc3a9b37fe911ee7d80f84e17a",
+     "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
+     "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
+     "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
+     "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
+     "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.js": "4cd1dfa0f3d2521dcd67689b6f45d1620dd9ea6c",
+     "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.map": "42ac2c9a8a58ed2d3de64774aecf298b12b26cba",
+     "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
+     "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
+     "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
+     "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
+     "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
+     "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
+     "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
+     "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
+     "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
+     "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
+     "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
+     "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
+     "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
+     "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
+    }
+   }
+  },
+  {
+   "at": "2026-11-18T12:20:53.134Z",
+   "type": "commit",
+   "tasks": [
+    "T6.1",
+    "T6.2",
+    "T6.3",
+    "T6.4",
+    "T6.5",
+    "T6.6",
+    "T6.7",
+    "T6.8"
+   ],
+   "attempt": "2",
+   "text": "feat(web): picker grouped by company with pinned company headers",
+   "sha": "4f9798a4309150edf65c461a9f1be11a8acf30f4",
+   "branch": "feature-enhancement",
+   "pushed": "yes",
+   "evidence": "e2e 154/154 prod x3, unit 100% cov on picker files, 2813 tests"
+  },
   {
    "at": "2026-11-18T12:20:36.024Z",
    "type": "deliverable",
@@ -5230,681 +6231,6 @@ window.DASHBOARD = {
     "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
     "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
     "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
-   }
-  },
-  {
-   "at": "2026-11-18T12:07:02.137Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.4"
-   ],
-   "fingerprint": "e84793d675828e2f9033eef9ac6a71ce63b95931040f2d2d9e2c469aadcebacf"
-  },
-  {
-   "at": "2026-11-18T12:05:30.028Z",
-   "type": "task_started",
-   "tasks": [
-    "T6.4"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T12:05:29.887Z",
-   "type": "build_started",
-   "tasks": [
-    "T6.4",
-    "T6.6",
-    "T6.7",
-    "T6.8"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T12:05:26.864Z",
-   "tasks": [
-    "T6.5"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "`vitest run src/utils/models.test.ts --coverage` 30/30, models.ts 100% lines/branches/funcs/stmts; no it.fails/skip; all listed cases present (order, Featured source order, alphabetical, disjoint both-tier company, cost/title, undefined cost as 1, same-id variants, empty sections)",
-   "fingerprint": "a7349b22ea6aedbfef17c39769d647ab8bead8039671c552b55fbe651f0447c9",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
-  },
-  {
-   "at": "2026-11-18T12:05:26.864Z",
-   "tasks": [
-    "T6.3"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "ModelOption.test.ts pass; NAME_SEPARATOR grep empty; live Flux Fast row 44px high, name and description separate elements 8px apart, sr-only \", \" keeps \"name, description\"; locked click to pricing covered by pro-tier e2e (green); shot 6/T6.3-1",
-   "fingerprint": "b79815533e2eae529b91bbfa56a130a6c695a747f19f735767e3ecf0b7d5fd9e",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
-  },
-  {
-   "at": "2026-11-18T12:05:26.864Z",
-   "tasks": [
-    "T6.2"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "ModelPicker dir vitest 95/95; live 1440: tier header pinned at top 0 and company header pinned at 28px after scroll, opaque bg dark rgb(15,12,9) and light rgb(242,235,227); Seedream 4 aria-selected in Featured and Free; shots 6/T6.2-1..5",
-   "fingerprint": "a23d9b7c899ee45938af6debef9084ac69f5a0981445a6b66b8d1875835139d2",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
-  },
-  {
-   "at": "2026-11-18T12:05:26.864Z",
-   "tasks": [
-    "T6.1"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "models.test.ts 30/30; vp lint + vp check 0 errors; no parallel helper added (`^export function group` = 2, same as HEAD: groupModelsByProvider pre-existed); live picker shows Featured/Free/Pro, companies alphabetical, Google in Free and Pro with disjoint models, cost-then-title order",
-   "fingerprint": "75c73ad16cc92155a43a2afa814b1558963ac31a1edeaf1608fdb7953897ed6d",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
-  },
-  {
-   "at": "2026-11-18T12:05:26.864Z",
-   "tasks": [
-    "T6.8"
-   ],
-   "attempt": "1",
-   "type": "verify_failed",
-   "category": "code-bug",
-   "text": "[code-bug] · Acceptance \"desktop picker matches design pass\" · the gate's commands are green (e2e prod 97/97 x2, vp lint/check 0 errors, bun run test 2812/2812) but the design pass it must match was not done (T6.4) and the picker e2e scenarios are missing (T6.7) · re-run the gate after T6.4 and T6.7 are fixed",
-   "files": [
-    "acceptance \"desktop picker matches design pass\""
-   ],
-   "sigs": [
-    "T6.8|code-bug|acceptance \"desktop picker matches design pass\""
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
-  },
-  {
-   "at": "2026-11-18T12:05:26.864Z",
-   "tasks": [
-    "T6.7"
-   ],
-   "attempt": "1",
-   "type": "verify_failed",
-   "category": "test-quality",
-   "text": "[test-quality] · Scenarios @critical company headers, @high pinned company header, @medium name/description separation · e2e/qa/model-menu.spec.ts is unchanged (git diff empty); no e2e asserts company headers, sticky pinning on scroll or row separation; only pro-tier.spec.ts was tightened. Desktop viewport there is 1280, scenario says 1440 · apps/web/e2e/qa/model-menu.spec.ts is T6.7's Spec: file ",
-   "files": [
-    "scenarios @critical company headers, @high pinned company he"
-   ],
-   "sigs": [
-    "T6.7|test-quality|scenarios @critical company headers, @high pinned company he"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
-  },
-  {
-   "at": "2026-11-18T12:05:26.864Z",
-   "tasks": [
-    "T6.6"
-   ],
-   "attempt": "1",
-   "type": "verify_failed",
-   "category": "test-quality",
-   "text": "[test-quality] · SPEC unit criterion \"name and description are separate elements with a gap class\" · ModelOption.test.ts checks separate elements and the combined text but never asserts the gap class (tw-gap-2 on model-option-label) · add the gap-class assertion",
-   "files": [
-    "spec unit criterion \"name and description are separate eleme"
-   ],
-   "sigs": [
-    "T6.6|test-quality|spec unit criterion \"name and description are separate eleme"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
-  },
-  {
-   "at": "2026-11-18T12:05:26.864Z",
-   "tasks": [
-    "T6.4"
-   ],
-   "attempt": "1",
-   "type": "verify_failed",
-   "category": "code-bug",
-   "text": "[code-bug] · SPEC Part 1 req 12 / Do \"screenshots 1440 light/dark\" · design pass was code review only; the AUDIT row \"picker design-pass: screenshots\" is wontfix and defers capture to T6.7, which took none (T6.7 report: \"Shots: none registered\") · run the impeccable critique/audit/layout pass on the real 1440 light and dark picker (verifier shots in reports/evidence/phase-6/ can seed it) and recor",
-   "files": [
-    "spec part 1 req 12 / do \"screenshots 1440 light/dark\""
-   ],
-   "sigs": [
-    "T6.4|code-bug|spec part 1 req 12 / do \"screenshots 1440 light/dark\""
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
-  },
-  {
-   "at": "2026-11-18T12:03:19.921Z",
-   "type": "advisory",
-   "tasks": [
-    "T6.1"
-   ],
-   "text": "modelsRoster.ts was a caller of groupModelsByCompany; builder added a local groupByLab repeating company grouping"
-  },
-  {
-   "at": "2026-11-18T12:03:19.769Z",
-   "type": "advisory",
-   "tasks": [
-    "T6.1"
-   ],
-   "text": "Verify grep \"^export function group\" expects 1 but HEAD already had 2 (groupModelsByProvider); no parallel helper added"
-  },
-  {
-   "at": "2026-11-18T11:55:57.707Z",
-   "type": "verify_started",
-   "tasks": [
-    "T6.1",
-    "T6.2",
-    "T6.3",
-    "T6.4",
-    "T6.5",
-    "T6.6",
-    "T6.7",
-    "T6.8"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T11:55:54.928Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.4"
-   ],
-   "fingerprint": "9fe2c0fcdd9218c56f7c71818d968e1b5fc4a91696400fb0ab7e1251efe30a49"
-  },
-  {
-   "at": "2026-11-18T11:55:52.631Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "9bdeff7d12dee22fc001110357689f3e438fa3dd",
-    "apps/web/e2e/qa/pro-tier.spec.ts": "e76102e25dd207c23147d1d77fb64f4f7819728b",
-    "apps/web/src/components.d.ts": "c677463a974994f5d78a28652c0155ce74bacb6a",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.test.ts": "cc1b31da40eb7ce0e3dc783dc577667879811155",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue": "473d1993cfa4f8844497c697043f5572b3e6ac63",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts": "07771a3bd56bec78385d5ec43409aaf4c1dbaad4",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "b2b0af879a6251afa66a19a3ee9a74e61691aeed",
-    "apps/web/src/components/LandingV2/modelsRoster.ts": "fe475c579b8e1e1bf3fe71956a7fb45be55405b0",
-    "apps/web/src/utils/models.test.ts": "fbfcdeb57bbe9e3921d0f68ef4ff493f804444d4",
-    "apps/web/src/utils/models.ts": "448fe48871f24a1de60219d67a6a51893e5c4c32",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.test.ts": "d756edac194ed0f6b57ba815e492a109242d3538",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue": "cca87e5158694621215a013609a4358b770da8d4",
-    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
-    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
-    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
-    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
-    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
-    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
-    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
-    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
-    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
-    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
-    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
-    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
-    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
-    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
-    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
-    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
-    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
-    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
-    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
-    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
-    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
-    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
-    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
-    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
-    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
-    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
-    "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
-    "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
-    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
-    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
-    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
-    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
-    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
-    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
-    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
-    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
-    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
-    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
-    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
-    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
-    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
-    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
-    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
-    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
-    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
-    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
-    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
-    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
-    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
-    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
-    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
-    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
-    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
-    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
-    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
-    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
-    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
-    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
-    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
-    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
-    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
-    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
-    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
-    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
-    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
-    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
-    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
-    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
-    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
-    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
-    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
-    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
-    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
-    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
-   }
-  },
-  {
-   "at": "2026-11-18T11:55:52.498Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.8"
-   ],
-   "fingerprint": "2e0c4b4be047263594c7707acb4e9db98e4bbd5c9859a1f722eb2bd71cf91870"
-  },
-  {
-   "at": "2026-11-18T11:55:52.498Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.7"
-   ],
-   "fingerprint": "88be0a922cab82f194a8e5b9a4e8300e5636551db01b6de16ba822ee5205b5e9"
-  },
-  {
-   "at": "2026-11-18T11:55:52.498Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.6"
-   ],
-   "fingerprint": "3bb09bc8226301dd35d2c2557435598542937cefa71f11b187ea573ae3a4263d"
-  },
-  {
-   "at": "2026-11-18T11:55:52.498Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.5"
-   ],
-   "fingerprint": "a7349b22ea6aedbfef17c39769d647ab8bead8039671c552b55fbe651f0447c9"
-  },
-  {
-   "at": "2026-11-18T11:55:52.214Z",
-   "type": "task_built",
-   "tasks": [
-    "T6.8"
-   ],
-   "text": "gate PASS: playwright 97/97, verify 0 errors, test 2812/2812",
-   "files": []
-  },
-  {
-   "at": "2026-11-18T11:55:46.940Z",
-   "type": "task_built",
-   "tasks": [
-    "T6.8"
-   ],
-   "text": "e2e 97/97 (x2), verify 0 errors, unit 2812/2812",
-   "files": []
-  },
-  {
-   "at": "2026-11-18T11:50:13.918Z",
-   "type": "task_started",
-   "tasks": [
-    "T6.8"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T11:50:13.752Z",
-   "type": "task_built",
-   "tasks": [
-    "T6.7"
-   ],
-   "text": "e2e PASS 12/12 pro-tier.spec.ts, flake x3 clean",
-   "files": [
-    "apps/web/e2e/qa/pro-tier.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T11:47:45.962Z",
-   "type": "task_started",
-   "tasks": [
-    "T6.7"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T11:47:45.819Z",
-   "type": "task_built",
-   "tasks": [
-    "T6.5"
-   ],
-   "text": "unit PASS, 100% lines",
-   "files": [
-    "apps/web/src/utils/models.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T11:47:20.768Z",
-   "type": "task_built",
-   "tasks": [
-    "T6.6"
-   ],
-   "text": "unit PASS, 100% cov on 3 files, 55 tests",
-   "files": [
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T11:46:36.377Z",
-   "type": "task_started",
-   "tasks": [
-    "T6.5",
-    "T6.6"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T11:46:36.237Z",
-   "type": "build_started",
-   "tasks": [
-    "T6.5",
-    "T6.6",
-    "T6.7",
-    "T6.8"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T11:46:32.307Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "a1a161a3e1f4d3daff31c8757195923453398136",
-    "apps/web/src/components.d.ts": "c677463a974994f5d78a28652c0155ce74bacb6a",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.test.ts": "cc1b31da40eb7ce0e3dc783dc577667879811155",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue": "473d1993cfa4f8844497c697043f5572b3e6ac63",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "b2b0af879a6251afa66a19a3ee9a74e61691aeed",
-    "apps/web/src/components/LandingV2/modelsRoster.ts": "fe475c579b8e1e1bf3fe71956a7fb45be55405b0",
-    "apps/web/src/utils/models.ts": "448fe48871f24a1de60219d67a6a51893e5c4c32",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue": "cca87e5158694621215a013609a4358b770da8d4",
-    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
-    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
-    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
-    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
-    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
-    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
-    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
-    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
-    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
-    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
-    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
-    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
-    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
-    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
-    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
-    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
-    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
-    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
-    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
-    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
-    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
-    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
-    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
-    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
-    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
-    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
-    "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
-    "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
-    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
-    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
-    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
-    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
-    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
-    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
-    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
-    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
-    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
-    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
-    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
-    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
-    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
-    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
-    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
-    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
-    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
-    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
-    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
-    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
-    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
-    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
-    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
-    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
-    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
-    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
-    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
-    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
-    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
-    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
-    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
-    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
-    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
-    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
-    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
-    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
-    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
-    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
-    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
-    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
-    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
-    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
-    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
-    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
-    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
-    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
-   }
-  },
-  {
-   "at": "2026-11-18T11:46:32.187Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.4"
-   ],
-   "fingerprint": "25d13ff4ab3b6e0eddac1bd8de022bf8e6fe17d7e4f3e74dfcddadc883711dd7"
-  },
-  {
-   "at": "2026-11-18T11:46:32.187Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.3"
-   ],
-   "fingerprint": "b79815533e2eae529b91bbfa56a130a6c695a747f19f735767e3ecf0b7d5fd9e"
-  },
-  {
-   "at": "2026-11-18T11:46:32.187Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.2"
-   ],
-   "fingerprint": "a23d9b7c899ee45938af6debef9084ac69f5a0981445a6b66b8d1875835139d2"
-  },
-  {
-   "at": "2026-11-18T11:46:32.187Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.1"
-   ],
-   "fingerprint": "75c73ad16cc92155a43a2afa814b1558963ac31a1edeaf1608fdb7953897ed6d"
-  },
-  {
-   "at": "2026-11-18T11:46:16.970Z",
-   "type": "task_built",
-   "tasks": [
-    "T6.4"
-   ],
-   "text": "design-pass rows logged, none open",
-   "files": [
-    "agent_docs/ui-polish-picker-header/AUDIT.md"
-   ]
-  },
-  {
-   "at": "2026-11-18T11:46:16.830Z",
-   "type": "task_built",
-   "tasks": [
-    "T6.3"
-   ],
-   "text": "row name/description split, NAME_SEPARATOR removed",
-   "files": [
-    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T11:46:16.690Z",
-   "type": "task_built",
-   "tasks": [
-    "T6.2"
-   ],
-   "text": "ModelCompanyHeader + sticky tier/company headers",
-   "files": [
-    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T11:46:16.550Z",
-   "type": "task_built",
-   "tasks": [
-    "T6.1"
-   ],
-   "text": "groupModelsByCompany returns Featured/Free/Pro with company groups; vitest+verify pass",
-   "files": [
-    "apps/web/src/utils/models.ts",
-    "apps/web/src/components/LandingV2/modelsRoster.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T11:43:03.153Z",
-   "type": "task_started",
-   "tasks": [
-    "T6.1",
-    "T6.2",
-    "T6.3",
-    "T6.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T11:43:03.008Z",
-   "type": "build_started",
-   "tasks": [
-    "T6.1",
-    "T6.2",
-    "T6.3",
-    "T6.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T11:42:56.760Z",
-   "type": "run_started",
-   "tasks": [
-    "T6.1",
-    "T6.2",
-    "T6.3",
-    "T6.4",
-    "T6.5",
-    "T6.6",
-    "T6.7",
-    "T6.8"
-   ],
-   "pipeline": 2,
-   "baseline": {
-    "head": "183a930deac5bed89d3767c00e133a16e2574723",
-    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000?? playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js\u0000?? playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map\u0000?? playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js\u0000?? playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map\u0000?? playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js\u0000?? playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map\u0000?? playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js\u0000?? playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map\u0000?? playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js\u0000?? playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map\u0000?? playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js\u0000?? playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map\u0000?? playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js\u0000?? playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map\u0000?? playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js\u0000?? playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map\u0000?? playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js\u0000?? playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map\u0000?? playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js\u0000?? playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map\u0000?? playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js\u0000?? playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map\u0000?? playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js\u0000?? playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map\u0000?? playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js\u0000?? playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map\u0000?? playwright-transform-cache-502/59/591cda456e_098774c_collections.js\u0000?? playwright-transform-cache-502/59/591cda456e_098774c_collections.map\u0000?? playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js\u0000?? playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map\u0000?? playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js\u0000?? playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map\u0000?? playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js\u0000?? playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map\u0000?? playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js\u0000?? playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map\u0000?? playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js\u0000?? playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map\u0000?? playwright-transform-cache-502/93/932854853d_d2b8c99_index.js\u0000?? playwright-transform-cache-502/93/932854853d_d2b8c99_index.map\u0000?? playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js\u0000?? playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map\u0000?? playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js\u0000?? playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map\u0000?? playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js\u0000?? playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map\u0000?? playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js\u0000?? playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map\u0000?? playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js\u0000?? playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map\u0000?? playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js\u0000?? playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map\u0000?? playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js\u0000?? playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map\u0000?? playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js\u0000?? playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map\u0000?? playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js\u0000?? playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map\u0000?? playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js\u0000?? playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map\u0000?? playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js\u0000?? playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map\u0000?? playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js\u0000?? playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map\u0000?? playwright-transform-cache-502/f0/f025738821_5a62be4_index.js\u0000?? playwright-transform-cache-502/f0/f025738821_5a62be4_index.map\u0000?? playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js\u0000?? playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map\u0000?? playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js\u0000?? playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map\u0000?? playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js\u0000?? playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map\u0000?? playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js\u0000?? playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map\u0000",
-    "hashes": {
-     "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "b3177ede8161df66333f2c0556b2a2489122d7e4",
-     "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
-     "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "c8493eff4e01d30a0620e914aee8301cd3abb74e",
-     "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
-     "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "be52c877d53b08ed97bf1e5a85e4ca3f9f93ea93",
-     "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
-     "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "7aac09933690ce8456df1a83804085ebb0646750",
-     "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
-     "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1eac258cab0c35f135663198b97ea088456c5a73",
-     "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
-     "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "e1c17b71949521f4dcdbbdf6af0dbc8f690e1458",
-     "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
-     "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "9407006984d27f0acfa32b316d0b64f2b5b5c370",
-     "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
-     "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "7ae2344b9149e7bce82f818f339889ac437acf3e",
-     "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
-     "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "638e5e5e662d7879ee8d0b1d3c972860d73fb7e1",
-     "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
-     "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "de7289993ae24dee8092c4c395233dbda4e9b352",
-     "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
-     "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "adeea4943797d28605e90989f98dd6e9a770dbb2",
-     "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
-     "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "608743c643e689d3e6292ae6a3a828e1ff0f4220",
-     "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
-     "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "a2e95940317eeaed7733ac6f547e974683a63947",
-     "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
-     "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5c966360ed2aaeb567719dc95dbca18e4f23c101",
-     "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
-     "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "7dae4e5945dbbea389471a8b09bee2752f4a06ce",
-     "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
-     "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "d243e0254e8631509d42f20c0b36b38c26436d4d",
-     "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
-     "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "04ca2ec8e67f7d6a248e8a3c15a36e3f1383d915",
-     "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
-     "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "d2575d9130ef30d8ebdb07518d3166d5b3bf28a6",
-     "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
-     "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "e984b00fb431f051bcb4d8714cc7b1f60e9fb0c4",
-     "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
-     "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "32253ce86713b26cab77ca4f167f4119c991b6db",
-     "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
-     "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "78c244b739d826a5e850450b8336a2fefc8845dc",
-     "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
-     "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "9aca56c8ac3f3f0cff5199153b4d9605c6e6b495",
-     "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
-     "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "6a1ddf967bc49bc5831cda803da536d86a01db92",
-     "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
-     "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "4232e5e6d62c997f4834ad118a4108b61bbb1691",
-     "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
-     "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "9f557b38551f9094a8c6094aa267cb41c9c5f271",
-     "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
-     "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "d66272889174cd0b3e983d5bc987d5a4ccadb68d",
-     "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
-     "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "12c247ce095a86d92c0f7064fedb382198922426",
-     "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
-     "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "87639f020f01138b8488230067db1d288f909261",
-     "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
-     "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "12a27c7b0281e83b29c901124ba4f92f2a0fc631",
-     "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
-     "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "0ac088d88d8556a870f0f73776b7f56bf6932b60",
-     "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
-     "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "024bc6d87d957274f1d53eee1705d413196c34fc",
-     "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
-     "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "3011cca9980dca17424f8a70698c997717dfa059",
-     "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
-     "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "d32ae1a261b233f102987815bead9def0384eb94",
-     "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
-     "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "9cf6a6ea8f7ed36e5ae6864034ed71e596b67c68",
-     "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
-     "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "d8504e5db8ad8c8181440cc0c3d443fde5373365",
-     "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
-     "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "2a64f37c0fbac94dce668acdbc5262de24bb7aca",
-     "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
-     "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "fad8f9a07a294c224d5c11ac3016efbe1cefc806",
-     "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
-    }
    }
   }
  ]

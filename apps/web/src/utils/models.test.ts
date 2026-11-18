@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { MODEL_IDS } from '@visual-ai/shared';
 import type { Model } from '@/types/model';
 import {
+  filterModelsBySearch,
   FLUX_MODES,
   formatPrice,
   getFeaturedModels,
@@ -342,5 +343,110 @@ describe('model presentation helpers', () => {
     expect(getModelBestForHint({ ...base, bestAt: '  Portraits  ' })).toBe('Portraits');
     expect(getModelBestForHint({ ...base, bestAt: '   ' })).toBe('Plain description');
     expect(getModelBestForHint(base)).toBe('Plain description');
+  });
+});
+
+describe('filterModelsBySearch', () => {
+  const luna = makeModel({
+    id: 'LUNA',
+    title: 'Lunar Brush',
+    companyName: 'Moonworks',
+    bestAt: 'Watercolour landscapes',
+    description: 'Gentle pastel rendering',
+  });
+  const forge = makeModel({
+    id: 'FORGE',
+    title: 'Iron Forge',
+    companyName: 'Smithy Labs',
+    bestAt: 'Hard-surface props',
+    description: 'Metallic detail pass',
+  });
+  const noCompany = makeModel({
+    id: 'NOCO',
+    title: 'Plain',
+    provider: 'bfl',
+    bestAt: undefined,
+    description: 'Nothing special',
+  });
+  const catalog = [luna, forge, noCompany];
+
+  it('matches on title', () => {
+    expect(filterModelsBySearch(catalog, 'brush')).toEqual([luna]);
+  });
+
+  it('matches on company name', () => {
+    expect(filterModelsBySearch(catalog, 'smithy')).toEqual([forge]);
+  });
+
+  it('matches on bestAt', () => {
+    expect(filterModelsBySearch(catalog, 'watercolour')).toEqual([luna]);
+  });
+
+  it('matches on description', () => {
+    expect(filterModelsBySearch(catalog, 'metallic')).toEqual([forge]);
+  });
+
+  it('is case-insensitive in both directions', () => {
+    expect(filterModelsBySearch(catalog, 'IRON FORGE')).toEqual([forge]);
+    expect(filterModelsBySearch([makeModel({ id: 'U', title: 'UPPER' })], 'upper')).toHaveLength(1);
+  });
+
+  it('trims the query before matching', () => {
+    expect(filterModelsBySearch(catalog, '   forge  ')).toEqual([forge]);
+  });
+
+  it.each(['', '   ', '\t\n'])('returns every model for the blank query %j', (query) => {
+    expect(filterModelsBySearch(catalog, query)).toEqual(catalog);
+  });
+
+  it('returns an empty list when nothing matches', () => {
+    expect(filterModelsBySearch(catalog, 'zzz-no-such-thing')).toEqual([]);
+  });
+
+  it('returns an empty list for an empty catalog', () => {
+    expect(filterModelsBySearch([], 'forge')).toEqual([]);
+  });
+
+  it('falls back to the provider when there is no company name', () => {
+    expect(filterModelsBySearch(catalog, 'bfl')).toEqual([noCompany]);
+  });
+
+  it('skips a missing bestAt without throwing', () => {
+    expect(filterModelsBySearch([noCompany], 'special')).toEqual([noCompany]);
+    expect(filterModelsBySearch([noCompany], 'undefined')).toEqual([]);
+  });
+
+  it('keeps source order of the matches', () => {
+    const a = makeModel({ id: 'A', title: 'Zed shared' });
+    const b = makeModel({ id: 'B', title: 'Alpha shared' });
+    expect(filterModelsBySearch([a, b], 'shared')).toEqual([a, b]);
+  });
+
+  describe('combined with groupModelsByCompany', () => {
+    it('drops empty sections and companies after filtering', () => {
+      const featured = makeModel({
+        id: 'F',
+        title: 'Star Pick',
+        companyName: 'Starco',
+        featured: true,
+      });
+      const sections = groupModelsByCompany(
+        filterModelsBySearch([featured, luna, forge], 'moonworks'),
+      );
+      expect(sections.map((s) => s.section)).toEqual(['Free']);
+      const [free] = sections;
+      expect('companies' in free && free.companies.map((c) => c.company)).toEqual(['Moonworks']);
+    });
+
+    it('keeps every model of a company matched by name only', () => {
+      const sibling = makeModel({
+        id: 'SIB',
+        title: 'Unrelated Title',
+        companyName: 'Moonworks',
+        description: 'x',
+      });
+      const result = filterModelsBySearch([luna, sibling, forge], 'moonworks');
+      expect(result).toEqual([luna, sibling]);
+    });
   });
 });
