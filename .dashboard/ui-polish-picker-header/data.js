@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-18T13:28:31.747Z",
+ "generatedAt": "2026-11-18T14:21:41.523Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -29,20 +29,20 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
- "costUsd": 29.2584,
- "elapsedMs": 179750843,
+ "costUsd": 31.989,
+ "elapsedMs": 181351318,
  "costByRole": {
-  "builder": 6.9154,
-  "verifier": 16.6739,
-  "unit": 2.8642,
-  "e2e": 2.8049
+  "builder": 7.325,
+  "verifier": 18.4193,
+  "unit": 3.0613,
+  "e2e": 3.1834
  },
  "totals": {
   "phases": 14,
   "tasks": 61,
   "byStatus": {
-   "verified": 41,
-   "ready": 20
+   "verified": 46,
+   "ready": 15
   }
  },
  "phases": [
@@ -2184,7 +2184,7 @@ window.DASHBOARD = {
      "line": 373,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T13:28:31.725Z",
+     "updatedAt": "2026-11-18T13:28:50.543Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2228,7 +2228,7 @@ window.DASHBOARD = {
      "line": 381,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T13:28:31.725Z",
+     "updatedAt": "2026-11-18T13:28:50.543Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2268,7 +2268,7 @@ window.DASHBOARD = {
      "line": 389,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T13:28:31.725Z",
+     "updatedAt": "2026-11-18T13:28:50.543Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2311,7 +2311,7 @@ window.DASHBOARD = {
      "line": 398,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T13:28:31.725Z",
+     "updatedAt": "2026-11-18T13:28:50.543Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2360,7 +2360,7 @@ window.DASHBOARD = {
     {
      "id": "T9.1",
      "title": "Reproduce and root-cause",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -2379,23 +2379,31 @@ window.DASHBOARD = {
      ],
      "line": 413,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T14:21:32.683Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4044,
+     "costApprox": true,
+     "elapsedMs": 1220053,
      "summary": []
     },
     {
      "id": "T9.2",
      "title": "Fix reveal inside the modal",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -2417,23 +2425,31 @@ window.DASHBOARD = {
      ],
      "line": 421,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T14:21:32.683Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4044,
+     "costApprox": true,
+     "elapsedMs": 1220053,
      "summary": []
     },
     {
      "id": "T9.3",
      "title": "Unit: reveal regression",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
@@ -2453,23 +2469,31 @@ window.DASHBOARD = {
      ],
      "line": 429,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T14:21:32.683Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4481,
+     "costApprox": true,
+     "elapsedMs": 1028316,
      "summary": []
     },
     {
      "id": "T9.4",
      "title": "E2E: dialog FAQ",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [],
      "files": [
@@ -2487,23 +2511,38 @@ window.DASHBOARD = {
      ],
      "line": 437,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T14:21:32.683Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.1199,
+     "costApprox": true,
+     "elapsedMs": 1335193,
      "summary": []
     },
     {
      "id": "T9.5",
      "title": "Gate: Phase 9",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -2521,25 +2560,33 @@ window.DASHBOARD = {
      ],
      "line": 446,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T14:21:32.683Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.354,
+     "costApprox": true,
+     "elapsedMs": 575385,
      "summary": []
     }
    ],
-   "verified": 0,
+   "verified": 5,
    "total": 5,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 2.7308,
+   "elapsedMs": 1600475
   },
   {
    "id": "10",
@@ -3167,7 +3214,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 9",
+ "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 10",
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -3262,6 +3309,32 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-18T13:28:50.543Z",
+   "ok": true,
+   "phase": "8",
+   "tasks": [
+    "T8.1",
+    "T8.2",
+    "T8.3",
+    "T8.4"
+   ],
+   "attempt": "1",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 157/157, lowest unit coverage 93.33% branches (sheet), 100% lines",
+   "error": null,
+   "sha": "14c226e565e09b933fd27242520f7ae0e9addb23",
+   "shortSha": "14c226e",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/14c226e565e09b933fd27242520f7ae0e9addb23",
+   "subject": "feat(web): picker bottom sheet below 768",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-18T18:58:42+05:30",
+   "filesChanged": 11,
+   "added": 1448,
+   "removed": 786
+  },
   {
    "at": "2026-11-18T12:56:38.784Z",
    "ok": true,
@@ -4849,9 +4922,183 @@ window.DASHBOARD = {
    "file": "8/T8.3-3.png",
    "phase": "8",
    "href": "shots/8/T8.3-3.png"
+  },
+  {
+   "taskId": "T9.2",
+   "kind": "before",
+   "step": "FAQ visible",
+   "attempt": 2,
+   "caption": "Before: FAQ invisible in the Upgrade dialog",
+   "annotations": [],
+   "at": "2026-11-18T13:57:44.738Z",
+   "file": "9/T9.2-1.png",
+   "phase": "9",
+   "href": "shots/9/T9.2-1.png"
+  },
+  {
+   "taskId": "T9.2",
+   "kind": "after",
+   "step": "FAQ heading and questions at opacity 1",
+   "attempt": 2,
+   "caption": "After: Before you buy heading and questions visible",
+   "annotations": [
+    {
+     "x": 10,
+     "y": 60,
+     "w": 80,
+     "h": 35,
+     "label": "FAQ heading and questions visible"
+    }
+   ],
+   "at": "2026-11-18T13:57:45.061Z",
+   "file": "9/T9.2-2.png",
+   "phase": "9",
+   "href": "shots/9/T9.2-2.png"
+  },
+  {
+   "taskId": "T9.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Upgrade dialog FAQ dialog-faq-revealed",
+   "annotations": [],
+   "at": "2026-11-18T14:04:54.805Z",
+   "file": "9/T9.4-1.png",
+   "phase": "9",
+   "href": "shots/9/T9.4-1.png"
+  },
+  {
+   "taskId": "T9.4",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Upgrade dialog FAQ dialog-faq-390",
+   "annotations": [],
+   "at": "2026-11-18T14:04:55.132Z",
+   "file": "9/T9.4-2.png",
+   "phase": "9",
+   "href": "shots/9/T9.4-2.png"
+  },
+  {
+   "taskId": "T9.5",
+   "kind": "after",
+   "step": "reveals intact",
+   "attempt": null,
+   "caption": "/pricing FAQ revealed at 390 wide",
+   "annotations": [
+    {
+     "x": 5,
+     "y": 30,
+     "w": 90,
+     "h": 60,
+     "label": "FAQ section visible"
+    }
+   ],
+   "at": "2026-11-18T14:08:17.244Z",
+   "file": "9/T9.5-1.png",
+   "phase": "9",
+   "href": "shots/9/T9.5-1.png"
+  },
+  {
+   "taskId": "T9.5",
+   "kind": "after",
+   "step": "reveals intact",
+   "attempt": null,
+   "caption": "/pricing FAQ revealed at 1440 wide",
+   "annotations": [
+    {
+     "x": 5,
+     "y": 30,
+     "w": 90,
+     "h": 60,
+     "label": "FAQ section visible"
+    }
+   ],
+   "at": "2026-11-18T14:08:17.466Z",
+   "file": "9/T9.5-2.png",
+   "phase": "9",
+   "href": "shots/9/T9.5-2.png"
+  },
+  {
+   "taskId": "T9.5",
+   "kind": "after",
+   "step": "Dialog FAQ visible at all widths, light theme",
+   "attempt": 1,
+   "caption": "Upgrade dialog at 360 light, scrolled to bottom: FAQ heading and all five questions visible",
+   "annotations": [
+    {
+     "x": 11,
+     "y": 26,
+     "w": 78,
+     "h": 63,
+     "label": "FAQ heading and every question at opacity 1"
+    }
+   ],
+   "at": "2026-11-18T14:13:28.434Z",
+   "file": "9/T9.5-3.png",
+   "phase": "9",
+   "href": "shots/9/T9.5-3.png"
+  },
+  {
+   "taskId": "T9.5",
+   "kind": "after",
+   "step": "Dialog FAQ visible at all widths, dark theme",
+   "attempt": 1,
+   "caption": "Upgrade dialog at 768 dark, scrolled to bottom: FAQ heading and all five questions visible",
+   "annotations": [
+    {
+     "x": 5,
+     "y": 29,
+     "w": 90,
+     "h": 60,
+     "label": "FAQ heading and every question at opacity 1"
+    }
+   ],
+   "at": "2026-11-18T14:13:28.610Z",
+   "file": "9/T9.5-4.png",
+   "phase": "9",
+   "href": "shots/9/T9.5-4.png"
+  },
+  {
+   "taskId": "T9.5",
+   "kind": "after",
+   "step": "Dialog FAQ visible at all widths, light theme",
+   "attempt": 1,
+   "caption": "Upgrade dialog at 1440 light, scrolled to bottom: FAQ heading and all five questions visible",
+   "annotations": [
+    {
+     "x": 10,
+     "y": 25,
+     "w": 80,
+     "h": 64,
+     "label": "FAQ heading and every question at opacity 1"
+    }
+   ],
+   "at": "2026-11-18T14:13:28.775Z",
+   "file": "9/T9.5-5.png",
+   "phase": "9",
+   "href": "shots/9/T9.5-5.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-18T14:21:32.683Z",
+   "type": "deliverable",
+   "tasks": [
+    "T9.1",
+    "T9.2",
+    "T9.3",
+    "T9.4",
+    "T9.5"
+   ],
+   "text": "FAQ in Upgrade dialog reveals: v-reveal takes a scroller, AppModal provides its panel",
+   "files": [
+    "apps/web/src/directives/reveal.ts",
+    "apps/web/src/components/Landing/FaqSection.vue",
+    "apps/web/src/components/AppModal.vue",
+    "apps/web/e2e/qa/pricing-layout.spec.ts"
+   ]
+  },
   {
    "at": "2026-11-18T13:28:31.725Z",
    "type": "deliverable",
@@ -4988,6 +5235,46 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-18T14:14:54.683Z",
+   "type": "advisory",
+   "tasks": [
+    "T9.5"
+   ],
+   "text": "Manifest shot 9/T9.5-2.png is also a connection-refused page (captioned /pricing FAQ at 1440); drop T9.5-1 and T9.5-2"
+  },
+  {
+   "at": "2026-11-18T14:13:38.988Z",
+   "type": "advisory",
+   "tasks": [
+    "T9.5"
+   ],
+   "text": "Manifest shot 9/T9.5-1.png is a connection-refused page captioned as /pricing FAQ; verifier added T9.5-3..5 dialog shots (360 light, 768 dark, 1440 light); drop T9.5-1"
+  },
+  {
+   "at": "2026-11-18T14:13:38.823Z",
+   "type": "advisory",
+   "tasks": [
+    "T9.3"
+   ],
+   "text": "FaqSection.test.ts tests without global vReveal print \"Failed to resolve directive: reveal\"; register the directive in a shared mount helper"
+  },
+  {
+   "at": "2026-11-18T14:13:38.658Z",
+   "type": "advisory",
+   "tasks": [
+    "T9.4"
+   ],
+   "text": "pricing-layout.spec.ts:275 expect(dialog.filter({visible:true}).last()).toBeVisible() is near-vacuous; drop it"
+  },
+  {
+   "at": "2026-11-18T14:13:38.483Z",
+   "type": "advisory",
+   "tasks": [
+    "T9.4"
+   ],
+   "text": "Spec path pricing-dialog-faq.spec.ts does not exist; scenarios live in e2e/qa/pricing-layout.spec.ts, so the Verify command names a missing file"
+  },
   {
    "at": "2026-11-18T13:27:58.525Z",
    "type": "advisory",
@@ -5359,6 +5646,414 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
+   "at": "2026-11-18T14:21:32.683Z",
+   "type": "deliverable",
+   "tasks": [
+    "T9.1",
+    "T9.2",
+    "T9.3",
+    "T9.4",
+    "T9.5"
+   ],
+   "text": "FAQ in Upgrade dialog reveals: v-reveal takes a scroller, AppModal provides its panel",
+   "files": [
+    "apps/web/src/directives/reveal.ts",
+    "apps/web/src/components/Landing/FaqSection.vue",
+    "apps/web/src/components/AppModal.vue",
+    "apps/web/e2e/qa/pricing-layout.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T14:21:28.912Z",
+   "tasks": [
+    "T9.4"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "E2E_SERVER=prod pricing-layout.spec.ts --repeat-each=3: 37/37 passed, 0 flaky, exit 0. The round-2 BLOCKING item is fixed. expectFaqItemsRevealed asserts listitem count == FAQ_QUESTIONS.length and polls computed opacity 1 plus in-viewport on every li.faq__item (the reveal target), in both the @critical dialog test and the @high 390 test. Isolated mutation on the prod build (dialog open, not scroll",
+   "fingerprint": "b0f45c9a18e3103fb5fb284695f7099784d72f6466d867e4a82acd03cab59402",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-18T14:17:56.461Z",
+   "type": "verify_started",
+   "tasks": [
+    "T9.4"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-18T14:17:54.190Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "051c8fdf64b4c185ed7c2e6a1a0121117c254b50",
+    "apps/web/e2e/qa/pricing-layout.spec.ts": "b4dad823f1e3f8b04aaf7cb657149573e04b286d",
+    "apps/web/src/components/AppModal.vue": "b769af17f28d087d059d654c6865fbf6fff1dee2",
+    "apps/web/src/components/Landing/FaqSection.test.ts": "046c7722186c7fc24628e703c161fd5e389aa364",
+    "apps/web/src/components/Landing/FaqSection.vue": "1f191ecd6a5337878db6aed00790f018009c2bd8",
+    "apps/web/src/directives/reveal.test.ts": "4a315854e12a5677b6847cd4bd332a1ec2bdb32a",
+    "apps/web/src/directives/reveal.ts": "e52551aac75d9369e88245c259f3fcbfb1a4b307"
+   }
+  },
+  {
+   "at": "2026-11-18T14:17:54.032Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T9.4"
+   ],
+   "fingerprint": "b0f45c9a18e3103fb5fb284695f7099784d72f6466d867e4a82acd03cab59402"
+  },
+  {
+   "at": "2026-11-18T14:17:53.808Z",
+   "type": "task_built",
+   "tasks": [
+    "T9.4"
+   ],
+   "attempt": "2",
+   "text": "e2e: 12/12, flake x3 clean, per-li opacity assertions",
+   "files": [
+    "apps/web/e2e/qa/pricing-layout.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T14:15:12.059Z",
+   "type": "task_started",
+   "tasks": [
+    "T9.4"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-18T14:15:11.886Z",
+   "type": "build_started",
+   "tasks": [
+    "T9.4"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-18T14:15:08.490Z",
+   "tasks": [
+    "T9.5"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "E2E_SERVER=prod pricing-layout + localized-prices --repeat-each=3: 61/61 passed, 0 flaky; vp lint/check 0 errors; bun run test 2890/2890; landing and /pricing reveal tests green; /pricing and landing FAQ h2 carry v-reveal directly so those heading assertions are real; T9.5 is a gate (Files: none), so its own shots do not gate it",
+   "fingerprint": "1245637eea06edd708d6963ff1952a7939e71004484ce05b58c377219f805576",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-18T14:15:08.490Z",
+   "tasks": [
+    "T9.3"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "scoped coverage run 18/18, reveal.ts / FaqSection.vue / PricingLayout.vue 100% stmts/branches/funcs/lines; modal-scroller test asserts every reveal trigger (2 + items) uses the panel, so it fails pre-fix; window default covered; no it.fails/skip/only",
+   "fingerprint": "2bca24ce90f22f9b478c592b81f5f60b37974838c43659f4439a5f1fd310b087",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-18T14:15:08.490Z",
+   "tasks": [
+    "T9.2"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "AppModal provides panel as REVEAL_SCROLLER_KEY, FaqSection passes it to v-reveal (default window unchanged); verifier browser check on prod build: heading + 5 items computed opacity 1 and in viewport at 360/390/768/1440 dark and light; vitest directives/Landing/Pricing 18/18, full suite 306 files 2890/2890; vp lint + vp check 0 errors",
+   "fingerprint": "02ef906ecf052e5d1f8594d01d0969ec7b240a0b679f0f9abd9b44bb5143f884",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-18T14:15:08.490Z",
+   "tasks": [
+    "T9.1"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "AUDIT.md:26 FAQ row states root cause (window ScrollTrigger vs AppModal panel scroller; :deep(.faq) and dvh ruled out); faq-repro-1440.png and faq-repro-390.png exist and show the FAQ missing below the credit table",
+   "fingerprint": "208b1e7c9c8210b19a4f03f3a88148de15cc02e1d862740a9dbf92e75ce16e75",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-18T14:15:08.489Z",
+   "tasks": [
+    "T9.4"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "test-quality",
+   "text": "[test-quality] · pricing-layout.spec.ts:226-229,262-265,284-285 (expectRevealed on question buttons) · v-reveal sits on li.faq__item, and CSS opacity is not inherited, so getComputedStyle(button).opacity is always 1. Playwright's toBeVisible also passes at opacity 0. On the prod build, with the dialog open and not scrolled, all 5 items read li opacity 0 / button opacity 1. The \"every question comp",
+   "files": [
+    "pricing-layout.spec.ts"
+   ],
+   "sigs": [
+    "T9.4|test-quality|pricing-layout.spec.ts"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-18T14:14:54.683Z",
+   "type": "advisory",
+   "tasks": [
+    "T9.5"
+   ],
+   "text": "Manifest shot 9/T9.5-2.png is also a connection-refused page (captioned /pricing FAQ at 1440); drop T9.5-1 and T9.5-2"
+  },
+  {
+   "at": "2026-11-18T14:13:38.988Z",
+   "type": "advisory",
+   "tasks": [
+    "T9.5"
+   ],
+   "text": "Manifest shot 9/T9.5-1.png is a connection-refused page captioned as /pricing FAQ; verifier added T9.5-3..5 dialog shots (360 light, 768 dark, 1440 light); drop T9.5-1"
+  },
+  {
+   "at": "2026-11-18T14:13:38.823Z",
+   "type": "advisory",
+   "tasks": [
+    "T9.3"
+   ],
+   "text": "FaqSection.test.ts tests without global vReveal print \"Failed to resolve directive: reveal\"; register the directive in a shared mount helper"
+  },
+  {
+   "at": "2026-11-18T14:13:38.658Z",
+   "type": "advisory",
+   "tasks": [
+    "T9.4"
+   ],
+   "text": "pricing-layout.spec.ts:275 expect(dialog.filter({visible:true}).last()).toBeVisible() is near-vacuous; drop it"
+  },
+  {
+   "at": "2026-11-18T14:13:38.483Z",
+   "type": "advisory",
+   "tasks": [
+    "T9.4"
+   ],
+   "text": "Spec path pricing-dialog-faq.spec.ts does not exist; scenarios live in e2e/qa/pricing-layout.spec.ts, so the Verify command names a missing file"
+  },
+  {
+   "at": "2026-11-18T14:08:27.935Z",
+   "type": "verify_started",
+   "tasks": [
+    "T9.1",
+    "T9.2",
+    "T9.3",
+    "T9.4",
+    "T9.5"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T14:08:24.958Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "051c8fdf64b4c185ed7c2e6a1a0121117c254b50",
+    "apps/web/e2e/qa/pricing-layout.spec.ts": "3596bc82bf1d8b654b15b45e5472ad6c597a75a1",
+    "apps/web/src/components/AppModal.vue": "b769af17f28d087d059d654c6865fbf6fff1dee2",
+    "apps/web/src/components/Landing/FaqSection.test.ts": "046c7722186c7fc24628e703c161fd5e389aa364",
+    "apps/web/src/components/Landing/FaqSection.vue": "1f191ecd6a5337878db6aed00790f018009c2bd8",
+    "apps/web/src/directives/reveal.test.ts": "4a315854e12a5677b6847cd4bd332a1ec2bdb32a",
+    "apps/web/src/directives/reveal.ts": "e52551aac75d9369e88245c259f3fcbfb1a4b307"
+   }
+  },
+  {
+   "at": "2026-11-18T14:08:24.801Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T9.5"
+   ],
+   "fingerprint": "1245637eea06edd708d6963ff1952a7939e71004484ce05b58c377219f805576"
+  },
+  {
+   "at": "2026-11-18T14:08:24.801Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T9.4"
+   ],
+   "fingerprint": "9b9d9735190ab446c3dd3a1522512e62fc50e17b575bff3399aed2a67b4479e8"
+  },
+  {
+   "at": "2026-11-18T14:08:24.801Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T9.3"
+   ],
+   "fingerprint": "2bca24ce90f22f9b478c592b81f5f60b37974838c43659f4439a5f1fd310b087"
+  },
+  {
+   "at": "2026-11-18T14:08:24.509Z",
+   "type": "task_built",
+   "tasks": [
+    "T9.5"
+   ],
+   "text": "gate: playwright 41/41 x2, verify 0 errors, unit 2890 pass",
+   "files": [
+    "agent_docs/ui-polish-picker-header/TASKS.md"
+   ]
+  },
+  {
+   "at": "2026-11-18T14:08:17.642Z",
+   "type": "task_built",
+   "tasks": [
+    "T9.5"
+   ],
+   "text": "playwright 41 passed x2; verify 0 errors; vitest 2890 passed",
+   "files": []
+  },
+  {
+   "at": "2026-11-18T14:05:33.105Z",
+   "type": "task_started",
+   "tasks": [
+    "T9.5"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T14:05:28.735Z",
+   "type": "task_built",
+   "tasks": [
+    "T9.4"
+   ],
+   "text": "e2e: 5/5 new scenarios, 37/37 in file, flake x3 clean",
+   "files": [
+    "apps/web/e2e/qa/pricing-layout.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T13:59:13.719Z",
+   "type": "task_started",
+   "tasks": [
+    "T9.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T13:59:13.371Z",
+   "type": "task_built",
+   "tasks": [
+    "T9.3"
+   ],
+   "text": "unit: lowest file 100% lines, shuffle clean",
+   "files": [
+    "apps/web/src/directives/reveal.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T13:58:00.174Z",
+   "type": "task_started",
+   "tasks": [
+    "T9.3"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T13:57:55.706Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "051c8fdf64b4c185ed7c2e6a1a0121117c254b50",
+    "apps/web/src/components/AppModal.vue": "b769af17f28d087d059d654c6865fbf6fff1dee2",
+    "apps/web/src/components/Landing/FaqSection.vue": "1f191ecd6a5337878db6aed00790f018009c2bd8",
+    "apps/web/src/directives/reveal.ts": "e52551aac75d9369e88245c259f3fcbfb1a4b307"
+   }
+  },
+  {
+   "at": "2026-11-18T13:57:55.508Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T9.2"
+   ],
+   "fingerprint": "02ef906ecf052e5d1f8594d01d0969ec7b240a0b679f0f9abd9b44bb5143f884"
+  },
+  {
+   "at": "2026-11-18T13:57:55.508Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T9.1"
+   ],
+   "fingerprint": "208b1e7c9c8210b19a4f03f3a88148de15cc02e1d862740a9dbf92e75ce16e75"
+  },
+  {
+   "at": "2026-11-18T13:57:45.447Z",
+   "type": "task_built",
+   "tasks": [
+    "T9.2"
+   ],
+   "text": "AppModal provides scroller, FaqSection passes it; FAQ opacity 1 at 1440/390; vitest 90 pass",
+   "files": [
+    "apps/web/src/directives/reveal.ts",
+    "apps/web/src/components/Landing/FaqSection.vue",
+    "apps/web/src/components/AppModal.vue"
+   ]
+  },
+  {
+   "at": "2026-11-18T13:57:45.252Z",
+   "type": "task_built",
+   "tasks": [
+    "T9.1"
+   ],
+   "text": "FAQ repro 1440/390: reveal targets opacity 0; root cause window ScrollTrigger vs modal scroller",
+   "files": [
+    "agent_docs/ui-polish-picker-header/AUDIT.md"
+   ]
+  },
+  {
+   "at": "2026-11-18T13:54:48.437Z",
+   "type": "task_started",
+   "tasks": [
+    "T9.1",
+    "T9.2"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T13:54:48.121Z",
+   "type": "build_started",
+   "tasks": [
+    "T9.1",
+    "T9.2",
+    "T9.3",
+    "T9.4",
+    "T9.5"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T13:54:42.512Z",
+   "type": "run_started",
+   "tasks": [
+    "T9.1",
+    "T9.2",
+    "T9.3",
+    "T9.4",
+    "T9.5"
+   ],
+   "pipeline": 2,
+   "baseline": {
+    "head": "14c226e565e09b933fd27242520f7ae0e9addb23",
+    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000"
+   }
+  },
+  {
+   "at": "2026-11-18T13:28:50.543Z",
+   "type": "commit",
+   "tasks": [
+    "T8.1",
+    "T8.2",
+    "T8.3",
+    "T8.4"
+   ],
+   "attempt": "1",
+   "text": "feat(web): picker bottom sheet below 768",
+   "sha": "14c226e565e09b933fd27242520f7ae0e9addb23",
+   "branch": "feature-enhancement",
+   "pushed": "yes",
+   "evidence": "e2e 157/157, lowest unit coverage 93.33% branches (sheet), 100% lines"
+  },
+  {
    "at": "2026-11-18T13:28:31.725Z",
    "type": "deliverable",
    "tasks": [
@@ -5569,512 +6264,6 @@ window.DASHBOARD = {
     "T8.2"
    ],
    "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T13:02:34.333Z",
-   "type": "build_started",
-   "tasks": [
-    "T8.2",
-    "T8.3",
-    "T8.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T13:02:33.999Z",
-   "type": "task_built",
-   "tasks": [
-    "T8.1"
-   ],
-   "text": "ModelPickerSheet + breakpoint switch; 110 vitest pass; verify 0 errors",
-   "files": [
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T13:02:28.287Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "apps/web/src/components.d.ts": "ecc685c815cdced5f21dcfe722967cec8f203258",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue": "9316d4f471873d30c3b1db01a69cfe2817f07b99",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "8c7f904c408c0e05745695d6d7f06c258212c0f8",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue": "59603215c23f97bec68af795b061ceff90250446"
-   }
-  },
-  {
-   "at": "2026-11-18T13:02:28.144Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T8.1"
-   ],
-   "fingerprint": "4c8a2042a315f2122a496b63d36c358e443ca6596e7efba2f5e8d0ee9a8cd8ea"
-  },
-  {
-   "at": "2026-11-18T13:02:20.550Z",
-   "type": "task_built",
-   "tasks": [
-    "T8.1"
-   ],
-   "text": "ModelPickerSheet + breakpoint switch; vitest ModelPicker 110 pass; verify 0 errors",
-   "files": [
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T13:01:12.353Z",
-   "type": "task_started",
-   "tasks": [
-    "T8.1"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T13:01:12.182Z",
-   "type": "build_started",
-   "tasks": [
-    "T8.1"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T13:01:09.308Z",
-   "type": "run_started",
-   "tasks": [
-    "T8.1",
-    "T8.2",
-    "T8.3",
-    "T8.4"
-   ],
-   "pipeline": 2,
-   "baseline": {
-    "head": "9846c503eaa7ebbc952461f1a205c968f065afd0",
-    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000"
-   }
-  },
-  {
-   "at": "2026-11-18T12:56:38.784Z",
-   "type": "commit",
-   "tasks": [
-    "T7.1",
-    "T7.2",
-    "T7.3",
-    "T7.4",
-    "T7.5",
-    "T7.6"
-   ],
-   "attempt": "2",
-   "text": "feat(web): picker search with keyboard navigation",
-   "sha": "9846c503eaa7ebbc952461f1a205c968f065afd0",
-   "branch": "feature-enhancement",
-   "pushed": "yes",
-   "evidence": "e2e 169/169 (x3), unit 2856 pass, lowest unit coverage 82% lines"
-  },
-  {
-   "at": "2026-11-18T12:56:20.087Z",
-   "type": "deliverable",
-   "tasks": [
-    "T7.1",
-    "T7.2",
-    "T7.3",
-    "T7.4",
-    "T7.5",
-    "T7.6"
-   ],
-   "text": "Picker search with sticky bar, filtering by title/company/bestAt/description, empty state, opt-in Popover keyboard navigation from input, desktop-only autofocus; unit and e2e coverage",
-   "files": [
-    "apps/web/src/utils/models.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T12:56:16.596Z",
-   "tasks": [
-    "T7.4"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "a3 BLOCKING fixed: ModelPicker.test.ts adds matchMedia-false test (search input exists, not focused) and filter -> ArrowDown -> Enter test emitting FLUX_1_1_PRO; ModelPicker.vue branches 62.5% -> 75% (false side of canAutofocusSearch now covered; 48-58 left are template chip branches); Verify run 4 files 45/45 pass, ModelPickerPanel.vue 100/100/100/100, ModelPickerSearch.vue 100/100/100/100, Popov",
-   "fingerprint": "7d95af16c7f1bd67b590cf1b1955b78e308717c2a892792bdacdf314d0af3dca",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-18T12:56:05.836Z",
-   "type": "advisory",
-   "tasks": [
-    "T7.4"
-   ],
-   "text": "T7.4 Verify coverage command exits 1 on global 90% branch threshold (aggregate 87.62%) though each file meets 80%"
-  },
-  {
-   "at": "2026-11-18T12:56:05.678Z",
-   "type": "advisory",
-   "tasks": [
-    "T7.4"
-   ],
-   "text": "ModelPicker.test.ts Enter test uses focused.click() after a no-op dialog keydown; assert tagName BUTTON"
-  },
-  {
-   "at": "2026-11-18T12:54:56.267Z",
-   "type": "verify_started",
-   "tasks": [
-    "T7.4"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T12:54:54.186Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    ".gitignore": "dd11c6efc2670c25746d4020c2b196fa08dd81b8",
-    "agent_docs/ui-polish-picker-header/TASKS.md": "2971ca6d3cab23c18e523273a8540ff9599a1de1",
-    "apps/web/e2e/qa/model-menu.spec.ts": "1a13cc5f8a424f9f8b393bf5ad2b77b28c2b5b68",
-    "apps/web/src/components.d.ts": "47c37ce4f80bddb74b0819c476374b2ecf76f53b",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.test.ts": "5594ab93424035aa57247cc8555ef91bc9c1c52f",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue": "6903896b2ac2a2ff52157ad2e95022d73be25522",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts": "1e4f8475bcad9ffcf858753ef82e8f5785864bd0",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "0ec8ed94daa5c9ab5af7764193fc1d114a70d031",
-    "apps/web/src/components/primitives/Popover.vue": "a9496f003946a1ed16de86af321552f4cc0c046e",
-    "apps/web/src/utils/models.test.ts": "a72b12c33efca840a323d4e327ec6271d201e593",
-    "apps/web/src/utils/models.ts": "4247f7e87a819d5b51ce0e7925f142c3e22f7833",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.test.ts": "8ed423ec268ca955ab8820399a8d63bc5d9bd859",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.vue": "e9e4b6711d3936e88bee2a48df2c145a3700490b",
-    "apps/web/src/components/primitives/Popover.optIn.test.ts": "9c3cc663bfdcf0dd794c2b3d62abc13f805c49d6"
-   }
-  },
-  {
-   "at": "2026-11-18T12:54:54.053Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T7.4"
-   ],
-   "fingerprint": "7d95af16c7f1bd67b590cf1b1955b78e308717c2a892792bdacdf314d0af3dca"
-  },
-  {
-   "at": "2026-11-18T12:54:53.790Z",
-   "type": "task_built",
-   "tasks": [
-    "T7.4"
-   ],
-   "attempt": "2",
-   "text": "unit PASS: media-query-false and filter/ArrowDown/Enter tests added, 123 tests clean",
-   "files": [
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T12:54:16.877Z",
-   "type": "task_started",
-   "tasks": [
-    "T7.4"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T12:54:13.789Z",
-   "tasks": [
-    "T7.6"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod model-menu + pro-tier + create-image + create-transforms --repeat-each=3 (stricter than x2) 169/169 passed; root bun run test 305 files/2854 tests pass; vp lint 0 errors; scoped vp check 0 errors; protected git diff --stat empty",
-   "fingerprint": "a6fa0ecca58931679620f3de205c390deb1f48d5aa072c4d637f6b09e47c977c",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-18T12:54:13.789Z",
-   "tasks": [
-    "T7.5"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod model-menu.spec.ts x3 (inside the 169/169 run, 4.7m), all 5 new search/keyboard scenarios pass 3/3, no flaky; paidCallGuard untouched",
-   "fingerprint": "7aa9e8619327a9af9dfe1d8476cd2bce9b8c8517ab7f3964a8e3489c37583e90",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-18T12:54:13.789Z",
-   "tasks": [
-    "T7.3"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "models.test.ts 46 passed; models.ts 100/100/100/100 (stmts/branch/funcs/lines); 15 new filterModelsBySearch cases cover title, company, bestAt, description, case, trim, blank/spaces-only, no-match, dropped sections/companies, company-name-only; no skip/fails markers",
-   "fingerprint": "8438d7b2b50263a51bb89717aaa43c9b4c0869eb79bfa40fe1e6a64da6873edf",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-18T12:54:13.789Z",
-   "tasks": [
-    "T7.2"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "Popover opt-in navigateOptionsFromInput/autofocusSelector default false/undefined; ArrowDown from input to first option, ArrowUp/Home/End not intercepted in input, buttons skipped; Popover.test.ts git diff empty and passing; protected consumer tests diff empty; prod e2e ArrowDown+Enter selects at 1440 3/3",
-   "fingerprint": "78b3913fa1df6af04a331ec031b123b414017d83a2faca854b1246a9708c4eee",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-18T12:54:13.789Z",
-   "tasks": [
-    "T7.1"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "filterModelsBySearch (trim, case-insensitive, title/company/bestAt/description) + ModelPickerSearch sticky with clear, empty sections removed via v-if, \"No models match\" + echoed query + Clear search, query resets on close (e2e), autofocus gated by (hover: hover) and (pointer: fine) and (min-width: 768px); vitest utils+Dashboard+primitives 56 files/445 tests pass; vp lint 0 errors, vp check apps/w",
-   "fingerprint": "2abe829d12b3eaaff7aaee138334e24037d2a5e95765ae3bf25f8e6574876b92",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-18T12:54:13.788Z",
-   "tasks": [
-    "T7.4"
-   ],
-   "attempt": "1",
-   "type": "verify_failed",
-   "category": "test-quality",
-   "text": "[test-quality] · SPEC Part 1 unit criteria \"autofocus only when the desktop media query matches\" and \"Enter selects after filtering\" · no test stubs matchMedia/useMediaQuery to false: ModelPicker.vue branch coverage 62.5% (false side of canAutofocusSearch uncovered, lines 45-58); ModelPicker.test.ts only asserts the happy-dom desktop case; panel \"selecting a filtered option\" uses click, no Enter k",
-   "files": [
-    "spec part 1 unit criteria \"autofocus only when the desktop m"
-   ],
-   "sigs": [
-    "T7.4|test-quality|spec part 1 unit criteria \"autofocus only when the desktop m"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-7-verifier-a3.md"
-  },
-  {
-   "at": "2026-11-18T12:53:40.332Z",
-   "type": "advisory",
-   "tasks": [
-    "T7.2"
-   ],
-   "text": "Keyboard-focused model option shows no visible focus ring in the 1440 e2e shot (keyboard-first-row-focused.png)"
-  },
-  {
-   "at": "2026-11-18T12:53:40.187Z",
-   "type": "advisory",
-   "tasks": [
-    "T7.6"
-   ],
-   "text": "untracked playwright-transform-cache-502/ is not gitignored and makes repo-wide vp check exit 1 (format); src+e2e scoped vp check exits 0"
-  },
-  {
-   "at": "2026-11-18T12:53:40.032Z",
-   "type": "advisory",
-   "tasks": [
-    "T7.1"
-   ],
-   "text": "Touch/narrow open focuses the first [role=option] (often a Featured row), SPEC req 6 says selected option or panel; input is never focused so no keyboard pops"
-  },
-  {
-   "at": "2026-11-18T12:44:44.251Z",
-   "type": "verify_started",
-   "tasks": [
-    "T7.1",
-    "T7.2",
-    "T7.3",
-    "T7.4",
-    "T7.5",
-    "T7.6"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T12:44:41.244Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/ui-polish-picker-header/TASKS.md": "2971ca6d3cab23c18e523273a8540ff9599a1de1",
-    "apps/web/e2e/qa/model-menu.spec.ts": "1a13cc5f8a424f9f8b393bf5ad2b77b28c2b5b68",
-    "apps/web/src/components.d.ts": "47c37ce4f80bddb74b0819c476374b2ecf76f53b",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.test.ts": "b46eb97fe137472ea0c02c9fd25e47b9bd15d5ff",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue": "6903896b2ac2a2ff52157ad2e95022d73be25522",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts": "1e4f8475bcad9ffcf858753ef82e8f5785864bd0",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "0ec8ed94daa5c9ab5af7764193fc1d114a70d031",
-    "apps/web/src/components/primitives/Popover.vue": "a9496f003946a1ed16de86af321552f4cc0c046e",
-    "apps/web/src/utils/models.test.ts": "a72b12c33efca840a323d4e327ec6271d201e593",
-    "apps/web/src/utils/models.ts": "4247f7e87a819d5b51ce0e7925f142c3e22f7833",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.test.ts": "8ed423ec268ca955ab8820399a8d63bc5d9bd859",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.vue": "e9e4b6711d3936e88bee2a48df2c145a3700490b",
-    "apps/web/src/components/primitives/Popover.optIn.test.ts": "9c3cc663bfdcf0dd794c2b3d62abc13f805c49d6",
-    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
-    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
-    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
-    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
-    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
-    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
-    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
-    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
-    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
-    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
-    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
-    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
-    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
-    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
-    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
-    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
-    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
-    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
-    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
-    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
-    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
-    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
-    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
-    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
-    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
-    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
-    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.js": "01e02583f03c6be8b6c463bf003c3df5b1de6373",
-    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.map": "b542d09ea1db9f3a5ad91eb0f4be0314c62bfa08",
-    "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
-    "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
-    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
-    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
-    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
-    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
-    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
-    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
-    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
-    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
-    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
-    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
-    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
-    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
-    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
-    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
-    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.js": "b590046e70cb6aedf9e7da97ddb189da58a59506",
-    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.map": "0d46d79d810c7c7b6648df14cf718cb06e83a2a0",
-    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
-    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
-    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
-    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
-    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
-    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
-    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.js": "6878d7314683cb3371f2b029d4d0398215876165",
-    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.map": "667f1570d94bb5683f55eb38382883c128a60b1a",
-    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
-    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
-    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
-    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
-    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
-    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
-    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
-    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
-    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.js": "521d6faf8ecbbd8448168797384520ce4c62443c",
-    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.map": "c9ba0d7b3b066fcc3a9b37fe911ee7d80f84e17a",
-    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
-    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
-    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
-    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
-    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.js": "4cd1dfa0f3d2521dcd67689b6f45d1620dd9ea6c",
-    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.map": "42ac2c9a8a58ed2d3de64774aecf298b12b26cba",
-    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
-    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
-    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
-    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
-    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
-    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
-    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
-    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
-    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
-    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
-    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
-    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
-    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
-    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
-   }
-  },
-  {
-   "at": "2026-11-18T12:44:41.116Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T7.6"
-   ],
-   "fingerprint": "a6fa0ecca58931679620f3de205c390deb1f48d5aa072c4d637f6b09e47c977c"
-  },
-  {
-   "at": "2026-11-18T12:44:41.116Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T7.5"
-   ],
-   "fingerprint": "7aa9e8619327a9af9dfe1d8476cd2bce9b8c8517ab7f3964a8e3489c37583e90"
-  },
-  {
-   "at": "2026-11-18T12:44:41.116Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T7.4"
-   ],
-   "fingerprint": "7d95af16c7f1bd67b590cf1b1955b78e308717c2a892792bdacdf314d0af3dca"
-  },
-  {
-   "at": "2026-11-18T12:44:41.116Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T7.3"
-   ],
-   "fingerprint": "8438d7b2b50263a51bb89717aaa43c9b4c0869eb79bfa40fe1e6a64da6873edf"
-  },
-  {
-   "at": "2026-11-18T12:44:30.690Z",
-   "type": "task_built",
-   "tasks": [
-    "T7.6"
-   ],
-   "text": "gate PASS: playwright 113 tests x2, verify 0, unit 1628 pass, protected diff empty"
-  },
-  {
-   "at": "2026-11-18T12:44:17.802Z",
-   "type": "task_built",
-   "tasks": [
-    "T7.6"
-   ],
-   "text": "e2e 113 pass x2, verify ok, 1628 unit pass, consumer diff empty",
-   "files": []
-  },
-  {
-   "at": "2026-11-18T12:39:39.750Z",
-   "type": "task_started",
-   "tasks": [
-    "T7.6"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T12:39:37.612Z",
-   "type": "task_built",
-   "tasks": [
-    "T7.5"
-   ],
-   "text": "e2e PASS: 5/5 scenarios, 46/46 in file, repeat-each=3 clean",
-   "files": [
-    "apps/web/e2e/qa/model-menu.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T12:30:51.606Z",
-   "type": "task_started",
-   "tasks": [
-    "T7.5"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T12:30:49.427Z",
-   "type": "task_built",
-   "tasks": [
-    "T7.4"
-   ],
-   "text": "unit PASS: Panel/Search 100%, Popover 96% lines, 45 tests",
-   "files": [
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.test.ts",
-    "apps/web/src/components/primitives/Popover.optIn.test.ts"
-   ]
   }
  ]
 };

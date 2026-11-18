@@ -410,7 +410,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** The "Before you buy." FAQ in the Upgrade to Pro dialog is visible and expandable instead of stuck invisible.
 **Try in UI:** Open Upgrade to Pro, scroll the dialog to the bottom and see the FAQ heading and questions ; click a question and see the answer expand ; visit /pricing and the landing page and see their reveal animations still run.
 
-### ☐ T9.1 Reproduce and root-cause
+### ✅ T9.1 Reproduce and root-cause
 
 - **Kind:** implementation
 - **Files:** `agent_docs/ui-polish-picker-header/AUDIT.md`
@@ -418,7 +418,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 4a: bug reproduced with screenshots before any fix; root cause stated.
 - **Verify:** `grep -n "FAQ" agent_docs/ui-polish-picker-header/AUDIT.md` (root cause recorded); `ls agent_docs/qa/ui-polish-picker-header | grep -i faq`.
 
-### ☐ T9.2 Fix reveal inside the modal
+### ✅ T9.2 Fix reveal inside the modal
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/directives/reveal.ts`, `apps/web/src/components/Landing/FaqSection.vue`, `apps/web/src/components/Pricing/PricingLayout.vue`, `apps/web/src/components/AppModal.vue`
@@ -426,7 +426,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 4a: FAQ heading and every question visible in the dialog at opacity 1; `/pricing` and landing animations unaffected.
 - **Verify:** `cd apps/web && npx vitest run src/directives src/components/Landing src/components/Pricing`; `bun run verify`.
 
-### ☐ T9.3 Unit: reveal regression
+### ✅ T9.3 Unit: reveal regression
 
 - **Kind:** unit
 - **Files:** `apps/web/src/directives/reveal.ts`, `apps/web/src/components/Landing/FaqSection.vue`, `apps/web/src/components/Pricing/PricingLayout.vue`
@@ -434,7 +434,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 4a unit criterion; every file at least 80% across metrics, target over 95%; no `it.fails`.
 - **Verify:** `cd apps/web && npx vitest run src/directives src/components/Landing/FaqSection.test.ts src/components/Pricing/PricingLayout.test.ts --coverage --coverage.include=src/directives/reveal.ts --coverage.include=src/components/Landing/FaqSection.vue --coverage.include=src/components/Pricing/PricingLayout.vue --coverage.reporter=text`
 
-### ☐ T9.4 E2E: dialog FAQ
+### ✅ T9.4 E2E: dialog FAQ
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` open the Upgrade dialog (mocked prices), scroll the panel to the bottom, "Before you buy." and every question visible with computed opacity 1 and in viewport; `@high` an answer expands on click; `@high` same at 390; `@medium` `/pricing` page FAQ still reveals; `@medium` landing page `v-reveal` sections reach opacity 1 after scrolling (signed out).
@@ -443,7 +443,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 4a e2e criteria pass; `pricing-layout.spec.ts` regression green; no Dodo call (prices mocked).
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/pricing-dialog-faq.spec.ts e2e/qa/pricing-layout.spec.ts --repeat-each=3`
 
-### ☐ T9.5 Gate: Phase 9
+### ✅ T9.5 Gate: Phase 9
 
 - **Kind:** gate
 - **Files:** none
