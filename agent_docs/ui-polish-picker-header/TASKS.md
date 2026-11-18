@@ -370,7 +370,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** On phones the model picker opens as a full-width bottom sheet with a backdrop, focus trap and scroll lock; tablets and desktops keep the anchored popover.
 **Try in UI:** At 390 open the picker and see a bottom sheet ; tap the backdrop or press Escape to close ; at 768 see the anchored popover.
 
-### ☐ T8.1 ModelPickerSheet and breakpoint switch
+### ✅ T8.1 ModelPickerSheet and breakpoint switch
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue`
@@ -378,15 +378,15 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 req 5 and req 10 height budget; same panel component and code path at all widths.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/ModelPicker`; `bun run verify`; `git diff --stat -- apps/web/package.json` (no dependency change).
 
-### ☐ T8.2 Unit: sheet and picker switch
+### ✅ T8.2 Unit: sheet and picker switch
 
 - **Kind:** unit
-- **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue`
+- **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue`, `apps/web/src/test/matchMediaMock.ts`
 - **Do:** Add `ModelPickerSheet.test.ts` and update `ModelPicker.test.ts`: sheet below 768 and popover at or above, backdrop/Escape/select dismiss, focus returns to the trigger, body scroll locked while open and released on close, closes when the breakpoint is crossed while open, reduced motion disables the animation class.
 - **Acceptance:** SPEC Part 1 req 5 unit coverage; every file at least 80% across metrics, target over 95%; no `it.fails`.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/ModelPicker/ModelPickerSheet.test.ts src/components/Dashboard/ModelPicker/ModelPicker.test.ts --coverage --coverage.include=src/components/Dashboard/ModelPicker/ModelPickerSheet.vue --coverage.include=src/components/Dashboard/ModelPicker/ModelPicker.vue --coverage.reporter=text`
 
-### ☐ T8.3 E2E: bottom sheet
+### ✅ T8.3 E2E: bottom sheet
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` at 390 picker opens a sheet with `boundingBox().width === viewport.width`; `@critical` search input not focused on open at 390; `@critical` Escape closes and focus returns to the trigger; `@high` at 360x640 at least 4 option rows visible with sticky chrome; `@high` backdrop tap closes; `@medium` selecting a model closes the sheet; `@medium` at 768 the anchored popover is used.
@@ -395,7 +395,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 e2e criteria for the sheet pass with mocked APIs.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/model-menu.spec.ts --repeat-each=3`
 
-### ☐ T8.4 Gate: Phase 8 with picker screenshots
+### ✅ T8.4 Gate: Phase 8 with picker screenshots
 
 - **Kind:** gate
 - **Files:** none

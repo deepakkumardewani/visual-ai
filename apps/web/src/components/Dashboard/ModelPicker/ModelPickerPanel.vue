@@ -11,6 +11,8 @@ import ModelPickerSearch from '@/components/Dashboard/ModelPicker/ModelPickerSea
 const props = defineProps<{
   models: Model[];
   selectedModel: Model;
+  /** Fill a bottom sheet (full width, flexible height) instead of the fixed-size popover. */
+  sheet?: boolean;
 }>();
 
 defineEmits<{
@@ -40,7 +42,12 @@ const isSelected = (model: Model) =>
     --picker-tier-header-h, so that variable is the search + tier height to clear both bars.
   -->
   <div
-    class="tw-max-h-[min(24rem,60vh)] tw-w-[min(26rem,calc(100vw-2rem))] tw-overflow-y-auto no-scrollbar [--picker-search-h:2.75rem] [--picker-tier-h:1.75rem] [--picker-tier-header-h:calc(var(--picker-search-h)+var(--picker-tier-h))]"
+    :class="
+      sheet
+        ? 'tw-min-h-0 tw-w-full tw-flex-1 tw-px-3'
+        : 'tw-max-h-[min(24rem,60vh)] tw-w-[min(26rem,calc(100vw-2rem))]'
+    "
+    class="tw-overflow-y-auto no-scrollbar [--picker-search-h:2.75rem] [--picker-tier-h:1.75rem] [--picker-tier-header-h:calc(var(--picker-search-h)+var(--picker-tier-h))]"
   >
     <ModelPickerSearch ref="searchRef" v-model="query" />
 

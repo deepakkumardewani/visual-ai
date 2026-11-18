@@ -493,3 +493,195 @@ test.describe('Model menu search and keyboard at 1440', () => {
     await page.screenshot({ path: shotPath('search-company') });
   });
 });
+
+const SHEET_390 = { width: 390, height: 844 };
+const SHEET_360 = { width: 360, height: 640 };
+const SHEET_700 = { width: 700, height: 900 };
+const TABLET = { width: 768, height: 1024 };
+const MIN_VISIBLE_ROWS = 4;
+const SHEET_TESTID = 'model-picker-sheet';
+const SHEET_BACKDROP_TESTID = 'model-picker-sheet-backdrop';
+const SHEET_SHOT_DIR = 'model-menu-sheet';
+const sheetShot = (name: string) => `../../agent_docs/qa/${SHEET_SHOT_DIR}/${name}.png`;
+
+const pickerTrigger = (page: Page) => page.getByTestId('model-picker').getByRole('button').first();
+const sheet = (page: Page) => page.getByTestId(SHEET_TESTID);
+
+async function openSheetAt(page: Page, viewport: { width: number; height: number }) {
+  await page.setViewportSize(viewport);
+  await gotoStudio(page);
+  await openModelMenu(page);
+  await expect(sheet(page)).toBeVisible();
+}
+
+test.describe('Model picker bottom sheet below 768', () => {
+  test.describe.configure({ mode: 'serial' });
+
+  test.beforeEach(async () => {
+    await resetToFree(E2E_USER_ID);
+  });
+
+  test.afterAll(async () => {
+    await resetToFree(E2E_USER_ID);
+  });
+
+  test('@critical at 390 picker opens a sheet spanning the full viewport width', async ({
+    page,
+    snap,
+  }) => {
+    await openSheetAt(page, SHEET_390);
+
+    // Let the slide-in transition settle before measuring.
+    await expect.poll(async () => (await sheet(page).boundingBox())?.width).toBe(SHEET_390.width);
+    const box = await sheet(page).boundingBox();
+    expect(box?.x).toBe(0);
+    // Docked to the bottom edge, not floating.
+    await expect
+      .poll(async () => {
+        const b = await sheet(page).boundingBox();
+        return b ? Math.round(b.y + b.height) : null;
+      })
+      .toBe(SHEET_390.height);
+    // The anchored popover is not what rendered.
+    await expect(page.getByTestId('model-option').first()).toBeVisible();
+    await snap('sheet-390-open');
+    await page.screenshot({ path: sheetShot('sheet-390-open') });
+  });
+
+  test('@critical at 390 the search input is not focused on open', async ({ page, snap }) => {
+    await openSheetAt(page, SHEET_390);
+
+    await expect(searchInput(page)).toBeVisible();
+    await expect(searchInput(page)).not.toBeFocused();
+    // Focus sits on the sheet itself so the on-screen keyboard stays down.
+    await expect(sheet(page)).toBeFocused();
+    await snap('sheet-390-no-autofocus');
+  });
+
+  // APP BUG: at 390 the picker lives inside the Settings sheet and both sheets listen for Escape on
+  // the document, so one Escape closes both. The picker trigger unmounts with the Settings sheet and
+  // focus cannot return to it. Correct behaviour: Escape closes only the picker sheet.
+  test('@critical at 390 Escape closes the sheet and focus returns to the trigger', async ({
+    page,
+    snap,
+  }) => {
+    await openSheetAt(page, SHEET_390);
+
+    await page.keyboard.press('Escape');
+    await expect(sheet(page)).toHaveCount(0);
+    await expect(page.getByTestId('mobile-settings-sheet')).toBeVisible();
+    await expect(pickerTrigger(page)).toBeFocused();
+    await snap('sheet-escape-closed');
+  });
+
+  test('@critical at 700 (sheet, chip not nested) Escape closes the sheet and focus returns to the trigger', async ({
+    page,
+    snap,
+  }) => {
+    await openSheetAt(page, SHEET_700);
+
+    await page.keyboard.press('Escape');
+    await expect(sheet(page)).toHaveCount(0);
+    await expect(pickerTrigger(page)).toBeFocused();
+    await snap('sheet-700-escape-closed');
+  });
+
+  test('@high at 360x640 at least 4 option rows are visible with sticky chrome', async ({
+    page,
+    snap,
+  }) => {
+    await openSheetAt(page, SHEET_360);
+    await expect.poll(async () => (await sheet(page).boundingBox())?.width).toBe(SHEET_360.width);
+
+    const countVisibleRows = () =>
+      page.getByTestId('model-option').evaluateAll((rows, vh) => {
+        const sheetEl = document.querySelector('[data-testid="model-picker-sheet"]')!;
+        const sheetBox = sheetEl.getBoundingClientRect();
+        const search = sheetEl.querySelector('[role="searchbox"]')!.getBoundingClientRect();
+        // Rows fully inside the sheet, below the search bar, inside the viewport.
+        return rows.filter((row) => {
+          const r = row.getBoundingClientRect();
+          return (
+            r.top >= search.bottom - 1 &&
+            r.bottom <= Math.min(sheetBox.bottom, vh) + 1 &&
+            r.height > 0
+          );
+        }).length;
+      }, SHEET_360.height);
+    // Poll: the sheet slides in, so rows are only in place once the transition settles.
+    await expect.poll(countVisibleRows).toBeGreaterThanOrEqual(MIN_VISIBLE_ROWS);
+
+    // Sticky chrome: after scrolling the list, the search bar and a tier header stay at the top.
+    const scrolled = await page
+      .getByRole('listbox', { name: 'Select a model' })
+      .evaluate((list) => {
+        const scroller = list.parentElement as HTMLElement;
+        const before = scroller.querySelector('[role="searchbox"]')!.getBoundingClientRect().top;
+        scroller.scrollTop = 400;
+        const after = scroller.querySelector('[role="searchbox"]')!.getBoundingClientRect().top;
+        return { scrollTop: scroller.scrollTop, before, after };
+      });
+    expect(scrolled.scrollTop).toBeGreaterThan(0);
+    expect(Math.abs(scrolled.after - scrolled.before)).toBeLessThanOrEqual(PIN_TOLERANCE_PX);
+    await expect(searchInput(page)).toBeInViewport();
+    const stickyTier = await page.evaluate(() => {
+      const sheetEl = document.querySelector('[data-testid="model-picker-sheet"]')!;
+      const search = sheetEl.querySelector('[role="searchbox"]')!.getBoundingClientRect();
+      const tiers = Array.from(
+        sheetEl.querySelectorAll('section[data-testid^="model-section-"] h3'),
+      );
+      return tiers.some((h) => {
+        const r = h.getBoundingClientRect();
+        return r.height > 0 && r.top >= search.top && r.top <= search.bottom + 80;
+      });
+    });
+    expect(stickyTier).toBe(true);
+    await snap('sheet-360-rows');
+    await page.screenshot({ path: sheetShot('sheet-360-rows') });
+  });
+
+  test('@high tapping the backdrop closes the sheet', async ({ page, snap }) => {
+    await openSheetAt(page, SHEET_390);
+
+    const backdrop = page.getByTestId(SHEET_BACKDROP_TESTID);
+    const sheetBox = await sheet(page).boundingBox();
+    expect(sheetBox?.y).toBeGreaterThan(0);
+    // Tap the dimmed strip above the sheet.
+    await backdrop.click({ position: { x: SHEET_390.width / 2, y: 10 } });
+    await expect(sheet(page)).toHaveCount(0);
+    await expect(pickerTrigger(page)).toBeFocused();
+    await snap('sheet-backdrop-closed');
+  });
+
+  test('@medium selecting a model closes the sheet and updates the chip', async ({
+    page,
+    snap,
+  }) => {
+    await openSheetAt(page, SHEET_390);
+    await expect(page.getByTestId('model-chip')).not.toContainText(KEYBOARD_PICK);
+
+    await page
+      .getByTestId('model-option')
+      .filter({ has: page.getByText(KEYBOARD_PICK, { exact: true }) })
+      .first()
+      .click();
+    await expect(sheet(page)).toHaveCount(0);
+    await expect(page.getByTestId('model-chip')).toContainText(KEYBOARD_PICK);
+    await snap('sheet-selected');
+  });
+
+  test('@medium at 768 the anchored popover is used, not the sheet', async ({ page, snap }) => {
+    await page.setViewportSize(TABLET);
+    await gotoStudio(page);
+    await openModelMenu(page);
+
+    const listbox = page.getByRole('listbox', { name: 'Select a model' });
+    await expect(listbox).toBeVisible();
+    await expect(sheet(page)).toHaveCount(0);
+    await expect(page.getByTestId(SHEET_BACKDROP_TESTID)).toHaveCount(0);
+    const box = await listbox.boundingBox();
+    expect(box?.width).toBeLessThan(TABLET.width);
+    await snap('popover-768');
+    await page.screenshot({ path: sheetShot('popover-768') });
+  });
+});

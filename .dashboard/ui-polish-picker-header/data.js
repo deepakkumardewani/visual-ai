@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-18T12:56:20.108Z",
+ "generatedAt": "2026-11-18T13:28:31.747Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -29,20 +29,20 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
- "costUsd": 26.9798,
- "elapsedMs": 178115710,
+ "costUsd": 29.2584,
+ "elapsedMs": 179750843,
  "costByRole": {
-  "builder": 6.3279,
-  "verifier": 15.6297,
-  "unit": 2.4983,
-  "e2e": 2.524
+  "builder": 6.9154,
+  "verifier": 16.6739,
+  "unit": 2.8642,
+  "e2e": 2.8049
  },
  "totals": {
   "phases": 14,
   "tasks": 61,
   "byStatus": {
-   "verified": 37,
-   "ready": 24
+   "verified": 41,
+   "ready": 20
   }
  },
  "phases": [
@@ -1870,7 +1870,7 @@ window.DASHBOARD = {
      "line": 317,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:56:20.087Z",
+     "updatedAt": "2026-11-18T12:56:38.784Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1919,7 +1919,7 @@ window.DASHBOARD = {
      "line": 325,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:56:20.087Z",
+     "updatedAt": "2026-11-18T12:56:38.784Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1964,7 +1964,7 @@ window.DASHBOARD = {
      "line": 333,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:56:20.087Z",
+     "updatedAt": "2026-11-18T12:56:38.784Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2013,7 +2013,7 @@ window.DASHBOARD = {
      "line": 341,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:56:20.087Z",
+     "updatedAt": "2026-11-18T12:56:38.784Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2063,7 +2063,7 @@ window.DASHBOARD = {
      "line": 349,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:56:20.087Z",
+     "updatedAt": "2026-11-18T12:56:38.784Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2109,7 +2109,7 @@ window.DASHBOARD = {
      "line": 358,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T12:56:20.087Z",
+     "updatedAt": "2026-11-18T12:56:38.784Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2161,7 +2161,7 @@ window.DASHBOARD = {
     {
      "id": "T8.1",
      "title": "ModelPickerSheet and breakpoint switch",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -2183,28 +2183,37 @@ window.DASHBOARD = {
      ],
      "line": 373,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T13:28:31.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4962,
+     "costApprox": true,
+     "elapsedMs": 1635132,
      "summary": []
     },
     {
      "id": "T8.2",
      "title": "Unit: sheet and picker switch",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
       "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue",
-      "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue"
+      "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue",
+      "apps/web/src/test/matchMediaMock.ts"
      ],
      "gherkin": null,
      "do": "Add `ModelPickerSheet.test.ts` and update `ModelPicker.test.ts`: sheet below 768 and popover at or above, backdrop/Escape/select dismiss, focus returns to the trigger, body scroll locked while open and released on close, closes when the breakpoint is crossed while open, reduced motion disables the animation class.",
@@ -2218,23 +2227,31 @@ window.DASHBOARD = {
      ],
      "line": 381,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T13:28:31.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.627,
+     "costApprox": true,
+     "elapsedMs": 1552930,
      "summary": []
     },
     {
      "id": "T8.3",
      "title": "E2E: bottom sheet",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [],
      "files": [],
@@ -2250,23 +2267,31 @@ window.DASHBOARD = {
      ],
      "line": 389,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T13:28:31.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5419,
+     "costApprox": true,
+     "elapsedMs": 1409116,
      "summary": []
     },
     {
      "id": "T8.4",
      "title": "Gate: Phase 8 with picker screenshots",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -2285,25 +2310,33 @@ window.DASHBOARD = {
      ],
      "line": 398,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T13:28:31.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6134,
+     "costApprox": true,
+     "elapsedMs": 1179344,
      "summary": []
     }
    ],
-   "verified": 0,
+   "verified": 4,
    "total": 4,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 2.2785,
+   "elapsedMs": 1635133
   },
   {
    "id": "9",
@@ -3134,7 +3167,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 8",
+ "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 9",
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -3229,6 +3262,34 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-18T12:56:38.784Z",
+   "ok": true,
+   "phase": "7",
+   "tasks": [
+    "T7.1",
+    "T7.2",
+    "T7.3",
+    "T7.4",
+    "T7.5",
+    "T7.6"
+   ],
+   "attempt": "2",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 169/169 (x3), unit 2856 pass, lowest unit coverage 82% lines",
+   "error": null,
+   "sha": "9846c503eaa7ebbc952461f1a205c968f065afd0",
+   "shortSha": "9846c50",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/9846c503eaa7ebbc952461f1a205c968f065afd0",
+   "subject": "feat(web): picker search with keyboard navigation",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-18T18:26:30+05:30",
+   "filesChanged": 16,
+   "added": 1769,
+   "removed": 648
+  },
   {
    "at": "2026-11-18T12:20:53.134Z",
    "ok": true,
@@ -4678,9 +4739,135 @@ window.DASHBOARD = {
    "file": "7/T7.5-4.png",
    "phase": "7",
    "href": "shots/7/T7.5-4.png"
+  },
+  {
+   "taskId": "T8.1",
+   "kind": "proof",
+   "step": "SPEC Part 1 req 5: <768 full-width bottom sheet with backdrop",
+   "attempt": 1,
+   "caption": "At 390 the picker opens as a full-width bottom sheet docked to the bottom edge, with the dimmed backdrop above it",
+   "annotations": [
+    {
+     "x": 0,
+     "y": 15,
+     "w": 100,
+     "h": 85,
+     "label": "Full-width sheet docked to the bottom"
+    },
+    {
+     "x": 0,
+     "y": 11,
+     "w": 100,
+     "h": 4,
+     "label": "Dimmed backdrop strip (tap closes)"
+    }
+   ],
+   "at": "2026-11-18T13:27:47.239Z",
+   "file": "8/T8.1-1.png",
+   "phase": "8",
+   "href": "shots/8/T8.1-1.png"
+  },
+  {
+   "taskId": "T8.1",
+   "kind": "proof",
+   "step": "SPEC Part 1 req 10: >=4 rows under sticky chrome at 360x640",
+   "attempt": 1,
+   "caption": "At 360x640 search, Free tier header and Black Forest Labs company header stay pinned and at least 4 option rows remain visible",
+   "annotations": [
+    {
+     "x": 3,
+     "y": 16,
+     "w": 94,
+     "h": 17,
+     "label": "Sticky search + tier + company chrome"
+    },
+    {
+     "x": 3,
+     "y": 34,
+     "w": 94,
+     "h": 35,
+     "label": "Four or more visible option rows"
+    }
+   ],
+   "at": "2026-11-18T13:27:47.597Z",
+   "file": "8/T8.1-2.png",
+   "phase": "8",
+   "href": "shots/8/T8.1-2.png"
+  },
+  {
+   "taskId": "T8.1",
+   "kind": "proof",
+   "step": "SPEC Part 1 req 5: >=768 keeps the anchored Popover",
+   "attempt": 1,
+   "caption": "At 768 the anchored popover is used under the Model trigger, not the sheet",
+   "annotations": [
+    {
+     "x": 2,
+     "y": 20,
+     "w": 56,
+     "h": 40,
+     "label": "Anchored popover below the trigger"
+    }
+   ],
+   "at": "2026-11-18T13:27:47.997Z",
+   "file": "8/T8.1-3.png",
+   "phase": "8",
+   "href": "shots/8/T8.1-3.png"
+  },
+  {
+   "taskId": "T8.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Picker bottom sheet at 390 spans the full width",
+   "annotations": [],
+   "at": "2026-11-18T13:08:41.413Z",
+   "file": "8/T8.3-1.png",
+   "phase": "8",
+   "href": "shots/8/T8.3-1.png"
+  },
+  {
+   "taskId": "T8.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Sheet at 360x640 with 4+ rows and sticky search",
+   "annotations": [],
+   "at": "2026-11-18T13:08:41.608Z",
+   "file": "8/T8.3-2.png",
+   "phase": "8",
+   "href": "shots/8/T8.3-2.png"
+  },
+  {
+   "taskId": "T8.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "At 768 the anchored popover is used",
+   "annotations": [],
+   "at": "2026-11-18T13:08:41.768Z",
+   "file": "8/T8.3-3.png",
+   "phase": "8",
+   "href": "shots/8/T8.3-3.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-18T13:28:31.725Z",
+   "type": "deliverable",
+   "tasks": [
+    "T8.1",
+    "T8.2",
+    "T8.3",
+    "T8.4"
+   ],
+   "text": "Bottom sheet below 768: ModelPickerSheet, breakpoint switch, unit + e2e coverage, nested Escape fix",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
+   ]
+  },
   {
    "at": "2026-11-18T12:56:20.087Z",
    "type": "deliverable",
@@ -4801,6 +4988,30 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-18T13:27:58.525Z",
+   "type": "advisory",
+   "tasks": [
+    "T8.2"
+   ],
+   "text": "Capture-phase Escape fix (only topmost sheet closes when nested in Settings sheet) has no unit test; covered by e2e only"
+  },
+  {
+   "at": "2026-11-18T13:27:58.360Z",
+   "type": "advisory",
+   "tasks": [
+    "T8.2"
+   ],
+   "text": "New lint warning eslint(no-unsafe-optional-chaining) at ModelPicker.test.ts:322 (emitted()?.[0]?.[0] cast then .id)"
+  },
+  {
+   "at": "2026-11-18T13:27:58.178Z",
+   "type": "advisory",
+   "tasks": [
+    "T8.1"
+   ],
+   "text": "Sheet does not use Popover navigate-options-from-input: ArrowUp/Down/Home/End option nav (SPEC Part 1 req 7, popover and sheet alike) is popover-only; builder DECISION, port to sheet"
+  },
   {
    "at": "2026-11-18T12:56:05.836Z",
    "type": "advisory",
@@ -5147,6 +5358,322 @@ window.DASHBOARD = {
   }
  ],
  "activity": [
+  {
+   "at": "2026-11-18T13:28:31.725Z",
+   "type": "deliverable",
+   "tasks": [
+    "T8.1",
+    "T8.2",
+    "T8.3",
+    "T8.4"
+   ],
+   "text": "Bottom sheet below 768: ModelPickerSheet, breakpoint switch, unit + e2e coverage, nested Escape fix",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
+   ]
+  },
+  {
+   "at": "2026-11-18T13:28:27.486Z",
+   "tasks": [
+    "T8.4"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "prod model-menu + pro-tier + create-image --repeat-each=3: 157/157; bun run verify (apps/web and root) 0 errors; bun run test apps/web 222 files 1655 tests, root 306 files 2881 tests; 20 picker-* screenshots present",
+   "fingerprint": "b5a8336bd5c7c4595b4f50bdad9168c8f9e4ada88b2bae2f21d1253df387feda",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a5.md"
+  },
+  {
+   "at": "2026-11-18T13:28:27.486Z",
+   "tasks": [
+    "T8.3"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "E2E_SERVER=prod model-menu.spec.ts x3 all green (part of 157/157), 9 sheet scenarios incl. 390 nested Escape (Settings sheet stays, focus on trigger), no test.fail/skip, retries 0",
+   "fingerprint": "fe1f062878bcd70481d75709028835e1f9bab870b0d0b791c5a83029ae3d1387",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a5.md"
+  },
+  {
+   "at": "2026-11-18T13:28:27.486Z",
+   "tasks": [
+    "T8.2"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "33/33 tests; coverage ModelPicker.vue 100/100/100/100, ModelPickerSheet.vue stmts 100 branch 93.33 funcs 100 lines 100 (only the SSR typeof document guard uncovered); no it.fails/skip; assertions real (scroll lock, focus restore, breakpoint crossing both ways, reduced motion)",
+   "fingerprint": "1e25afe040914f6bcb20878860220629b2d43143f19a4d4ff0ba8ca6e985b059",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a5.md"
+  },
+  {
+   "at": "2026-11-18T13:28:27.485Z",
+   "tasks": [
+    "T8.1"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "vitest src/components/Dashboard/ModelPicker 12 files 135/135; bun run verify 0 errors; package.json diff empty (no new dep); source has 85dvh, safe-area padding, useScrollLock, useFocusTrap, focus restore, reduced-motion :css off; e2e prod sheet 390 full width x=0, 360x640 >=4 rows with sticky chrome, popover at 768; proof shots 8/T8.1-1..3",
+   "fingerprint": "990381aef9b43dc25b90fcff1e2e96630348df12721014c0086dd8e8823702b4",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a5.md"
+  },
+  {
+   "at": "2026-11-18T13:27:58.525Z",
+   "type": "advisory",
+   "tasks": [
+    "T8.2"
+   ],
+   "text": "Capture-phase Escape fix (only topmost sheet closes when nested in Settings sheet) has no unit test; covered by e2e only"
+  },
+  {
+   "at": "2026-11-18T13:27:58.360Z",
+   "type": "advisory",
+   "tasks": [
+    "T8.2"
+   ],
+   "text": "New lint warning eslint(no-unsafe-optional-chaining) at ModelPicker.test.ts:322 (emitted()?.[0]?.[0] cast then .id)"
+  },
+  {
+   "at": "2026-11-18T13:27:58.178Z",
+   "type": "advisory",
+   "tasks": [
+    "T8.1"
+   ],
+   "text": "Sheet does not use Popover navigate-options-from-input: ArrowUp/Down/Home/End option nav (SPEC Part 1 req 7, popover and sheet alike) is popover-only; builder DECISION, port to sheet"
+  },
+  {
+   "at": "2026-11-18T13:19:40.883Z",
+   "type": "verify_started",
+   "tasks": [
+    "T8.1",
+    "T8.2",
+    "T8.3",
+    "T8.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T13:19:38.594Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/TASKS.md": "81fa50f002b5876132de3447adee3d73a748a920",
+    "apps/web/e2e/qa/model-menu.spec.ts": "cb2f7183dcb24d386fb7e1ca73cc3a250dd4d198",
+    "apps/web/src/components.d.ts": "ecc685c815cdced5f21dcfe722967cec8f203258",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.test.ts": "365c14ea8ff86685513ec3c43d4b5f562686901b",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue": "9316d4f471873d30c3b1db01a69cfe2817f07b99",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "8c7f904c408c0e05745695d6d7f06c258212c0f8",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.test.ts": "7875b28efa23af869e7ea79b49c1330d5c24663b",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue": "0430bef8544c42f40320e559cc10c9f457960284",
+    "apps/web/src/test/matchMediaMock.ts": "62c311f49ddfccf2c0cb0f199d3f6c2218d1b0f3"
+   }
+  },
+  {
+   "at": "2026-11-18T13:19:38.448Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T8.4"
+   ],
+   "fingerprint": "b5a8336bd5c7c4595b4f50bdad9168c8f9e4ada88b2bae2f21d1253df387feda"
+  },
+  {
+   "at": "2026-11-18T13:19:38.448Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T8.3"
+   ],
+   "fingerprint": "fe1f062878bcd70481d75709028835e1f9bab870b0d0b791c5a83029ae3d1387"
+  },
+  {
+   "at": "2026-11-18T13:19:38.448Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T8.2"
+   ],
+   "fingerprint": "1e25afe040914f6bcb20878860220629b2d43143f19a4d4ff0ba8ca6e985b059"
+  },
+  {
+   "at": "2026-11-18T13:19:38.448Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T8.1"
+   ],
+   "fingerprint": "990381aef9b43dc25b90fcff1e2e96630348df12721014c0086dd8e8823702b4"
+  },
+  {
+   "at": "2026-11-18T13:19:29.321Z",
+   "type": "task_built",
+   "tasks": [
+    "T8.4"
+   ],
+   "text": "e2e 105 pass, verify 0, unit 2881 pass; Escape fix in sheet",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue",
+    "apps/web/e2e/qa/model-menu.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T13:19:08.825Z",
+   "type": "task_built",
+   "tasks": [
+    "T8.4"
+   ],
+   "text": "Playwright 105 pass x2; verify ok; test 2881 pass; 20 picker shots; fixed nested Escape",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue"
+   ]
+  },
+  {
+   "at": "2026-11-18T13:08:48.142Z",
+   "type": "task_started",
+   "tasks": [
+    "T8.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T13:08:47.975Z",
+   "type": "task_built",
+   "tasks": [
+    "T8.3"
+   ],
+   "text": "8/8 scenarios, flake x3 clean; 1 app bug (Escape at 390 closes nested picker and Settings sheet, test.fail)",
+   "files": [
+    "apps/web/e2e/qa/model-menu.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T13:04:58.370Z",
+   "type": "task_started",
+   "tasks": [
+    "T8.3"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T13:04:58.112Z",
+   "type": "task_built",
+   "tasks": [
+    "T8.2"
+   ],
+   "text": "lowest file 100% lines, sheet branches 92.3%, shuffle clean",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue"
+   ]
+  },
+  {
+   "at": "2026-11-18T13:02:34.556Z",
+   "type": "task_started",
+   "tasks": [
+    "T8.2"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T13:02:34.333Z",
+   "type": "build_started",
+   "tasks": [
+    "T8.2",
+    "T8.3",
+    "T8.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T13:02:33.999Z",
+   "type": "task_built",
+   "tasks": [
+    "T8.1"
+   ],
+   "text": "ModelPickerSheet + breakpoint switch; 110 vitest pass; verify 0 errors",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
+   ]
+  },
+  {
+   "at": "2026-11-18T13:02:28.287Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "apps/web/src/components.d.ts": "ecc685c815cdced5f21dcfe722967cec8f203258",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue": "9316d4f471873d30c3b1db01a69cfe2817f07b99",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "8c7f904c408c0e05745695d6d7f06c258212c0f8",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue": "59603215c23f97bec68af795b061ceff90250446"
+   }
+  },
+  {
+   "at": "2026-11-18T13:02:28.144Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T8.1"
+   ],
+   "fingerprint": "4c8a2042a315f2122a496b63d36c358e443ca6596e7efba2f5e8d0ee9a8cd8ea"
+  },
+  {
+   "at": "2026-11-18T13:02:20.550Z",
+   "type": "task_built",
+   "tasks": [
+    "T8.1"
+   ],
+   "text": "ModelPickerSheet + breakpoint switch; vitest ModelPicker 110 pass; verify 0 errors",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
+   ]
+  },
+  {
+   "at": "2026-11-18T13:01:12.353Z",
+   "type": "task_started",
+   "tasks": [
+    "T8.1"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T13:01:12.182Z",
+   "type": "build_started",
+   "tasks": [
+    "T8.1"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T13:01:09.308Z",
+   "type": "run_started",
+   "tasks": [
+    "T8.1",
+    "T8.2",
+    "T8.3",
+    "T8.4"
+   ],
+   "pipeline": 2,
+   "baseline": {
+    "head": "9846c503eaa7ebbc952461f1a205c968f065afd0",
+    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000"
+   }
+  },
+  {
+   "at": "2026-11-18T12:56:38.784Z",
+   "type": "commit",
+   "tasks": [
+    "T7.1",
+    "T7.2",
+    "T7.3",
+    "T7.4",
+    "T7.5",
+    "T7.6"
+   ],
+   "attempt": "2",
+   "text": "feat(web): picker search with keyboard navigation",
+   "sha": "9846c503eaa7ebbc952461f1a205c968f065afd0",
+   "branch": "feature-enhancement",
+   "pushed": "yes",
+   "evidence": "e2e 169/169 (x3), unit 2856 pass, lowest unit coverage 82% lines"
+  },
   {
    "at": "2026-11-18T12:56:20.087Z",
    "type": "deliverable",
@@ -5548,690 +6075,6 @@ window.DASHBOARD = {
     "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.test.ts",
     "apps/web/src/components/primitives/Popover.optIn.test.ts"
    ]
-  },
-  {
-   "at": "2026-11-18T12:30:07.213Z",
-   "type": "task_built",
-   "tasks": [
-    "T7.3"
-   ],
-   "text": "unit PASS: models.ts 100% lines, 46 tests, shuffle clean",
-   "files": [
-    "apps/web/src/utils/models.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T12:29:34.311Z",
-   "type": "task_started",
-   "tasks": [
-    "T7.3",
-    "T7.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T12:29:27.116Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "apps/web/src/components.d.ts": "47c37ce4f80bddb74b0819c476374b2ecf76f53b",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.test.ts": "b46eb97fe137472ea0c02c9fd25e47b9bd15d5ff",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue": "6903896b2ac2a2ff52157ad2e95022d73be25522",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "0ec8ed94daa5c9ab5af7764193fc1d114a70d031",
-    "apps/web/src/components/primitives/Popover.vue": "a9496f003946a1ed16de86af321552f4cc0c046e",
-    "apps/web/src/utils/models.ts": "4247f7e87a819d5b51ce0e7925f142c3e22f7833",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.vue": "e9e4b6711d3936e88bee2a48df2c145a3700490b",
-    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
-    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
-    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
-    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
-    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
-    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
-    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
-    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
-    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
-    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
-    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
-    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
-    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
-    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
-    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
-    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
-    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
-    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
-    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
-    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
-    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
-    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
-    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
-    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
-    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
-    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
-    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.js": "01e02583f03c6be8b6c463bf003c3df5b1de6373",
-    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.map": "b542d09ea1db9f3a5ad91eb0f4be0314c62bfa08",
-    "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
-    "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
-    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
-    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
-    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
-    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
-    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
-    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
-    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
-    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
-    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
-    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
-    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
-    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
-    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
-    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
-    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.js": "b590046e70cb6aedf9e7da97ddb189da58a59506",
-    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.map": "0d46d79d810c7c7b6648df14cf718cb06e83a2a0",
-    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
-    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
-    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
-    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
-    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
-    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
-    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.js": "6878d7314683cb3371f2b029d4d0398215876165",
-    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.map": "667f1570d94bb5683f55eb38382883c128a60b1a",
-    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
-    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
-    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
-    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
-    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
-    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
-    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
-    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
-    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.js": "521d6faf8ecbbd8448168797384520ce4c62443c",
-    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.map": "c9ba0d7b3b066fcc3a9b37fe911ee7d80f84e17a",
-    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
-    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
-    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
-    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
-    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.js": "4cd1dfa0f3d2521dcd67689b6f45d1620dd9ea6c",
-    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.map": "42ac2c9a8a58ed2d3de64774aecf298b12b26cba",
-    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
-    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
-    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
-    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
-    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
-    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
-    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
-    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
-    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
-    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
-    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
-    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
-    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
-    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
-   }
-  },
-  {
-   "at": "2026-11-18T12:29:26.983Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T7.2"
-   ],
-   "fingerprint": "78b3913fa1df6af04a331ec031b123b414017d83a2faca854b1246a9708c4eee"
-  },
-  {
-   "at": "2026-11-18T12:29:26.983Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T7.1"
-   ],
-   "fingerprint": "2abe829d12b3eaaff7aaee138334e24037d2a5e95765ae3bf25f8e6574876b92"
-  },
-  {
-   "at": "2026-11-18T12:29:04.035Z",
-   "type": "task_built",
-   "tasks": [
-    "T7.2"
-   ],
-   "text": "opt-in Popover props wired; Popover.test.ts unchanged",
-   "files": [
-    "apps/web/src/components/primitives/Popover.vue",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T12:29:03.854Z",
-   "type": "task_built",
-   "tasks": [
-    "T7.1"
-   ],
-   "text": "search helper+ModelPickerSearch+panel empty state; vitest green",
-   "files": [
-    "apps/web/src/utils/models.ts",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSearch.vue",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T12:26:30.492Z",
-   "type": "task_started",
-   "tasks": [
-    "T7.1",
-    "T7.2"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T12:26:30.332Z",
-   "type": "build_started",
-   "tasks": [
-    "T7.1",
-    "T7.2",
-    "T7.3",
-    "T7.4",
-    "T7.5",
-    "T7.6"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T12:26:26.595Z",
-   "type": "run_started",
-   "tasks": [
-    "T7.1",
-    "T7.2",
-    "T7.3",
-    "T7.4",
-    "T7.5",
-    "T7.6"
-   ],
-   "pipeline": 2,
-   "baseline": {
-    "head": "4f9798a4309150edf65c461a9f1be11a8acf30f4",
-    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000?? playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js\u0000?? playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map\u0000?? playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js\u0000?? playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map\u0000?? playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js\u0000?? playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map\u0000?? playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js\u0000?? playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map\u0000?? playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js\u0000?? playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map\u0000?? playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js\u0000?? playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map\u0000?? playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js\u0000?? playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map\u0000?? playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js\u0000?? playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map\u0000?? playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js\u0000?? playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map\u0000?? playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js\u0000?? playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map\u0000?? playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js\u0000?? playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map\u0000?? playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js\u0000?? playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map\u0000?? playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js\u0000?? playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map\u0000?? playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.js\u0000?? playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.map\u0000?? playwright-transform-cache-502/59/591cda456e_098774c_collections.js\u0000?? playwright-transform-cache-502/59/591cda456e_098774c_collections.map\u0000?? playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js\u0000?? playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map\u0000?? playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js\u0000?? playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map\u0000?? playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js\u0000?? playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map\u0000?? playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js\u0000?? playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map\u0000?? playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js\u0000?? playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map\u0000?? playwright-transform-cache-502/93/932854853d_d2b8c99_index.js\u0000?? playwright-transform-cache-502/93/932854853d_d2b8c99_index.map\u0000?? playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js\u0000?? playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map\u0000?? playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.js\u0000?? playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.map\u0000?? playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js\u0000?? playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map\u0000?? playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js\u0000?? playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map\u0000?? playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js\u0000?? playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map\u0000?? playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.js\u0000?? playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.map\u0000?? playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js\u0000?? playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map\u0000?? playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js\u0000?? playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map\u0000?? playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js\u0000?? playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map\u0000?? playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js\u0000?? playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map\u0000?? playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.js\u0000?? playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.map\u0000?? playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js\u0000?? playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map\u0000?? playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js\u0000?? playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map\u0000?? playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.js\u0000?? playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.map\u0000?? playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js\u0000?? playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map\u0000?? playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js\u0000?? playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map\u0000?? playwright-transform-cache-502/f0/f025738821_5a62be4_index.js\u0000?? playwright-transform-cache-502/f0/f025738821_5a62be4_index.map\u0000?? playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js\u0000?? playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map\u0000?? playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js\u0000?? playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map\u0000?? playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js\u0000?? playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map\u0000?? playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js\u0000?? playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map\u0000",
-    "hashes": {
-     "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
-     "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
-     "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
-     "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
-     "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
-     "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
-     "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
-     "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
-     "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
-     "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
-     "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
-     "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
-     "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
-     "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
-     "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
-     "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
-     "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
-     "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
-     "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
-     "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
-     "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
-     "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
-     "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
-     "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
-     "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
-     "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
-     "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.js": "01e02583f03c6be8b6c463bf003c3df5b1de6373",
-     "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.map": "b542d09ea1db9f3a5ad91eb0f4be0314c62bfa08",
-     "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
-     "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
-     "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
-     "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
-     "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
-     "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
-     "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
-     "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
-     "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
-     "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
-     "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
-     "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
-     "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
-     "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
-     "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
-     "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
-     "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.js": "b590046e70cb6aedf9e7da97ddb189da58a59506",
-     "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.map": "0d46d79d810c7c7b6648df14cf718cb06e83a2a0",
-     "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
-     "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
-     "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
-     "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
-     "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
-     "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
-     "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.js": "6878d7314683cb3371f2b029d4d0398215876165",
-     "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.map": "667f1570d94bb5683f55eb38382883c128a60b1a",
-     "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
-     "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
-     "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
-     "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
-     "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
-     "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
-     "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
-     "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
-     "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.js": "521d6faf8ecbbd8448168797384520ce4c62443c",
-     "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.map": "c9ba0d7b3b066fcc3a9b37fe911ee7d80f84e17a",
-     "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
-     "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
-     "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
-     "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
-     "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.js": "4cd1dfa0f3d2521dcd67689b6f45d1620dd9ea6c",
-     "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.map": "42ac2c9a8a58ed2d3de64774aecf298b12b26cba",
-     "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
-     "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
-     "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
-     "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
-     "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
-     "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
-     "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
-     "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
-     "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
-     "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
-     "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
-     "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
-     "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
-     "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
-    }
-   }
-  },
-  {
-   "at": "2026-11-18T12:20:53.134Z",
-   "type": "commit",
-   "tasks": [
-    "T6.1",
-    "T6.2",
-    "T6.3",
-    "T6.4",
-    "T6.5",
-    "T6.6",
-    "T6.7",
-    "T6.8"
-   ],
-   "attempt": "2",
-   "text": "feat(web): picker grouped by company with pinned company headers",
-   "sha": "4f9798a4309150edf65c461a9f1be11a8acf30f4",
-   "branch": "feature-enhancement",
-   "pushed": "yes",
-   "evidence": "e2e 154/154 prod x3, unit 100% cov on picker files, 2813 tests"
-  },
-  {
-   "at": "2026-11-18T12:20:36.024Z",
-   "type": "deliverable",
-   "tasks": [
-    "T6.1",
-    "T6.2",
-    "T6.3",
-    "T6.4",
-    "T6.5",
-    "T6.6",
-    "T6.7",
-    "T6.8"
-   ],
-   "text": "Picker grouping by company, pinned company headers, name/description row fix, design pass, unit+e2e tests",
-   "files": [
-    "apps/web/src/utils/models.ts",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T12:20:32.726Z",
-   "tasks": [
-    "T6.8"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod model-menu + pro-tier + create-image + create-transforms at --repeat-each=3 (stricter than the x2 gate) 154/154 passed in 3.1m, no flaky; vp lint/check 0 errors; bun run test exit 0, 303 files / 2813 tests; design pass done (T6.4) and picker e2e scenarios present (T6.7); no test weakened (no skip/fails markers)",
-   "fingerprint": "2e0c4b4be047263594c7707acb4e9db98e4bbd5c9859a1f722eb2bd71cf91870",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a2.md"
-  },
-  {
-   "at": "2026-11-18T12:20:32.726Z",
-   "tasks": [
-    "T6.7"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "model-menu.spec.ts gained a 1440x900 describe with @critical company headers (Featured 0 headers, Free/Pro headers non-empty, logo visible, alphabetical), @high pinned header (scroll second company 12px past top, asserts it sits at tier-height offset, not the first company), @medium name/description gap >= 4px; model-menu + pro-tier ran x3 in the prod run, all green, 0 flaky; shared DESKTOP 1280 c",
-   "fingerprint": "88be0a922cab82f194a8e5b9a4e8300e5636551db01b6de16ba822ee5205b5e9",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a2.md"
-  },
-  {
-   "at": "2026-11-18T12:20:32.726Z",
-   "tasks": [
-    "T6.6"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "T6.6 coverage command 3 files 56/56, ModelCompanyHeader/ModelOption/ModelPickerPanel 100% stmts/branches/funcs/lines; new test asserts tw-gap-2 on model-option-label plus separate name/description elements (ModelOption.test.ts:84-91); no it.fails/skip/only",
-   "fingerprint": "7d09d08a64b5012a0b6085786865789bfa1417446cb461ff198d4c3aab0c9039",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a2.md"
-  },
-  {
-   "at": "2026-11-18T12:20:32.726Z",
-   "tasks": [
-    "T6.4"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "AUDIT.md picker design-pass rows 8, open 0; false T6.7 deferral row removed; 4 new live rows (separation, row under pinned header, contrast, search offset) with resolutions; live 1440 dark (6/T6.4-1) and light (6/T6.4-2) shots confirmed showing pinned Free tier header with hairline and company headers; fix confined to ModelPickerPanel.vue (picker file, declared EXTRA)",
-   "fingerprint": "e84793d675828e2f9033eef9ac6a71ce63b95931040f2d2d9e2c469aadcebacf",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a2.md"
-  },
-  {
-   "at": "2026-11-18T12:20:32.726Z",
-   "tasks": [
-    "T6.2"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "ModelPicker dir vitest 10 files 96/96; vp lint + vp check 0 errors (56 warnings); hairline diff uses valid semantic token tw-border-hairline (42 other uses), h3 height stays var(--picker-tier-header-h) and company header top reads the same var; e2e pinned scenario (company header top = listbox top + measured tier height incl. border, tol 1.5px) green 3/3 prod; T6.4 shots show hairline with sticky ",
-   "fingerprint": "d38870f3a5cfc3461212c61c2140ae0c2b1837b077b59763b3086c0f8efde2e1",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a2.md"
-  },
-  {
-   "at": "2026-11-18T12:15:51.193Z",
-   "type": "verify_started",
-   "tasks": [
-    "T6.2",
-    "T6.4",
-    "T6.6",
-    "T6.7",
-    "T6.8"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T12:15:49.072Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.2"
-   ],
-   "fingerprint": "d38870f3a5cfc3461212c61c2140ae0c2b1837b077b59763b3086c0f8efde2e1"
-  },
-  {
-   "at": "2026-11-18T12:15:46.282Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "304c53f9c1dd6b0df372c9e22a830f94d00c7624",
-    "apps/web/e2e/qa/model-menu.spec.ts": "6b6bf4164dfd4d32f54db8283eb9911814487483",
-    "apps/web/e2e/qa/pro-tier.spec.ts": "e76102e25dd207c23147d1d77fb64f4f7819728b",
-    "apps/web/src/components.d.ts": "c677463a974994f5d78a28652c0155ce74bacb6a",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.test.ts": "9b7a012b2f8ff4288bf32e2536b0c934ee013445",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue": "473d1993cfa4f8844497c697043f5572b3e6ac63",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts": "07771a3bd56bec78385d5ec43409aaf4c1dbaad4",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "8b52799c27cedace6590ac7bcd978a574fc6ab96",
-    "apps/web/src/components/LandingV2/modelsRoster.ts": "fe475c579b8e1e1bf3fe71956a7fb45be55405b0",
-    "apps/web/src/utils/models.test.ts": "fbfcdeb57bbe9e3921d0f68ef4ff493f804444d4",
-    "apps/web/src/utils/models.ts": "448fe48871f24a1de60219d67a6a51893e5c4c32",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.test.ts": "d756edac194ed0f6b57ba815e492a109242d3538",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue": "cca87e5158694621215a013609a4358b770da8d4",
-    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
-    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
-    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
-    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
-    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
-    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
-    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
-    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
-    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
-    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
-    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
-    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
-    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
-    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
-    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
-    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
-    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
-    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
-    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
-    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
-    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
-    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
-    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
-    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
-    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
-    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
-    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.js": "01e02583f03c6be8b6c463bf003c3df5b1de6373",
-    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.map": "b542d09ea1db9f3a5ad91eb0f4be0314c62bfa08",
-    "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
-    "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
-    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
-    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
-    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
-    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
-    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
-    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
-    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
-    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
-    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
-    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
-    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
-    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
-    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
-    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
-    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.js": "b590046e70cb6aedf9e7da97ddb189da58a59506",
-    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.map": "0d46d79d810c7c7b6648df14cf718cb06e83a2a0",
-    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
-    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
-    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
-    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
-    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
-    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
-    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.js": "6878d7314683cb3371f2b029d4d0398215876165",
-    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.map": "667f1570d94bb5683f55eb38382883c128a60b1a",
-    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
-    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
-    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
-    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
-    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
-    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
-    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
-    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
-    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.js": "521d6faf8ecbbd8448168797384520ce4c62443c",
-    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.map": "c9ba0d7b3b066fcc3a9b37fe911ee7d80f84e17a",
-    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
-    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
-    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
-    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
-    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.js": "4cd1dfa0f3d2521dcd67689b6f45d1620dd9ea6c",
-    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.map": "42ac2c9a8a58ed2d3de64774aecf298b12b26cba",
-    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
-    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
-    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
-    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
-    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
-    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
-    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
-    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
-    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
-    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
-    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
-    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
-    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
-    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
-   }
-  },
-  {
-   "at": "2026-11-18T12:15:46.147Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.8"
-   ],
-   "fingerprint": "2e0c4b4be047263594c7707acb4e9db98e4bbd5c9859a1f722eb2bd71cf91870"
-  },
-  {
-   "at": "2026-11-18T12:15:46.147Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.7"
-   ],
-   "fingerprint": "88be0a922cab82f194a8e5b9a4e8300e5636551db01b6de16ba822ee5205b5e9"
-  },
-  {
-   "at": "2026-11-18T12:15:46.147Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T6.6"
-   ],
-   "fingerprint": "7d09d08a64b5012a0b6085786865789bfa1417446cb461ff198d4c3aab0c9039"
-  },
-  {
-   "at": "2026-11-18T12:15:40.015Z",
-   "type": "task_built",
-   "tasks": [
-    "T6.8"
-   ],
-   "text": "gate green: e2e 103/103 x2, verify 0 errors, vitest 2813",
-   "files": []
-  },
-  {
-   "at": "2026-11-18T12:09:58.350Z",
-   "type": "task_started",
-   "tasks": [
-    "T6.8"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T12:09:58.199Z",
-   "type": "task_built",
-   "tasks": [
-    "T6.7"
-   ],
-   "text": "e2e PASS a2: 3 new scenarios, 67/67, flake x3",
-   "files": [
-    "apps/web/e2e/qa/model-menu.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T12:07:23.488Z",
-   "type": "task_started",
-   "tasks": [
-    "T6.7"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T12:07:23.330Z",
-   "type": "task_built",
-   "tasks": [
-    "T6.6"
-   ],
-   "text": "unit PASS a2, gap class assertion added",
-   "files": [
-    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T12:07:02.303Z",
-   "type": "task_started",
-   "tasks": [
-    "T6.6"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T12:07:02.265Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "304c53f9c1dd6b0df372c9e22a830f94d00c7624",
-    "apps/web/e2e/qa/pro-tier.spec.ts": "e76102e25dd207c23147d1d77fb64f4f7819728b",
-    "apps/web/src/components.d.ts": "c677463a974994f5d78a28652c0155ce74bacb6a",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.test.ts": "cc1b31da40eb7ce0e3dc783dc577667879811155",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue": "473d1993cfa4f8844497c697043f5572b3e6ac63",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts": "07771a3bd56bec78385d5ec43409aaf4c1dbaad4",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "8b52799c27cedace6590ac7bcd978a574fc6ab96",
-    "apps/web/src/components/LandingV2/modelsRoster.ts": "fe475c579b8e1e1bf3fe71956a7fb45be55405b0",
-    "apps/web/src/utils/models.test.ts": "fbfcdeb57bbe9e3921d0f68ef4ff493f804444d4",
-    "apps/web/src/utils/models.ts": "448fe48871f24a1de60219d67a6a51893e5c4c32",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.test.ts": "d756edac194ed0f6b57ba815e492a109242d3538",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue": "cca87e5158694621215a013609a4358b770da8d4",
-    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
-    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
-    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
-    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
-    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
-    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
-    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
-    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
-    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
-    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
-    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
-    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
-    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
-    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
-    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
-    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
-    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
-    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
-    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
-    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
-    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
-    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
-    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
-    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
-    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
-    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
-    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.js": "01e02583f03c6be8b6c463bf003c3df5b1de6373",
-    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.map": "b542d09ea1db9f3a5ad91eb0f4be0314c62bfa08",
-    "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
-    "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
-    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
-    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
-    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
-    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
-    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
-    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
-    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
-    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
-    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
-    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
-    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
-    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
-    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
-    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
-    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.js": "b590046e70cb6aedf9e7da97ddb189da58a59506",
-    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.map": "0d46d79d810c7c7b6648df14cf718cb06e83a2a0",
-    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
-    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
-    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
-    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
-    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
-    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
-    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.js": "6878d7314683cb3371f2b029d4d0398215876165",
-    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.map": "667f1570d94bb5683f55eb38382883c128a60b1a",
-    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
-    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
-    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
-    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
-    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
-    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
-    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
-    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
-    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.js": "521d6faf8ecbbd8448168797384520ce4c62443c",
-    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.map": "c9ba0d7b3b066fcc3a9b37fe911ee7d80f84e17a",
-    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
-    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
-    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
-    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
-    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.js": "4cd1dfa0f3d2521dcd67689b6f45d1620dd9ea6c",
-    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.map": "42ac2c9a8a58ed2d3de64774aecf298b12b26cba",
-    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
-    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
-    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
-    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
-    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
-    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
-    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
-    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
-    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
-    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
-    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
-    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
-    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
-    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
-   }
   }
  ]
 };

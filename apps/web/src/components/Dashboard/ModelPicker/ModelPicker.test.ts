@@ -22,6 +22,8 @@ vi.mock('vue-router', () => ({
 import ModelPicker from '@/components/Dashboard/ModelPicker/ModelPicker.vue';
 import { MODEL_IDS } from '@visual-ai/shared';
 import { FLUX_MODES, getFeaturedModels, MODELS } from '@/utils/models';
+import { installMatchMedia } from '@/test/matchMediaMock';
+import { BREAKPOINT } from '@/utils/layout';
 
 // Every model is listed in its tier section, so options are looked up by title.
 function findOption(title: string) {
@@ -202,7 +204,173 @@ describe('ModelPicker', () => {
     focused.click();
     await wrapper.vm.$nextTick();
 
-    const emitted = wrapper.emitted('update:selected')?.[0]?.[0] as { id: string };
+    const emitted = wrapper.emitted('update:selected')?.[0]?.[0] as {
+      id: string;
+    };
     expect(emitted.id).toBe(MODEL_IDS.FLUX_1_1_PRO);
+  });
+});
+
+describe('ModelPicker responsive container', () => {
+  const SHEET = '[data-testid="model-picker-sheet"]';
+  const BACKDROP = '[data-testid="model-picker-sheet-backdrop"]';
+  let media: ReturnType<typeof installMatchMedia>;
+  let wrapper: VueWrapper | null = null;
+
+  function mountAt(width: number) {
+    media = installMatchMedia({ width });
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    wrapper = mount(ModelPicker, {
+      props: { models: MODELS, selected: MODELS[0], fallback: FLUX_MODES[1] },
+      global: { plugins: [pinia] },
+      attachTo: document.body,
+    });
+    return wrapper;
+  }
+
+  afterEach(() => {
+    wrapper?.unmount();
+    wrapper = null;
+    media.restore();
+    document.body.style.overflow = '';
+    document.body.innerHTML = '';
+  });
+
+  it('opens a bottom sheet below the 768 breakpoint', async () => {
+    const w = mountAt(BREAKPOINT.MOBILE_MAX - 1);
+    await w.get('button').trigger('click');
+
+    expect(body().find(SHEET).exists()).toBe(true);
+    expect(body().find('[data-testid="model-search-input"]').exists()).toBe(true);
+    expect(w.get('button').attributes('aria-haspopup')).toBe('dialog');
+    expect(w.get('button').attributes('aria-expanded')).toBe('true');
+  });
+
+  it('uses the anchored popover at 768 and above', async () => {
+    const w = mountAt(BREAKPOINT.MOBILE_MAX);
+    await w.get('button').trigger('click');
+
+    expect(body().find(SHEET).exists()).toBe(false);
+    expect(body().findAll('[data-testid="model-option"]').length).toBeGreaterThan(0);
+  });
+
+  it('renders the chip trigger in the sheet layout when chip is set', async () => {
+    media = installMatchMedia({ width: 390 });
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    wrapper = mount(ModelPicker, {
+      props: {
+        chip: true,
+        models: MODELS,
+        selected: MODELS[0],
+        fallback: FLUX_MODES[1],
+      },
+      global: { plugins: [pinia] },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.find('[data-testid="model-picker-trigger"]').exists()).toBe(false);
+    await wrapper.get('button').trigger('click');
+    expect(body().find(SHEET).exists()).toBe(true);
+  });
+
+  it('renders the chip trigger in the popover layout when chip is set', async () => {
+    media = installMatchMedia({ width: 1280 });
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    wrapper = mount(ModelPicker, {
+      props: { chip: true, models: MODELS, selected: MODELS[0], fallback: FLUX_MODES[1] },
+      global: { plugins: [pinia] },
+      attachTo: document.body,
+    });
+
+    expect(wrapper.find('[data-testid="model-picker-trigger"]').exists()).toBe(false);
+    await wrapper.get('button').trigger('click');
+    expect(body().find(SHEET).exists()).toBe(false);
+    expect(body().findAll('[data-testid="model-option"]').length).toBeGreaterThan(0);
+  });
+
+  it('closes the sheet on backdrop click', async () => {
+    const w = mountAt(390);
+    await w.get('button').trigger('click');
+
+    (body().find(BACKDROP).element as HTMLElement).click();
+    await w.vm.$nextTick();
+
+    expect(body().find(SHEET).exists()).toBe(false);
+    expect(w.get('button').attributes('aria-expanded')).toBe('false');
+  });
+
+  it('closes the sheet on Escape', async () => {
+    const w = mountAt(390);
+    await w.get('button').trigger('click');
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', cancelable: true }));
+    await w.vm.$nextTick();
+
+    expect(body().find(SHEET).exists()).toBe(false);
+  });
+
+  it('emits the selection and closes the sheet when a model is chosen', async () => {
+    const w = mountAt(390);
+    await w.get('button').trigger('click');
+
+    const target = MODELS.find((m) => m.id === MODEL_IDS.FLUX_1_1_PRO)!;
+    await findOption(target.title).trigger('click');
+
+    expect((w.emitted('update:selected')?.[0]?.[0] as { id: string }).id).toBe(
+      MODEL_IDS.FLUX_1_1_PRO,
+    );
+    expect(body().find(SHEET).exists()).toBe(false);
+  });
+
+  it('returns focus to the trigger when the sheet closes', async () => {
+    const w = mountAt(390);
+    const trigger = w.get('button').element as HTMLButtonElement;
+    trigger.focus();
+    await w.get('button').trigger('click');
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', cancelable: true }));
+    await w.vm.$nextTick();
+
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('locks body scroll while the sheet is open and releases it on close', async () => {
+    const w = mountAt(390);
+    await w.get('button').trigger('click');
+    expect(document.body.style.overflow).toBe('hidden');
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', cancelable: true }));
+    await w.vm.$nextTick();
+    expect(document.body.style.overflow).not.toBe('hidden');
+  });
+
+  it('closes an open sheet when the viewport grows past the breakpoint', async () => {
+    const w = mountAt(390);
+    await w.get('button').trigger('click');
+    expect(body().find(SHEET).exists()).toBe(true);
+
+    media.setWidth(1024);
+    await w.vm.$nextTick();
+    await w.vm.$nextTick();
+
+    expect(body().find(SHEET).exists()).toBe(false);
+    expect(body().findAll('[data-testid="model-option"]')).toHaveLength(0);
+    expect(document.body.style.overflow).not.toBe('hidden');
+  });
+
+  it('closes an open popover when the viewport shrinks below the breakpoint', async () => {
+    const w = mountAt(1024);
+    await w.get('button').trigger('click');
+    expect(body().findAll('[data-testid="model-option"]').length).toBeGreaterThan(0);
+
+    media.setWidth(390);
+    await w.vm.$nextTick();
+    await w.vm.$nextTick();
+
+    expect(body().findAll('[data-testid="model-option"]')).toHaveLength(0);
+    expect(body().find(SHEET).exists()).toBe(false);
   });
 });
