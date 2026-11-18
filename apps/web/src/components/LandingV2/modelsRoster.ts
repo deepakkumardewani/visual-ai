@@ -1,11 +1,9 @@
 import { getCreditCost } from '@visual-ai/shared';
 
 import { getTierCreditLabel } from '@/utils/generationCredits';
-import { MODELS, UPSCALER_MODELS, groupModelsByCompany } from '@/utils/models';
+import { MODELS, UPSCALER_MODELS } from '@/utils/models';
 import type { Model } from '@/types/model';
 
-/** Group key `groupModelsByCompany` adds for the featured shortlist; it is not a lab. */
-const FEATURED_GROUP_KEY = 'Featured';
 /** Upscalers are listed on their own line, not as image generators. */
 const UPSCALE_ID_PREFIX = 'UPSCALE_';
 
@@ -42,8 +40,16 @@ export const GENERATION_MODEL_COUNT = GENERATION_MODELS.length;
 
 const toCreditLabel = (cost: number): string => `${cost} cr`;
 
-const labRows: RosterRow[] = Array.from(groupModelsByCompany(GENERATION_MODELS))
-  .filter(([name]) => name !== FEATURED_GROUP_KEY)
+function groupByLab(models: Model[]): Map<string, Model[]> {
+  const labs = new Map<string, Model[]>();
+  for (const model of models) {
+    const lab = model.companyName ?? model.provider;
+    labs.set(lab, [...(labs.get(lab) ?? []), model]);
+  }
+  return labs;
+}
+
+const labRows: RosterRow[] = Array.from(groupByLab(GENERATION_MODELS))
   .map(([name, models]) => ({ name, models: models.map(toRosterModel), finishing: false }))
   .sort((a, b) => b.models.length - a.models.length || a.name.localeCompare(b.name));
 

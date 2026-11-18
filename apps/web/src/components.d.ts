@@ -123,6 +123,7 @@ declare module 'vue' {
     MicButton: typeof import('./components/Dashboard/Composer/VoiceInput/MicButton.vue')['default']
     MobileSettingsSheet: typeof import('./components/Dashboard/MobileSettingsSheet.vue')['default']
     ModelChip: typeof import('./components/Dashboard/Composer/ModelChip.vue')['default']
+    ModelCompanyHeader: typeof import('./components/Dashboard/ModelPicker/ModelCompanyHeader.vue')['default']
     ModelOption: typeof import('./components/Dashboard/ModelPicker/ModelOption.vue')['default']
     ModelPicker: typeof import('./components/Dashboard/ModelPicker/ModelPicker.vue')['default']
     ModelPickerPanel: typeof import('./components/Dashboard/ModelPicker/ModelPickerPanel.vue')['default']

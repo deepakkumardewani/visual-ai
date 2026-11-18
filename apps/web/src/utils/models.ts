@@ -1,6 +1,12 @@
 import type { Model } from '@/types/model';
 
-import { MODEL_IDS, MODEL_REGISTRY, getCreditCost } from '@visual-ai/shared';
+import {
+  MODEL_IDS,
+  MODEL_REGISTRY,
+  PREMIUM_MODEL_KEYS,
+  getCreditCost,
+  type ModelKey,
+} from '@visual-ai/shared';
 
 /**
  * Derive Model fields from the shared registry entry.
@@ -306,31 +312,64 @@ export function groupModelsByProvider(models: Model[]): Map<string, Model[]> {
   return groups;
 }
 
-export function groupModelsByCompany(models: Model[] = MODELS): Map<string, Model[]> {
-  const featured = models.filter((m) => m.featured);
+export const PICKER_SECTION = {
+  FEATURED: 'Featured',
+  FREE: 'Free',
+  PRO: 'Pro',
+} as const;
 
-  // Company submenus must include every model for that company — including
-  // featured ones (e.g. Nano Banana still appears under Google on hover).
-  const groups = new Map<string, Model[]>();
+export type PickerSection = (typeof PICKER_SECTION)[keyof typeof PICKER_SECTION];
+
+export interface CompanyGroup {
+  company: string;
+  models: Model[];
+}
+
+export type PickerSectionGroup =
+  | { section: typeof PICKER_SECTION.FEATURED; models: Model[] }
+  | { section: typeof PICKER_SECTION.FREE | typeof PICKER_SECTION.PRO; companies: CompanyGroup[] };
+
+const DEFAULT_CREDIT_COST = 1;
+
+/** Cheapest first, then title; returns a new array. */
+export function sortByCostThenName(models: Model[]): Model[] {
+  return [...models].sort(
+    (a, b) =>
+      (a.creditCost ?? DEFAULT_CREDIT_COST) - (b.creditCost ?? DEFAULT_CREDIT_COST) ||
+      a.title.localeCompare(b.title),
+  );
+}
+
+const isPremiumModel = (model: Model): boolean => PREMIUM_MODEL_KEYS.includes(model.id as ModelKey);
+
+function groupByCompany(models: Model[]): CompanyGroup[] {
+  const byCompany = new Map<string, Model[]>();
   for (const model of models) {
     const company = model.companyName ?? model.provider;
-    const list = groups.get(company) ?? [];
-    list.push(model);
-    groups.set(company, list);
+    byCompany.set(company, [...(byCompany.get(company) ?? []), model]);
   }
+  return Array.from(byCompany, ([company, list]) => ({
+    company,
+    models: sortByCostThenName(list),
+  })).sort((a, b) => a.company.localeCompare(b.company));
+}
 
-  const result = new Map<string, Model[]>();
+/**
+ * Picker layout: Featured (source order), then Free and Pro, each split by company.
+ * A featured model also appears in its tier group; empty sections are dropped.
+ * Models are identified by `id` + `title` because variants can share an `id`.
+ */
+export function groupModelsByCompany(models: Model[] = MODELS): PickerSectionGroup[] {
+  const featured = models.filter((m) => m.featured);
+  const free = models.filter((m) => !isPremiumModel(m));
+  const pro = models.filter(isPremiumModel);
 
-  if (featured.length > 0) {
-    result.set('Featured', featured);
-  }
-
-  const sortedCompanies = Array.from(groups.keys()).sort();
-  for (const company of sortedCompanies) {
-    result.set(company, groups.get(company) ?? []);
-  }
-
-  return result;
+  const sections: PickerSectionGroup[] = [
+    { section: PICKER_SECTION.FEATURED, models: featured },
+    { section: PICKER_SECTION.FREE, companies: groupByCompany(free) },
+    { section: PICKER_SECTION.PRO, companies: groupByCompany(pro) },
+  ];
+  return sections.filter((s) => ('models' in s ? s.models.length : s.companies.length) > 0);
 }
 
 export function getModelLogoUrl(iconUrl?: string): string | null {

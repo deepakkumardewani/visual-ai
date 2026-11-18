@@ -18,6 +18,9 @@ const REF_CAPABLE_TOOLTIP = 'Up to 8 reference images';
 const NON_REF_TITLE = 'Flux Schnell';
 const ROW_HEIGHT_TOLERANCE_PX = 0.5;
 const DESKTOP = { width: 1280, height: 800 };
+const DESKTOP_WIDE = { width: 1440, height: 900 };
+const PIN_TOLERANCE_PX = 1.5;
+const MIN_NAME_DESCRIPTION_GAP_PX = 4;
 const MOBILE = { width: 375, height: 700 };
 // Evidence PNGs land in the repo-level agent_docs/qa tree (playwright runs from apps/web).
 const shotPath = (name: string) => `../../agent_docs/qa/model-menu/${name}.png`;
@@ -207,4 +210,116 @@ test.describe('Model menu', () => {
       await page.screenshot({ path: shotPath(`${label}-no-overflow`) });
     });
   }
+});
+
+test.describe('Model menu company headers at 1440', () => {
+  test.describe.configure({ mode: 'serial' });
+  test.use({ viewport: DESKTOP_WIDE });
+
+  test.beforeEach(async () => {
+    await resetToFree(E2E_USER_ID);
+  });
+
+  test.afterAll(async () => {
+    await resetToFree(E2E_USER_ID);
+  });
+
+  test('@critical 1440 popover shows company headers with logo and name inside Free and Pro', async ({
+    page,
+    snap,
+  }) => {
+    await gotoStudio(page);
+    await openModelMenu(page);
+
+    // Featured stays flat; Free and Pro group their rows under company headers.
+    await expect(section(page, 'featured').getByTestId('model-company-header')).toHaveCount(0);
+    for (const name of ['free', 'pro']) {
+      const headers = section(page, name).getByTestId('model-company-header');
+      const count = await headers.count();
+      expect(count, `${name} should have company headers`).toBeGreaterThan(0);
+      const companies: string[] = [];
+      for (let i = 0; i < count; i += 1) {
+        const header = headers.nth(i);
+        const company = (await header.innerText()).trim();
+        expect(company.length).toBeGreaterThan(0);
+        companies.push(company);
+        // Logo is an <img> with alt, or the provider icon fallback; either way a visible graphic.
+        await expect(header.locator('img, svg').first()).toBeVisible();
+      }
+      expect([...companies].sort((a, b) => a.localeCompare(b))).toEqual(companies);
+    }
+    await snap('company-headers-1440');
+    await page.screenshot({ path: shotPath('company-headers-1440') });
+  });
+
+  test('@high scrolling keeps the current company header pinned under the tier header', async ({
+    page,
+    snap,
+  }) => {
+    await gotoStudio(page);
+    await openModelMenu(page);
+
+    const listbox = page.getByRole('listbox', { name: 'Select a model' });
+    const result = await listbox.evaluate((el, tol) => {
+      const free = el.querySelector('[data-testid="model-section-free"]');
+      if (!free) throw new Error('free section missing');
+      const tier = free.querySelector('h3') as HTMLElement;
+      const headers = Array.from(free.querySelectorAll('[data-testid="model-company-header"]'));
+      if (headers.length < 2) throw new Error('need two free company headers');
+      const tierH = tier.getBoundingClientRect().height;
+      const firstName = headers[0].textContent?.trim();
+      // Scroll so the second company's rows run under its pinned header.
+      const target = headers[1] as HTMLElement;
+      el.scrollTop += target.getBoundingClientRect().top - el.getBoundingClientRect().top + 12;
+      const listTop = el.getBoundingClientRect().top;
+      const pinned = headers.find(
+        (h) => Math.abs(h.getBoundingClientRect().top - (listTop + tierH)) <= tol,
+      );
+      return {
+        scrolled: el.scrollTop,
+        tierOffset: tier.getBoundingClientRect().top - listTop,
+        pinnedName: pinned?.textContent?.trim() ?? null,
+        targetName: target.textContent?.trim(),
+        firstName,
+      };
+    }, PIN_TOLERANCE_PX);
+
+    expect(result.scrolled).toBeGreaterThan(0);
+    expect(Math.abs(result.tierOffset)).toBeLessThanOrEqual(PIN_TOLERANCE_PX);
+    expect(result.pinnedName).toBe(result.targetName);
+    expect(result.pinnedName).not.toBe(result.firstName);
+    await snap('company-header-pinned');
+    await page.screenshot({ path: shotPath('company-header-pinned') });
+  });
+
+  test('@medium row name and description are separate elements with a gap', async ({
+    page,
+    snap,
+  }) => {
+    await gotoStudio(page);
+    await openModelMenu(page);
+
+    const rows = page.getByTestId('model-option');
+    const count = await rows.count();
+    expect(count).toBeGreaterThan(3);
+    let checked = 0;
+    for (let i = 0; i < count; i += 1) {
+      const row = rows.nth(i);
+      const description = row.getByTestId('model-option-description');
+      if ((await description.count()) === 0) continue;
+      const name = row.getByTestId('model-option-name');
+      const [n, d] = await Promise.all([name.boundingBox(), description.boundingBox()]);
+      if (!n || !d) continue;
+      const sideBySide = d.x - (n.x + n.width);
+      const stacked = d.y - (n.y + n.height);
+      expect(
+        Math.max(sideBySide, stacked),
+        `row ${i} name and description should not touch`,
+      ).toBeGreaterThanOrEqual(MIN_NAME_DESCRIPTION_GAP_PX);
+      checked += 1;
+    }
+    expect(checked).toBeGreaterThan(0);
+    await snap('name-description-gap');
+    await page.screenshot({ path: shotPath('name-description-gap') });
+  });
 });

@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-18T11:38:09.522Z",
+ "generatedAt": "2026-11-18T12:20:36.042Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -29,20 +29,20 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
- "costUsd": 20.1617,
- "elapsedMs": 174080033,
+ "costUsd": 24.1608,
+ "elapsedMs": 176329606,
  "costByRole": {
-  "e2e": 1.869,
-  "builder": 4.7395,
-  "verifier": 12.0532,
-  "unit": 1.5
+  "e2e": 2.1863,
+  "builder": 5.6783,
+  "verifier": 14.2896,
+  "unit": 2.0066
  },
  "totals": {
   "phases": 14,
   "tasks": 61,
   "byStatus": {
-   "verified": 23,
-   "ready": 38
+   "verified": 31,
+   "ready": 30
   }
  },
  "phases": [
@@ -1220,7 +1220,7 @@ window.DASHBOARD = {
      "line": 205,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T11:38:09.505Z",
+     "updatedAt": "2026-11-18T11:38:21.190Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1285,7 +1285,7 @@ window.DASHBOARD = {
      "line": 213,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T11:38:09.505Z",
+     "updatedAt": "2026-11-18T11:38:21.190Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1325,7 +1325,7 @@ window.DASHBOARD = {
      "line": 221,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T11:38:09.505Z",
+     "updatedAt": "2026-11-18T11:38:21.190Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1384,7 +1384,7 @@ window.DASHBOARD = {
      "line": 230,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T11:38:09.505Z",
+     "updatedAt": "2026-11-18T11:38:21.190Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1447,7 +1447,7 @@ window.DASHBOARD = {
     {
      "id": "T6.1",
      "title": "Tier and company grouping helpers",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -1467,23 +1467,31 @@ window.DASHBOARD = {
      ],
      "line": 245,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:20:36.024Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.3774,
+     "costApprox": true,
+     "elapsedMs": 1343711,
      "summary": []
     },
     {
      "id": "T6.2",
      "title": "Company header and panel rendering",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -1504,23 +1512,31 @@ window.DASHBOARD = {
      ],
      "line": 253,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:20:36.024Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5157,
+     "costApprox": true,
+     "elapsedMs": 2249573,
      "summary": []
     },
     {
      "id": "T6.3",
      "title": "Row layout fix",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -1540,23 +1556,31 @@ window.DASHBOARD = {
      ],
      "line": 261,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:20:36.024Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.3774,
+     "costApprox": true,
+     "elapsedMs": 1343711,
      "summary": []
     },
     {
      "id": "T6.4",
      "title": "Design pass: picker",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -1576,23 +1600,38 @@ window.DASHBOARD = {
      ],
      "line": 269,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:20:36.024Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5157,
+     "costApprox": true,
+     "elapsedMs": 2249573,
      "summary": []
     },
     {
      "id": "T6.5",
      "title": "Unit: grouping and sort",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
@@ -1610,23 +1649,31 @@ window.DASHBOARD = {
      ],
      "line": 277,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:20:36.024Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4311,
+     "costApprox": true,
+     "elapsedMs": 1130487,
      "summary": []
     },
     {
      "id": "T6.6",
      "title": "Unit: picker panel and row",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
@@ -1646,23 +1693,38 @@ window.DASHBOARD = {
      ],
      "line": 285,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:20:36.024Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6,
+     "costApprox": true,
+     "elapsedMs": 2036349,
      "summary": []
     },
     {
      "id": "T6.7",
      "title": "E2E: picker sections and company headers",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [],
      "files": [
@@ -1680,23 +1742,38 @@ window.DASHBOARD = {
      ],
      "line": 293,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:20:36.024Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6488,
+     "costApprox": true,
+     "elapsedMs": 1966764,
      "summary": []
     },
     {
      "id": "T6.8",
      "title": "Gate: Phase 6",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -1714,25 +1791,40 @@ window.DASHBOARD = {
      ],
      "line": 302,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T12:20:36.024Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.533,
+     "costApprox": true,
+     "elapsedMs": 1818808,
      "summary": []
     }
    ],
-   "verified": 0,
+   "verified": 8,
    "total": 8,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 3.9991,
+   "elapsedMs": 2249573
   },
   {
    "id": "7",
@@ -2968,7 +3060,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 6",
+ "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 7",
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -3063,6 +3155,32 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-18T11:38:21.190Z",
+   "ok": true,
+   "phase": "5",
+   "tasks": [
+    "T5.1",
+    "T5.2",
+    "T5.3",
+    "T5.4"
+   ],
+   "attempt": "12",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 88/88 prod, unit 1559/1559, layout.ts/DashboardShell 100% coverage",
+   "error": null,
+   "sha": "183a930deac5bed89d3767c00e133a16e2574723",
+   "shortSha": "183a930",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/183a930deac5bed89d3767c00e133a16e2574723",
+   "subject": "feat(web): header height from a single source",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-18T17:08:14+05:30",
+   "filesChanged": 18,
+   "added": 1044,
+   "removed": 427
+  },
   {
    "at": "2026-11-17T09:40:08.038Z",
    "ok": true,
@@ -4083,9 +4201,266 @@ window.DASHBOARD = {
    "file": "5/T5.3-8.png",
    "phase": "5",
    "href": "shots/5/T5.3-8.png"
+  },
+  {
+   "taskId": "T6.2",
+   "kind": "proof",
+   "step": "Sections Featured, Free, Pro; company headers inside Free/Pro",
+   "attempt": 1,
+   "caption": "At 1440 the picker opens with Featured first, then Free starting with the Black Forest Labs company header (logo + name).",
+   "annotations": [
+    {
+     "x": 2,
+     "y": 24.1,
+     "w": 28.9,
+     "h": 3.1,
+     "label": "Featured tier header first"
+    },
+    {
+     "x": 2,
+     "y": 59,
+     "w": 28.9,
+     "h": 6.2,
+     "label": "Free tier header then company header with logo"
+    }
+   ],
+   "at": "2026-11-18T12:02:31.717Z",
+   "file": "6/T6.2-1.png",
+   "phase": "6",
+   "href": "shots/6/T6.2-1.png"
+  },
+  {
+   "taskId": "T6.2",
+   "kind": "proof",
+   "step": "Sticky tier then company header, opaque (dark)",
+   "attempt": 1,
+   "caption": "After scrolling the list 420px, the Free tier header and Black Forest Labs company header stay pinned with an opaque background; rows pass underneath.",
+   "annotations": [
+    {
+     "x": 2,
+     "y": 24.1,
+     "w": 28.9,
+     "h": 6.2,
+     "label": "Tier header pinned at top, company header pinned directly below"
+    }
+   ],
+   "at": "2026-11-18T12:02:31.867Z",
+   "file": "6/T6.2-2.png",
+   "phase": "6",
+   "href": "shots/6/T6.2-2.png"
+  },
+  {
+   "taskId": "T6.2",
+   "kind": "proof",
+   "step": "Sticky headers opaque in light mode",
+   "attempt": 1,
+   "caption": "Light mode: pinned Free and Black Forest Labs headers have an opaque background (rgb 242,235,227).",
+   "annotations": [
+    {
+     "x": 2,
+     "y": 24.1,
+     "w": 28.9,
+     "h": 6.2,
+     "label": "Opaque pinned headers in light mode"
+    }
+   ],
+   "at": "2026-11-18T12:02:32.011Z",
+   "file": "6/T6.2-3.png",
+   "phase": "6",
+   "href": "shots/6/T6.2-3.png"
+  },
+  {
+   "taskId": "T6.2",
+   "kind": "proof",
+   "step": "Pro tier grouped by company; company in both tiers shows disjoint models",
+   "attempt": 1,
+   "caption": "Pro section: Black Forest Labs, Google and OpenAI headers in alphabetical order; Google here lists only its Pro models (Imagen 4 Ultra, Nano Banana Pro).",
+   "annotations": [
+    {
+     "x": 2,
+     "y": 24.3,
+     "w": 28.9,
+     "h": 3.1,
+     "label": "Pro tier header"
+    },
+    {
+     "x": 2,
+     "y": 45.7,
+     "w": 28.9,
+     "h": 13.6,
+     "label": "Google group holds only Pro models"
+    }
+   ],
+   "at": "2026-11-18T12:02:32.148Z",
+   "file": "6/T6.2-4.png",
+   "phase": "6",
+   "href": "shots/6/T6.2-4.png"
+  },
+  {
+   "taskId": "T6.2",
+   "kind": "proof",
+   "step": "Model in Featured and its group highlighted in both",
+   "attempt": 1,
+   "caption": "Seedream 4, selected from Featured, is also highlighted in its Free / ByteDance group (aria-selected in both sections).",
+   "annotations": [
+    {
+     "x": 2,
+     "y": 40.8,
+     "w": 28.9,
+     "h": 4.9,
+     "label": "Seedream 4 highlighted in its company group"
+    }
+   ],
+   "at": "2026-11-18T12:02:32.285Z",
+   "file": "6/T6.2-5.png",
+   "phase": "6",
+   "href": "shots/6/T6.2-5.png"
+  },
+  {
+   "taskId": "T6.3",
+   "kind": "proof",
+   "step": "Name and description separated, one-line row",
+   "attempt": 1,
+   "caption": "Flux Fast row: name and \"Fastest Flux, batch volume\" are separate elements with an 8px gap, one 44px-high line with credit cost.",
+   "annotations": [
+    {
+     "x": 2,
+     "y": 37.4,
+     "w": 28.9,
+     "h": 4.9,
+     "label": "One-line 44px row"
+    },
+    {
+     "x": 5.3,
+     "y": 38.8,
+     "w": 4.2,
+     "h": 2.2,
+     "label": "Name element"
+    },
+    {
+     "x": 10.1,
+     "y": 39.1,
+     "w": 17.9,
+     "h": 1.8,
+     "label": "Description element, 8px gap after name"
+    }
+   ],
+   "at": "2026-11-18T12:02:32.422Z",
+   "file": "6/T6.3-1.png",
+   "phase": "6",
+   "href": "shots/6/T6.3-1.png"
+  },
+  {
+   "taskId": "T6.4",
+   "kind": "after",
+   "step": "desktop picker design pass, dark",
+   "attempt": 2,
+   "caption": "1440 dark picker scrolled: Free tier header pinned at the top with a hairline, company headers pinned below, opaque.",
+   "annotations": [
+    {
+     "x": 1.5,
+     "y": 23,
+     "w": 31,
+     "h": 3,
+     "label": "Pinned Free tier header"
+    },
+    {
+     "x": 1.5,
+     "y": 27,
+     "w": 31,
+     "h": 3,
+     "label": "Pinned company header (Black Forest Labs)"
+    }
+   ],
+   "at": "2026-11-18T12:06:41.357Z",
+   "file": "6/T6.4-1.png",
+   "phase": "6",
+   "href": "shots/6/T6.4-1.png"
+  },
+  {
+   "taskId": "T6.4",
+   "kind": "after",
+   "step": "desktop picker design pass, light",
+   "attempt": 2,
+   "caption": "1440 light picker with Featured, tier header and company headers; rows separated from their descriptions.",
+   "annotations": [
+    {
+     "x": 1.5,
+     "y": 24,
+     "w": 31,
+     "h": 3,
+     "label": "Tier header with hairline"
+    },
+    {
+     "x": 6,
+     "y": 29,
+     "w": 25,
+     "h": 4,
+     "label": "Name and description separated"
+    }
+   ],
+   "at": "2026-11-18T12:06:41.507Z",
+   "file": "6/T6.4-2.png",
+   "phase": "6",
+   "href": "shots/6/T6.4-2.png"
+  },
+  {
+   "taskId": "T6.7",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Picker company headers 1440",
+   "annotations": [],
+   "at": "2026-11-18T12:09:54.315Z",
+   "file": "6/T6.7-1.png",
+   "phase": "6",
+   "href": "shots/6/T6.7-1.png"
+  },
+  {
+   "taskId": "T6.7",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Company header pinned on scroll",
+   "annotations": [],
+   "at": "2026-11-18T12:09:54.462Z",
+   "file": "6/T6.7-2.png",
+   "phase": "6",
+   "href": "shots/6/T6.7-2.png"
+  },
+  {
+   "taskId": "T6.7",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Row name and description gap",
+   "annotations": [],
+   "at": "2026-11-18T12:09:54.603Z",
+   "file": "6/T6.7-3.png",
+   "phase": "6",
+   "href": "shots/6/T6.7-3.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-18T12:20:36.024Z",
+   "type": "deliverable",
+   "tasks": [
+    "T6.1",
+    "T6.2",
+    "T6.3",
+    "T6.4",
+    "T6.5",
+    "T6.6",
+    "T6.7",
+    "T6.8"
+   ],
+   "text": "Picker grouping by company, pinned company headers, name/description row fix, design pass, unit+e2e tests",
+   "files": [
+    "apps/web/src/utils/models.ts",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
+   ]
+  },
   {
    "at": "2026-11-18T11:38:09.505Z",
    "type": "deliverable",
@@ -4171,6 +4546,22 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-18T12:03:19.921Z",
+   "type": "advisory",
+   "tasks": [
+    "T6.1"
+   ],
+   "text": "modelsRoster.ts was a caller of groupModelsByCompany; builder added a local groupByLab repeating company grouping"
+  },
+  {
+   "at": "2026-11-18T12:03:19.769Z",
+   "type": "advisory",
+   "tasks": [
+    "T6.1"
+   ],
+   "text": "Verify grep \"^export function group\" expects 1 but HEAD already had 2 (groupModelsByProvider); no parallel helper added"
+  },
   {
    "at": "2026-11-18T11:37:38.867Z",
    "type": "advisory",
@@ -4462,605 +4853,1059 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
-   "at": "2026-11-18T11:38:09.505Z",
+   "at": "2026-11-18T12:20:36.024Z",
    "type": "deliverable",
    "tasks": [
-    "T5.1",
-    "T5.2",
-    "T5.3",
-    "T5.4"
+    "T6.1",
+    "T6.2",
+    "T6.3",
+    "T6.4",
+    "T6.5",
+    "T6.6",
+    "T6.7",
+    "T6.8"
    ],
-   "text": "Header height from a single source: layout.ts constants, no 100vh-60px, prod build green",
+   "text": "Picker grouping by company, pinned company headers, name/description row fix, design pass, unit+e2e tests",
    "files": [
-    "apps/web/src/utils/layout.ts"
+    "apps/web/src/utils/models.ts",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
    ]
   },
   {
-   "at": "2026-11-18T11:38:06.976Z",
+   "at": "2026-11-18T12:20:32.726Z",
    "tasks": [
-    "T5.4"
+    "T6.8"
    ],
-   "attempt": "12",
+   "attempt": "2",
    "type": "verify_passed",
-   "evidence": "Checkpoint 5 met. prod build OK; prod e2e (x3, covers x2) 88/88; `bun run test` 218 files / 1559 tests; vp lint/check 0 errors; 100vh-60px absent; useLenis.test.ts is a test-only change",
-   "fingerprint": "54d22665f87af6e610cb28376aca40b30105bdee85b6bee1dc1b3d1a5e74538f",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-5-verifier-a14.md"
+   "evidence": "E2E_SERVER=prod model-menu + pro-tier + create-image + create-transforms at --repeat-each=3 (stricter than the x2 gate) 154/154 passed in 3.1m, no flaky; vp lint/check 0 errors; bun run test exit 0, 303 files / 2813 tests; design pass done (T6.4) and picker e2e scenarios present (T6.7); no test weakened (no skip/fails markers)",
+   "fingerprint": "2e0c4b4be047263594c7707acb4e9db98e4bbd5c9859a1f722eb2bd71cf91870",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a2.md"
   },
   {
-   "at": "2026-11-18T11:38:06.975Z",
+   "at": "2026-11-18T12:20:32.726Z",
    "tasks": [
-    "T5.3"
+    "T6.7"
    ],
-   "attempt": "12",
+   "attempt": "2",
    "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod header-responsive --repeat-each=3: 88 passed (1.5m), 0 flaky; dev --repeat-each=3: 88 passed (1.8m). Composer @critical 360x640/390x844, @high 768x1024/1440x900 and @medium after-dismiss each 3/3 on prod. Proof shots 5/T5.3-1,-2,-5,-6 checked; I added the missing after-dismiss shot (5/T5.3-8, prod, 390x844, full page = viewport)",
-   "fingerprint": "f4dba4174b865ada76c421c47af465c512eddf054a61a779b0e2965fab2fd945",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-5-verifier-a14.md"
+   "evidence": "model-menu.spec.ts gained a 1440x900 describe with @critical company headers (Featured 0 headers, Free/Pro headers non-empty, logo visible, alphabetical), @high pinned header (scroll second company 12px past top, asserts it sits at tier-height offset, not the first company), @medium name/description gap >= 4px; model-menu + pro-tier ran x3 in the prod run, all green, 0 flaky; shared DESKTOP 1280 c",
+   "fingerprint": "88be0a922cab82f194a8e5b9a4e8300e5636551db01b6de16ba822ee5205b5e9",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a2.md"
   },
   {
-   "at": "2026-11-18T11:38:06.975Z",
+   "at": "2026-11-18T12:20:32.726Z",
    "tasks": [
-    "T5.2"
+    "T6.6"
    ],
-   "attempt": "12",
+   "attempt": "2",
    "type": "verify_passed",
-   "evidence": "3 files / 18 tests pass (with layout.test.ts); DashboardShell.vue 100/100/100/100, layout.ts 100/100/100/100, Dashboard.vue stmts 93.75 / branch 95.65 / funcs 81.81 / lines 96.55 (all >=80%); no it.fails/skip/only in the unit specs",
-   "fingerprint": "0cda0f1a3376b10408134218ec3e5f66514627f1292e390c69b912521f59dcef",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-5-verifier-a14.md"
+   "evidence": "T6.6 coverage command 3 files 56/56, ModelCompanyHeader/ModelOption/ModelPickerPanel 100% stmts/branches/funcs/lines; new test asserts tw-gap-2 on model-option-label plus separate name/description elements (ModelOption.test.ts:84-91); no it.fails/skip/only",
+   "fingerprint": "7d09d08a64b5012a0b6085786865789bfa1417446cb461ff198d4c3aab0c9039",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a2.md"
   },
   {
-   "at": "2026-11-18T11:38:06.974Z",
+   "at": "2026-11-18T12:20:32.726Z",
    "tasks": [
-    "T5.1"
+    "T6.4"
    ],
-   "attempt": "12",
+   "attempt": "2",
    "type": "verify_passed",
-   "evidence": "prod `bun run build` exit 0 (was failing in a11); layout.ts:20 HEIGHT_BELOW_HEADER_CLASS is now a plain literal; dist CSS emits `.tw-h-[calc(100dvh-var(--app-header-h,64px))]{height:calc(100dvh - var(--app-header-h,64px))}` with 0 `${` occurrences; vitest Dashboard scope 43 files / 336 tests pass; vp lint + vp check 0 errors; `grep -rn \"100vh-60px\" apps/web/src` empty; composer on screen at 360/39",
-   "fingerprint": "f0caa540bbb0d557bbae5d530be0e06baea3b8d4810d5ed986af1c2ec9b5cc89",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-5-verifier-a14.md"
+   "evidence": "AUDIT.md picker design-pass rows 8, open 0; false T6.7 deferral row removed; 4 new live rows (separation, row under pinned header, contrast, search offset) with resolutions; live 1440 dark (6/T6.4-1) and light (6/T6.4-2) shots confirmed showing pinned Free tier header with hairline and company headers; fix confined to ModelPickerPanel.vue (picker file, declared EXTRA)",
+   "fingerprint": "e84793d675828e2f9033eef9ac6a71ce63b95931040f2d2d9e2c469aadcebacf",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a2.md"
   },
   {
-   "at": "2026-11-18T11:37:38.867Z",
-   "type": "advisory",
+   "at": "2026-11-18T12:20:32.726Z",
    "tasks": [
-    "T5.3"
+    "T6.2"
    ],
-   "text": "Proof shots 5/T5.3-3,-4,-7 (two-rows, four-digit) match no T5.3 scenario; captions are generic"
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "ModelPicker dir vitest 10 files 96/96; vp lint + vp check 0 errors (56 warnings); hairline diff uses valid semantic token tw-border-hairline (42 other uses), h3 height stays var(--picker-tier-header-h) and company header top reads the same var; e2e pinned scenario (company header top = listbox top + measured tier height incl. border, tol 1.5px) green 3/3 prod; T6.4 shots show hairline with sticky ",
+   "fingerprint": "d38870f3a5cfc3461212c61c2140ae0c2b1837b077b59763b3086c0f8efde2e1",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a2.md"
   },
   {
-   "at": "2026-11-18T11:37:38.738Z",
-   "type": "advisory",
-   "tasks": [
-    "T5.3"
-   ],
-   "text": "header-responsive.spec.ts:166 TS2488 under e2e tsconfig on spread of rail?.children (pre-existing at baseline)"
-  },
-  {
-   "at": "2026-11-18T11:37:38.608Z",
-   "type": "advisory",
-   "tasks": [
-    "T5.3"
-   ],
-   "text": "header-responsive.spec.ts:388 Explore at 390 tabs rest at y=100 after scroll, held as test.fail (out-of-scope app bug)"
-  },
-  {
-   "at": "2026-11-18T11:37:38.451Z",
-   "type": "advisory",
-   "tasks": [
-    "T5.2"
-   ],
-   "text": "Scoped T5.2 coverage cmd exits 1: global 90% functions threshold applies to the 3-file run; Dashboard.vue funcs 81.81% (per-file 80% policy met)"
-  },
-  {
-   "at": "2026-11-18T11:32:42.510Z",
+   "at": "2026-11-18T12:15:51.193Z",
    "type": "verify_started",
    "tasks": [
-    "T5.1",
-    "T5.2",
-    "T5.3",
-    "T5.4"
+    "T6.2",
+    "T6.4",
+    "T6.6",
+    "T6.7",
+    "T6.8"
    ],
-   "attempt": "12"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-18T11:32:40.374Z",
+   "at": "2026-11-18T12:15:49.072Z",
    "type": "preflight_passed",
    "tasks": [
-    "T5.2"
+    "T6.2"
    ],
-   "fingerprint": "0cda0f1a3376b10408134218ec3e5f66514627f1292e390c69b912521f59dcef"
+   "fingerprint": "d38870f3a5cfc3461212c61c2140ae0c2b1837b077b59763b3086c0f8efde2e1"
   },
   {
-   "at": "2026-11-18T11:32:40.374Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T5.1"
-   ],
-   "fingerprint": "f0caa540bbb0d557bbae5d530be0e06baea3b8d4810d5ed986af1c2ec9b5cc89"
-  },
-  {
-   "at": "2026-11-18T11:32:36.656Z",
+   "at": "2026-11-18T12:15:46.282Z",
    "type": "dirty_snapshot",
    "tasks": [],
    "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "0910025210047b12cca8e572ee88af226701a9af",
-    "agent_docs/ui-polish-picker-header/TASKS.md": "117341ca2a5f4602f834ca29be072e91e3017914",
-    "apps/web/e2e/qa/header-responsive.spec.ts": "3e4c3dd2b1765104e5567e2e7d9608f58f8a0437",
-    "apps/web/src/App.test.ts": "1fd1e64ff4c0ac0747b9a946d107e906a787e038",
-    "apps/web/src/App.vue": "b6fdab36817f88e78282ac3a2b7c9cbe47dd2c5a",
-    "apps/web/src/components/Dashboard/DashboardShell.test.ts": "35029e529221b23f576a821dc936cab0c3ab397d",
-    "apps/web/src/components/Dashboard/DashboardShell.vue": "6f27e7b7451ddba1b301f224a39b028e9367e678",
-    "apps/web/src/components/Header/AppHeader.vue": "7cee62dd260e50a9b298339af3b8072d38cd91fc",
-    "apps/web/src/composables/useLenis.test.ts": "f365cabd2261fc158fd3a433cda749e909354be1",
-    "apps/web/src/pages/Dashboard.test.ts": "87c397975b3b0d8c97f8b98ab9d235f4d7c28b0a",
-    "apps/web/src/pages/Dashboard.vue": "a729ce7597dc61cf872b6a19da8d2db2675323e1",
-    "apps/web/src/pages/Examples.vue": "a097a935f8e31fb432514a760eb60534230fd418",
-    "apps/web/src/utils/layout.ts": "a432b838c0714fa98fb09ada6d544c8742e4f2ff",
-    "apps/web/src/utils/layout.test.ts": "c62a85a11726b686ff11b8538c0c791e77e09db4"
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "304c53f9c1dd6b0df372c9e22a830f94d00c7624",
+    "apps/web/e2e/qa/model-menu.spec.ts": "6b6bf4164dfd4d32f54db8283eb9911814487483",
+    "apps/web/e2e/qa/pro-tier.spec.ts": "e76102e25dd207c23147d1d77fb64f4f7819728b",
+    "apps/web/src/components.d.ts": "c677463a974994f5d78a28652c0155ce74bacb6a",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.test.ts": "9b7a012b2f8ff4288bf32e2536b0c934ee013445",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue": "473d1993cfa4f8844497c697043f5572b3e6ac63",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts": "07771a3bd56bec78385d5ec43409aaf4c1dbaad4",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "8b52799c27cedace6590ac7bcd978a574fc6ab96",
+    "apps/web/src/components/LandingV2/modelsRoster.ts": "fe475c579b8e1e1bf3fe71956a7fb45be55405b0",
+    "apps/web/src/utils/models.test.ts": "fbfcdeb57bbe9e3921d0f68ef4ff493f804444d4",
+    "apps/web/src/utils/models.ts": "448fe48871f24a1de60219d67a6a51893e5c4c32",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.test.ts": "d756edac194ed0f6b57ba815e492a109242d3538",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue": "cca87e5158694621215a013609a4358b770da8d4",
+    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
+    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
+    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
+    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
+    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
+    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
+    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
+    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
+    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
+    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
+    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
+    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
+    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
+    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
+    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
+    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
+    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
+    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
+    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
+    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
+    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
+    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
+    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
+    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
+    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
+    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
+    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.js": "01e02583f03c6be8b6c463bf003c3df5b1de6373",
+    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.map": "b542d09ea1db9f3a5ad91eb0f4be0314c62bfa08",
+    "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
+    "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
+    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
+    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
+    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
+    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
+    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
+    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
+    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
+    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
+    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
+    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
+    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
+    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
+    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
+    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
+    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.js": "b590046e70cb6aedf9e7da97ddb189da58a59506",
+    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.map": "0d46d79d810c7c7b6648df14cf718cb06e83a2a0",
+    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
+    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
+    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
+    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
+    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
+    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
+    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.js": "6878d7314683cb3371f2b029d4d0398215876165",
+    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.map": "667f1570d94bb5683f55eb38382883c128a60b1a",
+    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
+    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
+    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
+    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
+    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
+    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
+    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
+    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
+    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.js": "521d6faf8ecbbd8448168797384520ce4c62443c",
+    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.map": "c9ba0d7b3b066fcc3a9b37fe911ee7d80f84e17a",
+    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
+    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
+    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
+    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
+    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.js": "4cd1dfa0f3d2521dcd67689b6f45d1620dd9ea6c",
+    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.map": "42ac2c9a8a58ed2d3de64774aecf298b12b26cba",
+    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
+    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
+    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
+    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
+    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
+    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
+    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
+    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
+    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
+    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
+    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
+    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
+    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
+    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
    }
   },
   {
-   "at": "2026-11-18T11:32:36.550Z",
+   "at": "2026-11-18T12:15:46.147Z",
    "type": "preflight_passed",
    "tasks": [
-    "T5.4"
+    "T6.8"
    ],
-   "fingerprint": "54d22665f87af6e610cb28376aca40b30105bdee85b6bee1dc1b3d1a5e74538f"
+   "fingerprint": "2e0c4b4be047263594c7707acb4e9db98e4bbd5c9859a1f722eb2bd71cf91870"
   },
   {
-   "at": "2026-11-18T11:27:39.640Z",
+   "at": "2026-11-18T12:15:46.147Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T6.7"
+   ],
+   "fingerprint": "88be0a922cab82f194a8e5b9a4e8300e5636551db01b6de16ba822ee5205b5e9"
+  },
+  {
+   "at": "2026-11-18T12:15:46.147Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T6.6"
+   ],
+   "fingerprint": "7d09d08a64b5012a0b6085786865789bfa1417446cb461ff198d4c3aab0c9039"
+  },
+  {
+   "at": "2026-11-18T12:15:40.015Z",
+   "type": "task_built",
+   "tasks": [
+    "T6.8"
+   ],
+   "text": "gate green: e2e 103/103 x2, verify 0 errors, vitest 2813",
+   "files": []
+  },
+  {
+   "at": "2026-11-18T12:09:58.350Z",
    "type": "task_started",
    "tasks": [
-    "T5.4"
+    "T6.8"
    ],
-   "attempt": "3"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-18T11:27:37.937Z",
+   "at": "2026-11-18T12:09:58.199Z",
+   "type": "task_built",
+   "tasks": [
+    "T6.7"
+   ],
+   "text": "e2e PASS a2: 3 new scenarios, 67/67, flake x3",
+   "files": [
+    "apps/web/e2e/qa/model-menu.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T12:07:23.488Z",
+   "type": "task_started",
+   "tasks": [
+    "T6.7"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-18T12:07:23.330Z",
+   "type": "task_built",
+   "tasks": [
+    "T6.6"
+   ],
+   "text": "unit PASS a2, gap class assertion added",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T12:07:02.303Z",
+   "type": "task_started",
+   "tasks": [
+    "T6.6"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-18T12:07:02.265Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "304c53f9c1dd6b0df372c9e22a830f94d00c7624",
+    "apps/web/e2e/qa/pro-tier.spec.ts": "e76102e25dd207c23147d1d77fb64f4f7819728b",
+    "apps/web/src/components.d.ts": "c677463a974994f5d78a28652c0155ce74bacb6a",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.test.ts": "cc1b31da40eb7ce0e3dc783dc577667879811155",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue": "473d1993cfa4f8844497c697043f5572b3e6ac63",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts": "07771a3bd56bec78385d5ec43409aaf4c1dbaad4",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "8b52799c27cedace6590ac7bcd978a574fc6ab96",
+    "apps/web/src/components/LandingV2/modelsRoster.ts": "fe475c579b8e1e1bf3fe71956a7fb45be55405b0",
+    "apps/web/src/utils/models.test.ts": "fbfcdeb57bbe9e3921d0f68ef4ff493f804444d4",
+    "apps/web/src/utils/models.ts": "448fe48871f24a1de60219d67a6a51893e5c4c32",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.test.ts": "d756edac194ed0f6b57ba815e492a109242d3538",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue": "cca87e5158694621215a013609a4358b770da8d4",
+    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
+    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
+    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
+    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
+    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
+    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
+    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
+    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
+    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
+    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
+    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
+    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
+    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
+    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
+    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
+    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
+    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
+    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
+    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
+    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
+    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
+    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
+    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
+    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
+    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
+    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
+    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.js": "01e02583f03c6be8b6c463bf003c3df5b1de6373",
+    "playwright-transform-cache-502/4f/4f8492753f_1bb8e9b_generation.map": "b542d09ea1db9f3a5ad91eb0f4be0314c62bfa08",
+    "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
+    "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
+    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
+    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
+    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
+    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
+    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
+    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
+    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
+    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
+    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
+    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
+    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
+    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
+    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
+    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
+    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.js": "b590046e70cb6aedf9e7da97ddb189da58a59506",
+    "playwright-transform-cache-502/99/997ab23729_a7ac80d_modelmenuspec.map": "0d46d79d810c7c7b6648df14cf718cb06e83a2a0",
+    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
+    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
+    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
+    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
+    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
+    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
+    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.js": "6878d7314683cb3371f2b029d4d0398215876165",
+    "playwright-transform-cache-502/b3/b3c7a8843e_efc1e75_createtransformsspec.map": "667f1570d94bb5683f55eb38382883c128a60b1a",
+    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
+    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
+    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
+    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
+    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
+    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
+    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
+    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
+    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.js": "521d6faf8ecbbd8448168797384520ce4c62443c",
+    "playwright-transform-cache-502/cf/cf576cea9a_fe4648d_protierspec.map": "c9ba0d7b3b066fcc3a9b37fe911ee7d80f84e17a",
+    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
+    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
+    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
+    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
+    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.js": "4cd1dfa0f3d2521dcd67689b6f45d1620dd9ea6c",
+    "playwright-transform-cache-502/dd/ddd99fc47d_e5b8475_createimagespec.map": "42ac2c9a8a58ed2d3de64774aecf298b12b26cba",
+    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
+    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
+    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
+    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
+    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
+    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
+    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
+    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
+    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
+    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
+    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
+    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
+    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
+    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
+   }
+  },
+  {
+   "at": "2026-11-18T12:07:02.137Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T6.4"
+   ],
+   "fingerprint": "e84793d675828e2f9033eef9ac6a71ce63b95931040f2d2d9e2c469aadcebacf"
+  },
+  {
+   "at": "2026-11-18T12:05:30.028Z",
+   "type": "task_started",
+   "tasks": [
+    "T6.4"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-18T12:05:29.887Z",
    "type": "build_started",
    "tasks": [
-    "T5.4"
+    "T6.4",
+    "T6.6",
+    "T6.7",
+    "T6.8"
    ],
-   "attempt": "3"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-18T11:27:37.774Z",
+   "at": "2026-11-18T12:05:26.864Z",
+   "tasks": [
+    "T6.5"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "`vitest run src/utils/models.test.ts --coverage` 30/30, models.ts 100% lines/branches/funcs/stmts; no it.fails/skip; all listed cases present (order, Featured source order, alphabetical, disjoint both-tier company, cost/title, undefined cost as 1, same-id variants, empty sections)",
+   "fingerprint": "a7349b22ea6aedbfef17c39769d647ab8bead8039671c552b55fbe651f0447c9",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
+  },
+  {
+   "at": "2026-11-18T12:05:26.864Z",
+   "tasks": [
+    "T6.3"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "ModelOption.test.ts pass; NAME_SEPARATOR grep empty; live Flux Fast row 44px high, name and description separate elements 8px apart, sr-only \", \" keeps \"name, description\"; locked click to pricing covered by pro-tier e2e (green); shot 6/T6.3-1",
+   "fingerprint": "b79815533e2eae529b91bbfa56a130a6c695a747f19f735767e3ecf0b7d5fd9e",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
+  },
+  {
+   "at": "2026-11-18T12:05:26.864Z",
+   "tasks": [
+    "T6.2"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "ModelPicker dir vitest 95/95; live 1440: tier header pinned at top 0 and company header pinned at 28px after scroll, opaque bg dark rgb(15,12,9) and light rgb(242,235,227); Seedream 4 aria-selected in Featured and Free; shots 6/T6.2-1..5",
+   "fingerprint": "a23d9b7c899ee45938af6debef9084ac69f5a0981445a6b66b8d1875835139d2",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
+  },
+  {
+   "at": "2026-11-18T12:05:26.864Z",
+   "tasks": [
+    "T6.1"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "models.test.ts 30/30; vp lint + vp check 0 errors; no parallel helper added (`^export function group` = 2, same as HEAD: groupModelsByProvider pre-existed); live picker shows Featured/Free/Pro, companies alphabetical, Google in Free and Pro with disjoint models, cost-then-title order",
+   "fingerprint": "75c73ad16cc92155a43a2afa814b1558963ac31a1edeaf1608fdb7953897ed6d",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
+  },
+  {
+   "at": "2026-11-18T12:05:26.864Z",
+   "tasks": [
+    "T6.8"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "code-bug",
+   "text": "[code-bug] · Acceptance \"desktop picker matches design pass\" · the gate's commands are green (e2e prod 97/97 x2, vp lint/check 0 errors, bun run test 2812/2812) but the design pass it must match was not done (T6.4) and the picker e2e scenarios are missing (T6.7) · re-run the gate after T6.4 and T6.7 are fixed",
+   "files": [
+    "acceptance \"desktop picker matches design pass\""
+   ],
+   "sigs": [
+    "T6.8|code-bug|acceptance \"desktop picker matches design pass\""
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
+  },
+  {
+   "at": "2026-11-18T12:05:26.864Z",
+   "tasks": [
+    "T6.7"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "test-quality",
+   "text": "[test-quality] · Scenarios @critical company headers, @high pinned company header, @medium name/description separation · e2e/qa/model-menu.spec.ts is unchanged (git diff empty); no e2e asserts company headers, sticky pinning on scroll or row separation; only pro-tier.spec.ts was tightened. Desktop viewport there is 1280, scenario says 1440 · apps/web/e2e/qa/model-menu.spec.ts is T6.7's Spec: file ",
+   "files": [
+    "scenarios @critical company headers, @high pinned company he"
+   ],
+   "sigs": [
+    "T6.7|test-quality|scenarios @critical company headers, @high pinned company he"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
+  },
+  {
+   "at": "2026-11-18T12:05:26.864Z",
+   "tasks": [
+    "T6.6"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "test-quality",
+   "text": "[test-quality] · SPEC unit criterion \"name and description are separate elements with a gap class\" · ModelOption.test.ts checks separate elements and the combined text but never asserts the gap class (tw-gap-2 on model-option-label) · add the gap-class assertion",
+   "files": [
+    "spec unit criterion \"name and description are separate eleme"
+   ],
+   "sigs": [
+    "T6.6|test-quality|spec unit criterion \"name and description are separate eleme"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
+  },
+  {
+   "at": "2026-11-18T12:05:26.864Z",
+   "tasks": [
+    "T6.4"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "code-bug",
+   "text": "[code-bug] · SPEC Part 1 req 12 / Do \"screenshots 1440 light/dark\" · design pass was code review only; the AUDIT row \"picker design-pass: screenshots\" is wontfix and defers capture to T6.7, which took none (T6.7 report: \"Shots: none registered\") · run the impeccable critique/audit/layout pass on the real 1440 light and dark picker (verifier shots in reports/evidence/phase-6/ can seed it) and recor",
+   "files": [
+    "spec part 1 req 12 / do \"screenshots 1440 light/dark\""
+   ],
+   "sigs": [
+    "T6.4|code-bug|spec part 1 req 12 / do \"screenshots 1440 light/dark\""
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-6-verifier-a1.md"
+  },
+  {
+   "at": "2026-11-18T12:03:19.921Z",
+   "type": "advisory",
+   "tasks": [
+    "T6.1"
+   ],
+   "text": "modelsRoster.ts was a caller of groupModelsByCompany; builder added a local groupByLab repeating company grouping"
+  },
+  {
+   "at": "2026-11-18T12:03:19.769Z",
+   "type": "advisory",
+   "tasks": [
+    "T6.1"
+   ],
+   "text": "Verify grep \"^export function group\" expects 1 but HEAD already had 2 (groupModelsByProvider); no parallel helper added"
+  },
+  {
+   "at": "2026-11-18T11:55:57.707Z",
+   "type": "verify_started",
+   "tasks": [
+    "T6.1",
+    "T6.2",
+    "T6.3",
+    "T6.4",
+    "T6.5",
+    "T6.6",
+    "T6.7",
+    "T6.8"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T11:55:54.928Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T6.4"
+   ],
+   "fingerprint": "9fe2c0fcdd9218c56f7c71818d968e1b5fc4a91696400fb0ab7e1251efe30a49"
+  },
+  {
+   "at": "2026-11-18T11:55:52.631Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "9bdeff7d12dee22fc001110357689f3e438fa3dd",
+    "apps/web/e2e/qa/pro-tier.spec.ts": "e76102e25dd207c23147d1d77fb64f4f7819728b",
+    "apps/web/src/components.d.ts": "c677463a974994f5d78a28652c0155ce74bacb6a",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.test.ts": "cc1b31da40eb7ce0e3dc783dc577667879811155",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue": "473d1993cfa4f8844497c697043f5572b3e6ac63",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts": "07771a3bd56bec78385d5ec43409aaf4c1dbaad4",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "b2b0af879a6251afa66a19a3ee9a74e61691aeed",
+    "apps/web/src/components/LandingV2/modelsRoster.ts": "fe475c579b8e1e1bf3fe71956a7fb45be55405b0",
+    "apps/web/src/utils/models.test.ts": "fbfcdeb57bbe9e3921d0f68ef4ff493f804444d4",
+    "apps/web/src/utils/models.ts": "448fe48871f24a1de60219d67a6a51893e5c4c32",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.test.ts": "d756edac194ed0f6b57ba815e492a109242d3538",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue": "cca87e5158694621215a013609a4358b770da8d4",
+    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
+    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
+    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
+    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
+    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
+    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
+    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
+    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
+    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
+    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
+    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
+    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
+    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
+    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
+    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
+    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
+    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
+    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
+    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
+    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
+    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
+    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
+    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
+    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
+    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
+    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
+    "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
+    "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
+    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
+    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
+    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
+    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
+    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
+    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
+    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
+    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
+    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
+    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
+    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
+    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
+    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
+    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
+    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
+    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
+    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
+    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
+    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
+    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
+    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
+    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
+    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
+    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
+    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
+    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
+    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
+    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
+    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
+    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
+    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
+    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
+    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
+    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
+    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
+    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
+    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
+    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
+    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
+    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
+    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
+    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
+    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
+    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
+    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
+    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
+   }
+  },
+  {
+   "at": "2026-11-18T11:55:52.498Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T6.8"
+   ],
+   "fingerprint": "2e0c4b4be047263594c7707acb4e9db98e4bbd5c9859a1f722eb2bd71cf91870"
+  },
+  {
+   "at": "2026-11-18T11:55:52.498Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T6.7"
+   ],
+   "fingerprint": "88be0a922cab82f194a8e5b9a4e8300e5636551db01b6de16ba822ee5205b5e9"
+  },
+  {
+   "at": "2026-11-18T11:55:52.498Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T6.6"
+   ],
+   "fingerprint": "3bb09bc8226301dd35d2c2557435598542937cefa71f11b187ea573ae3a4263d"
+  },
+  {
+   "at": "2026-11-18T11:55:52.498Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T6.5"
+   ],
+   "fingerprint": "a7349b22ea6aedbfef17c39769d647ab8bead8039671c552b55fbe651f0447c9"
+  },
+  {
+   "at": "2026-11-18T11:55:52.214Z",
+   "type": "task_built",
+   "tasks": [
+    "T6.8"
+   ],
+   "text": "gate PASS: playwright 97/97, verify 0 errors, test 2812/2812",
+   "files": []
+  },
+  {
+   "at": "2026-11-18T11:55:46.940Z",
+   "type": "task_built",
+   "tasks": [
+    "T6.8"
+   ],
+   "text": "e2e 97/97 (x2), verify 0 errors, unit 2812/2812",
+   "files": []
+  },
+  {
+   "at": "2026-11-18T11:50:13.918Z",
+   "type": "task_started",
+   "tasks": [
+    "T6.8"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T11:50:13.752Z",
+   "type": "task_built",
+   "tasks": [
+    "T6.7"
+   ],
+   "text": "e2e PASS 12/12 pro-tier.spec.ts, flake x3 clean",
+   "files": [
+    "apps/web/e2e/qa/pro-tier.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T11:47:45.962Z",
+   "type": "task_started",
+   "tasks": [
+    "T6.7"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T11:47:45.819Z",
+   "type": "task_built",
+   "tasks": [
+    "T6.5"
+   ],
+   "text": "unit PASS, 100% lines",
+   "files": [
+    "apps/web/src/utils/models.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T11:47:20.768Z",
+   "type": "task_built",
+   "tasks": [
+    "T6.6"
+   ],
+   "text": "unit PASS, 100% cov on 3 files, 55 tests",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T11:46:36.377Z",
+   "type": "task_started",
+   "tasks": [
+    "T6.5",
+    "T6.6"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T11:46:36.237Z",
+   "type": "build_started",
+   "tasks": [
+    "T6.5",
+    "T6.6",
+    "T6.7",
+    "T6.8"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T11:46:32.307Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "a1a161a3e1f4d3daff31c8757195923453398136",
+    "apps/web/src/components.d.ts": "c677463a974994f5d78a28652c0155ce74bacb6a",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.test.ts": "cc1b31da40eb7ce0e3dc783dc577667879811155",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue": "473d1993cfa4f8844497c697043f5572b3e6ac63",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "b2b0af879a6251afa66a19a3ee9a74e61691aeed",
+    "apps/web/src/components/LandingV2/modelsRoster.ts": "fe475c579b8e1e1bf3fe71956a7fb45be55405b0",
+    "apps/web/src/utils/models.ts": "448fe48871f24a1de60219d67a6a51893e5c4c32",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue": "cca87e5158694621215a013609a4358b770da8d4",
+    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "502d8f1ecd13913a7a56b20cf2de26eeafc6b93a",
+    "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
+    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "7c0dac1de27f58971c4c1f2090ef185b7bf00a59",
+    "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
+    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "94c417e602df06783207fa7e38eb5205427caa4d",
+    "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
+    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "9591beca59c950c9037de57c7ab88b52a3bc0acd",
+    "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
+    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1f3ece266fbcfeb676d705b6d565df9f38a9875a",
+    "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
+    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "f6701e0cec7af7d0a36a6659030b01c0132dbd2e",
+    "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
+    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "4ac026c424249cca160a8cf7c713bc5884135dfd",
+    "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
+    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "df5f708eaacbdbffe6c31299fed55f3103269f86",
+    "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
+    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "b7b0cfe8dd97ccb3c350146606ab31b6b4d8f957",
+    "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
+    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "e9ea4b2d5eaa96178081a84d534e33071eca4450",
+    "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
+    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "04c8961a65552b321c3d68aa53557702e8423536",
+    "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
+    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "b5ef0e83500e417cbe3e04fc7759e22d978bdd41",
+    "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
+    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "3ea3b43988f86d82290afb2b72ec99ed638b7775",
+    "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
+    "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5d1cffa85b27f2fd0e286e610fbfb18dcd8f72be",
+    "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
+    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "39e7133814b7bef97b0c33de5dbf481d089d2954",
+    "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
+    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "3e59182ea92ae54c20fb6546f1a5a30d7eec38f4",
+    "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
+    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "ff28ce38edb8e0d81c5ec871d84d5db7b94a4415",
+    "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
+    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "23a7ed6762e832ea5166ddd90af990bc43e49e70",
+    "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
+    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "70d1e7834ff954e1315c0d4433f30c57ebaef934",
+    "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
+    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "682303d6e62f6e1eda88ba2307f7f4452d6cf23a",
+    "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
+    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "c03c90677ba4ccba7ce7af2f15c886748073b56d",
+    "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
+    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "3a3fa83510364a63d12c4e00ba0c47acdb9dff9e",
+    "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
+    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "8bdd5238d5681e45d650a7f65370f73dc11a1908",
+    "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
+    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "0ca09bcad2b366f5a098363750eb88759ae7b190",
+    "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
+    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "ffb8c64180b002e3fbfca1ee79a36cf765c5f30c",
+    "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
+    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "786886962cd865ecd85e58a8f64440f62b9018c5",
+    "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
+    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "beb189f2e7a3d35b98bbdcc4a39a3dccedeb0026",
+    "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
+    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "1794346d8eaebab3ce8af8f284bdaa0031f0c452",
+    "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
+    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "26a5e8b572b96fce8268d10d72270991f8cc5693",
+    "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
+    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "e819647b6bd7976efa501a972182ea4bb4960ae8",
+    "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
+    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "31ed6dcd1fab50a1a670e80b372610a5b83a98c4",
+    "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
+    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "653c9847b62da3a03cc77daef3d5813b34fc3642",
+    "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
+    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "23befdf49693b67d714a5ff43fca9ad28e26bec5",
+    "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
+    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "8599172d82c1ebd40352db4a804d9855ee077d59",
+    "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
+    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "30946d33607c476f4a7e32adee5ca6c10a9bccec",
+    "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
+    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "5efa7d72066ad2ded35ec22aa2c1ca416a555118",
+    "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
+    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "36eaa7d53930f0865ed647257c0a1426932c320f",
+    "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
+   }
+  },
+  {
+   "at": "2026-11-18T11:46:32.187Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T6.4"
+   ],
+   "fingerprint": "25d13ff4ab3b6e0eddac1bd8de022bf8e6fe17d7e4f3e74dfcddadc883711dd7"
+  },
+  {
+   "at": "2026-11-18T11:46:32.187Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T6.3"
+   ],
+   "fingerprint": "b79815533e2eae529b91bbfa56a130a6c695a747f19f735767e3ecf0b7d5fd9e"
+  },
+  {
+   "at": "2026-11-18T11:46:32.187Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T6.2"
+   ],
+   "fingerprint": "a23d9b7c899ee45938af6debef9084ac69f5a0981445a6b66b8d1875835139d2"
+  },
+  {
+   "at": "2026-11-18T11:46:32.187Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T6.1"
+   ],
+   "fingerprint": "75c73ad16cc92155a43a2afa814b1558963ac31a1edeaf1608fdb7953897ed6d"
+  },
+  {
+   "at": "2026-11-18T11:46:16.970Z",
+   "type": "task_built",
+   "tasks": [
+    "T6.4"
+   ],
+   "text": "design-pass rows logged, none open",
+   "files": [
+    "agent_docs/ui-polish-picker-header/AUDIT.md"
+   ]
+  },
+  {
+   "at": "2026-11-18T11:46:16.830Z",
+   "type": "task_built",
+   "tasks": [
+    "T6.3"
+   ],
+   "text": "row name/description split, NAME_SEPARATOR removed",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue"
+   ]
+  },
+  {
+   "at": "2026-11-18T11:46:16.690Z",
+   "type": "task_built",
+   "tasks": [
+    "T6.2"
+   ],
+   "text": "ModelCompanyHeader + sticky tier/company headers",
+   "files": [
+    "apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue",
+    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
+   ]
+  },
+  {
+   "at": "2026-11-18T11:46:16.550Z",
+   "type": "task_built",
+   "tasks": [
+    "T6.1"
+   ],
+   "text": "groupModelsByCompany returns Featured/Free/Pro with company groups; vitest+verify pass",
+   "files": [
+    "apps/web/src/utils/models.ts",
+    "apps/web/src/components/LandingV2/modelsRoster.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T11:43:03.153Z",
+   "type": "task_started",
+   "tasks": [
+    "T6.1",
+    "T6.2",
+    "T6.3",
+    "T6.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T11:43:03.008Z",
+   "type": "build_started",
+   "tasks": [
+    "T6.1",
+    "T6.2",
+    "T6.3",
+    "T6.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T11:42:56.760Z",
    "type": "run_started",
    "tasks": [
-    "T5.1",
-    "T5.2",
-    "T5.3",
-    "T5.4"
+    "T6.1",
+    "T6.2",
+    "T6.3",
+    "T6.4",
+    "T6.5",
+    "T6.6",
+    "T6.7",
+    "T6.8"
    ],
-   "pipeline": 2
-  },
-  {
-   "at": "2026-11-17T10:55:47.905Z",
-   "type": "question",
-   "tasks": [
-    "T5.4"
-   ],
-   "id": "Q8",
-   "text": "Gate builder (attempt 3) was stopped by the user before reporting; unsure whether to resume"
-  },
-  {
-   "at": "2026-11-17T10:55:25.143Z",
-   "type": "task_started",
-   "tasks": [
-    "T5.4"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-11-17T10:55:25.013Z",
-   "type": "build_started",
-   "tasks": [
-    "T5.4"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-11-17T10:55:22.103Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "0910025210047b12cca8e572ee88af226701a9af",
-    "agent_docs/ui-polish-picker-header/TASKS.md": "117341ca2a5f4602f834ca29be072e91e3017914",
-    "apps/web/e2e/qa/header-responsive.spec.ts": "3e4c3dd2b1765104e5567e2e7d9608f58f8a0437",
-    "apps/web/src/App.test.ts": "1fd1e64ff4c0ac0747b9a946d107e906a787e038",
-    "apps/web/src/App.vue": "b6fdab36817f88e78282ac3a2b7c9cbe47dd2c5a",
-    "apps/web/src/components/Dashboard/DashboardShell.test.ts": "1bc0ca303f5eaaea49c92f6876d992416db84fd5",
-    "apps/web/src/components/Dashboard/DashboardShell.vue": "6f27e7b7451ddba1b301f224a39b028e9367e678",
-    "apps/web/src/components/Header/AppHeader.vue": "7cee62dd260e50a9b298339af3b8072d38cd91fc",
-    "apps/web/src/composables/useLenis.test.ts": "f365cabd2261fc158fd3a433cda749e909354be1",
-    "apps/web/src/pages/Dashboard.test.ts": "77682e8176cd4f5fd3f88a9defdf4ba7d18775bd",
-    "apps/web/src/pages/Dashboard.vue": "a729ce7597dc61cf872b6a19da8d2db2675323e1",
-    "apps/web/src/pages/Examples.vue": "a097a935f8e31fb432514a760eb60534230fd418",
-    "apps/web/src/utils/layout.ts": "26bb4c2598b76977a6f8cbc4626b77b8f38a53f3",
-    "apps/web/src/utils/layout.test.ts": "418e6498f8fdd1b4989abc39a3b87275e45b5aae"
+   "pipeline": 2,
+   "baseline": {
+    "head": "183a930deac5bed89d3767c00e133a16e2574723",
+    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000?? playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js\u0000?? playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map\u0000?? playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js\u0000?? playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map\u0000?? playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js\u0000?? playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map\u0000?? playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js\u0000?? playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map\u0000?? playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js\u0000?? playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map\u0000?? playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js\u0000?? playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map\u0000?? playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js\u0000?? playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map\u0000?? playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js\u0000?? playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map\u0000?? playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js\u0000?? playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map\u0000?? playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js\u0000?? playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map\u0000?? playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js\u0000?? playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map\u0000?? playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js\u0000?? playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map\u0000?? playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js\u0000?? playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map\u0000?? playwright-transform-cache-502/59/591cda456e_098774c_collections.js\u0000?? playwright-transform-cache-502/59/591cda456e_098774c_collections.map\u0000?? playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js\u0000?? playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map\u0000?? playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js\u0000?? playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map\u0000?? playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js\u0000?? playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map\u0000?? playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js\u0000?? playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map\u0000?? playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js\u0000?? playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map\u0000?? playwright-transform-cache-502/93/932854853d_d2b8c99_index.js\u0000?? playwright-transform-cache-502/93/932854853d_d2b8c99_index.map\u0000?? playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js\u0000?? playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map\u0000?? playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js\u0000?? playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map\u0000?? playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js\u0000?? playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map\u0000?? playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js\u0000?? playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map\u0000?? playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js\u0000?? playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map\u0000?? playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js\u0000?? playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map\u0000?? playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js\u0000?? playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map\u0000?? playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js\u0000?? playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map\u0000?? playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js\u0000?? playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map\u0000?? playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js\u0000?? playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map\u0000?? playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js\u0000?? playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map\u0000?? playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js\u0000?? playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map\u0000?? playwright-transform-cache-502/f0/f025738821_5a62be4_index.js\u0000?? playwright-transform-cache-502/f0/f025738821_5a62be4_index.map\u0000?? playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js\u0000?? playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map\u0000?? playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js\u0000?? playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map\u0000?? playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js\u0000?? playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map\u0000?? playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js\u0000?? playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map\u0000",
+    "hashes": {
+     "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.js": "b3177ede8161df66333f2c0556b2a2489122d7e4",
+     "playwright-transform-cache-502/04/04c2b86918_3623d2d_proWebhook.map": "f113a5d0c2af89c743420037a9cfb59749322615",
+     "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.js": "c8493eff4e01d30a0620e914aee8301cd3abb74e",
+     "playwright-transform-cache-502/17/179fe3c64f_8c403d2_creditPacks.map": "6fecdd2621d1a5584ffced773708d513cbafebdb",
+     "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.js": "be52c877d53b08ed97bf1e5a85e4ca3f9f93ea93",
+     "playwright-transform-cache-502/19/19c974ae11_886eb4b_currencyMap.map": "1c0a7b79b97111271bdf5a02296fdcfc709e9e35",
+     "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.js": "7aac09933690ce8456df1a83804085ebb0646750",
+     "playwright-transform-cache-502/1e/1ea7ad94f5_1b14a60_stt.map": "e33192d0dfecab4bd3e9f13c4f1a5dd36bdf0293",
+     "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.js": "1eac258cab0c35f135663198b97ea088456c5a73",
+     "playwright-transform-cache-502/22/22b289d376_34d23f9_subscriptionState.map": "300b4859b3511f79e3bc52885292ba393d62aea0",
+     "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.js": "e1c17b71949521f4dcdbbdf6af0dbc8f690e1458",
+     "playwright-transform-cache-502/28/28d642a607_f5a9826_headerresponsivespec.map": "e309984de5ba9d32a9d43113c9c9e26209c74bbd",
+     "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.js": "9407006984d27f0acfa32b316d0b64f2b5b5c370",
+     "playwright-transform-cache-502/30/3029370cf6_3c94d73_playwrightconfig.map": "e679a351238ca5da783b07e7186cecaa01d7de89",
+     "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.js": "7ae2344b9149e7bce82f818f339889ac437acf3e",
+     "playwright-transform-cache-502/33/331b08887f_4a28f3d_studio.map": "522f968c9a4ec7ea18392bed1fe2f3ab8e993569",
+     "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.js": "638e5e5e662d7879ee8d0b1d3c972860d73fb7e1",
+     "playwright-transform-cache-502/34/3479b780da_81f7ed2_registry.map": "b2683a4ec87012b09852f531d19abfeeb4579241",
+     "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.js": "de7289993ae24dee8092c4c395233dbda4e9b352",
+     "playwright-transform-cache-502/37/379d9b0259_8d0fbc5_credits.map": "9496712ba257a31faf0e83f0dc9ac6ce6cdb8473",
+     "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.js": "adeea4943797d28605e90989f98dd6e9a770dbb2",
+     "playwright-transform-cache-502/3f/3f277e14ff_c0aee08_imagelimits.map": "72079f830bbb54d05d2199be0143c07910a7133d",
+     "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.js": "608743c643e689d3e6292ae6a3a828e1ff0f4220",
+     "playwright-transform-cache-502/3f/3fbf3bdbe8_4308bd5_qa.map": "12850313dce59bab47e7ccab95a96c38f3fb15b4",
+     "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.js": "a2e95940317eeaed7733ac6f547e974683a63947",
+     "playwright-transform-cache-502/4f/4f222c0a60_4b5ab5c_preflight.map": "ac0d3f3220605ceb063e8a11bcef5e8471d33acd",
+     "playwright-transform-cache-502/59/591cda456e_098774c_collections.js": "5c966360ed2aaeb567719dc95dbca18e4f23c101",
+     "playwright-transform-cache-502/59/591cda456e_098774c_collections.map": "813324ea1e35606974c4d3c641e90bebe5f47ba6",
+     "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.js": "7dae4e5945dbbea389471a8b09bee2752f4a06ce",
+     "playwright-transform-cache-502/5a/5a65d635bf_16069cf_proPerksSeed.map": "95b4279ee97ec5e2b33ee5ac010439b9b5b58596",
+     "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.js": "d243e0254e8631509d42f20c0b36b38c26436d4d",
+     "playwright-transform-cache-502/63/6325a991f0_1e4253d_cloudinaryMock.map": "6bc49db26588e1b48d49504e83521f7fa657f84c",
+     "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.js": "04ca2ec8e67f7d6a248e8a3c15a36e3f1383d915",
+     "playwright-transform-cache-502/68/68475d4e14_b5382ff_paidCallGuard.map": "28f0053e1778cd450e05fa96275623d47548abb1",
+     "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.js": "d2575d9130ef30d8ebdb07518d3166d5b3bf28a6",
+     "playwright-transform-cache-502/82/825f98fa74_504ca8f_plans.map": "5f1bfde8fe6d4bf73630e07ad855261451614ff1",
+     "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.js": "e984b00fb431f051bcb4d8714cc7b1f60e9fb0c4",
+     "playwright-transform-cache-502/91/910b9db82e_7a82521_styles.map": "e211c829a53529ff48757f28ab1383012103dd05",
+     "playwright-transform-cache-502/93/932854853d_d2b8c99_index.js": "32253ce86713b26cab77ca4f167f4119c991b6db",
+     "playwright-transform-cache-502/93/932854853d_d2b8c99_index.map": "81c703d4ddfb53dec473594f90f50cccefee01ff",
+     "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.js": "78c244b739d826a5e850450b8336a2fefc8845dc",
+     "playwright-transform-cache-502/97/97a284d81a_7f74d0e_planPill.map": "d2c0a83ccea77df7f8db73b342e51cec1b62dea5",
+     "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.js": "9aca56c8ac3f3f0cff5199153b4d9605c6e6b495",
+     "playwright-transform-cache-502/a2/a245f79496_2c71eec_index.map": "b409fd9f0c4e32f1786c4ab4947b021cca46baf9",
+     "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.js": "6a1ddf967bc49bc5831cda803da536d86a01db92",
+     "playwright-transform-cache-502/ab/ab1a7f8092_7e8bc4b_legacyUser.map": "13ef19ad6f1a4a8fe4d1231593b114d8e5d353af",
+     "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.js": "4232e5e6d62c997f4834ad118a4108b61bbb1691",
+     "playwright-transform-cache-502/ab/ab4223cc24_6220036_env.map": "50404b3f0f28f571f003f5687f44b8ddb7de5d6b",
+     "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.js": "9f557b38551f9094a8c6094aa267cb41c9c5f271",
+     "playwright-transform-cache-502/b6/b62d43114d_1be7409_signWebhook.map": "7c92fcdf3df79297279958e5e0773c306f10f4e6",
+     "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.js": "d66272889174cd0b3e983d5bc987d5a4ccadb68d",
+     "playwright-transform-cache-502/bb/bb90b63ed4_65363fb_intro.map": "f5cbadadd341c1a155ca79f7b962c43f1bece793",
+     "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.js": "12c247ce095a86d92c0f7064fedb382198922426",
+     "playwright-transform-cache-502/be/be2095db8c_fa54950_domain.map": "0434b8688bbb81c9b77a371033dd186a29a97aab",
+     "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.js": "87639f020f01138b8488230067db1d288f909261",
+     "playwright-transform-cache-502/c3/c34c4c3aec_290664f_authsetup.map": "479e35d243a8ad0435e32c949252ed0d52ea5c61",
+     "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.js": "12a27c7b0281e83b29c901124ba4f92f2a0fc631",
+     "playwright-transform-cache-502/da/da5db649e6_749839b_savedprompt.map": "b9f927fe5d3d02089134a3e88341f905212dd3cc",
+     "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.js": "0ac088d88d8556a870f0f73776b7f56bf6932b60",
+     "playwright-transform-cache-502/db/dba1d4470f_40bcd61_convert.map": "78d14133a0d0dae156a9dfbd5454bb11d2a1de79",
+     "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.js": "024bc6d87d957274f1d53eee1705d413196c34fc",
+     "playwright-transform-cache-502/ea/ea2857b97a_33b4cf6_globalsetup.map": "30fb8c8a20c3a322f5ff90ecff1154e10a0168fc",
+     "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.js": "3011cca9980dca17424f8a70698c997717dfa059",
+     "playwright-transform-cache-502/ee/ee8bc5cdae_7b5292e_types.map": "a1c5946a5886c4adc8eef735e0b21d7248f9159e",
+     "playwright-transform-cache-502/f0/f025738821_5a62be4_index.js": "d32ae1a261b233f102987815bead9def0384eb94",
+     "playwright-transform-cache-502/f0/f025738821_5a62be4_index.map": "137ea990ac0e9abf4608e1537a4325d4c96675d8",
+     "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.js": "9cf6a6ea8f7ed36e5ae6864034ed71e596b67c68",
+     "playwright-transform-cache-502/f1/f1d0ef18c7_264f0dc_base.map": "d88c4327b8106cd5b829902e02ddd04e80200818",
+     "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.js": "d8504e5db8ad8c8181440cc0c3d443fde5373365",
+     "playwright-transform-cache-502/f5/f589eb548a_9e450a8_format.map": "df9fb67ad87aefb43e581232263d45311394476c",
+     "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.js": "2a64f37c0fbac94dce668acdbc5262de24bb7aca",
+     "playwright-transform-cache-502/fa/fa15f3330d_6af2a70_generate.map": "00464c3d2e6079d2cae087d2e7431d992d1386e1",
+     "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.js": "fad8f9a07a294c224d5c11ac3016efbe1cefc806",
+     "playwright-transform-cache-502/fc/fc2e982238_3c8edec_index.map": "8fd43eba31fbaa059b693c0be5aa0785c61debf7"
+    }
    }
-  },
-  {
-   "at": "2026-11-17T10:55:21.993Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T5.1"
-   ],
-   "fingerprint": "b495e67733b1709c3a3b040d43d7e4cbc0bf3c36cc9dcf3d0558a63160789d47"
-  },
-  {
-   "at": "2026-11-17T10:54:37.729Z",
-   "type": "task_started",
-   "tasks": [
-    "T5.1"
-   ],
-   "attempt": "4"
-  },
-  {
-   "at": "2026-11-17T10:54:37.619Z",
-   "type": "build_started",
-   "tasks": [
-    "T5.1"
-   ],
-   "attempt": "4"
-  },
-  {
-   "at": "2026-11-17T10:54:35.399Z",
-   "tasks": [
-    "T5.2"
-   ],
-   "attempt": "11",
-   "type": "verify_passed",
-   "evidence": "vitest DashboardShell/Dashboard/layout tests 18/18; coverage-summary.json: DashboardShell.vue 100/100/100/100, layout.ts 100/100/100/100, Dashboard.vue lines 96.55 / stmts 93.75 / branches 95.65 / funcs 81.81 (all >=80; uncovered line 124 = stubbed MobileSettingsSheet slot + v-model handler, pre-existing, justified); no it.fails/skip in unit specs",
-   "fingerprint": "3e7948b3d1ebef2b5865b0dbaad15e4d148a151b0bab3fc61e001385de86dec9",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/ui-polish-picker-header/reports/phase-5-verifier-a11.md"
-  },
-  {
-   "at": "2026-11-17T10:54:35.399Z",
-   "tasks": [
-    "T5.3"
-   ],
-   "attempt": "11",
-   "type": "verify_inconclusive",
-   "text": "The spec passes 88/88 x3 on E2E_SERVER=dev (1 expected-fail held as test.fail); the required prod run could not start because the build fails (T5.1). The composer scenarios cannot be confirmed on prod until the build is fixed. Proof shots 5 and 6 prove the banner-showing composer AC at 360 and 390. Shots 3, 4 and 7 match no T5.3 scenario, and no shot covers the @medium after-dismiss scenario",
-   "sigs": [
-    "T5.3|inconclusive|build"
-   ],
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/ui-polish-picker-header/reports/phase-5-verifier-a11.md"
-  },
-  {
-   "at": "2026-11-17T10:54:35.399Z",
-   "tasks": [
-    "T5.4"
-   ],
-   "attempt": "11",
-   "type": "verify_failed",
-   "category": "code-bug",
-   "text": "[code-bug] · Acceptance \"Repo green\" / Checkpoint 5 · Unit (218 files, 1559 tests), lint and check are green and `100vh-60px` is gone, but the production build fails (see T5.1), so the repo is not green and the e2e gate cannot run on prod · Fix T5.1, then rerun `E2E_SERVER=prod` header-responsive --repeat-each=2",
-   "files": [
-    "acceptance \"repo green\" / checkpoint 5"
-   ],
-   "sigs": [
-    "T5.4|code-bug|acceptance \"repo green\" / checkpoint 5"
-   ],
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/ui-polish-picker-header/reports/phase-5-verifier-a11.md"
-  },
-  {
-   "at": "2026-11-17T10:54:35.398Z",
-   "tasks": [
-    "T5.1"
-   ],
-   "attempt": "11",
-   "type": "verify_failed",
-   "category": "code-bug",
-   "text": "[code-bug] · apps/web/src/utils/layout.ts:17 (HEIGHT_BELOW_HEADER_CLASS) · Tailwind's content scanner reads the template literal source text and emits `.tw-h-[calc(100dvh-var(${APP_HEADER_HEIGHT_VAR},${HEADER_BAR_PX}px))]`; lightningcss minify then fails (\"Unexpected token Delim('$')\"), so `vp build` (prod and e2e-preview) fails. Baseline 238d188 builds fine; the same build with the current src fa",
-   "files": [
-    "apps/web/src/utils/layout.ts"
-   ],
-   "sigs": [
-    "T5.1|code-bug|apps/web/src/utils/layout.ts"
-   ],
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/ui-polish-picker-header/reports/phase-5-verifier-a11.md"
-  },
-  {
-   "at": "2026-11-17T10:54:26.379Z",
-   "type": "advisory",
-   "tasks": [
-    "T5.2"
-   ],
-   "text": "Scoped coverage Verify cmd exits 1 on the global 90% funcs threshold (Dashboard.vue 81.81%); per-file 80% met"
-  },
-  {
-   "at": "2026-11-17T10:53:22.527Z",
-   "type": "advisory",
-   "tasks": [
-    "T5.1"
-   ],
-   "text": "Tailwind content scans *.test.ts; real height class only generated because tests contain the literal"
-  },
-  {
-   "at": "2026-11-17T10:53:22.420Z",
-   "type": "advisory",
-   "tasks": [
-    "T5.3"
-   ],
-   "text": "TS2488 at header-responsive.spec.ts:166 (pre-existing rail children spread), not caught by verify"
-  },
-  {
-   "at": "2026-11-17T10:53:22.306Z",
-   "type": "advisory",
-   "tasks": [
-    "T5.3"
-   ],
-   "text": "Explore at 390: tabs rest at y=100 after scroll; held as test.fail() (accepted, out of scope)"
-  },
-  {
-   "at": "2026-11-17T10:48:45.294Z",
-   "type": "verify_started",
-   "tasks": [
-    "T5.1",
-    "T5.2",
-    "T5.3",
-    "T5.4"
-   ],
-   "attempt": "11"
-  },
-  {
-   "at": "2026-11-17T10:48:42.707Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T5.4"
-   ],
-   "fingerprint": "54d22665f87af6e610cb28376aca40b30105bdee85b6bee1dc1b3d1a5e74538f"
-  },
-  {
-   "at": "2026-11-17T10:48:42.707Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T5.3"
-   ],
-   "fingerprint": "f4dba4174b865ada76c421c47af465c512eddf054a61a779b0e2965fab2fd945"
-  },
-  {
-   "at": "2026-11-17T10:48:42.707Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T5.2"
-   ],
-   "fingerprint": "3e7948b3d1ebef2b5865b0dbaad15e4d148a151b0bab3fc61e001385de86dec9"
-  },
-  {
-   "at": "2026-11-17T10:48:39.458Z",
-   "type": "task_built",
-   "tasks": [
-    "T5.4"
-   ],
-   "text": "gate green: playwright x2 59 pass, verify 0 errors, 302 files/2785 tests, grep empty; useLenis.test.ts expectation fixed",
-   "files": [
-    "apps/web/src/composables/useLenis.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-17T10:44:39.928Z",
-   "type": "task_started",
-   "tasks": [
-    "T5.4"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-17T10:44:39.756Z",
-   "type": "build_started",
-   "tasks": [
-    "T5.4"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-17T10:44:39.547Z",
-   "type": "answered",
-   "tasks": [],
-   "id": "Q-gate",
-   "text": "Re gate: fix useLenis.test.ts expectation (test-only); Re Explore tabs: keep test.fail, log as advisory"
-  },
-  {
-   "at": "2026-11-17T10:32:48.945Z",
-   "type": "task_failed",
-   "tasks": [
-    "T5.4"
-   ],
-   "attempt": "1",
-   "text": "bun run test: useLenis.test.ts:66 expects scrollTo offset only but useLenis.ts now passes onComplete (pre-existing from commit 3eb3a20, unrelated to this feature); rest of gate green",
-   "unblock": "update expectation to { offset: -8, onComplete: expect.any(Function) }",
-   "files": [
-    "apps/web/src/composables/useLenis.test.ts"
-   ],
-   "sigs": [
-    "T5.4|other|apps/web/src/composables/useLenis.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-17T10:30:02.388Z",
-   "type": "task_started",
-   "tasks": [
-    "T5.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-17T10:29:59.950Z",
-   "type": "task_built",
-   "tasks": [
-    "T5.3"
-   ],
-   "text": "e2e 29/29, x3 clean; reports 1 app bug (Explore tabs y=100) held as test.fail; spec tsc error line 166",
-   "files": [
-    "apps/web/e2e/qa/header-responsive.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-17T10:24:54.284Z",
-   "type": "task_started",
-   "tasks": [
-    "T5.3"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-11-17T10:24:54.156Z",
-   "type": "build_started",
-   "tasks": [
-    "T5.3"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-11-17T10:24:52.175Z",
-   "type": "task_failed",
-   "tasks": [
-    "T5.3"
-   ],
-   "attempt": "2",
-   "text": "T4.3 test \"Explore at 390px keeps tabs at viewport top after scrolling\" fails 3/3: Explore renders empty state in e2e so nothing scrolls; needs mocked community items. 28/29 else pass",
-   "unblock": "mock community items for Explore scroll test",
-   "files": [
-    "apps/web/e2e/qa/header-responsive.spec.ts"
-   ],
-   "sigs": [
-    "T5.3|e2e-fixture|apps/web/e2e/qa/header-responsive.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-17T10:22:16.171Z",
-   "type": "task_started",
-   "tasks": [
-    "T5.3"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-17T10:22:16.044Z",
-   "type": "build_started",
-   "tasks": [
-    "T5.3"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-17T10:22:13.786Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T5.1"
-   ],
-   "fingerprint": "bcfb608d38dccecabdeb47e3867123de455fe673ef71f9997027eac6f3f7077c"
-  },
-  {
-   "at": "2026-11-17T10:21:24.501Z",
-   "type": "task_started",
-   "tasks": [
-    "T5.1"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-11-17T10:21:24.377Z",
-   "type": "build_started",
-   "tasks": [
-    "T5.1"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-11-17T10:21:22.093Z",
-   "type": "task_failed",
-   "tasks": [
-    "T5.1"
-   ],
-   "attempt": "2",
-   "text": "e2e (T5.3 report) shows --app-header-h omits the 36px mobile banner: 136px vs 172px at 390x844/360x640, composer overflows viewport",
-   "unblock": "make --app-header-h include banner height",
-   "files": [
-    "apps/web/src/components/Header/AppHeader.vue"
-   ],
-   "sigs": [
-    "T5.1|other|apps/web/src/components/Header/AppHeader.vue"
-   ]
-  },
-  {
-   "at": "2026-11-17T10:21:17.152Z",
-   "type": "task_failed",
-   "tasks": [
-    "T5.3"
-   ],
-   "attempt": "1",
-   "text": "App bug: --app-header-h is 136px not 172px with 36px mobile banner at 390/360; composer overflows (shell ends 880 in 844 viewport). 3 tests test.fail(); also T4.3 Explore 390px tabs test fails 3/3 and tsc error at spec line 129",
-   "unblock": "Fix header height var to include banner, then remove test.fail markers",
-   "files": [
-    "apps/web/e2e/qa/header-responsive.spec.ts",
-    "apps/web/src/components/Header/AppHeader.vue"
-   ]
-  },
-  {
-   "at": "2026-11-17T10:17:59.639Z",
-   "type": "task_started",
-   "tasks": [
-    "T5.3"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-17T10:17:59.508Z",
-   "type": "task_built",
-   "tasks": [
-    "T5.2"
-   ],
-   "text": "unit PASS: lowest file 96.55% lines, shuffle clean",
-   "files": [
-    "apps/web/src/components/Dashboard/DashboardShell.test.ts",
-    "apps/web/src/pages/Dashboard.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-17T10:17:26.478Z",
-   "type": "task_started",
-   "tasks": [
-    "T5.2"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-17T10:17:26.355Z",
-   "type": "build_started",
-   "tasks": [
-    "T5.2",
-    "T5.3",
-    "T5.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-17T10:17:22.131Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T5.1"
-   ],
-   "fingerprint": "542ec705f1543912ec0a1996404754a2127be36cb3774f32ee8167b2b782fab5"
-  },
-  {
-   "at": "2026-11-17T10:16:52.888Z",
-   "type": "task_started",
-   "tasks": [
-    "T5.1"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-17T10:16:52.747Z",
-   "type": "build_started",
-   "tasks": [
-    "T5.1"
-   ],
-   "attempt": "2"
   }
  ]
 };

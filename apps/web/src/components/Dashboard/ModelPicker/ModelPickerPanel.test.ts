@@ -53,4 +53,55 @@ describe('ModelPickerPanel', () => {
       .trigger('click');
     expect(wrapper.emitted('selectModel')).toHaveLength(1);
   });
+
+  it('renders a company header with logo and name per company group in Free and Pro', () => {
+    const wrapper = mountPanel();
+    for (const section of ['free', 'pro']) {
+      const root = wrapper.get(`[data-testid="model-section-${section}"]`);
+      const headers = root.findAll('[data-testid="model-company-header"]');
+      const names = headers.map((h) => h.text());
+      expect(names.length).toBeGreaterThan(0);
+      expect(new Set(names).size).toBe(names.length);
+      expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+      for (const h of headers) expect(h.find('img, svg, [data-provider]').exists()).toBe(true);
+    }
+  });
+
+  it('header count matches the number of distinct companies in each tier', () => {
+    const wrapper = mountPanel();
+    const company = (m: (typeof MODELS)[number]) => m.companyName ?? m.provider;
+    const premium = MODELS.filter((m) => PREMIUM_MODEL_KEYS.includes(m.id as ModelKey));
+    const free = MODELS.filter((m) => !PREMIUM_MODEL_KEYS.includes(m.id as ModelKey));
+    const count = (s: string) =>
+      wrapper
+        .get(`[data-testid="model-section-${s}"]`)
+        .findAll('[data-testid="model-company-header"]').length;
+    expect(count('free')).toBe(new Set(free.map(company)).size);
+    expect(count('pro')).toBe(new Set(premium.map(company)).size);
+  });
+
+  it('has no company headers in the Featured section', () => {
+    const featured = mountPanel().get('[data-testid="model-section-featured"]');
+    expect(featured.find('[data-testid="model-company-header"]').exists()).toBe(false);
+  });
+
+  it('emits selectModel with the model when a Featured option is clicked', async () => {
+    const wrapper = mountPanel();
+    const first = MODELS.find((m) => m.featured && !PREMIUM_MODEL_KEYS.includes(m.id as ModelKey))!;
+    const options = wrapper
+      .get('[data-testid="model-section-featured"]')
+      .findAll('[data-testid="model-option"]');
+    const idx = MODELS.filter((m) => m.featured).indexOf(first);
+    await options[idx].trigger('click');
+    expect(wrapper.emitted('selectModel')?.[0]).toEqual([first]);
+  });
+
+  it('marks only the selected model option as selected', () => {
+    const wrapper = mountPanel();
+    const selected = wrapper
+      .findAll('[data-testid="model-option"]')
+      .filter((o) => o.attributes('aria-selected') === 'true');
+    expect(selected.length).toBeGreaterThan(0);
+    for (const o of selected) expect(o.text()).toContain(MODELS[0].title);
+  });
 });

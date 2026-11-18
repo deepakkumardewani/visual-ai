@@ -1,13 +1,20 @@
 import { describe, expect, it } from 'vitest';
 
 import { MODEL_IDS } from '@visual-ai/shared';
+import type { Model } from '@/types/model';
 import {
   FLUX_MODES,
   formatPrice,
   getFeaturedModels,
   getProviderDisplayName,
+  groupModelsByCompany,
+  getModelBestForHint,
+  getModelLogoUrl,
+  getModelSpeedHint,
   groupModelsByProvider,
   MODELS,
+  PICKER_SECTION,
+  sortByCostThenName,
   UPSCALER_MODELS,
 } from '@/utils/models';
 
@@ -127,5 +134,213 @@ describe('upscaler models', () => {
 
   it('includes UPSCALE_IMAGE as first entry for backward compatibility', () => {
     expect(UPSCALER_MODELS[0].id).toBe('UPSCALE_IMAGE');
+  });
+});
+
+const makeModel = (overrides: Partial<Model> & Pick<Model, 'id' | 'title'>): Model => ({
+  provider: 'google',
+  description: 'desc',
+  tier: 'standard',
+  creditCost: 1,
+  ...overrides,
+});
+
+describe('sortByCostThenName', () => {
+  it('orders by credit cost ascending, then title', () => {
+    const sorted = sortByCostThenName([
+      makeModel({ id: 'A', title: 'Zeta', creditCost: 2 }),
+      makeModel({ id: 'B', title: 'Beta', creditCost: 5 }),
+      makeModel({ id: 'C', title: 'Alpha', creditCost: 2 }),
+      makeModel({ id: 'D', title: 'Omega', creditCost: 1 }),
+    ]);
+    expect(sorted.map((m) => m.title)).toEqual(['Omega', 'Alpha', 'Zeta', 'Beta']);
+  });
+
+  it('treats an undefined creditCost as 1', () => {
+    const sorted = sortByCostThenName([
+      makeModel({ id: 'A', title: 'Two', creditCost: 2 }),
+      makeModel({ id: 'B', title: 'Undefined', creditCost: undefined }),
+      makeModel({ id: 'C', title: 'Zero-ish', creditCost: 1 }),
+    ]);
+    // undefined ties with cost 1, so the title decides between them
+    expect(sorted.map((m) => m.title)).toEqual(['Undefined', 'Zero-ish', 'Two']);
+  });
+
+  it('returns a new array without mutating the input', () => {
+    const input = [
+      makeModel({ id: 'A', title: 'B', creditCost: 3 }),
+      makeModel({ id: 'B', title: 'A', creditCost: 1 }),
+    ];
+    const snapshot = [...input];
+    const sorted = sortByCostThenName(input);
+    expect(sorted).not.toBe(input);
+    expect(input).toEqual(snapshot);
+  });
+
+  it('returns an empty array for empty input', () => {
+    expect(sortByCostThenName([])).toEqual([]);
+  });
+});
+
+describe('groupModelsByCompany', () => {
+  const free = (id: string, title: string, extra: Partial<Model> = {}) =>
+    makeModel({ id, title, ...extra });
+
+  it('exposes the section names', () => {
+    expect(PICKER_SECTION).toEqual({
+      FEATURED: 'Featured',
+      FREE: 'Free',
+      PRO: 'Pro',
+    });
+  });
+
+  it('orders sections Featured, Free, Pro', () => {
+    const sections = groupModelsByCompany([
+      free('GPT_IMAGE_2', 'GPT Image 2', {
+        companyName: 'OpenAI',
+        featured: true,
+      }),
+      free('FREE_1', 'Free One', { companyName: 'Acme' }),
+    ]);
+    expect(sections.map((s) => s.section)).toEqual(['Featured', 'Free', 'Pro']);
+  });
+
+  it('keeps Featured in source order, not sorted', () => {
+    const sections = groupModelsByCompany([
+      free('Z', 'Zulu', { featured: true, creditCost: 9 }),
+      free('N', 'Not featured'),
+      free('A', 'Alpha', { featured: true, creditCost: 1 }),
+      free('M', 'Mike', { featured: true, creditCost: 4 }),
+    ]);
+    const featured = sections[0];
+    expect(featured.section).toBe('Featured');
+    expect('models' in featured && featured.models.map((m) => m.title)).toEqual([
+      'Zulu',
+      'Alpha',
+      'Mike',
+    ]);
+  });
+
+  it('sorts companies alphabetically within a tier', () => {
+    const sections = groupModelsByCompany([
+      free('1', 'One', { companyName: 'Zed' }),
+      free('2', 'Two', { companyName: 'Acme' }),
+      free('3', 'Three', { companyName: 'Mid' }),
+    ]);
+    const freeSection = sections.find((s) => s.section === 'Free');
+    expect(
+      freeSection && 'companies' in freeSection && freeSection.companies.map((c) => c.company),
+    ).toEqual(['Acme', 'Mid', 'Zed']);
+  });
+
+  it('falls back to provider when companyName is missing', () => {
+    const sections = groupModelsByCompany([free('1', 'One', { provider: 'bfl' })]);
+    const freeSection = sections.find((s) => s.section === 'Free');
+    expect(freeSection && 'companies' in freeSection && freeSection.companies[0].company).toBe(
+      'bfl',
+    );
+  });
+
+  it('places a company with free and Pro models in both tiers with disjoint models', () => {
+    const sections = groupModelsByCompany([
+      free('FREE_G', 'Free G', { companyName: 'Google' }),
+      free('NANO_BANANA_PRO', 'Nano Banana Pro', { companyName: 'Google' }),
+      free('IMAGEN_4_ULTRA', 'Imagen 4 Ultra', { companyName: 'Google' }),
+    ]);
+    const freeSection = sections.find((s) => s.section === 'Free');
+    const proSection = sections.find((s) => s.section === 'Pro');
+    const freeGoogle = freeSection && 'companies' in freeSection ? freeSection.companies : [];
+    const proGoogle = proSection && 'companies' in proSection ? proSection.companies : [];
+
+    expect(freeGoogle.map((c) => c.company)).toEqual(['Google']);
+    expect(proGoogle.map((c) => c.company)).toEqual(['Google']);
+    expect(freeGoogle[0].models.map((m) => m.id)).toEqual(['FREE_G']);
+    expect(proGoogle[0].models.map((m) => m.id).sort()).toEqual([
+      'IMAGEN_4_ULTRA',
+      'NANO_BANANA_PRO',
+    ]);
+  });
+
+  it('sorts models inside a company by cost then title', () => {
+    const sections = groupModelsByCompany([
+      free('1', 'Pricey', { companyName: 'Acme', creditCost: 5 }),
+      free('2', 'Beta', { companyName: 'Acme', creditCost: 2 }),
+      free('3', 'Alpha', { companyName: 'Acme', creditCost: 2 }),
+      free('4', 'Unset', { companyName: 'Acme', creditCost: undefined }),
+    ]);
+    const freeSection = sections.find((s) => s.section === 'Free');
+    const acme = freeSection && 'companies' in freeSection ? freeSection.companies[0] : undefined;
+    expect(acme?.models.map((m) => m.title)).toEqual(['Unset', 'Alpha', 'Beta', 'Pricey']);
+  });
+
+  it('also lists a featured model in its tier group', () => {
+    const sections = groupModelsByCompany([
+      free('GPT_IMAGE_2', 'GPT Image 2', {
+        companyName: 'OpenAI',
+        featured: true,
+      }),
+    ]);
+    const pro = sections.find((s) => s.section === 'Pro');
+    expect(pro && 'companies' in pro && pro.companies[0].models.map((m) => m.id)).toEqual([
+      'GPT_IMAGE_2',
+    ]);
+    expect(sections[0].section).toBe('Featured');
+  });
+
+  it('keeps same-id variants distinct', () => {
+    const sections = groupModelsByCompany([
+      free('SHARED', 'Variant A', { companyName: 'Acme' }),
+      free('SHARED', 'Variant B', { companyName: 'Acme' }),
+    ]);
+    const freeSection = sections.find((s) => s.section === 'Free');
+    const acme = freeSection && 'companies' in freeSection ? freeSection.companies[0] : undefined;
+    expect(acme?.models.map((m) => m.title)).toEqual(['Variant A', 'Variant B']);
+  });
+
+  it('drops empty sections', () => {
+    const onlyFree = groupModelsByCompany([free('1', 'One', { companyName: 'Acme' })]);
+    expect(onlyFree.map((s) => s.section)).toEqual(['Free']);
+
+    const onlyPro = groupModelsByCompany([free('FLUX_REALISM', 'Realism', { companyName: 'BFL' })]);
+    expect(onlyPro.map((s) => s.section)).toEqual(['Pro']);
+
+    expect(groupModelsByCompany([])).toEqual([]);
+  });
+
+  it('defaults to the full catalog and partitions it across Free and Pro', () => {
+    const sections = groupModelsByCompany();
+    const count = (name: string) => {
+      const s = sections.find((x) => x.section === name);
+      return s && 'companies' in s ? s.companies.reduce((n, c) => n + c.models.length, 0) : 0;
+    };
+    expect(sections[0].section).toBe('Featured');
+    expect(count('Free') + count('Pro')).toBe(MODELS.length);
+    expect(count('Pro')).toBeGreaterThan(0);
+  });
+});
+
+describe('model presentation helpers', () => {
+  it('returns null for a missing logo and an asset url otherwise', () => {
+    expect(getModelLogoUrl(undefined)).toBeNull();
+    expect(getModelLogoUrl('')).toBeNull();
+    expect(getModelLogoUrl('openai.svg')).toEqual(expect.any(String));
+  });
+
+  it('maps known model ids to a speed hint and unknown ids to undefined', () => {
+    expect(getModelSpeedHint('FLUX_BASIC')).toBe('Fast');
+    expect(getModelSpeedHint('SEEDREAM_4')).toBe('Balanced');
+    expect(getModelSpeedHint('GPT_IMAGE_2')).toBe('Quality');
+    expect(getModelSpeedHint('NOT_A_MODEL')).toBeUndefined();
+  });
+
+  it('prefers trimmed bestAt and falls back to description', () => {
+    const base = makeModel({
+      id: 'X',
+      title: 'X',
+      description: 'Plain description',
+    });
+    expect(getModelBestForHint({ ...base, bestAt: '  Portraits  ' })).toBe('Portraits');
+    expect(getModelBestForHint({ ...base, bestAt: '   ' })).toBe('Plain description');
+    expect(getModelBestForHint(base)).toBe('Plain description');
   });
 });

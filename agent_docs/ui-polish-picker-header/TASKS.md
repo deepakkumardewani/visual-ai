@@ -242,7 +242,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** The model picker is grouped by Featured, Free and Pro, with company sub-headers (logo and name) inside Free and Pro, sorted by cost then name. Model rows no longer fuse name and description.
 **Try in UI:** Open the picker and see Featured, Free, Pro with company headers ; scroll and see the current company header stay pinned ; see "Flux Fast" separated from its description.
 
-### ☐ T6.1 Tier and company grouping helpers
+### ✅ T6.1 Tier and company grouping helpers
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/models.ts`
@@ -250,7 +250,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 reqs 1-4, the identity part of req 11, and assumptions 6-8: sections in order, company in both tiers shows disjoint models, same-`id` variants stay distinct.
 - **Verify:** `cd apps/web && npx vitest run src/utils/models.test.ts`; `bun run verify`; `grep -c "^export function group" apps/web/src/utils/models.ts` (exactly 1).
 
-### ☐ T6.2 Company header and panel rendering
+### ✅ T6.2 Company header and panel rendering
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue`, `apps/web/src/components/Dashboard/ModelPicker/Heading.vue`
@@ -258,7 +258,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 reqs 2, 10, 11: sticky tier then company headers, opaque, truncation with `title`, missing-logo fallback.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/ModelPicker`; `bun run verify`.
 
-### ☐ T6.3 Row layout fix
+### ✅ T6.3 Row layout fix
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue`
@@ -266,7 +266,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 reqs 8-9; locked click still opens pricing.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/ModelPicker/ModelOption.test.ts`; `grep -rn "NAME_SEPARATOR" apps/web/src` (empty); `bun run verify`.
 
-### ☐ T6.4 Design pass: picker
+### ✅ T6.4 Design pass: picker
 
 - **Kind:** implementation
 - **Files:** `agent_docs/ui-polish-picker-header/AUDIT.md`
@@ -274,7 +274,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 req 12: every finding resolved or recorded with a reason (no design-pass row left `open`).
 - **Verify:** `grep -c 'picker design-pass' agent_docs/ui-polish-picker-header/AUDIT.md` (non-zero); `grep 'picker design-pass' agent_docs/ui-polish-picker-header/AUDIT.md | grep -c '| open |'` (0); `bun run verify`.
 
-### ☐ T6.5 Unit: grouping and sort
+### ✅ T6.5 Unit: grouping and sort
 
 - **Kind:** unit
 - **Files:** `apps/web/src/utils/models.ts`
@@ -282,7 +282,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 unit criteria for grouping; the new helpers at least 90% line coverage (SPEC Testing Strategy), target over 95%, and `models.ts` at least 80% across metrics; no `it.fails`.
 - **Verify:** `cd apps/web && npx vitest run src/utils/models.test.ts --coverage --coverage.include=src/utils/models.ts --coverage.reporter=text`
 
-### ☐ T6.6 Unit: picker panel and row
+### ✅ T6.6 Unit: picker panel and row
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelOption.vue`, `apps/web/src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue`
@@ -290,7 +290,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 unit criteria for panel/row; every file at least 80% across metrics, target over 95%; no `it.fails`.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/ModelPicker/ModelPickerPanel.test.ts src/components/Dashboard/ModelPicker/ModelOption.test.ts src/components/Dashboard/ModelPicker/ModelCompanyHeader.test.ts --coverage --coverage.include=src/components/Dashboard/ModelPicker/ModelPickerPanel.vue --coverage.include=src/components/Dashboard/ModelPicker/ModelOption.vue --coverage.include=src/components/Dashboard/ModelPicker/ModelCompanyHeader.vue --coverage.reporter=text`
 
-### ☐ T6.7 E2E: picker sections and company headers
+### ✅ T6.7 E2E: picker sections and company headers
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` at 1440 popover shows Featured, Free, Pro in order with company headers; `@high` scrolling keeps the current company header pinned; `@critical` Free user sees lock on Pro rows and on Featured Pro models; `@high` Pro user sees no locks; `@medium` row name and description visually separated.
@@ -299,7 +299,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 1 e2e criteria pass with mocked APIs; stale selectors in `model-menu.spec.ts` and `pro-tier.spec.ts` updated without weakening.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/model-menu.spec.ts e2e/qa/pro-tier.spec.ts --repeat-each=3`
 
-### ☐ T6.8 Gate: Phase 6
+### ✅ T6.8 Gate: Phase 6
 
 - **Kind:** gate
 - **Files:** none
