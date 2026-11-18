@@ -458,7 +458,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** On phones and small tablets the landing page theme toggle sits in the top bar next to the menu button instead of inside the open menu.
 **Try in UI:** Open the landing page at 390 and see the theme toggle beside the hamburger with the menu closed ; tap it and see the theme flip ; at 1440 see one toggle in the actions.
 
-### ☐ T10.1 LandingNav toggle placement
+### ✅ T10.1 LandingNav toggle placement
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Landing/LandingNav.vue`
@@ -466,7 +466,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 4b: one visible toggle per width; no `ThemeButton` in the open sheet; no overflow at 360.
 - **Verify:** `cd apps/web && npx vitest run src/components/Landing/LandingNav.test.ts`; `grep -rn "nav__sheet-theme-btn" apps/web/src` (empty); `bun run verify`.
 
-### ☐ T10.2 Unit: LandingNav
+### ✅ T10.2 Unit: LandingNav
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Landing/LandingNav.vue`
@@ -474,7 +474,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 4b unit criterion; at least 80% across metrics, target over 95%; no `it.fails`.
 - **Verify:** `cd apps/web && npx vitest run src/components/Landing/LandingNav.test.ts --coverage --coverage.include=src/components/Landing/LandingNav.vue --coverage.reporter=text`
 
-### ☐ T10.3 E2E: landing theme toggle
+### ✅ T10.3 E2E: landing theme toggle
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` at 390 and 800 toggle visible with the menu closed and clicking flips the theme attribute; `@high` tap target >=44px; `@high` no header overflow at 360; `@medium` at 1440 exactly one toggle, in the actions; `@medium` signed-out header ThemeButton elsewhere unchanged.
@@ -483,7 +483,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 4b e2e criteria pass on the guest landing page, no API calls needed.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/landing-nav-theme.spec.ts --repeat-each=3`
 
-### ☐ T10.4 Gate: Phase 10
+### ✅ T10.4 Gate: Phase 10
 
 - **Kind:** gate
 - **Files:** none

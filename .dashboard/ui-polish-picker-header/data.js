@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-18T14:21:41.523Z",
+ "generatedAt": "2026-11-18T14:51:17.354Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -29,20 +29,20 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
- "costUsd": 31.989,
- "elapsedMs": 181351318,
+ "costUsd": 33.2902,
+ "elapsedMs": 182086853,
  "costByRole": {
-  "builder": 7.325,
-  "verifier": 18.4193,
-  "unit": 3.0613,
-  "e2e": 3.1834
+  "builder": 7.5597,
+  "verifier": 19.0974,
+  "unit": 3.1871,
+  "e2e": 3.446
  },
  "totals": {
   "phases": 14,
   "tasks": 61,
   "byStatus": {
-   "verified": 46,
-   "ready": 15
+   "verified": 50,
+   "ready": 11
   }
  },
  "phases": [
@@ -2380,7 +2380,7 @@ window.DASHBOARD = {
      "line": 413,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T14:21:32.683Z",
+     "updatedAt": "2026-11-18T14:21:50.014Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2426,7 +2426,7 @@ window.DASHBOARD = {
      "line": 421,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T14:21:32.683Z",
+     "updatedAt": "2026-11-18T14:21:50.014Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2470,7 +2470,7 @@ window.DASHBOARD = {
      "line": 429,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T14:21:32.683Z",
+     "updatedAt": "2026-11-18T14:21:50.014Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2512,7 +2512,7 @@ window.DASHBOARD = {
      "line": 437,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T14:21:32.683Z",
+     "updatedAt": "2026-11-18T14:21:50.014Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2561,7 +2561,7 @@ window.DASHBOARD = {
      "line": 446,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T14:21:32.683Z",
+     "updatedAt": "2026-11-18T14:21:50.014Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2610,7 +2610,7 @@ window.DASHBOARD = {
     {
      "id": "T10.1",
      "title": "LandingNav toggle placement",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -2630,23 +2630,31 @@ window.DASHBOARD = {
      ],
      "line": 461,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T14:51:17.319Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.2994,
+     "costApprox": true,
+     "elapsedMs": 735535,
      "summary": []
     },
     {
      "id": "T10.2",
      "title": "Unit: LandingNav",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
@@ -2664,23 +2672,31 @@ window.DASHBOARD = {
      ],
      "line": 469,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T14:51:17.319Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.2954,
+     "costApprox": true,
+     "elapsedMs": 684607,
      "summary": []
     },
     {
      "id": "T10.3",
      "title": "E2E: landing theme toggle",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [],
      "files": [],
@@ -2696,23 +2712,31 @@ window.DASHBOARD = {
      ],
      "line": 477,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T14:51:17.319Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4321,
+     "costApprox": true,
+     "elapsedMs": 642305,
      "summary": []
     },
     {
      "id": "T10.4",
      "title": "Gate: Phase 10",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -2730,25 +2754,33 @@ window.DASHBOARD = {
      ],
      "line": 486,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T14:51:17.319Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.2743,
+     "costApprox": true,
+     "elapsedMs": 359777,
      "summary": []
     }
    ],
-   "verified": 0,
+   "verified": 4,
    "total": 4,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 1.3012,
+   "elapsedMs": 735535
   },
   {
    "id": "11",
@@ -3214,7 +3246,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 10",
+ "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 11",
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -3309,6 +3341,33 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-18T14:21:50.014Z",
+   "ok": true,
+   "phase": "9",
+   "tasks": [
+    "T9.1",
+    "T9.2",
+    "T9.3",
+    "T9.4",
+    "T9.5"
+   ],
+   "attempt": "2",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 37/37 x3 prod, unit 18/18 100% on changed files",
+   "error": null,
+   "sha": "df57d37c68c2957a18422bcb5b17cebc53059beb",
+   "shortSha": "df57d37",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/df57d37c68c2957a18422bcb5b17cebc53059beb",
+   "subject": "fix(web): FAQ visible in the Upgrade dialog",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-18T19:51:41+05:30",
+   "filesChanged": 10,
+   "added": 1034,
+   "removed": 530
+  },
   {
    "at": "2026-11-18T13:28:50.543Z",
    "ok": true,
@@ -5078,9 +5137,123 @@ window.DASHBOARD = {
    "file": "9/T9.5-5.png",
    "phase": "9",
    "href": "shots/9/T9.5-5.png"
+  },
+  {
+   "taskId": "T10.1",
+   "kind": "after",
+   "step": "No ThemeButton in the open sheet",
+   "attempt": 1,
+   "caption": "At 390 with the menu open, the theme toggle stays in the bar beside the close button and the sheet holds only links and the Start free CTA",
+   "annotations": [
+    {
+     "x": 68.2,
+     "y": 1.9,
+     "w": 11.3,
+     "h": 5.2,
+     "label": "Single toggle in the bar, 44x44"
+    },
+    {
+     "x": 0,
+     "y": 9,
+     "w": 100,
+     "h": 48.7,
+     "label": "Open sheet, no theme toggle"
+    }
+   ],
+   "at": "2026-11-18T14:50:42.963Z",
+   "file": "10/T10.1-1.png",
+   "phase": "10",
+   "href": "shots/10/T10.1-1.png"
+  },
+  {
+   "taskId": "T10.1",
+   "kind": "after",
+   "step": "No overflow at 360; toggle next to the hamburger",
+   "attempt": 1,
+   "caption": "At 360 the bar holds logo, a 44px theme toggle and the burger with no horizontal overflow",
+   "annotations": [
+    {
+     "x": 65.6,
+     "y": 2,
+     "w": 12.2,
+     "h": 5.5,
+     "label": "Theme toggle left of the burger"
+    },
+    {
+     "x": 81.1,
+     "y": 2,
+     "w": 12.2,
+     "h": 5.5,
+     "label": "Burger"
+    }
+   ],
+   "at": "2026-11-18T14:50:43.332Z",
+   "file": "10/T10.1-2.png",
+   "phase": "10",
+   "href": "shots/10/T10.1-2.png"
+  },
+  {
+   "taskId": "T10.1",
+   "kind": "after",
+   "step": "One visible toggle at >=900, in .nav__actions",
+   "attempt": 1,
+   "caption": "At 1440 exactly one theme toggle is visible, inside the nav actions before Start free",
+   "annotations": [
+    {
+     "x": 81.1,
+     "y": 2,
+     "w": 3.1,
+     "h": 4.9,
+     "label": "Only visible toggle, in the actions"
+    }
+   ],
+   "at": "2026-11-18T14:50:43.597Z",
+   "file": "10/T10.1-3.png",
+   "phase": "10",
+   "href": "shots/10/T10.1-3.png"
+  },
+  {
+   "taskId": "T10.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Landing header at 390 with theme toggle beside the burger, menu closed",
+   "annotations": [],
+   "at": "2026-11-18T14:45:07.687Z",
+   "file": "10/T10.3-1.png",
+   "phase": "10",
+   "href": "shots/10/T10.3-1.png"
+  },
+  {
+   "taskId": "T10.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Landing header at 800 with theme toggle beside the burger, menu closed",
+   "annotations": [],
+   "at": "2026-11-18T14:45:07.973Z",
+   "file": "10/T10.3-2.png",
+   "phase": "10",
+   "href": "shots/10/T10.3-2.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-18T14:51:17.319Z",
+   "type": "deliverable",
+   "tasks": [
+    "T10.1",
+    "T10.2",
+    "T10.3",
+    "T10.4"
+   ],
+   "text": "Landing nav theme toggle moved into the bar (<900) and actions (>=900); removed from the sheet",
+   "files": [
+    "apps/web/src/components/Landing/LandingNav.vue",
+    "apps/web/src/components/Landing/LandingNav.test.ts",
+    "apps/web/e2e/qa/landing-nav-theme.spec.ts"
+   ]
+  },
   {
    "at": "2026-11-18T14:21:32.683Z",
    "type": "deliverable",
@@ -5235,6 +5408,14 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-18T14:51:00.826Z",
+   "type": "advisory",
+   "tasks": [
+    "T10.3"
+   ],
+   "text": "landing-nav-theme.spec.ts writes PNGs to agent_docs/qa/landing-nav-theme/ instead of the TASKS convention agent_docs/qa/ui-polish-picker-header/"
+  },
   {
    "at": "2026-11-18T14:14:54.683Z",
    "type": "advisory",
@@ -5646,6 +5827,266 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
+   "at": "2026-11-18T14:51:17.319Z",
+   "type": "deliverable",
+   "tasks": [
+    "T10.1",
+    "T10.2",
+    "T10.3",
+    "T10.4"
+   ],
+   "text": "Landing nav theme toggle moved into the bar (<900) and actions (>=900); removed from the sheet",
+   "files": [
+    "apps/web/src/components/Landing/LandingNav.vue",
+    "apps/web/src/components/Landing/LandingNav.test.ts",
+    "apps/web/e2e/qa/landing-nav-theme.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T14:51:12.924Z",
+   "tasks": [
+    "T10.4"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "e2e prod x3 clean (superset of x2); root bun run test 306 files / 2897 tests passed; vp lint + vp check 0 errors (run without --fix); git diff touches no UserMenu/AppHeader files, /pricing signed-out ThemeButton e2e passes",
+   "fingerprint": "52dd12e79f7d278e515eddfb85f4bcd5a9496689e3d4e3fb5deb0f2f717e271f",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-18T14:51:12.924Z",
+   "tasks": [
+    "T10.3"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "E2E_SERVER=prod (fresh build via webServer) landing-nav-theme.spec.ts --repeat-each=3: 22 passed (7 tests x3 + setup), 0 flaky; scenarios @critical 390/800, @high 44px, @high 360 overflow, @medium 1440, @medium /pricing all covered; shots T10.3-1/2 show toggle beside burger with menu closed",
+   "fingerprint": "b95a5f44aa327d335b37a4b884884b7f2c2f0633d09a7296d955a597df22f3a3",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-18T14:51:12.924Z",
+   "tasks": [
+    "T10.2"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "LandingNav.test.ts 11/11 pass; coverage LandingNav.vue stmts 95.83 branch 100 funcs 92.3 lines 95.45 (>=80 all); no it.fails/skip/only; asserts no ThemeButton in open sheet, bar toggle outside actions, actions toggle inside",
+   "fingerprint": "2c84cd61caa1fa633910eb88b0eb1eb429aa3e334fe2b437006486763cd9d1b3",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-18T14:51:12.924Z",
+   "tasks": [
+    "T10.1"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "grep nav__sheet-theme-btn in apps/web/src + e2e empty; live DOM 390 open menu: sheet present, 0 toggles in sheet, 1 visible toggle 44x44 in bar; 360: overflow 0, toggle x236 left of burger x292; 1440: 1 visible toggle, inside .nav__actions; shots T10.1-1..3 recorded; vp lint 0 errors, vp check 0 errors",
+   "fingerprint": "dd39c31ef0a62842af4d7a66373da940f980134421d1eeb16cf4b35e0622819b",
+   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-18T14:51:00.826Z",
+   "type": "advisory",
+   "tasks": [
+    "T10.3"
+   ],
+   "text": "landing-nav-theme.spec.ts writes PNGs to agent_docs/qa/landing-nav-theme/ instead of the TASKS convention agent_docs/qa/ui-polish-picker-header/"
+  },
+  {
+   "at": "2026-11-18T14:48:02.077Z",
+   "type": "verify_started",
+   "tasks": [
+    "T10.1",
+    "T10.2",
+    "T10.3",
+    "T10.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T14:47:58.384Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "apps/web/src/components/Landing/LandingNav.test.ts": "9c10e5f017383c91b8c08c14687b5fd7846006d7",
+    "apps/web/src/components/Landing/LandingNav.vue": "c3d50dd382ac4dcace01c24cb1bd5133f2494838",
+    "apps/web/src/components/LandingV2/LandingV2Page.vue": "d6cfca3bfd5d7acdf60050bcebe649d1ed5a332a",
+    "apps/web/e2e/qa/landing-nav-theme.spec.ts": "13a0bb57fff4437b83f4d401a4c801194019eddb"
+   }
+  },
+  {
+   "at": "2026-11-18T14:47:58.114Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T10.4"
+   ],
+   "fingerprint": "52dd12e79f7d278e515eddfb85f4bcd5a9496689e3d4e3fb5deb0f2f717e271f"
+  },
+  {
+   "at": "2026-11-18T14:47:58.114Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T10.3"
+   ],
+   "fingerprint": "b95a5f44aa327d335b37a4b884884b7f2c2f0633d09a7296d955a597df22f3a3"
+  },
+  {
+   "at": "2026-11-18T14:47:58.114Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T10.2"
+   ],
+   "fingerprint": "2c84cd61caa1fa633910eb88b0eb1eb429aa3e334fe2b437006486763cd9d1b3"
+  },
+  {
+   "at": "2026-11-18T14:47:57.707Z",
+   "type": "task_built",
+   "tasks": [
+    "T10.4"
+   ],
+   "text": "spec 15/15, verify 0 errors, full suite 306 files pass (1 unrelated FeatureLanding ECONNREFUSED flake)",
+   "files": [
+    "agent_docs/ui-polish-picker-header/TASKS.md"
+   ]
+  },
+  {
+   "at": "2026-11-18T14:47:50.302Z",
+   "type": "task_built",
+   "tasks": [
+    "T10.4"
+   ],
+   "text": "spec 15/15 x2; verify 0; test 306 files/2897 pass (1 flaky FeatureLanding ECONNREFUSED, 1 of 3 runs)",
+   "files": []
+  },
+  {
+   "at": "2026-11-18T14:45:13.147Z",
+   "type": "task_started",
+   "tasks": [
+    "T10.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T14:45:12.819Z",
+   "type": "task_built",
+   "tasks": [
+    "T10.3"
+   ],
+   "text": "e2e 8/8, 22/22 repeat-each=3, flake clean",
+   "files": [
+    "e2e"
+   ]
+  },
+  {
+   "at": "2026-11-18T14:40:30.619Z",
+   "type": "task_started",
+   "tasks": [
+    "T10.3"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T14:40:30.180Z",
+   "type": "task_built",
+   "tasks": [
+    "T10.2"
+   ],
+   "text": "LandingNav.test.ts 11 tests, lowest file 95.45% lines, shuffle clean",
+   "files": [
+    "apps/web/src/components/Landing/LandingNav.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-18T14:39:48.317Z",
+   "type": "task_started",
+   "tasks": [
+    "T10.2"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T14:39:43.564Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "apps/web/src/components/Landing/LandingNav.vue": "c3d50dd382ac4dcace01c24cb1bd5133f2494838",
+    "apps/web/src/components/LandingV2/LandingV2Page.vue": "d6cfca3bfd5d7acdf60050bcebe649d1ed5a332a"
+   }
+  },
+  {
+   "at": "2026-11-18T14:39:43.299Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T10.1"
+   ],
+   "fingerprint": "dd39c31ef0a62842af4d7a66373da940f980134421d1eeb16cf4b35e0622819b"
+  },
+  {
+   "at": "2026-11-18T14:39:36.611Z",
+   "type": "task_built",
+   "tasks": [
+    "T10.1"
+   ],
+   "text": "bar ThemeButton <900, actions >=900, sheet toggle removed, 44px",
+   "files": [
+    "apps/web/src/components/Landing/LandingNav.vue",
+    "apps/web/src/components/LandingV2/LandingV2Page.vue"
+   ]
+  },
+  {
+   "at": "2026-11-18T14:38:57.389Z",
+   "type": "task_started",
+   "tasks": [
+    "T10.1"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T14:38:57.043Z",
+   "type": "build_started",
+   "tasks": [
+    "T10.1",
+    "T10.2",
+    "T10.3",
+    "T10.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-18T14:38:53.348Z",
+   "type": "run_started",
+   "tasks": [
+    "T10.1",
+    "T10.2",
+    "T10.3",
+    "T10.4"
+   ],
+   "pipeline": 2,
+   "baseline": {
+    "head": "df57d37c68c2957a18422bcb5b17cebc53059beb",
+    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000"
+   }
+  },
+  {
+   "at": "2026-11-18T14:21:50.014Z",
+   "type": "commit",
+   "tasks": [
+    "T9.1",
+    "T9.2",
+    "T9.3",
+    "T9.4",
+    "T9.5"
+   ],
+   "attempt": "2",
+   "text": "fix(web): FAQ visible in the Upgrade dialog",
+   "sha": "df57d37c68c2957a18422bcb5b17cebc53059beb",
+   "branch": "feature-enhancement",
+   "pushed": "yes",
+   "evidence": "e2e 37/37 x3 prod, unit 18/18 100% on changed files"
+  },
+  {
    "at": "2026-11-18T14:21:32.683Z",
    "type": "deliverable",
    "tasks": [
@@ -5999,271 +6440,6 @@ window.DASHBOARD = {
    "files": [
     "agent_docs/ui-polish-picker-header/AUDIT.md"
    ]
-  },
-  {
-   "at": "2026-11-18T13:54:48.437Z",
-   "type": "task_started",
-   "tasks": [
-    "T9.1",
-    "T9.2"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T13:54:48.121Z",
-   "type": "build_started",
-   "tasks": [
-    "T9.1",
-    "T9.2",
-    "T9.3",
-    "T9.4",
-    "T9.5"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T13:54:42.512Z",
-   "type": "run_started",
-   "tasks": [
-    "T9.1",
-    "T9.2",
-    "T9.3",
-    "T9.4",
-    "T9.5"
-   ],
-   "pipeline": 2,
-   "baseline": {
-    "head": "14c226e565e09b933fd27242520f7ae0e9addb23",
-    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000"
-   }
-  },
-  {
-   "at": "2026-11-18T13:28:50.543Z",
-   "type": "commit",
-   "tasks": [
-    "T8.1",
-    "T8.2",
-    "T8.3",
-    "T8.4"
-   ],
-   "attempt": "1",
-   "text": "feat(web): picker bottom sheet below 768",
-   "sha": "14c226e565e09b933fd27242520f7ae0e9addb23",
-   "branch": "feature-enhancement",
-   "pushed": "yes",
-   "evidence": "e2e 157/157, lowest unit coverage 93.33% branches (sheet), 100% lines"
-  },
-  {
-   "at": "2026-11-18T13:28:31.725Z",
-   "type": "deliverable",
-   "tasks": [
-    "T8.1",
-    "T8.2",
-    "T8.3",
-    "T8.4"
-   ],
-   "text": "Bottom sheet below 768: ModelPickerSheet, breakpoint switch, unit + e2e coverage, nested Escape fix",
-   "files": [
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T13:28:27.486Z",
-   "tasks": [
-    "T8.4"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "prod model-menu + pro-tier + create-image --repeat-each=3: 157/157; bun run verify (apps/web and root) 0 errors; bun run test apps/web 222 files 1655 tests, root 306 files 2881 tests; 20 picker-* screenshots present",
-   "fingerprint": "b5a8336bd5c7c4595b4f50bdad9168c8f9e4ada88b2bae2f21d1253df387feda",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-18T13:28:27.486Z",
-   "tasks": [
-    "T8.3"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod model-menu.spec.ts x3 all green (part of 157/157), 9 sheet scenarios incl. 390 nested Escape (Settings sheet stays, focus on trigger), no test.fail/skip, retries 0",
-   "fingerprint": "fe1f062878bcd70481d75709028835e1f9bab870b0d0b791c5a83029ae3d1387",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-18T13:28:27.486Z",
-   "tasks": [
-    "T8.2"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "33/33 tests; coverage ModelPicker.vue 100/100/100/100, ModelPickerSheet.vue stmts 100 branch 93.33 funcs 100 lines 100 (only the SSR typeof document guard uncovered); no it.fails/skip; assertions real (scroll lock, focus restore, breakpoint crossing both ways, reduced motion)",
-   "fingerprint": "1e25afe040914f6bcb20878860220629b2d43143f19a4d4ff0ba8ca6e985b059",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-18T13:28:27.485Z",
-   "tasks": [
-    "T8.1"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "vitest src/components/Dashboard/ModelPicker 12 files 135/135; bun run verify 0 errors; package.json diff empty (no new dep); source has 85dvh, safe-area padding, useScrollLock, useFocusTrap, focus restore, reduced-motion :css off; e2e prod sheet 390 full width x=0, 360x640 >=4 rows with sticky chrome, popover at 768; proof shots 8/T8.1-1..3",
-   "fingerprint": "990381aef9b43dc25b90fcff1e2e96630348df12721014c0086dd8e8823702b4",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-18T13:27:58.525Z",
-   "type": "advisory",
-   "tasks": [
-    "T8.2"
-   ],
-   "text": "Capture-phase Escape fix (only topmost sheet closes when nested in Settings sheet) has no unit test; covered by e2e only"
-  },
-  {
-   "at": "2026-11-18T13:27:58.360Z",
-   "type": "advisory",
-   "tasks": [
-    "T8.2"
-   ],
-   "text": "New lint warning eslint(no-unsafe-optional-chaining) at ModelPicker.test.ts:322 (emitted()?.[0]?.[0] cast then .id)"
-  },
-  {
-   "at": "2026-11-18T13:27:58.178Z",
-   "type": "advisory",
-   "tasks": [
-    "T8.1"
-   ],
-   "text": "Sheet does not use Popover navigate-options-from-input: ArrowUp/Down/Home/End option nav (SPEC Part 1 req 7, popover and sheet alike) is popover-only; builder DECISION, port to sheet"
-  },
-  {
-   "at": "2026-11-18T13:19:40.883Z",
-   "type": "verify_started",
-   "tasks": [
-    "T8.1",
-    "T8.2",
-    "T8.3",
-    "T8.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T13:19:38.594Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/ui-polish-picker-header/TASKS.md": "81fa50f002b5876132de3447adee3d73a748a920",
-    "apps/web/e2e/qa/model-menu.spec.ts": "cb2f7183dcb24d386fb7e1ca73cc3a250dd4d198",
-    "apps/web/src/components.d.ts": "ecc685c815cdced5f21dcfe722967cec8f203258",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.test.ts": "365c14ea8ff86685513ec3c43d4b5f562686901b",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPicker.vue": "9316d4f471873d30c3b1db01a69cfe2817f07b99",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerPanel.vue": "8c7f904c408c0e05745695d6d7f06c258212c0f8",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.test.ts": "7875b28efa23af869e7ea79b49c1330d5c24663b",
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue": "0430bef8544c42f40320e559cc10c9f457960284",
-    "apps/web/src/test/matchMediaMock.ts": "62c311f49ddfccf2c0cb0f199d3f6c2218d1b0f3"
-   }
-  },
-  {
-   "at": "2026-11-18T13:19:38.448Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T8.4"
-   ],
-   "fingerprint": "b5a8336bd5c7c4595b4f50bdad9168c8f9e4ada88b2bae2f21d1253df387feda"
-  },
-  {
-   "at": "2026-11-18T13:19:38.448Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T8.3"
-   ],
-   "fingerprint": "fe1f062878bcd70481d75709028835e1f9bab870b0d0b791c5a83029ae3d1387"
-  },
-  {
-   "at": "2026-11-18T13:19:38.448Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T8.2"
-   ],
-   "fingerprint": "1e25afe040914f6bcb20878860220629b2d43143f19a4d4ff0ba8ca6e985b059"
-  },
-  {
-   "at": "2026-11-18T13:19:38.448Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T8.1"
-   ],
-   "fingerprint": "990381aef9b43dc25b90fcff1e2e96630348df12721014c0086dd8e8823702b4"
-  },
-  {
-   "at": "2026-11-18T13:19:29.321Z",
-   "type": "task_built",
-   "tasks": [
-    "T8.4"
-   ],
-   "text": "e2e 105 pass, verify 0, unit 2881 pass; Escape fix in sheet",
-   "files": [
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue",
-    "apps/web/e2e/qa/model-menu.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T13:19:08.825Z",
-   "type": "task_built",
-   "tasks": [
-    "T8.4"
-   ],
-   "text": "Playwright 105 pass x2; verify ok; test 2881 pass; 20 picker shots; fixed nested Escape",
-   "files": [
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T13:08:48.142Z",
-   "type": "task_started",
-   "tasks": [
-    "T8.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T13:08:47.975Z",
-   "type": "task_built",
-   "tasks": [
-    "T8.3"
-   ],
-   "text": "8/8 scenarios, flake x3 clean; 1 app bug (Escape at 390 closes nested picker and Settings sheet, test.fail)",
-   "files": [
-    "apps/web/e2e/qa/model-menu.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T13:04:58.370Z",
-   "type": "task_started",
-   "tasks": [
-    "T8.3"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T13:04:58.112Z",
-   "type": "task_built",
-   "tasks": [
-    "T8.2"
-   ],
-   "text": "lowest file 100% lines, sheet branches 92.3%, shuffle clean",
-   "files": [
-    "apps/web/src/components/Dashboard/ModelPicker/ModelPickerSheet.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T13:02:34.556Z",
-   "type": "task_started",
-   "tasks": [
-    "T8.2"
-   ],
-   "attempt": "1"
   }
  ]
 };

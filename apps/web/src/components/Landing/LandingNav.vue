@@ -53,6 +53,8 @@ function scrollToTop() {
         </LandingButton>
       </div>
 
+      <ThemeButton class="nav__theme-btn nav__theme-btn--bar" />
+
       <button
         class="nav__burger"
         :aria-expanded="menuOpen"
@@ -75,7 +77,6 @@ function scrollToTop() {
           {{ link.label }}
         </a>
         <div class="nav__sheet-actions">
-          <ThemeButton class="nav__sheet-theme-btn" />
           <LandingButton
             :to="auth.isSignedIn ? '/create' : '/signin'"
             size="lg"
@@ -300,21 +301,15 @@ function scrollToTop() {
   color: rgb(var(--tw-ink-muted));
   background: transparent;
   flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+}
+
+.nav__theme-btn--bar {
+  margin-right: -0.75rem;
 }
 
 .nav__theme-btn:hover {
-  border-color: rgba(201, 168, 76, 0.5);
-  color: rgb(var(--tw-ink-primary));
-}
-
-.nav__sheet-theme-btn {
-  border-color: rgba(201, 168, 76, 0.25);
-  color: rgb(var(--tw-ink-muted));
-  background: transparent;
-  flex-shrink: 0;
-}
-
-.nav__sheet-theme-btn:hover {
   border-color: rgba(201, 168, 76, 0.5);
   color: rgb(var(--tw-ink-primary));
 }
@@ -365,7 +360,8 @@ function scrollToTop() {
   .nav__actions {
     display: flex;
   }
-  .nav__burger {
+  .nav__burger,
+  .nav__theme-btn--bar {
     display: none;
   }
 }
