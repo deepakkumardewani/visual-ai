@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-17T09:36:32.743Z",
+ "generatedAt": "2026-11-18T11:38:09.522Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -29,20 +29,20 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
- "costUsd": 16.1946,
- "elapsedMs": 82318252,
+ "costUsd": 20.1617,
+ "elapsedMs": 174080033,
  "costByRole": {
-  "e2e": 1.3006,
-  "builder": 3.3126,
-  "verifier": 10.2231,
-  "unit": 1.3584
+  "e2e": 1.869,
+  "builder": 4.7395,
+  "verifier": 12.0532,
+  "unit": 1.5
  },
  "totals": {
   "phases": 14,
   "tasks": 61,
   "byStatus": {
-   "verified": 19,
-   "ready": 42
+   "verified": 23,
+   "ready": 38
   }
  },
  "phases": [
@@ -995,7 +995,7 @@ window.DASHBOARD = {
      "line": 165,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-17T09:36:32.726Z",
+     "updatedAt": "2026-11-17T09:40:08.038Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1048,7 +1048,7 @@ window.DASHBOARD = {
      "line": 173,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-17T09:36:32.726Z",
+     "updatedAt": "2026-11-17T09:40:08.038Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1088,7 +1088,7 @@ window.DASHBOARD = {
      "line": 181,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-17T09:36:32.726Z",
+     "updatedAt": "2026-11-17T09:40:08.038Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1137,7 +1137,7 @@ window.DASHBOARD = {
      "line": 190,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-17T09:36:32.726Z",
+     "updatedAt": "2026-11-17T09:40:08.038Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -1193,14 +1193,17 @@ window.DASHBOARD = {
     {
      "id": "T5.1",
      "title": "Header height variable and dvh shell",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
       "apps/web/src/utils/layout.ts",
       "apps/web/src/components/Header/AppHeader.vue",
       "apps/web/src/components/Dashboard/DashboardShell.vue",
-      "apps/web/src/pages/Dashboard.vue"
+      "apps/web/src/pages/Dashboard.vue",
+      "apps/web/src/pages/Examples.vue",
+      "apps/web/src/App.vue",
+      "apps/web/src/App.test.ts"
      ],
      "gherkin": null,
      "do": "Define `--app-header-h` (and the mobile row heights) once from `layout.ts` constants; replace `calc(100vh-60px)` in `DashboardShell.vue` and the two `Dashboard.vue` uses with `dvh` plus the variable; reconcile 60 vs 64px and the banner/two-row mobile case. Prove by e2e, not arithmetic.",
@@ -1216,23 +1219,52 @@ window.DASHBOARD = {
      ],
      "line": 205,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T11:38:09.505Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": null,
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "FAIL",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 4,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.2762,
+     "costApprox": true,
+     "elapsedMs": 91761779,
      "summary": []
     },
     {
      "id": "T5.2",
      "title": "Unit: shell height",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [],
      "files": [
@@ -1252,23 +1284,31 @@ window.DASHBOARD = {
      ],
      "line": 213,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T11:38:09.505Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5991,
+     "costApprox": true,
+     "elapsedMs": 91240497,
      "summary": []
     },
     {
      "id": "T5.3",
      "title": "E2E: composer stays on screen",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [],
      "files": [],
@@ -1284,26 +1324,50 @@ window.DASHBOARD = {
      ],
      "line": 221,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T11:38:09.505Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": null,
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "FAIL",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.0259,
+     "costApprox": true,
+     "elapsedMs": 91207336,
      "summary": []
     },
     {
      "id": "T5.4",
      "title": "Gate: Phase 5",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
-     "files": [],
+     "files": [
+      "apps/web/src/composables/useLenis.test.ts"
+     ],
      "gherkin": null,
      "do": "Run suites and greps as evidence.",
      "spec": null,
@@ -1319,25 +1383,47 @@ window.DASHBOARD = {
      ],
      "line": 230,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-18T11:38:09.505Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "FAIL",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.0658,
+     "costApprox": true,
+     "elapsedMs": 90484588,
      "summary": []
     }
    ],
-   "verified": 0,
+   "verified": 4,
    "total": 4,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 3.967,
+   "elapsedMs": 91761781
   },
   {
    "id": "6",
@@ -2882,7 +2968,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 5",
+ "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 6",
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -2962,10 +3048,47 @@ window.DASHBOARD = {
    "text": "spec_issue: SPEC:116 centered tabs vs SPEC:125 labelled Earn/Upgrade at 1024; tabs 86px left of midpoint at 1024, 34px at 1440. See reports/phase-4-verifier-a4.md",
    "answer": "Re Q7: option (a) free-slot centering accepted; SPEC/AUDIT reworded. Free-slot e2e assertion is correct.",
    "answeredAt": "2026-11-17T09:31:20.441Z"
+  },
+  {
+   "at": "2026-11-17T10:55:47.905Z",
+   "type": "question",
+   "tasks": [
+    "T5.4"
+   ],
+   "id": "Q8",
+   "text": "Gate builder (attempt 3) was stopped by the user before reporting; unsure whether to resume",
+   "answer": null,
+   "answeredAt": null
   }
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-17T09:40:08.038Z",
+   "ok": true,
+   "phase": "4",
+   "tasks": [
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4"
+   ],
+   "attempt": "7",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 73/73 x3, unit 130/130, lowest coverage 81.8%",
+   "error": null,
+   "sha": "238d18821d7e429ca9767c7fd061e5d9a048ec92",
+   "shortSha": "238d188",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/238d18821d7e429ca9767c7fd061e5d9a048ec92",
+   "subject": "feat(web): tabs into the header, centered in free space with pinned mobile row",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-17T15:06:36+05:30",
+   "filesChanged": 19,
+   "added": 1933,
+   "removed": 510
+  },
   {
    "at": "2026-11-16T12:09:41.677Z",
    "ok": true,
@@ -3856,9 +3979,127 @@ window.DASHBOARD = {
    "file": "4/T4.3-3.png",
    "phase": "4",
    "href": "shots/4/T4.3-3.png"
+  },
+  {
+   "taskId": "T5.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Composer fully on screen at 768x1024",
+   "annotations": [],
+   "at": "2026-11-17T10:21:08.428Z",
+   "file": "5/T5.3-1.png",
+   "phase": "5",
+   "href": "shots/5/T5.3-1.png"
+  },
+  {
+   "taskId": "T5.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Composer fully on screen at 1440x900",
+   "annotations": [],
+   "at": "2026-11-17T10:21:08.560Z",
+   "file": "5/T5.3-2.png",
+   "phase": "5",
+   "href": "shots/5/T5.3-2.png"
+  },
+  {
+   "taskId": "T5.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "header responsive two-rows-360",
+   "annotations": [],
+   "at": "2026-11-17T10:24:43.667Z",
+   "file": "5/T5.3-3.png",
+   "phase": "5",
+   "href": "shots/5/T5.3-3.png"
+  },
+  {
+   "taskId": "T5.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "header responsive two-rows-390",
+   "annotations": [],
+   "at": "2026-11-17T10:24:43.904Z",
+   "file": "5/T5.3-4.png",
+   "phase": "5",
+   "href": "shots/5/T5.3-4.png"
+  },
+  {
+   "taskId": "T5.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "header responsive composer-360x640",
+   "annotations": [],
+   "at": "2026-11-17T10:24:44.056Z",
+   "file": "5/T5.3-5.png",
+   "phase": "5",
+   "href": "shots/5/T5.3-5.png"
+  },
+  {
+   "taskId": "T5.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "header responsive composer-390x844",
+   "annotations": [],
+   "at": "2026-11-17T10:24:44.223Z",
+   "file": "5/T5.3-6.png",
+   "phase": "5",
+   "href": "shots/5/T5.3-6.png"
+  },
+  {
+   "taskId": "T5.3",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "header responsive four-digit-360",
+   "annotations": [],
+   "at": "2026-11-17T10:24:44.384Z",
+   "file": "5/T5.3-7.png",
+   "phase": "5",
+   "href": "shots/5/T5.3-7.png"
+  },
+  {
+   "taskId": "T5.3",
+   "kind": "proof",
+   "step": "@medium no vertical overflow regression after banner dismissal",
+   "attempt": 12,
+   "caption": "At 390x844 on the prod build, after the banner offer dialog is dismissed, the full page is still 844px tall and the prompt bar and Generate button sit fully on screen",
+   "annotations": [
+    {
+     "x": 3,
+     "y": 75,
+     "w": 94,
+     "h": 24,
+     "label": "Composer and Generate fully inside the viewport after dismissal"
+    }
+   ],
+   "at": "2026-11-18T11:35:33.032Z",
+   "file": "5/T5.3-8.png",
+   "phase": "5",
+   "href": "shots/5/T5.3-8.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-18T11:38:09.505Z",
+   "type": "deliverable",
+   "tasks": [
+    "T5.1",
+    "T5.2",
+    "T5.3",
+    "T5.4"
+   ],
+   "text": "Header height from a single source: layout.ts constants, no 100vh-60px, prod build green",
+   "files": [
+    "apps/web/src/utils/layout.ts"
+   ]
+  },
   {
    "at": "2026-11-17T09:36:32.726Z",
    "type": "deliverable",
@@ -3930,6 +4171,70 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-18T11:37:38.867Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.3"
+   ],
+   "text": "Proof shots 5/T5.3-3,-4,-7 (two-rows, four-digit) match no T5.3 scenario; captions are generic"
+  },
+  {
+   "at": "2026-11-18T11:37:38.738Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.3"
+   ],
+   "text": "header-responsive.spec.ts:166 TS2488 under e2e tsconfig on spread of rail?.children (pre-existing at baseline)"
+  },
+  {
+   "at": "2026-11-18T11:37:38.608Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.3"
+   ],
+   "text": "header-responsive.spec.ts:388 Explore at 390 tabs rest at y=100 after scroll, held as test.fail (out-of-scope app bug)"
+  },
+  {
+   "at": "2026-11-18T11:37:38.451Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.2"
+   ],
+   "text": "Scoped T5.2 coverage cmd exits 1: global 90% functions threshold applies to the 3-file run; Dashboard.vue funcs 81.81% (per-file 80% policy met)"
+  },
+  {
+   "at": "2026-11-17T10:54:26.379Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.2"
+   ],
+   "text": "Scoped coverage Verify cmd exits 1 on the global 90% funcs threshold (Dashboard.vue 81.81%); per-file 80% met"
+  },
+  {
+   "at": "2026-11-17T10:53:22.527Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.1"
+   ],
+   "text": "Tailwind content scans *.test.ts; real height class only generated because tests contain the literal"
+  },
+  {
+   "at": "2026-11-17T10:53:22.420Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.3"
+   ],
+   "text": "TS2488 at header-responsive.spec.ts:166 (pre-existing rail children spread), not caught by verify"
+  },
+  {
+   "at": "2026-11-17T10:53:22.306Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.3"
+   ],
+   "text": "Explore at 390: tabs rest at y=100 after scroll; held as test.fail() (accepted, out of scope)"
+  },
   {
    "at": "2026-11-17T09:35:56.425Z",
    "type": "advisory",
@@ -4157,588 +4462,605 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
-   "at": "2026-11-17T09:36:32.726Z",
+   "at": "2026-11-18T11:38:09.505Z",
    "type": "deliverable",
    "tasks": [
-    "T4.1",
-    "T4.2",
-    "T4.3",
-    "T4.4"
+    "T5.1",
+    "T5.2",
+    "T5.3",
+    "T5.4"
    ],
-   "text": "Tabs moved into the header: centered in free space at 768+, pinned segmented row 2 below 768",
+   "text": "Header height from a single source: layout.ts constants, no 100vh-60px, prod build green",
    "files": [
-    "apps/web/src/components/Header/AppHeader.vue"
+    "apps/web/src/utils/layout.ts"
    ]
   },
   {
-   "at": "2026-11-17T09:36:28.065Z",
+   "at": "2026-11-18T11:38:06.976Z",
    "tasks": [
-    "T4.3"
+    "T5.4"
    ],
-   "attempt": "7",
+   "attempt": "12",
    "type": "verify_passed",
-   "evidence": "`E2E_SERVER=prod` header-responsive.spec.ts --repeat-each=3 gives 73 passed, 0 failed, 0 flaky, exit 0. The @medium centering test now also checks |leftGap-rightGap| <= 8px, so it would fail on a layout where the tabs hug the select. That matches the amended SPEC:116.",
-   "fingerprint": "8ed39a2d73f3d4377a9ed8f9a62a6a968c6eb2decd08291022b6e9397083d2dd",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a13.md"
+   "evidence": "Checkpoint 5 met. prod build OK; prod e2e (x3, covers x2) 88/88; `bun run test` 218 files / 1559 tests; vp lint/check 0 errors; 100vh-60px absent; useLenis.test.ts is a test-only change",
+   "fingerprint": "54d22665f87af6e610cb28376aca40b30105bdee85b6bee1dc1b3d1a5e74538f",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-5-verifier-a14.md"
   },
   {
-   "at": "2026-11-17T09:36:28.065Z",
+   "at": "2026-11-18T11:38:06.975Z",
    "tasks": [
-    "T4.2"
+    "T5.3"
    ],
-   "attempt": "7",
+   "attempt": "12",
    "type": "verify_passed",
-   "evidence": "4 specs, 61/61 pass. Coverage (lines/branches/funcs): AppHeader.vue 100/100/100; NavTabs.vue 100/92.3/100; FeatureSelect.vue 96.25/83.33/95.45 (lines 34-36 are dead code); Dashboard.vue 96.55/95.65/81.81 (line 124 is the stubbed sheet's v-model). The lowest metric is 81.81% funcs, above the 80% floor. No it.fails, skip or only markers.",
-   "fingerprint": "3abf53154ac4396019024adc3e22efe6658939ed7dd6e311d7222b5b51b8cdd4",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a13.md"
+   "evidence": "E2E_SERVER=prod header-responsive --repeat-each=3: 88 passed (1.5m), 0 flaky; dev --repeat-each=3: 88 passed (1.8m). Composer @critical 360x640/390x844, @high 768x1024/1440x900 and @medium after-dismiss each 3/3 on prod. Proof shots 5/T5.3-1,-2,-5,-6 checked; I added the missing after-dismiss shot (5/T5.3-8, prod, 390x844, full page = viewport)",
+   "fingerprint": "f4dba4174b865ada76c421c47af465c512eddf054a61a779b0e2965fab2fd945",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-5-verifier-a14.md"
   },
   {
-   "at": "2026-11-17T09:36:28.064Z",
+   "at": "2026-11-18T11:38:06.975Z",
    "tasks": [
-    "T4.1"
+    "T5.2"
    ],
-   "attempt": "7",
+   "attempt": "12",
    "type": "verify_passed",
-   "evidence": "The Q7 spec issue is resolved by the owner's choice of option (a). SPEC:116 and AUDIT:9 now say \"centered in the free space\". On the prod build, the tabs sit centered in the slot between the feature select and the Earn button: about 9/12px gaps at 768 and 25/20px at 1024 (shots 4/T4.1-6, 4/T4.1-7). All other ACs were re-proven by the e2e run: tabs show at 700, row 2 stays pinned on Explore at 390,",
-   "fingerprint": "fd36ea1363ecda7da3c6baa2b63f587d664499440733c4c5073c5d5f12ab079a",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a13.md"
+   "evidence": "3 files / 18 tests pass (with layout.test.ts); DashboardShell.vue 100/100/100/100, layout.ts 100/100/100/100, Dashboard.vue stmts 93.75 / branch 95.65 / funcs 81.81 / lines 96.55 (all >=80%); no it.fails/skip/only in the unit specs",
+   "fingerprint": "0cda0f1a3376b10408134218ec3e5f66514627f1292e390c69b912521f59dcef",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-5-verifier-a14.md"
   },
   {
-   "at": "2026-11-17T09:35:56.425Z",
+   "at": "2026-11-18T11:38:06.974Z",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "12",
+   "type": "verify_passed",
+   "evidence": "prod `bun run build` exit 0 (was failing in a11); layout.ts:20 HEIGHT_BELOW_HEADER_CLASS is now a plain literal; dist CSS emits `.tw-h-[calc(100dvh-var(--app-header-h,64px))]{height:calc(100dvh - var(--app-header-h,64px))}` with 0 `${` occurrences; vitest Dashboard scope 43 files / 336 tests pass; vp lint + vp check 0 errors; `grep -rn \"100vh-60px\" apps/web/src` empty; composer on screen at 360/39",
+   "fingerprint": "f0caa540bbb0d557bbae5d530be0e06baea3b8d4810d5ed986af1c2ec9b5cc89",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-5-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-18T11:37:38.867Z",
    "type": "advisory",
    "tasks": [
-    "T4.3"
+    "T5.3"
    ],
-   "text": "Engineer report T4.3-e2e-a11.md named in the brief does not exist; verified by re-running the spec instead."
+   "text": "Proof shots 5/T5.3-3,-4,-7 (two-rows, four-digit) match no T5.3 scenario; captions are generic"
   },
   {
-   "at": "2026-11-17T09:35:56.327Z",
+   "at": "2026-11-18T11:37:38.738Z",
    "type": "advisory",
    "tasks": [
-    "T4.1"
+    "T5.3"
    ],
-   "text": "Shots 4/T4.1-4 and -5 frame 1024/1440 as spec-issue offsets from the viewport midpoint; superseded by 4/T4.1-6 and -7 under Q7 option a."
+   "text": "header-responsive.spec.ts:166 TS2488 under e2e tsconfig on spread of rail?.children (pre-existing at baseline)"
   },
   {
-   "at": "2026-11-17T09:35:56.231Z",
+   "at": "2026-11-18T11:37:38.608Z",
    "type": "advisory",
    "tasks": [
-    "T4.1"
+    "T5.3"
    ],
-   "text": "Dashboard.vue working-tree diff also carries useStudioPromptPrefill wiring from the unrelated prefill work (3eb3a20); commit it with that work, not as phase 4."
+   "text": "header-responsive.spec.ts:388 Explore at 390 tabs rest at y=100 after scroll, held as test.fail (out-of-scope app bug)"
   },
   {
-   "at": "2026-11-17T09:35:56.128Z",
+   "at": "2026-11-18T11:37:38.451Z",
    "type": "advisory",
    "tasks": [
-    "T4.1"
+    "T5.2"
    ],
-   "text": "Root bun run test: useLenis.test.ts fails deterministically (expects scrollTo offset only; source from commit 3eb3a20 now passes onComplete). Outside phase 4 files; fix the stale test."
+   "text": "Scoped T5.2 coverage cmd exits 1: global 90% functions threshold applies to the 3-file run; Dashboard.vue funcs 81.81% (per-file 80% policy met)"
   },
   {
-   "at": "2026-11-17T09:32:29.943Z",
+   "at": "2026-11-18T11:32:42.510Z",
    "type": "verify_started",
    "tasks": [
-    "T4.1",
-    "T4.2",
-    "T4.3"
+    "T5.1",
+    "T5.2",
+    "T5.3",
+    "T5.4"
    ],
-   "attempt": "7"
+   "attempt": "12"
   },
   {
-   "at": "2026-11-17T09:32:27.737Z",
+   "at": "2026-11-18T11:32:40.374Z",
    "type": "preflight_passed",
    "tasks": [
-    "T4.3"
+    "T5.2"
    ],
-   "fingerprint": "8ed39a2d73f3d4377a9ed8f9a62a6a968c6eb2decd08291022b6e9397083d2dd"
+   "fingerprint": "0cda0f1a3376b10408134218ec3e5f66514627f1292e390c69b912521f59dcef"
   },
   {
-   "at": "2026-11-17T09:32:27.441Z",
-   "type": "task_built",
-   "tasks": [
-    "T4.3"
-   ],
-   "text": "Tabs-centered 768/1024 free-slot tests pass 2/2 (repeat-each=3), plus equal-gap check",
-   "files": [
-    "apps/web/e2e/qa/header-responsive.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-17T09:31:47.062Z",
-   "type": "build_started",
-   "tasks": [
-    "T4.3"
-   ],
-   "attempt": "6"
-  },
-  {
-   "at": "2026-11-17T09:31:43.874Z",
+   "at": "2026-11-18T11:32:40.374Z",
    "type": "preflight_passed",
    "tasks": [
-    "T4.2"
+    "T5.1"
    ],
-   "fingerprint": "3abf53154ac4396019024adc3e22efe6658939ed7dd6e311d7222b5b51b8cdd4"
+   "fingerprint": "f0caa540bbb0d557bbae5d530be0e06baea3b8d4810d5ed986af1c2ec9b5cc89"
   },
   {
-   "at": "2026-11-17T09:31:43.874Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.1"
-   ],
-   "fingerprint": "fd36ea1363ecda7da3c6baa2b63f587d664499440733c4c5073c5d5f12ab079a"
-  },
-  {
-   "at": "2026-11-17T09:31:43.709Z",
-   "type": "task_started",
-   "tasks": [
-    "T4.1",
-    "T4.3"
-   ],
-   "attempt": "5"
-  },
-  {
-   "at": "2026-11-17T09:31:26.744Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.2"
-   ],
-   "fingerprint": "3abf53154ac4396019024adc3e22efe6658939ed7dd6e311d7222b5b51b8cdd4"
-  },
-  {
-   "at": "2026-11-17T09:31:20.441Z",
-   "type": "answered",
-   "tasks": [
-    "T4.1",
-    "T4.3"
-   ],
-   "id": "Q7",
-   "text": "Re Q7: option (a) free-slot centering accepted; SPEC/AUDIT reworded. Free-slot e2e assertion is correct."
-  },
-  {
-   "at": "2026-11-17T09:31:16.913Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.2"
-   ],
-   "fingerprint": "3abf53154ac4396019024adc3e22efe6658939ed7dd6e311d7222b5b51b8cdd4"
-  },
-  {
-   "at": "2026-11-17T09:18:18.253Z",
-   "type": "answered",
+   "at": "2026-11-18T11:32:36.656Z",
+   "type": "dirty_snapshot",
    "tasks": [],
-   "id": "Q7",
-   "text": "Re Q7: option (a) - tabs centered in free space between feature select and right cluster; SPEC and AUDIT reworded."
-  },
-  {
-   "at": "2026-11-16T16:28:23.804Z",
-   "type": "question",
-   "tasks": [
-    "T4.1",
-    "T4.3"
-   ],
-   "id": "Q7",
-   "text": "spec_issue: SPEC:116 centered tabs vs SPEC:125 labelled Earn/Upgrade at 1024; tabs 86px left of midpoint at 1024, 34px at 1440. See reports/phase-4-verifier-a4.md"
-  },
-  {
-   "at": "2026-11-16T12:44:50.663Z",
-   "type": "question",
-   "tasks": [
-    "T4.1",
-    "T4.3"
-   ],
-   "id": "Q6",
-   "text": "SPEC conflict at 1024: tabs centered (SPEC:116) vs Earn/Upgrade labelled (SPEC:125). Built: centered in free slot (86px left of midpoint). Choose: (a) accept free-slot centering and reword SPEC/AUDIT, (b) viewport-center where it fits (fix at 1440, 1024 exempt), (c) icon-only Earn/Upgrade up to wider breakpoint."
-  },
-  {
-   "at": "2026-11-16T12:44:47.805Z",
-   "tasks": [
-    "T4.4"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "prod build plus header-responsive.spec.ts --repeat-each=3: 73 passed, 0 failed, 0 flaky (the Verify line asks for 2). The 700px \"Shell fits under the in-flow header\" tests that the e2e engineer reported failing now pass. Root `bun run test`: 301 files, 2769/2769 pass. `vp lint`: 0 errors. `vp check --no-fmt` (includes the type check): 0 errors. vp check on the phase files: exit 0. The full `vp che",
-   "fingerprint": "d58c51e9ac3aaa4fefea819fa495a2005b2a88985d896b9a1d35fc77a450147a",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a4.md"
-  },
-  {
-   "at": "2026-11-16T12:44:47.805Z",
-   "tasks": [
-    "T4.2"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "4 specs, 61/61 pass. Coverage (lines/branches/funcs): AppHeader.vue 100/100/100; NavTabs.vue 100/92.3/100; FeatureSelect.vue 96.25/83.33/95.45 (the uncovered lines 34-36 are dead `iconComponent` code); Dashboard.vue 96.42/95.65/81.81 (the uncovered line 122 is the v-model handler of the stubbed sheet). Lowest metric is 81.81% funcs. Tests cover every SPEC:124 criterion for this phase: feature sele",
-   "fingerprint": "dfa0d5b9b3c55b509d12dac352670b450f34b84ae69264c6ea9a6b4e0365ee4f",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a4.md"
-  },
-  {
-   "at": "2026-11-16T12:44:47.805Z",
-   "tasks": [
-    "T4.3"
-   ],
-   "attempt": "1",
-   "type": "blocked",
-   "category": "spec-issue",
-   "text": "[spec-issue] · The @medium \"Tabs are centered at 768/1024\" test measures against the free slot between the feature select and the Earn pill (+/-4px). It would also pass on the baseline layout that SPEC:116 calls left-shifted. Whether it is correct depends on the owner's answer for T4.1. Every other scenario passes: header-responsive.spec.ts 73/73 x3 on E2E_SERVER=prod.",
-   "fingerprint": "fe403363d5fd204644017745dadeda1350375148aec7d167fca45069f17477cb",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a4.md"
-  },
-  {
-   "at": "2026-11-16T12:44:47.805Z",
-   "tasks": [
-    "T4.1"
-   ],
-   "attempt": "1",
-   "type": "blocked",
-   "category": "spec-issue",
-   "text": "[spec-issue] · SPEC:116 says \"Tabs centered at 768-1023 and >=1024 (today left-shifted)\" and AUDIT:9 names the baseline 1024 layout as the defect. SPEC:125 also requires the labelled Earn and Upgrade buttons at 1024. At 1024 on the prod build the free slot runs from x=263.3 to x=583.4. Centering on the viewport midpoint (512) leaves only about 142px for the tabs, which need about 236px, so the two",
-   "fingerprint": "2c5ec544ddb5a9f0bf475d9d0b9b437be428c44095936b2c019e833d7fdd4954",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-4-verifier-a4.md"
-  },
-  {
-   "at": "2026-11-16T12:44:00.693Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.4"
-   ],
-   "text": "[flaky-env] prod build regenerated apps/web/src/components.d.ts (+ProPerksDialog entry); left in place for the orchestrator"
-  },
-  {
-   "at": "2026-11-16T12:44:00.587Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.3"
-   ],
-   "text": "[test-quality] 4-digit credits test writes the shared e2e user credits to Mongo (restored in finally) instead of mocking the credits response"
-  },
-  {
-   "at": "2026-11-16T12:44:00.467Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.4"
-   ],
-   "text": "[flaky-env] vp check (no --fix) fails on formatting of untracked node-jiti/ cache files; phase files check clean; add node-jiti/ to .gitignore"
-  },
-  {
-   "at": "2026-11-16T12:33:40.808Z",
-   "type": "verify_started",
-   "tasks": [
-    "T4.1",
-    "T4.2",
-    "T4.3",
-    "T4.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T12:33:38.116Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.4"
-   ],
-   "fingerprint": "d58c51e9ac3aaa4fefea819fa495a2005b2a88985d896b9a1d35fc77a450147a"
-  },
-  {
-   "at": "2026-11-16T12:33:38.116Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.3"
-   ],
-   "fingerprint": "fe403363d5fd204644017745dadeda1350375148aec7d167fca45069f17477cb"
-  },
-  {
-   "at": "2026-11-16T12:33:38.116Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.2"
-   ],
-   "fingerprint": "dfa0d5b9b3c55b509d12dac352670b450f34b84ae69264c6ea9a6b4e0365ee4f"
-  },
-  {
-   "at": "2026-11-16T12:33:38.116Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.1"
-   ],
-   "fingerprint": "2c5ec544ddb5a9f0bf475d9d0b9b437be428c44095936b2c019e833d7fdd4954"
-  },
-  {
-   "at": "2026-11-16T12:33:35.610Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.4"
-   ],
-   "fingerprint": "d58c51e9ac3aaa4fefea819fa495a2005b2a88985d896b9a1d35fc77a450147a"
-  },
-  {
-   "at": "2026-11-16T12:33:35.419Z",
-   "type": "task_built",
-   "tasks": [
-    "T4.4"
-   ],
-   "text": "49 e2e pass x2, verify 0 errors, 2769 unit pass; fixed shell gap at 700 by moving tabs row inside header",
-   "files": [
-    "apps/web/src/components/Header/AppHeader.vue",
-    "apps/web/src/components/Header/AppHeader.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-16T12:29:51.595Z",
-   "type": "task_started",
-   "tasks": [
-    "T4.4"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-16T12:29:51.486Z",
-   "type": "build_started",
-   "tasks": [
-    "T4.4"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-16T12:29:47.093Z",
-   "type": "task_failed",
-   "tasks": [
-    "T4.4"
-   ],
-   "attempt": "1",
-   "text": "header-responsive \"Shell fits under in-flow header\" 700x600/700x900 fails (shell 71px below header, passes at HEAD): regression from Phase 4 working tree",
-   "unblock": "fix header/shell layout at 700 so shell sits under header",
-   "files": [
-    "apps/web/src/components/Header/AppHeader.vue"
-   ]
-  },
-  {
-   "at": "2026-11-16T12:27:31.187Z",
-   "type": "task_started",
-   "tasks": [
-    "T4.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T12:27:31.070Z",
-   "type": "task_built",
-   "tasks": [
-    "T4.3"
-   ],
-   "text": "13/13 new tests pass, flake x3 clean, app bugs: 0",
-   "files": [
-    "apps/web/e2e/qa/header-responsive.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-16T12:23:57.661Z",
-   "type": "task_started",
-   "tasks": [
-    "T4.3"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T12:23:57.540Z",
-   "type": "task_built",
-   "tasks": [
-    "T4.2"
-   ],
-   "text": "lowest file 96.25% lines (FeatureSelect), shuffle clean",
-   "files": [
-    "apps/web/src/components/Header"
-   ]
-  },
-  {
-   "at": "2026-11-16T12:22:18.988Z",
-   "type": "task_started",
-   "tasks": [
-    "T4.2"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T12:22:18.879Z",
-   "type": "build_started",
-   "tasks": [
-    "T4.2",
-    "T4.3",
-    "T4.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T12:22:14.990Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.1"
-   ],
-   "fingerprint": "3002df3690dbffb34e9e4d1c7466a0495e5e1d9c29197aa01a0beab67bfdf1c0"
-  },
-  {
-   "at": "2026-11-16T12:21:58.516Z",
-   "type": "task_built",
-   "tasks": [
-    "T4.1"
-   ],
-   "text": "tabs in AppHeader (sticky segmented row <768), mobile-tabs removed from Dashboard; vitest 110 pass, verify 0 errors",
-   "files": [
-    "apps/web/src/components/Header/AppHeader.vue",
-    "apps/web/src/components/Header/NavTabs.vue",
-    "apps/web/src/components/Header/FeatureSelect.vue",
-    "apps/web/src/pages/Dashboard.vue"
-   ]
-  },
-  {
-   "at": "2026-11-16T12:20:48.464Z",
-   "type": "task_started",
-   "tasks": [
-    "T4.1"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T12:20:48.356Z",
-   "type": "build_started",
-   "tasks": [
-    "T4.1"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-16T12:20:45.774Z",
-   "type": "run_started",
-   "tasks": [
-    "T4.1",
-    "T4.2",
-    "T4.3",
-    "T4.4"
-   ],
-   "pipeline": 2,
-   "baseline": {
-    "head": "0b2ee6aa03feb851e8656de382e79f57e694aee0",
-    "status": " M .dashboard/media-studio/data.js\u0000 M .dashboard/media-studio/docs/PLAN.html\u0000 M .dashboard/media-studio/docs/REPO_MAP.html\u0000 M .dashboard/media-studio/docs/SPEC.html\u0000 M .dashboard/media-studio/docs/TASKS.html\u0000 M .dashboard/media-studio/index.html\u0000 M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000 M agent_docs/ui-polish-picker-header/AUDIT.md\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000?? agent_docs/landing-v3-polish/PLAN.md\u0000?? node-jiti/web-tailwind.config.js.1a66b445.js\u0000?? node-jiti/web-tailwind.semantic-plugin.js.2cc2c8a3.js\u0000"
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "0910025210047b12cca8e572ee88af226701a9af",
+    "agent_docs/ui-polish-picker-header/TASKS.md": "117341ca2a5f4602f834ca29be072e91e3017914",
+    "apps/web/e2e/qa/header-responsive.spec.ts": "3e4c3dd2b1765104e5567e2e7d9608f58f8a0437",
+    "apps/web/src/App.test.ts": "1fd1e64ff4c0ac0747b9a946d107e906a787e038",
+    "apps/web/src/App.vue": "b6fdab36817f88e78282ac3a2b7c9cbe47dd2c5a",
+    "apps/web/src/components/Dashboard/DashboardShell.test.ts": "35029e529221b23f576a821dc936cab0c3ab397d",
+    "apps/web/src/components/Dashboard/DashboardShell.vue": "6f27e7b7451ddba1b301f224a39b028e9367e678",
+    "apps/web/src/components/Header/AppHeader.vue": "7cee62dd260e50a9b298339af3b8072d38cd91fc",
+    "apps/web/src/composables/useLenis.test.ts": "f365cabd2261fc158fd3a433cda749e909354be1",
+    "apps/web/src/pages/Dashboard.test.ts": "87c397975b3b0d8c97f8b98ab9d235f4d7c28b0a",
+    "apps/web/src/pages/Dashboard.vue": "a729ce7597dc61cf872b6a19da8d2db2675323e1",
+    "apps/web/src/pages/Examples.vue": "a097a935f8e31fb432514a760eb60534230fd418",
+    "apps/web/src/utils/layout.ts": "a432b838c0714fa98fb09ada6d544c8742e4f2ff",
+    "apps/web/src/utils/layout.test.ts": "c62a85a11726b686ff11b8538c0c791e77e09db4"
    }
   },
   {
-   "at": "2026-11-16T12:09:41.677Z",
-   "type": "commit",
+   "at": "2026-11-18T11:32:36.550Z",
+   "type": "preflight_passed",
    "tasks": [
-    "T3.1",
-    "T3.2",
-    "T3.3",
-    "T3.4",
-    "T3.5"
+    "T5.4"
    ],
-   "attempt": "5",
-   "text": "feat(web): plan pill in avatar menu and Pro perks dialog",
-   "sha": "0b2ee6aa03feb851e8656de382e79f57e694aee0",
-   "branch": "feature-enhancement",
-   "pushed": "yes",
-   "evidence": "e2e 145/145, unit 58 tests, lowest coverage 87.5% branches (98.41% lines)"
+   "fingerprint": "54d22665f87af6e610cb28376aca40b30105bdee85b6bee1dc1b3d1a5e74538f"
   },
   {
-   "at": "2026-11-16T12:09:25.138Z",
-   "type": "deliverable",
+   "at": "2026-11-18T11:27:39.640Z",
+   "type": "task_started",
    "tasks": [
-    "T3.1",
-    "T3.2",
-    "T3.3",
-    "T3.4",
-    "T3.5"
+    "T5.4"
    ],
-   "text": "Plan pill in avatar menu, Pro perks dialog, header PRO chip removed, unit and e2e coverage",
+   "attempt": "3"
+  },
+  {
+   "at": "2026-11-18T11:27:37.937Z",
+   "type": "build_started",
+   "tasks": [
+    "T5.4"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-11-18T11:27:37.774Z",
+   "type": "run_started",
+   "tasks": [
+    "T5.1",
+    "T5.2",
+    "T5.3",
+    "T5.4"
+   ],
+   "pipeline": 2
+  },
+  {
+   "at": "2026-11-17T10:55:47.905Z",
+   "type": "question",
+   "tasks": [
+    "T5.4"
+   ],
+   "id": "Q8",
+   "text": "Gate builder (attempt 3) was stopped by the user before reporting; unsure whether to resume"
+  },
+  {
+   "at": "2026-11-17T10:55:25.143Z",
+   "type": "task_started",
+   "tasks": [
+    "T5.4"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-11-17T10:55:25.013Z",
+   "type": "build_started",
+   "tasks": [
+    "T5.4"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-11-17T10:55:22.103Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "0910025210047b12cca8e572ee88af226701a9af",
+    "agent_docs/ui-polish-picker-header/TASKS.md": "117341ca2a5f4602f834ca29be072e91e3017914",
+    "apps/web/e2e/qa/header-responsive.spec.ts": "3e4c3dd2b1765104e5567e2e7d9608f58f8a0437",
+    "apps/web/src/App.test.ts": "1fd1e64ff4c0ac0747b9a946d107e906a787e038",
+    "apps/web/src/App.vue": "b6fdab36817f88e78282ac3a2b7c9cbe47dd2c5a",
+    "apps/web/src/components/Dashboard/DashboardShell.test.ts": "1bc0ca303f5eaaea49c92f6876d992416db84fd5",
+    "apps/web/src/components/Dashboard/DashboardShell.vue": "6f27e7b7451ddba1b301f224a39b028e9367e678",
+    "apps/web/src/components/Header/AppHeader.vue": "7cee62dd260e50a9b298339af3b8072d38cd91fc",
+    "apps/web/src/composables/useLenis.test.ts": "f365cabd2261fc158fd3a433cda749e909354be1",
+    "apps/web/src/pages/Dashboard.test.ts": "77682e8176cd4f5fd3f88a9defdf4ba7d18775bd",
+    "apps/web/src/pages/Dashboard.vue": "a729ce7597dc61cf872b6a19da8d2db2675323e1",
+    "apps/web/src/pages/Examples.vue": "a097a935f8e31fb432514a760eb60534230fd418",
+    "apps/web/src/utils/layout.ts": "26bb4c2598b76977a6f8cbc4626b77b8f38a53f3",
+    "apps/web/src/utils/layout.test.ts": "418e6498f8fdd1b4989abc39a3b87275e45b5aae"
+   }
+  },
+  {
+   "at": "2026-11-17T10:55:21.993Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T5.1"
+   ],
+   "fingerprint": "b495e67733b1709c3a3b040d43d7e4cbc0bf3c36cc9dcf3d0558a63160789d47"
+  },
+  {
+   "at": "2026-11-17T10:54:37.729Z",
+   "type": "task_started",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "4"
+  },
+  {
+   "at": "2026-11-17T10:54:37.619Z",
+   "type": "build_started",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "4"
+  },
+  {
+   "at": "2026-11-17T10:54:35.399Z",
+   "tasks": [
+    "T5.2"
+   ],
+   "attempt": "11",
+   "type": "verify_passed",
+   "evidence": "vitest DashboardShell/Dashboard/layout tests 18/18; coverage-summary.json: DashboardShell.vue 100/100/100/100, layout.ts 100/100/100/100, Dashboard.vue lines 96.55 / stmts 93.75 / branches 95.65 / funcs 81.81 (all >=80; uncovered line 124 = stubbed MobileSettingsSheet slot + v-model handler, pre-existing, justified); no it.fails/skip in unit specs",
+   "fingerprint": "3e7948b3d1ebef2b5865b0dbaad15e4d148a151b0bab3fc61e001385de86dec9",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/ui-polish-picker-header/reports/phase-5-verifier-a11.md"
+  },
+  {
+   "at": "2026-11-17T10:54:35.399Z",
+   "tasks": [
+    "T5.3"
+   ],
+   "attempt": "11",
+   "type": "verify_inconclusive",
+   "text": "The spec passes 88/88 x3 on E2E_SERVER=dev (1 expected-fail held as test.fail); the required prod run could not start because the build fails (T5.1). The composer scenarios cannot be confirmed on prod until the build is fixed. Proof shots 5 and 6 prove the banner-showing composer AC at 360 and 390. Shots 3, 4 and 7 match no T5.3 scenario, and no shot covers the @medium after-dismiss scenario",
+   "sigs": [
+    "T5.3|inconclusive|build"
+   ],
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/ui-polish-picker-header/reports/phase-5-verifier-a11.md"
+  },
+  {
+   "at": "2026-11-17T10:54:35.399Z",
+   "tasks": [
+    "T5.4"
+   ],
+   "attempt": "11",
+   "type": "verify_failed",
+   "category": "code-bug",
+   "text": "[code-bug] · Acceptance \"Repo green\" / Checkpoint 5 · Unit (218 files, 1559 tests), lint and check are green and `100vh-60px` is gone, but the production build fails (see T5.1), so the repo is not green and the e2e gate cannot run on prod · Fix T5.1, then rerun `E2E_SERVER=prod` header-responsive --repeat-each=2",
    "files": [
-    "apps/web/src/components/Header/UserMenu.vue"
+    "acceptance \"repo green\" / checkpoint 5"
+   ],
+   "sigs": [
+    "T5.4|code-bug|acceptance \"repo green\" / checkpoint 5"
+   ],
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/ui-polish-picker-header/reports/phase-5-verifier-a11.md"
+  },
+  {
+   "at": "2026-11-17T10:54:35.398Z",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "11",
+   "type": "verify_failed",
+   "category": "code-bug",
+   "text": "[code-bug] · apps/web/src/utils/layout.ts:17 (HEIGHT_BELOW_HEADER_CLASS) · Tailwind's content scanner reads the template literal source text and emits `.tw-h-[calc(100dvh-var(${APP_HEADER_HEIGHT_VAR},${HEADER_BAR_PX}px))]`; lightningcss minify then fails (\"Unexpected token Delim('$')\"), so `vp build` (prod and e2e-preview) fails. Baseline 238d188 builds fine; the same build with the current src fa",
+   "files": [
+    "apps/web/src/utils/layout.ts"
+   ],
+   "sigs": [
+    "T5.1|code-bug|apps/web/src/utils/layout.ts"
+   ],
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/ui-polish-picker-header/reports/phase-5-verifier-a11.md"
+  },
+  {
+   "at": "2026-11-17T10:54:26.379Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.2"
+   ],
+   "text": "Scoped coverage Verify cmd exits 1 on the global 90% funcs threshold (Dashboard.vue 81.81%); per-file 80% met"
+  },
+  {
+   "at": "2026-11-17T10:53:22.527Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.1"
+   ],
+   "text": "Tailwind content scans *.test.ts; real height class only generated because tests contain the literal"
+  },
+  {
+   "at": "2026-11-17T10:53:22.420Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.3"
+   ],
+   "text": "TS2488 at header-responsive.spec.ts:166 (pre-existing rail children spread), not caught by verify"
+  },
+  {
+   "at": "2026-11-17T10:53:22.306Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.3"
+   ],
+   "text": "Explore at 390: tabs rest at y=100 after scroll; held as test.fail() (accepted, out of scope)"
+  },
+  {
+   "at": "2026-11-17T10:48:45.294Z",
+   "type": "verify_started",
+   "tasks": [
+    "T5.1",
+    "T5.2",
+    "T5.3",
+    "T5.4"
+   ],
+   "attempt": "11"
+  },
+  {
+   "at": "2026-11-17T10:48:42.707Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T5.4"
+   ],
+   "fingerprint": "54d22665f87af6e610cb28376aca40b30105bdee85b6bee1dc1b3d1a5e74538f"
+  },
+  {
+   "at": "2026-11-17T10:48:42.707Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T5.3"
+   ],
+   "fingerprint": "f4dba4174b865ada76c421c47af465c512eddf054a61a779b0e2965fab2fd945"
+  },
+  {
+   "at": "2026-11-17T10:48:42.707Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T5.2"
+   ],
+   "fingerprint": "3e7948b3d1ebef2b5865b0dbaad15e4d148a151b0bab3fc61e001385de86dec9"
+  },
+  {
+   "at": "2026-11-17T10:48:39.458Z",
+   "type": "task_built",
+   "tasks": [
+    "T5.4"
+   ],
+   "text": "gate green: playwright x2 59 pass, verify 0 errors, 302 files/2785 tests, grep empty; useLenis.test.ts expectation fixed",
+   "files": [
+    "apps/web/src/composables/useLenis.test.ts"
    ]
   },
   {
-   "at": "2026-11-16T12:09:22.085Z",
+   "at": "2026-11-17T10:44:39.928Z",
+   "type": "task_started",
    "tasks": [
-    "T3.5"
+    "T5.4"
    ],
-   "attempt": "5",
-   "type": "verify_passed",
-   "evidence": "e2e above covers --repeat-each=2; bun run test 301 files/2749 tests pass; vp lint 0 errors; vp check --no-fmt exit 0; src+e2e formatting clean (610 files); grep pro-badge-header src+e2e empty",
-   "fingerprint": "d7cd82fc2cf7da226de81149e6ee8f4172b45736410ee5297783fd6ea23f1249",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a6.md"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-16T12:09:22.085Z",
+   "at": "2026-11-17T10:44:39.756Z",
+   "type": "build_started",
    "tasks": [
-    "T3.4"
+    "T5.4"
    ],
-   "attempt": "5",
-   "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod, plan-pill+plan-status+pro-tier+upgrade-entry+header-responsive --repeat-each=3 -> 145/145 passed (3.1m), exit 0; matrix covers Free and Pro at 360/1440 light/dark with animations settled; shots T3.4-5 (settled perks dialog, Close only) and T3.4-7..14 confirmed",
-   "fingerprint": "664898d799b8bc0ba00ea4d377f09ad17fb89c4f398db2c2d13fac303fe890ba",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a6.md"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-16T12:09:22.084Z",
-   "tasks": [
-    "T3.3"
-   ],
-   "attempt": "5",
-   "type": "verify_passed",
-   "evidence": "5 files/58 tests pass; coverage UserMenu.vue 100/96.25/100/100, ProPerksDialog.vue 100, PricingProCard.vue 100, dialog.ts 96.87/87.5/96/98.41 (all >=80, lowest 87.5% branches); CreditsChip Pro test checks text and icons by content, Pro pill test asserts menu closed, not-ready test starts isReady=false; no it.fails/skip",
-   "fingerprint": "f3c7aa9f20711e6293e795d3f38f7613c711c0130ec3dfed764017573bab5a4f",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a6.md"
+   "at": "2026-11-17T10:44:39.547Z",
+   "type": "answered",
+   "tasks": [],
+   "id": "Q-gate",
+   "text": "Re gate: fix useLenis.test.ts expectation (test-only); Re Explore tabs: keep test.fail, log as advisory"
   },
   {
-   "at": "2026-11-16T12:09:22.084Z",
+   "at": "2026-11-17T10:32:48.945Z",
+   "type": "task_failed",
    "tasks": [
-    "T3.2"
+    "T5.4"
    ],
-   "attempt": "5",
-   "type": "verify_passed",
-   "evidence": "no pro-badge-header in src or e2e (grep empty); vitest Header+Dialogs 24 files/215 tests pass; prod e2e \"no PRO chip in the header\" and Pro/Free pill tests pass x3; shots T3.4-8/9/11/14 show FREE muted / PRO gold pill in the menu and no header PRO chip",
-   "fingerprint": "82d6c1be277a5afe333043d38de98ec12ee4adc034c4ff4aae39f13b7c767e61",
-   "report": ".dashboard/ui-polish-picker-header/reports/ui-polish-picker-header-verifier-a6.md"
+   "attempt": "1",
+   "text": "bun run test: useLenis.test.ts:66 expects scrollTo offset only but useLenis.ts now passes onComplete (pre-existing from commit 3eb3a20, unrelated to this feature); rest of gate green",
+   "unblock": "update expectation to { offset: -8, onComplete: expect.any(Function) }",
+   "files": [
+    "apps/web/src/composables/useLenis.test.ts"
+   ],
+   "sigs": [
+    "T5.4|other|apps/web/src/composables/useLenis.test.ts"
+   ]
   },
   {
-   "at": "2026-11-16T12:08:48.489Z",
-   "type": "advisory",
+   "at": "2026-11-17T10:30:02.388Z",
+   "type": "task_started",
    "tasks": [
-    "T3.2"
+    "T5.4"
    ],
-   "text": "components.d.ts regenerates a ProPerksDialog entry on build/test; verifier reverted it; decide whether to commit"
+   "attempt": "1"
   },
   {
-   "at": "2026-11-16T12:08:48.393Z",
-   "type": "advisory",
+   "at": "2026-11-17T10:29:59.950Z",
+   "type": "task_built",
    "tasks": [
-    "T3.5"
+    "T5.3"
    ],
-   "text": "Untracked node-jiti/ cache is the only vp check format failure; gitignore it"
+   "text": "e2e 29/29, x3 clean; reports 1 app bug (Explore tabs y=100) held as test.fail; spec tsc error line 166",
+   "files": [
+    "apps/web/e2e/qa/header-responsive.spec.ts"
+   ]
   },
   {
-   "at": "2026-11-16T12:08:48.298Z",
-   "type": "advisory",
+   "at": "2026-11-17T10:24:54.284Z",
+   "type": "task_started",
    "tasks": [
-    "T3.4"
+    "T5.3"
    ],
-   "text": "Engineer report T3.4-e2e-a5.md was never written; verified from the spec and a fresh prod run instead"
+   "attempt": "3"
   },
   {
-   "at": "2026-11-16T12:08:48.186Z",
-   "type": "advisory",
+   "at": "2026-11-17T10:24:54.156Z",
+   "type": "build_started",
    "tasks": [
-    "T3.4"
+    "T5.3"
    ],
-   "text": "Stale attempt-null shots T3.4-1..4 (Free-only, pre-settle) still in manifest; superseded by T3.4-7..14 and T3.4-5"
+   "attempt": "3"
   },
   {
-   "at": "2026-11-16T12:04:43.843Z",
-   "type": "verify_started",
+   "at": "2026-11-17T10:24:52.175Z",
+   "type": "task_failed",
    "tasks": [
-    "T3.2",
-    "T3.3",
-    "T3.4",
-    "T3.5"
+    "T5.3"
    ],
-   "attempt": "5"
+   "attempt": "2",
+   "text": "T4.3 test \"Explore at 390px keeps tabs at viewport top after scrolling\" fails 3/3: Explore renders empty state in e2e so nothing scrolls; needs mocked community items. 28/29 else pass",
+   "unblock": "mock community items for Explore scroll test",
+   "files": [
+    "apps/web/e2e/qa/header-responsive.spec.ts"
+   ],
+   "sigs": [
+    "T5.3|e2e-fixture|apps/web/e2e/qa/header-responsive.spec.ts"
+   ]
+  },
+  {
+   "at": "2026-11-17T10:22:16.171Z",
+   "type": "task_started",
+   "tasks": [
+    "T5.3"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-17T10:22:16.044Z",
+   "type": "build_started",
+   "tasks": [
+    "T5.3"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-17T10:22:13.786Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T5.1"
+   ],
+   "fingerprint": "bcfb608d38dccecabdeb47e3867123de455fe673ef71f9997027eac6f3f7077c"
+  },
+  {
+   "at": "2026-11-17T10:21:24.501Z",
+   "type": "task_started",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-11-17T10:21:24.377Z",
+   "type": "build_started",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-11-17T10:21:22.093Z",
+   "type": "task_failed",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "2",
+   "text": "e2e (T5.3 report) shows --app-header-h omits the 36px mobile banner: 136px vs 172px at 390x844/360x640, composer overflows viewport",
+   "unblock": "make --app-header-h include banner height",
+   "files": [
+    "apps/web/src/components/Header/AppHeader.vue"
+   ],
+   "sigs": [
+    "T5.1|other|apps/web/src/components/Header/AppHeader.vue"
+   ]
+  },
+  {
+   "at": "2026-11-17T10:21:17.152Z",
+   "type": "task_failed",
+   "tasks": [
+    "T5.3"
+   ],
+   "attempt": "1",
+   "text": "App bug: --app-header-h is 136px not 172px with 36px mobile banner at 390/360; composer overflows (shell ends 880 in 844 viewport). 3 tests test.fail(); also T4.3 Explore 390px tabs test fails 3/3 and tsc error at spec line 129",
+   "unblock": "Fix header height var to include banner, then remove test.fail markers",
+   "files": [
+    "apps/web/e2e/qa/header-responsive.spec.ts",
+    "apps/web/src/components/Header/AppHeader.vue"
+   ]
+  },
+  {
+   "at": "2026-11-17T10:17:59.639Z",
+   "type": "task_started",
+   "tasks": [
+    "T5.3"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-17T10:17:59.508Z",
+   "type": "task_built",
+   "tasks": [
+    "T5.2"
+   ],
+   "text": "unit PASS: lowest file 96.55% lines, shuffle clean",
+   "files": [
+    "apps/web/src/components/Dashboard/DashboardShell.test.ts",
+    "apps/web/src/pages/Dashboard.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-17T10:17:26.478Z",
+   "type": "task_started",
+   "tasks": [
+    "T5.2"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-17T10:17:26.355Z",
+   "type": "build_started",
+   "tasks": [
+    "T5.2",
+    "T5.3",
+    "T5.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-17T10:17:22.131Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T5.1"
+   ],
+   "fingerprint": "542ec705f1543912ec0a1996404754a2127be36cb3774f32ee8167b2b782fab5"
+  },
+  {
+   "at": "2026-11-17T10:16:52.888Z",
+   "type": "task_started",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-17T10:16:52.747Z",
+   "type": "build_started",
+   "tasks": [
+    "T5.1"
+   ],
+   "attempt": "2"
   }
  ]
 };

@@ -3,6 +3,7 @@ import { createPinia } from 'pinia';
 import { describe, expect, it } from 'vitest';
 
 import DashboardShell from '@/components/Dashboard/DashboardShell.vue';
+import { HEIGHT_BELOW_HEADER_CLASS } from '@/utils/layout';
 
 const global = { plugins: [createPinia()], stubs: { WhatsNewModal: true } };
 
@@ -38,5 +39,15 @@ describe('DashboardShell', () => {
     expect(rail.classes().join(' ')).toContain('tw-border-hairline');
     expect(canvas.classes().join(' ')).toContain('tw-bg-canvas');
     expect(wrapper.html()).not.toMatch(/<v-[a-z]/i);
+  });
+
+  it('sizes the shell with the shared dvh header-variable class, not 100vh', () => {
+    const wrapper = mount(DashboardShell, { global, slots: { rail: 'rail', canvas: 'canvas' } });
+    const classes = wrapper.get('[data-testid="dashboard-shell"]').classes();
+
+    expect(classes).toContain(HEIGHT_BELOW_HEADER_CLASS);
+    expect(classes).toContain('tw-h-[calc(100dvh-var(--app-header-h,64px))]');
+    expect(classes.join(' ')).not.toContain('100vh');
+    expect(classes.join(' ')).not.toContain('60px');
   });
 });

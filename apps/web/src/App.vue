@@ -106,8 +106,9 @@ const isHeaderInFlowBand = computed(
         'tw-h-[98vh] tw-overflow-y-hidden': overflowHidden && !isExploreViewer,
         'tw-h-[100dvh] tw-overflow-hidden': isExploreViewer,
         'tw-pt-0': isMarketingShell || isExploreViewer,
-        'tw-pt-14': isHeaderVisible && !isMarketingShell && !isExploreViewer,
-        'sm:max-md:tw-flex sm:max-md:tw-h-auto sm:max-md:tw-min-h-0 sm:max-md:tw-flex-col sm:max-md:tw-pt-0 sm:max-md:[&>div]:tw-flex sm:max-md:[&>div]:tw-min-h-0 sm:max-md:[&>div]:tw-flex-1 sm:max-md:[&>div]:tw-flex-col':
+        'tw-pt-16': isHeaderVisible && !isMarketingShell && !isExploreViewer && !isHeaderInFlowBand,
+        'tw-pt-0 md:tw-pt-16': isHeaderInFlowBand,
+        'sm:max-md:tw-flex sm:max-md:tw-h-auto sm:max-md:tw-min-h-0 sm:max-md:tw-flex-col sm:max-md:[&>div]:tw-flex sm:max-md:[&>div]:tw-min-h-0 sm:max-md:[&>div]:tw-flex-1 sm:max-md:[&>div]:tw-flex-col':
           isHeaderInFlowBand,
       }"
     >

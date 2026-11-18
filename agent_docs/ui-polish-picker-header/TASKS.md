@@ -202,15 +202,15 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** The dashboard height follows the real header (including the two-row mobile header and banner) using dynamic viewport units, so the composer is never pushed off-screen.
 **Try in UI:** At 390 with the banner showing open Create and see the composer fully visible at the bottom ; at 1440 confirm no extra scroll ; run `grep -rn "100vh-60px" apps/web/src` and confirm nothing remains.
 
-### ☐ T5.1 Header height variable and dvh shell
+### ✅ T5.1 Header height variable and dvh shell
 
 - **Kind:** implementation
-- **Files:** `apps/web/src/utils/layout.ts`, `apps/web/src/components/Header/AppHeader.vue`, `apps/web/src/components/Dashboard/DashboardShell.vue`, `apps/web/src/pages/Dashboard.vue`
+- **Files:** `apps/web/src/utils/layout.ts`, `apps/web/src/components/Header/AppHeader.vue`, `apps/web/src/components/Dashboard/DashboardShell.vue`, `apps/web/src/pages/Dashboard.vue`, `apps/web/src/pages/Examples.vue`, `apps/web/src/App.vue`, `apps/web/src/App.test.ts`
 - **Do:** Define `--app-header-h` (and the mobile row heights) once from `layout.ts` constants; replace `calc(100vh-60px)` in `DashboardShell.vue` and the two `Dashboard.vue` uses with `dvh` plus the variable; reconcile 60 vs 64px and the banner/two-row mobile case. Prove by e2e, not arithmetic.
 - **Acceptance:** SPEC Part 2 height requirement: one source, `dvh`, composer never off-screen with banner; `100vh-60px` gone.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard src/pages/Dashboard.test.ts`; `bun run verify`; `grep -rn "100vh-60px" apps/web/src` (empty).
 
-### ☐ T5.2 Unit: shell height
+### ✅ T5.2 Unit: shell height
 
 - **Kind:** unit
 - **Files:** `apps/web/src/utils/layout.ts`, `apps/web/src/components/Dashboard/DashboardShell.vue`, `apps/web/src/pages/Dashboard.vue`
@@ -218,7 +218,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 2 unit criteria for height; every file at least 80% across metrics; no `it.fails`.
 - **Verify:** `cd apps/web && npx vitest run src/components/Dashboard/DashboardShell.test.ts src/pages/Dashboard.test.ts --coverage --coverage.include=src/components/Dashboard/DashboardShell.vue --coverage.include=src/utils/layout.ts --coverage.include=src/pages/Dashboard.vue --coverage.reporter=text`
 
-### ☐ T5.3 E2E: composer stays on screen
+### ✅ T5.3 E2E: composer stays on screen
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` on Create at 360 and 390 with the banner showing the composer bottom is `<= innerHeight`; `@high` same at 1440 and 768; `@medium` no vertical overflow regression after banner dismissal.
@@ -227,10 +227,10 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 2 e2e composer criterion passes; mocked generation endpoints only.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/header-responsive.spec.ts --repeat-each=3`
 
-### ☐ T5.4 Gate: Phase 5
+### ✅ T5.4 Gate: Phase 5
 
 - **Kind:** gate
-- **Files:** none
+- **Files:** `apps/web/src/composables/useLenis.test.ts`
 - **Do:** Run suites and greps as evidence.
 - **Acceptance:** Repo green; `100vh-60px` absent.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/header-responsive.spec.ts --repeat-each=2`; `bun run verify`; `bun run test`; `grep -rn "100vh-60px" apps/web/src`.

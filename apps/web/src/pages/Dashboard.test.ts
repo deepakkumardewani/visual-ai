@@ -85,6 +85,7 @@ vi.mock('@/components/Dashboard/Feed/ExploreFeed.vue', () => ({
 
 import Dashboard from '@/pages/Dashboard.vue';
 import { useAppStore } from '@/stores/app';
+import { HEIGHT_BELOW_HEADER_CLASS } from '@/utils/layout';
 
 describe('Dashboard', () => {
   beforeEach(() => {
@@ -190,4 +191,15 @@ describe('Dashboard', () => {
     await wrapper.vm.$nextTick();
     expect(isOpen()).toBe('false');
   });
+
+  it.each(['dashboard-explore-panel', 'dashboard-assets-panel'])(
+    '%s uses the shared dvh header-variable height class',
+    (testId) => {
+      const classes = mount(Dashboard).get(`[data-testid="${testId}"]`).classes();
+
+      expect(classes).toContain(HEIGHT_BELOW_HEADER_CLASS);
+      expect(classes).toContain('tw-h-[calc(100dvh-var(--app-header-h,64px))]');
+      expect(classes.join(' ')).not.toContain('100vh');
+    },
+  );
 });

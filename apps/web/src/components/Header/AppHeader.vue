@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { useMutationObserver, useResizeObserver } from '@vueuse/core';
+import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
 import { SignedIn, SignedOut, useAuth } from 'vue-clerk';
 import { useRoute } from 'vue-router';
 
@@ -20,6 +21,7 @@ import ThemeButton from '@/components/Header/ThemeButton.vue';
 import UserMenu from '@/components/Header/UserMenu.vue';
 
 import { APP_SURFACE, isAppShellRoute } from '@/utils/dashboardRoutes';
+import { APP_HEADER_HEIGHT_VAR, HEADER_BAR_PX } from '@/utils/layout';
 
 const { isMobile } = useHeaderBreakpoint();
 const { isLoaded: isAuthLoaded } = useAuth();
@@ -50,6 +52,35 @@ const showEndSkeleton = computed(() => {
   if (isDashboard.value && !isUserReady.value) return true;
   return false;
 });
+
+/**
+ * Publishes the space the header takes above page content as `--app-header-h`.
+ * Mobile dashboard: banner + bar + tabs row sit in flow, so measure them (banner height
+ * depends on text wrapping). Otherwise the fixed bar is a constant.
+ */
+const headerEl = ref<HTMLElement | null>(null);
+const bannerEl = ref<HTMLElement | null>(null);
+const measuredInFlowHeight = ref<number>(HEADER_BAR_PX);
+const headerParent = computed(() => headerEl.value?.parentElement ?? null);
+
+function measureInFlowHeight() {
+  const header = headerEl.value;
+  if (!header) return;
+  bannerEl.value = header.previousElementSibling as HTMLElement | null;
+  measuredInFlowHeight.value = header.offsetHeight + (bannerEl.value?.offsetHeight ?? 0);
+}
+
+// The banner mounts after user data loads and does not resize the header, so watch child changes too.
+useResizeObserver([headerEl, bannerEl], measureInFlowHeight);
+useMutationObserver(headerParent, measureInFlowHeight, { childList: true });
+
+watchEffect(() => {
+  const isInFlow = showMobileNavTabs.value;
+  const height = isInFlow ? measuredInFlowHeight.value : HEADER_BAR_PX;
+  document.documentElement.style.setProperty(APP_HEADER_HEIGHT_VAR, `${height}px`);
+});
+
+onBeforeUnmount(() => document.documentElement.style.removeProperty(APP_HEADER_HEIGHT_VAR));
 </script>
 
 <template>
@@ -58,6 +89,7 @@ const showEndSkeleton = computed(() => {
       <ReferralOffer v-if="isMobile && isDashboard" />
     </SignedIn>
     <header
+      ref="headerEl"
       class="header-v2 tw-fixed tw-left-0 tw-right-0 tw-top-0 tw-z-50 tw-bg-surface-1/80 tw-backdrop-blur-[14px]"
       :class="isMobile && isDashboard ? 'header-v2--dashboard-mobile' : 'tw-h-16'"
     >

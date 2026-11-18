@@ -31,7 +31,7 @@ import {
   resolveCreateFeature,
   tabFromRouteName,
 } from '@/utils/dashboardRoutes';
-import { CREATE_LAYOUT_SM } from '@/utils/layout';
+import { CREATE_LAYOUT_SM, HEIGHT_BELOW_HEADER_CLASS } from '@/utils/layout';
 
 const appStore = useAppStore();
 const { tab, feature } = storeToRefs(appStore);
@@ -133,7 +133,8 @@ usePageSeo(() => ({
   <div
     v-show="tab === APP_SURFACE_TAB.explore"
     data-testid="dashboard-explore-panel"
-    class="tw-h-[calc(100vh-60px)] tw-overflow-y-auto tw-bg-canvas no-scrollbar"
+    :class="HEIGHT_BELOW_HEADER_CLASS"
+    class="tw-overflow-y-auto tw-bg-canvas no-scrollbar"
   >
     <ExploreFeed />
   </div>
@@ -141,7 +142,8 @@ usePageSeo(() => ({
   <div
     v-show="tab === APP_SURFACE_TAB.assets"
     data-testid="dashboard-assets-panel"
-    class="tw-h-[calc(100vh-60px)] tw-overflow-y-auto tw-bg-canvas no-scrollbar"
+    :class="HEIGHT_BELOW_HEADER_CLASS"
+    class="tw-overflow-y-auto tw-bg-canvas no-scrollbar"
   >
     <History />
   </div>
