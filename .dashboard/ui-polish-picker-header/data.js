@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-19T14:27:01.861Z",
+ "generatedAt": "2026-11-19T14:27:16.876Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -3288,7 +3288,7 @@ window.DASHBOARD = {
      "line": 581,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-19T14:27:01.836Z",
+     "updatedAt": "2026-11-19T14:27:16.849Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -3333,7 +3333,7 @@ window.DASHBOARD = {
      "line": 589,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-19T14:27:01.836Z",
+     "updatedAt": "2026-11-19T14:27:16.849Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -3380,7 +3380,7 @@ window.DASHBOARD = {
      "line": 597,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-19T14:27:01.836Z",
+     "updatedAt": "2026-11-19T14:27:16.849Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -3434,7 +3434,7 @@ window.DASHBOARD = {
      "line": 605,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-19T14:27:01.836Z",
+     "updatedAt": "2026-11-19T14:27:16.849Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -3568,6 +3568,32 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-19T14:27:16.849Z",
+   "ok": true,
+   "phase": "13",
+   "tasks": [
+    "T13.1",
+    "T13.2",
+    "T13.3",
+    "T13.4"
+   ],
+   "attempt": "2",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 321/321 (3 skipped) dev+prod, unit 1687 pass",
+   "error": null,
+   "sha": "22adf67cc3755d155393dacdfe9313bca41b453f",
+   "shortSha": "22adf67",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/22adf67cc3755d155393dacdfe9313bca41b453f",
+   "subject": "test(web): final gate and walkthrough for picker/header polish",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-19T19:57:09+05:30",
+   "filesChanged": 8,
+   "added": 681,
+   "removed": 526
+  },
   {
    "at": "2026-11-19T13:20:36.818Z",
    "ok": true,
@@ -6390,6 +6416,22 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
+   "at": "2026-11-19T14:27:16.849Z",
+   "type": "commit",
+   "tasks": [
+    "T13.1",
+    "T13.2",
+    "T13.3",
+    "T13.4"
+   ],
+   "attempt": "2",
+   "text": "test(web): final gate and walkthrough for picker/header polish",
+   "sha": "22adf67cc3755d155393dacdfe9313bca41b453f",
+   "branch": "feature-enhancement",
+   "pushed": "yes",
+   "evidence": "e2e 321/321 (3 skipped) dev+prod, unit 1687 pass"
+  },
+  {
    "at": "2026-11-19T14:27:01.836Z",
    "type": "deliverable",
    "tasks": [
@@ -7025,17 +7067,6 @@ window.DASHBOARD = {
    "type": "verify_passed",
    "evidence": "source is unchanged since a5. The prod e2e tap-target measurements pass again (see T11.6). Proof shots 11/T11.3-1 and 11/T11.3-2 still apply.",
    "fingerprint": "417057db37a513c3d6441fb0b5c32a0fa0da9655d3ddc1d5010a540610e167f3",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
-  },
-  {
-   "at": "2026-11-18T15:42:13.099Z",
-   "tasks": [
-    "T11.2"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "source is unchanged since a5 (all mtimes before the a5 report). `vitest run src/pages src/components/Dashboard`: 63 files / 430 tests pass. `bun run verify` exits 0 and open rows are 0. Proof shot 11/T11.2-1 still applies.",
-   "fingerprint": "816b4c3bf450ae9fb4a543556f7636c4eb2d4b717180a2f6659279bf90e64661",
    "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
   }
  ]
