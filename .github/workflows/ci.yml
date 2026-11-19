@@ -18,8 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      # Fake value: the build only needs a syntactically present key to inline.
-      VITE_CLERK_PUBLISHABLE_KEY: pk_test_ci-fake-not-a-real-key
+      # Fake build-time values. The Clerk key is base64("ci-fake12.clerk.invalid$"): it must be
+      # structurally valid for Clerk to mount (prerender waits for rendered content), and the
+      # .invalid host never resolves, so no real Clerk instance is contacted.
+      VITE_CLERK_PUBLISHABLE_KEY: pk_test_Y2ktZmFrZTEyLmNsZXJrLmludmFsaWQk
+      VITE_TELEMETRYDECK_APP_ID: ci-fake
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
