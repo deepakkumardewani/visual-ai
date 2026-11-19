@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-18T15:42:17.779Z",
+ "generatedAt": "2026-11-19T13:20:28.650Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -8,6 +8,11 @@ window.DASHBOARD = {
  "tasksFile": "agent_docs/ui-polish-picker-header/TASKS.md",
  "projectRoot": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai",
  "docs": [
+  {
+   "name": "ANALYTICS",
+   "href": "docs/ANALYTICS.html",
+   "source": "agent_docs/ui-polish-picker-header/ANALYTICS.md"
+  },
   {
    "name": "AUDIT",
    "href": "docs/AUDIT.html",
@@ -29,11 +34,11 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
- "costUsd": 37.372,
- "elapsedMs": 185082478,
+ "costUsd": 38.3906,
+ "elapsedMs": 185430419,
  "costByRole": {
-  "builder": 8.796,
-  "verifier": 21.0959,
+  "builder": 9.1245,
+  "verifier": 21.786,
   "unit": 3.6938,
   "e2e": 3.7863
  },
@@ -41,8 +46,8 @@ window.DASHBOARD = {
   "phases": 14,
   "tasks": 62,
   "byStatus": {
-   "verified": 56,
-   "ready": 6
+   "verified": 58,
+   "ready": 4
   }
  },
  "phases": [
@@ -2825,7 +2830,7 @@ window.DASHBOARD = {
      "line": 501,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T15:42:17.758Z",
+     "updatedAt": "2026-11-18T15:42:37.630Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2877,7 +2882,7 @@ window.DASHBOARD = {
      "line": 509,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T15:42:17.758Z",
+     "updatedAt": "2026-11-18T15:42:37.630Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2929,7 +2934,7 @@ window.DASHBOARD = {
      "line": 517,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T15:42:17.758Z",
+     "updatedAt": "2026-11-18T15:42:37.630Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -2984,7 +2989,7 @@ window.DASHBOARD = {
      "line": 526,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T15:42:17.758Z",
+     "updatedAt": "2026-11-18T15:42:37.630Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -3033,7 +3038,7 @@ window.DASHBOARD = {
      "line": 534,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-18T15:42:17.758Z",
+     "updatedAt": "2026-11-18T15:42:37.630Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -3077,7 +3082,7 @@ window.DASHBOARD = {
      "line": 543,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-18T15:42:17.758Z",
+     "updatedAt": "2026-11-18T15:42:37.630Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -3135,7 +3140,7 @@ window.DASHBOARD = {
     {
      "id": "T12.1",
      "title": "Write ANALYTICS.md",
-     "done": false,
+     "done": true,
      "kind": "dod",
      "depends": [],
      "files": [
@@ -3154,23 +3159,44 @@ window.DASHBOARD = {
      ],
      "line": 558,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-19T13:20:23.727Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6285,
+     "costApprox": true,
+     "elapsedMs": 347941,
+     "summary": [
+      "Re-fetched every cited vendor page live (Simple Analytics, PostHog, Umami, Plausible, Replicate, MongoDB, Clerk, Mixpanel, Amplitude); all 31 URLs now return 200 (3 benign redirects).",
+      "Dead links fixed: SA /events/metadata -> /metadata, /api/export -> /api/export-data-points; Umami links moved to docs.umami.is; Plausible self-hosting -> self-hosted-web-analytics plus CE GitHub repo.",
+      "SA claim corrected: /metadata page says identifiers in metadata are not allowed and the account may be suspended (ToS prohibition); /what-we-collect cited only for no-cookies/no-IP.",
+      "Unverifiable claims fixed: PostHog cookieless now cites the cookieless tutorial (mode \"always\") and data-collection page; removed unconfirmed Plausible \"ClickHouse + Postgres\" wording (CE repo ships a",
+      "Admin gating: stated it does not exist today, must be built (Clerk publicMetadata role per Clerk RBAC docs, or allowlist); added effort row; total now 3.5 to 5 days."
+     ]
     },
     {
      "id": "T12.2",
      "title": "DoD: analytics diff clean",
-     "done": false,
+     "done": true,
      "kind": "dod",
      "depends": [],
      "files": [],
@@ -3187,25 +3213,39 @@ window.DASHBOARD = {
      ],
      "line": 566,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-19T13:20:23.727Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.3901,
+     "costApprox": true,
+     "elapsedMs": 188556,
+     "summary": [
+      "Re-fetched every cited vendor page live (Simple Analytics, PostHog, Umami, Plausible, Replicate, MongoDB, Clerk, Mixpanel, Amplitude); all 31 URLs now return 200 (3 benign redirects).",
+      "Dead links fixed: SA /events/metadata -> /metadata, /api/export -> /api/export-data-points; Umami links moved to docs.umami.is; Plausible self-hosting -> self-hosted-web-analytics plus CE GitHub repo.",
+      "SA claim corrected: /metadata page says identifiers in metadata are not allowed and the account may be suspended (ToS prohibition); /what-we-collect cited only for no-cookies/no-IP.",
+      "Unverifiable claims fixed: PostHog cookieless now cites the cookieless tutorial (mode \"always\") and data-collection page; removed unconfirmed Plausible \"ClickHouse + Postgres\" wording (CE repo ships a",
+      "Admin gating: stated it does not exist today, must be built (Clerk publicMetadata role per Clerk RBAC docs, or allowlist); added effort row; total now 3.5 to 5 days."
+     ]
     }
    ],
-   "verified": 0,
+   "verified": 2,
    "total": 2,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 1.0186,
+   "elapsedMs": 347941
   },
   {
    "id": "13",
@@ -3376,7 +3416,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 12",
+ "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 13",
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -3471,6 +3511,34 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-18T15:42:37.630Z",
+   "ok": true,
+   "phase": "11",
+   "tasks": [
+    "T11.1",
+    "T11.2",
+    "T11.3",
+    "T11.4",
+    "T11.5",
+    "T11.6"
+   ],
+   "attempt": "2",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "e2e 107/107, unit 2913 pass, Dashboard.vue 95.65% branches",
+   "error": null,
+   "sha": "a9791ee8587101ce4e8b76663f94c1e26ec58596",
+   "shortSha": "a9791ee",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/a9791ee8587101ce4e8b76663f94c1e26ec58596",
+   "subject": "feat(web): Create page responsiveness audit and fixes",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-18T21:12:29+05:30",
+   "filesChanged": 28,
+   "added": 1425,
+   "removed": 503
+  },
   {
    "at": "2026-11-18T14:51:33.376Z",
    "ok": true,
@@ -5524,6 +5592,18 @@ window.DASHBOARD = {
  ],
  "deliverables": [
   {
+   "at": "2026-11-19T13:20:23.727Z",
+   "type": "deliverable",
+   "tasks": [
+    "T12.1",
+    "T12.2"
+   ],
+   "text": "ANALYTICS.md research doc: recommends first-party Mongo usage ledger + admin page",
+   "files": [
+    "agent_docs/ui-polish-picker-header/ANALYTICS.md"
+   ]
+  },
+  {
    "at": "2026-11-18T15:42:17.758Z",
    "type": "deliverable",
    "tasks": [
@@ -5694,21 +5774,17 @@ window.DASHBOARD = {
    "files": [
     "apps/web/src/utils/layout.ts"
    ]
-  },
-  {
-   "at": "2026-11-16T09:43:36.375Z",
-   "type": "deliverable",
-   "tasks": [
-    "T0.1",
-    "T0.2"
-   ],
-   "text": "108 baseline screenshots captured and AUDIT.md with 9 open rows",
-   "files": [
-    "agent_docs/ui-polish-picker-header/AUDIT.md"
-   ]
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-19T13:17:29.923Z",
+   "type": "advisory",
+   "tasks": [
+    "T12.1"
+   ],
+   "text": "Plausible self-hosting link redirects to marketing page; link CE docs/GitHub"
+  },
   {
    "at": "2026-11-18T15:41:38.390Z",
    "type": "advisory",
@@ -6192,6 +6268,239 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
+   "at": "2026-11-19T13:20:23.727Z",
+   "type": "deliverable",
+   "tasks": [
+    "T12.1",
+    "T12.2"
+   ],
+   "text": "ANALYTICS.md research doc: recommends first-party Mongo usage ledger + admin page",
+   "files": [
+    "agent_docs/ui-polish-picker-header/ANALYTICS.md"
+   ]
+  },
+  {
+   "at": "2026-11-19T13:20:20.905Z",
+   "tasks": [
+    "T12.1"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "ANALYTICS.md answers all 4 SPEC Part 5 questions with linked sources; 31/31 unique URLs return HTTP 200 (2 benign redirects); recommendation explicit (line 70: Mongo ledger + admin page, 3.5 to 5 days); all 4 round-1 BLOCKING items fixed; no code changed (`git status --short apps packages | diff` rc=0, empty)",
+   "fingerprint": "8e2dc8f6c4095bec3975b3f233689a4226446f7dbf6a6900a6b3b6d1b5ee5e10",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-12-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-19T13:19:25.747Z",
+   "type": "verify_started",
+   "tasks": [
+    "T12.1"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-19T13:19:23.546Z",
+   "type": "task_built",
+   "tasks": [
+    "T12.1"
+   ],
+   "attempt": "2",
+   "text": "ANALYTICS.md fixed per verifier",
+   "files": [
+    "agent_docs/ui-polish-picker-header/ANALYTICS.md"
+   ]
+  },
+  {
+   "at": "2026-11-19T13:19:23.506Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/ANALYTICS.md": "3d6c3b8e4c24d9d21d556980c0415b6fa83ce1a8"
+   }
+  },
+  {
+   "at": "2026-11-19T13:19:23.266Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T12.1"
+   ],
+   "fingerprint": "8e2dc8f6c4095bec3975b3f233689a4226446f7dbf6a6900a6b3b6d1b5ee5e10"
+  },
+  {
+   "at": "2026-11-19T13:17:44.354Z",
+   "type": "task_started",
+   "tasks": [
+    "T12.1"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-19T13:17:44.141Z",
+   "type": "build_started",
+   "tasks": [
+    "T12.1"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-19T13:17:41.520Z",
+   "tasks": [
+    "T12.2"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "snapshot /tmp/ui-polish-p12-before.txt is 0 bytes (18:44); `git status --short apps packages | diff /tmp/ui-polish-p12-before.txt -` rc=0, no output; `git diff --stat HEAD -- apps packages` empty; ANALYTICS.md exists (8965 B); the other changes are orchestrator `.dashboard/` files plus the doc",
+   "fingerprint": "b2cdbbc4160c9965973257345a0869ee552570a2f7f0251714e7180327b5e063",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-12-verifier-a1.md"
+  },
+  {
+   "at": "2026-11-19T13:17:41.519Z",
+   "tasks": [
+    "T12.1"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "code-bug",
+   "text": "[code-bug] · AC \"each question answered with linked sources\" (ANALYTICS.md:12,14) · 2 of 26 cited URLs return HTTP 404, both in Q1: https://docs.simpleanalytics.com/events/metadata and https://docs.simpleanalytics.com/api/export · replace with https://docs.simpleanalytics.com/metadata and https://docs.simpleanalytics.com/api/export-data-points (or /api/export-events) ; [code-bug] · AC Q1 confirm h",
+   "files": [
+    "ac \"each question answered with linked sources\" (analytics.m",
+    "ac q1 confirm hypothesis from official docs (analytics.md:13",
+    "ac recommendation + effort (analytics.md:65, 75-84)",
+    "do \"research via docs fetch only\" (analytics.md:5)"
+   ],
+   "sigs": [
+    "T12.1|code-bug|ac \"each question answered with linked sources\" (analytics.m",
+    "T12.1|code-bug|ac q1 confirm hypothesis from official docs (analytics.md:13",
+    "T12.1|code-bug|ac recommendation + effort (analytics.md:65, 75-84)",
+    "T12.1|code-bug|do \"research via docs fetch only\" (analytics.md:5)"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-12-verifier-a1.md"
+  },
+  {
+   "at": "2026-11-19T13:17:29.923Z",
+   "type": "advisory",
+   "tasks": [
+    "T12.1"
+   ],
+   "text": "Plausible self-hosting link redirects to marketing page; link CE docs/GitHub"
+  },
+  {
+   "at": "2026-11-19T13:15:26.942Z",
+   "type": "verify_started",
+   "tasks": [
+    "T12.1",
+    "T12.2"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-19T13:15:25.198Z",
+   "type": "task_built",
+   "tasks": [
+    "T12.1",
+    "T12.2"
+   ],
+   "text": "ANALYTICS.md written; no code changed",
+   "files": [
+    "agent_docs/ui-polish-picker-header/ANALYTICS.md"
+   ]
+  },
+  {
+   "at": "2026-11-19T13:15:23.105Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/ANALYTICS.md": "3544c34784f60e904cc391c816f0cbc2a8522853"
+   }
+  },
+  {
+   "at": "2026-11-19T13:15:22.919Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T12.2"
+   ],
+   "fingerprint": "b2cdbbc4160c9965973257345a0869ee552570a2f7f0251714e7180327b5e063"
+  },
+  {
+   "at": "2026-11-19T13:15:22.919Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T12.1"
+   ],
+   "fingerprint": "7400bf73a563d4cb77080925a7c2e2c4579a99a161ef7bb1720e4032a62410c7"
+  },
+  {
+   "at": "2026-11-19T13:15:17.308Z",
+   "type": "task_built",
+   "tasks": [
+    "T12.2"
+   ],
+   "text": "ANALYTICS.md written; apps/packages diff unchanged",
+   "files": [
+    "agent_docs/ui-polish-picker-header/ANALYTICS.md"
+   ]
+  },
+  {
+   "at": "2026-11-19T13:15:17.098Z",
+   "type": "task_built",
+   "tasks": [
+    "T12.1"
+   ],
+   "text": "ANALYTICS.md written; apps/packages diff unchanged",
+   "files": [
+    "agent_docs/ui-polish-picker-header/ANALYTICS.md"
+   ]
+  },
+  {
+   "at": "2026-11-19T13:14:32.964Z",
+   "type": "task_started",
+   "tasks": [
+    "T12.1",
+    "T12.2"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-19T13:14:30.776Z",
+   "type": "build_started",
+   "tasks": [
+    "T12.1",
+    "T12.2"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-19T13:14:24.206Z",
+   "type": "run_started",
+   "tasks": [
+    "T12.1",
+    "T12.2"
+   ],
+   "pipeline": 2,
+   "baseline": {
+    "head": "a9791ee8587101ce4e8b76663f94c1e26ec58596",
+    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/10/T10.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/10/T10.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/10/T10.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/10/T10.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/10/T10.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000"
+   }
+  },
+  {
+   "at": "2026-11-18T15:42:37.630Z",
+   "type": "commit",
+   "tasks": [
+    "T11.1",
+    "T11.2",
+    "T11.3",
+    "T11.4",
+    "T11.5",
+    "T11.6"
+   ],
+   "attempt": "2",
+   "text": "feat(web): Create page responsiveness audit and fixes",
+   "sha": "a9791ee8587101ce4e8b76663f94c1e26ec58596",
+   "branch": "feature-enhancement",
+   "pushed": "yes",
+   "evidence": "e2e 107/107, unit 2913 pass, Dashboard.vue 95.65% branches"
+  },
+  {
    "at": "2026-11-18T15:42:17.758Z",
    "type": "deliverable",
    "tasks": [
@@ -6617,244 +6926,6 @@ window.DASHBOARD = {
     "T11.4"
    ],
    "text": "CSS-only header/composer 44px fixes outside Dashboard.vue have no unit class-contract test; covered only by create-responsive e2e measurements"
-  },
-  {
-   "at": "2026-11-18T15:32:16.715Z",
-   "type": "advisory",
-   "tasks": [
-    "T11.6"
-   ],
-   "text": "AUDIT.md fails vp check (missing blank line before list under \"Intended diffs\" in the 1440 section); bun run verify --fix repairs it, run it before commit"
-  },
-  {
-   "at": "2026-11-18T15:24:33.235Z",
-   "type": "verify_started",
-   "tasks": [
-    "T11.1",
-    "T11.2",
-    "T11.3",
-    "T11.4",
-    "T11.5",
-    "T11.6"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T15:24:29.133Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "f95e79bb6fdc3c2b18b6804e8edd025bd44e01ce",
-    "agent_docs/ui-polish-picker-header/TASKS.md": "ec3734094fd3a5003dcf32a327e2efea67a0022c",
-    "apps/web/src/components/Dashboard/Composer/GenerateCTA.vue": "da19976eb0c7149a12c8cc4cae1648f6d0b052d0",
-    "apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue": "0787eae35bd920418b35235bd7ac10e761108dff",
-    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue": "f0618587606b932890a63bec07fa2b6748c576e8",
-    "apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.vue": "c14d80ebcb95febbbc351a59f82999a283314558",
-    "apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.vue": "ac8a863d58f294cd4de7fe31abb5f43b631d1831",
-    "apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.vue": "e325c2618973a73d67720a99aa73e5e57efcb067",
-    "apps/web/src/components/Header/AppHeader.vue": "3198f5f579d97627b77b1c03c3d256daeb6b4b4a",
-    "apps/web/src/components/Header/FeatureSelect.vue": "eed431088e104176d9874448b7abe7d0f3fd87dd",
-    "apps/web/src/components/Header/Logo.test.ts": "90cecaa393f85d5b25f8cb1d9030ebe2a301c5ee",
-    "apps/web/src/components/Header/Logo.vue": "ad44871981aa276df6635ea92468abf16dad7ff5",
-    "apps/web/src/components/Header/ReferralOffer.vue": "0683237fb12693cccd3ecc09351b508f3942c81a",
-    "apps/web/src/components/Header/UserMenu.vue": "86e49050489cf87a0e87097b4b46dc52f66b5ead",
-    "apps/web/src/pages/Dashboard.test.ts": "5a613093a2dd4d683f56a7f43dc976ff9771c686",
-    "apps/web/src/pages/Dashboard.vue": "0d412bcef07fa997ac930fedbc62bf1f5d96aa81",
-    "apps/web/e2e/qa/create-responsive.spec.ts": "31e7918bd0abd6364085ec79a11f240df6fa28b0"
-   }
-  },
-  {
-   "at": "2026-11-18T15:24:28.967Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.5"
-   ],
-   "fingerprint": "30512242b7f6aa242fbbe5b66176bef570438773efaa2fe07ec49df51a0ad0cf"
-  },
-  {
-   "at": "2026-11-18T15:24:28.967Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.4"
-   ],
-   "fingerprint": "b606a766c1f08ed315b3787e83120a2b0d7da55eb567be05a418dff867e5579b"
-  },
-  {
-   "at": "2026-11-18T15:24:28.967Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.3"
-   ],
-   "fingerprint": "c54259d485547e9356e0867c70303f206ac3846c76856c3d994a2a1511bbf60c"
-  },
-  {
-   "at": "2026-11-18T15:24:28.967Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.2"
-   ],
-   "fingerprint": "775f23c23f2c20eb4bc7e82d79ec333b09441120f6bd90cb7ec057fbe4209e24"
-  },
-  {
-   "at": "2026-11-18T15:24:28.967Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.1"
-   ],
-   "fingerprint": "88891488b782e4f632008b5282841839144ac814a45852a4a2d8edc41b14eb44"
-  },
-  {
-   "at": "2026-11-18T15:24:23.546Z",
-   "type": "task_built",
-   "tasks": [
-    "T11.6"
-   ],
-   "text": "gate: e2e 107 pass, verify 0 err, 2901 unit pass; 1440 review recorded",
-   "files": [
-    "agent_docs/ui-polish-picker-header/AUDIT.md",
-    "apps/web/src/components/Header/AppHeader.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T15:23:05.452Z",
-   "type": "task_built",
-   "tasks": [
-    "T11.6"
-   ],
-   "text": "gate green: pw 107 pass, verify 0 errors, test 2901 pass; fixed 768 tab centering",
-   "files": [
-    "apps/web/src/components/Header/AppHeader.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T15:10:08.777Z",
-   "type": "task_started",
-   "tasks": [
-    "T11.6"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T15:10:08.575Z",
-   "type": "task_built",
-   "tasks": [
-    "T11.5"
-   ],
-   "text": "e2e 25/25, repeat x3 clean",
-   "files": [
-    "apps/web/e2e/qa/create-responsive.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T15:02:03.097Z",
-   "type": "task_started",
-   "tasks": [
-    "T11.5"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T15:02:02.890Z",
-   "type": "task_built",
-   "tasks": [
-    "T11.4"
-   ],
-   "text": "unit PASS, lowest 95.65% branches, 100% lines",
-   "files": [
-    "apps/web/src/pages/Dashboard.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T15:01:02.875Z",
-   "type": "task_started",
-   "tasks": [
-    "T11.4"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T15:01:00.162Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "384ab0f33802798f8957ecbad1da9739b641fe1c",
-    "agent_docs/ui-polish-picker-header/TASKS.md": "7e68dbb6f42b9a114651bb25eb1f08ba7743aea2",
-    "apps/web/src/components/Dashboard/Composer/GenerateCTA.vue": "da19976eb0c7149a12c8cc4cae1648f6d0b052d0",
-    "apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue": "0787eae35bd920418b35235bd7ac10e761108dff",
-    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue": "f0618587606b932890a63bec07fa2b6748c576e8",
-    "apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.vue": "c14d80ebcb95febbbc351a59f82999a283314558",
-    "apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.vue": "ac8a863d58f294cd4de7fe31abb5f43b631d1831",
-    "apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.vue": "e325c2618973a73d67720a99aa73e5e57efcb067",
-    "apps/web/src/components/Header/FeatureSelect.vue": "eed431088e104176d9874448b7abe7d0f3fd87dd",
-    "apps/web/src/components/Header/Logo.test.ts": "90cecaa393f85d5b25f8cb1d9030ebe2a301c5ee",
-    "apps/web/src/components/Header/Logo.vue": "ad44871981aa276df6635ea92468abf16dad7ff5",
-    "apps/web/src/components/Header/ReferralOffer.vue": "0683237fb12693cccd3ecc09351b508f3942c81a",
-    "apps/web/src/components/Header/UserMenu.vue": "86e49050489cf87a0e87097b4b46dc52f66b5ead",
-    "apps/web/src/pages/Dashboard.vue": "0d412bcef07fa997ac930fedbc62bf1f5d96aa81"
-   }
-  },
-  {
-   "at": "2026-11-18T15:00:59.974Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.3"
-   ],
-   "fingerprint": "3f72a162dc2c59f72a45a7e3163b91d194c177f7bb3e0fd452b4d661b21f512d"
-  },
-  {
-   "at": "2026-11-18T15:00:51.960Z",
-   "type": "task_built",
-   "tasks": [
-    "T11.3"
-   ],
-   "text": "max-md 44px on composer toolbar + sidebar chips; AUDIT open=0; vitest Dashboard 374 pass; verify ok",
-   "files": [
-    "apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue",
-    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue",
-    "apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.vue",
-    "apps/web/src/components/Dashboard/Composer/GenerateCTA.vue",
-    "apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.vue",
-    "apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.vue"
-   ]
-  },
-  {
-   "at": "2026-11-18T14:59:46.122Z",
-   "type": "task_started",
-   "tasks": [
-    "T11.3"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-18T14:59:24.404Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "b2304801164db579771c3915ef0c4667d3f34d22",
-    "agent_docs/ui-polish-picker-header/TASKS.md": "742af16f687f8e39b37e1cd4665446a893e5bc69",
-    "apps/web/src/components/Header/FeatureSelect.vue": "eed431088e104176d9874448b7abe7d0f3fd87dd",
-    "apps/web/src/components/Header/Logo.test.ts": "90cecaa393f85d5b25f8cb1d9030ebe2a301c5ee",
-    "apps/web/src/components/Header/Logo.vue": "ad44871981aa276df6635ea92468abf16dad7ff5",
-    "apps/web/src/components/Header/ReferralOffer.vue": "0683237fb12693cccd3ecc09351b508f3942c81a",
-    "apps/web/src/components/Header/UserMenu.vue": "86e49050489cf87a0e87097b4b46dc52f66b5ead",
-    "apps/web/src/pages/Dashboard.vue": "0d412bcef07fa997ac930fedbc62bf1f5d96aa81"
-   }
-  },
-  {
-   "at": "2026-11-18T14:59:24.193Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.2"
-   ],
-   "fingerprint": "7e2c8cb017532169a026336ec538119f196089fd9474089d2e9d94f2071f3ad2"
-  },
-  {
-   "at": "2026-11-18T14:59:24.193Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.1"
-   ],
-   "fingerprint": "e2245ca5d9aab0113040fb5ead45d53ba1cb422241cbb99c01b66084057a3858"
   }
  ]
 };

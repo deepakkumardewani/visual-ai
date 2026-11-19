@@ -555,7 +555,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** A research document (no code) on per-user analytics options with a single recommendation and effort estimate.
 **Try in UI:** No UI ; open `agent_docs/ui-polish-picker-header/ANALYTICS.md` and confirm the four questions are answered with links ; run `git status --short apps packages | diff /tmp/ui-polish-p12-before.txt -` and confirm this phase touched no code.
 
-### ☐ T12.1 Write ANALYTICS.md
+### ✅ T12.1 Write ANALYTICS.md
 
 - **Kind:** dod
 - **Files:** `agent_docs/ui-polish-picker-header/ANALYTICS.md`
@@ -563,7 +563,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Part 5: doc exists, each question answered with linked sources, recommendation explicit, no code or API changes.
 - **Verify:** `grep -c "http" agent_docs/ui-polish-picker-header/ANALYTICS.md` (links present); `grep -n -i "recommend" agent_docs/ui-polish-picker-header/ANALYTICS.md`.
 
-### ☐ T12.2 DoD: analytics diff clean
+### ✅ T12.2 DoD: analytics diff clean
 
 - **Kind:** dod
 - **Files:** none
