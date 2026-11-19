@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-19T13:20:28.650Z",
+ "generatedAt": "2026-11-19T14:27:01.861Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "ui-polish-picker-header",
@@ -34,11 +34,11 @@ window.DASHBOARD = {
    "source": "agent_docs/ui-polish-picker-header/TASKS.md"
   }
  ],
- "costUsd": 38.3906,
- "elapsedMs": 185430419,
+ "costUsd": 40.9134,
+ "elapsedMs": 188822609,
  "costByRole": {
-  "builder": 9.1245,
-  "verifier": 21.786,
+  "builder": 10.0522,
+  "verifier": 23.3812,
   "unit": 3.6938,
   "e2e": 3.7863
  },
@@ -46,8 +46,7 @@ window.DASHBOARD = {
   "phases": 14,
   "tasks": 62,
   "byStatus": {
-   "verified": 58,
-   "ready": 4
+   "verified": 62
   }
  },
  "phases": [
@@ -3160,7 +3159,7 @@ window.DASHBOARD = {
      "line": 558,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-19T13:20:23.727Z",
+     "updatedAt": "2026-11-19T13:20:36.818Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -3214,7 +3213,7 @@ window.DASHBOARD = {
      "line": 566,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-19T13:20:23.727Z",
+     "updatedAt": "2026-11-19T13:20:36.818Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
@@ -3269,7 +3268,7 @@ window.DASHBOARD = {
     {
      "id": "T13.1",
      "title": "Final stale-test and grep sweep",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -3288,23 +3287,34 @@ window.DASHBOARD = {
      ],
      "line": 581,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-19T14:27:01.836Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4704,
+     "costApprox": true,
+     "elapsedMs": 2901591,
+     "summary": [
+      "T13.3: 96 new shots in agent_docs/qa/ui-polish-picker-header/after/ (explore 24, assets 24, picker-open Free+Pro 24, upgrade-faq 12 at 6 widths light+dark, landing-nav 12). Temporary capture spec (del",
+      "T13.4: suites unchanged and green from the previous round; screenshot criterion now met. Owner-pending (not faked): keyboard-open check, Earn/Upgrade icon choice, commit."
+     ]
     },
     {
      "id": "T13.2",
      "title": "Gate: full e2e in both server modes",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [],
      "files": [],
@@ -3322,23 +3332,34 @@ window.DASHBOARD = {
      ],
      "line": 589,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-19T14:27:01.836Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4704,
+     "costApprox": true,
+     "elapsedMs": 2901591,
+     "summary": [
+      "T13.3: 96 new shots in agent_docs/qa/ui-polish-picker-header/after/ (explore 24, assets 24, picker-open Free+Pro 24, upgrade-faq 12 at 6 widths light+dark, landing-nav 12). Temporary capture spec (del",
+      "T13.4: suites unchanged and green from the previous round; screenshot criterion now met. Owner-pending (not faked): keyboard-open check, Earn/Upgrade icon choice, commit."
+     ]
     },
     {
      "id": "T13.3",
      "title": "Walkthrough: all spec parts",
-     "done": false,
+     "done": true,
      "kind": "walkthrough",
      "depends": [],
      "files": [
@@ -3358,23 +3379,41 @@ window.DASHBOARD = {
      ],
      "line": 597,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-19T14:27:01.836Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.791,
+     "costApprox": true,
+     "elapsedMs": 3392189,
+     "summary": [
+      "T13.3: 96 new shots in agent_docs/qa/ui-polish-picker-header/after/ (explore 24, assets 24, picker-open Free+Pro 24, upgrade-faq 12 at 6 widths light+dark, landing-nav 12). Temporary capture spec (del",
+      "T13.4: suites unchanged and green from the previous round; screenshot criterion now met. Owner-pending (not faked): keyboard-open check, Earn/Upgrade icon choice, commit."
+     ]
     },
     {
      "id": "T13.4",
      "title": "Definition of done",
-     "done": false,
+     "done": true,
      "kind": "dod",
      "depends": [],
      "files": [],
@@ -3394,29 +3433,47 @@ window.DASHBOARD = {
      ],
      "line": 605,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-19T14:27:01.836Z",
      "verifierRouted": true,
      "pending": [],
      "risk": null,
-     "surfaces": null,
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.791,
+     "costApprox": true,
+     "elapsedMs": 3392190,
+     "summary": [
+      "T13.3: 96 new shots in agent_docs/qa/ui-polish-picker-header/after/ (explore 24, assets 24, picker-open Free+Pro 24, upgrade-faq 12 at 6 widths light+dark, landing-nav 12). Temporary capture spec (del",
+      "T13.4: suites unchanged and green from the previous round; screenshot criterion now met. Owner-pending (not faked): keyboard-open check, Earn/Upgrade icon choice, commit."
+     ]
     }
    ],
-   "verified": 0,
+   "verified": 4,
    "total": 4,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 2.5228,
+   "elapsedMs": 3392190
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/ui-polish-picker-header/TASKS.md phase 13",
+ "nextCommand": null,
  "questions": [
   {
    "at": "2026-11-11T13:53:51.240Z",
@@ -3511,6 +3568,30 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-19T13:20:36.818Z",
+   "ok": true,
+   "phase": "12",
+   "tasks": [
+    "T12.1",
+    "T12.2"
+   ],
+   "attempt": "2",
+   "branch": "feature-enhancement",
+   "pushed": true,
+   "evidence": "doc-only; 31/31 cited URLs 200",
+   "error": null,
+   "sha": "2af1ab0fa432d38a6f1440601be1ca3ca69fc46d",
+   "shortSha": "2af1ab0",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/2af1ab0fa432d38a6f1440601be1ca3ca69fc46d",
+   "subject": "docs(web): analytics research doc",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-19T18:50:30+05:30",
+   "filesChanged": 4,
+   "added": 469,
+   "removed": 288
+  },
   {
    "at": "2026-11-18T15:42:37.630Z",
    "ok": true,
@@ -5592,6 +5673,21 @@ window.DASHBOARD = {
  ],
  "deliverables": [
   {
+   "at": "2026-11-19T14:27:01.836Z",
+   "type": "deliverable",
+   "tasks": [
+    "T13.1",
+    "T13.2",
+    "T13.3",
+    "T13.4"
+   ],
+   "text": "Final gate: stale-name sweep, full e2e dev+prod green, 96 after shots + AUDIT review, DoD checked",
+   "files": [
+    "agent_docs/ui-polish-picker-header/AUDIT.md",
+    "agent_docs/qa/ui-polish-picker-header"
+   ]
+  },
+  {
    "at": "2026-11-19T13:20:23.727Z",
    "type": "deliverable",
    "tasks": [
@@ -5760,23 +5856,49 @@ window.DASHBOARD = {
    "files": [
     "apps/web/src/components/Header/HeaderActions.vue"
    ]
-  },
-  {
-   "at": "2026-11-16T10:17:41.673Z",
-   "type": "deliverable",
-   "tasks": [
-    "T1.1",
-    "T1.2",
-    "T1.3",
-    "T1.4"
-   ],
-   "text": "Shared breakpoint constants + useHeaderBreakpoint; header/banner split moved 600->768; 640-767 shell sizing fixed; unit + e2e coverage",
-   "files": [
-    "apps/web/src/utils/layout.ts"
-   ]
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-19T14:26:32.873Z",
+   "type": "advisory",
+   "tasks": [
+    "T13.3"
+   ],
+   "text": "Open avatar menu shots exist only at 360/1440 (agent_docs/qa/plan-pill), not 390/768/1024; landing-nav-360-light captured mid hero fade-in"
+  },
+  {
+   "at": "2026-11-19T14:26:32.612Z",
+   "type": "advisory",
+   "tasks": [
+    "T13.4"
+   ],
+   "text": "header-responsive.spec.ts:388 test.fail (Explore 390 tabs rest at y=100) still open vs SPEC Part 2 sticky-tabs criterion; owner-accepted out of scope (Q-gate)"
+  },
+  {
+   "at": "2026-11-19T14:18:31.618Z",
+   "type": "advisory",
+   "tasks": [
+    "T13.4"
+   ],
+   "text": "ANALYTICS.md has formatter-only table re-alignment in working tree, undeclared as EXTRA"
+  },
+  {
+   "at": "2026-11-19T14:18:31.364Z",
+   "type": "advisory",
+   "tasks": [
+    "T13.1"
+   ],
+   "text": "Builder report claims an added dock-present check in Dashboard.test.ts; diff only removes two vacuous assertions"
+  },
+  {
+   "at": "2026-11-19T14:18:31.096Z",
+   "type": "advisory",
+   "tasks": [
+    "T13.2"
+   ],
+   "text": "Verify names e2e/qa/pricing-dialog-faq.spec.ts which does not exist; FAQ scenarios live in pricing-layout.spec.ts"
+  },
   {
    "at": "2026-11-19T13:17:29.923Z",
    "type": "advisory",
@@ -6268,6 +6390,351 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
+   "at": "2026-11-19T14:27:01.836Z",
+   "type": "deliverable",
+   "tasks": [
+    "T13.1",
+    "T13.2",
+    "T13.3",
+    "T13.4"
+   ],
+   "text": "Final gate: stale-name sweep, full e2e dev+prod green, 96 after shots + AUDIT review, DoD checked",
+   "files": [
+    "agent_docs/ui-polish-picker-header/AUDIT.md",
+    "agent_docs/qa/ui-polish-picker-header"
+   ]
+  },
+  {
+   "at": "2026-11-19T14:26:58.394Z",
+   "tasks": [
+    "T13.4"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "bun run verify rc=0 (0 errors/10 warnings, re-run this round); apps/web bun run test 222 files/1687 tests pass (re-run); e2e dev 321 passed/3 skipped and E2E_SERVER=prod 321 passed/3 skipped from attempt 2 with no source change since; paid-call-guard green; ANALYTICS.md present, no analytics code; SPEC summary screenshot criterion now met. Owner manual items listed and pending (keyboard-open check",
+   "fingerprint": "f5c2b57977e56db1dd9932e0c03b83f07ac539028ab13b966aa69d7c195a8313",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-13-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-19T14:26:58.393Z",
+   "tasks": [
+    "T13.3"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "previous BLOCKING fixed. after/ now holds explore 24, assets 24, picker-open 24 (Free+Pro), upgrade-faq 12, landing-nav 12 at 360/390/700/768/1024/1440 light+dark (plus create 24, create-keyboard 3, picker 12 from earlier); all 96 new PNGs are viewport-width (sips). Verifier's own Playwright probe (storageState, signed in, /generate/ routes blocked) on /explore and /assets at all 6 widths x light/",
+   "fingerprint": "37b69b01d6b26361039af6462d79d1d10f9fc5e0987bb390db74f86d2b6a18f5",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-13-verifier-a3.md"
+  },
+  {
+   "at": "2026-11-19T14:26:32.873Z",
+   "type": "advisory",
+   "tasks": [
+    "T13.3"
+   ],
+   "text": "Open avatar menu shots exist only at 360/1440 (agent_docs/qa/plan-pill), not 390/768/1024; landing-nav-360-light captured mid hero fade-in"
+  },
+  {
+   "at": "2026-11-19T14:26:32.612Z",
+   "type": "advisory",
+   "tasks": [
+    "T13.4"
+   ],
+   "text": "header-responsive.spec.ts:388 test.fail (Explore 390 tabs rest at y=100) still open vs SPEC Part 2 sticky-tabs criterion; owner-accepted out of scope (Q-gate)"
+  },
+  {
+   "at": "2026-11-19T14:23:29.994Z",
+   "type": "verify_started",
+   "tasks": [
+    "T13.3",
+    "T13.4"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-19T14:23:28.289Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/ANALYTICS.md": "0f1902efb20e185b2a21b206ab47400441bc9227",
+    "agent_docs/ui-polish-picker-header/AUDIT.md": "12a8cad6e4e246307b1c7c166630d5fb352f35d0",
+    "apps/web/src/components/Header/AppHeader.test.ts": "3951359e2a3f73a89b7d73f80d6668dd32d0c672",
+    "apps/web/src/components/Header/CreditsChip.test.ts": "d324cf92967f2ee34b8865cb9b0921bdb863c9da",
+    "apps/web/src/pages/Dashboard.test.ts": "63f721096578e2d3a050f5a74cbefead9798ddde"
+   }
+  },
+  {
+   "at": "2026-11-19T14:23:28.030Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T13.4"
+   ],
+   "fingerprint": "f5c2b57977e56db1dd9932e0c03b83f07ac539028ab13b966aa69d7c195a8313"
+  },
+  {
+   "at": "2026-11-19T14:23:28.030Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T13.3"
+   ],
+   "fingerprint": "37b69b01d6b26361039af6462d79d1d10f9fc5e0987bb390db74f86d2b6a18f5"
+  },
+  {
+   "at": "2026-11-19T14:18:50.465Z",
+   "type": "task_started",
+   "tasks": [
+    "T13.3",
+    "T13.4"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-19T14:18:50.200Z",
+   "type": "build_started",
+   "tasks": [
+    "T13.3",
+    "T13.4"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-19T14:18:47.795Z",
+   "tasks": [
+    "T13.2"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "targeted 13 specs --repeat-each=2: 291 passed (6.5m), paid-call-guard included and green; full dev e2e 321 passed / 3 skipped (pre-existing assets.spec fixmes from 393a224); full E2E_SERVER=prod e2e 321 passed / 3 skipped (5.8m) first run, no flake",
+   "fingerprint": "0ff74118048f45992109890d9c7275248eb9edc926dc5783478f88ae159014d3",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-13-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-19T14:18:47.795Z",
+   "tasks": [
+    "T13.1"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "grep for smAndUp|100vh-60px|dashboard-mobile-tabs|pro-badge-header|upgrade-pill|NAME_SEPARATOR|nav__sheet-theme-btn in apps/web/src+e2e empty (rc=1); 600px grep on AppHeader.vue/ReferralOffer.vue empty; extra grep for 'pro-badge' empty, model-section-* still a live testid (ModelPickerPanel.vue:80) so not stale; bun run verify 0 errors/10 warnings; root bun run test 306 files/2913 tests pass, apps/",
+   "fingerprint": "1ef904b3df134c26abd823f3b1ecf4388eb48d33eb73a8453bc72df7dc83bcf4",
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-13-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-19T14:18:47.795Z",
+   "tasks": [
+    "T13.4"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "test-quality",
+   "text": "[test-quality] · AC \"All SPEC per-part and summary success criteria met\" · suites green (verify, unit, e2e dev+prod, ANALYTICS.md present, no analytics code in apps/web/src), but SPEC Part 2 screenshot criterion and Summary \"screenshots reviewed at 360/390/768/1024/1440 in both themes\" are unmet (see T13.3) · re-run dod after T13.3 screenshot set is complete; owner manual items still pending",
+   "files": [
+    "ac \"all spec per-part and summary success criteria met\""
+   ],
+   "sigs": [
+    "T13.4|test-quality|ac \"all spec per-part and summary success criteria met\""
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-13-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-19T14:18:47.795Z",
+   "tasks": [
+    "T13.3"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "test-quality",
+   "text": "[test-quality] · AC \"screenshots reviewed against baseline\" + SPEC Part 2 \"Screenshots 360/390/768/1024/1440 light + dark, Free and Pro, Create/Explore/Assets routes\" · agent_docs/qa/ui-polish-picker-header/after/ has only create-* (24), create-keyboard-* (3) and picker-* free (12); no Explore or Assets after-shots at any width/theme/plan (baseline has 24 each), no Pro picker after-shots, Upgrade ",
+   "files": [
+    "ac \"screenshots reviewed against baseline\" + spec part 2 \"sc"
+   ],
+   "sigs": [
+    "T13.3|test-quality|ac \"screenshots reviewed against baseline\" + spec part 2 \"sc"
+   ],
+   "report": ".dashboard/ui-polish-picker-header/reports/phase-13-verifier-a2.md"
+  },
+  {
+   "at": "2026-11-19T14:18:31.618Z",
+   "type": "advisory",
+   "tasks": [
+    "T13.4"
+   ],
+   "text": "ANALYTICS.md has formatter-only table re-alignment in working tree, undeclared as EXTRA"
+  },
+  {
+   "at": "2026-11-19T14:18:31.364Z",
+   "type": "advisory",
+   "tasks": [
+    "T13.1"
+   ],
+   "text": "Builder report claims an added dock-present check in Dashboard.test.ts; diff only removes two vacuous assertions"
+  },
+  {
+   "at": "2026-11-19T14:18:31.096Z",
+   "type": "advisory",
+   "tasks": [
+    "T13.2"
+   ],
+   "text": "Verify names e2e/qa/pricing-dialog-faq.spec.ts which does not exist; FAQ scenarios live in pricing-layout.spec.ts"
+  },
+  {
+   "at": "2026-11-19T13:58:01.305Z",
+   "type": "verify_started",
+   "tasks": [
+    "T13.1",
+    "T13.2",
+    "T13.3",
+    "T13.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-19T13:57:57.886Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/ui-polish-picker-header/ANALYTICS.md": "0f1902efb20e185b2a21b206ab47400441bc9227",
+    "apps/web/src/components/Header/AppHeader.test.ts": "3951359e2a3f73a89b7d73f80d6668dd32d0c672",
+    "apps/web/src/components/Header/CreditsChip.test.ts": "d324cf92967f2ee34b8865cb9b0921bdb863c9da",
+    "apps/web/src/pages/Dashboard.test.ts": "63f721096578e2d3a050f5a74cbefead9798ddde"
+   }
+  },
+  {
+   "at": "2026-11-19T13:57:57.585Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T13.4"
+   ],
+   "fingerprint": "f5c2b57977e56db1dd9932e0c03b83f07ac539028ab13b966aa69d7c195a8313"
+  },
+  {
+   "at": "2026-11-19T13:57:57.585Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T13.3"
+   ],
+   "fingerprint": "6176ed1e55ac0590087378be78da590c42e9bc1f8d33504d26ace9b20707482d"
+  },
+  {
+   "at": "2026-11-19T13:57:57.585Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T13.2"
+   ],
+   "fingerprint": "0ff74118048f45992109890d9c7275248eb9edc926dc5783478f88ae159014d3"
+  },
+  {
+   "at": "2026-11-19T13:57:57.585Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T13.1"
+   ],
+   "fingerprint": "1ef904b3df134c26abd823f3b1ecf4388eb48d33eb73a8453bc72df7dc83bcf4"
+  },
+  {
+   "at": "2026-11-19T13:57:30.290Z",
+   "type": "task_built",
+   "tasks": [
+    "T13.4"
+   ],
+   "text": "phase 13 gate evidence: greps empty, verify 0 errors, vitest 2913 pass, e2e dev 321 pass, prod 321 pass",
+   "files": [
+    "apps/web/src/components/Header/CreditsChip.test.ts",
+    "apps/web/src/components/Header/AppHeader.test.ts",
+    "apps/web/src/pages/Dashboard.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-19T13:57:30.050Z",
+   "type": "task_built",
+   "tasks": [
+    "T13.3"
+   ],
+   "text": "phase 13 gate evidence: greps empty, verify 0 errors, vitest 2913 pass, e2e dev 321 pass, prod 321 pass",
+   "files": [
+    "apps/web/src/components/Header/CreditsChip.test.ts",
+    "apps/web/src/components/Header/AppHeader.test.ts",
+    "apps/web/src/pages/Dashboard.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-19T13:57:29.810Z",
+   "type": "task_built",
+   "tasks": [
+    "T13.2"
+   ],
+   "text": "phase 13 gate evidence: greps empty, verify 0 errors, vitest 2913 pass, e2e dev 321 pass, prod 321 pass",
+   "files": [
+    "apps/web/src/components/Header/CreditsChip.test.ts",
+    "apps/web/src/components/Header/AppHeader.test.ts",
+    "apps/web/src/pages/Dashboard.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-19T13:57:29.493Z",
+   "type": "task_built",
+   "tasks": [
+    "T13.1"
+   ],
+   "text": "phase 13 gate evidence: greps empty, verify 0 errors, vitest 2913 pass, e2e dev 321 pass, prod 321 pass",
+   "files": [
+    "apps/web/src/components/Header/CreditsChip.test.ts",
+    "apps/web/src/components/Header/AppHeader.test.ts",
+    "apps/web/src/pages/Dashboard.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-19T13:30:26.204Z",
+   "type": "task_started",
+   "tasks": [
+    "T13.1",
+    "T13.2",
+    "T13.3",
+    "T13.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-19T13:30:23.935Z",
+   "type": "build_started",
+   "tasks": [
+    "T13.1",
+    "T13.2",
+    "T13.3",
+    "T13.4"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-19T13:30:21.524Z",
+   "type": "run_started",
+   "tasks": [
+    "T13.1",
+    "T13.2",
+    "T13.3",
+    "T13.4"
+   ],
+   "pipeline": 2,
+   "baseline": {
+    "head": "2af1ab0fa432d38a6f1440601be1ca3ca69fc46d",
+    "status": " M .dashboard/ui-polish-picker-header/data.js\u0000 M .dashboard/ui-polish-picker-header/docs/AUDIT.html\u0000 M .dashboard/ui-polish-picker-header/docs/TASKS.html\u0000 M .dashboard/ui-polish-picker-header/events.jsonl\u0000?? .dashboard/ui-polish-picker-header/docs/ANALYTICS.html\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/1/T1.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/10/T10.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/10/T10.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/10/T10.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/10/T10.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/10/T10.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/11/T11.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/2/T2.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-10.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-11.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-12.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-13.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-14.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/3/T3.4-9.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.1-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/4/T4.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-6.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-7.png\u0000?? .dashboard/ui-polish-picker-header/shots/5/T5.3-8.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.2-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/6/T6.7-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/7/T7.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.1-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/8/T8.3-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.2-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.2-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.4-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.4-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-1.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-2.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-3.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-4.png\u0000?? .dashboard/ui-polish-picker-header/shots/9/T9.5-5.png\u0000?? .dashboard/ui-polish-picker-header/shots/manifest.json\u0000"
+   }
+  },
+  {
+   "at": "2026-11-19T13:20:36.818Z",
+   "type": "commit",
+   "tasks": [
+    "T12.1",
+    "T12.2"
+   ],
+   "attempt": "2",
+   "text": "docs(web): analytics research doc",
+   "sha": "2af1ab0fa432d38a6f1440601be1ca3ca69fc46d",
+   "branch": "feature-enhancement",
+   "pushed": "yes",
+   "evidence": "doc-only; 31/31 cited URLs 200"
+  },
+  {
    "at": "2026-11-19T13:20:23.727Z",
    "type": "deliverable",
    "tasks": [
@@ -6570,362 +7037,6 @@ window.DASHBOARD = {
    "evidence": "source is unchanged since a5 (all mtimes before the a5 report). `vitest run src/pages src/components/Dashboard`: 63 files / 430 tests pass. `bun run verify` exits 0 and open rows are 0. Proof shot 11/T11.2-1 still applies.",
    "fingerprint": "816b4c3bf450ae9fb4a543556f7636c4eb2d4b717180a2f6659279bf90e64661",
    "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
-  },
-  {
-   "at": "2026-11-18T15:42:13.099Z",
-   "tasks": [
-    "T11.1"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "no change since a5. AUDIT.md has 27 table lines and 0 open rows, after/ holds 39 shots. The stale \"T11.2b\" references are gone (grep finds 0).",
-   "fingerprint": "9bec572a4e839a49c7532c4689761a57d062926a39437af39a9700c4992aaea5",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
-  },
-  {
-   "at": "2026-11-18T15:42:05.232Z",
-   "tasks": [
-    "T11.6"
-   ],
-   "attempt": "2",
-   "type": "verify_inconclusive",
-   "text": "unparseable-report",
-   "sigs": [
-    "T11.6|inconclusive|unparseable-report"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
-  },
-  {
-   "at": "2026-11-18T15:42:05.232Z",
-   "tasks": [
-    "T11.5"
-   ],
-   "attempt": "2",
-   "type": "verify_inconclusive",
-   "text": "unparseable-report",
-   "sigs": [
-    "T11.5|inconclusive|unparseable-report"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
-  },
-  {
-   "at": "2026-11-18T15:42:05.232Z",
-   "tasks": [
-    "T11.4"
-   ],
-   "attempt": "2",
-   "type": "verify_inconclusive",
-   "text": "unparseable-report",
-   "sigs": [
-    "T11.4|inconclusive|unparseable-report"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
-  },
-  {
-   "at": "2026-11-18T15:42:05.231Z",
-   "tasks": [
-    "T11.3"
-   ],
-   "attempt": "2",
-   "type": "verify_inconclusive",
-   "text": "unparseable-report",
-   "sigs": [
-    "T11.3|inconclusive|unparseable-report"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
-  },
-  {
-   "at": "2026-11-18T15:42:05.231Z",
-   "tasks": [
-    "T11.2"
-   ],
-   "attempt": "2",
-   "type": "verify_inconclusive",
-   "text": "unparseable-report",
-   "sigs": [
-    "T11.2|inconclusive|unparseable-report"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
-  },
-  {
-   "at": "2026-11-18T15:42:05.231Z",
-   "tasks": [
-    "T11.1"
-   ],
-   "attempt": "2",
-   "type": "verify_inconclusive",
-   "text": "unparseable-report",
-   "sigs": [
-    "T11.1|inconclusive|unparseable-report"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a6.md"
-  },
-  {
-   "at": "2026-11-18T15:41:38.390Z",
-   "type": "advisory",
-   "tasks": [
-    "T11.6"
-   ],
-   "text": "vue-tsc --noEmit shows pre-existing errors outside phase-11 hunks; vue-tsc is not in bun run verify"
-  },
-  {
-   "at": "2026-11-18T15:41:38.219Z",
-   "type": "advisory",
-   "tasks": [
-    "T11.6"
-   ],
-   "text": "header-responsive.spec.ts:388 pre-existing committed test.fail (Explore tabs at 390) from an earlier phase"
-  },
-  {
-   "at": "2026-11-18T15:41:38.046Z",
-   "type": "advisory",
-   "tasks": [
-    "T11.5"
-   ],
-   "text": "TASKS.md T11.5 Files reads \"none, <10 unit test files>\": the test files belong to T11.4 Files, T11.5 should stay \"none\""
-  },
-  {
-   "at": "2026-11-18T15:37:24.544Z",
-   "type": "verify_started",
-   "tasks": [
-    "T11.1",
-    "T11.2",
-    "T11.3",
-    "T11.4",
-    "T11.5",
-    "T11.6"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T15:37:21.835Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.5"
-   ],
-   "fingerprint": "5059263e7c6a894ce3dbcfb3ef37c325919cc4c0a23be412b893e301d1cb2620"
-  },
-  {
-   "at": "2026-11-18T15:37:21.835Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.3"
-   ],
-   "fingerprint": "417057db37a513c3d6441fb0b5c32a0fa0da9655d3ddc1d5010a540610e167f3"
-  },
-  {
-   "at": "2026-11-18T15:37:21.835Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.2"
-   ],
-   "fingerprint": "816b4c3bf450ae9fb4a543556f7636c4eb2d4b717180a2f6659279bf90e64661"
-  },
-  {
-   "at": "2026-11-18T15:37:21.835Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.1"
-   ],
-   "fingerprint": "9bec572a4e839a49c7532c4689761a57d062926a39437af39a9700c4992aaea5"
-  },
-  {
-   "at": "2026-11-18T15:37:18.478Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/ui-polish-picker-header/AUDIT.md": "9d3a2545903f6fa604392d8a2b3ce016f3a55f02",
-    "agent_docs/ui-polish-picker-header/TASKS.md": "5d73744e22f5e5635539bc66f4bb22e24fae9812",
-    "apps/web/src/components/Dashboard/Composer/GenerateCTA.vue": "da19976eb0c7149a12c8cc4cae1648f6d0b052d0",
-    "apps/web/src/components/Dashboard/Composer/ReferenceImageControl.test.ts": "c08ad484acbf67ea875ff7afa750b91a23e99f72",
-    "apps/web/src/components/Dashboard/Composer/ReferenceImageControl.vue": "0787eae35bd920418b35235bd7ac10e761108dff",
-    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.test.ts": "b5bb081513d793d235307ddfdc0b68d4b435d130",
-    "apps/web/src/components/Dashboard/Composer/VoiceInput/MicButton.vue": "f0618587606b932890a63bec07fa2b6748c576e8",
-    "apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.test.ts": "f3ddc0f4de77dc89944e9a9c9620b24348206423",
-    "apps/web/src/components/Dashboard/ModelPicker/PromptAiMenu.vue": "c14d80ebcb95febbbc351a59f82999a283314558",
-    "apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.test.ts": "07a9232f9daa036f9418b6ac8a6f282104c54630",
-    "apps/web/src/components/Dashboard/Sidebar/AspectRatioPicker.vue": "ac8a863d58f294cd4de7fe31abb5f43b631d1831",
-    "apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.test.ts": "92324a83f328dfa6c2c08264a294fda8b425e61c",
-    "apps/web/src/components/Dashboard/Sidebar/ImageGenerateAside.vue": "e325c2618973a73d67720a99aa73e5e57efcb067",
-    "apps/web/src/components/Header/AppHeader.test.ts": "d7d782009a796ed561b02c79c3b55acb054fcda6",
-    "apps/web/src/components/Header/AppHeader.vue": "3198f5f579d97627b77b1c03c3d256daeb6b4b4a",
-    "apps/web/src/components/Header/FeatureSelect.test.ts": "fd0e537af37dda20d9b2ebf27e00169c9b5564c0",
-    "apps/web/src/components/Header/FeatureSelect.vue": "eed431088e104176d9874448b7abe7d0f3fd87dd",
-    "apps/web/src/components/Header/Logo.test.ts": "6862f5a1801793cf5e8b931d3784a69bc76723bc",
-    "apps/web/src/components/Header/Logo.vue": "ad44871981aa276df6635ea92468abf16dad7ff5",
-    "apps/web/src/components/Header/ReferralOffer.test.ts": "5f32d85aca66f1055280a6fed917de2c991a6c6c",
-    "apps/web/src/components/Header/ReferralOffer.vue": "0683237fb12693cccd3ecc09351b508f3942c81a",
-    "apps/web/src/components/Header/UserMenu.test.ts": "b1713749faed607fe768dbc93b1e89daba7e0ba5",
-    "apps/web/src/components/Header/UserMenu.vue": "86e49050489cf87a0e87097b4b46dc52f66b5ead",
-    "apps/web/src/pages/Dashboard.test.ts": "5a613093a2dd4d683f56a7f43dc976ff9771c686",
-    "apps/web/src/pages/Dashboard.vue": "0d412bcef07fa997ac930fedbc62bf1f5d96aa81",
-    "apps/web/e2e/qa/create-responsive.spec.ts": "31e7918bd0abd6364085ec79a11f240df6fa28b0"
-   }
-  },
-  {
-   "at": "2026-11-18T15:37:18.320Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T11.4"
-   ],
-   "fingerprint": "cafa7c31b635819187877ce60237fccaf23af3f71133ca3793edc6a135fb95bb"
-  },
-  {
-   "at": "2026-11-18T15:37:18.000Z",
-   "type": "task_built",
-   "tasks": [
-    "T11.6"
-   ],
-   "text": "AUDIT.md formatting fixed, bun run verify 0 errors",
-   "files": [
-    "agent_docs/ui-polish-picker-header/AUDIT.md"
-   ]
-  },
-  {
-   "at": "2026-11-18T15:36:50.789Z",
-   "type": "task_started",
-   "tasks": [
-    "T11.6"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T15:36:48.264Z",
-   "type": "task_built",
-   "tasks": [
-    "T11.4"
-   ],
-   "text": "unit PASS: class-contract tests added for T11.2/T11.3 fixes, 309 related tests pass",
-   "files": [
-    "apps/web/src/components/Header/Logo.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-18T15:35:12.460Z",
-   "type": "task_started",
-   "tasks": [
-    "T11.4"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T15:35:12.232Z",
-   "type": "build_started",
-   "tasks": [
-    "T11.4",
-    "T11.6"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-18T15:35:08.190Z",
-   "tasks": [
-    "T11.5"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "E2E_SERVER=prod, create-responsive 25 tests x3 = 75/75 clean, no retries. Scenarios match the task, paidCallGuard is on, and the test-quality grep is clean.",
-   "fingerprint": "30512242b7f6aa242fbbe5b66176bef570438773efaa2fe07ec49df51a0ad0cf",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-18T15:35:08.190Z",
-   "tasks": [
-    "T11.3"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "on the prod build (x3), reference, mic, AI actions, Generate, count/format chips and More sizes measure >=44px at 360/390/700, and the 1440 chips stay <44px. The 700 rail shot shows SD/HD at 44px. Open rows 0. Proof shots 11/T11.3-1 and 11/T11.3-2.",
-   "fingerprint": "c54259d485547e9356e0867c70303f206ac3846c76856c3d994a2a1511bbf60c",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-18T15:35:08.189Z",
-   "tasks": [
-    "T11.2"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "`vitest run src/pages src/components/Dashboard` 63 files / 423 tests pass. `vp check --no-fmt` 0 errors, open rows 0. On the prod build, logo, feature select, user menu, banner and Settings trigger measure >=44px at 360/390/700 (x3). Header tabs stay centered at 768/1024 (x3). Proof shot 11/T11.2-1.",
-   "fingerprint": "775f23c23f2c20eb4bc7e82d79ec333b09441120f6bd90cb7ec057fbe4209e24",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-18T15:35:08.189Z",
-   "tasks": [
-    "T11.1"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "AUDIT.md has 27 table lines and after/ has 39 shots (create/picker at 6 widths x themes, plus keyboard emulation at 360/390/700). Every Part 4c element (header, composer, aside, picker trigger, grid/history/dialogs, 700 band, keyboard) has a finding or \"no issue\". The 700 band row leaves the 640 split untouched (D8).",
-   "fingerprint": "88891488b782e4f632008b5282841839144ac814a45852a4a2d8edc41b14eb44",
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-18T15:35:08.188Z",
-   "tasks": [
-    "T11.6"
-   ],
-   "attempt": "1",
-   "type": "verify_failed",
-   "category": "type-lint",
-   "text": "[type-lint] · agent_docs/ui-polish-picker-header/AUDIT.md:39 · `vp check` exits 1: formatting, with no blank line before the \"Intended diffs\" list in the 1440 section added after the gate's own verify run. HEAD's version is clean. · Add the blank line, or run `bun run verify`, and re-run `vp check` to exit 0.",
-   "files": [
-    "agent_docs/ui-polish-picker-header/audit.md"
-   ],
-   "sigs": [
-    "T11.6|type-lint|agent_docs/ui-polish-picker-header/audit.md"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-18T15:35:08.187Z",
-   "tasks": [
-    "T11.4"
-   ],
-   "attempt": "1",
-   "type": "verify_failed",
-   "category": "test-quality",
-   "text": "[test-quality] · Do: \"if a fix is CSS-only, assert its class/attribute contract (include their touched component files in Files)\"; AC \"each logic-changing fix has a test\" · Only Dashboard.vue's Settings trigger has a class-contract test. Logo.vue dropped its useMediaQuery 30/34 conditional for a constant 34 plus tw-min-h-11/min-w-11, and Logo.test.ts asserts neither the size nor the classes. Featu",
-   "files": [
-    "do: \"if a fix is css-only, assert its class/attribute contra"
-   ],
-   "sigs": [
-    "T11.4|test-quality|do: \"if a fix is css-only, assert its class/attribute contra"
-   ],
-   "report": ".dashboard/ui-polish-picker-header/reports/phase-11-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-18T15:34:55.371Z",
-   "type": "advisory",
-   "tasks": [
-    "T11.6"
-   ],
-   "text": "vue-tsc --noEmit reports 33 pre-existing errors (none on phase-11 changed lines); project gate vp check has no tsc step"
-  },
-  {
-   "at": "2026-11-18T15:32:17.219Z",
-   "type": "advisory",
-   "tasks": [
-    "T11.3"
-   ],
-   "text": "AUDIT row 22/23 fix text still reads \"moved to T11.2b Fixed in T11.3\" (stale renumbering text, missing separator)"
-  },
-  {
-   "at": "2026-11-18T15:32:17.053Z",
-   "type": "advisory",
-   "tasks": [
-    "T11.6"
-   ],
-   "text": "header-responsive.spec.ts:388 keeps a pre-existing test.fail (Explore header does not park tabs at y<=1 at 390); known app gap from an earlier phase"
-  },
-  {
-   "at": "2026-11-18T15:32:16.887Z",
-   "type": "advisory",
-   "tasks": [
-    "T11.4"
-   ],
-   "text": "CSS-only header/composer 44px fixes outside Dashboard.vue have no unit class-contract test; covered only by create-responsive e2e measurements"
   }
  ]
 };

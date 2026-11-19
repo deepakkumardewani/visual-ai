@@ -44,3 +44,17 @@ Intended diffs (header and picker):
 Not diffs of the product: the `after/` capture is 1440x900 (baseline 800 tall, so the sidebar shows its end and the composer sits 8px lower) and the account has 80 credits (baseline 60).
 
 Unintended diff candidates: sidebar eyebrow labels (Model, Style, Size, Quality) look slightly more letter-spaced in `after/`. No source in this feature touches the `text-eyebrow` token or those labels (`git log` since the baseline shows no style/config change), so this is a capture-environment artifact (font loading/rendering), not a regression. No fix needed. Everything else (canvas, starter cards, sidebar controls and their order) is unchanged.
+
+## Phase 13 final walkthrough: baseline vs after
+
+Captured 96 final shots into `agent_docs/qa/ui-polish-picker-header/after/` by a temporary Playwright capture run (since deleted) using the seeded QA user, mocked prices and the checkout route stubbed (no paid calls). Each capture asserted `scrollWidth - innerWidth <= 0`, so no horizontal scroll at 360, 390, 700, 768, 1024 or 1440 in light or dark.
+
+Sets: `explore-*` and `assets-*` (6 widths x light/dark x Free/Pro, 24 each), `picker-open-*` (6 widths x light/dark x Free/Pro, 24), `upgrade-faq-*` (Upgrade dialog scrolled to the FAQ, 6 widths x light/dark, Free, 12), `landing-nav-*` (signed out, 6 widths x light/dark, 12). Create and Free picker sets from earlier phases remain in `after/`.
+
+Review against `baseline/` (explore and assets, all widths):
+
+- Header (intended): mobile header is now a two-row layout below 768 with the segmented Create/Explore/Assets control on its own row; baseline had the tabs in a separate strip with a gap above them. At 390 Pro the standalone "PRO" chip is gone from the header (Pro is shown in the avatar menu, per Part 2). Credits differ (92 vs 80) because the QA account balance differs; not a product change.
+- Explore/Assets content (unchanged): empty-state and grid content match baseline; page height differs only because the capture viewport is 900 tall (baseline 800 on mobile).
+- FAQ (intended fix): "Before you buy." and its questions are visible in the Upgrade dialog at every width and theme; baseline showed the dialog FAQ invisible.
+- Landing nav (intended): theme toggle sits in the bar at every width, no overflow.
+- No unintended diffs found. Owner-only manual items still pending, not faked: on-screen-keyboard check on a real device, final Earn/Upgrade icon choice, and committing.

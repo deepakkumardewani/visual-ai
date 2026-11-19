@@ -578,7 +578,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 **Adds:** Final proof that header, picker, plan pill and fixes work together with zero real paid calls, plus final screenshots.
 **Try in UI:** Run `cd apps/web && bunx playwright test e2e/qa/paid-call-guard.spec.ts` and confirm green ; walk Create, Explore and Assets at 360/390/768/1024/1440 as Free and Pro ; open the picker, plan pill, Upgrade dialog FAQ and landing nav.
 
-### ☐ T13.1 Final stale-test and grep sweep
+### ✅ T13.1 Final stale-test and grep sweep
 
 - **Kind:** gate
 - **Files:** none
@@ -586,7 +586,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** SPEC Testing Strategy: no stale test left; all greps empty; no test weakened.
 - **Verify:** `grep -rnE "smAndUp|100vh-60px|dashboard-mobile-tabs|pro-badge-header|upgrade-pill|NAME_SEPARATOR|nav__sheet-theme-btn" apps/web/src apps/web/e2e` (empty); `grep -n "600px" apps/web/src/components/Header/AppHeader.vue apps/web/src/components/Header/ReferralOffer.vue` (empty); `bun run verify`; `bun run test`.
 
-### ☐ T13.2 Gate: full e2e in both server modes
+### ✅ T13.2 Gate: full e2e in both server modes
 
 - **Kind:** gate
 - **Files:** none
@@ -594,7 +594,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** `paid-call-guard.spec.ts` green with zero un-intercepted paid calls; all new and changed specs green; no test weakened.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/header-responsive.spec.ts e2e/qa/plan-pill.spec.ts e2e/qa/model-menu.spec.ts e2e/qa/pricing-dialog-faq.spec.ts e2e/qa/landing-nav-theme.spec.ts e2e/qa/create-responsive.spec.ts e2e/qa/upgrade-entry.spec.ts e2e/qa/pro-tier.spec.ts e2e/qa/plan-status.spec.ts e2e/qa/pricing-layout.spec.ts e2e/qa/mods-referral-favicon.spec.ts e2e/qa/localized-prices.spec.ts e2e/qa/paid-call-guard.spec.ts --repeat-each=2`; `cd apps/web && bun run test:e2e`; `cd apps/web && E2E_SERVER=prod bun run test:e2e`.
 
-### ☐ T13.3 Walkthrough: all spec parts
+### ✅ T13.3 Walkthrough: all spec parts
 
 - **Kind:** walkthrough
 - **Files:** `agent_docs/qa/ui-polish-picker-header/` (screenshots only)
@@ -602,7 +602,7 @@ Mock-only rule (applies to every task): no task may make a real Replicate, Dodo 
 - **Acceptance:** Every SPEC part verifiable in the browser through its QA spec; screenshots reviewed against baseline; no horizontal scroll at any audited width.
 - **Verify:** `cd apps/web && bunx playwright test e2e/qa/header-responsive.spec.ts e2e/qa/model-menu.spec.ts e2e/qa/plan-pill.spec.ts e2e/qa/pricing-dialog-faq.spec.ts e2e/qa/landing-nav-theme.spec.ts e2e/qa/create-responsive.spec.ts --repeat-each=2`; `bun run test`; `bun run verify`.
 
-### ☐ T13.4 Definition of done
+### ✅ T13.4 Definition of done
 
 - **Kind:** dod
 - **Files:** none

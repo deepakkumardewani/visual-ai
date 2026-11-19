@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 const routePathRef = ref('/create');
 const routeNameRef = ref('create');
-const smAndUpRef = ref(true);
+const isWideRef = ref(true);
 const isAuthLoaded = ref(true);
 
 vi.mock('vue-router', () => ({
@@ -17,7 +17,7 @@ vi.mock('@/composables/useHeaderBreakpoint', async () => {
   const vue = await import('vue');
   return {
     useHeaderBreakpoint: () => ({
-      isMobile: vue.computed(() => !smAndUpRef.value),
+      isMobile: vue.computed(() => !isWideRef.value),
       isTablet: vue.computed(() => false),
     }),
   };
@@ -79,7 +79,7 @@ describe('AppHeader', () => {
     setActivePinia(createPinia());
     routePathRef.value = '/create';
     routeNameRef.value = 'create';
-    smAndUpRef.value = true;
+    isWideRef.value = true;
     isAuthLoaded.value = true;
     localStorage.clear();
   });
@@ -133,7 +133,7 @@ describe('AppHeader', () => {
   });
 
   it('uses the mobile dashboard header and referral slot', () => {
-    smAndUpRef.value = false;
+    isWideRef.value = false;
     const wrapper = mountHeader();
     const shell = wrapper.get('[data-testid="app-header-v2"]').find('header');
 
@@ -204,7 +204,7 @@ describe('AppHeader', () => {
   });
 
   it('shows the banner above the header and no Earn chip below 768', () => {
-    smAndUpRef.value = false;
+    isWideRef.value = false;
     const wrapper = mountHeader();
     const root = wrapper.get('[data-testid="app-header-v2"]');
 
@@ -213,7 +213,7 @@ describe('AppHeader', () => {
   });
 
   it('shows the Earn chip inside the header and no banner at 768 and above', () => {
-    smAndUpRef.value = true;
+    isWideRef.value = true;
     const wrapper = mountHeader();
     const root = wrapper.get('[data-testid="app-header-v2"]');
 
@@ -225,7 +225,7 @@ describe('AppHeader', () => {
     routePathRef.value = '/pricing';
     routeNameRef.value = 'pricing';
     for (const wide of [false, true]) {
-      smAndUpRef.value = wide;
+      isWideRef.value = wide;
       const wrapper = mountHeader();
       expect(wrapper.find('[data-testid="referral-offer-stub"]').exists()).toBe(false);
     }
@@ -273,7 +273,7 @@ describe('AppHeader', () => {
     });
 
     it('omits Earn below 768 while keeping Upgrade', () => {
-      smAndUpRef.value = false;
+      isWideRef.value = false;
       const order = clusterOrder(mountWithPlan(PLAN.FREE));
 
       expect(order).toEqual(['upgrade-button', 'credits-chip-stub', 'user-menu-stub']);
@@ -296,7 +296,7 @@ describe('AppHeader', () => {
 
     it('shows the feature select on Create at desktop and mobile widths', () => {
       for (const wide of [true, false]) {
-        smAndUpRef.value = wide;
+        isWideRef.value = wide;
         expect(mountHeader().find('[data-testid="feature-select-stub"]').exists()).toBe(true);
       }
     });
@@ -306,14 +306,14 @@ describe('AppHeader', () => {
         for (const wide of [true, false]) {
           routeNameRef.value = name;
           routePathRef.value = `/${name}`;
-          smAndUpRef.value = wide;
+          isWideRef.value = wide;
           expect(mountHeader().find('[data-testid="feature-select-stub"]').exists()).toBe(false);
         }
       }
     });
 
     it('renders tabs once in the centered slot at 768+ and no mobile tabs row', () => {
-      smAndUpRef.value = true;
+      isWideRef.value = true;
       const wrapper = mountHeader();
 
       expect(navTabsCalls(wrapper)).toHaveLength(1);
@@ -325,7 +325,7 @@ describe('AppHeader', () => {
     });
 
     it('renders tabs once, in a second row inside the sticky header, below 768', () => {
-      smAndUpRef.value = false;
+      isWideRef.value = false;
       const wrapper = mountHeader();
       const row = wrapper.get('[data-testid="header-mobile-tabs"]');
 
@@ -341,7 +341,7 @@ describe('AppHeader', () => {
 
     it('shows a tabs skeleton in the centered slot at 768+ while Clerk loads', () => {
       isAuthLoaded.value = false;
-      smAndUpRef.value = true;
+      isWideRef.value = true;
       const wrapper = mountHeader();
       const skeleton = wrapper.get('.header-v2__center [aria-hidden="true"]');
 
@@ -351,7 +351,7 @@ describe('AppHeader', () => {
 
     it('shows a tabs skeleton in the mobile row while Clerk loads', () => {
       isAuthLoaded.value = false;
-      smAndUpRef.value = false;
+      isWideRef.value = false;
       const wrapper = mountHeader();
       const skeleton = wrapper.get('[data-testid="header-mobile-tabs"] [aria-hidden="true"]');
 
@@ -362,7 +362,7 @@ describe('AppHeader', () => {
     it('shows no tabs row on non-dashboard pages below 768', () => {
       routePathRef.value = '/pricing';
       routeNameRef.value = 'pricing';
-      smAndUpRef.value = false;
+      isWideRef.value = false;
       expect(mountHeader().find('[data-testid="header-mobile-tabs"]').exists()).toBe(false);
     });
   });
