@@ -28,7 +28,15 @@ vi.mock("../lib/logger.js", () => ({
 }))
 
 vi.mock("../lib/replicate.js", () => ({
-    replicate: { run: replicateRun },
+    runReplicate: ({
+        model,
+        input,
+        onProgress,
+    }: {
+        model: string
+        input: unknown
+        onProgress?: unknown
+    }) => replicateRun(model, { input }, onProgress),
 }))
 
 vi.mock("../lib/prompt-pipeline.js", () => ({
@@ -90,7 +98,12 @@ function setupHappyPersist(
         credits: 6,
     },
 ) {
-    getImageDetails.mockResolvedValue({ width: 1024, height: 768, format: "png", bytes: 12 })
+    getImageDetails.mockResolvedValue({
+        width: 1024,
+        height: 768,
+        format: "png",
+        bytes: 12,
+    })
     User.findOneAndUpdate.mockResolvedValueOnce({ history: [] }).mockResolvedValueOnce(credits)
     User.findOne.mockResolvedValue({
         history: [{ _id: { toString: () => "img_123" }, prompt: "done" }],
@@ -137,7 +150,12 @@ describe("runGenerationJob", () => {
         vi.clearAllMocks()
         User.findOne.mockReset()
         User.findOneAndUpdate.mockReset()
-        getImageDetails.mockResolvedValue({ width: 10, height: 20, format: "jpg", bytes: 3 })
+        getImageDetails.mockResolvedValue({
+            width: 10,
+            height: 20,
+            format: "jpg",
+            bytes: 3,
+        })
         uploadToCloudinary.mockResolvedValue(undefined)
     })
 
@@ -164,14 +182,20 @@ describe("runGenerationJob", () => {
                 aspectRatio: "1:1",
                 prompt: "cat",
                 creditCost: 1,
-                buildCloudinaryPayload: (output: unknown, imageId: string) => ({ output, imageId }),
+                buildCloudinaryPayload: (output: unknown, imageId: string) => ({
+                    output,
+                    imageId,
+                }),
             } as never,
             services,
         )
 
         expect(services.jobStatus.setStatus).toHaveBeenCalledWith(
             "job_1",
-            expect.objectContaining({ status: "processing", userCreditsRemaining: 10 }),
+            expect.objectContaining({
+                status: "processing",
+                userCreditsRemaining: 10,
+            }),
         )
         expect(services.jobStatus.setStatus).toHaveBeenCalledWith(
             "job_1",
@@ -264,7 +288,12 @@ describe("runGenerationJob", () => {
 
         it("at the cap returns the Replicate URL unsaved, charges credits and never uploads", async () => {
             replicateRun.mockResolvedValue("https://out.png")
-            getImageDetails.mockResolvedValue({ width: 1, height: 1, format: "png", bytes: 1 })
+            getImageDetails.mockResolvedValue({
+                width: 1,
+                height: 1,
+                format: "png",
+                bytes: 1,
+            })
             User.findOne.mockResolvedValue({ plan: "free" })
             User.findOneAndUpdate
                 .mockResolvedValueOnce(null)
@@ -315,7 +344,12 @@ describe("runGenerationJob", () => {
 
     it("treats a missing user as an unsaved result and still completes", async () => {
         replicateRun.mockResolvedValue("https://out.png")
-        getImageDetails.mockResolvedValue({ width: 1, height: 1, format: "png", bytes: 1 })
+        getImageDetails.mockResolvedValue({
+            width: 1,
+            height: 1,
+            format: "png",
+            bytes: 1,
+        })
         User.findOneAndUpdate.mockResolvedValueOnce(null).mockResolvedValueOnce({
             dailyCredits: 0,
             credits: 9,
@@ -344,7 +378,12 @@ describe("runGenerationJob", () => {
 
     it("maps insufficient credits into an error status", async () => {
         replicateRun.mockResolvedValue("https://out.png")
-        getImageDetails.mockResolvedValue({ width: 1, height: 1, format: "png", bytes: 1 })
+        getImageDetails.mockResolvedValue({
+            width: 1,
+            height: 1,
+            format: "png",
+            bytes: 1,
+        })
         User.findOneAndUpdate.mockResolvedValueOnce({ history: [] }).mockResolvedValueOnce(null)
         const services = { jobStatus: jobStatus() }
 
@@ -432,6 +471,28 @@ describe("processImage", () => {
         replicateRun.mockResolvedValue("https://out.png")
         setupHappyPersist()
     })
+
+    it.each(["FLUX_2_PRO", "FLUX_1_1_PRO", "FLUX_2_MAX", "FLUX_PRO"])(
+        "charges 5 credits for %s",
+        async (modelId) => {
+            await processImage({
+                userId: "user_1",
+                jobId: "job_cost",
+                modelId,
+                modelName: "Flux",
+                imageType: "generated",
+                prompt: "a cat",
+                numOfOutputs: 1,
+                outputQuality: 80,
+                aspectRatio: "1:1",
+                outputFormat: "png",
+            } as never)
+
+            const [filter, update] = User.findOneAndUpdate.mock.calls[1]
+            expect(filter.$expr.$gte[1]).toBe(5)
+            expect(update[0].$set.dailyCredits.$max[1].$subtract[1]).toBe(5)
+        },
+    )
 
     it("prepares a prompt and unwraps a single-item output array for Cloudinary", async () => {
         replicateRun.mockResolvedValue(["https://only.png"])
@@ -581,7 +642,10 @@ describe("processUpscale", () => {
                 filePath: "in.png",
                 fileName: "in",
             } as never),
-        ).rejects.toMatchObject({ statusCode: 400, message: 'Unknown model key: "NOT_A_MODEL"' })
+        ).rejects.toMatchObject({
+            statusCode: 400,
+            message: 'Unknown model key: "NOT_A_MODEL"',
+        })
     })
 
     it("throws when the model is not a utility model", async () => {
@@ -599,7 +663,12 @@ describe("processUpscale", () => {
 
     it("defaults to UPSCALE_IMAGE and uploads the first array output", async () => {
         await processUpscale({
-            body: { userId: "user_1", jobId: "job_up", outputFormat: "png", scale: "2" },
+            body: {
+                userId: "user_1",
+                jobId: "job_up",
+                outputFormat: "png",
+                scale: "2",
+            },
             filePath: "in.png",
             fileName: "orig",
         } as never)
@@ -669,7 +738,10 @@ describe("processRevive", () => {
             expect.any(Function),
         )
         expect(uploadToCloudinary).toHaveBeenCalledWith(
-            expect.objectContaining({ type: FeatureType.REVIVE, imageUrl: "https://rev.png" }),
+            expect.objectContaining({
+                type: FeatureType.REVIVE,
+                imageUrl: "https://rev.png",
+            }),
         )
     })
 
@@ -707,7 +779,10 @@ describe("processColorize", () => {
 
         expect(getModelReplicateId).toHaveBeenCalledWith("COLORIZE_BASIC")
         expect(uploadToCloudinary).toHaveBeenCalledWith(
-            expect.objectContaining({ type: FeatureType.COLORIZE, original: "bw.png" }),
+            expect.objectContaining({
+                type: FeatureType.COLORIZE,
+                original: "bw.png",
+            }),
         )
     })
 

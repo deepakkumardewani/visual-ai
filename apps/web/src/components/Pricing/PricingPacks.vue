@@ -16,7 +16,7 @@ const props = defineProps<{
 const router = useRouter();
 const userStore = useUserStore();
 const { start } = usePurchase();
-const { formatPackPrice, formatPackPerCredit, loadPrices } = usePricingCatalog();
+const { formatPackPrice, formatPackPer100Credits, loadPrices } = usePricingCatalog();
 const buyingId = shallowRef<string | null>(null);
 
 onMounted(loadPrices);
@@ -58,10 +58,10 @@ async function buyPack(pack: CreditPack) {
   <section id="packs" class="packs" aria-labelledby="packs-title">
     <div class="packs__intro">
       <p class="eyebrow">Top up</p>
-      <h2 id="packs-title" class="packs__title">Buy Credits</h2>
+      <h2 id="packs-title" class="packs__title">Top up any plan</h2>
       <p class="packs__lede">
-        Larger packs offer better value. Purchased credits apply as soon as payment clears, and they
-        never expire.
+        Free or Pro, packs add credits on top of your daily allowance. Larger packs offer better
+        value, apply as soon as payment clears, and never expire.
       </p>
     </div>
 
@@ -75,7 +75,7 @@ async function buyPack(pack: CreditPack) {
         <p v-if="savingsLabel(pack)" class="pack__save">Save {{ savingsLabel(pack) }}</p>
         <h3 class="pack__credits">{{ pack.credits }} credits</h3>
         <p class="pack__price">{{ formatPackPrice(pack) }}</p>
-        <p class="pack__unit">{{ formatPackPerCredit(pack) }} per credit</p>
+        <p class="pack__unit">{{ formatPackPer100Credits(pack) }} per 100 credits</p>
         <LandingButton
           class="pack__cta"
           :variant="pack.id === featuredId ? 'primary' : 'ghost'"
@@ -93,7 +93,7 @@ async function buyPack(pack: CreditPack) {
 
 <style scoped lang="scss">
 .packs {
-  padding: clamp(3.5rem, 7vw, 5.5rem) 0 0;
+  padding: clamp(2rem, 4vw, 3rem) 0 0;
 }
 
 .packs__intro {

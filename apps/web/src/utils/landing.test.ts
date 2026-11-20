@@ -47,7 +47,7 @@ describe('landing', () => {
     for (const tool of TOOLS) {
       expect(tool.ctaTo.startsWith('/')).toBe(true);
       expect(tool.points.length).toBeGreaterThan(0);
-      expect(['gallery', 'compare']).toContain(tool.media.kind);
+      expect(['gallery', 'compare', 'cutout']).toContain(tool.media.kind);
     }
   });
 
@@ -79,9 +79,12 @@ describe('landing', () => {
     const LANDING_PREFIX = '/landing/';
     const PUBLIC_DIR = resolve(__dirname, '../../public');
 
-    const toolMediaUrls = TOOLS.flatMap((tool) =>
-      tool.media.kind === 'gallery' ? tool.media.images : [tool.media.before, tool.media.after],
-    );
+    const toolMediaUrls = TOOLS.flatMap((tool) => {
+      const { media } = tool;
+      if (media.kind === 'gallery') return media.images;
+      if (media.kind === 'compare') return [media.before, media.after];
+      return media.pairs.flatMap((pair) => [pair.original, pair.cutout]);
+    });
     const allUrls = [HERO_IMAGE, ...SHOWCASE.map((item) => item.url), ...toolMediaUrls];
 
     it('collects urls from every exported source', () => {

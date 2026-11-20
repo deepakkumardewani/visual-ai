@@ -1,11 +1,13 @@
 import express, { type NextFunction, type Request, type Response } from "express"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import request from "supertest"
 
 import { PAYMENTS_MESSAGES } from "./constants.js"
 import { AlreadySubscribedError, ProviderApiError, UnknownPackError } from "./errors.js"
 
 const integrationMocks = vi.hoisted(() => ({
+    env: { NODE_ENV: "test", DEV_COUNTRY_OVERRIDE: undefined as string | undefined },
+    getFxRates: vi.fn(),
     providerCreateCheckout: vi.fn(),
     providerGetSessionStatus: vi.fn(),
     paymentCreate: vi.fn(),
@@ -14,12 +16,13 @@ const integrationMocks = vi.hoisted(() => ({
 }))
 
 vi.mock("../config/env.js", () => ({
-    env: {
+    env: Object.assign(integrationMocks.env, {
         PAYMENT_RETURN_URL: "https://visual-ai.app/checkout/return",
         LOG_LEVEL: "info",
-        NODE_ENV: "test",
-    },
+    }),
 }))
+
+vi.mock("./fx.js", () => ({ getFxRates: integrationMocks.getFxRates }))
 
 vi.mock("../lib/logger.js", () => ({
     createLogger: () => ({ debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() }),
@@ -64,7 +67,7 @@ vi.mock("../lib/logger.js", () => ({
 const { isHttpError, NotFoundError } = await import("../lib/errors.js")
 const service = await import("./service.js")
 const actualService = await vi.importActual<typeof import("./service.js")>("./service.js")
-const { paymentsApiRouter } = await import("./router.js")
+const { paymentsApiRouter, paymentsPublicRouter } = await import("./router.js")
 
 function createTestApp(auth?: { userId: string; email?: string }) {
     const app = express()
@@ -86,6 +89,95 @@ function createTestApp(auth?: { userId: string; email?: string }) {
     })
     return app
 }
+
+const FX_RATES = { USD: 1, INR: 80, EUR: 0.9, JPY: 150 }
+const PRO_USD_MINOR = 500
+const PRO_INR_MINOR = 40_000 // $5 * 80 INR/USD, in paise
+
+describe("GET /payments/prices", () => {
+    const fetchMock = vi.fn()
+
+    function createPublicApp() {
+        const app = express()
+        app.use(paymentsPublicRouter)
+        return app
+    }
+
+    beforeEach(() => {
+        vi.clearAllMocks()
+        integrationMocks.env.NODE_ENV = "test"
+        integrationMocks.env.DEV_COUNTRY_OVERRIDE = undefined
+        integrationMocks.getFxRates.mockResolvedValue(FX_RATES)
+        // ipapi.co must never be reached for real
+        fetchMock.mockResolvedValue({ ok: false, text: async () => "" })
+        vi.stubGlobal("fetch", fetchMock)
+    })
+
+    afterEach(() => {
+        vi.unstubAllGlobals()
+    })
+
+    it("returns INR amounts for cf-ipcountry IN with no override", async () => {
+        const res = await request(createPublicApp())
+            .get("/payments/prices")
+            .set("cf-ipcountry", "IN")
+
+        expect(res.status).toBe(200)
+        expect(res.body.country).toBe("IN")
+        expect(res.body.currency).toBe("INR")
+        expect(res.body.pro).toEqual({ amountMinor: PRO_INR_MINOR, currency: "INR" })
+        expect(fetchMock).not.toHaveBeenCalled()
+    })
+
+    it("returns USD amounts when the country is unknown", async () => {
+        const res = await request(createPublicApp()).get("/payments/prices")
+
+        expect(res.status).toBe(200)
+        expect(res.body.country).toBeNull()
+        expect(res.body.pro).toEqual({ amountMinor: PRO_USD_MINOR, currency: "USD" })
+    })
+
+    it("honours ?country=IN over a US header in test", async () => {
+        const res = await request(createPublicApp())
+            .get("/payments/prices?country=IN")
+            .set("cf-ipcountry", "US")
+
+        expect(res.body.currency).toBe("INR")
+        expect(res.body.country).toBe("IN")
+    })
+
+    it("uses DEV_COUNTRY_OVERRIDE over the header in development", async () => {
+        integrationMocks.env.NODE_ENV = "development"
+        integrationMocks.env.DEV_COUNTRY_OVERRIDE = "IN"
+
+        const res = await request(createPublicApp())
+            .get("/payments/prices")
+            .set("cf-ipcountry", "US")
+
+        expect(res.body.currency).toBe("INR")
+    })
+
+    it("ignores ?country and the env override in production, using the header", async () => {
+        integrationMocks.env.NODE_ENV = "production"
+        integrationMocks.env.DEV_COUNTRY_OVERRIDE = "IN"
+
+        const res = await request(createPublicApp())
+            .get("/payments/prices?country=IN")
+            .set("cf-ipcountry", "JP")
+
+        expect(res.body.country).toBe("JP")
+        expect(res.body.pro).toEqual({ amountMinor: 750, currency: "JPY" })
+    })
+
+    it("ignores ?country=ZZ and falls back to the header", async () => {
+        const res = await request(createPublicApp())
+            .get("/payments/prices?country=ZZ")
+            .set("cf-ipcountry", "IN")
+
+        expect(res.body.country).toBe("IN")
+        expect(res.body.currency).toBe("INR")
+    })
+})
 
 describe("paymentsApiRouter", () => {
     beforeEach(() => {

@@ -3,13 +3,17 @@ import { randomUUID } from 'node:crypto';
 import { clerk } from '@clerk/testing/playwright';
 import { mergeTests, type Locator, type Page } from '@playwright/test';
 
-import type { IImageObject } from '@visual-ai/shared';
-
 import { test as generationTest } from '../fixtures/generation';
 import { expect, test as qaTest } from '../fixtures/qa';
 import { API_URL, E2E_WEB_ORIGIN, requireEnv } from '../support/env';
 import { activateProViaWebhook } from '../support/proWebhook';
-import { deleteUsers, readPlan, seedExploreUsers, uniqueToken } from '../support/proPerksSeed';
+import {
+  deleteUsers,
+  readPlan,
+  seedExploreUsers,
+  stubUnsavedGeneration,
+  uniqueToken,
+} from '../support/proPerksSeed';
 import { gotoStudio } from '../support/studio';
 import { resetToFree } from '../support/subscriptionState';
 
@@ -17,17 +21,12 @@ const test = mergeTests(qaTest, generationTest);
 
 const E2E_USER_ID = requireEnv('E2E_CLERK_USER_ID');
 const RUN = randomUUID().slice(0, 8);
-const USER_PROFILE_URL = /\/users\/user_/;
 const PRICES_URL = /\/payments\/prices$/;
-const PROGRESS_URL = /\/progress\?jobId=/;
 const GEO_HEADER = 'cf-ipcountry';
 const HTTP_OK = 200;
 const HTTP_CONFLICT = 409;
 const PREMIUM_TITLE = 'Nano Banana Pro';
-const STUDIO_CREDITS = 500;
 const ALT_PREFIX_LENGTH = 60;
-const PNG_BASE64 =
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
 // Evidence PNGs land in the repo-level agent_docs/qa tree (playwright runs from apps/web).
 const shotPath = (name: string) => `../../agent_docs/qa/pro-tier/${name}.png`;
 
@@ -61,64 +60,6 @@ async function clerkBearerToken(page: Page): Promise<string> {
     const token = await window.Clerk.session?.getToken();
     if (!token) throw new Error('[e2e] Clerk session token unavailable');
     return token;
-  });
-}
-
-/** Stubs an at-cap generation: the API's completed payload with no _id and savedToHistory false. */
-async function stubUnsavedGeneration(page: Page, prompt: string) {
-  const replicateUrl = `https://replicate.delivery/e2e/${uniqueToken()}/out.png`;
-  await page.route(USER_PROFILE_URL, async (route) => {
-    if (route.request().method() !== 'GET') return route.continue();
-    const response = await route.fetch();
-    const user = (await response.json()) as Record<string, unknown>;
-    return route.fulfill({
-      response,
-      json: { ...user, credits: STUDIO_CREDITS, dailyCredits: 0 },
-    });
-  });
-  await page.route('https://replicate.delivery/**', (route) =>
-    route.fulfill({
-      status: 200,
-      contentType: 'image/png',
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: Buffer.from(PNG_BASE64, 'base64'),
-    }),
-  );
-  await page.route(PROGRESS_URL, (route) => {
-    const image: Omit<IImageObject, '_id' | 'createdAt' | 'featureType'> & {
-      featureType: string;
-      createdAt: string;
-    } = {
-      userId: E2E_USER_ID,
-      prompt,
-      featureType: 'image',
-      createdAt: new Date().toISOString(),
-      modelName: 'E2E Stub',
-      imageType: 'horizontal',
-      images: [
-        {
-          name: 'unsaved',
-          aiImageUrl: replicateUrl,
-          resolution: '1x1',
-          aspectRatio: '16:9',
-          width: 1,
-          height: 1,
-          format: 'png',
-          bytes: 70,
-        },
-      ],
-    };
-    const body = { status: 'completed', image, userCreditsRemaining: 10, savedToHistory: false };
-    return route.fulfill({
-      status: 200,
-      headers: {
-        'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
-        'Access-Control-Allow-Credentials': 'true',
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-      },
-      body: `data: ${JSON.stringify(body)}\n\n`,
-    });
   });
 }
 
@@ -198,8 +139,167 @@ test.describe('Pro tier UI', () => {
     await page.screenshot({ path: shotPath('pro-premium-selected'), fullPage: true });
   });
 
-  test('@high not-saved notice has Download and the correct CTA per plan', async ({
+  test.describe('model tiers and gating', () => {
+    const PRO_ONLY_MODELS = [
+      { title: 'Flux Realism', company: 'Black Forest Labs' },
+      { title: 'Flux Kontext Pro', company: 'Black Forest Labs' },
+      { title: 'Flux Kontext Max', company: 'Black Forest Labs' },
+      { title: 'Imagen 4 Ultra', company: 'Google' },
+      { title: 'Nano Banana Pro', company: 'Google' },
+      { title: 'GPT Image 2', company: 'OpenAI' },
+    ];
+    const FREE_MAX_MODEL = { title: 'Flux 2 Max', company: 'Black Forest Labs' };
+    const PREMIUM_CREDIT_COST = 5;
+
+    /** Opens the picker if needed; the flat list scrolls, so bring the model's row into view. */
+    async function modelOption(page: Page, model: { title: string; company: string }) {
+      if (!(await page.getByRole('listbox').isVisible())) await openModelPicker(page);
+      const option = page
+        .getByTestId('model-option')
+        .filter({ has: page.getByText(model.title, { exact: true }) })
+        .last();
+      await option.scrollIntoViewIfNeeded();
+      await expect(option).toBeVisible();
+      return option;
+    }
+
+    test('@critical free sees lock and PRO badge on the six Pro-only models and clicking opens pricing', async ({
+      page,
+      snap,
+    }) => {
+      await gotoStudio(page);
+      for (const model of PRO_ONLY_MODELS) {
+        const option = await modelOption(page, model); // also opens the picker
+        // A Pro model can appear in Featured and in Pro: every copy must be locked.
+        const rows = page
+          .getByTestId('model-option')
+          .filter({ has: page.getByText(model.title, { exact: true }) });
+        expect(await rows.count()).toBeGreaterThan(0);
+        for (const row of await rows.all()) {
+          await expect(row.getByTestId('premium-lock-badge')).toBeVisible();
+          await expect(row).toHaveAttribute('data-locked', 'true');
+        }
+        await expect(option.getByTestId('premium-lock-badge')).toHaveText(/Pro/);
+        await expect(option).toHaveAttribute('data-locked', 'true');
+        await option.click();
+        const dialog = pricingDialog(page);
+        await expect(dialog).toBeVisible();
+        await page.getByRole('button', { name: 'Close pricing' }).click();
+        await expect(dialog).toBeHidden();
+        await expect(page.getByTestId('model-chip')).not.toContainText(model.title);
+      }
+      await modelOption(page, PRO_ONLY_MODELS[0]);
+      await snap('free-six-locked');
+      await page.screenshot({ path: shotPath('free-six-locked'), fullPage: true });
+    });
+
+    test('@critical free can select FLUX.2 Max with no lock and cost shows 5', async ({
+      page,
+      snap,
+    }) => {
+      await gotoStudio(page);
+      const option = await modelOption(page, FREE_MAX_MODEL);
+      await expect(option.getByTestId('premium-lock-badge')).toHaveCount(0);
+      await expect(option).not.toHaveAttribute('data-locked', 'true');
+      await expect(option.getByLabel(`${PREMIUM_CREDIT_COST} credits`)).toBeVisible();
+      await option.scrollIntoViewIfNeeded(); // the submenu scrolls: Flux 2 Max must be in the shot
+      await snap('free-flux-2-max-unlocked');
+      await page.screenshot({ path: shotPath('free-flux-2-max-unlocked'), fullPage: true });
+
+      await option.click();
+
+      await expect(pricingDialog(page)).toHaveCount(0);
+      await expect(page.getByTestId('model-chip')).toContainText(FREE_MAX_MODEL.title);
+    });
+
+    test('@critical pro sees no locks', async ({ page, snap }) => {
+      await gotoStudio(page);
+      await activatePro(page, 'no-locks');
+      await gotoStudio(page);
+
+      for (const model of [...PRO_ONLY_MODELS, FREE_MAX_MODEL]) {
+        const option = await modelOption(page, model);
+        await expect(option.getByTestId('premium-lock-badge')).toHaveCount(0);
+      }
+      await expect(page.getByTestId('premium-lock-badge')).toHaveCount(0);
+      await snap('pro-no-locks');
+      await page.screenshot({ path: shotPath('pro-no-locks'), fullPage: true });
+    });
+
+    test.describe('stale selection', () => {
+      // The browser logs every non-2xx response as a console error, so the stubbed 403 is expected
+      // (one combined regex: a 2-element array in test.use is read as a [value, options] fixture tuple).
+      test.use({ expectedConsoleErrors: [/status of 403|ERROR api GET .* 403 /] });
+
+      test('@high stale Pro-only selection for Free shows the upsell, not a raw error', async ({
+        page,
+        snap,
+      }) => {
+        const prompt = `stale premium ${uniqueToken()}`;
+        let generateRequests = 0;
+        // The API would answer 403 + code; stubbing it keeps the paid endpoint off the network.
+        await page.route(/\/generate\/image$/, (route) => {
+          const headers = {
+            'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Allow-Headers': '*',
+          };
+          if (route.request().method() === 'OPTIONS')
+            return route.fulfill({ status: 204, headers });
+          generateRequests += 1;
+          return route.fulfill({
+            status: 403,
+            headers,
+            json: {
+              message: 'This model requires a Pro plan',
+              code: 'PREMIUM_MODEL_REQUIRES_PRO',
+            },
+          });
+        });
+        await page.addInitScript(
+          ([key, modelId]) =>
+            window.localStorage.setItem(
+              key,
+              JSON.stringify({ modelId, prompt: '', noOfOutputs: 1 }),
+            ),
+          ['visual-ai-composer-state', 'FLUX_REALISM'],
+        );
+
+        await gotoStudio(page);
+        await expect(page.getByTestId('model-chip')).toContainText('Flux Realism');
+        await page.getByTestId('composer-textarea-input').fill(prompt);
+        await page.getByTestId('generate-cta').dispatchEvent('click');
+
+        await expect(pricingDialog(page)).toBeVisible();
+        expect(generateRequests).toBe(1);
+        await expect(page.getByText(/error processing your request/)).toHaveCount(0);
+        await snap('stale-selection-upsell');
+        await page.screenshot({ path: shotPath('stale-selection-upsell'), fullPage: true });
+      });
+    });
+
+    test('@medium cost table shows the 5-credit group', async ({ page, snap }) => {
+      await page.goto('/pricing');
+      const costs = page.locator('#model-costs');
+      await expect(costs).toBeVisible();
+      const premium = costs.locator('.band').filter({ hasText: 'Premium generation' });
+      await expect(premium).toBeVisible();
+      for (const title of [...PRO_ONLY_MODELS.map((m) => m.title), FREE_MAX_MODEL.title]) {
+        await expect(premium).toContainText(title);
+      }
+      await expect(premium).toContainText('Flux 2 Pro');
+      // One flat rate for the whole band: every premium model costs 5, so no 3-5 style range.
+      await expect(premium.getByLabel(`${PREMIUM_CREDIT_COST} credits`).first()).toBeVisible();
+      await expect(premium.getByLabel(/\d+–\d+ credits/)).toHaveCount(0);
+      await costs.scrollIntoViewIfNeeded();
+      await snap('cost-table-five');
+      await costs.screenshot({ path: shotPath('cost-table-five') });
+    });
+  });
+
+  test('@high not-saved notice has icon Download and the correct CTA per plan', async ({
     page,
+    generationStub, // stubs POST /generate/image so no real Replicate job is billed
     snap,
   }) => {
     const prompt = `unsaved plan cta ${uniqueToken()}`;
@@ -208,19 +308,21 @@ test.describe('Pro tier UI', () => {
     await gotoStudio(page);
     await generateUnsaved(page, prompt);
     const notice = page.getByTestId('unsaved-result-notice');
-    await expect(notice.getByRole('button', { name: 'Download' })).toBeVisible();
+    await expect(notice.getByRole('button', { name: 'Download image' })).toBeVisible();
     await expect(notice.getByTestId('unsaved-upgrade')).toContainText('Upgrade to Pro');
-    await expect(notice.getByTestId('unsaved-free-space')).toHaveCount(0);
+    await expect(notice.getByRole('button', { name: 'Dismiss' })).toBeVisible();
+    await expect(notice.getByText('Delete images to free space')).toHaveCount(0);
     await snap('unsaved-notice-free');
     await page.screenshot({ path: shotPath('unsaved-notice-free'), fullPage: true });
 
     await activatePro(page, 'notice');
     await gotoStudio(page);
     await generateUnsaved(page, prompt);
-    await expect(notice.getByRole('button', { name: 'Download' })).toBeVisible();
-    await expect(notice.getByTestId('unsaved-free-space')).toBeVisible();
+    await expect(notice.getByRole('button', { name: 'Download image' })).toBeVisible();
+    await expect(notice.getByText('Delete images to free space')).toHaveCount(0);
     await expect(notice.getByTestId('unsaved-upgrade')).toHaveCount(0);
     await page.screenshot({ path: shotPath('unsaved-notice-pro'), fullPage: true });
+    expect(generationStub.generateRequestCount()).toBe(2);
   });
 
   test.describe('Explore privacy', () => {
@@ -274,7 +376,8 @@ test.describe('Pro tier UI', () => {
     await gotoStudio(page);
     const indiaDialog = await openPricingDialogFromLock(page);
     await expect(indiaDialog.getByTestId('pro-price')).toContainText('₹');
-    await expect(indiaDialog.getByTestId('pro-price-note')).toContainText('Approx.');
+    await expect(indiaDialog.getByTestId('pro-price-note')).toHaveCount(0);
+    await expect(indiaDialog.getByText('Approx. price')).toHaveCount(0);
     await snap('pricing-inr');
     await page.screenshot({ path: shotPath('pricing-inr'), fullPage: true });
   });
@@ -298,18 +401,18 @@ test.describe('Pro tier UI', () => {
     expect(((await profile.json()) as { plan: string }).plan).toBe('pro');
   });
 
-  test('@medium Pro badge persists after reload', async ({ page, snap }) => {
+  test('@medium Pro plan pill persists after reload', async ({ page, snap }) => {
     await gotoStudio(page);
     await activatePro(page, 'badge');
     await gotoStudio(page);
     await openUserMenu(page);
-    await expect(page.getByTestId('pro-badge')).toBeVisible();
+    await expect(page.getByTestId('plan-pill')).toHaveText('Pro');
     await page.getByTestId('user-menu-panel').screenshot({ path: shotPath('pro-badge') });
 
     await page.reload();
     await expect(page.getByTestId('composer-textarea-input')).toBeVisible();
     await openUserMenu(page);
-    await expect(page.getByTestId('pro-badge')).toBeVisible();
+    await expect(page.getByTestId('plan-pill')).toHaveText('Pro');
     await snap('pro-badge-after-reload');
     await page
       .getByTestId('user-menu-panel')

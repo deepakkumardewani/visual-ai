@@ -6,6 +6,7 @@ import { useImageDrop, validateImageFile } from '@/composables/useImageDrop';
 import { useAsideStore } from '@/stores/aside';
 import { useGenerateStore } from '@/stores/generate';
 
+import HistoryFullNote from '@/components/Dashboard/Canvas/HistoryFullNote.vue';
 import ComposerTextarea from '@/components/Dashboard/Composer/ComposerTextarea.vue';
 import MicButton from '@/components/Dashboard/Composer/VoiceInput/MicButton.vue';
 import GenerateCTA from '@/components/Dashboard/Composer/GenerateCTA.vue';
@@ -139,5 +140,6 @@ function removeReferenceAt(index: number) {
         <GenerateCTA />
       </div>
     </div>
+    <HistoryFullNote />
   </div>
 </template>

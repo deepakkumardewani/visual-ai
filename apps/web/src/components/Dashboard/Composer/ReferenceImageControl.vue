@@ -146,7 +146,7 @@ function handleFileChange(event: Event) {
         type="button"
         data-testid="reference-image-trigger"
         disabled
-        class="tw-inline-flex tw-h-8 tw-w-8 tw-cursor-not-allowed tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-hairline/60 tw-bg-surface-2/40 tw-text-ink-faint tw-opacity-50"
+        class="tw-inline-flex tw-h-8 tw-w-8 max-md:tw-h-11 max-md:tw-w-11 tw-cursor-not-allowed tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-hairline/60 tw-bg-surface-2/40 tw-text-ink-faint tw-opacity-50"
         :aria-label="disabledTooltip"
         :aria-describedby="tipVisible ? 'reference-image-tooltip' : undefined"
       >
@@ -181,7 +181,7 @@ function handleFileChange(event: Event) {
         <span
           data-testid="reference-image-trigger"
           :class="[
-            'tw-inline-flex tw-h-8 tw-w-8 tw-items-center tw-justify-center tw-text-ink-muted',
+            'tw-inline-flex tw-h-8 tw-w-8 max-md:tw-h-11 max-md:tw-w-11 tw-items-center tw-justify-center tw-text-ink-muted',
             interactiveTransition,
             open ? 'tw-text-ink' : '',
           ]"
@@ -267,6 +267,16 @@ function handleFileChange(event: Event) {
   border-radius: 0.375rem;
   border-color: rgb(var(--tw-hairline) / 0.6);
   background: rgb(var(--tw-surface-2) / 0.6);
+}
+
+/* Touch target: 44px below the md breakpoint (768px). */
+@media (max-width: 767.98px) {
+  .reference-image-control :deep(.tw-relative.tw-inline-block > button) {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    height: 2.75rem;
+    width: 2.75rem;
+  }
 }
 
 .reference-image-control :deep(.tw-relative.tw-inline-block > button:hover) {

@@ -42,10 +42,10 @@ export function CreditsCallout() {
       <Text style={numbersStyle}>
         <span style={previousStyle}>{PREVIOUS_DAILY_CREDITS}</span>
         <span style={arrowStyle}>&rarr;</span>
-        <span>{DAILY_CREDITS}</span>
+        <span>{DAILY_CREDITS.free}</span>
       </Text>
       <Text style={captionStyle}>
-        {`Daily free credits go up from ${PREVIOUS_DAILY_CREDITS} to ${DAILY_CREDITS}.`}
+        {`Daily free credits go up from ${PREVIOUS_DAILY_CREDITS} to ${DAILY_CREDITS.free}.`}
       </Text>
     </Section>
   );

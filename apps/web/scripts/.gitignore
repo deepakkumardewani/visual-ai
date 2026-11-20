@@ -1,4 +1,5 @@
-# Re-include the env check script and its test (ignored by root **/scripts/*)
+# Re-include the env check script, its test and the build-time prerender script (ignored by root **/scripts/*)
 !check-cloudinary-env.mjs
 !check-cloudinary-env.test.mjs
 !.gitignore
+!prerender.mjs

@@ -23,3 +23,27 @@ export function isPro(user: PlanSubject | null | undefined, now: Date = new Date
 
     return !!currentPeriodEnd && currentPeriodEnd.getTime() > now.getTime()
 }
+
+/**
+ * Mongo query equivalent of `isPro`, for bulk updates (daily reset). It must mirror `isPro`
+ * exactly: if one changes without the other, users get the wrong daily allowance.
+ */
+export function proUsersFilter(now: Date = new Date()) {
+    return {
+        plan: PLAN.PRO,
+        $or: [
+            { "subscription.status": SUBSCRIPTION_STATUS.ACTIVE },
+            {
+                "subscription.status": {
+                    $in: [SUBSCRIPTION_STATUS.PAST_DUE, SUBSCRIPTION_STATUS.CANCELLED],
+                },
+                "subscription.currentPeriodEnd": { $gt: now },
+            },
+        ],
+    }
+}
+
+/** Complement of `proUsersFilter`; legacy users without plan fields match here (count as Free). */
+export function freeUsersFilter(now: Date = new Date()) {
+    return { $nor: [proUsersFilter(now)] }
+}

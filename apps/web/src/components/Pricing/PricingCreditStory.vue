@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { SIGNUP_CREDITS } from '@visual-ai/shared';
+import { DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
+
+import { dailyResetLabel } from '@/utils/dailyReset';
 
 const beats = [
   {
     label: 'Daily Credits',
-    value: '30',
-    copy: 'Refreshed at midnight. Use them that day — unused daily credits do not roll over.',
+    value: String(DAILY_CREDITS.free),
+    copy: `${dailyResetLabel()} in your local time. Use them that day — unused daily credits do not roll over.`,
   },
   {
     label: 'Persistent Credits',
@@ -14,8 +16,8 @@ const beats = [
   },
   {
     label: 'Pay Per Use',
-    value: '1–8',
-    copy: 'Budget generation is 1 credit. Utilities are 2. Premium models and upscalers run 4–8. The studio shows the cost before you run.',
+    value: '1–5',
+    copy: 'Budget generation is 1 credit. Utilities are 2. Premium upscalers are 4 and premium generation is 5. The studio shows the cost before you run.',
   },
 ] as const;
 </script>
@@ -25,9 +27,7 @@ const beats = [
     <div class="story__intro">
       <p class="eyebrow">The economy</p>
       <h2 id="how-credits-title" class="story__title">How Credits Work</h2>
-      <p class="story__lede">
-        One currency. No subscription tiers. Spend only on the model you pick.
-      </p>
+      <p class="story__lede">One currency across every plan. Spend only on the model you pick.</p>
     </div>
 
     <dl class="story__list">
@@ -46,7 +46,7 @@ const beats = [
 .story {
   display: grid;
   gap: clamp(2rem, 4vw, 3.5rem);
-  padding: clamp(3.5rem, 7vw, 5.5rem) 0 0;
+  padding: clamp(2rem, 4vw, 3rem) 0 0;
 
   @media (min-width: 880px) {
     grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);

@@ -188,6 +188,7 @@ describe("applyEvent subscription lifecycle", () => {
         expect(User.updateOne).toHaveBeenCalledWith(
             { userId: "user_1", $and: [STALE_CLAUSE] },
             {
+                $max: { dailyCredits: 50 },
                 $set: {
                     "subscription.providerSubscriptionId": "sub_1",
                     "subscription.lastEventAt": new Date("2026-11-01T00:00:00.000Z"),

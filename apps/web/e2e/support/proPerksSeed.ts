@@ -1,7 +1,11 @@
 import { randomUUID } from 'node:crypto';
 
+import type { Page } from '@playwright/test';
 import mongoose from 'mongoose';
 
+import type { IImageObject } from '@visual-ai/shared';
+
+import { E2E_WEB_ORIGIN, requireEnv } from './env';
 import { mongoUri } from './legacyUser';
 
 const USERS_COLLECTION = 'users';
@@ -108,6 +112,43 @@ export async function pushHistoryImage(
   return seeded;
 }
 
+export type HistorySnapshot = { history: unknown[] };
+
+/**
+ * Replaces the user's whole history with `count` seeded entries (Mongo-direct) so the history-full
+ * level is deterministic regardless of what the shared account already holds. Returns a snapshot
+ * for `restoreHistory`; callers must restore it in a finally/afterEach.
+ */
+export async function replaceHistoryWithSeed(
+  userId: string,
+  count: number,
+  token: string,
+): Promise<HistorySnapshot> {
+  const createdAt = new Date();
+  const entries = Array.from(
+    { length: count },
+    (_, index) =>
+      buildHistoryEntry(
+        {
+          prompt: `hist ${index} ${token}`,
+          isPrivate: false,
+          publicId: `e2e/hist_${index}_${token}`,
+        },
+        createdAt,
+      ).entry,
+  );
+  return withUsers(async (users) => {
+    const doc = await users.findOne({ userId }, { projection: { history: 1 } });
+    if (!doc) throw new Error(`[e2e] user ${userId} not found`);
+    await users.updateOne({ userId }, { $set: { history: entries } });
+    return { history: (doc.history as unknown[]) ?? [] };
+  });
+}
+
+export async function restoreHistory(userId: string, snapshot: HistorySnapshot): Promise<void> {
+  await withUsers((users) => users.updateOne({ userId }, { $set: { history: snapshot.history } }));
+}
+
 export async function pullHistoryImages(userId: string, ids: string[]): Promise<void> {
   const objectIds = ids.map((id) => new mongoose.Types.ObjectId(id));
   await withUsers((users) =>
@@ -176,5 +217,69 @@ export async function readPlan(userId: string): Promise<string | undefined> {
   return withUsers(async (users) => {
     const doc = await users.findOne({ userId }, { projection: { plan: 1 } });
     return doc?.plan as string | undefined;
+  });
+}
+const USER_PROFILE_URL = /\/users\/user_/;
+const PROGRESS_URL = /\/progress\?jobId=/;
+const STUDIO_CREDITS = 500;
+const PNG_BASE64 =
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+
+/** Stubs an at-cap generation's progress (POST /generate/image comes from generationStub): the API's completed payload with no _id and savedToHistory false. */
+export async function stubUnsavedGeneration(page: Page, prompt: string) {
+  const e2eUserId = requireEnv('E2E_CLERK_USER_ID');
+  const replicateUrl = `https://replicate.delivery/e2e/${uniqueToken()}/out.png`;
+  await page.route(USER_PROFILE_URL, async (route) => {
+    if (route.request().method() !== 'GET') return route.continue();
+    const response = await route.fetch();
+    const user = (await response.json()) as Record<string, unknown>;
+    return route.fulfill({
+      response,
+      json: { ...user, credits: STUDIO_CREDITS, dailyCredits: 0 },
+    });
+  });
+  await page.route('https://replicate.delivery/**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'image/png',
+      headers: { 'Access-Control-Allow-Origin': '*' },
+      body: Buffer.from(PNG_BASE64, 'base64'),
+    }),
+  );
+  await page.route(PROGRESS_URL, (route) => {
+    const image: Omit<IImageObject, '_id' | 'createdAt' | 'featureType'> & {
+      featureType: string;
+      createdAt: string;
+    } = {
+      userId: e2eUserId,
+      prompt,
+      featureType: 'image',
+      createdAt: new Date().toISOString(),
+      modelName: 'E2E Stub',
+      imageType: 'horizontal',
+      images: [
+        {
+          name: 'unsaved',
+          aiImageUrl: replicateUrl,
+          resolution: '1x1',
+          aspectRatio: '16:9',
+          width: 1,
+          height: 1,
+          format: 'png',
+          bytes: 70,
+        },
+      ],
+    };
+    const body = { status: 'completed', image, userCreditsRemaining: 10, savedToHistory: false };
+    return route.fulfill({
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
+        'Access-Control-Allow-Credentials': 'true',
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+      },
+      body: `data: ${JSON.stringify(body)}\n\n`,
+    });
   });
 }

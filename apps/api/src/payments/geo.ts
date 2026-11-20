@@ -1,6 +1,7 @@
 import { normalizeCountryCode } from "@visual-ai/shared"
 import type { Request } from "express"
 
+import { env } from "../config/env.js"
 import { createLogger } from "../lib/logger.js"
 
 const logger = createLogger("payments-geo")
@@ -13,6 +14,35 @@ export const GEO_COUNTRY_HEADERS = [
 ] as const
 export const IP_LOOKUP_URL = "https://ipapi.co"
 export const IP_LOOKUP_TIMEOUT_MS = 2000
+
+/** The override is a dev/test pricing aid only; staging and production always use real geo. */
+const OVERRIDE_ENVIRONMENTS: ReadonlyArray<typeof env.NODE_ENV> = ["development", "test"]
+const regionNames = new Intl.DisplayNames(["en"], { type: "region", fallback: "none" })
+
+/** ICU names every unassigned code (ZZ is the reserved one) "Unknown Region", never undefined. */
+const UNKNOWN_REGION_NAME = regionNames.of("ZZ")
+
+function isKnownRegion(code: string): boolean {
+    const name = regionNames.of(code)
+    return name !== undefined && name !== code && name !== UNKNOWN_REGION_NAME
+}
+
+function parseOverride(raw: unknown, source: string): string | undefined {
+    if (raw === undefined || raw === "") return undefined
+    const country = typeof raw === "string" ? normalizeCountryCode(raw) : undefined
+    if (country && isKnownRegion(country)) return country
+    logger.warn({ source, value: raw }, "Ignoring invalid country override")
+    return undefined
+}
+
+/** Query beats DEV_COUNTRY_OVERRIDE; both are ignored outside development and test. */
+function countryFromOverride(queryCountry: unknown): string | undefined {
+    if (!OVERRIDE_ENVIRONMENTS.includes(env.NODE_ENV)) return undefined
+    return (
+        parseOverride(queryCountry, "query") ??
+        parseOverride(env.DEV_COUNTRY_OVERRIDE, "DEV_COUNTRY_OVERRIDE")
+    )
+}
 
 function countryFromHeaders(req: Request): string | undefined {
     for (const name of GEO_COUNTRY_HEADERS) {
@@ -37,7 +67,14 @@ async function countryFromIp(ip: string | undefined): Promise<string | undefined
     }
 }
 
-/** Geo header wins; the IP lookup runs only when no header yields a country. Undefined means unknown. */
-export async function resolveCountry(req: Request): Promise<string | undefined> {
-    return countryFromHeaders(req) ?? (await countryFromIp(req.ip))
+/** Override (dev/test), then geo header, then IP lookup. Undefined means unknown. */
+export async function resolveCountry(
+    req: Request,
+    queryCountry?: unknown,
+): Promise<string | undefined> {
+    return (
+        countryFromOverride(queryCountry) ??
+        countryFromHeaders(req) ??
+        (await countryFromIp(req.ip))
+    )
 }

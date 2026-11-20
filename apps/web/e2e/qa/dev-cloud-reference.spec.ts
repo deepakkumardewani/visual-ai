@@ -2,10 +2,10 @@ import path from 'node:path';
 
 import { clerk } from '@clerk/testing/playwright';
 import dotenv from 'dotenv';
-import type { APIRequestContext, Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 import { expect, test } from '../fixtures/qa';
-import { API_URL } from '../support/env';
+import { API_URL, E2E_WEB_ORIGIN } from '../support/env';
 
 const MODEL_WITH_REFERENCE_INPUT = 'FLUX_2_PRO';
 const GENERATE_IMAGE_URL = `${API_URL}/generate/image`;
@@ -42,35 +42,64 @@ async function clerkBearerToken(page: Page): Promise<string> {
   });
 }
 
-async function postGenerate(
-  request: APIRequestContext,
-  token: string,
-  body: Record<string, unknown>,
-) {
-  const res = await request.post(GENERATE_IMAGE_URL, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    data: {
-      modelId: MODEL_WITH_REFERENCE_INPUT,
-      prompt: 'e2e dev-cloud reference',
-      ...body,
-    },
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
+  'Access-Control-Allow-Credentials': 'true',
+  'Access-Control-Allow-Headers': '*',
+};
+
+/**
+ * Stubs POST /generate/image so no paid endpoint is hit (paidCallGuard stays on). The stub answers
+ * like the API's reference-URL validation: foreign cloud -> CLOUD_ERROR, otherwise it gets past
+ * validation and stops at PAST_VALIDATION_ERROR. The real validation is unit-tested in the API.
+ */
+async function stubGenerate(page: Page, cloud: string) {
+  const ownPrefix = `https://res.cloudinary.com/${cloud}/`;
+  await page.route(/\/generate\/image$/, (route) => {
+    if (route.request().method() === 'OPTIONS')
+      return route.fulfill({ status: 204, headers: CORS_HEADERS });
+    const urls = (route.request().postDataJSON()?.referenceImageUrls ?? []) as string[];
+    const foreign = urls.some((url) => !url.startsWith(ownPrefix));
+    return route.fulfill({
+      status: 400,
+      headers: CORS_HEADERS,
+      json: { message: foreign ? CLOUD_ERROR : PAST_VALIDATION_ERROR },
+    });
   });
-  return { status: res.status(), text: await res.text() };
 }
+
+/** Issues the POST from the page so the page.route stub intercepts it. */
+async function postGenerate(page: Page, token: string, body: Record<string, unknown>) {
+  return page.evaluate(
+    async ([url, bearer, payload]) => {
+      const res = await fetch(url as string, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${bearer}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      return { status: res.status, text: await res.text() };
+    },
+    [
+      GENERATE_IMAGE_URL,
+      token,
+      { modelId: MODEL_WITH_REFERENCE_INPUT, prompt: 'e2e dev-cloud reference', ...body },
+    ] as const,
+  );
+}
+
+// The stubbed 400s are logged by the browser as console errors.
+test.use({ expectedConsoleErrors: [/status of 400/] });
 
 test.describe('reference images and the configured Cloudinary cloud', () => {
   test('@high a reference image URL from the configured cloud is accepted', async ({
     page,
-    request,
     cloudinaryMock,
   }) => {
     const token = await clerkBearerToken(page);
+    await stubGenerate(page, configuredCloudName());
     const cloud = configuredCloudName();
 
-    const res = await postGenerate(request, token, {
+    const res = await postGenerate(page, token, {
       referenceImageUrls: [refUrl(cloud, 'ref-a'), refUrl(cloud, 'ref-b')],
     });
 
@@ -82,11 +111,11 @@ test.describe('reference images and the configured Cloudinary cloud', () => {
 
   test('@high a URL from another cloud is rejected with an error', async ({
     page,
-    request,
     cloudinaryMock,
   }) => {
     const token = await clerkBearerToken(page);
-    const foreign = await postGenerate(request, token, {
+    await stubGenerate(page, configuredCloudName());
+    const foreign = await postGenerate(page, token, {
       referenceImageUrls: [refUrl(OTHER_CLOUD, 'ref-x')],
     });
     expect(foreign.status).toBe(400);
@@ -97,11 +126,11 @@ test.describe('reference images and the configured Cloudinary cloud', () => {
 
   test('@high a mix of valid and foreign cloud URLs is rejected', async ({
     page,
-    request,
     cloudinaryMock,
   }) => {
     const token = await clerkBearerToken(page);
-    const res = await postGenerate(request, token, {
+    await stubGenerate(page, configuredCloudName());
+    const res = await postGenerate(page, token, {
       referenceImageUrls: [refUrl(configuredCloudName(), 'ref-ok'), refUrl(OTHER_CLOUD, 'ref-bad')],
     });
     expect(res.status).toBe(400);
@@ -109,11 +138,12 @@ test.describe('reference images and the configured Cloudinary cloud', () => {
     expect(cloudinaryMock.networkHits).toEqual([]);
   });
 
-  test('@medium empty reference input is ignored', async ({ page, request, cloudinaryMock }) => {
+  test('@medium empty reference input is ignored', async ({ page, cloudinaryMock }) => {
     const token = await clerkBearerToken(page);
+    await stubGenerate(page, configuredCloudName());
 
     for (const body of [{ referenceImageUrls: [] }, {}]) {
-      const res = await postGenerate(request, token, body);
+      const res = await postGenerate(page, token, body);
       expect(res.status).toBe(400);
       expect(res.text).toContain(PAST_VALIDATION_ERROR);
       expect(res.text).not.toContain(CLOUD_ERROR);

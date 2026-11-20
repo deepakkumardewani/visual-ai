@@ -1,0 +1,543 @@
+[
+ {
+  "file": "3/T3.4-1.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "History grid tile requests w_400 thumbnail",
+  "annotations": [],
+  "at": "2026-11-02T15:54:52.999Z"
+ },
+ {
+  "file": "3/T3.4-2.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Collections strip cover requests w_400 thumbnail",
+  "annotations": [],
+  "at": "2026-11-02T15:54:53.079Z"
+ },
+ {
+  "file": "3/T3.4-3.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "ImageDialog requests full-size URL",
+  "annotations": [],
+  "at": "2026-11-02T15:54:53.148Z"
+ },
+ {
+  "file": "3/T3.4-4.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Empty history, no image requests",
+  "annotations": [],
+  "at": "2026-11-02T15:54:53.212Z"
+ },
+ {
+  "file": "3/T3.4-5.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "ImageDialog open, full-size URL requested",
+  "annotations": [],
+  "at": "2026-11-02T16:00:50.727Z"
+ },
+ {
+  "file": "3/T3.4-6.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "History grid tiles load w_400 thumbnails",
+  "annotations": [],
+  "at": "2026-11-02T16:59:16.565Z"
+ },
+ {
+  "file": "3/T3.4-7.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Collections strip cover uses w_400 thumbnail",
+  "annotations": [],
+  "at": "2026-11-02T16:59:16.631Z"
+ },
+ {
+  "file": "3/T3.4-8.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Open ImageDialog loads the full-size, non-thumbnail image",
+  "annotations": [],
+  "at": "2026-11-02T16:59:16.691Z"
+ },
+ {
+  "file": "3/T3.4-9.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Empty history shows Nothing here yet, no thumbnail requests",
+  "annotations": [],
+  "at": "2026-11-02T16:59:16.749Z"
+ },
+ {
+  "file": "3/T3.2-1.png",
+  "taskId": "T3.2",
+  "kind": "proof",
+  "step": "Thumbnail src contains w_400",
+  "attempt": 4,
+  "caption": "History grid tile rendered from the w_400,c_limit thumbnail URL (e2e prod run asserts src and recorded request)",
+  "annotations": [
+   {
+    "x": 3.1,
+    "y": 26.8,
+    "w": 18,
+    "h": 31.9,
+    "label": "History grid tile, src matches w_400 thumbnail"
+   }
+  ],
+  "at": "2026-11-02T17:04:20.000Z"
+ },
+ {
+  "file": "3/T3.2-2.png",
+  "taskId": "T3.2",
+  "kind": "proof",
+  "step": "Thumbnail src contains w_400",
+  "attempt": 4,
+  "caption": "Collections strip cover requests <base>/q_auto,f_auto,w_400,c_limit/<id> (asserted in e2e prod run)",
+  "annotations": [
+   {
+    "x": 3.1,
+    "y": 20.4,
+    "w": 11.2,
+    "h": 5,
+    "label": "Collection chip cover uses w_400 thumbnail"
+   },
+   {
+    "x": 3.1,
+    "y": 34.6,
+    "w": 18,
+    "h": 31.9,
+    "label": "History grid tile uses w_400 thumbnail"
+   }
+  ],
+  "at": "2026-11-02T17:04:20.076Z"
+ },
+ {
+  "file": "4/T4.3-1.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "landing with Cloudinary blocked",
+  "annotations": [],
+  "at": "2026-11-03T11:26:03.911Z"
+ },
+ {
+  "file": "4/T4.3-2.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "page-gallery with Cloudinary blocked",
+  "annotations": [],
+  "at": "2026-11-03T11:26:04.079Z"
+ },
+ {
+  "file": "4/T4.3-3.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "page-examples with Cloudinary blocked",
+  "annotations": [],
+  "at": "2026-11-03T11:26:04.259Z"
+ },
+ {
+  "file": "4/T4.3-4.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "page-pricing with Cloudinary blocked",
+  "annotations": [],
+  "at": "2026-11-03T11:26:04.412Z"
+ },
+ {
+  "file": "4/T4.3-5.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "page-text-to-image with Cloudinary blocked",
+  "annotations": [],
+  "at": "2026-11-03T11:26:04.562Z"
+ },
+ {
+  "file": "4/T4.3-6.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "signup-dialog with Cloudinary blocked",
+  "annotations": [],
+  "at": "2026-11-03T11:26:04.677Z"
+ },
+ {
+  "file": "5/T5.5-1.png",
+  "taskId": "T5.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free user studio header with no Pro badge",
+  "annotations": [],
+  "at": "2026-11-03T11:52:14.673Z"
+ },
+ {
+  "file": "5/T5.5-2.png",
+  "taskId": "T5.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Same free state after page reload",
+  "annotations": [],
+  "at": "2026-11-03T11:52:14.785Z"
+ },
+ {
+  "file": "5/T5.5-3.png",
+  "taskId": "T5.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free user studio header with no Pro badge",
+  "annotations": [],
+  "at": "2026-11-03T12:04:28.535Z"
+ },
+ {
+  "file": "6/T6.6-1.png",
+  "taskId": "T6.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Studio after the signed active webhook; API reports plan pro",
+  "annotations": [],
+  "at": "2026-11-03T12:24:03.752Z"
+ },
+ {
+  "file": "6/T6.6-2.png",
+  "taskId": "T6.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Studio after cancelled webhook; API still reports pro with cancelAtPeriodEnd",
+  "annotations": [],
+  "at": "2026-11-03T12:24:03.857Z"
+ },
+ {
+  "file": "6/T6.6-3.png",
+  "taskId": "T6.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Studio after expired webhook; API reports plan free",
+  "annotations": [],
+  "at": "2026-11-03T12:24:03.949Z"
+ },
+ {
+  "file": "7/T7.10-1.png",
+  "taskId": "T7.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "At-cap generation shows the unsaved result with a Download action",
+  "annotations": [],
+  "at": "2026-11-03T14:15:30.510Z"
+ },
+ {
+  "file": "7/T7.10-2.png",
+  "taskId": "T7.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Explore shows the public item and hides the Pro private one",
+  "annotations": [],
+  "at": "2026-11-03T14:15:30.623Z"
+ },
+ {
+  "file": "7/T7.10-3.png",
+  "taskId": "T7.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pro user downloads from the image dialog (original URL)",
+  "annotations": [],
+  "at": "2026-11-03T14:15:30.726Z"
+ },
+ {
+  "file": "7/T7.3-1.png",
+  "taskId": "T7.3",
+  "kind": "after",
+  "step": "At cap: not saved, still downloadable",
+  "attempt": null,
+  "caption": "At-cap result shows in the grid with its Download action row though it was not saved to history.",
+  "annotations": [
+   {
+    "x": 23.8,
+    "y": 72.5,
+    "w": 58.4,
+    "h": 3.9,
+    "label": "Download action row on the unsaved result"
+   }
+  ],
+  "at": "2026-11-03T14:45:09.538Z"
+ },
+ {
+  "file": "7/T7.10-4.png",
+  "taskId": "T7.10",
+  "kind": "after",
+  "step": "History at cap returns an unsaved result with Download",
+  "attempt": null,
+  "caption": "At-cap unsaved result with Download action.",
+  "annotations": [
+   {
+    "x": 23.8,
+    "y": 72.5,
+    "w": 58.4,
+    "h": 3.9,
+    "label": "Download action row"
+   }
+  ],
+  "at": "2026-11-03T14:45:09.627Z"
+ },
+ {
+  "file": "7/T7.3-2.png",
+  "taskId": "T7.3",
+  "kind": "after",
+  "step": "At cap: result returned unsaved with Download",
+  "attempt": 6,
+  "caption": "At-cap user with a full history: the unsaved result sits on top with its own Download row; saved rows below have none.",
+  "annotations": [
+   {
+    "x": 23.7,
+    "y": 72.5,
+    "w": 58.4,
+    "h": 3.9,
+    "label": "Download row on the unsaved result (newest row)"
+   },
+   {
+    "x": 23.7,
+    "y": 34.7,
+    "w": 10.7,
+    "h": 3.6,
+    "label": "History count includes the saved rows"
+   }
+  ],
+  "at": "2026-11-03T14:51:19.205Z"
+ },
+ {
+  "file": "7/T7.10-5.png",
+  "taskId": "T7.10",
+  "kind": "after",
+  "step": "At cap: result returned unsaved with Download",
+  "attempt": 6,
+  "caption": "At-cap user with a full history: the unsaved result sits on top with its own Download row; saved rows below have none.",
+  "annotations": [
+   {
+    "x": 23.7,
+    "y": 72.5,
+    "w": 58.4,
+    "h": 3.9,
+    "label": "Download row on the unsaved result (newest row)"
+   },
+   {
+    "x": 23.7,
+    "y": 34.7,
+    "w": 10.7,
+    "h": 3.6,
+    "label": "History count includes the saved rows"
+   }
+  ],
+  "at": "2026-11-03T14:51:19.296Z"
+ },
+ {
+  "file": "9/T9.3-1.png",
+  "taskId": "T9.3",
+  "kind": "proof",
+  "step": "Free users see locks",
+  "attempt": null,
+  "caption": "Free user sees Pro lock badges on premium models",
+  "annotations": [
+   {
+    "x": 1,
+    "y": 80,
+    "w": 34,
+    "h": 9,
+    "label": "Nano Banana Pro row with Pro lock badge"
+   }
+  ],
+  "at": "2026-11-04T13:11:10.049Z"
+ },
+ {
+  "file": "9/T9.2-1.png",
+  "taskId": "T9.2",
+  "kind": "proof",
+  "step": "Local currency with geo header, USD without",
+  "attempt": null,
+  "caption": "Pricing dialog shows the Pro card with price and the approximate-price note",
+  "annotations": [
+   {
+    "x": 27.5,
+    "y": 16,
+    "w": 45,
+    "h": 68,
+    "label": "Pro card with USD price and note"
+   }
+  ],
+  "at": "2026-11-04T13:11:54.338Z"
+ },
+ {
+  "file": "9/T9.3-2.png",
+  "taskId": "T9.3",
+  "kind": "proof",
+  "step": "403 / lock opens pricing dialog",
+  "attempt": null,
+  "caption": "Picking a locked premium model opens the pricing dialog upsell",
+  "annotations": [
+   {
+    "x": 27.5,
+    "y": 16,
+    "w": 45,
+    "h": 68,
+    "label": "Pricing dialog opened by the locked model"
+   }
+  ],
+  "at": "2026-11-04T13:11:54.513Z"
+ },
+ {
+  "file": "9/T9.7-1.png",
+  "taskId": "T9.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free user: premium model shows Pro lock badge",
+  "annotations": [],
+  "at": "2026-11-04T13:16:45.093Z"
+ },
+ {
+  "file": "9/T9.7-2.png",
+  "taskId": "T9.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Clicking the locked model opens the Pro upsell",
+  "annotations": [],
+  "at": "2026-11-04T13:16:45.240Z"
+ },
+ {
+  "file": "9/T9.7-3.png",
+  "taskId": "T9.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free: not-saved notice with Download and Upgrade CTA",
+  "annotations": [],
+  "at": "2026-11-04T13:16:45.357Z"
+ },
+ {
+  "file": "9/T9.7-4.png",
+  "taskId": "T9.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pro: not-saved notice with Download and Delete-to-free-space CTA",
+  "annotations": [],
+  "at": "2026-11-04T13:16:45.472Z"
+ },
+ {
+  "file": "9/T9.7-5.png",
+  "taskId": "T9.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Mocked IN geo header shows rupee price with approx note",
+  "annotations": [],
+  "at": "2026-11-04T13:16:45.586Z"
+ },
+ {
+  "file": "9/T9.7-7.png",
+  "taskId": "T9.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Open user menu panel showing the Pro badge next to the user name",
+  "annotations": [],
+  "at": "2026-11-04T13:35:39.633Z"
+ },
+ {
+  "file": "9/T9.7-8.png",
+  "taskId": "T9.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Open user menu panel still showing the Pro badge after page reload",
+  "annotations": [],
+  "at": "2026-11-04T13:35:39.794Z"
+ },
+ {
+  "file": "9/T9.7-9.png",
+  "taskId": "T9.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Free user: premium model row with lock badge",
+  "annotations": [],
+  "at": "2026-11-04T13:35:39.904Z"
+ },
+ {
+  "file": "9/T9.7-10.png",
+  "taskId": "T9.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pro user: not-saved notice with Free-space CTA",
+  "annotations": [],
+  "at": "2026-11-04T13:35:40.015Z"
+ },
+ {
+  "file": "9/T9.7-11.png",
+  "taskId": "T9.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pricing dialog with INR price and approx note (geo IN)",
+  "annotations": [],
+  "at": "2026-11-04T13:35:40.133Z"
+ },
+ {
+  "file": "9/T9.7-6.png",
+  "taskId": "T9.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Pro badge in user menu after webhook activation",
+  "annotations": [
+   {
+    "x": 55,
+    "y": 4,
+    "w": 15,
+    "h": 6,
+    "label": "Pro badge next to the user name"
+   }
+  ],
+  "at": "2026-11-04T13:47:24.799Z"
+ }
+]

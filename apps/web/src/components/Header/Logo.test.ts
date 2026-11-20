@@ -4,20 +4,11 @@ import { ref } from 'vue';
 
 const push = vi.fn();
 const routeName = ref<string>('home');
-const isMobile = ref(false);
 
 vi.mock('vue-router', () => ({
   useRoute: () => ({ name: routeName.value }),
   useRouter: () => ({ push }),
 }));
-
-vi.mock('@vueuse/core', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@vueuse/core')>();
-  return {
-    ...actual,
-    useMediaQuery: () => isMobile,
-  };
-});
 
 import Logo from '@/components/Header/Logo.vue';
 
@@ -32,7 +23,6 @@ describe('Logo', () => {
   beforeEach(() => {
     push.mockReset();
     routeName.value = 'home';
-    isMobile.value = false;
   });
 
   it('shows wordmark off the app shell', () => {
@@ -72,5 +62,13 @@ describe('Logo', () => {
     const wrapper = mount(Logo, { global: { stubs } });
     await wrapper.trigger('click');
     expect(push).toHaveBeenCalledWith('/');
+  });
+
+  it('renders the mark at a constant 34px and keeps a 44px hit area', () => {
+    const wrapper = mount(Logo, { global: { stubs } });
+    const mark = wrapper.get('[data-testid="logo-mark"]');
+    expect(mark.attributes('width')).toBe('34');
+    expect(mark.attributes('height')).toBe('34');
+    expect(wrapper.classes()).toEqual(expect.arrayContaining(['tw-min-h-11', 'tw-min-w-11']));
   });
 });

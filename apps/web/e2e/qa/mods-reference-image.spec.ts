@@ -43,10 +43,11 @@ async function selectSidebarModel(
   const listbox = page.getByRole('listbox', { name: 'Select a model' });
   await expect(listbox).toBeVisible();
 
-  let option = listbox.getByRole('option', { name: new RegExp(title, 'i') });
+  // first(): a model can appear in both the Featured and the Free sections.
+  let option = listbox.getByRole('option', { name: new RegExp(title, 'i') }).first();
   if ((await option.count()) === 0 && company) {
     await listbox.getByText(company, { exact: true }).hover();
-    option = page.getByRole('option', { name: new RegExp(title, 'i') });
+    option = page.getByRole('option', { name: new RegExp(title, 'i') }).first();
   }
   await expect(option).toBeVisible({ timeout: 15_000 });
   await option.click();
@@ -116,9 +117,12 @@ async function installGenerationMocks(page: Page): Promise<GenerationMocks> {
   });
 
   await page.route('**/generate/image**', async (route) => {
-    if (!route.request().url().endsWith('/generate/image')) return route.continue();
     if (route.request().method() === 'OPTIONS') {
       return route.fulfill({ status: 204, headers: CORS_HEADERS });
+    }
+    // Never continue to the network: an unexpected URL variant could start a billed generation.
+    if (!route.request().url().endsWith('/generate/image')) {
+      return route.fulfill({ status: 404, headers: CORS_HEADERS, json: { message: 'unstubbed' } });
     }
     generateCount += 1;
     lastGenerateBody = route.request().postDataJSON() as Record<string, unknown>;

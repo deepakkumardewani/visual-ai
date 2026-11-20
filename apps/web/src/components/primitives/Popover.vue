@@ -12,14 +12,29 @@ const props = withDefaults(
     matchTriggerWidth?: boolean;
     /** Render the trigger slot as the clickable control, without the default 44px bordered button. */
     unstyledTrigger?: boolean;
+    /**
+     * Opt-in for panels with a text input above the options: arrow keys move over
+     * `[role="option"]` only (skipping buttons such as a clear control), ArrowDown from the
+     * input enters the list, and Home/End/ArrowUp keep their native caret behaviour while typing.
+     */
+    navigateOptionsFromInput?: boolean;
+    /** Opt-in CSS selector focused on open instead of the first item; no match falls back to it. */
+    autofocusSelector?: string;
   }>(),
   {
     open: undefined,
     placement: 'bottom-start',
     matchTriggerWidth: false,
     unstyledTrigger: false,
+    navigateOptionsFromInput: false,
+    autofocusSelector: undefined,
   },
 );
+
+const DEFAULT_ITEM_SELECTOR = 'button:not([disabled]), [role="option"], [role="menuitem"]';
+const OPTION_ITEM_SELECTOR = '[role="option"]';
+const itemSelector = () =>
+  props.navigateOptionsFromInput ? OPTION_ITEM_SELECTOR : DEFAULT_ITEM_SELECTOR;
 
 const emit = defineEmits<{
   'update:open': [value: boolean];
@@ -91,12 +106,11 @@ const onPanelKeydown = (event: KeyboardEvent) => {
   const panel = panelRef.value;
   if (!panel) return;
 
-  const items = Array.from(
-    panel.querySelectorAll<HTMLElement>(
-      'button:not([disabled]), [role="option"], [role="menuitem"]',
-    ),
-  );
+  const items = Array.from(panel.querySelectorAll<HTMLElement>(itemSelector()));
   if (items.length === 0) return;
+
+  const typingInInput = props.navigateOptionsFromInput && event.target instanceof HTMLInputElement;
+  if (typingInInput && event.key !== 'ArrowDown') return;
 
   const activeIndex = items.indexOf(document.activeElement as HTMLElement);
 
@@ -188,10 +202,11 @@ watch(isOpen, async (open) => {
   updatePosition();
   panelRef.value?.focus();
 
-  const firstItem = panelRef.value?.querySelector<HTMLElement>(
-    'button:not([disabled]), [role="option"], [role="menuitem"]',
-  );
-  firstItem?.focus();
+  const preferred = props.autofocusSelector
+    ? panelRef.value?.querySelector<HTMLElement>(props.autofocusSelector)
+    : null;
+  const target = preferred ?? panelRef.value?.querySelector<HTMLElement>(itemSelector());
+  target?.focus();
 });
 
 window.addEventListener('scroll', updatePosition, {

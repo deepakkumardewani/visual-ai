@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { PREMIUM_MODEL_KEYS, type ModelKey } from "@visual-ai/shared"
 
 import { asyncHandler } from "../lib/async-handler.js"
@@ -25,7 +25,17 @@ export const generateRoute = Router()
 
 /** Prefers the verified session; falls back to `req.body.userId` only when no session is attached. */
 function authedUserId(req: Request): string {
-    return req.auth?.userId ?? req.body.userId ?? ""
+    return req.auth?.userId ?? req.body?.userId ?? ""
+}
+
+/**
+ * Makes the job body's userId server-trusted: the e2e fake-Replicate decision and credit
+ * accounting key off it, so a client-supplied value must never survive. Must run after
+ * multer on multipart routes, since multer replaces req.body.
+ */
+function stampAuthedUserId(req: Request, _res: Response, next: NextFunction) {
+    req.body = { ...req.body, userId: authedUserId(req) }
+    next()
 }
 
 function acceptResponse(res: Response) {
@@ -89,10 +99,9 @@ generateRoute.get("/progress", async (req: Request, res: Response) => {
 // AI Image Generation Endpoint
 // Fire-and-forget: starts background job, returns 202 immediately
 function attachReferenceUploadBody(req: Request, _res: Response, next: () => void) {
-    const authUserId = (req as Request & { auth?: { userId?: string } }).auth?.userId
     req.body = {
         ...req.body,
-        userId: authUserId ?? req.body.userId,
+        userId: authedUserId(req),
         feature: "reference",
         format: req.body.format ?? "png",
     }
@@ -122,6 +131,7 @@ generateRoute.post(
     "/generate/image",
     // @ts-ignore
     requireAuth,
+    stampAuthedUserId,
     asyncHandler(async (req: Request, res: Response) => {
         const modelKey = (req.body.modelId ?? "FLUX_BASIC") as ModelKey
         validateReferenceImageUrls(modelKey, req.body.referenceImageUrls)
@@ -144,6 +154,7 @@ generateRoute.post(
     // @ts-ignore
     requireAuth,
     upload.single("image"),
+    stampAuthedUserId,
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.path) {
             throw new BadRequestError("No image file provided")
@@ -169,6 +180,7 @@ generateRoute.post(
     // @ts-ignore
     requireAuth,
     upload.single("image"),
+    stampAuthedUserId,
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.path) {
             throw new BadRequestError("No image file provided")
@@ -194,6 +206,7 @@ generateRoute.post(
     // @ts-ignore
     requireAuth,
     upload.single("image"),
+    stampAuthedUserId,
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.path) {
             throw new BadRequestError("No image file provided")
@@ -219,6 +232,7 @@ generateRoute.post(
     // @ts-ignore
     requireAuth,
     upload.single("image"),
+    stampAuthedUserId,
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.path) {
             throw new BadRequestError("No image file provided")

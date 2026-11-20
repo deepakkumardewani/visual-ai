@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 const tween = vi.hoisted(() => ({
   scrollTrigger: { kill: vi.fn() },
@@ -25,11 +25,16 @@ const Host = defineComponent({
   template: '<p v-reveal="binding">Reveal me</p>',
 });
 
-function mountReveal(binding?: { delay?: number; y?: number }) {
+function mountReveal(binding?: object) {
   return mount(Host, {
     props: { binding },
     global: { directives: { reveal: vReveal } },
   });
+}
+
+function firstTriggerConfig() {
+  const call = gsap.to.mock.calls[0] as unknown[] | undefined;
+  return call?.[1] as { scrollTrigger: { scroller?: unknown } };
 }
 
 describe('vReveal', () => {
@@ -95,6 +100,32 @@ describe('vReveal', () => {
     mountReveal({ delay: 0.2 });
     expect(gsap.set).not.toHaveBeenCalled();
     expect(gsap.to).not.toHaveBeenCalled();
+  });
+
+  it('observes the window when no scroller is given', () => {
+    mountReveal({ delay: 0.1 });
+    const config = firstTriggerConfig();
+    expect(config.scrollTrigger.scroller).toBeUndefined();
+  });
+
+  it('observes an element scroller passed directly', () => {
+    const panel = document.createElement('div');
+    mountReveal({ scroller: panel });
+    const config = firstTriggerConfig();
+    expect(config.scrollTrigger.scroller).toBe(panel);
+  });
+
+  it('reads a scroller ref at mount time', () => {
+    const panel = document.createElement('div');
+    mountReveal({ scroller: ref<HTMLElement | null>(panel) });
+    const config = firstTriggerConfig();
+    expect(config.scrollTrigger.scroller).toBe(panel);
+  });
+
+  it('falls back to the window for an empty scroller ref', () => {
+    mountReveal({ scroller: ref<HTMLElement | null>(null) });
+    const config = firstTriggerConfig();
+    expect(config.scrollTrigger.scroller).toBeUndefined();
   });
 
   it('kills the tween and scroll trigger on unmount', () => {

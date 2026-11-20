@@ -20,11 +20,11 @@ import {
 describe('credit marketing copy', () => {
   it('uses shared signup, daily, and referral constants', () => {
     expect(newAccountCreditsDefinition()).toBe(
-      `New accounts get ${SIGNUP_CREDITS} credits plus ${DAILY_CREDITS} daily credits.`,
+      `New accounts get ${SIGNUP_CREDITS} credits plus ${DAILY_CREDITS.free} daily credits.`,
     );
     expect(freeTierSignupFaqAnswer()).toContain(String(SIGNUP_CREDITS));
-    expect(freeTierSignupFaqAnswer()).toContain(String(DAILY_CREDITS));
-    expect(colorizeFreeTierFaqAnswer()).toContain(String(DAILY_CREDITS));
+    expect(freeTierSignupFaqAnswer()).toContain(String(DAILY_CREDITS.free));
+    expect(colorizeFreeTierFaqAnswer()).toContain(String(DAILY_CREDITS.free));
     expect(colorizeFreeTierFaqAnswer()).toContain(String(SIGNUP_CREDITS));
     expect(referralGiveEarnCopy()).toBe(
       `Give ${REFERRAL_BONUS} credits and earn ${REFERRAL_BONUS} credits for each new referral who signs up.`,

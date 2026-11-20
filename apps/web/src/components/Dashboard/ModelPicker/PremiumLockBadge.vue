@@ -1,7 +1,7 @@
 <template>
   <span
     data-testid="premium-lock-badge"
-    class="tw-inline-flex tw-items-center tw-gap-1 tw-rounded-full tw-bg-gold/15 tw-px-1.5 tw-py-0.5 tw-text-[10px] tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gold"
+    class="tw-inline-flex tw-shrink-0 tw-items-center tw-gap-1 tw-rounded-full tw-bg-gold/15 tw-px-1.5 tw-py-0.5 tw-text-[10px] tw-font-semibold tw-uppercase tw-tracking-wide tw-text-gold"
     title="Premium model, available on Pro"
   >
     <svg

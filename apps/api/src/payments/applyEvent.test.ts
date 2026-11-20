@@ -383,7 +383,10 @@ describe("applyEvent subscription lifecycle", () => {
             await applyEvent(subEvent({ type }))
 
             expect(User.updateOne).toHaveBeenCalledTimes(1)
+            const topUp =
+                type === SUBSCRIPTION_EVENT_TYPE.ACTIVATED ? { $max: { dailyCredits: 50 } } : {}
             expect(User.updateOne.mock.calls[0]![1]).toEqual({
+                ...topUp,
                 $set: {
                     "subscription.providerSubscriptionId": "sub_1",
                     "subscription.lastEventAt": occurredAt,

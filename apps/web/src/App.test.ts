@@ -90,7 +90,7 @@ describe('App', () => {
     const { wrapper } = await renderAt('/account');
     expect(wrapper.find('[data-testid="app-header"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="app-footer"]').exists()).toBe(true);
-    expect(wrapper.find('.tw-pt-14').exists()).toBe(true);
+    expect(wrapper.find('.tw-pt-16').exists()).toBe(true);
   });
 
   it('locks overflow on the create surface and hides the footer', async () => {

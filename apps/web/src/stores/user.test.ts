@@ -98,6 +98,7 @@ describe('useUserStore', () => {
     const store = useUserStore();
     expect(store.plan).toBe('free');
     expect(store.isPro).toBe(false);
+    expect(store.dailyAllowance).toBe(30);
   });
 
   it('getUserDetails marks the user as Pro when the API returns the pro plan', async () => {
@@ -112,6 +113,7 @@ describe('useUserStore', () => {
     await store.getUserDetails();
     expect(store.plan).toBe('pro');
     expect(store.isPro).toBe(true);
+    expect(store.dailyAllowance).toBe(50);
   });
 
   it('getUserDetails falls back to the free plan when the API omits it', async () => {

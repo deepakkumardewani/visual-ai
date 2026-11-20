@@ -29,7 +29,7 @@ const auth = useAuthStore();
       <h2 v-reveal="{ delay: 0.06 }" class="cta__title">Your next image is one prompt away.</h2>
       <p v-reveal="{ delay: 0.12 }" class="cta__sub">
         Generate, upscale, colorize, and revive — {{ SIGNUP_CREDITS }} persistent credits at signup
-        and {{ DAILY_CREDITS }} more every day.
+        and {{ DAILY_CREDITS.free }} more every day.
       </p>
       <div v-reveal="{ delay: 0.18 }" class="cta__actions">
         <LandingButton :to="auth.isSignedIn ? '/create' : '/signin'" size="lg">

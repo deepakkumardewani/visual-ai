@@ -1,3 +1,4 @@
+import { normalizeCountryCode } from "@visual-ai/shared"
 import { z } from "zod"
 
 /**
@@ -52,6 +53,24 @@ const envSchema = z
 
         // Replicate
         REPLICATE_API_TOKEN: z.string().min(1, "REPLICATE_API_TOKEN is required"),
+        // Comma-separated user ids whose generations never reach real Replicate (e2e test users).
+        // Parsed once at startup, so changing it requires an API restart.
+        E2E_USER_IDS: z
+            .string()
+            .default("")
+            .transform((v) =>
+                v
+                    .split(",")
+                    .map((id) => id.trim())
+                    .filter(Boolean),
+            ),
+
+        // Dev/test only: price for this ISO country instead of the request's geo. Invalid values
+        // become undefined so a typo never blocks boot; production/staging ignore it.
+        DEV_COUNTRY_OVERRIDE: z
+            .string()
+            .optional()
+            .transform((v) => normalizeCountryCode(v)),
 
         // Payments provider
         PAYMENT_PROVIDER: z.enum(["dodo"]).default("dodo"),
@@ -159,6 +178,20 @@ function validateEnv() {
         console.error(errors)
         console.error(`\nMissing vars: ${missingVars}`)
         process.exit(1)
+    }
+
+    if (result.data.DEV_COUNTRY_OVERRIDE) {
+        console.warn(
+            `DEV_COUNTRY_OVERRIDE=${result.data.DEV_COUNTRY_OVERRIDE} is set: pricing country is forced in development/test (ignored in staging/production).`,
+        )
+    }
+
+    // Logger imports env, so console.warn is used here. Boot must never fail on a typo.
+    const rawCountryOverride = process.env.DEV_COUNTRY_OVERRIDE?.trim()
+    if (rawCountryOverride && !result.data.DEV_COUNTRY_OVERRIDE) {
+        console.warn(
+            `DEV_COUNTRY_OVERRIDE="${rawCountryOverride}" is not a valid ISO 3166-1 alpha-2 country code and was ignored.`,
+        )
     }
 
     return result.data

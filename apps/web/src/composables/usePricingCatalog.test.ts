@@ -92,6 +92,13 @@ describe('usePricingCatalog', () => {
     expect(generation.bands.some((band) => band.title === 'Everyday generation')).toBe(true);
   });
 
+  it('derives the flagship blurb cost from PREMIUM_CREDIT_COST', () => {
+    const { pricingBoard } = usePricingCatalog();
+    expect(pricingBoard.value[0].blurb).toBe(
+      `Most prompts cost 1 credit. A few flagship models cost ${shared.PREMIUM_CREDIT_COST}.`,
+    );
+  });
+
   it('builds premium-only generation when no everyday models remain', () => {
     vi.spyOn(shared, 'getCreditCost').mockImplementation((key: ModelKey) => {
       const model = shared.MODEL_REGISTRY[key];
@@ -193,26 +200,18 @@ describe('usePricingCatalog prices', () => {
     expect(catalog.formatPackPrice(CREDIT_PACKS[1])).toContain('₹');
   });
 
-  it('shows the per-credit price in INR when no estimates are loaded', () => {
-    const pack = CREDIT_PACKS[0];
-    const expected = new Intl.NumberFormat(undefined, {
-      style: 'currency',
-      currency: 'INR',
-    }).format(pack.priceMinor / pack.credits / 100);
-    expect(loadCatalog().formatPackPerCredit(pack)).toBe(expected);
+  it('shows the per-100-credit price in INR when no estimates are loaded', () => {
+    // 13000 paise / 200 credits * 100 = 6500 paise
+    expect(loadCatalog().formatPackPer100Credits(CREDIT_PACKS[0])).toBe('₹65.00');
   });
 
-  it('shows the per-credit price in the localized currency after a fetch', async () => {
+  it('shows the per-100-credit price in the localized currency after a fetch', async () => {
     mockPricesResponse({ data: EUR_PRICES, error: null });
     const catalog = loadCatalog();
     await catalog.loadPrices();
 
-    const pack = CREDIT_PACKS[0];
-    const expected = new Intl.NumberFormat(undefined, {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(250 / pack.credits / 100);
-    expect(catalog.formatPackPerCredit(pack)).toBe(expected);
+    // 250 cents / 200 credits * 100 = 125 cents
+    expect(catalog.formatPackPer100Credits(CREDIT_PACKS[0])).toMatch(/^€\s?1[.,]25$|^1[.,]25\s?€$/);
   });
 
   it('falls back to USD and INR when the API returns an unsupported currency', async () => {
@@ -265,5 +264,75 @@ describe('usePricingCatalog prices', () => {
     expect(useFetch).toHaveBeenCalledTimes(1);
     expect(useFetch).toHaveBeenCalledWith('/payments/prices');
     expect(second.proPrice.value).toContain('€');
+  });
+});
+
+describe('usePricingCatalog localized currency rendering', () => {
+  let loadCatalog: () => ReturnType<typeof usePricingCatalog>;
+
+  beforeEach(async () => {
+    vi.resetModules();
+    vi.mocked(useFetch).mockReset();
+    const mod = await import('@/composables/usePricingCatalog');
+    loadCatalog = mod.usePricingCatalog;
+  });
+
+  it('renders an INR catalog with the rupee symbol for Pro and packs', async () => {
+    mockPricesResponse({
+      data: {
+        country: 'IN',
+        currency: 'INR',
+        isEstimate: true,
+        pro: { amountMinor: 49900, currency: 'INR' },
+        packs: [{ id: CREDIT_PACKS[0].id, amountMinor: 29900, currency: 'INR' }],
+      },
+      error: null,
+    });
+    const catalog = loadCatalog();
+    await catalog.loadPrices();
+
+    expect(catalog.proPrice.value).toContain('₹');
+    expect(catalog.proPrice.value).toMatch(/499/);
+    expect(catalog.proPrice.value).not.toContain('$');
+    expect(catalog.formatPackPrice(CREDIT_PACKS[0])).toMatch(/₹\s?299/);
+  });
+
+  it('keeps USD rendering unchanged when the API returns USD', async () => {
+    mockPricesResponse({
+      data: {
+        country: 'US',
+        currency: 'USD',
+        isEstimate: true,
+        pro: { amountMinor: 500, currency: 'USD' },
+        packs: [{ id: CREDIT_PACKS[0].id, amountMinor: 350, currency: 'USD' }],
+      },
+      error: null,
+    });
+    const catalog = loadCatalog();
+    await catalog.loadPrices();
+
+    expect(catalog.proPrice.value).toBe(shared.formatPrice(500, 'USD'));
+    expect(catalog.proPrice.value).toMatch(/\$\s?5\.00/);
+    expect(catalog.formatPackPrice(CREDIT_PACKS[0])).toMatch(/\$\s?3\.50/);
+  });
+
+  it('formats JPY as a zero-decimal currency', async () => {
+    mockPricesResponse({
+      data: {
+        country: 'JP',
+        currency: 'JPY',
+        isEstimate: true,
+        pro: { amountMinor: 750, currency: 'JPY' },
+        packs: [{ id: CREDIT_PACKS[0].id, amountMinor: 500, currency: 'JPY' }],
+      },
+      error: null,
+    });
+    const catalog = loadCatalog();
+    await catalog.loadPrices();
+
+    expect(catalog.proPrice.value).toMatch(/750$/);
+    expect(catalog.proPrice.value).not.toMatch(/[.,]\d{2}$/);
+    expect(catalog.proPrice.value).not.toContain('7.50');
+    expect(catalog.formatPackPrice(CREDIT_PACKS[0])).toMatch(/500$/);
   });
 });

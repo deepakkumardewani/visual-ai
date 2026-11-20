@@ -9,11 +9,13 @@ import {
   getCreditCost,
   isSupportedCurrency,
   MODEL_REGISTRY,
+  PREMIUM_CREDIT_COST,
 } from '@visual-ai/shared';
 import type { CreditPack, ModelKey, SupportedCurrency } from '@visual-ai/shared';
 
 import { useFetch } from '@/composables/useFetch';
 import { createLogger } from '@/utils/logger';
+import { formatPricePer100Credits } from '@/utils/pricePerCredits';
 
 const log = createLogger('pricing-catalog');
 
@@ -210,7 +212,7 @@ export function usePricingCatalog() {
     return [
       {
         category: 'Image generation',
-        blurb: 'Most prompts cost 1 credit. A few flagship models cost 4 or 5.',
+        blurb: `Most prompts cost 1 credit. A few flagship models cost ${PREMIUM_CREDIT_COST}.`,
         bands: generationBands(cats['Image Generation']),
       },
       {
@@ -246,18 +248,22 @@ export function usePricingCatalog() {
     return formatPrice(amountMinor, currency);
   }
 
-  function formatPackPerCredit(pack: CreditPack): string {
+  function formatPackPer100Credits(pack: CreditPack): string {
     const { amountMinor, currency } = packAmount(pack);
-    return formatPrice(amountMinor / pack.credits, currency);
+    return formatPricePer100Credits(amountMinor, pack.credits, currency);
   }
+
+  /** True only when shown prices came from the server; false means the mixed USD/INR fallback. */
+  const hasServerPrices = computed(() => prices.value !== null);
 
   return {
     modelsByCategory,
     pricingBoard,
     creditPacks,
     proPrice,
+    hasServerPrices,
     formatPackPrice,
-    formatPackPerCredit,
+    formatPackPer100Credits,
     loadPrices,
   };
 }

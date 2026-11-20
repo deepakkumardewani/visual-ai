@@ -85,4 +85,18 @@ describe('useFetch', () => {
     expect(config.options.onFetchError(failed)).toBe(failed);
     expect(apiLogger.error).toHaveBeenCalled();
   });
+
+  it('logs failures when the context has no options', () => {
+    const config = fetchConfig.current!;
+    const failed = {
+      error: new Error('offline'),
+      url: '/v1/generate/image',
+      response: { status: 403 },
+    };
+    expect(() => config.options.onFetchError(failed)).not.toThrow();
+    expect(apiLogger.error).toHaveBeenCalledWith(
+      expect.stringContaining('GET /v1/generate/image'),
+      expect.anything(),
+    );
+  });
 });
