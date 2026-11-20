@@ -256,4 +256,17 @@ describe('ReferenceImageControl', () => {
     await input.trigger('change');
     expect(useAsideStore(pinia).referenceImage).toBeNull();
   });
+
+  it('grows the disabled trigger to 44px below md', () => {
+    const classes = mountControl().get('[data-testid="reference-image-trigger"]').classes();
+    expect(classes).toEqual(expect.arrayContaining(['tw-h-8', 'max-md:tw-h-11', 'max-md:tw-w-11']));
+  });
+
+  it('grows the enabled trigger to 44px below md', () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    enableReference(pinia);
+    const classes = mountControl(pinia).get('[data-testid="reference-image-trigger"]').classes();
+    expect(classes).toEqual(expect.arrayContaining(['tw-h-8', 'max-md:tw-h-11', 'max-md:tw-w-11']));
+  });
 });

@@ -32,7 +32,7 @@ watch(
       v-if="isMobile"
       type="button"
       data-testid="referral-offer-mobile"
-      class="referral-offer--mobile tw-flex tw-w-full tw-items-center tw-justify-center tw-gap-2 tw-border-0 tw-bg-gold/15 tw-px-4 tw-py-2 tw-text-center tw-text-sm tw-font-medium tw-text-gold tw-transition-colors hover:tw-bg-gold/25"
+      class="referral-offer--mobile tw-flex tw-min-h-11 tw-w-full tw-items-center tw-justify-center tw-gap-2 tw-border-0 tw-bg-gold/15 tw-px-4 tw-py-2 tw-text-center tw-text-sm tw-font-medium tw-text-gold tw-transition-colors hover:tw-bg-gold/25"
       @click="dialogStore.showReferralOffer()"
     >
       <font-awesome-icon :icon="faGift" class="tw-text-xs" aria-hidden="true" />

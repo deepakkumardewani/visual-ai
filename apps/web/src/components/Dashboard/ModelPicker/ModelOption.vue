@@ -23,11 +23,6 @@ const emit = defineEmits<{
   select: [];
 }>();
 
-// Vue's whitespace condensing drops a literal space between or at the start of the name and
-// description spans, fusing them visually and in the button's accessible name. An interpolated
-// space placed flush against both spans compiles to a real text node, so the gap survives.
-const NAME_SEPARATOR = ' ';
-
 const dialogStore = useDialogStore();
 const { isPro } = storeToRefs(useUserStore());
 
@@ -79,11 +74,21 @@ function onClick() {
 
     <span
       data-testid="model-option-label"
-      class="tw-min-w-0 tw-flex-1 tw-truncate tw-text-sm"
-      :title="bestFor"
+      class="tw-flex tw-min-w-0 tw-flex-1 tw-items-baseline tw-gap-2 tw-text-sm"
     >
-      <span class="tw-font-semibold tw-text-ink">{{ model.title }}</span
-      >{{ NAME_SEPARATOR }}<span class="tw-text-xs tw-text-ink-muted">{{ bestFor }}</span>
+      <span
+        data-testid="model-option-name"
+        class="tw-max-w-[60%] tw-shrink-0 tw-truncate tw-font-semibold tw-text-ink"
+        :title="model.title"
+        >{{ model.title }}</span
+      >
+      <span class="tw-sr-only">, </span>
+      <span
+        data-testid="model-option-description"
+        class="tw-min-w-0 tw-flex-1 tw-truncate tw-text-xs tw-text-ink-muted"
+        :title="bestFor"
+        >{{ bestFor }}</span
+      >
     </span>
 
     <Tooltip v-if="imageInput" :text="referenceTooltip">

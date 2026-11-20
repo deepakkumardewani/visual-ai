@@ -183,7 +183,7 @@ function setItemRef(index: number) {
       data-testid="user-menu-trigger"
       aria-haspopup="menu"
       :aria-expanded="menu"
-      class="user-menu__trigger tw-flex tw-h-10 tw-items-center tw-gap-2 tw-rounded-full tw-border tw-border-border/60 tw-bg-surface-1/50 tw-py-1 tw-pl-1 tw-pr-2.5 tw-transition-colors tw-duration-fast hover:tw-border-accent/40 hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
+      class="user-menu__trigger tw-flex tw-h-11 tw-items-center tw-gap-2 tw-rounded-full tw-border tw-border-border/60 tw-bg-surface-1/50 tw-py-1 tw-pl-1 tw-pr-2.5 tw-transition-colors tw-duration-fast hover:tw-border-accent/40 hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
       @click="toggleMenu"
       @keydown="onTriggerKeydown"
     >

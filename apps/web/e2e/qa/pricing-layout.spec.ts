@@ -9,7 +9,7 @@ import {
 } from '@visual-ai/shared';
 
 import { expect, test } from '../fixtures/qa';
-import { requireEnv } from '../support/env';
+import { API_URL, E2E_WEB_ORIGIN, requireEnv } from '../support/env';
 import { gotoStudio } from '../support/studio';
 import { resetToFree } from '../support/subscriptionState';
 
@@ -23,10 +23,45 @@ const RESET_TEXT = /Resets daily at \d{1,2}:\d{2}\s?(AM|PM)?/i;
 // Evidence PNGs land in the repo-level agent_docs/qa tree (playwright runs from apps/web).
 const shotPath = (name: string) => `../../agent_docs/qa/pricing-layout/${name}.png`;
 
+const PRICES_URL = `${API_URL}/payments/prices`;
+const PHONE_VIEWPORT = { width: 390, height: 800 };
+const FAQ_HEADING = 'Before you buy.';
+const FAQ_QUESTIONS = [
+  'Will I own the images I make?',
+  'How do credits work?',
+  'Do unused credits expire?',
+  'Can I use my generated images for commercial projects?',
+  'How do I pay for the service?',
+];
+const MOCK_PRICES = {
+  country: 'US',
+  currency: 'USD',
+  isEstimate: false,
+  pro: { amountMinor: 500, currency: 'USD' },
+  packs: [
+    { id: 'pack-1', amountMinor: 160, currency: 'USD' },
+    { id: 'pack-2', amountMinor: 350, currency: 'USD' },
+    { id: 'pack-3', amountMinor: 600, currency: 'USD' },
+    { id: 'pack-4', amountMinor: 1100, currency: 'USD' },
+  ],
+};
+
 const pricingDialog = (page: Page) => page.getByRole('dialog', { name: /Unlock the full power/ });
 
 test.beforeEach(async ({ page }) => {
   await resetToFree(E2E_USER_ID);
+  // Prices are mocked so the suite never depends on Dodo or FX data.
+  await page.route(PRICES_URL, (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      headers: {
+        'access-control-allow-origin': E2E_WEB_ORIGIN,
+        'access-control-allow-credentials': 'true',
+      },
+      body: JSON.stringify(MOCK_PRICES),
+    }),
+  );
   // Checkout must never reach the real API or Dodo; nothing here should call it.
   await page.route(
     (url) => API_ORIGIN_PREFIX.test(url.toString()) && CHECKOUT_URL.test(url.pathname),
@@ -180,4 +215,115 @@ test('@medium local-time reset text visible', async ({ page, snap }) => {
 
   const dialog = await openPricingModal(page);
   await expect(dialog.getByText(RESET_TEXT)).toBeVisible();
+});
+
+const opacityOf = (locator: Locator) =>
+  locator.evaluate((el) => Number(getComputedStyle(el).opacity));
+
+/** Every ancestor-compounded reveal must have settled: the element itself reads opacity 1. */
+async function expectRevealed(locator: Locator) {
+  await expect(locator).toBeVisible();
+  await expect.poll(() => opacityOf(locator)).toBe(1);
+  await expect(locator).toBeInViewport();
+}
+
+/** Re-scrolls on retry: lazy content above can shift layout and push the target out of view. */
+async function expectRevealedAfterScroll(locator: Locator) {
+  await expect(async () => {
+    await locator.scrollIntoViewIfNeeded();
+    await expectRevealed(locator);
+  }).toPass();
+}
+
+/** v-reveal sits on the list item, and opacity is not inherited, so read the item, not the button. */
+async function expectFaqItemsRevealed(faq: Locator) {
+  const items = faq.getByRole('listitem');
+  await expect(items).toHaveCount(FAQ_QUESTIONS.length);
+  for (let i = 0; i < FAQ_QUESTIONS.length; i++) {
+    const item = items.nth(i);
+    await expect(item.getByRole('button', { name: FAQ_QUESTIONS[i] })).toBeVisible();
+    await expectRevealed(item);
+  }
+}
+
+async function scrollDialogToBottom(dialog: Locator) {
+  await dialog.evaluate((el) => {
+    el.scrollTop = el.scrollHeight;
+  });
+}
+
+async function expectDialogFaqRevealed(
+  page: Page,
+  name: string,
+  snap: (n: string) => Promise<void>,
+) {
+  const dialog = await openPricingModal(page);
+  await scrollDialogToBottom(dialog);
+  const faq = dialog.locator('#faq');
+  await expectRevealed(faq.getByRole('heading', { name: FAQ_HEADING }));
+  await expectFaqItemsRevealed(faq);
+  await snap(name);
+  await page.screenshot({ path: shotPath(name) });
+  return dialog;
+}
+
+test('@critical Upgrade dialog FAQ is fully revealed after scrolling to the bottom', async ({
+  page,
+  snap,
+}) => {
+  await expectDialogFaqRevealed(page, 'dialog-faq-revealed', snap);
+});
+
+test('@high Upgrade dialog FAQ answer expands on click', async ({ page }) => {
+  const dialog = await openPricingModal(page);
+  await scrollDialogToBottom(dialog);
+  const question = dialog.locator('#faq').getByRole('button', { name: FAQ_QUESTIONS[2] });
+  await expect(question).toHaveAttribute('aria-expanded', 'false');
+  await question.click();
+  await expect(question).toHaveAttribute('aria-expanded', 'true');
+  await expect(dialog.locator(`#${await question.getAttribute('aria-controls')}`)).toBeVisible();
+});
+
+test('@high Upgrade dialog FAQ is revealed and expands at 390 wide', async ({ page, snap }) => {
+  await page.setViewportSize(PHONE_VIEWPORT);
+  const dialog = await openPricingModal(page);
+  await scrollDialogToBottom(dialog);
+  const faq = dialog.locator('#faq');
+  await expectRevealed(faq.getByRole('heading', { name: FAQ_HEADING }));
+  await expectFaqItemsRevealed(faq);
+  const question = faq.getByRole('button', { name: FAQ_QUESTIONS[4] });
+  await question.click();
+  await expect(question).toHaveAttribute('aria-expanded', 'true');
+  await expect(dialog.locator(`#${await question.getAttribute('aria-controls')}`)).toBeVisible();
+  await snap('dialog-faq-390');
+  await page.screenshot({ path: shotPath('dialog-faq-390') });
+});
+
+test('@medium /pricing page FAQ still reveals', async ({ page, snap }) => {
+  const layout = await openPricingPage(page);
+  const faq = layout.locator('#faq');
+  await faq.scrollIntoViewIfNeeded();
+  await expectRevealedAfterScroll(faq.getByRole('heading', { name: FAQ_HEADING }));
+  await expect(faq.getByRole('listitem')).toHaveCount(FAQ_QUESTIONS.length);
+  await expectRevealedAfterScroll(faq.getByRole('listitem').first());
+  await snap('page-faq-revealed');
+});
+
+test.describe('landing reveals (signed out)', () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test('@medium landing v-reveal sections reach opacity 1 after scrolling', async ({
+    page,
+    snap,
+  }) => {
+    await page.goto('/');
+    const tools = page.getByRole('heading', {
+      name: 'Five tools, one studio.',
+    });
+    const faq = page.locator('#faq');
+    await expectRevealedAfterScroll(tools);
+    await expectRevealedAfterScroll(faq.getByRole('heading', { name: 'Good to know.' }));
+    await expectRevealedAfterScroll(faq.getByRole('button').first());
+    await snap('landing-reveals');
+  });
 });

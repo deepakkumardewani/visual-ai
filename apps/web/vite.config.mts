@@ -75,6 +75,10 @@ export default defineConfig(({ mode }) => ({
     globals: true,
     include: ['src/**/*.{test,spec}.{ts,tsx}', 'e2e/support/**/*.test.ts', 'scripts/**/*.test.mjs'],
     setupFiles: ['src/test/setup.ts'],
+    // Mirrors the root config so tests pass without a local .env (e.g. in CI).
+    env: {
+      VITE_TELEMETRYDECK_APP_ID: 'vitest-test-app-id',
+    },
     // Node 25+ ships an experimental global localStorage that throws without --localstorage-file
     // and shadows happy-dom's implementation; disable it in test workers (mirrors the root config).
     execArgv: ['--no-experimental-webstorage'],

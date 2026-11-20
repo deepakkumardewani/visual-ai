@@ -82,7 +82,7 @@ onUnmounted(() => {
       <button
         type="button"
         data-testid="voice-cancel-button"
-        class="tw-inline-flex tw-min-h-[36px] tw-min-w-[36px] tw-items-center tw-justify-center tw-rounded-md tw-text-ink-muted hover:tw-text-ink focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
+        class="tw-inline-flex tw-min-h-[36px] tw-min-w-[36px] max-md:tw-min-h-11 max-md:tw-min-w-11 tw-items-center tw-justify-center tw-rounded-md tw-text-ink-muted hover:tw-text-ink focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
         aria-label="Cancel voice recording"
         @mousedown.prevent
         @click="cancelRecording"
@@ -93,7 +93,7 @@ onUnmounted(() => {
       <button
         type="button"
         data-testid="voice-accept-button"
-        class="tw-inline-flex tw-min-h-[36px] tw-min-w-[36px] tw-items-center tw-justify-center tw-rounded-md tw-text-accent hover:tw-text-accent/90 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
+        class="tw-inline-flex tw-min-h-[36px] tw-min-w-[36px] max-md:tw-min-h-11 max-md:tw-min-w-11 tw-items-center tw-justify-center tw-rounded-md tw-text-accent hover:tw-text-accent/90 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
         aria-label="Stop recording and transcribe"
         @click="stopRecording"
       >
@@ -106,7 +106,7 @@ onUnmounted(() => {
       type="button"
       data-testid="voice-mic-button"
       data-tour="mic"
-      class="tw-inline-flex tw-min-h-[36px] tw-min-w-[36px] tw-items-center tw-justify-center tw-rounded-md tw-text-ink-muted hover:tw-text-ink focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
+      class="tw-inline-flex tw-min-h-[36px] tw-min-w-[36px] max-md:tw-min-h-11 max-md:tw-min-w-11 tw-items-center tw-justify-center tw-rounded-md tw-text-ink-muted hover:tw-text-ink focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px] disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
       :aria-label="isTranscribing ? 'Transcribing voice input' : 'Voice input'"
       :aria-pressed="isRecording"
       :disabled="isTranscribing"

@@ -331,4 +331,12 @@ describe('UserMenu', () => {
     await nextTick();
     expect(wrapper.get('[data-testid="plan-pill"]').text()).toBe('Pro');
   });
+
+  it('keeps the trigger at the 44px tap-target height', () => {
+    const classes = mount(UserMenu, { global: { stubs } })
+      .get('[data-testid="user-menu-trigger"]')
+      .classes();
+    expect(classes).toContain('tw-h-11');
+    expect(classes).not.toContain('tw-h-10');
+  });
 });

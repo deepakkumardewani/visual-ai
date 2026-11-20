@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-16T03:18:36.492Z",
+ "generatedAt": "2026-11-16T10:23:37.707Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "media-studio",
@@ -114,7 +114,7 @@ window.DASHBOARD = {
       "packages/shared/src/types/domain.ts"
      ],
      "gherkin": null,
-     "do": "Copy the pattern of `packages/shared/src/models/image-limits.ts`. Create media-limits.ts as the only home of media limits and named constants (EXPENSIVE_JOB_CREDITS = 150, MAX_VOICES_PER_USER = 10, upload byte caps and second caps from SPEC section 5 and 11, P_VIDEO_MAX_SEC = 20, EXPORT_PCM_CAP_BYTES, EDITOR_PEAK_BUCKETS, lyrics and prompt limits); no magic numbers elsewhere. In credits.ts add MEDIA_CREDITS_PER_USD = 200, MIN_JOB_CREDITS = 1 and the pure function getMediaCreditCost(modelKey, input) = max(MIN_JOB_CREDITS, ceil(round6(usd * 200) - 1e-9)) for the 5 MediaCostInput variants (file, chars, seconds with resolution and draft, run, blocks of 30 s). In types.ts add ModelKind ('image'|'music'|'song'|'tts'|'video'|'tool'), the media field types, MediaPricing (unit file|second|kChars|kTokens|run plus optional blockSec, gap G6) and the new CatalogModelKey members from PLAN 1.3; getModelKind defaults legacy entries to image. In domain.ts extend FeatureType with SONG, MUSIC, SPEECH, VIDEO, WATERMARK_IMAGE, WATERMARK_VIDEO, AUTOCAPTION, SKETCH (SKETCH is for routing and labels only, G11) and extend JobStatus with optional stage, elapsedMs, assetId, asset, credits and the noCharge failure reason union. Functions stay under 30 lines. Tests are not written here: T0.4, T0.29 cover Unit: table test regenerates every SPEC section 8 row from the constant and asserts the exact credits; Unit: chars 0 -> 1, 1, 1000, 2000, 10000 and blocks 30, 31, 120 s boundary cases; Unit: registry test asserts getModelKind is image for all legacy keys.",
+     "do": "Copy the pattern of `packages/shared/src/models/image-limits.ts`. Create media-limits.ts as the only home of media limits and named constants (EXPENSIVE_JOB_CREDITS = 150, MAX_VOICES_PER_USER = 10, upload byte caps and second caps from SPEC section 5 and 11, P_VIDEO_MAX_SEC = 20, EXPORT_PCM_CAP_BYTES, EDITOR_PEAK_BUCKETS, lyrics and prompt limits); no magic numbers elsewhere. In credits.ts add MEDIA_CREDITS_PER_USD = 200, MIN_JOB_CREDITS = 1 and the pure function getMediaCreditCost(modelKey, input) = max(MIN_JOB_CREDITS, ceil(round6(usd \\* 200) - 1e-9)) for the 5 MediaCostInput variants (file, chars, seconds with resolution and draft, run, blocks of 30 s). In types.ts add ModelKind ('image'|'music'|'song'|'tts'|'video'|'tool'), the media field types, MediaPricing (unit file|second|kChars|kTokens|run plus optional blockSec, gap G6) and the new CatalogModelKey members from PLAN 1.3; getModelKind defaults legacy entries to image. In domain.ts extend FeatureType with SONG, MUSIC, SPEECH, VIDEO, WATERMARK_IMAGE, WATERMARK_VIDEO, AUTOCAPTION, SKETCH (SKETCH is for routing and labels only, G11) and extend JobStatus with optional stage, elapsedMs, assetId, asset, credits and the noCharge failure reason union. Functions stay under 30 lines. Tests are not written here: T0.4, T0.29 cover Unit: table test regenerates every SPEC section 8 row from the constant and asserts the exact credits; Unit: chars 0 -> 1, 1, 1000, 2000, 10000 and blocks 30, 31, 120 s boundary cases; Unit: registry test asserts getModelKind is image for all legacy keys.",
      "spec": "R-INF-1, R-INF-2, R-INF-3, R-INF-6, R-INF-7",
      "filesDeclared": true,
      "acceptance": [
@@ -272,7 +272,7 @@ window.DASHBOARD = {
       "apps/web/e2e/support/cloudinaryMock.ts"
      ],
      "gherkin": null,
-     "do": "Read replicate.ts and paidCallGuard.ts first. Extend the existing FAKE_REPLICATE_OUTPUT_URL branch (taken when the authed user is in env.E2E_USER_IDS) so it returns FAKE_REPLICATE_AUDIO_URL, FAKE_REPLICATE_VIDEO_URL, FAKE_REPLICATE_TRANSCRIPT_URL or FAKE_VOICE_ID by model kind and key; non-e2e users still use the real client. Create lyrics-generator.ts with only the fake branch for e2e users (fixed fake sections, no DeepSeek call); the real generator arrives in the lyrics task. Export PAID_PATH_PATTERN and broaden it to POST /generate/audio/*, /generate/tools/*, /prompt/lyrics and /generate/audio/voices (it already covers /generate/video). The guard is only ever broadened, never narrowed or opted out of. Extend cloudinaryMock.ts so mock uploads can return audio and video shaped assets. Tests are not written here: T0.7, T0.29 cover Unit: e2e user returns each fake URL by kind and the spy for the real client has zero calls; Unit: non-e2e user selects the real client path with the spy only inspected; Unit: isPaidCall table for song, music, speech, voices, tools, video, lyrics and GET variants; Unit: existing paidCallGuard tests still pass unchanged.",
+     "do": "Read replicate.ts and paidCallGuard.ts first. Extend the existing FAKE*REPLICATE_OUTPUT_URL branch (taken when the authed user is in env.E2E_USER_IDS) so it returns FAKE_REPLICATE_AUDIO_URL, FAKE_REPLICATE_VIDEO_URL, FAKE_REPLICATE_TRANSCRIPT_URL or FAKE_VOICE_ID by model kind and key; non-e2e users still use the real client. Create lyrics-generator.ts with only the fake branch for e2e users (fixed fake sections, no DeepSeek call); the real generator arrives in the lyrics task. Export PAID_PATH_PATTERN and broaden it to POST /generate/audio/*, /generate/tools/\\_, /prompt/lyrics and /generate/audio/voices (it already covers /generate/video). The guard is only ever broadened, never narrowed or opted out of. Extend cloudinaryMock.ts so mock uploads can return audio and video shaped assets. Tests are not written here: T0.7, T0.29 cover Unit: e2e user returns each fake URL by kind and the spy for the real client has zero calls; Unit: non-e2e user selects the real client path with the spy only inspected; Unit: isPaidCall table for song, music, speech, voices, tools, video, lyrics and GET variants; Unit: existing paidCallGuard tests still pass unchanged.",
      "spec": "R-INF-9",
      "filesDeclared": true,
      "acceptance": [
@@ -945,7 +945,7 @@ window.DASHBOARD = {
       "apps/web/src/utils/dashboardRoutes.ts"
      ],
      "gherkin": null,
-     "do": "Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look (no gradient hero, no emoji icons, no uniform rounded-card grid); obey Standing UI rules in the header. Design intent (PLAN 1.12): the header reads as Image, Video, Audio with a caret, Tools with a caret, with no layout shift when the credits chip grows. Read NavTabs.vue, AppHeader.vue and primitives/Popover.vue first. NavMenuGroup wraps Popover: opens on click or Enter, Space or ArrowDown, ArrowUp and ArrowDown move, Home and End jump, Enter activates, Escape closes and returns focus to the trigger, Tab closes, hover never opens; each item is a 16 px icon, a label and a one-line muted description truncated to one line. Audio items: Song, Music, Speech. Tools items: Image watermark, Video watermark, Autocaption, Sketch to image. NavMobileAccordion (below 768 px, inside the existing mobile menu) has items at least 44 px. Add the new route names to APP_SURFACE and APP_SURFACE_TAB so Audio highlights on any /audio/* and Tools on any /tools/*. The Image tab keeps its destination and behaviour. Tests are not written here: T0.28, T0.29 cover Component: NavMenuGroup open keys; Component: arrows, Home, End, Enter, hover-does-not-open; Component: Escape focus return and Tab close; Unit: tabFromRouteName returns Audio and Tools for each new route name; Component: existing NavTabs and AppHeader tests unchanged for the Image tab; E2E spec: 375px viewport accordion item heights and scrollWidth; Component: truncation class asserted; T0.29 chip-growth shift check; Component: aria attributes and reduced-motion media query.",
+     "do": "Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look (no gradient hero, no emoji icons, no uniform rounded-card grid); obey Standing UI rules in the header. Design intent (PLAN 1.12): the header reads as Image, Video, Audio with a caret, Tools with a caret, with no layout shift when the credits chip grows. Read NavTabs.vue, AppHeader.vue and primitives/Popover.vue first. NavMenuGroup wraps Popover: opens on click or Enter, Space or ArrowDown, ArrowUp and ArrowDown move, Home and End jump, Enter activates, Escape closes and returns focus to the trigger, Tab closes, hover never opens; each item is a 16 px icon, a label and a one-line muted description truncated to one line. Audio items: Song, Music, Speech. Tools items: Image watermark, Video watermark, Autocaption, Sketch to image. NavMobileAccordion (below 768 px, inside the existing mobile menu) has items at least 44 px. Add the new route names to APP*SURFACE and APP_SURFACE_TAB so Audio highlights on any /audio/* and Tools on any /tools/\\_. The Image tab keeps its destination and behaviour. Tests are not written here: T0.28, T0.29 cover Component: NavMenuGroup open keys; Component: arrows, Home, End, Enter, hover-does-not-open; Component: Escape focus return and Tab close; Unit: tabFromRouteName returns Audio and Tools for each new route name; Component: existing NavTabs and AppHeader tests unchanged for the Image tab; E2E spec: 375px viewport accordion item heights and scrollWidth; Component: truncation class asserted; T0.29 chip-growth shift check; Component: aria attributes and reduced-motion media query.",
      "spec": "R-INF-10, R-QOL-2, R-QOL-3",
      "filesDeclared": true,
      "acceptance": [
@@ -1611,7 +1611,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; readCredits from support/proPerksSeed.ts proves balance changes.",
       "AC2: paidCallGuard stays on and no real Replicate, Dodo or email call is made.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts --repeat-each=3`",
@@ -1648,7 +1648,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass using the media stub and sample.mp3 as the audio source.",
       "AC2: No test starts the server and no un-intercepted paid call occurs.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/media-nav-player.spec.ts --repeat-each=3`",
@@ -1986,7 +1986,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/song.spec.ts --repeat-each=3`"
@@ -2182,7 +2182,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/lyrics.spec.ts --repeat-each=3`"
@@ -2592,7 +2592,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/editor.spec.ts --repeat-each=3`"
@@ -2960,7 +2960,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/music.spec.ts --repeat-each=3`"
@@ -3751,7 +3751,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/speech.spec.ts --repeat-each=3`"
@@ -3787,7 +3787,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/voice-clone.spec.ts --repeat-each=3`"
@@ -4222,7 +4222,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/video.spec.ts --repeat-each=3`"
@@ -4748,7 +4748,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/*, /generate/video, /generate/tools/*, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/tools.spec.ts --repeat-each=3`"

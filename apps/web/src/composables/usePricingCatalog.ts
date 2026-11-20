@@ -253,11 +253,15 @@ export function usePricingCatalog() {
     return formatPricePer100Credits(amountMinor, pack.credits, currency);
   }
 
+  /** True only when shown prices came from the server; false means the mixed USD/INR fallback. */
+  const hasServerPrices = computed(() => prices.value !== null);
+
   return {
     modelsByCategory,
     pricingBoard,
     creditPacks,
     proPrice,
+    hasServerPrices,
     formatPackPrice,
     formatPackPer100Credits,
     loadPrices,

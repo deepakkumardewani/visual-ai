@@ -11,14 +11,34 @@ gsap.registerPlugin(ScrollTrigger);
 // without creating a second Lenis instance.
 let instance: Lenis | null = null;
 
+export interface ScrollToSectionOptions {
+  /** Runs once the scroll has landed, e.g. to move focus without interrupting it. */
+  onComplete?: () => void;
+}
+
 /** Smoothly scroll to an element or selector; falls back to native scroll. */
-export function scrollToSection(target: string | HTMLElement) {
+export function scrollToSection(
+  target: string | HTMLElement,
+  options: ScrollToSectionOptions = {},
+) {
   if (instance) {
-    instance.scrollTo(target, { offset: -8 });
+    instance.scrollTo(target, { offset: -8, onComplete: () => options.onComplete?.() });
     return;
   }
   const el = typeof target === 'string' ? document.querySelector(target) : target;
   el?.scrollIntoView({ behavior: 'auto', block: 'start' });
+  // The native fallback jumps instantly, so the scroll has already landed.
+  options.onComplete?.();
+}
+
+/** Freezes smooth scroll (e.g. under a modal). A no-op when Lenis is off. */
+export function pauseSmoothScroll(): void {
+  instance?.stop();
+}
+
+/** Undoes `pauseSmoothScroll`. */
+export function resumeSmoothScroll(): void {
+  instance?.start();
 }
 
 /**

@@ -54,8 +54,7 @@ useScrollTriggerHygiene();
 
 <style scoped lang="scss">
 /* The candidate is dark-only; the shared nav's theme toggle would do nothing here. */
-:deep(.nav__theme-btn),
-:deep(.nav__sheet-theme-btn) {
+:deep(.nav__theme-btn) {
   display: none;
 }
 

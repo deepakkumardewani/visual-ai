@@ -3,9 +3,10 @@ import { randomUUID } from 'node:crypto';
 import type { Page } from '@playwright/test';
 
 import { test, expect } from '../fixtures/qa';
-import { requireEnv } from '../support/env';
+import { E2E_WEB_ORIGIN, requireEnv } from '../support/env';
 import { expectPlanPill, headerPlanChip } from '../support/planPill';
 import { activateProViaWebhook } from '../support/proWebhook';
+import { readCredits, withUsers } from '../support/proPerksSeed';
 import { gotoStudio } from '../support/studio';
 import { resetToFree } from '../support/subscriptionState';
 
@@ -20,6 +21,19 @@ const CHECKOUT_URL = /\/payments\/(checkout|subscribe)(\/|$|\?)/;
 const API_ORIGIN_PREFIX = /^https:\/\/api\./;
 const UPGRADE_LABEL = 'Upgrade to Pro';
 const EARN_LABEL = 'Earn credits';
+const FEED_ITEM_COUNT = 24;
+const PIXEL_PNG_BASE64 =
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+const FEED_CORS = {
+  'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
+  'Access-Control-Allow-Credentials': 'true',
+  'Access-Control-Allow-Headers': '*',
+};
+const TAB_NAMES = ['create', 'explore', 'assets'] as const;
+const WIDTH_TOLERANCE_PX = 1;
+const CENTER_TOLERANCE_PX = 4;
+const FOUR_DIGIT_CREDITS = 1234;
+const SCROLL_PROBE_PX = 4000;
 // Evidence PNGs land in the repo-level agent_docs/qa tree (playwright runs from apps/web).
 const shotPath = (name: string) => `../../agent_docs/qa/header-responsive/${name}.png`;
 
@@ -38,6 +52,37 @@ test.beforeEach(async ({ page }) => {
 test.afterEach(async () => {
   await resetToFree(E2E_USER_ID);
 });
+
+/** Serves enough community items to overflow the viewport; no real feed or image traffic. */
+async function mockExploreFeed(page: Page) {
+  await page.route('**/e2e-fixture.png**', (route) =>
+    route.fulfill({
+      status: HTTP_OK,
+      contentType: 'image/png',
+      body: Buffer.from(PIXEL_PNG_BASE64, 'base64'),
+    }),
+  );
+  await page.route('**/explore/feed**', async (route) => {
+    if (route.request().method() === 'OPTIONS') {
+      return route.fulfill({ status: 204, headers: FEED_CORS });
+    }
+    const items = Array.from({ length: FEED_ITEM_COUNT }, (_, i) => ({
+      id: `e2e-hdr-${RUN}-${i}`,
+      imageUrl: `${E2E_WEB_ORIGIN}/e2e-fixture.png`,
+      aspectRatio: '1:1',
+      prompt: `e2e header scroll prompt ${RUN} ${i}`,
+      modelName: 'E2E Model',
+      author: 'Neighbor Creator',
+      authorUserId: 'user_e2e_neighbor',
+      createdAt: new Date().toISOString(),
+    }));
+    return route.fulfill({
+      status: HTTP_OK,
+      headers: FEED_CORS,
+      json: { items, nextCursor: null },
+    });
+  });
+}
 
 /** Keeps the real response (and its CORS headers) but pins every amount so the test owns the data. */
 async function mockPrices(page: Page) {
@@ -237,11 +282,277 @@ test.describe('header responsive banner and Earn pill', () => {
       await openStudioAt(page, 1440);
 
       await page.getByTestId('upgrade-button').click();
-      const dialog = page.getByRole('dialog', { name: /Unlock the full power/ });
+      const dialog = page.getByRole('dialog', {
+        name: /Unlock the full power/,
+      });
       await expect(dialog).toBeVisible();
       await expect(dialog.getByTestId('pricing-layout')).toBeVisible();
       await expect(dialog).toContainText(`$${MOCK_PRO_USD_MINOR / 100}`);
       await snap('header-upgrade-dialog');
+    },
+  );
+
+  async function tabBoxes(page: Page) {
+    const boxes = [];
+    for (const name of TAB_NAMES) {
+      const box = await page.getByTestId(`nav-tab-${name}`).boundingBox();
+      expect(box, `nav-tab-${name} has a bounding box`).not.toBeNull();
+      boxes.push(box!);
+    }
+    return boxes;
+  }
+
+  async function noHorizontalOverflow(page: Page) {
+    return page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  }
+
+  test('Tabs visible at 700px', { tag: ['@critical'] }, async ({ page, snap }) => {
+    await openStudioAt(page, 700);
+    for (const name of TAB_NAMES) {
+      await expect(page.getByTestId(`nav-tab-${name}`)).toBeVisible();
+    }
+    const boxes = await tabBoxes(page);
+    for (const box of boxes) {
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(700);
+    }
+    await snap('header-tabs-700');
+  });
+
+  for (const width of [390, 360]) {
+    test(
+      `Two-row header with equal segmented thirds at ${width}px`,
+      { tag: ['@critical'] },
+      async ({ page, snap }) => {
+        await openStudioAt(page, width);
+
+        const trigger = page.getByTestId('feature-select-trigger');
+        await expect(trigger).toBeVisible();
+        await expect(page.getByTestId('referral-offer-mobile')).toBeVisible();
+        await expect(page.getByTestId('referral-offer-desktop')).toHaveCount(0);
+        await expect(page.getByTestId('header-mobile-tabs')).toBeVisible();
+
+        const boxes = await tabBoxes(page);
+        const triggerBox = (await trigger.boundingBox())!;
+        // Row 2 sits fully below row 1 (feature select).
+        for (const box of boxes)
+          expect(box.y).toBeGreaterThanOrEqual(triggerBox.y + triggerBox.height);
+        const [first, ...rest] = boxes;
+        for (const box of rest) {
+          expect(Math.abs(box.width - first.width)).toBeLessThanOrEqual(WIDTH_TOLERANCE_PX);
+        }
+        for (const box of boxes) {
+          expect(box.x).toBeGreaterThanOrEqual(0);
+          expect(box.x + box.width).toBeLessThanOrEqual(width);
+        }
+        await snap(`header-two-rows-${width}`);
+        await page.screenshot({ path: shotPath(`two-rows-${width}`) });
+      },
+    );
+  }
+
+  for (const title of ['AI Image Generator', 'Remove Background']) {
+    test(
+      `Feature title "${title}" is not truncated at 768px`,
+      { tag: ['@critical'] },
+      async ({ page, snap }) => {
+        await openStudioAt(page, 768);
+        const trigger = page.getByTestId('feature-select-trigger');
+        if (title !== 'AI Image Generator') {
+          await trigger.click();
+          await page
+            .getByTestId('feature-select-menu')
+            .getByRole('option', { name: title })
+            .click();
+        }
+        const label = trigger.getByText(title, { exact: true });
+        await expect(label).toBeVisible();
+        const sizes = await label.evaluate((el) => ({
+          scrollWidth: el.scrollWidth,
+          clientWidth: el.clientWidth,
+        }));
+        expect(sizes.clientWidth).toBeGreaterThan(0);
+        expect(sizes.scrollWidth).toBeLessThanOrEqual(sizes.clientWidth);
+        await snap(`header-feature-title-${title.replace(/\W+/g, '-').toLowerCase()}-768`);
+      },
+    );
+  }
+
+  test(
+    'Explore at 390px keeps tabs at the viewport top after scrolling',
+    { tag: ['@high'] },
+    async ({ page, snap }) => {
+      // App bug / spec ambiguity: on Explore the header is tw-fixed (only the Create dashboard uses the
+      // sticky, top-parked variant), so the tabs row rests below the 64px top bar (y=100, not ~0).
+      // The strict y<=1 assertion is kept; remove this marker once Explore parks the top bar too.
+      test.fail(true, 'Explore header does not park the top bar; tabs rest at y=100');
+      await mockExploreFeed(page);
+      await page.setViewportSize({ width: 390, height: HEIGHT });
+      await page.goto('/explore', { waitUntil: 'domcontentloaded' });
+      await expect(page.getByTestId('community-card').first()).toBeVisible();
+      const tabs = page.getByTestId('header-mobile-tabs');
+      await expect(tabs).toBeVisible();
+      await expect(page.getByTestId('nav-tab-explore')).toHaveAttribute('aria-selected', 'true');
+
+      // Scroll the window and every scrollable ancestor so the test holds whichever one owns the scroll.
+      const scrolled = await page.evaluate((probe) => {
+        let moved = 0;
+        const nodes = [
+          document.scrollingElement,
+          ...Array.from(document.querySelectorAll<HTMLElement>('*')),
+        ];
+        for (const node of nodes) {
+          if (!node || node.scrollHeight <= node.clientHeight) continue;
+          node.scrollTop = probe;
+          moved += node.scrollTop;
+        }
+        return moved;
+      }, SCROLL_PROBE_PX);
+      expect(scrolled, 'something actually scrolled').toBeGreaterThan(0);
+
+      await expect(tabs).toBeInViewport();
+      const box = (await tabs.boundingBox())!;
+      expect(box.y).toBeGreaterThanOrEqual(0);
+      expect(box.y).toBeLessThanOrEqual(1);
+      await snap('header-explore-scrolled-390');
+    },
+  );
+
+  for (const width of [390, 360]) {
+    test(`No horizontal page scroll at ${width}px`, { tag: ['@high'] }, async ({ page }) => {
+      await openStudioAt(page, width);
+      await expect(page.getByTestId('credits-chip')).toBeVisible();
+      expect(await noHorizontalOverflow(page)).toBeLessThanOrEqual(0);
+    });
+  }
+
+  test(
+    'No horizontal page scroll at 360px with a 4-digit credit balance',
+    { tag: ['@high'] },
+    async ({ page, snap }) => {
+      const original = await readCredits(E2E_USER_ID);
+      // The chip shows daily + persistent credits, so zero daily makes the total exactly 1234.
+      await withUsers((users) =>
+        users.updateOne(
+          { userId: E2E_USER_ID },
+          { $set: { credits: FOUR_DIGIT_CREDITS, dailyCredits: 0 } },
+        ),
+      );
+      try {
+        await openStudioAt(page, 360);
+        await expect(page.getByTestId('credits-chip')).toContainText(String(FOUR_DIGIT_CREDITS));
+        await expect(page.getByTestId('user-menu-trigger')).toBeVisible();
+        expect(await noHorizontalOverflow(page)).toBeLessThanOrEqual(0);
+        await snap('header-4digit-360');
+        await page.screenshot({ path: shotPath('four-digit-360') });
+      } finally {
+        await withUsers((users) =>
+          users.updateOne(
+            { userId: E2E_USER_ID },
+            {
+              $set: {
+                credits: original.credits,
+                dailyCredits: original.dailyCredits,
+              },
+            },
+          ),
+        );
+      }
+    },
+  );
+
+  for (const width of [768, 1024]) {
+    test(`Tabs are centered at ${width}px`, { tag: ['@medium'] }, async ({ page, snap }) => {
+      await openStudioAt(page, width);
+      // Centered in the free slot between the start cluster (logo + feature select) and the Earn pill,
+      // which is where the header lays the tabs out; the right cluster is wider so this is not the viewport midpoint.
+      const tabs = (await page.getByTestId('nav-tabs').boundingBox())!;
+      const select = (await page.getByTestId('feature-select-trigger').boundingBox())!;
+      const earn = (await page.getByTestId('referral-offer-desktop').boundingBox())!;
+      const slotCenter = (select.x + select.width + earn.x) / 2;
+      expect(Math.abs(tabs.x + tabs.width / 2 - slotCenter)).toBeLessThanOrEqual(
+        CENTER_TOLERANCE_PX,
+      );
+      // A left-shifted baseline (tabs hugging the select) leaves a gap on the right only: the slot is wider than the
+      // tabs by >=20px at both widths, so the two gaps would differ by that much and this would fail.
+      const leftGap = tabs.x - (select.x + select.width);
+      const rightGap = earn.x - (tabs.x + tabs.width);
+      expect(Math.abs(leftGap - rightGap)).toBeLessThanOrEqual(CENTER_TOLERANCE_PX * 2);
+      await snap(`header-tabs-centered-${width}`);
+    });
+  }
+
+  const COMPOSER_VIEWPORTS: Array<{
+    width: number;
+    height: number;
+    tag: string;
+  }> = [
+    { width: 360, height: 640, tag: '@critical' },
+    { width: 390, height: 844, tag: '@critical' },
+    { width: 768, height: 1024, tag: '@high' },
+    { width: 1440, height: 900, tag: '@high' },
+  ];
+
+  /** Composer (prompt bar plus its Generate button) bottom edge and the viewport height, read in one tick. */
+  async function composerMetrics(page: Page) {
+    return page.evaluate(() => {
+      const bar = document.querySelector('[data-testid="prompt-bar"]');
+      const cta = document.querySelector('[data-testid="generate-cta-wrap"]');
+      return {
+        barBottom: bar?.getBoundingClientRect().bottom ?? Infinity,
+        ctaBottom: cta?.getBoundingClientRect().bottom ?? Infinity,
+        innerHeight: window.innerHeight,
+        docOverflow: document.documentElement.scrollHeight - window.innerHeight,
+      };
+    });
+  }
+
+  for (const { width, height, tag } of COMPOSER_VIEWPORTS) {
+    test(
+      `Composer bottom stays within the viewport at ${width}x${height}`,
+      { tag: [tag] },
+      async ({ page, snap }) => {
+        await page.setViewportSize({ width, height });
+        await gotoStudio(page);
+        const bannerExpected = width < 768;
+        await expect(page.getByTestId('referral-offer-mobile')).toHaveCount(bannerExpected ? 1 : 0);
+        await expect(page.getByTestId('prompt-bar')).toBeVisible();
+        await expect(page.getByTestId('generate-cta-wrap')).toBeVisible();
+
+        const m = await composerMetrics(page);
+        expect(m.barBottom).toBeGreaterThan(0);
+        expect(m.barBottom).toBeLessThanOrEqual(m.innerHeight);
+        expect(m.ctaBottom).toBeLessThanOrEqual(m.innerHeight);
+        await snap(`composer-${width}x${height}`);
+        await page.screenshot({
+          path: shotPath(`composer-${width}x${height}`),
+        });
+      },
+    );
+  }
+
+  test(
+    'No vertical overflow regression after the banner offer dialog is dismissed at 390px',
+    { tag: ['@medium'] },
+    async ({ page, snap }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await gotoStudio(page);
+      const banner = page.getByTestId('referral-offer-mobile');
+      await expect(banner).toBeVisible();
+      const before = await composerMetrics(page);
+
+      await banner.click();
+      const offer = page.getByTestId('referral-offer-dialog');
+      await expect(offer).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(offer).toBeHidden();
+
+      await expect(banner).toBeVisible();
+      const after = await composerMetrics(page);
+      expect(after.barBottom).toBeLessThanOrEqual(after.innerHeight);
+      expect(after.docOverflow).toBeLessThanOrEqual(0);
+      expect(Math.abs(after.barBottom - before.barBottom)).toBeLessThanOrEqual(1);
+      await snap('composer-after-dismiss-390');
     },
   );
 });

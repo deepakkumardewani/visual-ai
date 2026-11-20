@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, shallowRef } from 'vue';
+import { computed, inject, shallowRef } from 'vue';
 
+import { REVEAL_SCROLLER_KEY } from '@/directives/reveal';
 import { FAQS, type Faq } from '@/utils/landing';
 
 const props = withDefaults(
@@ -17,6 +18,9 @@ const props = withDefaults(
 );
 
 const items = computed(() => props.faqs ?? FAQS);
+// Inside AppModal the panel scrolls, not the window, so reveals must watch it.
+const revealScroller = inject(REVEAL_SCROLLER_KEY, null);
+const reveal = (delay = 0) => ({ delay, scroller: revealScroller });
 const open = shallowRef<number | null>(0);
 
 function toggle(i: number) {
@@ -27,15 +31,15 @@ function toggle(i: number) {
 <template>
   <section id="faq" class="faq" :class="{ 'faq--centered': centered }">
     <div class="faq__head">
-      <p v-reveal :class="centered ? 'lv2-eyebrow' : 'eyebrow'">Questions</p>
-      <h2 v-reveal="{ delay: 0.05 }" class="faq__title">{{ heading }}</h2>
+      <p v-reveal="reveal()" :class="centered ? 'lv2-eyebrow' : 'eyebrow'">Questions</p>
+      <h2 v-reveal="reveal(0.05)" class="faq__title">{{ heading }}</h2>
     </div>
 
     <ul class="faq__list">
       <li
         v-for="(item, i) in items"
         :key="item.question"
-        v-reveal="{ delay: i * 0.05 }"
+        v-reveal="reveal(i * 0.05)"
         class="faq__item"
       >
         <button

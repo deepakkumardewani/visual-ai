@@ -169,7 +169,16 @@ test.describe('Pro tier UI', () => {
     }) => {
       await gotoStudio(page);
       for (const model of PRO_ONLY_MODELS) {
-        const option = await modelOption(page, model);
+        const option = await modelOption(page, model); // also opens the picker
+        // A Pro model can appear in Featured and in Pro: every copy must be locked.
+        const rows = page
+          .getByTestId('model-option')
+          .filter({ has: page.getByText(model.title, { exact: true }) });
+        expect(await rows.count()).toBeGreaterThan(0);
+        for (const row of await rows.all()) {
+          await expect(row.getByTestId('premium-lock-badge')).toBeVisible();
+          await expect(row).toHaveAttribute('data-locked', 'true');
+        }
         await expect(option.getByTestId('premium-lock-badge')).toHaveText(/Pro/);
         await expect(option).toHaveAttribute('data-locked', 'true');
         await option.click();

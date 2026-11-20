@@ -4,6 +4,7 @@ import { ref } from 'vue';
 
 import { usePageSeo } from '@/composables/usePageSeo';
 import { useAppStore } from '@/stores/app';
+import { HEIGHT_BELOW_HEADER_CLASS } from '@/utils/layout';
 
 import LandingFooter from '@/components/Landing/LandingFooter.vue';
 import SideBySide from '@/components/SideBySide.vue';
@@ -131,7 +132,7 @@ const reviveExamples = [
       </button>
     </div>
 
-    <div class="tw-h-[calc(100vh-60px)] tw-overflow-y-auto">
+    <div :class="HEIGHT_BELOW_HEADER_CLASS" class="tw-overflow-y-auto">
       <div v-if="tab === 1" class="tw-mx-auto tw-max-w-5xl tw-px-4 tw-py-12">
         <div class="tw-flex tw-flex-col tw-items-center tw-gap-16">
           <div

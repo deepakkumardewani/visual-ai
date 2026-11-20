@@ -95,3 +95,12 @@ useFeatureSubmit(FeatureType.IMAGE, {
     />
   </div>
 </template>
+
+<style scoped>
+/* Touch target: 44px below the md breakpoint (768px). */
+@media (max-width: 767.98px) {
+  [data-testid='generate-cta-wrap'] :deep(button) {
+    min-height: 44px;
+  }
+}
+</style>
