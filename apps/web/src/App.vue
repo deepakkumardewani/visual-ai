@@ -44,9 +44,13 @@ watch(
   },
   { immediate: true },
 );
-// Landing and keyword feature landers ship their own nav/footer.
+// Landing, its design candidates and keyword feature landers ship their own nav/footer.
+const CANDIDATE_LANDING_PATHS: ReadonlySet<string> = new Set(['/v2', '/v3']);
 const isMarketingShell = computed(
-  () => route.path === '/' || String(route.name ?? '').startsWith('seo-'),
+  () =>
+    route.path === '/' ||
+    CANDIDATE_LANDING_PATHS.has(route.path) ||
+    String(route.name ?? '').startsWith('seo-'),
 );
 const isExploreViewer = computed(() => route.name === 'explore-image');
 const isHeaderVisible = computed(() => {
@@ -84,9 +88,17 @@ const isFooterVisible = computed(() => {
     route.path !== '/signup'
   );
 });
+
+/** At 640-767px the dashboard header is in flow (banner + header): drop the fixed-header offset and let the h-dvh column let the shell flex-fill the remaining space. */
+const isHeaderInFlowBand = computed(
+  () => isHeaderVisible.value && isAppShellRoute(route) && !isExploreViewer.value,
+);
 </script>
 <template>
-  <div class="tw-flex tw-min-h-dvh tw-flex-col tw-bg-canvas tw-font-body">
+  <div
+    class="tw-flex tw-min-h-dvh tw-flex-col tw-bg-canvas tw-font-body"
+    :class="{ 'sm:max-md:tw-h-dvh': isHeaderInFlowBand }"
+  >
     <AppHeader v-if="isHeaderVisible" />
     <div
       class="tw-flex-1"
@@ -94,7 +106,10 @@ const isFooterVisible = computed(() => {
         'tw-h-[98vh] tw-overflow-y-hidden': overflowHidden && !isExploreViewer,
         'tw-h-[100dvh] tw-overflow-hidden': isExploreViewer,
         'tw-pt-0': isMarketingShell || isExploreViewer,
-        'tw-pt-14': isHeaderVisible && !isMarketingShell && !isExploreViewer,
+        'tw-pt-16': isHeaderVisible && !isMarketingShell && !isExploreViewer && !isHeaderInFlowBand,
+        'tw-pt-0 md:tw-pt-16': isHeaderInFlowBand,
+        'sm:max-md:tw-flex sm:max-md:tw-h-auto sm:max-md:tw-min-h-0 sm:max-md:tw-flex-col sm:max-md:[&>div]:tw-flex sm:max-md:[&>div]:tw-min-h-0 sm:max-md:[&>div]:tw-flex-1 sm:max-md:[&>div]:tw-flex-col':
+          isHeaderInFlowBand,
       }"
     >
       <router-view />

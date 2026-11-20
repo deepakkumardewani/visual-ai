@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { computed, ref, watch, type Ref } from 'vue';
 import { useUser } from 'vue-clerk';
 
-import type { ExploreFeedItem } from '@/types';
+import type { ExploreFeedItem, IImageObject } from '@/types';
 import { FeatureType } from '@/types';
 
 import { useAppStore } from '@/stores/app';
@@ -50,6 +50,8 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
   const processingAction = ref<ViewerTransformAction | null>(null);
   const originalUrl = ref<string | null>(null);
   const resultUrl = ref<string | null>(null);
+  // The completed job's saved history entry; its `_id` routes downloads through the plan-aware endpoint.
+  const resultItem = ref<IImageObject | null>(null);
   const resultIsTransparent = ref(false);
 
   const creditCost = TRANSFORM_CREDIT_COST;
@@ -62,6 +64,7 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
   function resetResult() {
     originalUrl.value = null;
     resultUrl.value = null;
+    resultItem.value = null;
     resultIsTransparent.value = false;
   }
 
@@ -162,6 +165,7 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
     const enhanced = data.images[0].enhancedImageUrl || data.images[0].aiImageUrl || null;
     if (!enhanced) return;
     resultUrl.value = enhanced;
+    resultItem.value = data;
     resultIsTransparent.value = processingAction.value === 'remove_bg';
     processingAction.value = null;
   });
@@ -193,6 +197,7 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
     processingLabel,
     originalUrl,
     resultUrl,
+    resultItem,
     hasResult,
     resultIsTransparent,
     startAction,

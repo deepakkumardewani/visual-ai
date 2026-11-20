@@ -42,7 +42,7 @@ function buyCredits() {
 <template>
   <div
     ref="rootRef"
-    class="credits-chip tw-relative tw-inline-flex"
+    class="credits-chip tw-relative tw-inline-flex tw-items-center tw-gap-2"
     data-testid="credits-chip-root"
   >
     <button

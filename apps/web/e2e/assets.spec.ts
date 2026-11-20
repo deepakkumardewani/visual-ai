@@ -1,21 +1,21 @@
 import type { Page, Route } from '@playwright/test';
 
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/base';
 
 import type { CollectionListItem, IImage, IImageObject } from '@visual-ai/shared';
-import { FeatureType } from '@visual-ai/shared';
+import { CURRENT_INTRO_VERSION, FeatureType } from '@visual-ai/shared';
 
-import { WEB_URL } from './support/env';
+import { E2E_WEB_ORIGIN } from './support/env';
 
 const USER_PROFILE_URL = /\/users\/user_/;
 const E2E_USER_ID = process.env.E2E_CLERK_USER_ID ?? 'user_e2e';
-const FIXTURE_IMAGE_URL = `${WEB_URL}/e2e-fixture.png`;
+const FIXTURE_IMAGE_URL = `${E2E_WEB_ORIGIN}/e2e-fixture.png`;
 const FIXTURE_DOWNLOAD_URL = `${FIXTURE_IMAGE_URL}?download=1`;
 const FIXTURE_IMAGE_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
 
 const API_CORS = {
-  'Access-Control-Allow-Origin': WEB_URL,
+  'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
   'Access-Control-Allow-Credentials': 'true',
   'Access-Control-Allow-Headers': '*',
 };
@@ -89,6 +89,8 @@ async function stubAssetsApi(page: Page, options: AssetsMockOptions = {}) {
     credits: 100,
     dailyCredits: 10,
     referralCode: 'E2E',
+    // Without this the V2 intro modal auto-opens and its backdrop blocks every tile interaction.
+    seenIntroVersion: CURRENT_INTRO_VERSION,
     referrals: [],
     payments: [],
     history,
@@ -104,6 +106,14 @@ async function stubAssetsApi(page: Page, options: AssetsMockOptions = {}) {
       return route.continue();
     }
     return fulfillJson(route, userPayload());
+  });
+
+  // Downloads resolve their URL through the plan-aware endpoint (GET /images/:id/download).
+  await page.route('**/images/*/download**', async (route) => {
+    if (route.request().method() === 'OPTIONS') {
+      return route.fulfill({ status: 204, headers: API_CORS });
+    }
+    return fulfillJson(route, { url: FIXTURE_DOWNLOAD_URL });
   });
 
   await page.route('**/collections**', async (route) => {

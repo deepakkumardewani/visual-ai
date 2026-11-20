@@ -2,6 +2,14 @@ import type { CreditPackId } from "@visual-ai/shared"
 
 import { env } from "../../config/env.js"
 
+export function getDodoProductIdForPro(): string {
+    const productId = env.DODO_PRODUCT_ID_PRO
+    if (!productId) {
+        throw new Error("Missing Dodo product id for Pro subscription")
+    }
+    return productId
+}
+
 export function getDodoProductIdForPack(packId: CreditPackId): string {
     const productIdByPack: Record<CreditPackId, string | undefined> = {
         pack_200: env.DODO_PRODUCT_ID_PACK_200,

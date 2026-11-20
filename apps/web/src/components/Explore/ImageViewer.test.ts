@@ -20,6 +20,7 @@ const transformState = vi.hoisted(() => ({
   processingLabel: '',
   originalUrl: 'https://cdn.example.com/orig.jpg',
   resultUrl: '',
+  resultItem: null as null | { _id: string },
   hasResult: false,
   resultIsTransparent: false,
   startAction: vi.fn(),
@@ -39,6 +40,7 @@ const chain = vi.hoisted(() => ({
 }));
 
 const downloadImage = vi.hoisted(() => vi.fn());
+const downloadItemImage = vi.hoisted(() => vi.fn());
 const detectMonochrome = vi.hoisted(() => vi.fn());
 const prefetchImageUrls = vi.hoisted(() => vi.fn());
 const navHandlers = vi.hoisted(() => ({
@@ -86,6 +88,7 @@ vi.mock('@/composables/useViewerTransform', () => ({
     processingLabel: ref(transformState.processingLabel),
     originalUrl: ref(transformState.originalUrl),
     resultUrl: ref(transformState.resultUrl),
+    resultItem: ref(transformState.resultItem),
     hasResult: ref(transformState.hasResult),
     resultIsTransparent: ref(transformState.resultIsTransparent),
     startAction: transformState.startAction,
@@ -94,6 +97,7 @@ vi.mock('@/composables/useViewerTransform', () => ({
 
 vi.mock('@/utils/helpers', () => ({
   downloadImage: (...args: any[]) => Reflect.apply(downloadImage, undefined, args),
+  downloadItemImage: (...args: any[]) => Reflect.apply(downloadItemImage, undefined, args),
 }));
 
 vi.mock('@/utils/detectMonochrome', () => ({
@@ -182,10 +186,12 @@ describe('ImageViewer', () => {
     transformState.isProcessing = false;
     transformState.hasResult = false;
     transformState.resultUrl = '';
+    transformState.resultItem = null;
     transformState.originalUrl = 'https://cdn.example.com/orig.jpg';
     chain.confirmChainAction.mockResolvedValue(true);
     detectMonochrome.mockResolvedValue(true);
     downloadImage.mockResolvedValue(true);
+    downloadItemImage.mockResolvedValue(true);
   });
 
   it('composes stage and details stubs', () => {
@@ -287,16 +293,20 @@ describe('ImageViewer', () => {
     const wrapper = mountViewer();
     await wrapper.get('[data-testid="download"]').trigger('click');
     await flushPromises();
-    expect(downloadImage).toHaveBeenCalled();
+    expect(downloadImage).toHaveBeenCalledWith(undefined, item.imageUrl);
+    expect(downloadItemImage).not.toHaveBeenCalled();
     expect(share.showToast).toHaveBeenCalledWith('Image downloaded');
   });
 
   it('toasts success when downloading a transform result', async () => {
     transformState.hasResult = true;
     transformState.resultUrl = 'https://cdn.example.com/result.png';
+    transformState.resultItem = { _id: 'saved-result' };
     const wrapper = mountViewer();
     await wrapper.get('[data-testid="download"]').trigger('click');
     await flushPromises();
+    expect(downloadItemImage).toHaveBeenCalledWith(undefined, { _id: 'saved-result' });
+    expect(downloadImage).not.toHaveBeenCalled();
     expect(share.showToast).toHaveBeenCalledWith('Result downloaded');
   });
 

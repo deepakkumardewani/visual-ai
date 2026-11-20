@@ -25,6 +25,7 @@ export const ImageObjectSchema = new Schema({
     modelName: { type: String, required: false, default: "" },
     imageType: { type: String, required: false, default: "" },
     isFavorite: { type: Boolean, default: false },
+    isPrivate: { type: Boolean, default: false },
     images: { type: [ImageSchema], required: true },
     createdAt: { type: Date, default: Date.now },
     humanReadableDate: {

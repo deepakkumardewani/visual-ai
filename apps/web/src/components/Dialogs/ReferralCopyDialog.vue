@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { faCoins, faGift, faTimes } from '@/plugins/icons';
+import { DAILY_CREDITS } from '@visual-ai/shared';
 import { storeToRefs } from 'pinia';
 
 import { useDialogStore } from '@/stores/dialog';
@@ -44,8 +45,9 @@ const { credits } = storeToRefs(userStore);
         Credits are used to generate AI images and access other features.
       </p>
       <p class="ref-copy__copy">
-        Each generation costs a small number of credits, shown on every model. You get 30 free
-        credits daily, plus any credits you buy or earn that never expire.
+        Each generation costs a small number of credits, shown on every model. You get
+        {{ DAILY_CREDITS.free }} free credits daily, plus any credits you buy or earn that never
+        expire.
       </p>
 
       <h3 class="ref-copy__section">Earn more credits</h3>

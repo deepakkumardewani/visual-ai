@@ -124,6 +124,17 @@ describe("getExploreFeed", () => {
         })
     })
 
+    it("excludes private generations while matching legacy docs without the field", async () => {
+        vi.mocked(User.aggregate).mockResolvedValue([])
+
+        await getExploreFeed({ excludeUserId: "viewer_1" })
+
+        const [pipeline] = vi.mocked(User.aggregate).mock.calls[0]
+        expect(pipeline[1]).toEqual({
+            $match: expect.objectContaining({ "history.isPrivate": { $ne: true } }),
+        })
+    })
+
     it("uses default page size 24 when limit is omitted or NaN", async () => {
         vi.mocked(User.aggregate).mockResolvedValue([])
 
@@ -243,6 +254,17 @@ describe("getExploreItemById", () => {
         ])
 
         await expect(getExploreItemById(VALID_ID)).rejects.toThrow("Explore item not found")
+    })
+
+    it("filters private generations so a private single-image fetch is a 404", async () => {
+        vi.mocked(User.aggregate).mockResolvedValue([])
+
+        await expect(getExploreItemById(VALID_ID)).rejects.toThrow("Explore item not found")
+
+        const [pipeline] = vi.mocked(User.aggregate).mock.calls[0]
+        expect(pipeline[1]).toEqual({
+            $match: expect.objectContaining({ "history.isPrivate": { $ne: true } }),
+        })
     })
 
     it("returns the mapped item on success", async () => {

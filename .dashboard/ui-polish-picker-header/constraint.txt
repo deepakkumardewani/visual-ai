@@ -1,0 +1,1 @@
+Never start servers; no commits unless asked; mock-only: no real Replicate, Dodo live or email calls (paidCallGuard stays on); merge with uncommitted edits, never overwrite; agent-browser with AGENT_BROWSER_SESSION=visual-ai, always close.

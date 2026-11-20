@@ -336,4 +336,84 @@ describe('UserGenerationsGrid', () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.find('[data-testid="result-next-actions-stub"]').exists()).toBe(false);
   });
+
+  it('shows the next-actions row on an id-less at-cap result after generation ends', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const unsaved = { ...sample, _id: undefined, savedToHistory: false } as IImageObject;
+    useUserStore().history = [{ ...sample, createdAt: new Date('2024-05-01T10:00:00.000Z') }];
+    useGenerateStore().isLoading = true;
+
+    const wrapper = mount(UserGenerationsGrid, { global: { plugins: [pinia], stubs } });
+    useUserStore().history.push(unsaved);
+    useGenerateStore().isLoading = false;
+    await wrapper.vm.$nextTick();
+
+    const cards = wrapper.findAll('[data-testid="user-generation-card"]');
+    expect(cards).toHaveLength(2);
+    expect(cards[0].find('[data-testid="result-next-actions-stub"]').exists()).toBe(true);
+    expect(wrapper.findAll('[data-testid="result-next-actions-stub"]')).toHaveLength(1);
+  });
+
+  it('puts Download on the unsaved row, not a saved one, with a full history', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const saved = [1, 2, 3, 4, 5].map((day) => ({
+      ...sample,
+      _id: `saved-${day}`,
+      prompt: `saved ${day}`,
+      createdAt: new Date(`2024-05-0${day}T10:00:00.000Z`),
+    }));
+    // Server-serialized at-cap payload: no _id, ISO createdAt newer than every saved row.
+    const unsaved = {
+      ...sample,
+      _id: undefined,
+      prompt: 'unsaved at cap',
+      createdAt: '2024-06-02T09:00:00.000Z',
+    } as unknown as IImageObject;
+    useUserStore().history = saved;
+    useGenerateStore().isLoading = true;
+
+    const wrapper = mount(UserGenerationsGrid, { global: { plugins: [pinia], stubs } });
+    useUserStore().history.push(unsaved);
+    useGenerateStore().isLoading = false;
+    await wrapper.vm.$nextTick();
+
+    const cards = wrapper.findAll('[data-testid="user-generation-card"]');
+    expect(cards).toHaveLength(6);
+    expect(cards[0].text()).toContain('unsaved at cap');
+    expect(cards[0].find('[data-testid="result-next-actions-stub"]').exists()).toBe(true);
+    expect(wrapper.findAll('[data-testid="result-next-actions-stub"]')).toHaveLength(1);
+  });
+
+  it('keys two same-prompt unsaved results separately', () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const twin = (createdAt: string) =>
+      ({ ...sample, _id: undefined, prompt: 'twin', createdAt }) as unknown as IImageObject;
+    useUserStore().history = [twin('2024-06-02T09:00:00.000Z'), twin('2024-06-02T09:05:00.000Z')];
+
+    const wrapper = mount(UserGenerationsGrid, { global: { plugins: [pinia], stubs } });
+    expect(wrapper.findAll('[data-testid="user-generation-card"]')).toHaveLength(2);
+  });
+
+  it('renders two id-less results as separate rows', () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    useUserStore().history = [
+      { ...sample, _id: undefined, prompt: 'first unsaved' } as IImageObject,
+      {
+        ...sample,
+        _id: undefined,
+        prompt: 'second unsaved',
+        createdAt: new Date('2024-06-01T10:31:00.000Z'),
+      } as IImageObject,
+    ];
+
+    const wrapper = mount(UserGenerationsGrid, { global: { plugins: [pinia], stubs } });
+    const text = wrapper.text();
+    expect(wrapper.findAll('[data-testid="user-generation-card"]')).toHaveLength(2);
+    expect(text).toContain('first unsaved');
+    expect(text).toContain('second unsaved');
+  });
 });

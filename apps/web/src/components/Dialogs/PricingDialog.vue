@@ -5,11 +5,7 @@ import { storeToRefs } from 'pinia';
 import { useDialogStore } from '@/stores/dialog';
 
 import AppModal from '@/components/AppModal.vue';
-import FAQ from '@/components/FAQ.vue';
-
-import { PRICING_FAQS } from '@/utils/constants';
-
-import Pricing from '@/pages/Pricing.vue';
+import PricingLayout from '@/components/Pricing/PricingLayout.vue';
 
 const dialogStore = useDialogStore();
 const { showPricingDialog } = storeToRefs(dialogStore);
@@ -39,8 +35,7 @@ const { showPricingDialog } = storeToRefs(dialogStore);
         Unlock the full power of Visual AI
       </h2>
 
-      <Pricing />
-      <FAQ :faqs="PRICING_FAQS" />
+      <PricingLayout />
     </div>
   </AppModal>
 </template>

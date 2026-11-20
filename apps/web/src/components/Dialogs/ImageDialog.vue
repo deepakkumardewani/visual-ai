@@ -30,7 +30,12 @@ import SideBySide from '@/components/SideBySide.vue';
 
 import { useImageChainActions } from '@/composables/useImageChainActions';
 import { useShareActions } from '@/composables/useShareActions';
-import { deleteImage, downloadImage, favoriteImage, getDownloadImageUrl } from '@/utils/helpers';
+import {
+  deleteImage,
+  downloadItemImage,
+  favoriteImage,
+  getDownloadImageUrl,
+} from '@/utils/helpers';
 
 const isMobile = useMediaQuery('(max-width: 600px)');
 const dialogStore = useDialogStore();
@@ -98,9 +103,8 @@ function getImageUrl(index: number): string {
 }
 
 function downloadAtIndex(event: Event, index: number) {
-  const image = props.item?.images?.[index];
-  if (!image) return;
-  void downloadImage(event, getDownloadImageUrl(image));
+  if (!props.item?.images?.[index]) return;
+  void downloadItemImage(event, props.item, index);
 }
 
 const canDownload = computed(() => {
@@ -113,8 +117,8 @@ function handleToolbarDownload(event: Event) {
     downloadAtIndex(event, 0);
     return;
   }
-  if (!enhanceDownloadUrl.value) return;
-  void downloadImage(event, enhanceDownloadUrl.value);
+  if (!enhanceDownloadUrl.value || !props.item) return;
+  void downloadItemImage(event, props.item);
 }
 
 const originalImageUrl = computed(() => {

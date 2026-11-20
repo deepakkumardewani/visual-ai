@@ -3,8 +3,8 @@ import { DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
 import { MODELS as CATALOG_MODELS, getFeaturedModels } from '@/utils/models';
 import galleryData from '@/utils/gallery.json';
 
-const BASE_URL = import.meta.env.VITE_CLOUDINARY_BASE_URL;
-const ASSETS_URL = import.meta.env.VITE_CLOUDINARY_ASSETS_URL;
+/** Single source for the free-credits promise so the hero and final CTA cannot drift. */
+export const FREE_CREDITS_COPY = `${SIGNUP_CREDITS} free credits to keep, plus ${DAILY_CREDITS.free} more each day that reset daily. No card needed.`;
 
 export interface GalleryItem {
   url: string;
@@ -20,9 +20,39 @@ export interface ToolChapter {
   points: string[];
   ctaLabel: string;
   ctaTo: string;
-  /** 'gallery' chapters render a generated-image cluster; 'compare' render a before/after slider. */
-  media: { kind: 'gallery'; images: string[] } | { kind: 'compare'; before: string; after: string };
+  /**
+   * 'gallery' chapters render a generated-image cluster, 'compare' a before/after slider,
+   * 'cutout' a set of transparent cutouts paired with their originals.
+   */
+  media: ToolMedia;
 }
+
+/**
+ * How a cutout is framed inside its card. Small subjects (a product on a wide
+ * frame) are scaled up around their own centre so they read at card size.
+ */
+export interface CutoutFraming {
+  /** 1 leaves the frame as is; above 1 zooms in on the subject. */
+  zoom: number;
+  /** Subject centre in percent of the frame; the card recentres on it. */
+  focusX: number;
+  focusY: number;
+}
+
+export interface CutoutPair {
+  /** The source photo, shown as a small inset. */
+  original: string;
+  /** Transparent webp of the subject alone. */
+  cutout: string;
+  /** Describes the subject; the component adds "background removed" / "original photo". */
+  alt: string;
+  framing: CutoutFraming;
+}
+
+export type ToolMedia =
+  | { kind: 'gallery'; images: string[] }
+  | { kind: 'compare'; before: string; after: string }
+  | { kind: 'cutout'; pairs: CutoutPair[] };
 
 export interface Stat {
   value: string;
@@ -49,6 +79,32 @@ export function getLandingStats(): Stat[] {
 export const STATS: Stat[] = getLandingStats();
 
 const galleryItems = galleryData as GalleryItem[];
+
+const CUTOUT_FULL_FRAME: CutoutFraming = { zoom: 1, focusX: 50, focusY: 50 };
+
+/** Measured from the cutout's alpha: the sneakers span ~68% of the frame, centred at 52% / 63%. */
+const CUTOUT_SNEAKERS_FRAMING: CutoutFraming = { zoom: 1.4, focusX: 52, focusY: 56 };
+
+const REMOVE_BG_PAIRS: CutoutPair[] = [
+  {
+    original: '/landing/remove-bg-person.360ed339.webp',
+    cutout: '/landing/remove-bg-person-cutout.eff56965.webp',
+    alt: 'Woman in a mustard wool coat',
+    framing: CUTOUT_FULL_FRAME,
+  },
+  {
+    original: '/landing/remove-bg-product.54a6f505.webp',
+    cutout: '/landing/remove-bg-product-cutout.9943c670.webp',
+    alt: 'Pair of white leather sneakers',
+    framing: CUTOUT_SNEAKERS_FRAMING,
+  },
+  {
+    original: '/landing/remove-bg-pet.1b314262.webp',
+    cutout: '/landing/remove-bg-pet-cutout.bd1d723c.webp',
+    alt: 'Golden retriever sitting',
+    framing: CUTOUT_FULL_FRAME,
+  },
+];
 
 /** A curated slice of real generated images for the showcase wall. */
 export const SHOWCASE: GalleryItem[] = galleryItems.slice(0, 12);
@@ -85,8 +141,8 @@ export const TOOLS: ToolChapter[] = [
     ctaTo: '/image-upscaler',
     media: {
       kind: 'compare',
-      before: `${BASE_URL}/examples/upscale/upscale-1.jpg`,
-      after: `${BASE_URL}/examples/upscale/upscale-1.1.png`,
+      before: '/landing/upscale-1.769d2c02.webp',
+      after: '/landing/upscale-1.1.d76f06d3.webp',
     },
   },
   {
@@ -103,8 +159,8 @@ export const TOOLS: ToolChapter[] = [
     ctaTo: '/colorize-photo',
     media: {
       kind: 'compare',
-      before: `${BASE_URL}/examples/colorize/colorize-1.webp`,
-      after: `${BASE_URL}/examples/colorize/colorize-1.1.png`,
+      before: '/landing/colorize-1.144e6229.webp',
+      after: '/landing/colorize-1.1.382dd645.webp',
     },
   },
   {
@@ -121,8 +177,8 @@ export const TOOLS: ToolChapter[] = [
     ctaTo: '/photo-restorer',
     media: {
       kind: 'compare',
-      before: `${BASE_URL}/examples/revive/revive-1.png`,
-      after: `${BASE_URL}/examples/revive/revive-1.1.png`,
+      before: '/landing/revive-1.001ae842.webp',
+      after: '/landing/revive-1.1.fe6b12b1.webp',
     },
   },
   {
@@ -137,10 +193,7 @@ export const TOOLS: ToolChapter[] = [
     ],
     ctaLabel: 'Remove a background',
     ctaTo: '/remove-background',
-    media: {
-      kind: 'gallery',
-      images: galleryItems.slice(3, 6).map((item) => item.url),
-    },
+    media: { kind: 'cutout', pairs: REMOVE_BG_PAIRS },
   },
 ];
 
@@ -155,11 +208,11 @@ export { getFeaturedModels };
 export const FAQS: Faq[] = [
   {
     question: 'Is there really a free plan?',
-    answer: `Yes. Every new account gets ${SIGNUP_CREDITS} persistent credits plus ${DAILY_CREDITS} daily credits (unused daily credits reset). Generate, upscale, colorize, restore, and remove backgrounds — no card and no subscription required to start.`,
+    answer: `Yes. Every new account gets ${SIGNUP_CREDITS} persistent credits plus ${DAILY_CREDITS.free} daily credits (unused daily credits reset). Generate, upscale, colorize, restore, and remove backgrounds — no card and no subscription required to start.`,
   },
   {
     question: 'How do credits work?',
-    answer: `Each generation or edit spends credits. You get ${SIGNUP_CREDITS} persistent credits that stay on the account, plus ${DAILY_CREDITS} daily credits that reset unused at the end of the day. Purchased credits never expire.`,
+    answer: `Each generation or edit spends credits. You get ${SIGNUP_CREDITS} persistent credits that stay on the account, plus ${DAILY_CREDITS.free} daily credits that reset unused at the end of the day. Purchased credits never expire.`,
   },
   {
     question: 'Which models can I use?',
@@ -178,7 +231,8 @@ export const FAQS: Faq[] = [
   },
   {
     question: 'Do I need a subscription?',
-    answer: 'No. Visual AI is credits only — there are no paid subscription tiers.',
+    answer:
+      'No. You can use Visual AI on the free tier, add an optional Pro monthly subscription, or buy one-off credit packs whose credits never expire.',
   },
 ];
 
@@ -190,4 +244,4 @@ export const NAV_LINKS = [
   { label: 'FAQ', href: '#faq' },
 ];
 
-export const HERO_IMAGE = `${ASSETS_URL}/hero.png`;
+export const HERO_IMAGE = '/landing/hero.0053f405.webp';

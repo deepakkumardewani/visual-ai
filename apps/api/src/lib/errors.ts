@@ -42,6 +42,20 @@ export class ForbiddenError extends HttpError {
     }
 }
 
+export const PREMIUM_MODEL_REQUIRES_PRO = "PREMIUM_MODEL_REQUIRES_PRO"
+
+/**
+ * 403 raised when a non-Pro user requests a premium model; `code` lets clients show an upgrade prompt.
+ */
+export class PremiumModelRequiresProError extends ForbiddenError {
+    readonly code = PREMIUM_MODEL_REQUIRES_PRO
+
+    constructor(message: string = "This model requires a Pro plan") {
+        super(message)
+        this.name = "PremiumModelRequiresProError"
+    }
+}
+
 /**
  * 404 Not Found error
  */

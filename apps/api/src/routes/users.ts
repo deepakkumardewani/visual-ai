@@ -6,15 +6,23 @@ import { env } from "../config/env.js"
 import { asyncHandler } from "../lib/async-handler.js"
 import { BadRequestError, NotFoundError } from "../lib/errors.js"
 import { UserModel as User } from "../models/user.js"
-import {
-    ensureUserFromClerk,
-    updateUserPlan,
-    deleteClerkUserData,
-} from "../services/user-service.js"
+import { ensureUserFromClerk, deleteClerkUserData } from "../services/user-service.js"
 import { deleteCloudinaryUserData } from "../services/cloudinary-service.js"
-import { KNOWN_INTRO_VERSIONS, REFERRAL_BONUS } from "@visual-ai/shared"
+import { isPro } from "../lib/isPro.js"
+import { KNOWN_INTRO_VERSIONS, PLAN, REFERRAL_BONUS } from "@visual-ai/shared"
 
 export const userRoutes = Router()
+
+// Flattens the subscription subdoc into the plan fields the client reads (`plan` stays server-derived).
+function toUserWithPlanStatus(user: InstanceType<typeof User>) {
+    const { subscription, ...rest } = user.toObject()
+    return {
+        ...rest,
+        plan: isPro(user) ? PLAN.PRO : PLAN.FREE,
+        periodEnd: subscription?.currentPeriodEnd ?? null,
+        cancelAtPeriodEnd: subscription?.cancelAtPeriodEnd ?? false,
+    }
+}
 
 // Get all users
 userRoutes.get(
@@ -38,17 +46,7 @@ userRoutes.get(
             }
             user = await ensureUserFromClerk(clerkUserId, projection)
         }
-        res.status(200).json(user)
-    }),
-)
-
-// Update a user's plan
-userRoutes.get(
-    "/users/update/plan",
-    asyncHandler(async (req: Request, res: Response) => {
-        const { userId, plan } = req.query
-        await updateUserPlan(userId as string, plan as string)
-        res.status(200).send("success")
+        res.status(200).json(toUserWithPlanStatus(user))
     }),
 )
 

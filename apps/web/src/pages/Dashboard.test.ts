@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
 
-const smAndUpRef = ref(true);
+const isWideRef = ref(true);
 const routeName = ref('create');
 const routeParams = ref<Record<string, string>>({});
 
@@ -20,7 +20,7 @@ vi.mock('@vueuse/core', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@vueuse/core')>();
   return {
     ...actual,
-    useMediaQuery: () => smAndUpRef,
+    useMediaQuery: () => isWideRef,
   };
 });
 
@@ -28,8 +28,12 @@ vi.mock('vue-clerk', () => ({
   useUser: () => ({ user: ref(null) }),
 }));
 
+const seoGetters: Array<() => Record<string, unknown>> = [];
+
 vi.mock('@/composables/usePageSeo', () => ({
-  usePageSeo: () => undefined,
+  usePageSeo: (getter: () => Record<string, unknown>) => {
+    seoGetters.push(getter);
+  },
 }));
 
 vi.mock('@/components/Dashboard/DashboardShell.vue', () => ({
@@ -42,7 +46,9 @@ vi.mock('@/components/Dashboard/DashboardShell.vue', () => ({
 vi.mock('@/components/Dashboard/MobileSettingsSheet.vue', () => ({
   default: {
     props: ['modelValue'],
-    template: '<div data-testid="mobile-settings-sheet-stub"><slot /></div>',
+    emits: ['update:modelValue'],
+    template:
+      '<div data-testid="mobile-settings-sheet-stub" :data-open="String(modelValue)"><button data-testid="sheet-close" @click="$emit(\'update:modelValue\', false)" /><slot /></div>',
   },
 }));
 
@@ -84,11 +90,12 @@ vi.mock('@/components/Dashboard/Feed/ExploreFeed.vue', () => ({
 
 import Dashboard from '@/pages/Dashboard.vue';
 import { useAppStore } from '@/stores/app';
+import { HEIGHT_BELOW_HEADER_CLASS } from '@/utils/layout';
 
 describe('Dashboard', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
-    smAndUpRef.value = true;
+    isWideRef.value = true;
     routeName.value = 'create';
     routeParams.value = {};
   });
@@ -122,14 +129,13 @@ describe('Dashboard', () => {
     expect(wrapper.find('[data-testid="history-stub"]').exists()).toBe(true);
   });
 
-  it('shows mobile nav tab strip only on xs viewports on app shell routes', async () => {
-    smAndUpRef.value = false;
+  it('does not render its own mobile tab strip (tabs live in the header)', () => {
+    isWideRef.value = false;
     routeName.value = 'create';
 
     const wrapper = mount(Dashboard);
 
-    expect(wrapper.find('[data-testid="dashboard-mobile-tabs"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(false);
   });
 
   it('does not render v-tabs-window or v-divider', () => {
@@ -138,4 +144,117 @@ describe('Dashboard', () => {
     expect(wrapper.html()).not.toMatch(/<v-tabs-window/i);
     expect(wrapper.html()).not.toMatch(/<v-divider/i);
   });
+
+  it('shows only the explore panel on the explore route', async () => {
+    routeName.value = 'explore';
+    const wrapper = mount(Dashboard);
+    await wrapper.vm.$nextTick();
+
+    expect(useAppStore().tab).toBe(2);
+    expect(panelIsShown(wrapper, 'dashboard-explore-panel')).toBe(true);
+    expect(panelIsShown(wrapper, 'dashboard-generate-panel')).toBe(false);
+    expect(panelIsShown(wrapper, 'dashboard-assets-panel')).toBe(false);
+    expect(wrapper.find('[data-testid="explore-feed-stub"]').exists()).toBe(true);
+  });
+
+  it('docks the composer and settings trigger below the sm breakpoint without tabs', () => {
+    isWideRef.value = false;
+    const wrapper = mount(Dashboard);
+
+    expect(wrapper.find('[data-testid="mobile-composer-dock"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="mobile-settings-trigger"]').exists()).toBe(true);
+  });
+
+  it('gives the settings trigger a 44px minimum touch target', () => {
+    isWideRef.value = false;
+    const classes = mount(Dashboard).get('[data-testid="mobile-settings-trigger"]').classes();
+
+    expect(classes).toContain('tw-min-h-11');
+    expect(classes).toContain('tw-min-w-11');
+  });
+
+  it('mounts the settings sidebar inside the sheet only below the sm breakpoint', () => {
+    isWideRef.value = false;
+    const below = mount(Dashboard);
+    expect(
+      below
+        .get('[data-testid="mobile-settings-sheet-stub"]')
+        .find('[data-testid="dashboard-sidebar-stub"]')
+        .exists(),
+    ).toBe(true);
+
+    isWideRef.value = true;
+    const above = mount(Dashboard);
+    expect(
+      above
+        .get('[data-testid="mobile-settings-sheet-stub"]')
+        .find('[data-testid="dashboard-sidebar-stub"]')
+        .exists(),
+    ).toBe(false);
+  });
+
+  it('keeps the desktop prompt on top and no dock at sm and above', () => {
+    isWideRef.value = true;
+    const wrapper = mount(Dashboard);
+
+    expect(wrapper.find('[data-testid="mobile-composer-dock"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="prompt-bar-stub"]').exists()).toBe(true);
+  });
+
+  it('syncs the feature from the route params on create', () => {
+    routeParams.value = { feature: 'upscale' };
+    mount(Dashboard);
+
+    expect(useAppStore().feature).not.toBe('image');
+  });
+
+  it('opens the settings sheet from the dock and closes it when the viewport grows', async () => {
+    isWideRef.value = false;
+    const wrapper = mount(Dashboard);
+    const isOpen = () =>
+      wrapper.get('[data-testid="mobile-settings-sheet-stub"]').attributes('data-open');
+
+    expect(isOpen()).toBe('false');
+    await wrapper.get('[data-testid="mobile-settings-trigger"]').trigger('click');
+    expect(isOpen()).toBe('true');
+
+    isWideRef.value = true;
+    await wrapper.vm.$nextTick();
+    expect(isOpen()).toBe('false');
+  });
+
+  it('closes the settings sheet when the sheet emits update:modelValue', async () => {
+    isWideRef.value = false;
+    const wrapper = mount(Dashboard);
+    const isOpen = () =>
+      wrapper.get('[data-testid="mobile-settings-sheet-stub"]').attributes('data-open');
+
+    await wrapper.get('[data-testid="mobile-settings-trigger"]').trigger('click');
+    expect(isOpen()).toBe('true');
+    await wrapper.get('[data-testid="sheet-close"]').trigger('click');
+    expect(isOpen()).toBe('false');
+  });
+
+  it('registers noindex page SEO for the current route path', () => {
+    seoGetters.length = 0;
+    routeName.value = 'create';
+    mount(Dashboard);
+
+    expect(seoGetters[0]?.()).toMatchObject({
+      title: 'Create with Visual AI',
+      path: '/create',
+      robots: 'noindex, follow',
+    });
+  });
+
+  it.each(['dashboard-explore-panel', 'dashboard-assets-panel'])(
+    '%s uses the shared dvh header-variable height class',
+    (testId) => {
+      const classes = mount(Dashboard).get(`[data-testid="${testId}"]`).classes();
+
+      expect(classes).toContain(HEIGHT_BELOW_HEADER_CLASS);
+      expect(classes).toContain('tw-h-[calc(100dvh-var(--app-header-h,64px))]');
+      expect(classes.join(' ')).not.toContain('100vh');
+    },
+  );
 });

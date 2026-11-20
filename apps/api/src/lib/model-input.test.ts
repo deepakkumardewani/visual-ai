@@ -1,8 +1,10 @@
 import { describe, it, expect, vi } from "vitest"
 import { STYLE_PRESETS } from "@visual-ai/shared"
 
+const { DEV_CLOUD_NAME } = vi.hoisted(() => ({ DEV_CLOUD_NAME: "demo-cloud" }))
+
 vi.mock("../config/env.js", () => ({
-    env: { CLOUDINARY_CLOUD_NAME: "demo-cloud" },
+    env: { CLOUDINARY_CLOUD_NAME: DEV_CLOUD_NAME },
 }))
 
 import {
@@ -14,7 +16,8 @@ import {
 } from "./model-input.js"
 import type { UserGenerationParams } from "./model-input.js"
 
-const validCloudinaryRefUrl = "https://res.cloudinary.com/x/demo-cloud/image/upload/v1/ref.png"
+const cloudRefUrl = (cloud: string) => `https://res.cloudinary.com/${cloud}/image/upload/v1/ref.png`
+const validCloudinaryRefUrl = cloudRefUrl(DEV_CLOUD_NAME)
 
 describe("buildModelInput — per-model payload assertions", () => {
     describe("upscaler models", () => {
@@ -226,19 +229,17 @@ describe("isAllowedReferenceImageUrl", () => {
 
     it("rejects non-https, wrong host, missing upload path, wrong cloud, and malformed urls", () => {
         expect(
-            isAllowedReferenceImageUrl("http://res.cloudinary.com/x/demo-cloud/image/upload/a.png"),
-        ).toBe(false)
-        expect(
-            isAllowedReferenceImageUrl("https://evil.example/x/demo-cloud/image/upload/a.png"),
-        ).toBe(false)
-        expect(isAllowedReferenceImageUrl("https://res.cloudinary.com/demo-cloud/a.png")).toBe(
-            false,
-        )
-        expect(
             isAllowedReferenceImageUrl(
-                "https://res.cloudinary.com/x/other-cloud/image/upload/a.png",
+                `http://res.cloudinary.com/${DEV_CLOUD_NAME}/image/upload/a.png`,
             ),
         ).toBe(false)
+        expect(
+            isAllowedReferenceImageUrl(`https://evil.example/${DEV_CLOUD_NAME}/image/upload/a.png`),
+        ).toBe(false)
+        expect(
+            isAllowedReferenceImageUrl(`https://res.cloudinary.com/${DEV_CLOUD_NAME}/a.png`),
+        ).toBe(false)
+        expect(isAllowedReferenceImageUrl(cloudRefUrl(`not-${DEV_CLOUD_NAME}`))).toBe(false)
         expect(isAllowedReferenceImageUrl("not-a-url")).toBe(false)
     })
 })

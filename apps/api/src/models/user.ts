@@ -1,6 +1,12 @@
 import mongoose from "mongoose"
 import { v4 as uuidv4 } from "uuid"
-import { SIGNUP_CREDITS, DAILY_CREDITS } from "@visual-ai/shared"
+import {
+    SIGNUP_CREDITS,
+    DAILY_CREDITS,
+    PLAN,
+    PlanSchema,
+    SubscriptionStatus,
+} from "@visual-ai/shared"
 
 import { ImageObjectSchema } from "./image.js"
 import { PaymentSchema } from "./payment.js"
@@ -22,11 +28,20 @@ const UserSchema = new Schema(
         fullName: { type: String, required: false, default: "" },
         email: { type: String, required: false, unique: true, default: "" },
         credits: { type: Number, default: SIGNUP_CREDITS },
-        dailyCredits: { type: Number, default: DAILY_CREDITS },
+        dailyCredits: { type: Number, default: DAILY_CREDITS.free },
         referralCode: {
             type: String,
             unique: true,
             sparse: true,
+        },
+        plan: { type: String, enum: PlanSchema.options, default: PLAN.FREE },
+        subscription: {
+            providerSubscriptionId: { type: String },
+            status: { type: String, enum: SubscriptionStatus.options },
+            currentPeriodEnd: { type: Date },
+            cancelAtPeriodEnd: { type: Boolean, default: false },
+            /** Provider timestamp of the last applied webhook; drops stale and duplicate deliveries. */
+            lastEventAt: { type: Date },
         },
         referralsUsed: { type: [String], default: [] },
         emailOptOut: { type: Boolean, default: false },

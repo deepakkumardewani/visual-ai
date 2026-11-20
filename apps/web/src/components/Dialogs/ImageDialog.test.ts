@@ -1,9 +1,9 @@
 import { createPinia, setActivePinia } from 'pinia';
-import { mount } from '@vue/test-utils';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { flushPromises, mount } from '@vue/test-utils';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const deleteImage = vi.fn();
-const downloadImage = vi.fn();
+const downloadItemImage = vi.fn();
 const favoriteImage = vi.fn();
 const copyPrompt = vi.fn();
 const shareLink = vi.fn();
@@ -15,7 +15,7 @@ const getDownloadImageUrl = vi.fn(() => 'https://cdn.example/dl.png');
 
 vi.mock('@/utils/helpers', () => ({
   deleteImage: (...args: any[]) => Reflect.apply(deleteImage, undefined, args),
-  downloadImage: (...args: any[]) => Reflect.apply(downloadImage, undefined, args),
+  downloadItemImage: (...args: any[]) => Reflect.apply(downloadItemImage, undefined, args),
   favoriteImage: (...args: any[]) => Reflect.apply(favoriteImage, undefined, args),
   getDownloadImageUrl: (...args: any[]) => Reflect.apply(getDownloadImageUrl, undefined, args),
 }));
@@ -45,7 +45,7 @@ vi.mock('@vueuse/core', async (importOriginal) => {
 });
 
 import ImageDialog from '@/components/Dialogs/ImageDialog.vue';
-import { FeatureType } from '@/types';
+import { FeatureType, type IImageObject } from '@/types';
 import { useDialogStore } from '@/stores/dialog';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
@@ -84,9 +84,9 @@ const sampleItem = {
   ],
 };
 
-function openDialog(item: Record<string, unknown> = sampleItem) {
+function openDialog(item: Record<string, unknown> | IImageObject = sampleItem) {
   const dialogStore = useDialogStore();
-  dialogStore.showImage(item._id as string);
+  dialogStore.showImage((item as { _id?: string })._id as string);
   return mount(ImageDialog, {
     props: { item: item as never },
     global: { stubs },
@@ -97,7 +97,7 @@ describe('ImageDialog', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
     deleteImage.mockReset();
-    downloadImage.mockReset();
+    downloadItemImage.mockReset();
     favoriteImage.mockReset();
     copyPrompt.mockReset();
     shareLink.mockReset();
@@ -196,7 +196,68 @@ describe('ImageDialog', () => {
   it('downloads the first image for an image feature', async () => {
     const wrapper = openDialog();
     await wrapper.get('[aria-label="Download"]').trigger('click');
-    expect(downloadImage).toHaveBeenCalled();
+    expect(downloadItemImage).toHaveBeenCalledWith(expect.anything(), sampleItem, 0);
+  });
+
+  describe('unsaved result without an _id', () => {
+    const providerUrl = 'https://replicate.delivery/pbxt/result.png';
+    const unsavedItem = {
+      ...sampleItem,
+      _id: undefined,
+      images: [{ aiImageUrl: providerUrl }],
+    } as unknown as IImageObject;
+    const fetchMock = vi.fn();
+
+    // showImage() stores null for an id-less item, which never equals item._id (undefined), so the
+    // store is set directly to render the dialog for this item.
+    function openUnsavedDialog(item: IImageObject) {
+      const dialogStore = useDialogStore();
+      dialogStore.showImageDialog = true;
+      dialogStore.activeImageId = item._id as never;
+      return mount(ImageDialog, { props: { item }, global: { stubs } });
+    }
+
+    let originalUrlFns: { create: typeof URL.createObjectURL; revoke: typeof URL.revokeObjectURL };
+
+    beforeEach(async () => {
+      // Use the real helper so the test proves which URL is fetched, not just which mock ran.
+      const actual = await vi.importActual<typeof import('@/utils/helpers')>('@/utils/helpers');
+      downloadItemImage.mockImplementation(actual.downloadItemImage);
+      fetchMock.mockReset();
+      fetchMock.mockResolvedValue({
+        ok: true,
+        blob: async () => new Blob(['x'], { type: 'image/png' }),
+      });
+      vi.stubGlobal('fetch', fetchMock);
+      originalUrlFns = { create: URL.createObjectURL, revoke: URL.revokeObjectURL };
+      URL.createObjectURL = () => 'blob:x';
+      URL.revokeObjectURL = () => {};
+    });
+
+    afterEach(() => {
+      URL.createObjectURL = originalUrlFns.create;
+      URL.revokeObjectURL = originalUrlFns.revoke;
+      vi.unstubAllGlobals();
+    });
+
+    it('downloads the provider URL from the toolbar for an image feature', async () => {
+      const wrapper = openUnsavedDialog(unsavedItem);
+      await wrapper.get('[aria-label="Download"]').trigger('click');
+      await flushPromises();
+      expect(fetchMock).toHaveBeenCalledWith(providerUrl);
+    });
+
+    it('downloads the provider URL from the toolbar for an enhance feature', async () => {
+      getDownloadImageUrl.mockReturnValue(providerUrl);
+      const wrapper = openUnsavedDialog({
+        ...unsavedItem,
+        featureType: FeatureType.UPSCALE,
+        images: [{ aiImageUrl: providerUrl, originalImageUrl: 'https://cdn.example/orig.png' }],
+      } as unknown as IImageObject);
+      await wrapper.get('[aria-label="Download"]').trigger('click');
+      await flushPromises();
+      expect(fetchMock).toHaveBeenCalledWith(providerUrl);
+    });
   });
 
   it('skips image download when the gallery has no image at the index', async () => {
@@ -205,7 +266,7 @@ describe('ImageDialog', () => {
       images: [],
     });
     await wrapper.get('[aria-label="Download"]').trigger('click');
-    expect(downloadImage).not.toHaveBeenCalled();
+    expect(downloadItemImage).not.toHaveBeenCalled();
   });
 
   it('downloads the enhance url for non-image features', async () => {
@@ -222,7 +283,10 @@ describe('ImageDialog', () => {
     });
     expect(wrapper.find('[data-testid="side-by-side"]').exists()).toBe(true);
     await wrapper.get('[aria-label="Download"]').trigger('click');
-    expect(downloadImage).toHaveBeenCalled();
+    expect(downloadItemImage).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ _id: 'img-1' }),
+    );
   });
 
   it('skips enhance download when no download url exists', async () => {
@@ -233,7 +297,7 @@ describe('ImageDialog', () => {
       images: [{ enhancedImageUrl: '' }],
     });
     await wrapper.get('[aria-label="Download"]').trigger('click');
-    expect(downloadImage).not.toHaveBeenCalled();
+    expect(downloadItemImage).not.toHaveBeenCalled();
   });
 
   it('favorites the open image', async () => {

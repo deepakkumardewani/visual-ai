@@ -11,7 +11,7 @@ const useAsReference = vi.fn();
 const sendToUpscale = vi.fn();
 const sendToRemoveBg = vi.fn();
 const moreLikeThis = vi.fn();
-const downloadImage = vi.fn();
+const downloadItemImage = vi.fn();
 
 vi.mock('@/composables/useShareActions', () => ({
   useShareActions: () => ({ shareLink, copyPrompt, showToast }),
@@ -22,7 +22,7 @@ vi.mock('@/composables/useImageChainActions', () => ({
 }));
 
 vi.mock('@/utils/helpers', () => ({
-  downloadImage: (...args: any[]) => Reflect.apply(downloadImage, undefined, args),
+  downloadItemImage: (...args: any[]) => Reflect.apply(downloadItemImage, undefined, args),
   getDownloadImageUrl: (image: { aiImageUrl?: string }) => image.aiImageUrl ?? '',
 }));
 
@@ -91,7 +91,7 @@ describe('ResultNextActions', () => {
     });
 
     await clickNamed(wrapper, 'Download');
-    expect(downloadImage).toHaveBeenCalled();
+    expect(downloadItemImage).toHaveBeenCalledWith(expect.any(Event), item, 0);
 
     await clickNamed(wrapper, 'Use as reference');
     expect(useAsReference).toHaveBeenCalledWith(item.images[0]);
@@ -122,6 +122,20 @@ describe('ResultNextActions', () => {
     expect(sendToRemoveBg).toHaveBeenCalledWith('https://cdn.example.com/frame.jpg');
   });
 
+  it('downloads the provider URL directly when the result was not saved to history', async () => {
+    const wrapper = mount(ResultNextActions, {
+      props: { item: { ...item, _id: undefined } },
+      global: { stubs },
+    });
+
+    await clickNamed(wrapper, 'Download');
+    expect(downloadItemImage).toHaveBeenCalledWith(
+      expect.any(Event),
+      expect.objectContaining({ _id: undefined }),
+      0,
+    );
+  });
+
   it('toasts when there is nothing to download', async () => {
     const wrapper = mount(ResultNextActions, {
       props: { item: { ...item, images: [] } },
@@ -130,7 +144,7 @@ describe('ResultNextActions', () => {
 
     await clickNamed(wrapper, 'Download');
     expect(showToast).toHaveBeenCalledWith('Nothing to download');
-    expect(downloadImage).not.toHaveBeenCalled();
+    expect(downloadItemImage).not.toHaveBeenCalled();
   });
 
   it('shares the current location when no image URL exists', async () => {

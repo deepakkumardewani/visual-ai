@@ -274,4 +274,24 @@ describe('MicButton', () => {
     expect(wrapper.find('[data-testid="voice-inline-error"]').exists()).toBe(false);
     wrapper.unmount();
   });
+
+  it('gives the idle mic button a 44px minimum size below md', () => {
+    const { wrapper } = mountMic();
+    expect(wrapper.get('[data-testid="voice-mic-button"]').classes()).toEqual(
+      expect.arrayContaining(['max-md:tw-min-h-11', 'max-md:tw-min-w-11']),
+    );
+    wrapper.unmount();
+  });
+
+  it('gives the cancel and accept buttons a 44px minimum size below md while recording', async () => {
+    acceptDisclosure();
+    const { wrapper, voice } = mountMic();
+    await voice.startRecording();
+    for (const id of ['voice-cancel-button', 'voice-accept-button']) {
+      expect(wrapper.get(`[data-testid="${id}"]`).classes()).toEqual(
+        expect.arrayContaining(['max-md:tw-min-h-11', 'max-md:tw-min-w-11']),
+      );
+    }
+    wrapper.unmount();
+  });
 });

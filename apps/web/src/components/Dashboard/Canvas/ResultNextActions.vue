@@ -5,7 +5,7 @@ import type { IImageObject } from '@/types';
 
 import { useImageChainActions } from '@/composables/useImageChainActions';
 import { useShareActions } from '@/composables/useShareActions';
-import { downloadImage, getDownloadImageUrl } from '@/utils/helpers';
+import { downloadItemImage, getDownloadImageUrl } from '@/utils/helpers';
 
 const props = withDefaults(
   defineProps<{
@@ -33,7 +33,7 @@ async function handleDownload(event: Event) {
     showToast('Nothing to download');
     return;
   }
-  await downloadImage(event, getDownloadImageUrl(targetImage.value));
+  await downloadItemImage(event, props.item, props.imageIndex);
 }
 
 async function handleShare(event: Event) {

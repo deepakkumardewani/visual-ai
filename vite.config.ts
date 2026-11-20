@@ -84,6 +84,15 @@ export default defineConfig({
     ],
   },
   fmt: {
+    // Generated or gitignored artifacts (prerender output, reports, saved sessions) are not source.
+    ignorePatterns: [
+      '**/dist/**',
+      '**/coverage/**',
+      '**/test-results/**',
+      '**/playwright/.auth/**',
+      'apps/web/src/auto-imports.d.ts',
+      'apps/web/src/components.d.ts',
+    ],
     singleQuote: true,
     semi: true,
     overrides: [

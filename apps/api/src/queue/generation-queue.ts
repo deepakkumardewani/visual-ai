@@ -1,3 +1,4 @@
+import { QUEUE_PRIORITY } from "@visual-ai/shared"
 import { Queue } from "bullmq"
 
 import { env } from "../config/env.js"
@@ -9,9 +10,11 @@ import type { Body, Props } from "../types/index.js"
 
 const logger = createLogger("generation-queue")
 
-export type GenerationJobData =
+/** `isPro` is resolved once at enqueue time and drives queue priority. */
+export type GenerationJobData = { isPro: boolean } & (
     | { kind: "image"; body: Body }
     | { kind: "upscale" | "revive" | "colorize" | "remove-bg"; props: Props }
+)
 
 export const GENERATION_QUEUE_NAME = `${env.QUEUE_PREFIX}-generation`
 
@@ -39,6 +42,9 @@ export async function enqueueGeneration(data: GenerationJobData): Promise<void> 
         userCreditsRemaining: null,
     })
 
-    await generationQueue.add(data.kind, data, { jobId })
+    await generationQueue.add(data.kind, data, {
+        jobId,
+        priority: data.isPro ? QUEUE_PRIORITY.PRO : QUEUE_PRIORITY.FREE,
+    })
     logger.info({ jobId, kind: data.kind }, "Generation job enqueued")
 }
