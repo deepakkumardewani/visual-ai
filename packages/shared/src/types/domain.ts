@@ -1,3 +1,5 @@
+import type { Plan } from '../models/plans.js';
+
 // Shared domain types used by both API and web
 
 // Note: Exported as const enum for JavaScript output; used as both type and value
@@ -36,6 +38,8 @@ export interface IImageObject {
   images: IImage[];
   humanReadableDate?: string;
   createdAt?: Date;
+  /** Hidden from the public Explore feed; set for Pro generations. */
+  isPrivate?: boolean;
 }
 
 /** Lean community/explore feed card — one image per generation. */
@@ -60,6 +64,8 @@ export interface JobStatus {
   image: IImageObject | undefined;
   userCreditsRemaining: number | null;
   progress?: number;
+  /** False when the history cap was reached: the image is the provider URL and is not stored. */
+  savedToHistory?: boolean;
   /** User-facing explanation, set on 'error' status for known/expected failure reasons (e.g. moderation rejection) */
   message?: string;
 }
@@ -113,6 +119,12 @@ export interface IUser {
   credits: number;
   dailyCredits: number;
   referralCode: string;
+  /** Last intro version the user dismissed; null until they see one. */
+  seenIntroVersion?: string | null;
+  plan: Plan;
+  /** ISO date the current paid period ends; null for free users. */
+  periodEnd: Date | string | null;
+  cancelAtPeriodEnd: boolean;
   referrals: IReferral[];
   payments: IPayment[];
   history: IImageObject[];

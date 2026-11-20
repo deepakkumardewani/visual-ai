@@ -9,7 +9,7 @@ import {
     generateRandomPrompt,
     improveUserPrompt,
 } from "../lib/prompt-actions.js"
-import { ClerkExpressRequireAuth } from "../middlewares/clerk.js"
+import { requireAuth } from "../middlewares/clerk.js"
 import { memoryUpload } from "../middlewares/multer.js"
 
 const logger = createLogger("prompt-route")
@@ -19,7 +19,7 @@ export const promptRoutes = Router()
 promptRoutes.post(
     "/prompt/improve",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     asyncHandler(async (req: Request, res: Response) => {
         const prompt = typeof req.body?.prompt === "string" ? req.body.prompt.trim() : ""
         if (!prompt) {
@@ -39,7 +39,7 @@ promptRoutes.post(
 promptRoutes.post(
     "/prompt/random",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     asyncHandler(async (_req: Request, res: Response) => {
         try {
             const text = await generateRandomPrompt()
@@ -54,7 +54,7 @@ promptRoutes.post(
 promptRoutes.post(
     "/prompt/describe",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     memoryUpload.single("image"),
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.buffer) {

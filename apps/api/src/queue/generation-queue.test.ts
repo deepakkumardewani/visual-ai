@@ -33,13 +33,16 @@ vi.mock("../services/redis-service.js", () => ({
 const { enqueueGeneration, GENERATION_QUEUE_NAME, generationQueue, queueConnection } =
     await import("./generation-queue.js")
 
+// Snapshot import-time calls: later suites call vi.clearAllMocks(), which would erase them under shuffle.
+const redisClientCalls = [...createRedisClient.mock.calls]
+
 describe("generation queue module", () => {
     it("names the queue from QUEUE_PREFIX", () => {
         expect(GENERATION_QUEUE_NAME).toBe("test-generation")
     })
 
     it("creates a Redis connection that does not retry per request", () => {
-        expect(createRedisClient).toHaveBeenCalledWith({ maxRetriesPerRequest: null })
+        expect(redisClientCalls).toEqual([[{ maxRetriesPerRequest: null }]])
         expect(queueConnection).toEqual({ host: "mock-redis" })
     })
 
@@ -67,7 +70,7 @@ describe("enqueueGeneration", () => {
 
     it("throws when an image job is missing jobId", async () => {
         await expect(
-            enqueueGeneration({ kind: "image", body: { jobId: "" } as never }),
+            enqueueGeneration({ kind: "image", body: { jobId: "" } as never, isPro: false }),
         ).rejects.toMatchObject({
             name: "BadRequestError",
             message: "jobId is required",
@@ -83,6 +86,7 @@ describe("enqueueGeneration", () => {
             enqueueGeneration({
                 kind: "upscale",
                 props: { body: {} } as never,
+                isPro: false,
             }),
         ).rejects.toMatchObject({
             name: "BadRequestError",
@@ -92,7 +96,7 @@ describe("enqueueGeneration", () => {
     })
 
     it("marks the job processing and enqueues an image job", async () => {
-        const data = { kind: "image" as const, body: { jobId: "job_img" } as never }
+        const data = { kind: "image" as const, body: { jobId: "job_img" } as never, isPro: false }
 
         await enqueueGeneration(data)
 
@@ -101,18 +105,27 @@ describe("enqueueGeneration", () => {
             image: undefined,
             userCreditsRemaining: null,
         })
-        expect(add).toHaveBeenCalledWith("image", data, { jobId: "job_img" })
+        expect(add).toHaveBeenCalledWith("image", data, { jobId: "job_img", priority: 10 })
+    })
+
+    it("gives Pro jobs priority 1", async () => {
+        const data = { kind: "image" as const, body: { jobId: "job_pro" } as never, isPro: true }
+
+        await enqueueGeneration(data)
+
+        expect(add).toHaveBeenCalledWith("image", data, { jobId: "job_pro", priority: 1 })
     })
 
     it("reads jobId from props.body for transform jobs", async () => {
         const data = {
             kind: "colorize" as const,
             props: { body: { jobId: "job_color" } } as never,
+            isPro: false,
         }
 
         await enqueueGeneration(data)
 
         expect(setStatus).toHaveBeenCalledWith("job_color", expect.any(Object))
-        expect(add).toHaveBeenCalledWith("colorize", data, { jobId: "job_color" })
+        expect(add).toHaveBeenCalledWith("colorize", data, { jobId: "job_color", priority: 10 })
     })
 })

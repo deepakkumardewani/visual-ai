@@ -1,5 +1,9 @@
 <script setup lang="ts">
- /**
+import WhatsNewModal from '@/components/Intro/WhatsNewModal.vue';
+
+import { HEIGHT_BELOW_HEADER_CLASS } from '@/utils/layout';
+
+/**
  * Two-column dashboard layout: control rail (left) + result canvas (right).
  * Below `sm` (640px) the rail is hidden from flow — Create mounts settings in a
  * mobile bottom sheet instead so the composer stays reachable.
@@ -9,7 +13,8 @@
 <template>
   <div
     data-testid="dashboard-shell"
-    class="dashboard-shell tw-h-[calc(100vh-60px)] tw-max-h-[calc(100vh-60px)] tw-min-h-0 tw-overflow-hidden tw-bg-canvas"
+    :class="HEIGHT_BELOW_HEADER_CLASS"
+    class="dashboard-shell sm:max-md:tw-h-auto sm:max-md:tw-flex-1 tw-min-h-0 tw-overflow-hidden tw-bg-canvas"
   >
     <div class="dashboard-shell__grid tw-grid tw-h-full tw-min-h-0">
       <aside
@@ -26,6 +31,7 @@
         <slot name="canvas" />
       </main>
     </div>
+    <WhatsNewModal />
   </div>
 </template>
 

@@ -61,6 +61,8 @@ export interface Body {
   styleId?: string;
   /** Enhancement mode ('on', 'off', 'auto') — t2i only */
   enhanceMode?: string;
+  /** Cloudinary URLs from POST /generate/reference-images — t2i reference images */
+  referenceImageUrls?: string[];
 }
 
 export interface Props {

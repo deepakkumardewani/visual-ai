@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
 
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/base';
 
 const USER_PROFILE_URL = /\/users\/user_/;
 

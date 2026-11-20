@@ -1,0 +1,6 @@
+{
+  "apps": {
+    "apps/web": { "name": "visual-ai" },
+    "apps/api": { "name": "api.visual-ai" }
+  }
+}

@@ -13,6 +13,10 @@ import {
 } from '@/utils/dashboardRoutes';
 import { FeatureType } from '@/types';
 
+const props = withDefaults(defineProps<{ variant?: 'pill' | 'segmented' }>(), {
+  variant: 'pill',
+});
+
 const route = useRoute();
 const router = useRouter();
 const appStore = useAppStore();
@@ -23,6 +27,9 @@ const tabs = [
   { id: APP_SURFACE_TAB.explore, name: 'Explore', routeName: APP_SURFACE.EXPLORE },
   { id: APP_SURFACE_TAB.assets, name: 'Assets', routeName: APP_SURFACE.ASSETS },
 ] as const;
+
+/** Track padding (p-1 = 0.25rem per side) the slider must not overlap. */
+const TRACK_INSET_REM = 0.5;
 
 const tabRefs = ref<(HTMLButtonElement | null)[]>([]);
 
@@ -75,7 +82,8 @@ function onKeydown(event: KeyboardEvent, index: number) {
   <nav
     data-testid="nav-tabs"
     aria-label="Dashboard sections"
-    class="nav-tabs tw-w-full tw-max-w-md"
+    class="nav-tabs tw-w-full"
+    :class="props.variant === 'segmented' ? 'nav-tabs--segmented' : 'tw-max-w-md'"
   >
     <div
       class="nav-tabs__track tw-relative tw-flex tw-rounded-full tw-border tw-border-border tw-bg-surface-2/60 tw-p-1"
@@ -88,9 +96,10 @@ function onKeydown(event: KeyboardEvent, index: number) {
         type="button"
         role="tab"
         :data-testid="`nav-tab-${tabItem.name.toLowerCase()}`"
+        :data-tour="tabItem.name === 'Explore' ? 'explore-tab' : undefined"
         :aria-selected="activeTabId === tabItem.id"
         :tabindex="activeTabId === tabItem.id ? 0 : -1"
-        class="nav-tabs__tab tw-relative tw-z-[1] tw-min-h-11 tw-flex-1 tw-rounded-full tw-border-0 tw-bg-transparent tw-px-3 tw-text-sm tw-font-medium tw-text-ink-muted tw-transition-colors tw-duration-fast hover:tw-text-ink-primary focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
+        class="nav-tabs__tab tw-relative tw-z-[1] tw-min-h-11 tw-flex-1 tw-basis-0 tw-rounded-full tw-border-0 tw-bg-transparent tw-px-3 tw-text-sm tw-font-medium tw-text-ink-muted tw-transition-colors tw-duration-fast hover:tw-text-ink-primary focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
         :class="{ 'nav-tabs__tab--active tw-text-ink-primary': activeTabId === tabItem.id }"
         @click="selectTab(tabItem.id)"
         @keydown="onKeydown($event, index)"
@@ -102,7 +111,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
         class="nav-tabs__slider tw-pointer-events-none tw-absolute tw-bottom-1 tw-left-1 tw-top-1 tw-rounded-full tw-bg-surface-3 tw-shadow-sm tw-ring-1 tw-ring-border tw-transition-transform tw-duration-300 tw-ease-out"
         :style="{
           transform: `translateX(${activeTabIndex * 100}%)`,
-          width: `calc(${100 / tabs.length}% - 0.25rem)`,
+          width: `calc((100% - ${TRACK_INSET_REM}rem) / ${tabs.length})`,
         }"
       />
     </div>

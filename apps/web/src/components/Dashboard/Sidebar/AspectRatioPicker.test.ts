@@ -112,4 +112,14 @@ describe('AspectRatioPicker', () => {
     expect(wrapper.find('[data-testid="aspect-auto"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="aspect-0:2"]').exists()).toBe(true);
   });
+
+  it('grows the More sizes trigger to 44px below md', () => {
+    const wrapper = mount(AspectRatioPicker, {
+      props: { options: ASPECT_RATIOS, modelValue: ASPECT_RATIOS[0] },
+      global: { stubs: { ChevronCaret: true } },
+    });
+    expect(wrapper.get('[data-testid="aspect-more-trigger"]').classes()).toEqual(
+      expect.arrayContaining(['tw-h-9', 'max-md:tw-h-11']),
+    );
+  });
 });

@@ -6,10 +6,23 @@ import { env } from "../config/env.js"
 import { asyncHandler } from "../lib/async-handler.js"
 import { BadRequestError, NotFoundError } from "../lib/errors.js"
 import { UserModel as User } from "../models/user.js"
-import { updateUserPlan, deleteClerkUserData } from "../services/user-service.js"
+import { ensureUserFromClerk, deleteClerkUserData } from "../services/user-service.js"
 import { deleteCloudinaryUserData } from "../services/cloudinary-service.js"
+import { isPro } from "../lib/isPro.js"
+import { KNOWN_INTRO_VERSIONS, PLAN, REFERRAL_BONUS } from "@visual-ai/shared"
 
 export const userRoutes = Router()
+
+// Flattens the subscription subdoc into the plan fields the client reads (`plan` stays server-derived).
+function toUserWithPlanStatus(user: InstanceType<typeof User>) {
+    const { subscription, ...rest } = user.toObject()
+    return {
+        ...rest,
+        plan: isPro(user) ? PLAN.PRO : PLAN.FREE,
+        periodEnd: subscription?.currentPeriodEnd ?? null,
+        cancelAtPeriodEnd: subscription?.cancelAtPeriodEnd ?? false,
+    }
+}
 
 // Get all users
 userRoutes.get(
@@ -24,21 +37,16 @@ userRoutes.get(
 userRoutes.get(
     "/users/:id",
     asyncHandler(async (req: Request, res: Response) => {
-        const user = await User.findOne({ userId: req.params.id }, { collection: 0, activities: 0 })
+        const clerkUserId = req.params.id
+        const projection = { collection: 0, activities: 0 } as const
+        let user = await User.findOne({ userId: clerkUserId }, projection)
         if (!user) {
-            throw new NotFoundError("User not found")
+            if (req.auth?.userId !== clerkUserId) {
+                throw new NotFoundError("User not found")
+            }
+            user = await ensureUserFromClerk(clerkUserId, projection)
         }
-        res.status(200).json(user)
-    }),
-)
-
-// Update a user's plan
-userRoutes.get(
-    "/users/update/plan",
-    asyncHandler(async (req: Request, res: Response) => {
-        const { userId, plan } = req.query
-        await updateUserPlan(userId as string, plan as string)
-        res.status(200).send("success")
+        res.status(200).json(toUserWithPlanStatus(user))
     }),
 )
 
@@ -64,6 +72,28 @@ userRoutes.delete(
         await deleteCloudinaryUserData(userId)
         await deleteClerkUserData(userId)
         res.status(200).json({ message: "User deleted successfully" })
+    }),
+)
+
+// Record that the caller has seen an intro version (identity comes from auth, never the body)
+userRoutes.put(
+    "/users/intro-seen",
+    asyncHandler(async (req: Request, res: Response) => {
+        const { version } = req.body ?? {}
+        if (typeof version !== "string" || !KNOWN_INTRO_VERSIONS.includes(version)) {
+            throw new BadRequestError("Unknown intro version")
+        }
+
+        const updatedUser = await User.findOneAndUpdate(
+            { userId: req.auth.userId },
+            { seenIntroVersion: version },
+            { new: true },
+        )
+        if (!updatedUser) {
+            throw new NotFoundError("User not found")
+        }
+
+        res.status(200).json({ seenIntroVersion: updatedUser.seenIntroVersion })
     }),
 )
 
@@ -164,7 +194,7 @@ userRoutes.post(
         const updatedUser = await User.findOneAndUpdate(
             { userId },
             {
-                $inc: { credits: 50 },
+                $inc: { credits: REFERRAL_BONUS },
                 $push: { referralsUsed: referralCode },
             },
             { new: true },
@@ -178,7 +208,7 @@ userRoutes.post(
         await User.findOneAndUpdate(
             { referralCode },
             {
-                $inc: { credits: 50 },
+                $inc: { credits: REFERRAL_BONUS },
                 $push: { referrals: referral },
             },
             { new: true },

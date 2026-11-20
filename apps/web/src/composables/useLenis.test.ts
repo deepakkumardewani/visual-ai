@@ -63,7 +63,10 @@ describe('useLenis', () => {
     expect(ticker.lagSmoothing).toHaveBeenCalledWith(0);
 
     scrollToSection('#pricing');
-    expect(lenisInstance.scrollTo).toHaveBeenCalledWith('#pricing', { offset: -8 });
+    expect(lenisInstance.scrollTo).toHaveBeenCalledWith('#pricing', {
+      offset: -8,
+      onComplete: expect.any(Function),
+    });
 
     wrapper.unmount();
     expect(ticker.remove).toHaveBeenCalled();

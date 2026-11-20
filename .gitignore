@@ -3,6 +3,14 @@ node_modules
 dist/
 buildcache/
 coverage/
+test-results/
+playwright-report/
+.dashboard/*/reports/
+# Keep legacy agent reports that were committed before this ignore rule.
+!.dashboard/tasks_dodo_payments/reports/
+!.dashboard/tasks_dodo_payments/reports/**
+.next-e2e
+apps/web/.next-e2e
 
 # env files
 .env
@@ -40,10 +48,16 @@ pnpm-debug.log*
 
 copyEnv.sh
 
-scripts/
+# `scripts/*` (not `scripts/`) so a nested .gitignore can re-include a specific file
+**/scripts/*
 infra/.env.prod
 infra/.env.staging
 # Playwright
 apps/web/playwright/.auth/
 apps/web/test-results/
 apps/web/playwright-report/
+
+# QA evidence screenshots written by e2e/qa specs
+agent_docs/qa/
+node-jiti/
+playwright-transform-cache-*/

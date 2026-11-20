@@ -4,6 +4,7 @@ import {
   faCreditCard,
   faLink,
   faMoon,
+  faRocket,
   faSignOutAlt,
   faSun,
   faUser,
@@ -14,20 +15,28 @@ import { onClickOutside } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useClerk } from 'vue-clerk';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
+import { useIntro } from '@/composables/useIntro';
+
+import PricingDialog from '@/components/Dialogs/PricingDialog.vue';
+import ProPerksDialog from '@/components/Dialogs/ProPerksDialog.vue';
 import ReferralCopyDialog from '@/components/Dialogs/ReferralCopyDialog.vue';
 import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue';
 
+import { APP_SURFACE, isAppShellRoute } from '@/utils/dashboardRoutes';
+
 const router = useRouter();
+const route = useRoute();
+const intro = useIntro();
 const dialogStore = useDialogStore();
 const appStore = useAppStore();
 const userStore = useUserStore();
-const { userDetails } = storeToRefs(userStore);
+const { userDetails, isPro, isReady } = storeToRefs(userStore);
 const { isDark } = storeToRefs(appStore);
 const { signOut } = useClerk();
 
@@ -68,6 +77,7 @@ const menuItems = computed(() => [
   { id: 'payments', label: 'Payments', icon: faCreditCard, action: goToPayments },
   { id: 'use-referral', label: 'Use Referral Code', icon: faUsers, action: showReferralDialog },
   { id: 'refer-earn', label: 'Refer & Earn Credits', icon: faLink, action: copyReferralCode },
+  { id: 'whats-new', label: "What's new", icon: faRocket, action: showWhatsNew },
 ]);
 
 function toggleMenu() {
@@ -135,7 +145,22 @@ function showReferralDialog() {
 
 function copyReferralCode() {
   closeMenu();
-  dialogStore.showCopyReferral();
+  dialogStore.showCopyReferral(triggerRef.value);
+}
+
+/** The modal is mounted by the dashboard, so other pages hop there first. */
+async function showWhatsNew() {
+  closeMenu();
+  if (!isAppShellRoute(route)) {
+    await router.push({ name: APP_SURFACE.CREATE });
+  }
+  intro.open();
+}
+
+function onPlanPillClick() {
+  closeMenu();
+  if (isPro.value) dialogStore.showProPerks();
+  else dialogStore.showPricing();
 }
 
 function handleSignOut() {
@@ -158,7 +183,7 @@ function setItemRef(index: number) {
       data-testid="user-menu-trigger"
       aria-haspopup="menu"
       :aria-expanded="menu"
-      class="user-menu__trigger tw-flex tw-h-10 tw-items-center tw-gap-2 tw-rounded-full tw-border tw-border-border/60 tw-bg-surface-1/50 tw-py-1 tw-pl-1 tw-pr-2.5 tw-transition-colors tw-duration-fast hover:tw-border-accent/40 hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
+      class="user-menu__trigger tw-flex tw-h-11 tw-items-center tw-gap-2 tw-rounded-full tw-border tw-border-border/60 tw-bg-surface-1/50 tw-py-1 tw-pl-1 tw-pr-2.5 tw-transition-colors tw-duration-fast hover:tw-border-accent/40 hover:tw-bg-surface-2 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
       @click="toggleMenu"
       @keydown="onTriggerKeydown"
     >
@@ -207,6 +232,21 @@ function setItemRef(index: number) {
             <span v-if="email" class="tw-block tw-truncate tw-text-xs tw-text-ink-muted">{{
               email
             }}</span>
+            <button
+              v-if="isReady"
+              type="button"
+              data-testid="plan-pill"
+              :aria-label="isPro ? 'Pro plan: view perks' : 'Free plan: upgrade to Pro'"
+              class="user-menu__badge tw-mt-1 tw-inline-flex tw-items-center tw-rounded-full tw-border-0 tw-px-2 tw-py-0.5 tw-text-[0.625rem] tw-font-semibold tw-uppercase tw-tracking-wide focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
+              :class="
+                isPro
+                  ? 'user-menu__badge--pro tw-bg-gold/15 tw-text-gold'
+                  : 'tw-bg-surface-3 tw-text-ink-muted'
+              "
+              @click="onPlanPillClick"
+            >
+              {{ isPro ? 'Pro' : 'Free' }}
+            </button>
           </span>
         </div>
 
@@ -291,6 +331,8 @@ function setItemRef(index: number) {
     </transition>
   </div>
   <ReferralDialog />
+  <PricingDialog />
+  <ProPerksDialog />
   <ReferralCopyDialog />
 </template>
 

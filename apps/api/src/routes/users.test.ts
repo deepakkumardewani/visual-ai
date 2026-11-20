@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import { CURRENT_INTRO_VERSION, REFERRAL_BONUS } from "@visual-ai/shared"
 
 const {
     find,
@@ -6,9 +7,9 @@ const {
     findById,
     findOneAndUpdate,
     deleteOne,
-    updateUserPlan,
     deleteClerkUserData,
     deleteCloudinaryUserData,
+    ensureUserFromClerk,
     sendMail,
     createTransport,
 } = vi.hoisted(() => {
@@ -19,9 +20,9 @@ const {
         findById: vi.fn(),
         findOneAndUpdate: vi.fn(),
         deleteOne: vi.fn(),
-        updateUserPlan: vi.fn(),
         deleteClerkUserData: vi.fn(),
         deleteCloudinaryUserData: vi.fn(),
+        ensureUserFromClerk: vi.fn(),
         sendMail,
         createTransport: vi.fn(() => ({ sendMail })),
     }
@@ -45,8 +46,8 @@ vi.mock("../models/user.js", () => ({
 }))
 
 vi.mock("../services/user-service.js", () => ({
-    updateUserPlan: (...args: any[]) => Reflect.apply(updateUserPlan, undefined, args),
     deleteClerkUserData: (...args: any[]) => Reflect.apply(deleteClerkUserData, undefined, args),
+    ensureUserFromClerk: (...args: any[]) => Reflect.apply(ensureUserFromClerk, undefined, args),
 }))
 
 vi.mock("../services/cloudinary-service.js", () => ({
@@ -96,6 +97,9 @@ function expectHttpError(next: ReturnType<typeof vi.fn>, name: string, message: 
     expect(error.statusCode).toBeGreaterThanOrEqual(400)
 }
 
+// Stands in for a mongoose document, which the route flattens via toObject().
+const withToObject = <T extends object>(doc: T) => ({ ...doc, toObject: () => ({ ...doc }) })
+
 describe("userRoutes", () => {
     beforeEach(() => {
         vi.clearAllMocks()
@@ -114,13 +118,89 @@ describe("userRoutes", () => {
     })
 
     it("returns a user by id", async () => {
-        const user = { userId: "u1", userName: "ada" }
+        const user = withToObject({ userId: "u1", userName: "ada" })
         findOne.mockResolvedValue(user)
 
         const { res } = await invoke(findHandler("/users/:id", "get"), { params: { id: "u1" } })
 
         expect(findOne).toHaveBeenCalledWith({ userId: "u1" }, { collection: 0, activities: 0 })
-        expect(res.json).toHaveBeenCalledWith(user)
+        expect(res.json).toHaveBeenCalledWith({
+            userId: "u1",
+            userName: "ada",
+            plan: "free",
+            periodEnd: null,
+            cancelAtPeriodEnd: false,
+        })
+    })
+
+    it("reports pro with period end and cancel flag for an active subscriber, hiding the subscription subdoc", async () => {
+        const periodEnd = new Date("2099-01-01T00:00:00.000Z")
+        findOne.mockResolvedValue(
+            withToObject({
+                userId: "u-pro",
+                plan: "pro",
+                subscription: {
+                    status: "active",
+                    currentPeriodEnd: periodEnd,
+                    cancelAtPeriodEnd: true,
+                },
+            }),
+        )
+
+        const { res } = await invoke(findHandler("/users/:id", "get"), { params: { id: "u-pro" } })
+
+        const body = res.json.mock.calls[0][0]
+        expect(body).toMatchObject({
+            userId: "u-pro",
+            plan: "pro",
+            periodEnd,
+            cancelAtPeriodEnd: true,
+        })
+        expect(body).not.toHaveProperty("subscription")
+    })
+
+    it("reports free for a legacy user with no plan fields", async () => {
+        findOne.mockResolvedValue(withToObject({ userId: "legacy" }))
+
+        const { res } = await invoke(findHandler("/users/:id", "get"), {
+            params: { id: "legacy" },
+        })
+
+        expect(res.json).toHaveBeenCalledWith({
+            userId: "legacy",
+            plan: "free",
+            periodEnd: null,
+            cancelAtPeriodEnd: false,
+        })
+    })
+
+    it("reports free when a stored pro plan has an expired past_due subscription", async () => {
+        const periodEnd = new Date("2000-01-01T00:00:00.000Z")
+        findOne.mockResolvedValue(
+            withToObject({
+                userId: "lapsed",
+                plan: "pro",
+                subscription: { status: "past_due", currentPeriodEnd: periodEnd },
+            }),
+        )
+
+        const { res } = await invoke(findHandler("/users/:id", "get"), {
+            params: { id: "lapsed" },
+        })
+
+        expect(res.json).toHaveBeenCalledWith(
+            expect.objectContaining({ plan: "free", periodEnd, cancelAtPeriodEnd: false }),
+        )
+    })
+
+    it("does not register the removed plan route", () => {
+        const paths = (userRoutes as any).stack
+            .filter((item: any) => item.route)
+            .map((item: any) => item.route.path as string)
+
+        expect(paths.filter((path: string) => /plan/i.test(path))).toEqual([])
+        expect(() => findHandler("/users/:id/plan", "put")).toThrow("Missing PUT /users/:id/plan")
+        expect(() => findHandler("/users/:id/plan", "post")).toThrow("Missing POST")
     })
 
     it("throws NotFoundError when the user id does not exist", async () => {
@@ -133,16 +213,20 @@ describe("userRoutes", () => {
         expectHttpError(next, "NotFoundError", "User not found")
     })
 
-    it("updates a user plan from query params", async () => {
-        updateUserPlan.mockResolvedValue(undefined)
+    it("creates the user from Clerk when the requester fetches their own missing profile", async () => {
+        const created = withToObject({ userId: "u-new", userName: "new" })
+        findOne.mockResolvedValueOnce(null)
+        ensureUserFromClerk.mockResolvedValue(created)
 
-        const { res } = await invoke(findHandler("/users/update/plan", "get"), {
-            query: { userId: "u1", plan: "free" },
+        const { res } = await invoke(findHandler("/users/:id", "get"), {
+            params: { id: "u-new" },
+            auth: { userId: "u-new" },
         })
 
-        expect(updateUserPlan).toHaveBeenCalledWith("u1", "free")
-        expect(res.status).toHaveBeenCalledWith(200)
-        expect(res.send).toHaveBeenCalledWith("success")
+        expect(ensureUserFromClerk).toHaveBeenCalledWith("u-new", { collection: 0, activities: 0 })
+        expect(res.json).toHaveBeenCalledWith(
+            expect.objectContaining({ userId: "u-new", plan: "free" }),
+        )
     })
 
     it("returns populated history for an existing user", async () => {
@@ -184,6 +268,85 @@ describe("userRoutes", () => {
         expect(deleteCloudinaryUserData).toHaveBeenCalledWith("u1")
         expect(deleteClerkUserData).toHaveBeenCalledWith("u1")
         expect(res.json).toHaveBeenCalledWith({ message: "User deleted successfully" })
+    })
+
+    it("returns the seenIntroVersion field on the profile GET", async () => {
+        findOne.mockResolvedValue(
+            withToObject({ userId: "u1", seenIntroVersion: CURRENT_INTRO_VERSION }),
+        )
+
+        const { res } = await invoke(findHandler("/users/:id", "get"), { params: { id: "u1" } })
+
+        expect(res.json).toHaveBeenCalledWith(
+            expect.objectContaining({ seenIntroVersion: CURRENT_INTRO_VERSION }),
+        )
+    })
+
+    it("returns a null seenIntroVersion for a user who has not seen the intro", async () => {
+        findOne.mockResolvedValue(withToObject({ userId: "u1", seenIntroVersion: null }))
+
+        const { res } = await invoke(findHandler("/users/:id", "get"), { params: { id: "u1" } })
+
+        expect(res.json).toHaveBeenCalledWith(
+            expect.objectContaining({ userId: "u1", seenIntroVersion: null }),
+        )
+    })
+
+    it("records a known intro version for the authenticated caller", async () => {
+        findOneAndUpdate.mockResolvedValue({ seenIntroVersion: CURRENT_INTRO_VERSION })
+
+        const { res, next } = await invoke(findHandler("/users/intro-seen", "put"), {
+            auth: { userId: "caller" },
+            body: { version: CURRENT_INTRO_VERSION },
+        })
+
+        expect(next).not.toHaveBeenCalled()
+        expect(findOneAndUpdate).toHaveBeenCalledWith(
+            { userId: "caller" },
+            { seenIntroVersion: CURRENT_INTRO_VERSION },
+            { new: true },
+        )
+        expect(res.status).toHaveBeenCalledWith(200)
+        expect(res.json).toHaveBeenCalledWith({ seenIntroVersion: CURRENT_INTRO_VERSION })
+    })
+
+    it("ignores a spoofed userId in the intro-seen body and writes only the caller", async () => {
+        findOneAndUpdate.mockResolvedValue({ seenIntroVersion: CURRENT_INTRO_VERSION })
+
+        await invoke(findHandler("/users/intro-seen", "put"), {
+            auth: { userId: "caller" },
+            body: { version: CURRENT_INTRO_VERSION, userId: "victim" },
+        })
+
+        expect(findOneAndUpdate).toHaveBeenCalledTimes(1)
+        expect(findOneAndUpdate.mock.calls[0][0]).toEqual({ userId: "caller" })
+    })
+
+    it.each([
+        ["an unknown version", { version: "v999" }],
+        ["a non-string version", { version: 2 }],
+        ["a missing version", {}],
+        ["an absent body", undefined],
+    ])("rejects intro-seen with %s and does not write", async (_label, body) => {
+        const { next } = await invoke(findHandler("/users/intro-seen", "put"), {
+            auth: { userId: "caller" },
+            body,
+        })
+
+        expectHttpError(next, "BadRequestError", "Unknown intro version")
+        expect(next.mock.calls[0][0].statusCode).toBe(400)
+        expect(findOneAndUpdate).not.toHaveBeenCalled()
+    })
+
+    it("throws NotFoundError when the intro-seen caller has no user record", async () => {
+        findOneAndUpdate.mockResolvedValue(null)
+
+        const { next } = await invoke(findHandler("/users/intro-seen", "put"), {
+            auth: { userId: "caller" },
+            body: { version: CURRENT_INTRO_VERSION },
+        })
+
+        expectHttpError(next, "NotFoundError", "User not found")
     })
 
     it("rejects a username update without a username", async () => {
@@ -334,7 +497,7 @@ describe("userRoutes", () => {
         expectHttpError(next, "BadRequestError", "You cannot use your own referral code.")
     })
 
-    it("grants 50 credits to both users and does not set a pro plan", async () => {
+    it("grants referral bonus credits to both users and does not set a pro plan", async () => {
         findOne
             .mockResolvedValueOnce({ userId: "u1", referralsUsed: [] })
             .mockResolvedValueOnce({ userId: "u2", referralCode: "CODE1" })
@@ -353,14 +516,14 @@ describe("userRoutes", () => {
         expect(findOneAndUpdate).toHaveBeenNthCalledWith(
             1,
             { userId: "u1" },
-            { $inc: { credits: 50 }, $push: { referralsUsed: "CODE1" } },
+            { $inc: { credits: REFERRAL_BONUS }, $push: { referralsUsed: "CODE1" } },
             { new: true },
         )
         expect(findOneAndUpdate).toHaveBeenNthCalledWith(
             2,
             { referralCode: "CODE1" },
             {
-                $inc: { credits: 50 },
+                $inc: { credits: REFERRAL_BONUS },
                 $push: {
                     referrals: {
                         userId: "u1",
@@ -413,3 +576,6 @@ describe("userRoutes", () => {
         expect(res.send).toHaveBeenCalledWith({ success: "Form submitted successfully!" })
     })
 })
+
+// T1.11 Verify runs this file but not multer.test.ts; import executes multer coverage.
+import "../middlewares/multer.test.js"

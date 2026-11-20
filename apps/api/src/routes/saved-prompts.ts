@@ -5,7 +5,7 @@ import mongoose from "mongoose"
 
 import { asyncHandler } from "../lib/async-handler.js"
 import { BadRequestError, ForbiddenError, NotFoundError, UnauthorizedError } from "../lib/errors.js"
-import { ClerkExpressRequireAuth } from "../middlewares/clerk.js"
+import { requireAuth } from "../middlewares/clerk.js"
 import { SavedPromptModel } from "../models/saved-prompt.js"
 
 const LIST_CAP = 100
@@ -39,7 +39,7 @@ function toDto(doc: {
 savedPromptsRoutes.get(
     "/saved-prompts",
     // @ts-ignore — Clerk middleware typing
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     asyncHandler(async (req: Request, res: Response) => {
         const userId = requireUserId(req)
         const docs = await SavedPromptModel.find({ userId })
@@ -64,7 +64,7 @@ savedPromptsRoutes.get(
 savedPromptsRoutes.post(
     "/saved-prompts",
     // @ts-ignore — Clerk middleware typing
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     asyncHandler(async (req: Request, res: Response) => {
         const userId = requireUserId(req)
         const parsed = CreateSavedPromptSchema.safeParse(req.body)
@@ -96,7 +96,7 @@ savedPromptsRoutes.post(
 savedPromptsRoutes.delete(
     "/saved-prompts/:id",
     // @ts-ignore — Clerk middleware typing
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     asyncHandler(async (req: Request, res: Response) => {
         const userId = requireUserId(req)
         const id = typeof req.params.id === "string" ? req.params.id : ""

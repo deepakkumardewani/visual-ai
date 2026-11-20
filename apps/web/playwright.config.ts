@@ -7,11 +7,36 @@ import { AUTH_STATE_PATH, WEB_URL } from './e2e/support/env';
 // dotenv does not override vars already set in the shell; a missing file is reported by preflight.
 dotenv.config({ path: '.env.e2e.local', quiet: true });
 
-// No webServer: the web app and API are always running locally.
+const useProdServer = process.env.E2E_SERVER === 'prod';
+const e2eProdPort = Number(process.env.E2E_PROD_PORT ?? 4173);
+const prodWebUrl = `http://127.0.0.1:${e2eProdPort}`;
+
+const webServer = useProdServer
+  ? {
+      // e2e-preview: production build with pk_test + local API (see .env.e2e-preview).
+      command: `VITE_PRERENDER=1 vp build --mode e2e-preview && bun run preview -- --port ${e2eProdPort} --strictPort --host 127.0.0.1`,
+      url: prodWebUrl,
+      reuseExistingServer: false,
+      // build + preview often exceeds Playwright's default 60s webServer timeout
+      timeout: 300_000,
+    }
+  : undefined;
+
+const VITEST_FILE_PATTERN = /\.test\.ts$/;
+
+// Default (unset or E2E_SERVER=dev): no webServer — web app and API are already running locally.
 export default defineConfig({
   testDir: './e2e',
+  // Vitest unit tests live beside the e2e helpers; Playwright must not collect them.
+  testIgnore: VITEST_FILE_PATTERN,
   globalSetup: './e2e/global.setup.ts',
-  use: { baseURL: WEB_URL },
+  ...(webServer ? { webServer } : {}),
+  use: {
+    baseURL: useProdServer ? prodWebUrl : WEB_URL,
+    // Portless serves HTTPS with a local CA (`portless trust`). The prod preview page is plain
+    // http but still calls the https portless API, so it needs the same allowance.
+    ignoreHTTPSErrors: useProdServer || WEB_URL.startsWith('https://'),
+  },
   projects: [
     { name: 'setup', testMatch: /auth\.setup\.ts/ },
     {
@@ -34,7 +59,8 @@ export default defineConfig({
     },
     {
       name: 'chromium',
-      testIgnore: [/auth\.setup\.ts/, /billing-(purchase|history)\.spec\.ts/],
+      // A project-level testIgnore replaces the top-level one, so repeat the Vitest-file pattern.
+      testIgnore: [VITEST_FILE_PATTERN, /auth\.setup\.ts/, /billing-(purchase|history)\.spec\.ts/],
       grepInvert: /@guest/,
       dependencies: ['setup'],
       // Real local API + one Clerk user: parallel signed-in specs race on /users/user_*.

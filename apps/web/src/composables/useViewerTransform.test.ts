@@ -108,6 +108,7 @@ describe('useViewerTransform', () => {
     await nextTick();
 
     expect(viewer.resultUrl.value).toBe('https://cdn.example/up.png');
+    expect(viewer.resultItem.value).toBe(generate.imageData);
     expect(viewer.hasResult.value).toBe(true);
     expect(viewer.isProcessing.value).toBe(false);
     expect(viewer.resultIsTransparent.value).toBe(false);
@@ -133,6 +134,7 @@ describe('useViewerTransform', () => {
     item.value = feedItem('b');
     await nextTick();
     expect(viewer.hasResult.value).toBe(false);
+    expect(viewer.resultItem.value).toBeNull();
     expect(viewer.processingAction.value).toBeNull();
   });
 

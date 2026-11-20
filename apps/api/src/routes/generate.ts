@@ -1,12 +1,19 @@
 import { Router } from "express"
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
+import { PREMIUM_MODEL_KEYS, type ModelKey } from "@visual-ai/shared"
 
 import { asyncHandler } from "../lib/async-handler.js"
-import { BadRequestError } from "../lib/errors.js"
+import { BadRequestError, PremiumModelRequiresProError } from "../lib/errors.js"
 import { createLogger } from "../lib/logger.js"
+import { validateReferenceImageUrls } from "../lib/model-input.js"
 import { enqueueGeneration } from "../queue/generation-queue.js"
-import { ClerkExpressRequireAuth } from "../middlewares/clerk.js"
-import { upload } from "../middlewares/multer.js"
+import { requireAuth } from "../middlewares/clerk.js"
+import {
+    MAX_REFERENCE_IMAGES_PER_REQUEST,
+    referenceImagesUpload,
+    upload,
+} from "../middlewares/multer.js"
+import { resolveUserIsPro } from "../services/generation-service.js"
 import { RedisService } from "../services/redis-service.js"
 import { Props } from "../types"
 
@@ -15,6 +22,21 @@ const logger = createLogger("generate-route")
 const jobStatusService = new RedisService()
 
 export const generateRoute = Router()
+
+/** Prefers the verified session; falls back to `req.body.userId` only when no session is attached. */
+function authedUserId(req: Request): string {
+    return req.auth?.userId ?? req.body?.userId ?? ""
+}
+
+/**
+ * Makes the job body's userId server-trusted: the e2e fake-Replicate decision and credit
+ * accounting key off it, so a client-supplied value must never survive. Must run after
+ * multer on multipart routes, since multer replaces req.body.
+ */
+function stampAuthedUserId(req: Request, _res: Response, next: NextFunction) {
+    req.body = { ...req.body, userId: authedUserId(req) }
+    next()
+}
 
 function acceptResponse(res: Response) {
     res.status(202).json({
@@ -76,12 +98,51 @@ generateRoute.get("/progress", async (req: Request, res: Response) => {
 
 // AI Image Generation Endpoint
 // Fire-and-forget: starts background job, returns 202 immediately
+function attachReferenceUploadBody(req: Request, _res: Response, next: () => void) {
+    req.body = {
+        ...req.body,
+        userId: authedUserId(req),
+        feature: "reference",
+        format: req.body.format ?? "png",
+    }
+    next()
+}
+
+generateRoute.post(
+    "/generate/reference-images",
+    // @ts-ignore
+    requireAuth,
+    attachReferenceUploadBody,
+    referenceImagesUpload.array("images", MAX_REFERENCE_IMAGES_PER_REQUEST),
+    asyncHandler(async (req: Request, res: Response) => {
+        const files = req.files as { path?: string }[] | undefined
+        if (!files?.length) {
+            throw new BadRequestError("No image files provided")
+        }
+        const urls = files.map((file) => file.path).filter(Boolean)
+        if (urls.length !== files.length) {
+            throw new BadRequestError("Failed to upload one or more reference images")
+        }
+        res.status(200).json({ urls })
+    }),
+)
+
 generateRoute.post(
     "/generate/image",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
+    stampAuthedUserId,
     asyncHandler(async (req: Request, res: Response) => {
-        await enqueueGeneration({ kind: "image", body: req.body })
+        const modelKey = (req.body.modelId ?? "FLUX_BASIC") as ModelKey
+        validateReferenceImageUrls(modelKey, req.body.referenceImageUrls)
+        const isPro = await resolveUserIsPro(authedUserId(req))
+        if (!isPro && PREMIUM_MODEL_KEYS.includes(modelKey)) {
+            // Rejected before queueing, so no credits are ever deducted for a gated request.
+            const error = new PremiumModelRequiresProError()
+            res.status(error.statusCode).json({ error: error.message, code: error.code })
+            return
+        }
+        await enqueueGeneration({ kind: "image", body: req.body, isPro })
         acceptResponse(res)
     }),
 )
@@ -91,8 +152,9 @@ generateRoute.post(
 generateRoute.post(
     "/generate/upscale/image",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     upload.single("image"),
+    stampAuthedUserId,
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.path) {
             throw new BadRequestError("No image file provided")
@@ -102,7 +164,11 @@ generateRoute.post(
             filePath: req.file.path,
             fileName: req.file.filename,
         }
-        await enqueueGeneration({ kind: "upscale", props })
+        await enqueueGeneration({
+            kind: "upscale",
+            props,
+            isPro: await resolveUserIsPro(authedUserId(req)),
+        })
         acceptResponse(res)
     }),
 )
@@ -112,8 +178,9 @@ generateRoute.post(
 generateRoute.post(
     "/generate/revive/image",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     upload.single("image"),
+    stampAuthedUserId,
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.path) {
             throw new BadRequestError("No image file provided")
@@ -123,7 +190,11 @@ generateRoute.post(
             filePath: req.file.path,
             fileName: req.file.filename,
         }
-        await enqueueGeneration({ kind: "revive", props })
+        await enqueueGeneration({
+            kind: "revive",
+            props,
+            isPro: await resolveUserIsPro(authedUserId(req)),
+        })
         acceptResponse(res)
     }),
 )
@@ -133,8 +204,9 @@ generateRoute.post(
 generateRoute.post(
     "/generate/colorize/image",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     upload.single("image"),
+    stampAuthedUserId,
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.path) {
             throw new BadRequestError("No image file provided")
@@ -144,7 +216,11 @@ generateRoute.post(
             filePath: req.file.path,
             fileName: req.file.filename,
         }
-        await enqueueGeneration({ kind: "colorize", props })
+        await enqueueGeneration({
+            kind: "colorize",
+            props,
+            isPro: await resolveUserIsPro(authedUserId(req)),
+        })
         acceptResponse(res)
     }),
 )
@@ -154,8 +230,9 @@ generateRoute.post(
 generateRoute.post(
     "/generate/remove-bg/image",
     // @ts-ignore
-    ClerkExpressRequireAuth({}),
+    requireAuth,
     upload.single("image"),
+    stampAuthedUserId,
     asyncHandler(async (req: Request, res: Response) => {
         if (!req.file?.path) {
             throw new BadRequestError("No image file provided")
@@ -165,7 +242,11 @@ generateRoute.post(
             filePath: req.file.path,
             fileName: req.file.filename,
         }
-        await enqueueGeneration({ kind: "remove-bg", props })
+        await enqueueGeneration({
+            kind: "remove-bg",
+            props,
+            isPro: await resolveUserIsPro(authedUserId(req)),
+        })
         acceptResponse(res)
     }),
 )

@@ -14,7 +14,7 @@ import { useAsideStore } from '@/stores/aside';
 import Popover from '@/components/primitives/Popover.vue';
 
 const asideStore = useAsideStore();
-const { referenceImage, supportsImageInput } = storeToRefs(asideStore);
+const { referenceImages, supportsImageInput, imageInputMax } = storeToRefs(asideStore);
 const { interactiveTransition } = useDashboardMotion();
 
 const infoOpen = ref(false);
@@ -22,8 +22,14 @@ const fileInputRef = ref<HTMLInputElement | null>(null);
 const disabledTriggerRef = ref<HTMLElement | null>(null);
 const tipVisible = ref(false);
 const tipStyle = ref<Record<string, string>>({});
+const inlineError = ref('');
 
-const addLabel = computed(() => (referenceImage.value ? 'Replace reference' : 'Add reference'));
+const allowsMultiple = computed(() => imageInputMax.value > 1);
+
+const addLabel = computed(() => {
+  if (allowsMultiple.value) return 'Add reference';
+  return referenceImages.value.length ? 'Replace reference' : 'Add reference';
+});
 
 const disabledTooltip = 'This model doesn’t support reference images';
 
@@ -70,23 +76,55 @@ function openFilePicker() {
   fileInputRef.value?.click();
 }
 
+function limitMessage(max: number) {
+  return max === 1 ? 'This model accepts up to 1 image' : `This model accepts up to ${max} images`;
+}
+
+function stageFiles(fileList: FileList | null) {
+  if (!fileList?.length) return;
+  inlineError.value = '';
+
+  const max = imageInputMax.value;
+  const files = Array.from(fileList);
+
+  for (const file of files) {
+    const result = validateImageFile(file);
+    if (!result.ok) {
+      inlineError.value = result.error;
+      continue;
+    }
+
+    if (referenceImages.value.length >= max) {
+      inlineError.value = limitMessage(max);
+      return;
+    }
+
+    if (max === 1) {
+      asideStore.setReferenceImage(result.file);
+    } else {
+      asideStore.addReferenceImage(result.file);
+    }
+  }
+}
+
 function handleFileChange(event: Event) {
   const input = event.target as HTMLInputElement;
-  const file = input.files?.[0];
+  stageFiles(input.files);
   input.value = '';
-  if (!file) return;
-  const result = validateImageFile(file);
-  if (!result.ok) return;
-  asideStore.setReferenceImage(result.file);
 }
 </script>
 
 <template>
-  <div data-testid="reference-image-control" class="reference-image-control tw-shrink-0">
+  <div
+    data-testid="reference-image-control"
+    data-tour="ref-image"
+    class="reference-image-control tw-shrink-0"
+  >
     <input
       ref="fileInputRef"
       type="file"
       :accept="ACCEPTED_IMAGE_ACCEPT"
+      :multiple="allowsMultiple"
       class="tw-sr-only"
       tabindex="-1"
       aria-hidden="true"
@@ -108,7 +146,7 @@ function handleFileChange(event: Event) {
         type="button"
         data-testid="reference-image-trigger"
         disabled
-        class="tw-inline-flex tw-h-8 tw-w-8 tw-cursor-not-allowed tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-hairline/60 tw-bg-surface-2/40 tw-text-ink-faint tw-opacity-50"
+        class="tw-inline-flex tw-h-8 tw-w-8 max-md:tw-h-11 max-md:tw-w-11 tw-cursor-not-allowed tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-hairline/60 tw-bg-surface-2/40 tw-text-ink-faint tw-opacity-50"
         :aria-label="disabledTooltip"
         :aria-describedby="tipVisible ? 'reference-image-tooltip' : undefined"
       >
@@ -143,7 +181,7 @@ function handleFileChange(event: Event) {
         <span
           data-testid="reference-image-trigger"
           :class="[
-            'tw-inline-flex tw-h-8 tw-w-8 tw-items-center tw-justify-center tw-text-ink-muted',
+            'tw-inline-flex tw-h-8 tw-w-8 max-md:tw-h-11 max-md:tw-w-11 tw-items-center tw-justify-center tw-text-ink-muted',
             interactiveTransition,
             open ? 'tw-text-ink' : '',
           ]"
@@ -196,6 +234,15 @@ function handleFileChange(event: Event) {
           </div>
         </div>
 
+        <p
+          v-if="inlineError"
+          data-testid="reference-image-inline-error"
+          class="tw-text-caption tw-leading-snug tw-text-red-400"
+          role="alert"
+        >
+          {{ inlineError }}
+        </p>
+
         <button
           type="button"
           data-testid="reference-image-add"
@@ -220,6 +267,16 @@ function handleFileChange(event: Event) {
   border-radius: 0.375rem;
   border-color: rgb(var(--tw-hairline) / 0.6);
   background: rgb(var(--tw-surface-2) / 0.6);
+}
+
+/* Touch target: 44px below the md breakpoint (768px). */
+@media (max-width: 767.98px) {
+  .reference-image-control :deep(.tw-relative.tw-inline-block > button) {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    height: 2.75rem;
+    width: 2.75rem;
+  }
 }
 
 .reference-image-control :deep(.tw-relative.tw-inline-block > button:hover) {

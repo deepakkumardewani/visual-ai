@@ -19,6 +19,7 @@ const logoUrl = computed(() => getModelLogoUrl(props.model.iconUrl));
 <template>
   <span
     data-testid="model-picker-trigger"
+    data-tour="model-picker"
     class="tw-flex tw-w-full tw-items-center tw-gap-2 tw-text-left"
   >
     <img

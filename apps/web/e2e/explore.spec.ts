@@ -1,18 +1,18 @@
 import type { Page, Route } from '@playwright/test';
 
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/base';
 
 import type { ExploreFeedItem } from '@visual-ai/shared';
 
-import { WEB_URL } from './support/env';
+import { E2E_WEB_ORIGIN } from './support/env';
 
 const USER_PROFILE_URL = /\/users\/user_/;
-const FIXTURE_IMAGE_URL = `${WEB_URL}/e2e-fixture.png`;
+const FIXTURE_IMAGE_URL = `${E2E_WEB_ORIGIN}/e2e-fixture.png`;
 const FIXTURE_IMAGE_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
 
 const API_CORS = {
-  'Access-Control-Allow-Origin': WEB_URL,
+  'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
   'Access-Control-Allow-Credentials': 'true',
   'Access-Control-Allow-Headers': '*',
 };

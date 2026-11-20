@@ -49,6 +49,9 @@ export default defineConfig({
       },
     },
     setupFiles: ['apps/web/src/test/setup.ts'],
+    // Node 25+ ships an experimental global localStorage that throws without --localstorage-file
+    // and shadows happy-dom's implementation; disable it in test workers.
+    execArgv: ['--no-experimental-webstorage'],
   },
   lint: {
     plugins: ['typescript'],
@@ -81,6 +84,15 @@ export default defineConfig({
     ],
   },
   fmt: {
+    // Generated or gitignored artifacts (prerender output, reports, saved sessions) are not source.
+    ignorePatterns: [
+      '**/dist/**',
+      '**/coverage/**',
+      '**/test-results/**',
+      '**/playwright/.auth/**',
+      'apps/web/src/auto-imports.d.ts',
+      'apps/web/src/components.d.ts',
+    ],
     singleQuote: true,
     semi: true,
     overrides: [

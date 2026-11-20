@@ -6,7 +6,7 @@ const { verifyToken, createClerkClient, createClerkExpressRequireAuth, mockLogge
         return {
             verifyToken,
             createClerkClient: vi.fn(() => ({ verifyToken })),
-            createClerkExpressRequireAuth: vi.fn(() => "require-auth-middleware"),
+            createClerkExpressRequireAuth: vi.fn(() => vi.fn(() => "require-auth-middleware")),
             mockLogger: { error: vi.fn(), info: vi.fn() },
         }
     },
@@ -30,7 +30,7 @@ vi.mock("../lib/logger.js", () => ({
     createLogger: () => mockLogger,
 }))
 
-import { ClerkExpressRequireAuth, authenticateProgress, clerkClient } from "./clerk.js"
+import { ClerkExpressRequireAuth, authenticateProgress, clerkClient, requireAuth } from "./clerk.js"
 
 describe("clerk middleware", () => {
     beforeEach(() => {
@@ -40,7 +40,22 @@ describe("clerk middleware", () => {
 
     it("exports a clerk client and require-auth middleware", () => {
         expect(clerkClient).toEqual({ verifyToken })
-        expect(ClerkExpressRequireAuth).toBe("require-auth-middleware")
+        expect(typeof ClerkExpressRequireAuth).toBe("function")
+        expect(requireAuth).toBe("require-auth-middleware")
+        expect(createClerkExpressRequireAuth).toHaveBeenCalledWith({
+            clerkClient: { verifyToken },
+        })
+        expect(ClerkExpressRequireAuth).toHaveBeenCalledWith({
+            authorizedParties: [
+                "http://localhost:3000",
+                "http://localhost:3005",
+                "http://127.0.0.1:4173",
+                "http://127.0.0.1:4174",
+                "https://visual-ai.localhost",
+                "http://visual-ai.localhost",
+                "https://visual-ai.app",
+            ],
+        })
     })
 
     it("calls next when the progress token verifies", async () => {
@@ -53,7 +68,15 @@ describe("clerk middleware", () => {
 
         expect(verifyToken).toHaveBeenCalledWith("valid-token", {
             jwtKey: "clerk-jwt",
-            authorizedParties: ["http://localhost:3000", "https://visual-ai.app"],
+            authorizedParties: [
+                "http://localhost:3000",
+                "http://localhost:3005",
+                "http://127.0.0.1:4173",
+                "http://127.0.0.1:4174",
+                "https://visual-ai.localhost",
+                "http://visual-ai.localhost",
+                "https://visual-ai.app",
+            ],
         })
         expect(next).toHaveBeenCalledTimes(1)
         expect(res.status).not.toHaveBeenCalled()

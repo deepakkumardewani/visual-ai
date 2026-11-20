@@ -22,8 +22,13 @@ const app: Application = express()
 const LOCAL_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3005",
+    "http://localhost:3006",
     "http://localhost:8080",
     "http://127.0.0.1:8080",
+    "http://127.0.0.1:4173",
+    "http://127.0.0.1:4174",
+    "https://visual-ai.localhost",
+    "http://visual-ai.localhost",
 ]
 
 // Deployed origins differ per environment (prod apex vs. staging subdomain),
@@ -43,8 +48,12 @@ const corsOptions = {
     credentials: true,
 }
 
-app.use(cors(corsOptions))
-app.options("*", cors(corsOptions))
+// The public unsubscribe endpoint is opened from email clients and posted by plain
+// HTML forms (Origin is absent or the API's own), so it must bypass the origin check.
+const NON_PUBLIC_EMAIL_PATH = /^(?!\/email(\/|$))/
+
+app.use(NON_PUBLIC_EMAIL_PATH, cors(corsOptions))
+app.options(NON_PUBLIC_EMAIL_PATH, cors(corsOptions))
 
 // HTTP access logs: one-liners. Skip generate (domain logs cover those) + health/SSE noise.
 app.use(
@@ -64,6 +73,10 @@ app.use(
         },
         customSuccessMessage: (req, res) => `${req.method} ${req.url} ${res.statusCode}`,
         customErrorMessage: (req, res) => `${req.method} ${req.url} ${res.statusCode}`,
+        customProps: (req) => {
+            const origin = req.headers.origin
+            return origin ? { origin } : {}
+        },
         serializers: {
             req: () => undefined,
             res: () => undefined,

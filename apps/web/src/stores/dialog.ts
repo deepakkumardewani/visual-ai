@@ -17,9 +17,11 @@ export type ConfirmChainActionOptions = {
 };
 
 let settleChainConfirm: ((confirmed: boolean) => void) | null = null;
+let copyReferralReturnFocus: HTMLElement | null = null;
 
 export const useDialogStore = defineStore('dialog', () => {
   const showPricingDialog = ref(false);
+  const showProPerksDialog = ref(false);
   const showLowCreditsDialog = ref(false);
   const showImageDialog = ref(false);
   const activeImageId = ref<string | null>(null);
@@ -73,7 +75,8 @@ export const useDialogStore = defineStore('dialog', () => {
   function showReferral() {
     showReferralDialog.value = true;
   }
-  function showCopyReferral() {
+  function showCopyReferral(returnFocus?: HTMLElement | null) {
+    copyReferralReturnFocus = returnFocus ?? null;
     showCopyReferralDialog.value = true;
   }
   function showBuyCredits() {
@@ -87,6 +90,11 @@ export const useDialogStore = defineStore('dialog', () => {
   }
   function hideCopyReferral() {
     showCopyReferralDialog.value = false;
+    const restoreTarget = copyReferralReturnFocus;
+    copyReferralReturnFocus = null;
+    if (restoreTarget?.isConnected) {
+      requestAnimationFrame(() => restoreTarget.focus());
+    }
   }
   function showDelete() {
     showDeleteDialog.value = true;
@@ -99,6 +107,12 @@ export const useDialogStore = defineStore('dialog', () => {
   }
   function hidePricing() {
     showPricingDialog.value = false;
+  }
+  function showProPerks() {
+    showProPerksDialog.value = true;
+  }
+  function hideProPerks() {
+    showProPerksDialog.value = false;
   }
   function showSignup() {
     signupDialog.value = true;
@@ -115,6 +129,7 @@ export const useDialogStore = defineStore('dialog', () => {
 
   return {
     showPricingDialog,
+    showProPerksDialog,
     showImageDialog,
     activeImageId,
     showReferralDialog,
@@ -131,6 +146,8 @@ export const useDialogStore = defineStore('dialog', () => {
     referralOfferDialog,
     showPricing,
     hidePricing,
+    showProPerks,
+    hideProPerks,
     showLowCredits,
     hideLowCredits,
     showImage,

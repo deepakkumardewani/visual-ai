@@ -21,6 +21,7 @@ const logoUrl = computed(() => getModelLogoUrl(props.model.iconUrl));
 <template>
   <span
     data-testid="model-chip"
+    data-tour="model-picker"
     :class="[
       'tw-inline-flex tw-min-h-[44px] tw-w-full tw-items-center tw-gap-2.5 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2/60 tw-py-1.5 tw-pl-3 tw-pr-2 tw-text-left',
       interactiveTransition,

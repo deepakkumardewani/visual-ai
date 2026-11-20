@@ -182,6 +182,18 @@ describe("app", () => {
         expect(deny.mock.calls[0][0].message).toBe("Not allowed by CORS")
     })
 
+    it("exempts /email/* from the CORS origin check but keeps it elsewhere", () => {
+        const corsLayer = app._router.stack.find(
+            (layer: { name?: string }) => layer.name === "corsMiddleware",
+        )
+        const matches = (path: string) => corsLayer.regexp.test(path)
+        expect(matches("/email/unsubscribe")).toBe(false)
+        expect(matches("/email")).toBe(false)
+        expect(matches("/users")).toBe(true)
+        expect(matches("/emails")).toBe(true)
+        expect(matches("/")).toBe(true)
+    })
+
     it("skips HTTP access logs for health, progress, and generate paths", () => {
         const ignore = pinoCapture.options.autoLogging.ignore
         expect(ignore({ url: "/health" })).toBe(true)
@@ -201,5 +213,13 @@ describe("app", () => {
         expect(pinoCapture.options.serializers.req()).toBeUndefined()
         expect(pinoCapture.options.serializers.res()).toBeUndefined()
         expect(typeof pinoCapture.options.genReqId()).toBe("string")
+    })
+
+    it("adds origin to access logs when the client sends Origin", () => {
+        const props = pinoCapture.options.customProps({
+            headers: { origin: "https://visual-ai.localhost" },
+        } as any)
+        expect(props).toEqual({ origin: "https://visual-ai.localhost" })
+        expect(pinoCapture.options.customProps({ headers: {} } as any)).toEqual({})
     })
 })

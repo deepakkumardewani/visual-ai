@@ -93,7 +93,7 @@ onBeforeUnmount(clearStylePreview);
 </script>
 
 <template>
-  <div data-testid="style-picker">
+  <div data-testid="style-picker" data-tour="style-picker">
     <Popover v-model:open="isOpen" placement="bottom-start">
       <template #trigger="{ open }">
         <span

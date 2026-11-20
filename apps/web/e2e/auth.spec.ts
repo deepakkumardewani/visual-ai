@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/base';
 
 const COMMUNITY_CREATION_PATH = '/explore/e2e-creation';
 const PROMPT = 'e2e signed-out prompt';

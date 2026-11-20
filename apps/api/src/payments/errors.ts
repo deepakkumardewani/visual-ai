@@ -1,3 +1,5 @@
+import { PAYMENTS_MESSAGES } from "./constants.js"
+
 const SECRET_PATTERN = /(?:whsec_|sk_|bearer\s)[^\s'"]+/gi
 
 function sanitizeProviderMessage(message: string): string {
@@ -15,6 +17,13 @@ export class UnknownPackError extends Error {
     constructor(packId: string) {
         super(`Unknown credit pack: ${packId}`)
         this.name = "UnknownPackError"
+    }
+}
+
+export class AlreadySubscribedError extends Error {
+    constructor() {
+        super(PAYMENTS_MESSAGES.ALREADY_SUBSCRIBED)
+        this.name = "AlreadySubscribedError"
     }
 }
 

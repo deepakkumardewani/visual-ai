@@ -25,7 +25,7 @@ Visual AI is for people who need still images without a subscription: designers,
 
 You buy credits. There are no paid subscription tiers.
 
-- New account: 50 persistent credits (they do not expire).
+- New account: 30 persistent credits (they do not expire).
 - Every day: 30 daily credits. Unused daily credits reset (use-or-lose).
 - Purchased credits persist and never expire.
 - Pay in INR via Dodo Payments (card or UPI where available). Packs and prices: https://visual-ai.app/pricing

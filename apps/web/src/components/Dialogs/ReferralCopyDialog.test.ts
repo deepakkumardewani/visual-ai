@@ -1,8 +1,10 @@
+import { REFERRAL_BONUS } from '@visual-ai/shared';
 import { createPinia, setActivePinia } from 'pinia';
 import { mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import ReferralCopyDialog from '@/components/Dialogs/ReferralCopyDialog.vue';
+import { referralGiveEarnCopy } from '@/utils/seo';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
@@ -36,6 +38,8 @@ describe('ReferralCopyDialog', () => {
     expect(wrapper.text()).toContain('Your account balance');
     expect(wrapper.text()).toContain('75 credits');
     expect(wrapper.text()).toContain('Earn more credits');
+    expect(wrapper.text()).toContain(referralGiveEarnCopy());
+    expect(wrapper.text()).toContain(String(REFERRAL_BONUS));
     expect(wrapper.find('[data-testid="referral-code"]').exists()).toBe(true);
   });
 
@@ -47,6 +51,25 @@ describe('ReferralCopyDialog', () => {
 
     const wrapper = mount(ReferralCopyDialog, { global: { stubs } });
     expect(wrapper.text()).toContain('0 credits');
+  });
+
+  it('closes when Escape is pressed on the modal', async () => {
+    const dialogStore = useDialogStore();
+    dialogStore.showCopyReferral();
+    const wrapper = mount(ReferralCopyDialog, {
+      global: {
+        stubs: {
+          Teleport: true,
+          Transition: false,
+          ReferralCode: { template: '<div data-testid="referral-code" />' },
+          'font-awesome-icon': true,
+        },
+      },
+    });
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    await wrapper.vm.$nextTick();
+    expect(dialogStore.showCopyReferralDialog).toBe(false);
+    wrapper.unmount();
   });
 
   it('closes from the close button', async () => {

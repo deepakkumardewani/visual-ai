@@ -1,0 +1,1562 @@
+[
+ {
+  "file": "1/T1.3-1.png",
+  "taskId": "T1.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Header at banner-390",
+  "annotations": [],
+  "at": "2026-11-16T09:55:34.276Z"
+ },
+ {
+  "file": "1/T1.3-2.png",
+  "taskId": "T1.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Header at banner-700",
+  "annotations": [],
+  "at": "2026-11-16T09:55:34.370Z"
+ },
+ {
+  "file": "1/T1.3-3.png",
+  "taskId": "T1.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Header at earn-pill-768",
+  "annotations": [],
+  "at": "2026-11-16T09:55:34.451Z"
+ },
+ {
+  "file": "1/T1.3-4.png",
+  "taskId": "T1.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Header at earn-pill-1024",
+  "annotations": [],
+  "at": "2026-11-16T09:55:34.530Z"
+ },
+ {
+  "file": "1/T1.1-1.png",
+  "taskId": "T1.1",
+  "kind": "proof",
+  "step": "Banner below 768; 640 split unchanged",
+  "attempt": 1,
+  "caption": "At 700px the banner shows and Earn is gone, but a ~55px empty band sits between header and content and the page grows to 996px in a 900px viewport",
+  "annotations": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 100,
+    "h": 3.6,
+    "label": "Referral banner shown below 768"
+   },
+   {
+    "x": 0,
+    "y": 10,
+    "w": 100,
+    "h": 5.5,
+    "label": "New empty band (in-flow mobile header + pt-14 stacked on sm layout)"
+   }
+  ],
+  "at": "2026-11-16T10:04:05.486Z"
+ },
+ {
+  "file": "1/T1.1-2.png",
+  "taskId": "T1.1",
+  "kind": "proof",
+  "step": "Earn pill shown from 768",
+  "attempt": 1,
+  "caption": "At 768px no banner and the Earn credits chip is in the header; content sits directly under the header",
+  "annotations": [
+   {
+    "x": 45.2,
+    "y": 1.6,
+    "w": 15,
+    "h": 3.8,
+    "label": "Earn credits chip in header"
+   }
+  ],
+  "at": "2026-11-16T10:04:05.562Z"
+ },
+ {
+  "file": "1/T1.1-3.png",
+  "taskId": "T1.1",
+  "kind": "after",
+  "step": "Banner below 768; 640 split unchanged, nothing cut off",
+  "attempt": 3,
+  "caption": "At 700x600 (640-767 band) the banner shows, Earn is absent, the shell starts right under the header and the options rail scrolled to its end shows the Format row fully inside the viewport",
+  "annotations": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 100,
+    "h": 6,
+    "label": "Referral banner below 768, no Earn pill"
+   },
+   {
+    "x": 0,
+    "y": 87,
+    "w": 37,
+    "h": 12,
+    "label": "Last rail control (Format) fully visible, not clipped"
+   }
+  ],
+  "at": "2026-11-16T10:16:40.881Z"
+ },
+ {
+  "file": "2/T2.3-1.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Header cluster-1440",
+  "annotations": [],
+  "at": "2026-11-16T10:36:50.497Z"
+ },
+ {
+  "file": "2/T2.3-2.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Header cluster-1024",
+  "annotations": [],
+  "at": "2026-11-16T10:36:50.582Z"
+ },
+ {
+  "file": "2/T2.3-3.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Header icon-only-768",
+  "annotations": [],
+  "at": "2026-11-16T10:36:50.664Z"
+ },
+ {
+  "file": "2/T2.3-4.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Header upgrade-icon-390",
+  "annotations": [],
+  "at": "2026-11-16T10:36:50.746Z"
+ },
+ {
+  "file": "2/T2.1-1.png",
+  "taskId": "T2.1",
+  "kind": "proof",
+  "step": "Order Earn, Upgrade, credits, avatar; labels at >=1024",
+  "attempt": 1,
+  "caption": "Free user at 1440: Earn credits and Upgrade to Pro show icon plus label, left of the credits pill and avatar",
+  "annotations": [
+   {
+    "x": 69.4,
+    "y": 1.1,
+    "w": 8.2,
+    "h": 4.9,
+    "label": "Earn credits (faUserPlus) first"
+   },
+   {
+    "x": 78.4,
+    "y": 1.1,
+    "w": 9.3,
+    "h": 4.9,
+    "label": "Upgrade to Pro (faGem) second"
+   },
+   {
+    "x": 88.6,
+    "y": 1.1,
+    "w": 4.3,
+    "h": 4.9,
+    "label": "Credits pill third"
+   },
+   {
+    "x": 93.75,
+    "y": 1.3,
+    "w": 4.6,
+    "h": 4.4,
+    "label": "Avatar menu last"
+   }
+  ],
+  "at": "2026-11-16T10:46:12.512Z"
+ },
+ {
+  "file": "2/T2.1-2.png",
+  "taskId": "T2.1",
+  "kind": "proof",
+  "step": "Icon-only with aria-label and tooltip at 768-1023, 44px targets",
+  "attempt": 1,
+  "caption": "Free user at 768: Earn and Upgrade are 44x44 icon-only buttons; keyboard focus on Upgrade shows the Upgrade to Pro tooltip",
+  "annotations": [
+   {
+    "x": 66.6,
+    "y": 1.1,
+    "w": 5.7,
+    "h": 4.9,
+    "label": "Earn icon-only, 44x44"
+   },
+   {
+    "x": 73.4,
+    "y": 1.1,
+    "w": 5.7,
+    "h": 4.9,
+    "label": "Upgrade icon-only, 44x44, focused"
+   },
+   {
+    "x": 67.9,
+    "y": 6.9,
+    "w": 16.7,
+    "h": 3.6,
+    "label": "Tooltip on focus"
+   }
+  ],
+  "at": "2026-11-16T10:46:12.607Z"
+ },
+ {
+  "file": "2/T2.1-3.png",
+  "taskId": "T2.1",
+  "kind": "proof",
+  "step": "Below 768: Upgrade icon button, Earn only in the banner",
+  "attempt": 1,
+  "caption": "Free user at 390: the header has an icon-only Upgrade button and no Earn pill; Earn lives in the top referral banner",
+  "annotations": [
+   {
+    "x": 47.6,
+    "y": 5.1,
+    "w": 11.3,
+    "h": 4.9,
+    "label": "Upgrade icon button, 44x44"
+   },
+   {
+    "x": 0,
+    "y": 0,
+    "w": 100,
+    "h": 4,
+    "label": "Referral banner replaces Earn"
+   }
+  ],
+  "at": "2026-11-16T10:46:12.686Z"
+ },
+ {
+  "file": "2/T2.1-4.png",
+  "taskId": "T2.1",
+  "kind": "proof",
+  "step": "Upgrade shown to Free users only",
+  "attempt": 1,
+  "caption": "Pro user at 768: no Upgrade button; Earn icon, credits, PRO badge (stays until P3) and avatar",
+  "annotations": [
+   {
+    "x": 64.2,
+    "y": 1.1,
+    "w": 5.7,
+    "h": 4.9,
+    "label": "Earn icon-only"
+   },
+   {
+    "x": 70.9,
+    "y": 1.1,
+    "w": 8.1,
+    "h": 4.9,
+    "label": "Credits pill directly after Earn, no Upgrade"
+   }
+  ],
+  "at": "2026-11-16T10:46:12.767Z"
+ },
+ {
+  "file": "3/T3.4-1.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill menu-360-light",
+  "annotations": [],
+  "at": "2026-11-16T11:45:59.977Z"
+ },
+ {
+  "file": "3/T3.4-2.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill menu-360-dark",
+  "annotations": [],
+  "at": "2026-11-16T11:46:00.077Z"
+ },
+ {
+  "file": "3/T3.4-3.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill menu-1440-light",
+  "annotations": [],
+  "at": "2026-11-16T11:46:00.170Z"
+ },
+ {
+  "file": "3/T3.4-4.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill menu-1440-dark",
+  "annotations": [],
+  "at": "2026-11-16T11:46:00.265Z"
+ },
+ {
+  "file": "3/T3.1-1.png",
+  "taskId": "T3.1",
+  "kind": "proof",
+  "step": "One PRO_PERKS source; dialog has no buy CTA",
+  "attempt": 4,
+  "caption": "Pro perks dialog lists the four shared PRO_PERKS items and offers only a Close button, no buy CTA.",
+  "annotations": [
+   {
+    "x": 33.3,
+    "y": 35.6,
+    "w": 33.3,
+    "h": 28.9,
+    "label": "Perks dialog: 4 perks, only Close control"
+   }
+  ],
+  "at": "2026-11-16T11:56:01.885Z"
+ },
+ {
+  "file": "3/T3.2-1.png",
+  "taskId": "T3.2",
+  "kind": "proof",
+  "step": "No PRO chip in header",
+  "attempt": 4,
+  "caption": "Pro user at 1440: header right cluster shows Earn credits, credits and avatar only, with no PRO chip and no Upgrade pill.",
+  "annotations": [
+   {
+    "x": 79.2,
+    "y": 0.8,
+    "w": 19.2,
+    "h": 6,
+    "label": "No PRO chip beside credits"
+   }
+  ],
+  "at": "2026-11-16T11:56:02.002Z"
+ },
+ {
+  "file": "3/T3.2-2.png",
+  "taskId": "T3.2",
+  "kind": "proof",
+  "step": "Pill by plan: PRO",
+  "attempt": 4,
+  "caption": "Pro user opens the avatar menu and sees the gold PRO pill under their email.",
+  "annotations": [
+   {
+    "x": 83,
+    "y": 12.7,
+    "w": 2.7,
+    "h": 2.4,
+    "label": "Gold PRO pill"
+   }
+  ],
+  "at": "2026-11-16T11:56:02.092Z"
+ },
+ {
+  "file": "3/T3.2-3.png",
+  "taskId": "T3.2",
+  "kind": "proof",
+  "step": "Pill by plan: FREE",
+  "attempt": 4,
+  "caption": "Free user opens the avatar menu and sees the muted FREE pill under their email.",
+  "annotations": [
+   {
+    "x": 83,
+    "y": 12.7,
+    "w": 2.9,
+    "h": 2.4,
+    "label": "Muted FREE pill"
+   }
+  ],
+  "at": "2026-11-16T11:56:02.179Z"
+ },
+ {
+  "file": "3/T3.2-4.png",
+  "taskId": "T3.2",
+  "kind": "proof",
+  "step": "FREE opens pricing dialog",
+  "attempt": 4,
+  "caption": "Clicking FREE closes the menu and opens the existing Upgrade to Pro pricing dialog.",
+  "annotations": [
+   {
+    "x": 22.9,
+    "y": 7.8,
+    "w": 54.2,
+    "h": 6.7,
+    "label": "Pricing dialog title"
+   }
+  ],
+  "at": "2026-11-16T11:56:02.269Z"
+ },
+ {
+  "file": "3/T3.4-6.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": "Pro clicks PRO and the perks dialog opens with no buy button",
+  "attempt": 4,
+  "caption": "Replaces the mid-fade pro-perks-dialog shot: clicking PRO opens the settled perks dialog with only a Close button.",
+  "annotations": [
+   {
+    "x": 33.3,
+    "y": 35.6,
+    "w": 33.3,
+    "h": 28.9,
+    "label": "Perks dialog, no buy button"
+   }
+  ],
+  "at": "2026-11-16T11:56:02.360Z"
+ },
+ {
+  "file": "3/T3.4-7.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill menu-free-1440-dark",
+  "annotations": [],
+  "at": "2026-11-16T12:01:58.466Z"
+ },
+ {
+  "file": "3/T3.4-8.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill menu-free-1440-light",
+  "annotations": [],
+  "at": "2026-11-16T12:01:58.572Z"
+ },
+ {
+  "file": "3/T3.4-9.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill menu-free-360-dark",
+  "annotations": [],
+  "at": "2026-11-16T12:01:58.668Z"
+ },
+ {
+  "file": "3/T3.4-10.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill menu-free-360-light",
+  "annotations": [],
+  "at": "2026-11-16T12:01:58.764Z"
+ },
+ {
+  "file": "3/T3.4-11.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill menu-pro-1440-dark",
+  "annotations": [],
+  "at": "2026-11-16T12:01:58.859Z"
+ },
+ {
+  "file": "3/T3.4-12.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill menu-pro-1440-light",
+  "annotations": [],
+  "at": "2026-11-16T12:01:58.954Z"
+ },
+ {
+  "file": "3/T3.4-13.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill menu-pro-360-dark",
+  "annotations": [],
+  "at": "2026-11-16T12:01:59.050Z"
+ },
+ {
+  "file": "3/T3.4-14.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill menu-pro-360-light",
+  "annotations": [],
+  "at": "2026-11-16T12:01:59.146Z"
+ },
+ {
+  "file": "3/T3.4-5.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "plan pill pro-perks-dialog",
+  "annotations": [],
+  "at": "2026-11-16T12:01:59.240Z"
+ },
+ {
+  "file": "4/T4.3-1.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "390px: two rows, equal thirds, feature select, banner",
+  "annotations": [],
+  "at": "2026-11-16T12:27:23.209Z"
+ },
+ {
+  "file": "4/T4.3-2.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "360px: two rows, equal thirds, feature select, banner",
+  "annotations": [],
+  "at": "2026-11-16T12:27:23.335Z"
+ },
+ {
+  "file": "4/T4.3-3.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "360px with 4-digit credits, no horizontal scroll",
+  "annotations": [],
+  "at": "2026-11-16T12:27:23.440Z"
+ },
+ {
+  "file": "4/T4.1-1.png",
+  "taskId": "T4.1",
+  "kind": "after",
+  "step": "Tabs at every width including 640-767",
+  "attempt": 1,
+  "caption": "At 700px (the old 640-767 gap) Create, Explore and Assets render as the full-width row 2 under the header.",
+  "annotations": [
+   {
+    "x": 2.3,
+    "y": 12,
+    "w": 95.4,
+    "h": 6,
+    "label": "tabs row visible at 700"
+   }
+  ],
+  "at": "2026-11-16T12:43:54.928Z"
+ },
+ {
+  "file": "4/T4.1-2.png",
+  "taskId": "T4.1",
+  "kind": "after",
+  "step": "Sticky row 2 below 768; feature select on Create at all widths",
+  "attempt": 1,
+  "caption": "At 390px: banner, row 1 with compact feature select, row 2 equal-thirds segmented tabs.",
+  "annotations": [
+   {
+    "x": 14.9,
+    "y": 5.7,
+    "w": 29.6,
+    "h": 4.7,
+    "label": "compact feature select on Create"
+   },
+   {
+    "x": 0,
+    "y": 11.8,
+    "w": 100,
+    "h": 8.4,
+    "label": "row 2 segmented tabs"
+   }
+  ],
+  "at": "2026-11-16T12:43:55.041Z"
+ },
+ {
+  "file": "4/T4.1-3.png",
+  "taskId": "T4.1",
+  "kind": "after",
+  "step": "Row 2 stays at the viewport top while content scrolls",
+  "attempt": 1,
+  "caption": "Explore at 390px after scrolling: row 1 and banner scrolled away, tabs row pinned at y=0.",
+  "annotations": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 100,
+    "h": 8.4,
+    "label": "tabs pinned at top after scroll"
+   }
+  ],
+  "at": "2026-11-16T12:43:55.145Z"
+ },
+ {
+  "file": "4/T4.1-4.png",
+  "taskId": "T4.1",
+  "kind": "after",
+  "step": "Tabs centered at 768+ (spec-issue evidence)",
+  "attempt": 1,
+  "caption": "At 1024px the tabs center sits at x=426, 86px left of the viewport midpoint (512): same as the baseline left-shift.",
+  "annotations": [
+   {
+    "x": 28.1,
+    "y": 0.6,
+    "w": 26.9,
+    "h": 6,
+    "label": "tabs center 86px left of midpoint"
+   }
+  ],
+  "at": "2026-11-16T12:43:55.251Z"
+ },
+ {
+  "file": "4/T4.1-5.png",
+  "taskId": "T4.1",
+  "kind": "after",
+  "step": "Tabs centered at 768+ (spec-issue evidence)",
+  "attempt": 1,
+  "caption": "At 1440px the tabs center sits at x=686, 34px left of the viewport midpoint (720).",
+  "annotations": [
+   {
+    "x": 32.1,
+    "y": 0.6,
+    "w": 31.1,
+    "h": 6,
+    "label": "tabs center 34px left of midpoint"
+   }
+  ],
+  "at": "2026-11-16T12:43:55.354Z"
+ },
+ {
+  "file": "4/T4.1-6.png",
+  "taskId": "T4.1",
+  "kind": "proof",
+  "step": "Centered at 768+ (in the free space between feature select and right cluster, Q7 option a)",
+  "attempt": 7,
+  "caption": "At 768px (prod build, signed-in Free user) the tabs sit centered between the feature select and the Earn icon button, gaps about 9px and 12px.",
+  "annotations": [
+   {
+    "x": 34.3,
+    "y": 0.6,
+    "w": 30.7,
+    "h": 6,
+    "label": "tabs centered in the free slot"
+   },
+   {
+    "x": 8,
+    "y": 1.3,
+    "w": 25.3,
+    "h": 4.6,
+    "label": "feature select, left edge of slot"
+   },
+   {
+    "x": 66.6,
+    "y": 1.3,
+    "w": 6,
+    "h": 4.6,
+    "label": "Earn button, right edge of slot"
+   }
+  ],
+  "at": "2026-11-17T09:35:48.667Z"
+ },
+ {
+  "file": "4/T4.1-7.png",
+  "taskId": "T4.1",
+  "kind": "proof",
+  "step": "Centered at 768+ (in the free space between feature select and right cluster, Q7 option a)",
+  "attempt": 7,
+  "caption": "At 1024px the tabs sit centered between the feature select and the labelled Earn credits button, gaps about 25px and 20px (within the 4px e2e tolerance of the slot center).",
+  "annotations": [
+   {
+    "x": 28.1,
+    "y": 0.6,
+    "w": 26.9,
+    "h": 6,
+    "label": "tabs centered in the free slot"
+   },
+   {
+    "x": 6.8,
+    "y": 1.3,
+    "w": 18.9,
+    "h": 4.6,
+    "label": "feature select, left edge of slot"
+   },
+   {
+    "x": 57,
+    "y": 1.3,
+    "w": 13,
+    "h": 4.6,
+    "label": "Earn credits, right edge of slot"
+   }
+  ],
+  "at": "2026-11-17T09:35:48.770Z"
+ },
+ {
+  "file": "5/T5.3-1.png",
+  "taskId": "T5.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Composer fully on screen at 768x1024",
+  "annotations": [],
+  "at": "2026-11-17T10:21:08.428Z"
+ },
+ {
+  "file": "5/T5.3-2.png",
+  "taskId": "T5.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Composer fully on screen at 1440x900",
+  "annotations": [],
+  "at": "2026-11-17T10:21:08.560Z"
+ },
+ {
+  "file": "5/T5.3-3.png",
+  "taskId": "T5.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "header responsive two-rows-360",
+  "annotations": [],
+  "at": "2026-11-17T10:24:43.667Z"
+ },
+ {
+  "file": "5/T5.3-4.png",
+  "taskId": "T5.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "header responsive two-rows-390",
+  "annotations": [],
+  "at": "2026-11-17T10:24:43.904Z"
+ },
+ {
+  "file": "5/T5.3-5.png",
+  "taskId": "T5.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "header responsive composer-360x640",
+  "annotations": [],
+  "at": "2026-11-17T10:24:44.056Z"
+ },
+ {
+  "file": "5/T5.3-6.png",
+  "taskId": "T5.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "header responsive composer-390x844",
+  "annotations": [],
+  "at": "2026-11-17T10:24:44.223Z"
+ },
+ {
+  "file": "5/T5.3-7.png",
+  "taskId": "T5.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "header responsive four-digit-360",
+  "annotations": [],
+  "at": "2026-11-17T10:24:44.384Z"
+ },
+ {
+  "file": "5/T5.3-8.png",
+  "taskId": "T5.3",
+  "kind": "proof",
+  "step": "@medium no vertical overflow regression after banner dismissal",
+  "attempt": 12,
+  "caption": "At 390x844 on the prod build, after the banner offer dialog is dismissed, the full page is still 844px tall and the prompt bar and Generate button sit fully on screen",
+  "annotations": [
+   {
+    "x": 3,
+    "y": 75,
+    "w": 94,
+    "h": 24,
+    "label": "Composer and Generate fully inside the viewport after dismissal"
+   }
+  ],
+  "at": "2026-11-18T11:35:33.032Z"
+ },
+ {
+  "file": "6/T6.2-1.png",
+  "taskId": "T6.2",
+  "kind": "proof",
+  "step": "Sections Featured, Free, Pro; company headers inside Free/Pro",
+  "attempt": 1,
+  "caption": "At 1440 the picker opens with Featured first, then Free starting with the Black Forest Labs company header (logo + name).",
+  "annotations": [
+   {
+    "x": 2,
+    "y": 24.1,
+    "w": 28.9,
+    "h": 3.1,
+    "label": "Featured tier header first"
+   },
+   {
+    "x": 2,
+    "y": 59,
+    "w": 28.9,
+    "h": 6.2,
+    "label": "Free tier header then company header with logo"
+   }
+  ],
+  "at": "2026-11-18T12:02:31.717Z"
+ },
+ {
+  "file": "6/T6.2-2.png",
+  "taskId": "T6.2",
+  "kind": "proof",
+  "step": "Sticky tier then company header, opaque (dark)",
+  "attempt": 1,
+  "caption": "After scrolling the list 420px, the Free tier header and Black Forest Labs company header stay pinned with an opaque background; rows pass underneath.",
+  "annotations": [
+   {
+    "x": 2,
+    "y": 24.1,
+    "w": 28.9,
+    "h": 6.2,
+    "label": "Tier header pinned at top, company header pinned directly below"
+   }
+  ],
+  "at": "2026-11-18T12:02:31.867Z"
+ },
+ {
+  "file": "6/T6.2-3.png",
+  "taskId": "T6.2",
+  "kind": "proof",
+  "step": "Sticky headers opaque in light mode",
+  "attempt": 1,
+  "caption": "Light mode: pinned Free and Black Forest Labs headers have an opaque background (rgb 242,235,227).",
+  "annotations": [
+   {
+    "x": 2,
+    "y": 24.1,
+    "w": 28.9,
+    "h": 6.2,
+    "label": "Opaque pinned headers in light mode"
+   }
+  ],
+  "at": "2026-11-18T12:02:32.011Z"
+ },
+ {
+  "file": "6/T6.2-4.png",
+  "taskId": "T6.2",
+  "kind": "proof",
+  "step": "Pro tier grouped by company; company in both tiers shows disjoint models",
+  "attempt": 1,
+  "caption": "Pro section: Black Forest Labs, Google and OpenAI headers in alphabetical order; Google here lists only its Pro models (Imagen 4 Ultra, Nano Banana Pro).",
+  "annotations": [
+   {
+    "x": 2,
+    "y": 24.3,
+    "w": 28.9,
+    "h": 3.1,
+    "label": "Pro tier header"
+   },
+   {
+    "x": 2,
+    "y": 45.7,
+    "w": 28.9,
+    "h": 13.6,
+    "label": "Google group holds only Pro models"
+   }
+  ],
+  "at": "2026-11-18T12:02:32.148Z"
+ },
+ {
+  "file": "6/T6.2-5.png",
+  "taskId": "T6.2",
+  "kind": "proof",
+  "step": "Model in Featured and its group highlighted in both",
+  "attempt": 1,
+  "caption": "Seedream 4, selected from Featured, is also highlighted in its Free / ByteDance group (aria-selected in both sections).",
+  "annotations": [
+   {
+    "x": 2,
+    "y": 40.8,
+    "w": 28.9,
+    "h": 4.9,
+    "label": "Seedream 4 highlighted in its company group"
+   }
+  ],
+  "at": "2026-11-18T12:02:32.285Z"
+ },
+ {
+  "file": "6/T6.3-1.png",
+  "taskId": "T6.3",
+  "kind": "proof",
+  "step": "Name and description separated, one-line row",
+  "attempt": 1,
+  "caption": "Flux Fast row: name and \"Fastest Flux, batch volume\" are separate elements with an 8px gap, one 44px-high line with credit cost.",
+  "annotations": [
+   {
+    "x": 2,
+    "y": 37.4,
+    "w": 28.9,
+    "h": 4.9,
+    "label": "One-line 44px row"
+   },
+   {
+    "x": 5.3,
+    "y": 38.8,
+    "w": 4.2,
+    "h": 2.2,
+    "label": "Name element"
+   },
+   {
+    "x": 10.1,
+    "y": 39.1,
+    "w": 17.9,
+    "h": 1.8,
+    "label": "Description element, 8px gap after name"
+   }
+  ],
+  "at": "2026-11-18T12:02:32.422Z"
+ },
+ {
+  "file": "6/T6.4-1.png",
+  "taskId": "T6.4",
+  "kind": "after",
+  "step": "desktop picker design pass, dark",
+  "attempt": 2,
+  "caption": "1440 dark picker scrolled: Free tier header pinned at the top with a hairline, company headers pinned below, opaque.",
+  "annotations": [
+   {
+    "x": 1.5,
+    "y": 23,
+    "w": 31,
+    "h": 3,
+    "label": "Pinned Free tier header"
+   },
+   {
+    "x": 1.5,
+    "y": 27,
+    "w": 31,
+    "h": 3,
+    "label": "Pinned company header (Black Forest Labs)"
+   }
+  ],
+  "at": "2026-11-18T12:06:41.357Z"
+ },
+ {
+  "file": "6/T6.4-2.png",
+  "taskId": "T6.4",
+  "kind": "after",
+  "step": "desktop picker design pass, light",
+  "attempt": 2,
+  "caption": "1440 light picker with Featured, tier header and company headers; rows separated from their descriptions.",
+  "annotations": [
+   {
+    "x": 1.5,
+    "y": 24,
+    "w": 31,
+    "h": 3,
+    "label": "Tier header with hairline"
+   },
+   {
+    "x": 6,
+    "y": 29,
+    "w": 25,
+    "h": 4,
+    "label": "Name and description separated"
+   }
+  ],
+  "at": "2026-11-18T12:06:41.507Z"
+ },
+ {
+  "file": "6/T6.7-1.png",
+  "taskId": "T6.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Picker company headers 1440",
+  "annotations": [],
+  "at": "2026-11-18T12:09:54.315Z"
+ },
+ {
+  "file": "6/T6.7-2.png",
+  "taskId": "T6.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Company header pinned on scroll",
+  "annotations": [],
+  "at": "2026-11-18T12:09:54.462Z"
+ },
+ {
+  "file": "6/T6.7-3.png",
+  "taskId": "T6.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Row name and description gap",
+  "annotations": [],
+  "at": "2026-11-18T12:09:54.603Z"
+ },
+ {
+  "file": "7/T7.5-1.png",
+  "taskId": "T7.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Search 'flux' shows only matching rows",
+  "annotations": [],
+  "at": "2026-11-18T12:39:30.398Z"
+ },
+ {
+  "file": "7/T7.5-2.png",
+  "taskId": "T7.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "No models match empty state with Clear search",
+  "annotations": [],
+  "at": "2026-11-18T12:39:30.570Z"
+ },
+ {
+  "file": "7/T7.5-3.png",
+  "taskId": "T7.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "ArrowDown moves focus from search to first row",
+  "annotations": [],
+  "at": "2026-11-18T12:39:30.722Z"
+ },
+ {
+  "file": "7/T7.5-4.png",
+  "taskId": "T7.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Company-name query keeps all of that company's models",
+  "annotations": [],
+  "at": "2026-11-18T12:39:30.889Z"
+ },
+ {
+  "file": "7/T7.1-1.png",
+  "taskId": "T7.1",
+  "kind": "proof",
+  "step": "Search filters by title/company/description",
+  "attempt": 1,
+  "caption": "Typing \"flux\" in the sticky search leaves only Flux-matching rows; Nano Banana and GPT Image are gone",
+  "annotations": [
+   {
+    "x": 2,
+    "y": 24,
+    "w": 29,
+    "h": 4.5,
+    "label": "sticky search input with query"
+   },
+   {
+    "x": 1.2,
+    "y": 29,
+    "w": 30.6,
+    "h": 39,
+    "label": "only matching rows remain"
+   }
+  ],
+  "at": "2026-11-18T12:53:33.592Z"
+ },
+ {
+  "file": "7/T7.1-2.png",
+  "taskId": "T7.1",
+  "kind": "proof",
+  "step": "Zero matches shows the empty state",
+  "attempt": 1,
+  "caption": "A nonsense query shows \"No models match\" with the echoed query and a Clear search button",
+  "annotations": [
+   {
+    "x": 1.2,
+    "y": 31.5,
+    "w": 30.6,
+    "h": 8.5,
+    "label": "empty state copy, echoed query and clear button"
+   }
+  ],
+  "at": "2026-11-18T12:53:33.849Z"
+ },
+ {
+  "file": "7/T7.1-3.png",
+  "taskId": "T7.1",
+  "kind": "proof",
+  "step": "Company-name match shows all that company models",
+  "attempt": 1,
+  "caption": "Searching the company name \"Black Forest Labs\" keeps every one of its models in the tier",
+  "annotations": [
+   {
+    "x": 1.2,
+    "y": 41,
+    "w": 30.6,
+    "h": 26,
+    "label": "all Black Forest Labs models under Free"
+   }
+  ],
+  "at": "2026-11-18T12:53:34.052Z"
+ },
+ {
+  "file": "7/T7.2-1.png",
+  "taskId": "T7.2",
+  "kind": "proof",
+  "step": "ArrowDown from the search input moves to the first visible option",
+  "attempt": 1,
+  "caption": "After filtering to \"schnell\", ArrowDown moved focus out of the input to the first visible option (asserted toBeFocused in e2e)",
+  "annotations": [
+   {
+    "x": 2.5,
+    "y": 35,
+    "w": 28.5,
+    "h": 5,
+    "label": "first visible option receives focus"
+   }
+  ],
+  "at": "2026-11-18T12:53:34.222Z"
+ },
+ {
+  "file": "8/T8.3-1.png",
+  "taskId": "T8.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Picker bottom sheet at 390 spans the full width",
+  "annotations": [],
+  "at": "2026-11-18T13:08:41.413Z"
+ },
+ {
+  "file": "8/T8.3-2.png",
+  "taskId": "T8.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Sheet at 360x640 with 4+ rows and sticky search",
+  "annotations": [],
+  "at": "2026-11-18T13:08:41.608Z"
+ },
+ {
+  "file": "8/T8.3-3.png",
+  "taskId": "T8.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "At 768 the anchored popover is used",
+  "annotations": [],
+  "at": "2026-11-18T13:08:41.768Z"
+ },
+ {
+  "file": "8/T8.1-1.png",
+  "taskId": "T8.1",
+  "kind": "proof",
+  "step": "SPEC Part 1 req 5: <768 full-width bottom sheet with backdrop",
+  "attempt": 1,
+  "caption": "At 390 the picker opens as a full-width bottom sheet docked to the bottom edge, with the dimmed backdrop above it",
+  "annotations": [
+   {
+    "x": 0,
+    "y": 15,
+    "w": 100,
+    "h": 85,
+    "label": "Full-width sheet docked to the bottom"
+   },
+   {
+    "x": 0,
+    "y": 11,
+    "w": 100,
+    "h": 4,
+    "label": "Dimmed backdrop strip (tap closes)"
+   }
+  ],
+  "at": "2026-11-18T13:27:47.239Z"
+ },
+ {
+  "file": "8/T8.1-2.png",
+  "taskId": "T8.1",
+  "kind": "proof",
+  "step": "SPEC Part 1 req 10: >=4 rows under sticky chrome at 360x640",
+  "attempt": 1,
+  "caption": "At 360x640 search, Free tier header and Black Forest Labs company header stay pinned and at least 4 option rows remain visible",
+  "annotations": [
+   {
+    "x": 3,
+    "y": 16,
+    "w": 94,
+    "h": 17,
+    "label": "Sticky search + tier + company chrome"
+   },
+   {
+    "x": 3,
+    "y": 34,
+    "w": 94,
+    "h": 35,
+    "label": "Four or more visible option rows"
+   }
+  ],
+  "at": "2026-11-18T13:27:47.597Z"
+ },
+ {
+  "file": "8/T8.1-3.png",
+  "taskId": "T8.1",
+  "kind": "proof",
+  "step": "SPEC Part 1 req 5: >=768 keeps the anchored Popover",
+  "attempt": 1,
+  "caption": "At 768 the anchored popover is used under the Model trigger, not the sheet",
+  "annotations": [
+   {
+    "x": 2,
+    "y": 20,
+    "w": 56,
+    "h": 40,
+    "label": "Anchored popover below the trigger"
+   }
+  ],
+  "at": "2026-11-18T13:27:47.997Z"
+ },
+ {
+  "file": "9/T9.2-1.png",
+  "taskId": "T9.2",
+  "kind": "before",
+  "step": "FAQ visible",
+  "attempt": 2,
+  "caption": "Before: FAQ invisible in the Upgrade dialog",
+  "annotations": [],
+  "at": "2026-11-18T13:57:44.738Z"
+ },
+ {
+  "file": "9/T9.2-2.png",
+  "taskId": "T9.2",
+  "kind": "after",
+  "step": "FAQ heading and questions at opacity 1",
+  "attempt": 2,
+  "caption": "After: Before you buy heading and questions visible",
+  "annotations": [
+   {
+    "x": 10,
+    "y": 60,
+    "w": 80,
+    "h": 35,
+    "label": "FAQ heading and questions visible"
+   }
+  ],
+  "at": "2026-11-18T13:57:45.061Z"
+ },
+ {
+  "file": "9/T9.4-1.png",
+  "taskId": "T9.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Upgrade dialog FAQ dialog-faq-revealed",
+  "annotations": [],
+  "at": "2026-11-18T14:04:54.805Z"
+ },
+ {
+  "file": "9/T9.4-2.png",
+  "taskId": "T9.4",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Upgrade dialog FAQ dialog-faq-390",
+  "annotations": [],
+  "at": "2026-11-18T14:04:55.132Z"
+ },
+ {
+  "file": "9/T9.5-1.png",
+  "taskId": "T9.5",
+  "kind": "after",
+  "step": "reveals intact",
+  "attempt": null,
+  "caption": "/pricing FAQ revealed at 390 wide",
+  "annotations": [
+   {
+    "x": 5,
+    "y": 30,
+    "w": 90,
+    "h": 60,
+    "label": "FAQ section visible"
+   }
+  ],
+  "at": "2026-11-18T14:08:17.244Z"
+ },
+ {
+  "file": "9/T9.5-2.png",
+  "taskId": "T9.5",
+  "kind": "after",
+  "step": "reveals intact",
+  "attempt": null,
+  "caption": "/pricing FAQ revealed at 1440 wide",
+  "annotations": [
+   {
+    "x": 5,
+    "y": 30,
+    "w": 90,
+    "h": 60,
+    "label": "FAQ section visible"
+   }
+  ],
+  "at": "2026-11-18T14:08:17.466Z"
+ },
+ {
+  "file": "9/T9.5-3.png",
+  "taskId": "T9.5",
+  "kind": "after",
+  "step": "Dialog FAQ visible at all widths, light theme",
+  "attempt": 1,
+  "caption": "Upgrade dialog at 360 light, scrolled to bottom: FAQ heading and all five questions visible",
+  "annotations": [
+   {
+    "x": 11,
+    "y": 26,
+    "w": 78,
+    "h": 63,
+    "label": "FAQ heading and every question at opacity 1"
+   }
+  ],
+  "at": "2026-11-18T14:13:28.434Z"
+ },
+ {
+  "file": "9/T9.5-4.png",
+  "taskId": "T9.5",
+  "kind": "after",
+  "step": "Dialog FAQ visible at all widths, dark theme",
+  "attempt": 1,
+  "caption": "Upgrade dialog at 768 dark, scrolled to bottom: FAQ heading and all five questions visible",
+  "annotations": [
+   {
+    "x": 5,
+    "y": 29,
+    "w": 90,
+    "h": 60,
+    "label": "FAQ heading and every question at opacity 1"
+   }
+  ],
+  "at": "2026-11-18T14:13:28.610Z"
+ },
+ {
+  "file": "9/T9.5-5.png",
+  "taskId": "T9.5",
+  "kind": "after",
+  "step": "Dialog FAQ visible at all widths, light theme",
+  "attempt": 1,
+  "caption": "Upgrade dialog at 1440 light, scrolled to bottom: FAQ heading and all five questions visible",
+  "annotations": [
+   {
+    "x": 10,
+    "y": 25,
+    "w": 80,
+    "h": 64,
+    "label": "FAQ heading and every question at opacity 1"
+   }
+  ],
+  "at": "2026-11-18T14:13:28.775Z"
+ },
+ {
+  "file": "10/T10.3-1.png",
+  "taskId": "T10.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Landing header at 390 with theme toggle beside the burger, menu closed",
+  "annotations": [],
+  "at": "2026-11-18T14:45:07.687Z"
+ },
+ {
+  "file": "10/T10.3-2.png",
+  "taskId": "T10.3",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Landing header at 800 with theme toggle beside the burger, menu closed",
+  "annotations": [],
+  "at": "2026-11-18T14:45:07.973Z"
+ },
+ {
+  "file": "10/T10.1-1.png",
+  "taskId": "T10.1",
+  "kind": "after",
+  "step": "No ThemeButton in the open sheet",
+  "attempt": 1,
+  "caption": "At 390 with the menu open, the theme toggle stays in the bar beside the close button and the sheet holds only links and the Start free CTA",
+  "annotations": [
+   {
+    "x": 68.2,
+    "y": 1.9,
+    "w": 11.3,
+    "h": 5.2,
+    "label": "Single toggle in the bar, 44x44"
+   },
+   {
+    "x": 0,
+    "y": 9,
+    "w": 100,
+    "h": 48.7,
+    "label": "Open sheet, no theme toggle"
+   }
+  ],
+  "at": "2026-11-18T14:50:42.963Z"
+ },
+ {
+  "file": "10/T10.1-2.png",
+  "taskId": "T10.1",
+  "kind": "after",
+  "step": "No overflow at 360; toggle next to the hamburger",
+  "attempt": 1,
+  "caption": "At 360 the bar holds logo, a 44px theme toggle and the burger with no horizontal overflow",
+  "annotations": [
+   {
+    "x": 65.6,
+    "y": 2,
+    "w": 12.2,
+    "h": 5.5,
+    "label": "Theme toggle left of the burger"
+   },
+   {
+    "x": 81.1,
+    "y": 2,
+    "w": 12.2,
+    "h": 5.5,
+    "label": "Burger"
+   }
+  ],
+  "at": "2026-11-18T14:50:43.332Z"
+ },
+ {
+  "file": "10/T10.1-3.png",
+  "taskId": "T10.1",
+  "kind": "after",
+  "step": "One visible toggle at >=900, in .nav__actions",
+  "attempt": 1,
+  "caption": "At 1440 exactly one theme toggle is visible, inside the nav actions before Start free",
+  "annotations": [
+   {
+    "x": 81.1,
+    "y": 2,
+    "w": 3.1,
+    "h": 4.9,
+    "label": "Only visible toggle, in the actions"
+   }
+  ],
+  "at": "2026-11-18T14:50:43.597Z"
+ },
+ {
+  "file": "11/T11.5-1.png",
+  "taskId": "T11.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Create at 360px, no horizontal scroll",
+  "annotations": [],
+  "at": "2026-11-18T15:10:03.389Z"
+ },
+ {
+  "file": "11/T11.5-2.png",
+  "taskId": "T11.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Create at 390px, no horizontal scroll",
+  "annotations": [],
+  "at": "2026-11-18T15:10:03.590Z"
+ },
+ {
+  "file": "11/T11.5-3.png",
+  "taskId": "T11.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Create at 700px, no horizontal scroll",
+  "annotations": [],
+  "at": "2026-11-18T15:10:03.783Z"
+ },
+ {
+  "file": "11/T11.5-4.png",
+  "taskId": "T11.5",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Create at 1440px, no horizontal scroll",
+  "annotations": [],
+  "at": "2026-11-18T15:10:03.978Z"
+ },
+ {
+  "file": "11/T11.2-1.png",
+  "taskId": "T11.2",
+  "kind": "after",
+  "step": "Tap targets >=44px on mobile (header and Settings)",
+  "attempt": 1,
+  "caption": "At 360px (prod build) the referral banner, logo, feature select, credits, user menu and Settings trigger are all at least 44px tall",
+  "annotations": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 100,
+    "h": 4.9,
+    "label": "Referral banner min-h 44px"
+   },
+   {
+    "x": 3,
+    "y": 6,
+    "w": 93,
+    "h": 5,
+    "label": "Logo, feature select, user menu 44px"
+   },
+   {
+    "x": 3,
+    "y": 62.8,
+    "w": 27,
+    "h": 4.9,
+    "label": "Settings trigger 44px"
+   }
+  ],
+  "at": "2026-11-18T15:32:04.275Z"
+ },
+ {
+  "file": "11/T11.3-1.png",
+  "taskId": "T11.3",
+  "kind": "after",
+  "step": "Composer toolbar tap targets >=44px below 768",
+  "attempt": 1,
+  "caption": "At 360px the composer toolbar controls (reference, mic, AI actions, Generate) reach 44px",
+  "annotations": [
+   {
+    "x": 5.8,
+    "y": 69.6,
+    "w": 12.5,
+    "h": 5,
+    "label": "Reference-image trigger 44x44"
+   },
+   {
+    "x": 29,
+    "y": 93,
+    "w": 66,
+    "h": 5,
+    "label": "Mic, AI actions and Generate 44px tall"
+   }
+  ],
+  "at": "2026-11-18T15:32:04.444Z"
+ },
+ {
+  "file": "11/T11.3-2.png",
+  "taskId": "T11.3",
+  "kind": "after",
+  "step": "Sidebar chips and More sizes >=44px on mobile",
+  "attempt": 1,
+  "caption": "In the 360px Settings sheet the More sizes trigger is 44px tall (count and format chips measured >=44px by the e2e spec)",
+  "annotations": [
+   {
+    "x": 3.6,
+    "y": 90,
+    "w": 93,
+    "h": 5,
+    "label": "More sizes trigger 44px"
+   }
+  ],
+  "at": "2026-11-18T15:32:04.608Z"
+ }
+]

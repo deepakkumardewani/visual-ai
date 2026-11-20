@@ -1,6 +1,8 @@
 import { useFetch } from '@/composables/useFetch';
 import { createLogger } from '@/utils/logger';
 
+import { HTTP_CONFLICT } from './constants';
+
 const log = createLogger('checkout-client');
 
 export type CheckoutSessionStatus = 'pending' | 'succeeded' | 'failed';
@@ -9,6 +11,14 @@ export class CheckoutClientError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'CheckoutClientError';
+  }
+}
+
+/** 409 from POST /payments/subscribe: the user already has an active subscription. */
+export class AlreadySubscribedClientError extends CheckoutClientError {
+  constructor() {
+    super('Already subscribed');
+    this.name = 'AlreadySubscribedClientError';
   }
 }
 
@@ -40,6 +50,31 @@ export async function createCheckoutSession(packId: string): Promise<CheckoutSes
   const payload = data.value;
   if (!payload?.checkoutUrl || !payload?.sessionId) {
     throw new CheckoutClientError('Invalid checkout response');
+  }
+
+  return payload;
+}
+
+export async function createSubscriptionSession(): Promise<CheckoutSessionResponse> {
+  const { error, data, response } = await useFetch('/payments/subscribe', {
+    method: 'POST',
+  }).json<CheckoutSessionResponse>();
+
+  if (response.value?.status === HTTP_CONFLICT) {
+    throw new AlreadySubscribedClientError();
+  }
+
+  if (error.value || !response.value?.ok) {
+    log.error('createSubscriptionSession failed', {
+      error: error.value,
+      status: response.value?.status,
+    });
+    throw new CheckoutClientError('Could not start subscription');
+  }
+
+  const payload = data.value;
+  if (!payload?.checkoutUrl || !payload?.sessionId) {
+    throw new CheckoutClientError('Invalid subscription response');
   }
 
   return payload;

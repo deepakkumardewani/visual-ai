@@ -21,6 +21,7 @@ const REQUIRED_ENV: Record<string, string> = {
     DODO_PRODUCT_ID_PACK_450: "pdt_450",
     DODO_PRODUCT_ID_PACK_960: "pdt_960",
     DODO_PRODUCT_ID_PACK_2000: "pdt_2000",
+    DODO_PRODUCT_ID_PRO: "pdt_pro",
     EMAIL_USER: "test@example.com",
     EMAIL_PASSWORD: "password",
     WEBHOOK_SECRET: "webhook-secret",
@@ -43,6 +44,8 @@ const MANAGED_KEYS = [
     "ENABLE_CRON",
     "QUEUE_PREFIX",
     "ALLOWED_ORIGINS",
+    "E2E_USER_IDS",
+    "DEV_COUNTRY_OVERRIDE",
     "PAYMENT_PROVIDER",
     "PAYMENT_RETURN_URL",
     "DODO_PAYMENTS_API_KEY",
@@ -52,6 +55,8 @@ const MANAGED_KEYS = [
     "DODO_PRODUCT_ID_PACK_450",
     "DODO_PRODUCT_ID_PACK_960",
     "DODO_PRODUCT_ID_PACK_2000",
+    "DODO_PRODUCT_ID_PRO",
+    "XAI_API_KEY",
 ]
 
 let snapshot: NodeJS.ProcessEnv
@@ -159,6 +164,52 @@ describe("env parse", () => {
         expect(env.ALLOWED_ORIGINS).toEqual(["https://visual-ai.app", "https://www.visual-ai.app"])
     })
 
+    it("splits, trims, and drops empty E2E_USER_IDS", async () => {
+        applyEnv({ E2E_USER_IDS: " user_a, ,user_b " })
+        expect((await importEnv()).env.E2E_USER_IDS).toEqual(["user_a", "user_b"])
+    })
+
+    it("defaults E2E_USER_IDS to an empty list when unset", async () => {
+        applyEnv({ E2E_USER_IDS: undefined })
+        expect((await importEnv()).env.E2E_USER_IDS).toEqual([])
+    })
+
+    it("normalizes DEV_COUNTRY_OVERRIDE and warns that it is set", async () => {
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+        applyEnv({ DEV_COUNTRY_OVERRIDE: " in " })
+
+        expect((await importEnv()).env.DEV_COUNTRY_OVERRIDE).toBe("IN")
+        expect(warn).toHaveBeenCalledWith(expect.stringContaining("DEV_COUNTRY_OVERRIDE=IN"))
+    })
+
+    it.each(["XX1", "IND", "india", "  i1 "])(
+        "turns invalid DEV_COUNTRY_OVERRIDE %j into undefined, warns naming the value, and does not exit",
+        async (raw) => {
+            const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+            const exit = vi.spyOn(process, "exit").mockImplementation((() => {
+                throw new Error("process.exit")
+            }) as typeof process.exit)
+            applyEnv({ DEV_COUNTRY_OVERRIDE: raw })
+
+            expect((await importEnv()).env.DEV_COUNTRY_OVERRIDE).toBeUndefined()
+            expect(warn).toHaveBeenCalledWith(
+                expect.stringContaining(`DEV_COUNTRY_OVERRIDE="${raw.trim()}"`),
+            )
+            expect(warn).toHaveBeenCalledWith(
+                expect.stringContaining("not a valid ISO 3166-1 alpha-2"),
+            )
+            expect(exit).not.toHaveBeenCalled()
+        },
+    )
+
+    it("leaves DEV_COUNTRY_OVERRIDE undefined and silent when unset", async () => {
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+        applyEnv({ DEV_COUNTRY_OVERRIDE: undefined })
+
+        expect((await importEnv()).env.DEV_COUNTRY_OVERRIDE).toBeUndefined()
+        expect(warn).not.toHaveBeenCalled()
+    })
+
     it("defaults PAYMENT_PROVIDER to dodo when unset", async () => {
         applyEnv({ PAYMENT_PROVIDER: undefined, NODE_ENV: "test" })
         expect((await importEnv()).env.PAYMENT_PROVIDER).toBe("dodo")
@@ -168,6 +219,49 @@ describe("env parse", () => {
         expect((await importEnv()).env.PAYMENT_PROVIDER).toBe("dodo")
     })
 
+    it("skips dodo payment checks when PAYMENT_PROVIDER is not dodo", async () => {
+        // PAYMENT_PROVIDER is z.enum(["dodo"]) only; proxy widens it so superRefine early-return runs.
+        vi.doMock("zod", async (importOriginal) => {
+            const mod = await importOriginal<typeof import("zod")>()
+            const baseZ = mod.z
+            const patchedZ = new Proxy(baseZ, {
+                get(target, prop, receiver) {
+                    if (prop === "enum") {
+                        return (values: readonly [string, ...string[]]) => {
+                            if (values.length === 1 && values[0] === "dodo") {
+                                return baseZ.string().default("dodo")
+                            }
+                            return baseZ.enum(values)
+                        }
+                    }
+                    return Reflect.get(target, prop, receiver)
+                },
+            })
+            return { ...mod, z: patchedZ }
+        })
+
+        try {
+            vi.resetModules()
+            applyEnv({
+                PAYMENT_PROVIDER: "legacy",
+                DODO_PAYMENTS_API_KEY: undefined,
+                DODO_PAYMENTS_WEBHOOK_KEY: undefined,
+                DODO_PRODUCT_ID_PACK_200: undefined,
+                DODO_PRODUCT_ID_PACK_450: undefined,
+                DODO_PRODUCT_ID_PACK_960: undefined,
+                DODO_PRODUCT_ID_PACK_2000: undefined,
+                DODO_PRODUCT_ID_PRO: undefined,
+                PAYMENT_RETURN_URL: undefined,
+            })
+
+            const { env } = await importEnv()
+            expect(env.PAYMENT_PROVIDER).toBe("legacy")
+        } finally {
+            vi.doUnmock("zod")
+            vi.resetModules()
+        }
+    })
+
     it.each([
         "DODO_PAYMENTS_API_KEY",
         "DODO_PAYMENTS_WEBHOOK_KEY",
@@ -175,6 +269,7 @@ describe("env parse", () => {
         "DODO_PRODUCT_ID_PACK_450",
         "DODO_PRODUCT_ID_PACK_960",
         "DODO_PRODUCT_ID_PACK_2000",
+        "DODO_PRODUCT_ID_PRO",
         "PAYMENT_RETURN_URL",
     ] as const)("exits when PAYMENT_PROVIDER=dodo and %s is missing", async (missingKey) => {
         const exit = vi.spyOn(process, "exit").mockImplementation(((code?: number) => {
@@ -186,6 +281,15 @@ describe("env parse", () => {
 
         await expect(importEnv()).rejects.toThrow("process.exit:1")
         expect(exit).toHaveBeenCalledWith(1)
+    })
+
+    it("accepts an optional XAI_API_KEY for speech-to-text", async () => {
+        applyEnv({ XAI_API_KEY: "xai-secret" })
+        expect((await importEnv()).env.XAI_API_KEY).toBe("xai-secret")
+
+        vi.resetModules()
+        applyEnv({ XAI_API_KEY: undefined })
+        expect((await importEnv()).env.XAI_API_KEY).toBeUndefined()
     })
 
     it("does not expose removed payment env keys on the parsed env object", async () => {

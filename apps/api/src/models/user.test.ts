@@ -34,7 +34,7 @@ describe("UserModel schema", () => {
 
     it("defaults credits from shared constants", () => {
         expect(UserModel.schema.path("credits").options.default).toBe(SIGNUP_CREDITS)
-        expect(UserModel.schema.path("dailyCredits").options.default).toBe(DAILY_CREDITS)
+        expect(UserModel.schema.path("dailyCredits").options.default).toBe(DAILY_CREDITS.free)
     })
 
     it("keeps referralCode unique and sparse", () => {
@@ -49,6 +49,13 @@ describe("UserModel schema", () => {
         expect(UserModel.schema.path("payments").options.default).toEqual([])
         expect(UserModel.schema.path("history").isRequired).toBe(true)
         expect(UserModel.schema.path("history").options.default).toEqual([])
+    })
+
+    it("defaults seenIntroVersion to null as a string", () => {
+        const seen = UserModel.schema.path("seenIntroVersion")
+        expect(seen.instance).toBe("String")
+        expect(seen.options.default).toBeNull()
+        expect(new UserModel({ userId: "u1", userName: "ada" }).seenIntroVersion).toBeNull()
     })
 
     it("embeds referral documents with required identity fields", () => {
@@ -68,5 +75,13 @@ describe("UserModel schema", () => {
         expect(nested.path("action").isRequired).toBe(true)
         expect(nested.path("image").options.ref).toBe("Image")
         expect(nested.path("timestamp").options.default).toBe(Date.now)
+    })
+
+    it("defaults emailOptOut to false and tracks the v2 announcement send", () => {
+        expect(UserModel.schema.path("emailOptOut").options.default).toBe(false)
+        expect(UserModel.schema.path("announcements.v2.sentAt").instance).toBe("Date")
+        expect(UserModel.schema.path("announcements.v2.resendId").instance).toBe("String")
+        expect(UserModel.schema.path("announcements.v2.pendingKey").instance).toBe("String")
+        expect(new UserModel({ userName: "u" }).emailOptOut).toBe(false)
     })
 })

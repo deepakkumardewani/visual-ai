@@ -3,17 +3,22 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 const mounted = vi.hoisted(() => [] as unknown[][])
 
 vi.mock("../middlewares/clerk.js", () => ({
-    ClerkExpressRequireAuth: () => "clerk-auth",
+    requireAuth: "clerk-auth",
 }))
 
 vi.mock("../routes/collections.js", () => ({ collectionRoutes: "collectionRoutes" }))
 vi.mock("../routes/credits.js", () => ({ creditsRoute: "creditsRoute" }))
+vi.mock("../routes/email.js", () => ({ emailRoutes: "emailRoutes" }))
 vi.mock("../routes/explore.js", () => ({ exploreRoutes: "exploreRoutes" }))
 vi.mock("../routes/generate.js", () => ({ generateRoute: "generateRoute" }))
 vi.mock("../routes/image.js", () => ({ imageRoutes: "imageRoutes" }))
-vi.mock("../payments/router.js", () => ({ paymentsApiRouter: "paymentsApiRouter" }))
+vi.mock("../payments/router.js", () => ({
+    paymentsApiRouter: "paymentsApiRouter",
+    paymentsPublicRouter: "paymentsPublicRouter",
+}))
 vi.mock("../routes/prompt.js", () => ({ promptRoutes: "promptRoutes" }))
 vi.mock("../routes/saved-prompts.js", () => ({ savedPromptsRoutes: "savedPromptsRoutes" }))
+vi.mock("../routes/stt.js", () => ({ sttRoute: "sttRoute" }))
 vi.mock("../routes/users.js", () => ({ userRoutes: "userRoutes" }))
 
 vi.mock("express", () => {
@@ -42,16 +47,17 @@ describe("api router index", () => {
         expect(router).toBeDefined()
         expect(mounted[0]).toEqual(["generateRoute"])
         expect(mounted[1]).toEqual(["promptRoutes"])
-        expect(mounted[2]).toEqual(["savedPromptsRoutes"])
+        expect(mounted[2]).toEqual(["sttRoute"])
+        expect(mounted[3]).toEqual(["savedPromptsRoutes"])
     })
 
     it("mounts authenticated routers with ClerkExpressRequireAuth", async () => {
         await import("./index.js")
-        expect(mounted).toContainEqual(["userRoutes", "clerk-auth"])
-        expect(mounted).toContainEqual(["exploreRoutes", "clerk-auth"])
-        expect(mounted).toContainEqual(["creditsRoute", "clerk-auth"])
-        expect(mounted).toContainEqual(["imageRoutes", "clerk-auth"])
-        expect(mounted).toContainEqual(["collectionRoutes", "clerk-auth"])
+        expect(mounted).toContainEqual(["clerk-auth", "userRoutes"])
+        expect(mounted).toContainEqual(["clerk-auth", "exploreRoutes"])
+        expect(mounted).toContainEqual(["clerk-auth", "creditsRoute"])
+        expect(mounted).toContainEqual(["clerk-auth", "imageRoutes"])
+        expect(mounted).toContainEqual(["clerk-auth", "collectionRoutes"])
         expect(mounted).toContainEqual(["clerk-auth", "paymentsApiRouter"])
     })
 
@@ -63,7 +69,10 @@ describe("api router index", () => {
         expect(routerNames).toEqual([
             "generateRoute",
             "promptRoutes",
+            "sttRoute",
             "savedPromptsRoutes",
+            "emailRoutes",
+            "paymentsPublicRouter",
             "userRoutes",
             "exploreRoutes",
             "creditsRoute",

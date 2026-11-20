@@ -235,7 +235,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     fields: {
       prompt: true,
       aspectRatio: { values: GROK_ASPECT_RATIOS },
-      imageInput: { inputKey: 'image' },
+      imageInput: { inputKey: 'image', array: false },
     },
   },
 
@@ -264,7 +264,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       resolution: { values: ['1K', '2K', '4K'], inputKey: 'size' },
       numOutputs: { max: 4, inputKey: 'max_images' },
       dimensions: { min: 1024, max: 4096 },
-      imageInput: { inputKey: 'image_input' },
+      imageInput: { inputKey: 'image_input', array: false },
     },
   },
 
@@ -279,7 +279,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       aspectRatio: { values: FLUX_2_ASPECT_RATIOS },
       outputFormat: { values: PNG_JPG_WEBP },
       dimensions: { min: 256, max: 1440 },
-      imageInput: { inputKey: 'input_images' },
+      imageInput: { inputKey: 'input_images', array: true },
     },
   },
 
@@ -294,7 +294,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       aspectRatio: { values: FLUX_2_ASPECT_RATIOS },
       outputFormat: { values: PNG_JPG_WEBP },
       dimensions: { min: 256, max: 2048 },
-      imageInput: { inputKey: 'input_images', max: 8 },
+      imageInput: { inputKey: 'input_images', array: true, max: 8 },
     },
   },
 
@@ -308,7 +308,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       prompt: true,
       aspectRatio: { values: KONTEXT_ASPECT_RATIOS },
       outputFormat: { values: JPG_PNG },
-      imageInput: { inputKey: 'input_image' },
+      imageInput: { inputKey: 'input_image', array: false },
     },
   },
 
@@ -323,7 +323,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       aspectRatio: { values: FLUX_2_ASPECT_RATIOS },
       outputFormat: { values: PNG_JPG_WEBP },
       dimensions: { min: 256, max: 2048 },
-      imageInput: { inputKey: 'input_images' },
+      imageInput: { inputKey: 'input_images', array: true },
     },
   },
 
@@ -337,7 +337,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       prompt: true,
       aspectRatio: { values: KONTEXT_ASPECT_RATIOS },
       outputFormat: { values: JPG_PNG },
-      imageInput: { inputKey: 'input_image' },
+      imageInput: { inputKey: 'input_image', array: false },
     },
   },
 
@@ -352,7 +352,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       aspectRatio: { values: NANO_BANANA_2_ASPECT_RATIOS },
       outputFormat: { values: JPG_PNG },
       resolution: { values: ['1K', '2K', '4K'], inputKey: 'resolution' },
-      imageInput: { inputKey: 'image_input' },
+      imageInput: { inputKey: 'image_input', array: false },
     },
   },
 
@@ -381,7 +381,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       aspectRatio: { values: NANO_BANANA_PRO_ASPECT_RATIOS },
       outputFormat: { values: JPG_PNG },
       resolution: { values: ['1K', '2K', '4K'], inputKey: 'resolution' },
-      imageInput: { inputKey: 'image_input' },
+      imageInput: { inputKey: 'image_input', array: false },
     },
   },
 
@@ -396,7 +396,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       aspectRatio: { values: GPT_IMAGE_ASPECT_RATIOS },
       outputFormat: { values: PNG_JPEG_WEBP },
       numOutputs: { max: 4, inputKey: 'number_of_images' },
-      imageInput: { inputKey: 'input_images' },
+      imageInput: { inputKey: 'input_images', array: true },
     },
   },
 
@@ -411,7 +411,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     utility: true,
     fields: {
       prompt: true,
-      imageInput: { inputKey: 'image' },
+      imageInput: { inputKey: 'image', array: false },
     },
   },
 
@@ -424,7 +424,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     utility: true,
     fields: {
       prompt: true,
-      imageInput: { inputKey: 'input_image' },
+      imageInput: { inputKey: 'input_image', array: false },
     },
   },
 
@@ -436,7 +436,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     utility: true,
     fields: {
       prompt: true,
-      imageInput: { inputKey: 'image' },
+      imageInput: { inputKey: 'image', array: false },
     },
   },
 
@@ -449,7 +449,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     utility: true,
     fields: {
       prompt: true,
-      imageInput: { inputKey: 'image' },
+      imageInput: { inputKey: 'image', array: false },
     },
   },
 
@@ -462,7 +462,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     utility: true,
     fields: {
       prompt: true,
-      imageInput: { inputKey: 'image' },
+      imageInput: { inputKey: 'image', array: false },
     },
   },
 
@@ -475,7 +475,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     utility: true,
     fields: {
       prompt: true,
-      imageInput: { inputKey: 'image' },
+      imageInput: { inputKey: 'image', array: false },
     },
   },
 
@@ -489,7 +489,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     tier: 'budget',
     utility: true,
     fields: {
-      imageInput: { inputKey: 'image' },
+      imageInput: { inputKey: 'image', array: false },
       scale: {
         inputKey: 'scale',
         values: {
@@ -508,7 +508,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     tier: 'budget',
     utility: true,
     fields: {
-      imageInput: { inputKey: 'image' },
+      imageInput: { inputKey: 'image', array: false },
       outputFormat: { values: ['png', 'jpg', 'webp'] },
       scale: {
         inputKey: 'factor',
@@ -529,7 +529,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     tier: 'budget',
     utility: true,
     fields: {
-      imageInput: { inputKey: 'image' },
+      imageInput: { inputKey: 'image', array: false },
     },
   },
 
@@ -540,7 +540,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     tier: 'standard',
     utility: true,
     fields: {
-      imageInput: { inputKey: 'image' },
+      imageInput: { inputKey: 'image', array: false },
       scale: {
         inputKey: 'upscale_factor',
         values: {
@@ -559,7 +559,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     tier: 'premium',
     utility: true,
     fields: {
-      imageInput: { inputKey: 'image' },
+      imageInput: { inputKey: 'image', array: false },
       outputFormat: { values: ['png', 'jpg'] },
       scale: {
         inputKey: 'scale_factor',
@@ -580,7 +580,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     tier: 'premium',
     utility: true,
     fields: {
-      imageInput: { inputKey: 'image' },
+      imageInput: { inputKey: 'image', array: false },
       outputFormat: { values: ['jpg', 'png'] },
       scale: {
         inputKey: 'upscale_factor',

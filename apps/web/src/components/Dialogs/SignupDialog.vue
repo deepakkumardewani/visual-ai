@@ -12,13 +12,13 @@ const router = useRouter();
 const dialogStore = useDialogStore();
 const { signupDialog } = storeToRefs(dialogStore);
 
-const aiImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/ai-image.jpg`;
-const upscaleImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/upscale.jpg`;
-const upscaleImage1 = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/upscale-1.png`;
-const colorizeImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/bw.webp`;
-const colorizeImage1 = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/bw-1.png`;
-const reviveImage = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/revive.png`;
-const reviveImage1 = `${import.meta.env.VITE_CLOUDINARY_ASSETS_URL}/revive-1.png`;
+const aiImage = '/landing/ai-image.a53bc4de.webp';
+const upscaleImage = '/landing/upscale.769d2c02.webp';
+const upscaleImage1 = '/landing/upscale-1.a43c71bd.webp';
+const colorizeImage = '/landing/bw.bc3a2bd1.webp';
+const colorizeImage1 = '/landing/bw-1.17d411f3.webp';
+const reviveImage = '/landing/revive.001ae842.webp';
+const reviveImage1 = '/landing/revive-1.6250d07a.webp';
 
 function handleSignup() {
   signupDialog.value = false;

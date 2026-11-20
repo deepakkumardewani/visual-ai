@@ -76,6 +76,8 @@ export interface ModelDefinition {
     dimensions?: { min: number; max: number };
     imageInput?: {
       inputKey: 'image' | 'image_input' | 'input_image' | 'input_images';
+      /** When true, Replicate expects an array at `inputKey` (verified OpenAPI schema). */
+      array: boolean;
       max?: number;
     };
     /** Scale/upscale factor with model-specific param name and value mapping */

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { faCoins, faGift, faTimes } from '@/plugins/icons';
+import { DAILY_CREDITS } from '@visual-ai/shared';
 import { storeToRefs } from 'pinia';
 
 import { useDialogStore } from '@/stores/dialog';
@@ -7,6 +8,7 @@ import { useUserStore } from '@/stores/user';
 
 import AppModal from '@/components/AppModal.vue';
 import ReferralCode from '@/components/ReferralCode.vue';
+import { referralGiveEarnCopy } from '@/utils/seo';
 
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
@@ -43,15 +45,16 @@ const { credits } = storeToRefs(userStore);
         Credits are used to generate AI images and access other features.
       </p>
       <p class="ref-copy__copy">
-        Each generation costs a small number of credits, shown on every model. You get 30 free
-        credits daily, plus any credits you buy or earn that never expire.
+        Each generation costs a small number of credits, shown on every model. You get
+        {{ DAILY_CREDITS.free }} free credits daily, plus any credits you buy or earn that never
+        expire.
       </p>
 
       <h3 class="ref-copy__section">Earn more credits</h3>
       <div class="ref-copy__offer">
         <p class="ref-copy__offer-text">
           <font-awesome-icon :icon="faGift" class="ref-copy__gift" aria-hidden="true" />
-          Give 50 credits and earn 50 credits for each new referral who signs up.
+          {{ referralGiveEarnCopy() }}
         </p>
         <ReferralCode />
       </div>

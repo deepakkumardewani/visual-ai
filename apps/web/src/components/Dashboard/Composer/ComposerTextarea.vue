@@ -16,6 +16,7 @@ const props = defineProps<{
   embedded?: boolean;
   hideAiMenu?: boolean;
   aiLoading?: boolean;
+  voiceBusy?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -32,7 +33,9 @@ const isAiLoading = ref(false);
 const isFocused = ref(false);
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
 
-const isReadonly = computed(() => isAiLoading.value || Boolean(props.aiLoading));
+const isReadonly = computed(
+  () => isAiLoading.value || Boolean(props.aiLoading) || Boolean(props.voiceBusy),
+);
 const showAiLoadingBar = computed(() => isAiLoading.value || Boolean(props.aiLoading));
 const charCount = computed(() => typingPrompt.value.length);
 const showCharCount = computed(() => charCount.value > CHAR_COUNT_THRESHOLD);

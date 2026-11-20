@@ -148,8 +148,9 @@ async function handleFileChange(event: Event) {
       <template #trigger="{ open }">
         <span
           data-testid="prompt-ai-trigger"
+          data-tour="prompt-tools"
           :class="[
-            'tw-inline-flex tw-min-h-9 tw-min-w-9 tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2 tw-text-ink-muted hover:tw-border-accent/40 hover:tw-text-accent focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
+            'tw-inline-flex tw-min-h-9 tw-min-w-9 max-md:tw-min-h-11 max-md:tw-min-w-11 tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2 tw-text-ink-muted hover:tw-border-accent/40 hover:tw-text-accent focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]',
             interactiveTransition,
             open || activeAction === 'describe' ? 'tw-border-accent/50 tw-text-accent' : '',
           ]"
@@ -258,5 +259,13 @@ async function handleFileChange(event: Event) {
   padding: 0;
   border: none;
   background: transparent;
+}
+
+/* Touch target: 44px below the md breakpoint (768px). */
+@media (max-width: 767.98px) {
+  :deep(.tw-relative.tw-inline-block > button) {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 </style>

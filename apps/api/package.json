@@ -20,6 +20,7 @@
         "@ai-sdk/anthropic": "^4.0.37",
         "@ai-sdk/deepseek": "^3.0.19",
         "@clerk/clerk-sdk-node": "^5.0.33",
+        "@visual-ai/email": "workspace:*",
         "@visual-ai/shared": "workspace:*",
         "ai": "^7.0.0",
         "body-parser": "^1.18.2",
@@ -31,6 +32,7 @@
         "dodopayments": "^2.55.0",
         "dotenv": "^16.4.5",
         "express": "^4.16.2",
+        "express-rate-limit": "^8.7.1",
         "ioredis": "^5.4.2",
         "moment": "^2.30.1",
         "mongoose": "8.0.0",
@@ -41,7 +43,9 @@
         "pino": "^8.21.0",
         "pino-http": "^8.6.0",
         "probe-image-size": "^7.2.3",
+        "rate-limit-redis": "^6.0.2",
         "replicate": "^0.32.0",
+        "resend": "^6.35.0",
         "sharp": "^0.33.5",
         "svix": "^1.30.0",
         "tsx": "^4.19.0",
@@ -67,5 +71,6 @@
         "pino-pretty": "^10.3.1",
         "supertest": "^7.3.1",
         "vitest": "^4.1.9"
-    }
+    },
+    "portless": "api.visual-ai"
 }

@@ -1,13 +1,17 @@
+import { PLAN } from '@visual-ai/shared';
 import { createPinia, setActivePinia } from 'pinia';
 import { mount } from '@vue/test-utils';
+import { nextTick } from 'vue';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const push = vi.fn();
 const signOut = vi.fn();
+const routeState = vi.hoisted(() => ({ name: 'create' as string }));
+const useFetchMock = vi.hoisted(() => vi.fn());
 
 vi.mock('vue-router', () => ({
   useRouter: () => ({ push }),
-  useRoute: () => ({ name: 'create', params: {}, query: {} }),
+  useRoute: () => ({ name: routeState.name, params: {}, query: {} }),
 }));
 
 vi.mock('vue-clerk', () => ({
@@ -15,6 +19,9 @@ vi.mock('vue-clerk', () => ({
   useUser: () => ({ user: { value: null } }),
 }));
 
+vi.mock('@/composables/useFetch', () => ({ useFetch: useFetchMock }));
+
+import { useIntro } from '@/composables/useIntro';
 import UserMenu from '@/components/Header/UserMenu.vue';
 import { useAppStore } from '@/stores/app';
 import { useDialogStore } from '@/stores/dialog';
@@ -24,6 +31,8 @@ const stubs = {
   'font-awesome-icon': true,
   ReferralDialog: { template: '<div data-testid="referral-dialog-stub" />' },
   ReferralCopyDialog: { template: '<div data-testid="referral-copy-stub" />' },
+  PricingDialog: { template: '<div data-testid="pricing-dialog-stub" />' },
+  ProPerksDialog: { template: '<div data-testid="pro-perks-dialog-stub" />' },
 };
 
 describe('UserMenu', () => {
@@ -31,6 +40,9 @@ describe('UserMenu', () => {
     setActivePinia(createPinia());
     push.mockReset();
     signOut.mockReset();
+    useFetchMock.mockReset();
+    routeState.name = 'create';
+    useIntro().isOpen.value = false;
   });
 
   it('shows initials when there is no avatar', () => {
@@ -175,5 +187,156 @@ describe('UserMenu', () => {
     await dark.get('[data-testid="user-menu-trigger"]').trigger('click');
     expect(dark.text()).toContain('Light Mode');
     expect(dark.text()).toContain('Dark');
+  });
+
+  it("reopens What's new on an app-shell route without a DB write", async () => {
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    await wrapper.get('[data-testid="user-menu-item-whats-new"]').trigger('click');
+    expect(useIntro().isOpen.value).toBe(true);
+    expect(push).not.toHaveBeenCalled();
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(false);
+
+    await useIntro().dismiss();
+    expect(useFetchMock).not.toHaveBeenCalled();
+  });
+
+  it("hops to the create surface before opening What's new from another page", async () => {
+    routeState.name = 'profile';
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    await wrapper.get('[data-testid="user-menu-item-whats-new"]').trigger('click');
+    await vi.waitFor(() => expect(useIntro().isOpen.value).toBe(true));
+    expect(push).toHaveBeenCalledWith({ name: 'create' });
+  });
+
+  it('closes the open menu when clicking outside it', async () => {
+    const wrapper = mount(UserMenu, { global: { stubs }, attachTo: document.body });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(true);
+    document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+    document.body.click();
+    await nextTick();
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(false);
+    wrapper.unmount();
+  });
+
+  it('opens from ArrowDown on the trigger and ignores other keys', async () => {
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('keydown', { key: 'a' });
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(false);
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('keydown', { key: 'ArrowDown' });
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(true);
+  });
+
+  it('wraps ArrowDown on the last item to the first and keeps the menu open on other keys', async () => {
+    const wrapper = mount(UserMenu, { global: { stubs }, attachTo: document.body });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    const items = wrapper.findAll('[role="menuitem"]');
+    const last = wrapper.get('[data-testid="user-menu-item-whats-new"]');
+    await last.trigger('keydown', { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(items[0].element);
+    await items[0].trigger('keydown', { key: 'ArrowUp' });
+    expect(document.activeElement).toBe(last.element);
+    await last.trigger('keydown', { key: 'x' });
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(true);
+    wrapper.unmount();
+  });
+
+  it('falls back to blanks when profile fields are missing', async () => {
+    const userStore = useUserStore();
+    userStore.userDetails = {} as never;
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    expect(wrapper.text()).toContain('Your account');
+    expect(wrapper.get('[data-testid="user-menu-trigger"]').text().trim()).toBe('');
+  });
+  it('shows the plan pill in the open menu only once ready', async () => {
+    const userStore = useUserStore();
+    userStore.plan = PLAN.PRO;
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    expect(wrapper.find('[data-testid="plan-pill"]').exists()).toBe(false);
+
+    userStore.isReady = true;
+    await nextTick();
+    expect(wrapper.get('[data-testid="plan-pill"]').text()).toBe('Pro');
+
+    userStore.plan = PLAN.FREE;
+    await nextTick();
+    expect(wrapper.get('[data-testid="plan-pill"]').text()).toBe('Free');
+  });
+
+  it('opens the pricing dialog from the Free pill and closes the menu', async () => {
+    const userStore = useUserStore();
+    userStore.isReady = true;
+    userStore.plan = PLAN.FREE;
+    const dialogStore = useDialogStore();
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    await wrapper.get('[data-testid="plan-pill"]').trigger('click');
+    expect(dialogStore.showPricingDialog).toBe(true);
+    expect(dialogStore.showProPerksDialog).toBe(false);
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(false);
+  });
+
+  it('opens the perks dialog from the Pro pill', async () => {
+    const userStore = useUserStore();
+    userStore.isReady = true;
+    userStore.plan = PLAN.PRO;
+    const dialogStore = useDialogStore();
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    await wrapper.get('[data-testid="plan-pill"]').trigger('click');
+    expect(dialogStore.showProPerksDialog).toBe(true);
+    expect(dialogStore.showPricingDialog).toBe(false);
+    expect(wrapper.find('[data-testid="user-menu-panel"]').exists()).toBe(false);
+  });
+
+  it('mounts the perks dialog alongside the menu', () => {
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    expect(wrapper.find('[data-testid="pro-perks-dialog-stub"]').exists()).toBe(true);
+  });
+
+  it('keeps the pill rendered while a long name truncates', async () => {
+    const userStore = useUserStore();
+    userStore.isReady = true;
+    userStore.plan = PLAN.FREE;
+    const longName = 'Bartholomew Maximilian Featherstonehaugh-Cholmondeley the Third';
+    userStore.userDetails = {
+      firstName: 'Bartholomew',
+      lastName: 'Third',
+      fullName: longName,
+      email: 'b@example.com',
+    } as never;
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    const nameEl = wrapper.findAll('span').find((s) => s.text() === longName);
+    expect(nameEl).toBeDefined();
+    expect(nameEl?.classes()).toContain('tw-truncate');
+    expect(wrapper.get('[data-testid="plan-pill"]').text()).toBe('Free');
+  });
+
+  it('shows no pill before ready for a Free user and flips to Pro without remount', async () => {
+    const userStore = useUserStore();
+    userStore.isReady = false;
+    userStore.plan = PLAN.FREE;
+    const wrapper = mount(UserMenu, { global: { stubs } });
+    await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
+    expect(wrapper.find('[data-testid="plan-pill"]').exists()).toBe(false);
+    userStore.isReady = true;
+    await nextTick();
+    expect(wrapper.get('[data-testid="plan-pill"]').text()).toBe('Free');
+    userStore.plan = PLAN.PRO;
+    await nextTick();
+    expect(wrapper.get('[data-testid="plan-pill"]').text()).toBe('Pro');
+  });
+
+  it('keeps the trigger at the 44px tap-target height', () => {
+    const classes = mount(UserMenu, { global: { stubs } })
+      .get('[data-testid="user-menu-trigger"]')
+      .classes();
+    expect(classes).toContain('tw-h-11');
+    expect(classes).not.toContain('tw-h-10');
   });
 });

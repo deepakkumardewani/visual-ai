@@ -8,6 +8,7 @@ import type { IGenerateResponse, IImage, IImageObject, ImageBody } from '@/types
 import { FeatureType } from '@/types';
 
 import { useAsideStore } from '@/stores/aside';
+import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
 import { useLocal } from '@/composables/local';
@@ -21,6 +22,11 @@ import { useAppStore } from './app';
 const log = createLogger('generate');
 
 const GENERIC_ERROR = 'Sorry, there was an error processing your request. Please try again.';
+const REFERENCE_UPLOAD_ERROR =
+  'Could not upload reference images. Please try again or remove them.';
+
+/** Error code the API returns with a 403 when a non-Pro user requests a premium model. */
+const PREMIUM_MODEL_REQUIRES_PRO = 'PREMIUM_MODEL_REQUIRES_PRO';
 
 type RetryAction = 'generate' | 'upscale' | 'colorize' | 'remove_bg' | 'revive';
 
@@ -56,9 +62,25 @@ export const useGenerateStore = defineStore('generate', () => {
   const enhanceMode = useStorage<EnhanceMode>('visual-ai-enhance-mode', 'auto');
   const removeBgInProgress = ref<boolean>(false);
   const userStore = useUserStore();
+  const dialogStore = useDialogStore();
   const appStore = useAppStore();
   const { userId } = storeToRefs(userStore);
   const { setLocal } = useLocal();
+
+  /** The result that was dismissed, so a new unsaved result shows its notice again. */
+  const dismissedUnsavedResult = ref<IImageObject | null>(null);
+
+  /** An at-cap result is returned without an `_id`: it was never stored and only has the provider URL. */
+  const unsavedResult = computed(() =>
+    imageData.value && !imageData.value._id ? imageData.value : null,
+  );
+  const showUnsavedNotice = computed(
+    () => unsavedResult.value !== null && unsavedResult.value !== dismissedUnsavedResult.value,
+  );
+
+  function dismissUnsavedNotice() {
+    dismissedUnsavedResult.value = unsavedResult.value;
+  }
 
   const hasAnyError = computed(() => Object.keys(errMsg.value).length > 0);
 
@@ -164,6 +186,59 @@ export const useGenerateStore = defineStore('generate', () => {
     }
   }
 
+  function inferUploadFormat(file: File): string {
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    if (ext === 'jpg' || ext === 'jpeg') return 'jpg';
+    if (ext === 'webp') return 'webp';
+    if (ext === 'png') return 'png';
+    if (file.type === 'image/jpeg') return 'jpg';
+    if (file.type === 'image/webp') return 'webp';
+    return 'png';
+  }
+
+  /**
+   * Uploads staged reference files before generation. Orphaned Cloudinary objects after a
+   * failed generation are acceptable — we only send URLs that survive an in-flight remove.
+   */
+  async function uploadReferenceImagesForGenerate(): Promise<string[] | null> {
+    const asideStore = useAsideStore();
+    const staged = [...asideStore.referenceImages];
+    if (!staged.length) return [];
+
+    const uploadBatch = staged.map((item) => ({
+      localId: item.localId,
+      file: item.file,
+    }));
+
+    const formData = new FormData();
+    formData.append('userId', userId.value);
+    formData.append('feature', 'reference');
+    formData.append('format', inferUploadFormat(uploadBatch[0].file));
+    for (const { file } of uploadBatch) {
+      formData.append('images', file);
+    }
+
+    const { data, error } = await useFetch('/generate/reference-images', {
+      method: 'POST',
+      body: formData,
+    }).json<{ urls: string[] }>();
+
+    if (error.value || !data.value?.urls?.length) {
+      log.warn('uploadReferenceImagesForGenerate failed', { error: error.value });
+      return null;
+    }
+
+    const stillPresent = new Set(asideStore.referenceImages.map((item) => item.localId));
+    const urls: string[] = [];
+    for (let i = 0; i < uploadBatch.length; i += 1) {
+      const { localId } = uploadBatch[i];
+      if (!stillPresent.has(localId)) continue;
+      const url = data.value.urls[i];
+      if (url) urls.push(url);
+    }
+    return urls;
+  }
+
   async function generateImage(imgData?: ImageBody) {
     appStore.sendSignal('generate_image');
     isLoading.value = true;
@@ -173,38 +248,58 @@ export const useGenerateStore = defineStore('generate', () => {
     activePrompt.value = imgData?.prompt ?? '';
     images.value = [];
 
+    const referenceImageUrls = await uploadReferenceImagesForGenerate();
+    if (referenceImageUrls === null) {
+      isLoading.value = false;
+      appStore.closeEventSource('image');
+      appStore.snackbarText = REFERENCE_UPLOAD_ERROR;
+      appStore.snackbar = true;
+      setFeatureError(FeatureType.IMAGE, REFERENCE_UPLOAD_ERROR);
+      return;
+    }
+
     const url = `/generate/image`;
     const modelId = imgData?.modelId ?? MODEL_REGISTRY.FLUX_BASIC.key;
     const supportsOutputQuality = Boolean(
       MODEL_REGISTRY[modelId as keyof typeof MODEL_REGISTRY]?.fields.outputQuality,
     );
 
-    const { error } = await useFetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        mode: 'cors',
+    const { error, data } = await useFetch(
+      url,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          mode: 'cors',
+        },
+        body: JSON.stringify({
+          jobId: imgData?.jobId,
+          userId: userId.value,
+          // Default model is sourced from MODEL_REGISTRY to keep metadata in sync with the registry
+          modelId,
+          imageType: imgData?.imageType ?? 'horizontal',
+          modelName: imgData?.modelName ?? 'Flux Lightning',
+          prompt: imgData?.prompt ?? '',
+          numOfOutputs: imgData?.noOfOutputs ?? 1,
+          ...(supportsOutputQuality ? { outputQuality: imgData?.outputQuality ?? 70 } : {}),
+          aspectRatio: imgData?.aspectRatio ?? '16:9',
+          outputFormat: imgData?.outputFormat ?? 'jpg',
+          styleId: styleId.value,
+          enhanceMode: enhanceMode.value,
+          ...(referenceImageUrls.length ? { referenceImageUrls } : {}),
+        }),
       },
-      body: JSON.stringify({
-        jobId: imgData?.jobId,
-        userId: userId.value,
-        // Default model is sourced from MODEL_REGISTRY to keep metadata in sync with the registry
-        modelId,
-        imageType: imgData?.imageType ?? 'horizontal',
-        modelName: imgData?.modelName ?? 'Flux Lightning',
-        prompt: imgData?.prompt ?? '',
-        numOfOutputs: imgData?.noOfOutputs ?? 1,
-        ...(supportsOutputQuality ? { outputQuality: imgData?.outputQuality ?? 70 } : {}),
-        aspectRatio: imgData?.aspectRatio ?? '16:9',
-        outputFormat: imgData?.outputFormat ?? 'jpg',
-        styleId: styleId.value,
-        enhanceMode: enhanceMode.value,
-      }),
-    }).json<IGenerateResponse>();
+      // The error body carries the `code` that tells a premium-gate 403 apart from a real failure.
+      { updateDataOnError: true },
+    ).json<IGenerateResponse & { code?: string }>();
     if (error.value) {
-      log.error('generateImage failed', { error: error.value, jobId: imgData?.jobId });
       isLoading.value = false;
       appStore.closeEventSource('image');
+      if (data.value?.code === PREMIUM_MODEL_REQUIRES_PRO) {
+        dialogStore.showPricing();
+        return;
+      }
+      log.error('generateImage failed', { error: error.value, jobId: imgData?.jobId });
       setFeatureError(FeatureType.IMAGE, GENERIC_ERROR);
     }
   }
@@ -371,6 +466,9 @@ export const useGenerateStore = defineStore('generate', () => {
     jobStatus,
     jobProgress,
     hasAnyError,
+    unsavedResult,
+    showUnsavedNotice,
+    dismissUnsavedNotice,
     styleId,
     enhanceMode,
   };

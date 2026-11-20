@@ -25,6 +25,9 @@ type CursorParts = {
 
 const IMAGE_FEATURE_TYPES = [FeatureType.IMAGE, "IMAGE", "Image"]
 
+/** `$ne: true` also matches legacy docs that predate the field. */
+const PUBLIC_HISTORY_FILTER = { "history.isPrivate": { $ne: true } } as const
+
 const EXPLORE_ITEM_PROJECT = {
     _id: 0,
     id: { $toString: "$history._id" },
@@ -145,6 +148,7 @@ export async function getExploreFeed({
         userId: { $ne: excludeUserId },
         "history.featureType": { $in: IMAGE_FEATURE_TYPES },
         "history.images.0": { $exists: true },
+        ...PUBLIC_HISTORY_FILTER,
     }
 
     if (cursor) {
@@ -199,6 +203,7 @@ export async function getExploreItemById(id: string): Promise<ExploreFeedItem> {
                 "history._id": new mongoose.Types.ObjectId(id),
                 "history.featureType": { $in: IMAGE_FEATURE_TYPES },
                 "history.images.0": { $exists: true },
+                ...PUBLIC_HISTORY_FILTER,
             },
         },
         { $limit: 1 },

@@ -17,7 +17,7 @@ cd apps/web && bunx playwright test e2e/qa/billing-purchase.spec.ts --repeat-eac
 
 ## Base URL
 
-Configured in `e2e/support/env.ts` as `WEB_URL` (default `http://localhost:3005`). Override with `E2E_WEB_URL` in the shell if needed.
+Configured in `e2e/support/env.ts`: `WEB_URL` / `API_URL` default to portless (`https://visual-ai.localhost`, `https://api.visual-ai.localhost`). Override with `E2E_WEB_URL` / `E2E_API_URL` when using `dev:direct:*`.
 
 ## Auth
 
@@ -26,9 +26,18 @@ Configured in `e2e/support/env.ts` as `WEB_URL` (default `http://localhost:3005`
 - Refresh storage state: `cd apps/web && bun run auth:state` (runs `e2e/auth.setup.ts`, writes `playwright/.auth/user.json` at `AUTH_STATE_PATH`).
 - Specs in the `chromium` project reuse that storage state; `@guest` specs use an empty state.
 
-## No webServer
+## Server mode (`E2E_SERVER`)
 
-`playwright.config.ts` does **not** start the Vue app or API. Both must already be running locally (dev servers). Tests never spawn servers.
+| `E2E_SERVER`   | Behaviour                                                                                                                                                                                                                                                                             |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| unset or `dev` | No `webServer` in Playwright config. The Vue app and API must already be running (portless dev URLs).                                                                                                                                                                                 |
+| `prod`         | Playwright starts a production build via `webServer`: `bun run build` then `vp preview` on **`E2E_PROD_PORT`** (default `4173`). `baseURL` is `http://127.0.0.1:<port>`. `reuseExistingServer` is `false`. The API is still expected to be running separately unless a spec stubs it. |
+
+Example (list specs against prod preview config without running them):
+
+```bash
+cd apps/web && E2E_SERVER=prod E2E_PROD_PORT=4173 bunx playwright test --list
+```
 
 ## Environment file
 
