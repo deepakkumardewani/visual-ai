@@ -9,6 +9,7 @@ import {
   dashboardRedirectLocation,
   isValidFeatureParam,
 } from '@/utils/dashboardRoutes';
+import { toSafeInternalPath } from '@/utils/safeRedirect';
 
 const Compare = () => import('@/pages/Compare.vue');
 const Contact = () => import('@/pages/Contact.vue');
@@ -18,6 +19,8 @@ const Examples = () => import('@/pages/Examples.vue');
 const FeatureLanding = () => import('@/pages/FeatureLanding.vue');
 const Faqs = () => import('@/pages/Frequent.vue');
 const Gallery = () => import('@/pages/Gallery.vue');
+const LandingV2 = () => import('@/pages/LandingV2.vue');
+const LandingV3 = () => import('@/pages/LandingV3.vue');
 const Pricing = () => import('@/pages/Pricing.vue');
 const Privacy = () => import('@/pages/PrivacyPolicy.vue');
 const Profile = () => import('@/pages/Profile.vue');
@@ -31,6 +34,16 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'landing',
     component: Landing,
+  },
+  {
+    path: '/v2',
+    name: 'landing-v2',
+    component: LandingV2,
+  },
+  {
+    path: '/v3',
+    name: 'landing-v3',
+    component: LandingV3,
   },
   {
     path: '/text-to-image',
@@ -108,6 +121,8 @@ const routes: RouteRecordRaw[] = [
     path: '/signin/:pathMatch(.*)*',
     name: 'signin',
     component: Signin,
+    // Only a validated same-origin path reaches Clerk as the post-sign-in destination.
+    props: (route) => ({ redirect: toSafeInternalPath(route.query.redirect) }),
   },
   {
     path: '/signup/:pathMatch(.*)*',
@@ -163,9 +178,9 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  scrollBehavior(to, from, savedPosition) {
-    // always scroll to top
+  scrollBehavior(to) {
+    // Land on in-page anchors such as /pricing#packs; everything else starts at the top.
+    if (to.hash) return { el: to.hash };
     return { top: 0 };
   },
 });

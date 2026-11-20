@@ -5,17 +5,18 @@ import { REFERRAL_BONUS, SIGNUP_CREDITS } from '@visual-ai/shared';
 import { test, expect } from '../fixtures/qa';
 import { gotoStudio } from '../support/studio';
 
+// Mirrors BREAKPOINT.MOBILE_MAX: banner below 768px, Earn pill from 768px.
+const MOBILE_MAX_WIDTH = 768;
+
 const STALE_SIGNUP_CREDITS =
   /\b50\s+(free|bonus|persistent)\s+credits|\b50\s+persistent\s+credits|\b50\s+you\s+get\s+at\s+signup/i;
 
 async function openReferralOfferDialog(page: Page) {
-  const mobile = page.getByTestId('referral-offer-mobile');
-  const desktop = page.getByTestId('referral-offer-desktop');
-  if (await mobile.isVisible()) {
-    await mobile.click();
-  } else {
-    await desktop.click();
-  }
+  const width = page.viewportSize()?.width ?? 0;
+  const trigger = page.getByTestId(
+    width < MOBILE_MAX_WIDTH ? 'referral-offer-mobile' : 'referral-offer-desktop',
+  );
+  await trigger.click();
   await expect(page.getByTestId('referral-offer-dialog')).toBeVisible();
 }
 

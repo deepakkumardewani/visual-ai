@@ -169,7 +169,16 @@ test.describe('Pro tier UI', () => {
     }) => {
       await gotoStudio(page);
       for (const model of PRO_ONLY_MODELS) {
-        const option = await modelOption(page, model);
+        const option = await modelOption(page, model); // also opens the picker
+        // A Pro model can appear in Featured and in Pro: every copy must be locked.
+        const rows = page
+          .getByTestId('model-option')
+          .filter({ has: page.getByText(model.title, { exact: true }) });
+        expect(await rows.count()).toBeGreaterThan(0);
+        for (const row of await rows.all()) {
+          await expect(row.getByTestId('premium-lock-badge')).toBeVisible();
+          await expect(row).toHaveAttribute('data-locked', 'true');
+        }
         await expect(option.getByTestId('premium-lock-badge')).toHaveText(/Pro/);
         await expect(option).toHaveAttribute('data-locked', 'true');
         await option.click();
@@ -392,18 +401,18 @@ test.describe('Pro tier UI', () => {
     expect(((await profile.json()) as { plan: string }).plan).toBe('pro');
   });
 
-  test('@medium Pro badge persists after reload', async ({ page, snap }) => {
+  test('@medium Pro plan pill persists after reload', async ({ page, snap }) => {
     await gotoStudio(page);
     await activatePro(page, 'badge');
     await gotoStudio(page);
     await openUserMenu(page);
-    await expect(page.getByTestId('pro-badge')).toBeVisible();
+    await expect(page.getByTestId('plan-pill')).toHaveText('Pro');
     await page.getByTestId('user-menu-panel').screenshot({ path: shotPath('pro-badge') });
 
     await page.reload();
     await expect(page.getByTestId('composer-textarea-input')).toBeVisible();
     await openUserMenu(page);
-    await expect(page.getByTestId('pro-badge')).toBeVisible();
+    await expect(page.getByTestId('plan-pill')).toHaveText('Pro');
     await snap('pro-badge-after-reload');
     await page
       .getByTestId('user-menu-panel')

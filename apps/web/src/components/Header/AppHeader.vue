@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { useMediaQuery } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { useMutationObserver, useResizeObserver } from '@vueuse/core';
+import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
 import { SignedIn, SignedOut, useAuth } from 'vue-clerk';
 import { useRoute } from 'vue-router';
 
+import { useHeaderBreakpoint } from '@/composables/useHeaderBreakpoint';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
 import CustomButton from '@/components/CustomButton.vue';
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue';
 import ReferralOfferDialog from '@/components/Dialogs/ReferralOfferDialog.vue';
-import CreditsChip from '@/components/Header/CreditsChip.vue';
 import FeatureSelect from '@/components/Header/FeatureSelect.vue';
+import HeaderActions from '@/components/Header/HeaderActions.vue';
 import Logo from '@/components/Header/Logo.vue';
 import NavTabs from '@/components/Header/NavTabs.vue';
 import ReferralOffer from '@/components/Header/ReferralOffer.vue';
@@ -20,8 +21,9 @@ import ThemeButton from '@/components/Header/ThemeButton.vue';
 import UserMenu from '@/components/Header/UserMenu.vue';
 
 import { APP_SURFACE, isAppShellRoute } from '@/utils/dashboardRoutes';
+import { APP_HEADER_HEIGHT_VAR, HEADER_BAR_PX } from '@/utils/layout';
 
-const smAndUp = useMediaQuery('(min-width: 600px)');
+const { isMobile } = useHeaderBreakpoint();
 const { isLoaded: isAuthLoaded } = useAuth();
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
@@ -35,7 +37,8 @@ const isThemeButtonVisible = computed(() => {
   return route.path !== '/privacy' && route.path !== '/terms' && route.path !== '/refund';
 });
 
-const showDesktopNavTabs = computed(() => smAndUp.value && isDashboard.value);
+const showDesktopNavTabs = computed(() => !isMobile.value && isDashboard.value);
+const showMobileNavTabs = computed(() => isMobile.value && isDashboard.value);
 
 /** Dashboard is auth-gated — show tabs once Clerk is loaded (don't wait for SignedIn). */
 const showNavTabs = computed(() => Boolean(isAuthLoaded.value) && isDashboard.value);
@@ -49,27 +52,57 @@ const showEndSkeleton = computed(() => {
   if (isDashboard.value && !isUserReady.value) return true;
   return false;
 });
+
+/**
+ * Publishes the space the header takes above page content as `--app-header-h`.
+ * Mobile dashboard: banner + bar + tabs row sit in flow, so measure them (banner height
+ * depends on text wrapping). Otherwise the fixed bar is a constant.
+ */
+const headerEl = ref<HTMLElement | null>(null);
+const bannerEl = ref<HTMLElement | null>(null);
+const measuredInFlowHeight = ref<number>(HEADER_BAR_PX);
+const headerParent = computed(() => headerEl.value?.parentElement ?? null);
+
+function measureInFlowHeight() {
+  const header = headerEl.value;
+  if (!header) return;
+  bannerEl.value = header.previousElementSibling as HTMLElement | null;
+  measuredInFlowHeight.value = header.offsetHeight + (bannerEl.value?.offsetHeight ?? 0);
+}
+
+// The banner mounts after user data loads and does not resize the header, so watch child changes too.
+useResizeObserver([headerEl, bannerEl], measureInFlowHeight);
+useMutationObserver(headerParent, measureInFlowHeight, { childList: true });
+
+watchEffect(() => {
+  const isInFlow = showMobileNavTabs.value;
+  const height = isInFlow ? measuredInFlowHeight.value : HEADER_BAR_PX;
+  document.documentElement.style.setProperty(APP_HEADER_HEIGHT_VAR, `${height}px`);
+});
+
+onBeforeUnmount(() => document.documentElement.style.removeProperty(APP_HEADER_HEIGHT_VAR));
 </script>
 
 <template>
-  <div data-testid="app-header-v2">
+  <div data-testid="app-header-v2" :class="{ 'header-v2-root--mobile': showMobileNavTabs }">
     <SignedIn>
-      <ReferralOffer v-if="!smAndUp && isDashboard" />
+      <ReferralOffer v-if="isMobile && isDashboard" />
     </SignedIn>
     <header
-      class="header-v2 tw-fixed tw-left-0 tw-right-0 tw-top-0 tw-z-50 tw-h-16 tw-bg-surface-1/80 tw-backdrop-blur-[14px]"
-      :class="{ 'header-v2--dashboard-mobile': !smAndUp && isDashboard }"
+      ref="headerEl"
+      class="header-v2 tw-fixed tw-left-0 tw-right-0 tw-top-0 tw-z-50 tw-bg-surface-1/80 tw-backdrop-blur-[14px]"
+      :class="isMobile && isDashboard ? 'header-v2--dashboard-mobile' : 'tw-h-16'"
     >
       <div
         class="header-v2__inner tw-mx-auto tw-flex tw-h-16 tw-w-full tw-items-center tw-gap-3 tw-px-4 lg:tw-gap-5 lg:tw-px-6"
       >
         <div
-          class="header-v2__start tw-flex tw-min-w-0 tw-flex-1 tw-items-center tw-gap-3 lg:tw-flex-none lg:tw-basis-1/4"
+          class="header-v2__start tw-flex tw-min-w-0 tw-flex-1 tw-items-center tw-gap-3 md:tw-flex-none lg:tw-basis-1/4"
         >
           <Logo />
           <div
             v-if="isCreateSurface"
-            class="tw-relative tw-hidden tw-min-w-0 tw-flex-1 md:tw-block lg:tw-flex-none"
+            class="tw-relative tw-min-w-0 tw-flex-1 md:tw-max-w-[17rem] md:tw-flex-none"
           >
             <FeatureSelect />
           </div>
@@ -77,7 +110,7 @@ const showEndSkeleton = computed(() => {
 
         <div
           v-if="showDesktopNavTabs"
-          class="header-v2__center tw-hidden tw-flex-1 tw-justify-center md:tw-flex"
+          class="header-v2__center tw-flex tw-flex-1 tw-justify-center"
         >
           <div
             v-if="!showNavTabs"
@@ -98,11 +131,15 @@ const showEndSkeleton = computed(() => {
           >
             <div
               v-if="isDashboard"
-              class="tw-h-9 tw-w-[4.5rem] tw-animate-pulse tw-rounded-chip tw-bg-surface-2"
+              class="tw-hidden tw-h-11 tw-w-11 tw-animate-pulse tw-rounded-full tw-bg-surface-2 md:tw-block lg:tw-w-32"
             />
             <div
               v-if="isDashboard"
-              class="tw-h-9 tw-w-[4.75rem] tw-animate-pulse tw-rounded-chip tw-bg-surface-2"
+              class="tw-h-11 tw-w-11 tw-animate-pulse tw-rounded-full tw-bg-surface-2 lg:tw-w-40"
+            />
+            <div
+              v-if="isDashboard"
+              class="tw-h-11 tw-w-[4.75rem] tw-animate-pulse tw-rounded-full tw-bg-surface-2"
             />
             <div class="tw-h-9 tw-w-9 tw-animate-pulse tw-rounded-full tw-bg-surface-2" />
           </div>
@@ -127,13 +164,26 @@ const showEndSkeleton = computed(() => {
             </SignedOut>
 
             <SignedIn>
-              <ReferralOffer v-if="smAndUp && isDashboard" />
-              <CreditsChip v-if="isDashboard" />
-              <CustomButton v-if="!isDashboard" title="Dashboard" />
-              <UserMenu />
+              <HeaderActions v-if="isDashboard" />
+              <template v-else>
+                <CustomButton title="Dashboard" />
+                <UserMenu />
+              </template>
             </SignedIn>
           </div>
         </div>
+      </div>
+      <div
+        v-if="showMobileNavTabs"
+        data-testid="header-mobile-tabs"
+        class="header-v2__tabs-row tw-border-b tw-border-border tw-bg-surface-1 tw-px-4 tw-py-2"
+      >
+        <div
+          v-if="!showNavTabs"
+          aria-hidden="true"
+          class="tw-h-11 tw-w-full tw-animate-pulse tw-rounded-full tw-bg-surface-2"
+        />
+        <NavTabs v-else variant="segmented" />
       </div>
     </header>
     <BuyMoreCreditsDialog />
@@ -147,8 +197,15 @@ const showEndSkeleton = computed(() => {
   border-image: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.35), transparent) 1;
 }
 
+/* Lets the sticky header stick against the app column, not this wrapper. */
+.header-v2-root--mobile {
+  display: contents;
+}
+
 .header-v2--dashboard-mobile {
-  position: relative !important;
+  position: sticky !important;
+  /* Park the 64px top bar off-screen so only the tabs row stays pinned. */
+  top: -4rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

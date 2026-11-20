@@ -28,6 +28,16 @@ describe('useDialogStore', () => {
     expect(CHAIN_ACTION_LABELS.colorize).toBe('Colorize');
   });
 
+  it('opens and closes the pro perks dialog independently of pricing', () => {
+    const store = useDialogStore();
+    expect(store.showProPerksDialog).toBe(false);
+    store.showProPerks();
+    expect(store.showProPerksDialog).toBe(true);
+    expect(store.showPricingDialog).toBe(false);
+    store.hideProPerks();
+    expect(store.showProPerksDialog).toBe(false);
+  });
+
   it('toggles pricing, credits, signup, and referral dialogs', () => {
     const store = useDialogStore();
     store.showPricing();

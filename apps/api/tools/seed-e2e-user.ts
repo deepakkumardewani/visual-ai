@@ -15,7 +15,7 @@ import { UserModel } from "../src/models/user.js"
 import { signUpHandler } from "../src/services/user-service.js"
 import { ClerkUserEvent } from "../src/types/index.js"
 
-const E2E_USER_ID = process.env.E2E_CLERK_USER_ID ?? "user_3K9cU9AoSCfly17t5EfB8YyA3cs"
+const E2E_USER_ID = process.env.E2E_CLERK_USER_ID ?? "user_2wTu04vGSICXzCOVXoiL8nuv7zn"
 
 async function buildSignUpEvent(userId: string): Promise<ClerkUserEvent> {
     const user = await clerkClient.users.getUser(userId)

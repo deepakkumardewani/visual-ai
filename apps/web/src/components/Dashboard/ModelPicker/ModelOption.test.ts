@@ -65,16 +65,30 @@ describe('ModelOption', () => {
     expect(wrapper.text()).not.toContain('Premium');
   });
 
-  // Guards against Vue's whitespace condensing fusing the two spans ("Grok ImagineCheap, ...").
+  // Name and description are separate elements, so whitespace condensing cannot fuse them.
   it.each(MODELS.map((m) => [m.title, m] as const))(
-    '%s separates name and description with a single space',
+    '%s renders name and description as separate elements, read as "name, description"',
     (_title, model) => {
       const wrapper = mount(ModelOption, { props: { model } });
-      const label = wrapper.get('[data-testid="model-option-label"]').element;
 
-      expect(label.textContent).toBe(`${model.title} ${getModelBestForHint(model)}`);
+      expect(wrapper.get('[data-testid="model-option-name"]').text()).toBe(model.title);
+      expect(wrapper.get('[data-testid="model-option-description"]').text()).toBe(
+        getModelBestForHint(model),
+      );
+      expect(wrapper.get('[data-testid="model-option-label"]').text()).toBe(
+        `${model.title}, ${getModelBestForHint(model)}`,
+      );
     },
   );
+
+  it('spaces the name and description with a gap class on the label container', () => {
+    const wrapper = mount(ModelOption, { props: { model: FLUX_MODES[2] } });
+    const label = wrapper.get('[data-testid="model-option-label"]');
+
+    expect(label.classes()).toContain('tw-gap-2');
+    expect(label.find('[data-testid="model-option-name"]').exists()).toBe(true);
+    expect(label.find('[data-testid="model-option-description"]').exists()).toBe(true);
+  });
 
   it('displays logo image when iconUrl is provided', () => {
     const model = FLUX_MODES[2]; // Has iconUrl

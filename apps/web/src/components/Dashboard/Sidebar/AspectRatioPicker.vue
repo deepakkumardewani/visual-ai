@@ -102,7 +102,7 @@ function toggleExpanded() {
       <button
         type="button"
         data-testid="aspect-more-trigger"
-        class="tw-flex tw-h-9 tw-w-full tw-items-center tw-justify-between tw-gap-2 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2 tw-px-3 tw-text-body-sm tw-font-medium tw-text-ink tw-transition-[color,background-color,border-color] tw-duration-fast hover:tw-border-accent/40 hover:tw-bg-surface-3 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
+        class="tw-flex tw-h-9 max-md:tw-h-11 tw-w-full tw-items-center tw-justify-between tw-gap-2 tw-rounded-md tw-border tw-border-hairline tw-bg-surface-2 tw-px-3 tw-text-body-sm tw-font-medium tw-text-ink tw-transition-[color,background-color,border-color] tw-duration-fast hover:tw-border-accent/40 hover:tw-bg-surface-3 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-accent focus-visible:tw-outline-offset-[3px]"
         :aria-expanded="expanded"
         aria-controls="aspect-more-panel"
         @click="toggleExpanded"

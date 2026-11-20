@@ -1,0 +1,1 @@
+Never start the server; it is always running. Mock-only: never call real Replicate, Dodo live, email or any paid/outbound service; stub paid endpoints with MediaGenerationStub. Use bun run check/test/lint, agent-browser for browser checks, impeccable (never frontend-design) for UI tasks. Implementation tasks do not write specs.

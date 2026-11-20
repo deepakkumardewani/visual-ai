@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BeforeAfter from '@/components/Landing/BeforeAfter.vue';
+import ToolCutoutCards from '@/components/LandingV2/ToolCutoutCards.vue';
 
 import type { ToolChapter } from '@/utils/landing';
 
@@ -11,6 +12,7 @@ defineProps<{
 
 <template>
   <BeforeAfter v-if="media.kind === 'compare'" :before="media.before" :after="media.after" />
+  <ToolCutoutCards v-else-if="media.kind === 'cutout'" :pairs="media.pairs" />
   <div v-else class="cluster">
     <img
       v-for="(src, i) in media.images"

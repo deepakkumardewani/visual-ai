@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { faTimes } from '@/plugins/icons';
 import { onKeyStroke, useScrollLock } from '@vueuse/core';
-import { computed, ref, watch } from 'vue';
+import { computed, provide, ref, watch } from 'vue';
+
+import { useFocusTrap } from '@/composables/useFocusTrap';
+import { REVEAL_SCROLLER_KEY } from '@/directives/reveal';
 
 const props = withDefaults(
   defineProps<{
@@ -17,6 +20,8 @@ const props = withDefaults(
     closeOnOverlay?: boolean;
     /** Stacking layer — increases z-index so nested confirms sit above. */
     layer?: number;
+    /** Keeps Tab and Shift+Tab cycling inside the panel while open. */
+    trapFocus?: boolean;
   }>(),
   {
     maxWidth: '32rem',
@@ -27,6 +32,7 @@ const props = withDefaults(
     closeOnEscape: true,
     closeOnOverlay: true,
     layer: 0,
+    trapFocus: false,
   },
 );
 
@@ -36,8 +42,14 @@ const emit = defineEmits<{
 }>();
 
 const panelRef = ref<HTMLElement | null>(null);
+provide(REVEAL_SCROLLER_KEY, panelRef);
 const previouslyFocused = ref<HTMLElement | null>(null);
 const bodyLocked = useScrollLock(typeof document !== 'undefined' ? document.body : null);
+
+useFocusTrap(
+  panelRef,
+  computed(() => props.open && props.trapFocus),
+);
 
 const isOpen = computed({
   get: () => props.open,

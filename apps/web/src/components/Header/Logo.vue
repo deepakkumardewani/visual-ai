@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useMediaQuery } from '@vueuse/core';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -18,9 +17,10 @@ const props = withDefaults(
   },
 );
 
+const LOGO_MARK_SIZE_PX = 34;
+
 const route = useRoute();
 const router = useRouter();
-const isMobile = useMediaQuery('(max-width: 600px)');
 
 const onAppShell = computed(() => isAppShellRoute(route));
 const showWordmark = computed(() => props.forceWordmark || !onAppShell.value);
@@ -33,13 +33,13 @@ function goHome() {
 <template>
   <button
     type="button"
-    class="logo tw-group tw-flex tw-items-center tw-gap-2.5 tw-border-0 tw-bg-transparent tw-p-0 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-4 focus-visible:tw-outline-accent"
+    class="logo tw-group tw-flex tw-min-h-11 tw-min-w-11 tw-items-center tw-gap-2.5 tw-border-0 tw-bg-transparent tw-p-0 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-4 focus-visible:tw-outline-accent"
     :aria-label="onAppShell ? 'Visual AI home' : 'Visual AI'"
     @click="goHome"
   >
     <LogoMark
       v-if="showMark"
-      :size="isMobile ? 30 : 34"
+      :size="LOGO_MARK_SIZE_PX"
       class="tw-block tw-shrink-0 tw-transition-transform tw-duration-fast tw-ease-out group-hover:tw-scale-[1.04]"
     />
     <span v-if="showWordmark" class="logo__wordmark tw-flex tw-items-baseline">

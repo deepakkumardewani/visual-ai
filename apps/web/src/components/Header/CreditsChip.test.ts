@@ -4,7 +4,7 @@ import { mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
 
-const smAndUpRef = vi.hoisted(() => ({ value: true }));
+const isWideRef = vi.hoisted(() => ({ value: true }));
 
 vi.mock('vue-clerk', () => ({
   useUser: () => ({ user: ref(null) }),
@@ -14,7 +14,7 @@ vi.mock('@vueuse/core', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@vueuse/core')>();
   return {
     ...actual,
-    useMediaQuery: () => smAndUpRef,
+    useMediaQuery: () => isWideRef,
   };
 });
 
@@ -28,7 +28,7 @@ import { useUserStore } from '@/stores/user';
 describe('CreditsChip', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
-    smAndUpRef.value = true;
+    isWideRef.value = true;
   });
 
   it('renders live credit count in a compact pill', () => {
@@ -73,7 +73,7 @@ describe('CreditsChip', () => {
   });
 
   it('opens credits menu on click for mobile', async () => {
-    smAndUpRef.value = false;
+    isWideRef.value = false;
 
     const wrapper = mount(CreditsChip, {
       global: {
@@ -140,26 +140,28 @@ describe('CreditsChip', () => {
         },
       });
 
-    it('shows the upgrade pill and no Pro badge for a ready Free user', () => {
+    it('renders neither the upgrade pill nor a Pro badge for a ready Free user', () => {
       const userStore = useUserStore();
       userStore.isReady = true;
       userStore.plan = PLAN.FREE;
 
       const wrapper = mountChip();
 
-      expect(wrapper.find('[data-testid="upgrade-pill"]').exists()).toBe(true);
-      expect(wrapper.find('[data-testid="pro-badge-header"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="upgrade-button"]').exists()).toBe(false);
     });
 
-    it('shows the Pro badge and no pill for a ready Pro user', () => {
+    it('shows no pill and no Pro badge for a ready Pro user', () => {
       const userStore = useUserStore();
       userStore.isReady = true;
       userStore.plan = PLAN.PRO;
 
       const wrapper = mountChip();
 
-      expect(wrapper.get('[data-testid="pro-badge-header"]').text()).toBe('Pro');
-      expect(wrapper.find('[data-testid="upgrade-pill"]').exists()).toBe(false);
+      expect(wrapper.text()).not.toMatch(/pro/i);
+      const icons = wrapper.findAll('font-awesome-icon-stub').map((i) => i.attributes('icon'));
+      expect(icons.length).toBeGreaterThan(0);
+      expect(icons.join(' ')).not.toMatch(/crown/i);
+      expect(wrapper.find('[data-testid="upgrade-button"]').exists()).toBe(false);
     });
 
     it.each([false, true])('hides both while loading (isPro=%s)', (isPro) => {
@@ -169,25 +171,7 @@ describe('CreditsChip', () => {
 
       const wrapper = mountChip();
 
-      expect(wrapper.find('[data-testid="upgrade-pill"]').exists()).toBe(false);
-      expect(wrapper.find('[data-testid="pro-badge-header"]').exists()).toBe(false);
-    });
-
-    it('opens the pricing dialog and closes the menu when the pill is clicked', async () => {
-      const userStore = useUserStore();
-      userStore.isReady = true;
-      userStore.plan = PLAN.FREE;
-      const { useDialogStore } = await import('@/stores/dialog');
-      const dialogStore = useDialogStore();
-      const showPricing = vi.spyOn(dialogStore, 'showPricing');
-
-      const wrapper = mountChip();
-      await wrapper.get('[data-testid="credits-chip"]').trigger('click');
-      expect(wrapper.find('[data-testid="credits-chip-menu"]').exists()).toBe(true);
-      await wrapper.get('[data-testid="upgrade-pill"]').trigger('click');
-
-      expect(showPricing).toHaveBeenCalledTimes(1);
-      expect(wrapper.find('[data-testid="credits-chip-menu"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="upgrade-button"]').exists()).toBe(false);
     });
 
     it('closes the open menu when clicking outside', async () => {

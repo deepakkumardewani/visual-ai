@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 const routePathRef = ref('/create');
 const routeNameRef = ref('create');
-const smAndUpRef = ref(true);
+const isWideRef = ref(true);
 const isAuthLoaded = ref(true);
 
 vi.mock('vue-router', () => ({
@@ -13,11 +13,13 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ push: vi.fn() }),
 }));
 
-vi.mock('@vueuse/core', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@vueuse/core')>();
+vi.mock('@/composables/useHeaderBreakpoint', async () => {
+  const vue = await import('vue');
   return {
-    ...actual,
-    useMediaQuery: () => smAndUpRef,
+    useHeaderBreakpoint: () => ({
+      isMobile: vue.computed(() => !isWideRef.value),
+      isTablet: vue.computed(() => false),
+    }),
   };
 });
 
@@ -70,13 +72,14 @@ vi.mock('@/components/Dialogs/ReferralOfferDialog.vue', () => ({
 
 import AppHeader from '@/components/Header/AppHeader.vue';
 import { useUserStore } from '@/stores/user';
+import { PLAN } from '@visual-ai/shared';
 
 describe('AppHeader', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
     routePathRef.value = '/create';
     routeNameRef.value = 'create';
-    smAndUpRef.value = true;
+    isWideRef.value = true;
     isAuthLoaded.value = true;
     localStorage.clear();
   });
@@ -130,13 +133,14 @@ describe('AppHeader', () => {
   });
 
   it('uses the mobile dashboard header and referral slot', () => {
-    smAndUpRef.value = false;
+    isWideRef.value = false;
     const wrapper = mountHeader();
     const shell = wrapper.get('[data-testid="app-header-v2"]').find('header');
 
     expect(shell.classes()).toContain('header-v2--dashboard-mobile');
     expect(wrapper.find('[data-testid="referral-offer-stub"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="header-mobile-tabs"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="nav-tabs-stub"]').exists()).toBe(true);
   });
 
   it('shows a nav skeleton until Clerk finishes loading', () => {
@@ -197,5 +201,176 @@ describe('AppHeader', () => {
     routeNameRef.value = 'pricing';
     const wrapper = mountHeader();
     expect(wrapper.find('[data-testid="header-end-skeleton"]').exists()).toBe(false);
+  });
+
+  it('shows the banner above the header and no Earn chip below 768', () => {
+    isWideRef.value = false;
+    const wrapper = mountHeader();
+    const root = wrapper.get('[data-testid="app-header-v2"]');
+
+    expect(root.findAll('[data-testid="referral-offer-stub"]')).toHaveLength(1);
+    expect(root.find('header [data-testid="referral-offer-stub"]').exists()).toBe(false);
+  });
+
+  it('shows the Earn chip inside the header and no banner at 768 and above', () => {
+    isWideRef.value = true;
+    const wrapper = mountHeader();
+    const root = wrapper.get('[data-testid="app-header-v2"]');
+
+    expect(root.findAll('[data-testid="referral-offer-stub"]')).toHaveLength(1);
+    expect(root.find('header [data-testid="referral-offer-stub"]').exists()).toBe(true);
+  });
+
+  it('renders neither referral slot off the dashboard', () => {
+    routePathRef.value = '/pricing';
+    routeNameRef.value = 'pricing';
+    for (const wide of [false, true]) {
+      isWideRef.value = wide;
+      const wrapper = mountHeader();
+      expect(wrapper.find('[data-testid="referral-offer-stub"]').exists()).toBe(false);
+    }
+  });
+  describe('right cluster', () => {
+    const mountWithPlan = (plan: string) => {
+      const pinia = createPinia();
+      setActivePinia(pinia);
+      const userStore = useUserStore();
+      userStore.isReady = true;
+      userStore.plan = plan as typeof userStore.plan;
+      return mount(AppHeader, {
+        global: {
+          plugins: [pinia],
+          stubs: {
+            'router-link': { template: '<a><slot /></a>' },
+            'font-awesome-icon': true,
+          },
+        },
+      });
+    };
+
+    const clusterOrder = (wrapper: ReturnType<typeof mountWithPlan>) =>
+      Array.from(
+        wrapper
+          .get('#export-area [data-testid="signed-in"]')
+          .element.querySelectorAll('[data-testid]'),
+      ).map((el) => el.getAttribute('data-testid'));
+
+    it('orders Earn, Upgrade, credits, avatar for a Free user on the dashboard', () => {
+      const order = clusterOrder(mountWithPlan(PLAN.FREE));
+
+      expect(order).toEqual([
+        'referral-offer-stub',
+        'upgrade-button',
+        'credits-chip-stub',
+        'user-menu-stub',
+      ]);
+    });
+
+    it('omits Upgrade for a Pro user on the dashboard', () => {
+      const order = clusterOrder(mountWithPlan(PLAN.PRO));
+
+      expect(order).toEqual(['referral-offer-stub', 'credits-chip-stub', 'user-menu-stub']);
+    });
+
+    it('omits Earn below 768 while keeping Upgrade', () => {
+      isWideRef.value = false;
+      const order = clusterOrder(mountWithPlan(PLAN.FREE));
+
+      expect(order).toEqual(['upgrade-button', 'credits-chip-stub', 'user-menu-stub']);
+    });
+
+    it('shows no Upgrade or credits off the dashboard', () => {
+      routePathRef.value = '/pricing';
+      routeNameRef.value = 'pricing';
+      const wrapper = mountWithPlan(PLAN.FREE);
+
+      expect(wrapper.find('[data-testid="upgrade-button"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="credits-chip-stub"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="user-menu-stub"]').exists()).toBe(true);
+    });
+  });
+
+  describe('layout across widths', () => {
+    const navTabsCalls = (wrapper: ReturnType<typeof mountHeader>) =>
+      wrapper.findAll('[data-testid="nav-tabs-stub"]');
+
+    it('shows the feature select on Create at desktop and mobile widths', () => {
+      for (const wide of [true, false]) {
+        isWideRef.value = wide;
+        expect(mountHeader().find('[data-testid="feature-select-stub"]').exists()).toBe(true);
+      }
+    });
+
+    it('hides the feature select on Explore and Assets at all widths', () => {
+      for (const name of ['explore', 'assets']) {
+        for (const wide of [true, false]) {
+          routeNameRef.value = name;
+          routePathRef.value = `/${name}`;
+          isWideRef.value = wide;
+          expect(mountHeader().find('[data-testid="feature-select-stub"]').exists()).toBe(false);
+        }
+      }
+    });
+
+    it('renders tabs once in the centered slot at 768+ and no mobile tabs row', () => {
+      isWideRef.value = true;
+      const wrapper = mountHeader();
+
+      expect(navTabsCalls(wrapper)).toHaveLength(1);
+      expect(wrapper.find('.header-v2__center [data-testid="nav-tabs-stub"]').exists()).toBe(true);
+      expect(wrapper.find('[data-testid="header-mobile-tabs"]').exists()).toBe(false);
+      expect(wrapper.get('[data-testid="app-header-v2"]').classes()).not.toContain(
+        'header-v2-root--mobile',
+      );
+    });
+
+    it('renders tabs once, in a second row inside the sticky header, below 768', () => {
+      isWideRef.value = false;
+      const wrapper = mountHeader();
+      const row = wrapper.get('[data-testid="header-mobile-tabs"]');
+
+      expect(navTabsCalls(wrapper)).toHaveLength(1);
+      expect(row.find('[data-testid="nav-tabs-stub"]').exists()).toBe(true);
+      expect(wrapper.get('header.header-v2').element.contains(row.element)).toBe(true);
+      expect(wrapper.get('header.header-v2').classes()).toContain('header-v2--dashboard-mobile');
+      expect(wrapper.find('.header-v2__center').exists()).toBe(false);
+      expect(wrapper.get('[data-testid="app-header-v2"]').classes()).toContain(
+        'header-v2-root--mobile',
+      );
+    });
+
+    it('shows a tabs skeleton in the centered slot at 768+ while Clerk loads', () => {
+      isAuthLoaded.value = false;
+      isWideRef.value = true;
+      const wrapper = mountHeader();
+      const skeleton = wrapper.get('.header-v2__center [aria-hidden="true"]');
+
+      expect(skeleton.classes()).toContain('tw-animate-pulse');
+      expect(navTabsCalls(wrapper)).toHaveLength(0);
+    });
+
+    it('shows a tabs skeleton in the mobile row while Clerk loads', () => {
+      isAuthLoaded.value = false;
+      isWideRef.value = false;
+      const wrapper = mountHeader();
+      const skeleton = wrapper.get('[data-testid="header-mobile-tabs"] [aria-hidden="true"]');
+
+      expect(skeleton.classes()).toContain('tw-animate-pulse');
+      expect(navTabsCalls(wrapper)).toHaveLength(0);
+    });
+
+    it('shows no tabs row on non-dashboard pages below 768', () => {
+      routePathRef.value = '/pricing';
+      routeNameRef.value = 'pricing';
+      isWideRef.value = false;
+      expect(mountHeader().find('[data-testid="header-mobile-tabs"]').exists()).toBe(false);
+    });
+  });
+
+  it('stops the start cluster from stretching from the md breakpoint', () => {
+    const classes = mountHeader().get('.header-v2__start').classes();
+    expect(classes).toContain('md:tw-flex-none');
+    expect(classes).toContain('tw-flex-1');
+    expect(classes).not.toContain('lg:tw-flex-none');
   });
 });

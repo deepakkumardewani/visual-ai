@@ -247,4 +247,11 @@ describe('PromptAiMenu', () => {
     await wrapper.vm.$nextTick();
     expect(getPanel()).toBeNull();
   });
+
+  it('gives the trigger a 44px minimum size below md', () => {
+    const { wrapper } = mountMenu();
+    expect(wrapper.get('[data-testid="prompt-ai-trigger"]').classes()).toEqual(
+      expect.arrayContaining(['tw-min-h-9', 'max-md:tw-min-h-11', 'max-md:tw-min-w-11']),
+    );
+  });
 });

@@ -22,6 +22,7 @@ import {
   faFile,
   faFileContract,
   faGear,
+  faGem,
   faGift,
   faHandHolding,
   faImages,
@@ -47,6 +48,7 @@ import {
   faTrashAlt,
   faUpload,
   faUser,
+  faUserPlus,
   faUsers,
   faWandMagicSparkles,
   faXmark,
@@ -111,6 +113,8 @@ library.add(
   faCheck,
   faInfoCircle,
   faUpload,
+  faGem,
+  faUserPlus,
 );
 
 export {
@@ -168,4 +172,6 @@ export {
   faUpload,
   faBolt,
   faCreditCard,
+  faGem,
+  faUserPlus,
 };

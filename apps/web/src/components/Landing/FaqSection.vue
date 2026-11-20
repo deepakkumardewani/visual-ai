@@ -1,19 +1,26 @@
 <script setup lang="ts">
-import { computed, shallowRef } from 'vue';
+import { computed, inject, shallowRef } from 'vue';
 
+import { REVEAL_SCROLLER_KEY } from '@/directives/reveal';
 import { FAQS, type Faq } from '@/utils/landing';
 
 const props = withDefaults(
   defineProps<{
     faqs?: Faq[];
     heading?: string;
+    /** Centred, lv2-token variant for the LandingV2 pages. */
+    centered?: boolean;
   }>(),
   {
+    centered: false,
     heading: 'Good to know.',
   },
 );
 
 const items = computed(() => props.faqs ?? FAQS);
+// Inside AppModal the panel scrolls, not the window, so reveals must watch it.
+const revealScroller = inject(REVEAL_SCROLLER_KEY, null);
+const reveal = (delay = 0) => ({ delay, scroller: revealScroller });
 const open = shallowRef<number | null>(0);
 
 function toggle(i: number) {
@@ -22,17 +29,17 @@ function toggle(i: number) {
 </script>
 
 <template>
-  <section id="faq" class="faq">
+  <section id="faq" class="faq" :class="{ 'faq--centered': centered }">
     <div class="faq__head">
-      <p v-reveal class="eyebrow">Questions</p>
-      <h2 v-reveal="{ delay: 0.05 }" class="faq__title">{{ heading }}</h2>
+      <p v-reveal="reveal()" :class="centered ? 'lv2-eyebrow' : 'eyebrow'">Questions</p>
+      <h2 v-reveal="reveal(0.05)" class="faq__title">{{ heading }}</h2>
     </div>
 
     <ul class="faq__list">
       <li
         v-for="(item, i) in items"
         :key="item.question"
-        v-reveal="{ delay: i * 0.05 }"
+        v-reveal="reveal(i * 0.05)"
         class="faq__item"
       >
         <button
@@ -156,6 +163,41 @@ function toggle(i: number) {
   font-size: 1rem;
   line-height: 1.7;
   color: rgb(var(--tw-ink-muted));
+}
+
+/* Centred variant: lv2 type and hairline tokens, matching the other LandingV2 scenes. */
+.faq--centered {
+  max-width: none;
+  padding: var(--lv2-section-y) var(--lv2-gutter);
+
+  .faq__head {
+    text-align: center;
+    margin-bottom: var(--lv2-space-2xl);
+  }
+  .faq__title {
+    margin: var(--lv2-space-md) 0 0;
+    font-family: var(--lv2-font-display);
+    font-size: var(--lv2-text-display);
+    line-height: var(--lv2-leading-display);
+    letter-spacing: var(--lv2-tracking-display);
+    text-wrap: balance;
+  }
+  .faq__list {
+    max-width: var(--lv2-measure);
+    margin-inline: auto;
+  }
+  .faq__item {
+    border-bottom-color: rgb(var(--tw-hairline));
+  }
+  .faq__q {
+    font-family: var(--lv2-font-body);
+    font-size: var(--lv2-text-lede);
+  }
+  .faq__a {
+    max-width: none;
+    font-size: var(--lv2-text-body);
+    line-height: var(--lv2-leading-body);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
