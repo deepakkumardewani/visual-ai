@@ -1,6 +1,6 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
@@ -21,6 +21,9 @@ vi.mock('vue-clerk', () => ({
     getToken: vi.fn().mockResolvedValue('token'),
   }),
 }));
+
+/** Wrappers mounted by a test; unmounted afterwards so no watcher fires once the test is over. */
+const mounted: Array<{ unmount: () => void }> = [];
 
 const shellStubs = {
   AppHeader: { template: '<header data-testid="app-header" />' },
@@ -57,6 +60,7 @@ async function renderAt(path: string, name?: string) {
       stubs: shellStubs,
     },
   });
+  mounted.push(wrapper);
 
   return { wrapper, pinia };
 }
@@ -66,6 +70,16 @@ describe('App', () => {
     clerkUser.value = null;
     clerkLoaded.value = false;
     vi.clearAllMocks();
+    // The user store reads /users/:id with a raw fetch; answer it so nothing hits the network or logs late.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(new Response('{}', { status: 200 }))),
+    );
+  });
+
+  afterEach(() => {
+    mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+    vi.unstubAllGlobals();
   });
 
   it('hides the app header and footer on the marketing home route', async () => {
@@ -128,9 +142,11 @@ describe('App', () => {
     await router.push('/account');
     await router.isReady();
 
-    mount(App, {
-      global: { plugins: [pinia, router], stubs: shellStubs },
-    });
+    mounted.push(
+      mount(App, {
+        global: { plugins: [pinia, router], stubs: shellStubs },
+      }),
+    );
     await flushPromises();
 
     expect(sync).toHaveBeenCalledWith('user_123');
@@ -152,9 +168,11 @@ describe('App', () => {
     await router.push('/account');
     await router.isReady();
 
-    mount(App, {
-      global: { plugins: [pinia, router], stubs: shellStubs },
-    });
+    mounted.push(
+      mount(App, {
+        global: { plugins: [pinia, router], stubs: shellStubs },
+      }),
+    );
     await flushPromises();
 
     expect(sync).not.toHaveBeenCalled();

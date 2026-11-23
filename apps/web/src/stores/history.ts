@@ -85,18 +85,40 @@ export function matchesChip(entry: HistoryItem, chip: HistoryChip): boolean {
   return entry.kind === 'media' && CHIP_MEDIA_FEATURES[chip].includes(entry.item.feature);
 }
 
+/** Splits out versions whose original is in `entries`; others stay top-level. */
+function splitVersions(entries: readonly HistoryItem[]) {
+  const versionsByParent = new Map<string, HistoryItem[]>();
+  const top: HistoryItem[] = [];
+  const ids = new Set(entries.map(getHistoryItemId));
+  for (const entry of entries) {
+    const parentId = entry.kind === 'media' ? entry.item.parentId : undefined;
+    if (!parentId || !ids.has(parentId)) {
+      top.push(entry);
+      continue;
+    }
+    versionsByParent.set(parentId, [...(versionsByParent.get(parentId) ?? []), entry]);
+  }
+  return { top, versionsByParent };
+}
+
 /**
  * Reuses groupByDate (which only reads createdAt) so media and images share one set of date
  * headings; shells carry an index key so the original entries are recovered after grouping.
  */
 export function groupHistoryItems(entries: readonly HistoryItem[]): HistoryGroup[] {
-  const shells = entries.map(
+  // Versions are not dated on their own: they follow their original into its date group, so the
+  // date sort cannot separate a song from its edits.
+  const { top, versionsByParent } = splitVersions(entries);
+  const shells = top.map(
     (entry, index) => ({ _id: String(index), createdAt: entry.item.createdAt }) as IImageObject,
   );
   return groupByDate(shells).map((group) => ({
     title: group.title,
     isDeleting: group.isDeleting,
-    data: group.data.map((shell) => entries[Number(shell._id)]),
+    data: group.data.flatMap((shell) => {
+      const entry = top[Number(shell._id)];
+      return [entry, ...(versionsByParent.get(getHistoryItemId(entry)) ?? [])];
+    }),
   }));
 }
 
@@ -152,6 +174,11 @@ export const useHistoryStore = defineStore('history', () => {
     isMediaLoading.value = false;
   }
 
+  /** Adds a freshly created asset (such as a saved version) without refetching the list. */
+  function addMediaAsset(asset: MediaAssetDto) {
+    mediaAssets.value = [asset, ...mediaAssets.value.filter((item) => item.id !== asset.id)];
+  }
+
   /** Returns true once the server confirmed the delete and the asset left the list. */
   async function deleteMedia(id: string): Promise<boolean> {
     const { error } = await useFetch(`${MEDIA_ASSETS_PATH}/${encodeURIComponent(id)}`, {
@@ -179,6 +206,7 @@ export const useHistoryStore = defineStore('history', () => {
     isBulkFavoriting,
     isBulkDownloading,
     loadMedia,
+    addMediaAsset,
     deleteMedia,
   };
 });

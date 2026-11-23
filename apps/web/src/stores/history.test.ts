@@ -195,6 +195,41 @@ describe('history item helpers', () => {
   });
 
   describe('groupHistoryItems', () => {
+    it("lists a newer version directly after its original, in the original's date group", () => {
+      const original: HistoryItem = {
+        kind: 'media',
+        item: asset('orig', FeatureType.SONG, new Date(2025, 0, 10, 12).toISOString()),
+      };
+      const other: HistoryItem = {
+        kind: 'media',
+        item: asset('other', FeatureType.SONG, new Date(2025, 0, 10, 9).toISOString()),
+      };
+      const version: HistoryItem = {
+        kind: 'media',
+        item: {
+          ...asset('ver', FeatureType.SONG, new Date(2025, 0, 15, 12).toISOString()),
+          parentId: 'orig',
+        },
+      };
+
+      const groups = groupHistoryItems([version, original, other]);
+
+      expect(groups).toHaveLength(1);
+      expect(groups[0].data).toEqual([original, version, other]);
+    });
+
+    it('keeps a version top-level when its original is not in the list', () => {
+      const version: HistoryItem = {
+        kind: 'media',
+        item: {
+          ...asset('ver', FeatureType.SONG, new Date(2025, 0, 15, 12).toISOString()),
+          parentId: 'gone',
+        },
+      };
+
+      expect(groupHistoryItems([version])[0].data).toEqual([version]);
+    });
+
     it('groups mixed entries by local calendar day, newest group first, keeping the originals', () => {
       const first: HistoryItem = {
         kind: 'image',

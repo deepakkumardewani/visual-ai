@@ -61,3 +61,5 @@ apps/web/playwright-report/
 agent_docs/qa/
 node-jiti/
 playwright-transform-cache-*/
+
+agent-browser-chrome-*/

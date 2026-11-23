@@ -289,3 +289,27 @@ export async function processMusic(body: MediaJobBody, services?: MediaJobServic
         services,
     )
 }
+
+/** Song studio always renders with Minimax Music 2.6; the client never picks the model. */
+export const SONG_MODEL_KEY: MediaModelKey = "MINIMAX_MUSIC_26"
+
+export function getSongCreditCost(): number {
+    return getMediaCreditCost(SONG_MODEL_KEY, { kind: "file" })
+}
+
+export async function processSong(body: MediaJobBody, services?: MediaJobServices): Promise<void> {
+    const params = modelParamsOf(body)
+    return runMediaJob(
+        {
+            jobId: body.jobId,
+            userId: body.userId,
+            modelKey: SONG_MODEL_KEY,
+            featureType: FeatureType.SONG,
+            input: buildMediaInput(SONG_MODEL_KEY, "song", params),
+            prompt: typeof params.stylePrompt === "string" ? params.stylePrompt : "",
+            // Recomputed here: the queued payload carries no trusted cost.
+            creditCost: getSongCreditCost(),
+        },
+        services,
+    )
+}

@@ -151,6 +151,17 @@ export const usePlayerStore = defineStore('player', () => {
     }
   }
 
+  /** Loads `next` into the shared element without playing, so an editor can bind to it. */
+  function prepare(next: PlayerTrack): HTMLAudioElement {
+    const el = ensureAudio();
+    if (next.id !== track.value?.id) {
+      el.pause();
+      loadTrack(el, next);
+      status.value = 'paused';
+    }
+    return el;
+  }
+
   function pause() {
     audio?.pause();
     if (track.value) status.value = 'paused';
@@ -215,6 +226,7 @@ export const usePlayerStore = defineStore('player', () => {
     rate,
     loop,
     play,
+    prepare,
     pause,
     toggle,
     seek,

@@ -70,6 +70,16 @@ describe("buildMediaInput", () => {
         expect(input.disable_safety_filter).toBe(false)
     })
 
+    it("maps song style and lyrics to Minimax inputs and never sends audio_format", () => {
+        const input = buildMediaInput("MINIMAX_MUSIC_26", "song", {
+            stylePrompt: "upbeat indie pop",
+            lyrics: "[Verse]\nHello there",
+            audioFormat: "wav",
+        })
+
+        expect(input).toEqual({ prompt: "upbeat indie pop", lyrics: "[Verse]\nHello there" })
+    })
+
     it("rejects an unknown modelKey", () => {
         expect(() => buildMediaInput("NOPE", "music", {})).toThrow('modelKey: unknown model "NOPE"')
     })

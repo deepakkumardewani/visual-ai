@@ -656,7 +656,7 @@
 **Adds:** Users write lyrics (or have AI draft them), pick a style and generate a full song with Minimax Music 2.6, then play it, edit the waveform and export a new version. Every result lands in History.
 **Try in UI:** Open Audio then Song ; type a style and lyrics and press Generate ; play the result and trim a region ; export an MP3 and find it in History
 
-### ☐ T1.1 Record wavesurfer.js approval (approved)
+### ✅ T1.1 Record wavesurfer.js approval (approved)
 
 - **Kind:** dod
 - **Files:** `agent_docs/media-studio/APPROVALS.md` (edit)
@@ -669,7 +669,7 @@
   - V1: `grep -n wavesurfer agent_docs/media-studio/APPROVALS.md`
   - V2: `git diff --name-only -- package.json apps/web/package.json bun.lock` returns nothing from this task
 
-### ☐ T1.2 Song endpoint, schema and processSong (S1.1a)
+### ✅ T1.2 Song endpoint, schema and processSong (S1.1a)
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/schemas/media.ts` (edit), `apps/api/src/lib/media-input.ts` (edit), `apps/api/src/routes/media.ts` (edit), `apps/api/src/services/media-service.ts` (edit)
@@ -691,7 +691,7 @@
   - V3: `cd apps/api && bun run test` (existing api tests stay green)
   - V4: `bun run check`
 
-### ☐ T1.3 Song studio page: compose and generate (S1.1b)
+### ✅ T1.3 Song studio page: compose and generate (S1.1b)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/pages/SongStudio.vue` (new), `apps/web/src/components/Song/SongComposer.vue` (new), `apps/web/src/components/Song/LyricsEditor.vue` (new), `apps/web/src/components/Song/StylePresets.vue` (new), `apps/web/src/router/index.ts` (edit)
@@ -715,7 +715,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T1.4 Unit: Song composer and draft mapping
+### ✅ T1.4 Unit: Song composer and draft mapping
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Song/SongComposer.vue` (edit), `apps/web/src/components/Song/LyricsEditor.vue` (edit), `apps/web/src/components/Song/StylePresets.vue` (edit), `apps/web/src/composables/useMediaDraft.ts` (edit)
@@ -726,7 +726,7 @@
 - **Verify:**
   - V1: `cd apps/web && npx vitest run src/components/Song src/composables/useMediaDraft.test.ts --coverage --coverage.include=src/components/Song/SongComposer.vue --coverage.include=src/components/Song/LyricsEditor.vue --coverage.include=src/components/Song/StylePresets.vue --coverage.include=src/composables/useMediaDraft.ts --coverage.reporter=text`
 
-### ☐ T1.5 Unit: Song route and service
+### ✅ T1.5 Unit: Song route and service
 
 - **Kind:** unit
 - **Files:** `apps/api/src/routes/media.ts` (edit), `apps/api/src/services/media-service.ts` (edit), `apps/api/src/lib/media-input.ts` (edit)
@@ -737,7 +737,7 @@
 - **Verify:**
   - V1: `cd apps/api && npx vitest run src/routes/media.test.ts src/services/media-service.test.ts src/lib/media-input.test.ts --coverage --coverage.include=src/routes/media.ts --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.reporter=text`
 
-### ☐ T1.6 E2E: Song studio
+### ✅ T1.6 E2E: Song studio
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` generate a song and the balance drops by the per-file cost; `@critical` insufficient credits opens the low-credits dialog and queues nothing; `@critical` failure shows "No credits were used." and the balance is unchanged; `@high` result appears in History and plays; `@high` empty state example fills the form; `@high` keyboard-only compose and submit; `@high` 375px layout; `@medium` draft survives reload
@@ -751,7 +751,7 @@
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/song.spec.ts --repeat-each=3`
 
-### ☐ T1.7 Lyrics generator service and POST /prompt/lyrics (S1.2a)
+### ✅ T1.7 Lyrics generator service and POST /prompt/lyrics (S1.2a)
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/lib/lyrics-generator.ts` (edit), `apps/api/src/routes/prompt.ts` (edit), `packages/shared/src/schemas/media.ts` (edit), `apps/api/src/middlewares/rate-limit.ts` (edit)
@@ -775,7 +775,7 @@
   - V3: `cd apps/api && bun run test` (existing api tests stay green)
   - V4: `bun run check`
 
-### ☐ T1.8 Lyrics AI actions in the Song composer (S1.2b)
+### ✅ T1.8 Lyrics AI actions in the Song composer (S1.2b)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Song/LyricsAiMenu.vue` (new), `apps/web/src/components/Song/LyricsEditor.vue` (edit), `apps/web/src/composables/useLyricsAssist.ts` (new)
@@ -798,7 +798,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T1.9 Unit: Lyrics generator and prompt route
+### ✅ T1.9 Unit: Lyrics generator and prompt route
 
 - **Kind:** unit
 - **Files:** `apps/api/src/lib/lyrics-generator.ts` (edit), `apps/api/src/routes/prompt.ts` (edit), `apps/api/src/middlewares/rate-limit.ts` (edit)
@@ -809,7 +809,7 @@
 - **Verify:**
   - V1: `cd apps/api && npx vitest run src/lib/lyrics-generator.test.ts src/routes/prompt.test.ts src/middlewares/rate-limit.test.ts --coverage --coverage.include=src/lib/lyrics-generator.ts --coverage.include=src/routes/prompt.ts --coverage.include=src/middlewares/rate-limit.ts --coverage.reporter=text`
 
-### ☐ T1.10 E2E: Lyrics help
+### ✅ T1.10 E2E: Lyrics help
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` Write from a theme fills a suggestion that Accept applies with no credit change; `@high` Fit to limit appears only over the limit; `@high` Undo restores text; `@high` 429 shows the daily-limit copy; `@medium` keyboard-only use of the menu; `@medium` 375px layout
@@ -823,7 +823,7 @@
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/lyrics.spec.ts --repeat-each=3`
 
-### ☐ T1.11 Audio editor math, history and waveform component (S1.3a)
+### ✅ T1.11 Audio editor math, history and waveform component (S1.3a)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/audioEditMath.ts` (new), `apps/web/src/composables/useAudioEditor.ts` (new), `apps/web/src/components/Audio/WaveformEditor.vue` (new), `apps/web/package.json` (edit)
@@ -847,7 +847,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T1.12 Editor toolbar and Song result integration (S1.3b)
+### ✅ T1.12 Editor toolbar and Song result integration (S1.3b)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Audio/EditorToolbar.vue` (new), `apps/web/src/components/Song/SongResult.vue` (new), `apps/web/src/pages/SongStudio.vue` (edit)
@@ -870,7 +870,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T1.13 Unit: Editor math, composable and components
+### ✅ T1.13 Unit: Editor math, composable and components
 
 - **Kind:** unit
 - **Files:** `apps/web/src/utils/audioEditMath.ts` (edit), `apps/web/src/composables/useAudioEditor.ts` (edit), `apps/web/src/components/Audio/WaveformEditor.vue` (edit), `apps/web/src/components/Audio/EditorToolbar.vue` (edit)
@@ -881,7 +881,7 @@
 - **Verify:**
   - V1: `cd apps/web && npx vitest run src/utils/audioEditMath.test.ts src/composables/useAudioEditor.test.ts src/components/Audio/WaveformEditor.test.ts src/components/Audio/EditorToolbar.test.ts --coverage --coverage.include=src/utils/audioEditMath.ts --coverage.include=src/composables/useAudioEditor.ts --coverage.include=src/components/Audio/WaveformEditor.vue --coverage.include=src/components/Audio/EditorToolbar.vue --coverage.reporter=text`
 
-### ☐ T1.14 Record @breezystack/lamejs approval (approved)
+### ✅ T1.14 Record @breezystack/lamejs approval (approved)
 
 - **Kind:** dod
 - **Files:** `agent_docs/media-studio/APPROVALS.md` (edit)
@@ -895,7 +895,7 @@
   - V1: `grep -n lamejs agent_docs/media-studio/APPROVALS.md`
   - V2: `git diff --name-only -- package.json apps/web/package.json bun.lock` shows nothing from this task
 
-### ☐ T1.15 WAV encoder, MP3 worker and export composable (S1.4a)
+### ✅ T1.15 WAV encoder, MP3 worker and export composable (S1.4a)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/utils/wavEncoder.ts` (new), `apps/web/src/workers/mp3-encoder.worker.ts` (new), `apps/web/src/composables/useAudioExport.ts` (new), `apps/web/package.json` (edit)
@@ -916,7 +916,7 @@
   - V1: `cd apps/web && bun run test` (existing web tests stay green)
   - V2: `bun run check`
 
-### ☐ T1.16 Export dialog and save-as-version flow (S1.4b)
+### ✅ T1.16 Export dialog and save-as-version flow (S1.4b)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Audio/ExportDialog.vue` (new), `apps/api/src/routes/media.ts` (edit), `apps/web/src/components/Song/SongResult.vue` (edit), `apps/web/src/stores/history.ts` (edit)
@@ -942,7 +942,7 @@
   - V4: `bun run check`
   - V5: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T1.17 Unit: WAV encoder, worker and export composable
+### ✅ T1.17 Unit: WAV encoder, worker and export composable
 
 - **Kind:** unit
 - **Files:** `apps/web/src/utils/wavEncoder.ts` (edit), `apps/web/src/workers/mp3-encoder.worker.ts` (edit), `apps/web/src/composables/useAudioExport.ts` (edit), `apps/web/src/components/Audio/ExportDialog.vue` (edit)
@@ -953,7 +953,7 @@
 - **Verify:**
   - V1: `cd apps/web && npx vitest run src/utils/wavEncoder.test.ts src/workers/mp3-encoder.worker.test.ts src/composables/useAudioExport.test.ts src/components/Audio/ExportDialog.test.ts --coverage --coverage.include=src/utils/wavEncoder.ts --coverage.include=src/workers/mp3-encoder.worker.ts --coverage.include=src/composables/useAudioExport.ts --coverage.include=src/components/Audio/ExportDialog.vue --coverage.reporter=text`
 
-### ☐ T1.18 E2E: Waveform editor and export
+### ✅ T1.18 E2E: Waveform editor and export
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` trim then export WAV downloads a file; `@critical` save as new version appears in History grouped under the original and the balance is unchanged; `@high` undo and redo keys; `@high` editor and mini-player never play together; `@high` over-cap audio shows the exact error copy; `@high` keyboard-only region selection; `@medium` 375px handles and toolbar
@@ -967,7 +967,7 @@
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/editor.spec.ts --repeat-each=3`
 
-### ☐ T1.19 Gate: Phase 1 Song studio
+### ✅ T1.19 Gate: Phase 1 Song studio
 
 - **Kind:** gate
 - **Files:** none

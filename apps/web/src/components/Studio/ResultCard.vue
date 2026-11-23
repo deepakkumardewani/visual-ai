@@ -120,6 +120,9 @@ watch(() => props.asset.id, revealResult);
   border: 1px solid rgb(var(--tw-border));
   border-radius: 9999px;
   font-size: 0.875rem;
+  // Anchors take the browser link colour, which is near-black on the dark surface.
+  color: rgb(var(--tw-ink-primary));
+  text-decoration: none;
 
   &:focus-visible {
     outline: 2px solid rgb(var(--studio-accent, var(--tw-ink-primary)));

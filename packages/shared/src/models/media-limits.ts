@@ -45,6 +45,10 @@ export const MUSIC_26_PROMPT = { min: 0, max: 2000 } as const;
 export const MUSIC_15_LYRICS = { min: 10, max: 600 } as const;
 export const MUSIC_15_PROMPT = { min: 10, max: 300 } as const;
 
+/** Song studio request limits (SPEC R-SONG-1, R-SONG-2): style description and lyrics. */
+export const SONG_PROMPT_LIMITS = { min: 10, max: 300 } as const;
+export const SONG_LYRICS_LIMITS = { min: 10, max: 3000 } as const;
+
 export const STABLE_AUDIO_DURATION_SEC = { min: 1, max: 190, default: 30 } as const;
 export const STABLE_AUDIO_STEPS = { min: 4, max: 8, default: 8 } as const;
 export const STABLE_AUDIO_CFG_SCALE = { min: 1, max: 25, default: 1 } as const;

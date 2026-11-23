@@ -47,11 +47,15 @@ const {
     getMusicCostInput,
     getMusicCreditCost,
     hasExistingJob,
+    getSongCreditCost,
     processMusic,
+    processSong,
     runMediaJob,
+    SONG_MODEL_KEY,
 } = await import("./media-service.js")
 
 import type { MediaJobParams, MediaJobServices } from "./media-service.js"
+import type { MediaJobBody } from "../queue/generation-queue.js"
 
 const LYRIA_COST = 12
 const OUTPUT_URL = "https://fake.invalid/out.mp3"
@@ -405,6 +409,77 @@ describe("processMusic", () => {
             { jobId: "job_123456", userId: "user_1", modelKey: "LYRIA_2", prompt: 5 },
             services,
         )
+
+        expect(services.persistAsset).toHaveBeenCalledWith(expect.objectContaining({ prompt: "" }))
+    })
+})
+
+describe("song cost", () => {
+    it("always renders with Minimax Music 2.6", () => {
+        expect(SONG_MODEL_KEY).toBe("MINIMAX_MUSIC_26")
+    })
+
+    it("charges the fixed per-file price from the server-side registry", () => {
+        expect(getSongCreditCost()).toBe(30)
+    })
+})
+
+describe("processSong", () => {
+    beforeEach(() => vi.clearAllMocks())
+
+    const songBody: MediaJobBody = {
+        jobId: "job_123456",
+        userId: "user_1",
+        modelKey: "LYRIA_2",
+        stylePrompt: "upbeat indie pop",
+        lyrics: "[Verse]\nWalking home",
+    }
+
+    it("maps style and lyrics to the Minimax input, ignoring the queued modelKey", async () => {
+        runReplicate.mockResolvedValue(OUTPUT_URL)
+        const { services } = makeServices()
+
+        await processSong(songBody, services)
+
+        expect(runReplicate.mock.calls[0][0].input).toEqual({
+            prompt: "upbeat indie pop",
+            lyrics: "[Verse]\nWalking home",
+        })
+        expect(runReplicate.mock.calls[0][0].input).not.toHaveProperty("audio_format")
+        expect(services.persistAsset).toHaveBeenCalledWith(
+            expect.objectContaining({
+                modelKey: "MINIMAX_MUSIC_26",
+                featureType: FeatureType.SONG,
+                prompt: "upbeat indie pop",
+            }),
+        )
+    })
+
+    it("deducts the fixed per-file cost exactly once on success", async () => {
+        runReplicate.mockResolvedValue(OUTPUT_URL)
+        const { services } = makeServices()
+
+        await processSong(songBody, services)
+
+        expect(services.deductCredits).toHaveBeenCalledTimes(1)
+        expect(services.deductCredits).toHaveBeenCalledWith("user_1", 30)
+    })
+
+    it("deducts nothing when generation fails", async () => {
+        runReplicate.mockRejectedValue(new Error("replicate down"))
+        const { services } = makeServices()
+
+        await processSong(songBody, services)
+
+        expect(services.deductCredits).not.toHaveBeenCalled()
+        expect(services.persistAsset).not.toHaveBeenCalled()
+    })
+
+    it("uses an empty prompt when the style is not a string", async () => {
+        runReplicate.mockResolvedValue(OUTPUT_URL)
+        const { services } = makeServices()
+
+        await processSong({ ...songBody, stylePrompt: 5 }, services)
 
         expect(services.persistAsset).toHaveBeenCalledWith(expect.objectContaining({ prompt: "" }))
     })

@@ -8,6 +8,9 @@ import { redisClient } from "../config/redis.js"
 
 const STT_LIMIT_MESSAGE = "Too many voice requests. Try again later."
 const UPLOAD_LIMIT_MESSAGE = "Too many uploads. Try again later."
+const LYRICS_LIMIT_MESSAGE = "Daily lyrics limit reached. Try again tomorrow."
+const LYRICS_WINDOW_MS = 24 * 60 * 60 * 1000
+export const LYRICS_DAILY_LIMIT = 30
 const UPLOAD_RATE_LIMIT = { windowMs: 10 * 60 * 1000, max: 30 } as const
 
 function userRateLimitKey(req: Request): string {
@@ -61,4 +64,11 @@ export const uploadRateLimiter = createUserRateLimiter({
     name: "upload",
     ...UPLOAD_RATE_LIMIT,
     message: UPLOAD_LIMIT_MESSAGE,
+})
+
+export const lyricsRateLimiter = createUserRateLimiter({
+    name: "lyrics",
+    windowMs: LYRICS_WINDOW_MS,
+    max: LYRICS_DAILY_LIMIT,
+    message: LYRICS_LIMIT_MESSAGE,
 })

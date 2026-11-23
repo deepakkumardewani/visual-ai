@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-23T02:00:34.438Z",
+ "generatedAt": "2026-11-23T12:59:55.607Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "media-studio",
@@ -34,26 +34,26 @@ window.DASHBOARD = {
    "source": "agent_docs/media-studio/TASKS.md"
   }
  ],
- "costUsd": 28.3629,
- "elapsedMs": 55632876,
+ "costUsd": 46.1848,
+ "elapsedMs": 76742502,
  "costByRole": {
-  "builder": 9.805,
-  "unit": 4.4101,
-  "e2e": 2.2299,
-  "verifier": 6.5502,
-  "reviewer-ui": 0.605,
-  "reviewer-security": 2.948,
-  "reviewer-code": 1.1816,
-  "runner": 0.0941,
-  "reviewer-ux": 0.5391
+  "verifier": 11.9847,
+  "builder": 15.7571,
+  "unit": 6.448,
+  "e2e": 3.9495,
+  "reviewer-security": 4.0808,
+  "reviewer-ux": 0.9888,
+  "reviewer-code": 1.8545,
+  "reviewer-ui": 1.0273,
+  "runner": 0.0941
  },
  "totals": {
   "phases": 6,
   "tasks": 90,
   "byStatus": {
-   "verified": 31,
-   "ready": 2,
-   "waiting": 57
+   "verified": 50,
+   "ready": 1,
+   "waiting": 39
   }
  },
  "phases": [
@@ -103,7 +103,7 @@ window.DASHBOARD = {
      "line": 46,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -161,7 +161,7 @@ window.DASHBOARD = {
      "line": 61,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -235,7 +235,7 @@ window.DASHBOARD = {
      "line": 84,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -303,7 +303,7 @@ window.DASHBOARD = {
      "line": 108,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -362,7 +362,7 @@ window.DASHBOARD = {
      "line": 121,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -431,7 +431,7 @@ window.DASHBOARD = {
      "line": 145,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -499,7 +499,7 @@ window.DASHBOARD = {
      "line": 165,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -557,7 +557,7 @@ window.DASHBOARD = {
      "line": 178,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -629,7 +629,7 @@ window.DASHBOARD = {
      "line": 201,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -711,7 +711,7 @@ window.DASHBOARD = {
      "line": 224,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -792,7 +792,7 @@ window.DASHBOARD = {
      "line": 247,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -852,7 +852,7 @@ window.DASHBOARD = {
      "line": 260,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -921,7 +921,7 @@ window.DASHBOARD = {
      "line": 283,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -1008,7 +1008,7 @@ window.DASHBOARD = {
      "line": 304,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -1065,7 +1065,7 @@ window.DASHBOARD = {
      "line": 315,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -1142,7 +1142,7 @@ window.DASHBOARD = {
      "line": 337,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -1219,7 +1219,7 @@ window.DASHBOARD = {
      "line": 357,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -1287,7 +1287,7 @@ window.DASHBOARD = {
      "line": 368,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -1364,7 +1364,7 @@ window.DASHBOARD = {
      "line": 393,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -1446,7 +1446,7 @@ window.DASHBOARD = {
      "line": 416,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -1525,7 +1525,7 @@ window.DASHBOARD = {
      "line": 439,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -1606,7 +1606,7 @@ window.DASHBOARD = {
      "line": 463,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -1702,7 +1702,7 @@ window.DASHBOARD = {
      "line": 488,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -1778,7 +1778,7 @@ window.DASHBOARD = {
      "line": 511,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -1865,7 +1865,7 @@ window.DASHBOARD = {
      "line": 536,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -1962,7 +1962,7 @@ window.DASHBOARD = {
      "line": 561,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2039,7 +2039,7 @@ window.DASHBOARD = {
      "line": 580,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2101,7 +2101,7 @@ window.DASHBOARD = {
      "line": 593,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2163,7 +2163,7 @@ window.DASHBOARD = {
      "line": 606,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2230,7 +2230,7 @@ window.DASHBOARD = {
      "line": 622,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2285,7 +2285,7 @@ window.DASHBOARD = {
      "line": 637,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T02:00:34.410Z",
+     "updatedAt": "2026-11-23T02:00:53.725Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2346,7 +2346,7 @@ window.DASHBOARD = {
     {
      "id": "T1.1",
      "title": "Record wavesurfer.js approval (approved)",
-     "done": false,
+     "done": true,
      "kind": "dod",
      "depends": [],
      "files": [
@@ -2366,23 +2366,37 @@ window.DASHBOARD = {
      ],
      "line": 659,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.198,
+     "costApprox": true,
+     "elapsedMs": 4138799,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.2",
      "title": "Song endpoint, schema and processSong (S1.1a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [],
      "files": [
@@ -2410,8 +2424,8 @@ window.DASHBOARD = {
      ],
      "line": 672,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -2429,16 +2443,33 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6577,
+     "costApprox": true,
+     "elapsedMs": 4116584,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.3",
      "title": "Song studio page: compose and generate (S1.1b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T1.2"
@@ -2470,8 +2501,8 @@ window.DASHBOARD = {
      ],
      "line": 694,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2493,16 +2524,45 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ui": "PASS",
+        "ux": "PASS",
+        "code": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "code": "PASS",
+        "ui": "PASS",
+        "ux": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.8531,
+     "costApprox": true,
+     "elapsedMs": 21087410,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.4",
      "title": "Unit: Song composer and draft mapping",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T1.3"
@@ -2526,23 +2586,46 @@ window.DASHBOARD = {
      ],
      "line": 718,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.3721,
+     "costApprox": true,
+     "elapsedMs": 20880500,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.5",
      "title": "Unit: Song route and service",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T1.4"
@@ -2565,23 +2648,37 @@ window.DASHBOARD = {
      ],
      "line": 729,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.3799,
+     "costApprox": true,
+     "elapsedMs": 3909673,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.6",
      "title": "E2E: Song studio",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [
       "T1.5"
@@ -2601,23 +2698,39 @@ window.DASHBOARD = {
      ],
      "line": 740,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6359,
+     "costApprox": true,
+     "elapsedMs": 3909673,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.7",
      "title": "Lyrics generator service and POST /prompt/lyrics (S1.2a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T1.2"
@@ -2648,8 +2761,8 @@ window.DASHBOARD = {
      ],
      "line": 754,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -2667,16 +2780,43 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "CHANGES",
+        "security": "CHANGES"
+       },
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.9919,
+     "costApprox": true,
+     "elapsedMs": 3524548,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.8",
      "title": "Lyrics AI actions in the Song composer (S1.2b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T1.7",
@@ -2706,8 +2846,8 @@ window.DASHBOARD = {
      ],
      "line": 778,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2729,16 +2869,45 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ui": "CHANGES",
+        "ux": "CHANGES",
+        "code": "CHANGES"
+       },
+       "verifier": null
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "code": "PASS",
+        "ui": "PASS",
+        "ux": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.832,
+     "costApprox": true,
+     "elapsedMs": 20495374,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.9",
      "title": "Unit: Lyrics generator and prompt route",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T1.8"
@@ -2761,23 +2930,37 @@ window.DASHBOARD = {
      ],
      "line": 801,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4182,
+     "costApprox": true,
+     "elapsedMs": 3270831,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.10",
      "title": "E2E: Lyrics help",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [
       "T1.9"
@@ -2797,23 +2980,39 @@ window.DASHBOARD = {
      ],
      "line": 812,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.3689,
+     "costApprox": true,
+     "elapsedMs": 3270831,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.11",
      "title": "Audio editor math, history and waveform component (S1.3a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T1.1",
@@ -2845,8 +3044,8 @@ window.DASHBOARD = {
      ],
      "line": 826,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2873,16 +3072,47 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ui": "PASS",
+        "ux": "CHANGES",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "code": "PASS",
+        "ui": "PASS",
+        "ux": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.1979,
+     "costApprox": true,
+     "elapsedMs": 3964808,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.12",
      "title": "Editor toolbar and Song result integration (S1.3b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T1.11"
@@ -2911,8 +3141,8 @@ window.DASHBOARD = {
      ],
      "line": 850,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2933,16 +3163,45 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ui": "CHANGES",
+        "ux": "PASS",
+        "code": "PASS"
+       },
+       "verifier": null
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "code": "PASS",
+        "ui": "PASS",
+        "ux": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.9989,
+     "costApprox": true,
+     "elapsedMs": 3964809,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.13",
      "title": "Unit: Editor math, composable and components",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T1.12"
@@ -2966,23 +3225,39 @@ window.DASHBOARD = {
      ],
      "line": 873,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6563,
+     "costApprox": true,
+     "elapsedMs": 2849472,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.14",
      "title": "Record @breezystack/lamejs approval (approved)",
-     "done": false,
+     "done": true,
      "kind": "dod",
      "depends": [
       "T1.13"
@@ -3004,23 +3279,37 @@ window.DASHBOARD = {
      ],
      "line": 884,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.1915,
+     "costApprox": true,
+     "elapsedMs": 2674620,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.15",
      "title": "WAV encoder, MP3 worker and export composable (S1.4a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T1.14"
@@ -3048,8 +3337,8 @@ window.DASHBOARD = {
      ],
      "line": 898,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -3067,16 +3356,43 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "CHANGES",
+        "security": "PASS"
+       },
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.3002,
+     "costApprox": true,
+     "elapsedMs": 3542753,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.16",
      "title": "Export dialog and save-as-version flow (S1.4b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T1.15",
@@ -3110,8 +3426,8 @@ window.DASHBOARD = {
      ],
      "line": 919,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -3138,16 +3454,47 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ui": "PASS",
+        "ux": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ui": "PASS",
+        "ux": "PASS",
+        "security": "PASS",
+        "code": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.9749,
+     "costApprox": true,
+     "elapsedMs": 3542753,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.17",
      "title": "Unit: WAV encoder, worker and export composable",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T1.16"
@@ -3171,23 +3518,39 @@ window.DASHBOARD = {
      ],
      "line": 945,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.7055,
+     "costApprox": true,
+     "elapsedMs": 3286325,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.18",
      "title": "E2E: Waveform editor and export",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [
       "T1.17"
@@ -3207,23 +3570,46 @@ window.DASHBOARD = {
      ],
      "line": 956,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.1406,
+     "costApprox": true,
+     "elapsedMs": 3135953,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     },
     {
      "id": "T1.19",
      "title": "Gate: Phase 1 Song studio",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [
       "T1.18",
@@ -3247,25 +3633,53 @@ window.DASHBOARD = {
      ],
      "line": 970,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T12:59:55.578Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": null,
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.9484,
+     "costApprox": true,
+     "elapsedMs": 2679770,
+     "summary": [
+      "bun run check: exit 0 (0 errors, 17 warnings)",
+      "cd apps/web && bun run test x2: exit 0 both, 249 files 2197/2197, 0 EnvironmentTeardownError (App.test.ts already fixed)",
+      "root bun run test: exit 0, 344 files 3840/3840",
+      "check:model-docs: passed (15 models)",
+      "song 25, lyrics 19, editor 22 passed at --repeat-each=3 --workers=1; no test.fail left in editor.spec.ts"
+     ]
     }
    ],
-   "verified": 0,
+   "verified": 19,
    "total": 19,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 17.8219,
+   "elapsedMs": 21109626
   },
   {
    "id": "2",
@@ -3318,7 +3732,7 @@ window.DASHBOARD = {
      ],
      "line": 991,
      "ui": false,
-     "status": "waiting",
+     "status": "ready",
      "updatedAt": null,
      "verifierRouted": true,
      "pending": [],
@@ -5424,7 +5838,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/media-studio/TASKS.md phase 1",
+ "nextCommand": "/build-phases agent_docs/media-studio/TASKS.md phase 2",
  "questions": [
   {
    "at": "2026-11-16T02:52:56.327Z",
@@ -5681,7 +6095,61 @@ window.DASHBOARD = {
   }
  ],
  "stuck": [],
- "commits": [],
+ "commits": [
+  {
+   "at": "2026-11-23T02:00:53.725Z",
+   "ok": true,
+   "phase": "0",
+   "tasks": [
+    "T0.1",
+    "T0.2",
+    "T0.3",
+    "T0.4",
+    "T0.5",
+    "T0.6",
+    "T0.7",
+    "T0.8",
+    "T0.9",
+    "T0.10",
+    "T0.11",
+    "T0.12",
+    "T0.13",
+    "T0.14",
+    "T0.15",
+    "T0.16",
+    "T0.17",
+    "T0.18",
+    "T0.19",
+    "T0.20",
+    "T0.21",
+    "T0.22",
+    "T0.23",
+    "T0.24",
+    "T0.25",
+    "T0.26",
+    "T0.27",
+    "T0.28",
+    "T0.29",
+    "T0.30",
+    "T0.31"
+   ],
+   "attempt": "17",
+   "branch": "feature/media-studio",
+   "pushed": true,
+   "evidence": "root tests 3543/3543, media-pipeline+nav-player e2e 16/16, lowest unit branch coverage 94.11%",
+   "error": null,
+   "sha": "b2c2a6c7e5ff469d21351e8b28c2ab97bb054b6a",
+   "shortSha": "b2c2a6c",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/b2c2a6c7e5ff469d21351e8b28c2ab97bb054b6a",
+   "subject": "feat(media): phase 0 shared media infrastructure",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-23T07:30:46+05:30",
+   "filesChanged": 144,
+   "added": 16425,
+   "removed": 958
+  }
+ ],
  "shots": [
   {
    "taskId": "T0.18",
@@ -6108,9 +6576,538 @@ window.DASHBOARD = {
    "file": "0/T0.30-6.png",
    "phase": "0",
    "href": "shots/0/T0.30-6.png"
+  },
+  {
+   "taskId": "T1.3",
+   "kind": "proof",
+   "step": "AC1/AC3 empty state and counters",
+   "attempt": 2,
+   "caption": "Song studio empty state with style chips, three example ideas, lyrics ruler and counters.",
+   "annotations": [
+    {
+     "x": 7,
+     "y": 19,
+     "w": 39,
+     "h": 13,
+     "label": "style counter and chips"
+    },
+    {
+     "x": 54,
+     "y": 11,
+     "w": 39,
+     "h": 12,
+     "label": "empty state copy"
+    }
+   ],
+   "at": "2026-11-23T07:11:37.995Z",
+   "file": "1/T1.3-1.png",
+   "phase": "1",
+   "href": "shots/1/T1.3-1.png"
+  },
+  {
+   "taskId": "T1.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Song generated, result card with Play focused",
+   "annotations": [],
+   "at": "2026-11-23T07:18:11.192Z",
+   "file": "1/T1.6-1.png",
+   "phase": "1",
+   "href": "shots/1/T1.6-1.png"
+  },
+  {
+   "taskId": "T1.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "402 opens the Low credits dialog",
+   "annotations": [],
+   "at": "2026-11-23T07:18:11.327Z",
+   "file": "1/T1.6-2.png",
+   "phase": "1",
+   "href": "shots/1/T1.6-2.png"
+  },
+  {
+   "taskId": "T1.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Failure shows No credits were used",
+   "annotations": [],
+   "at": "2026-11-23T07:18:11.427Z",
+   "file": "1/T1.6-3.png",
+   "phase": "1",
+   "href": "shots/1/T1.6-3.png"
+  },
+  {
+   "taskId": "T1.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Result in History playing in the mini-player",
+   "annotations": [],
+   "at": "2026-11-23T07:18:11.525Z",
+   "file": "1/T1.6-4.png",
+   "phase": "1",
+   "href": "shots/1/T1.6-4.png"
+  },
+  {
+   "taskId": "T1.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Example idea fills style and lyrics",
+   "annotations": [],
+   "at": "2026-11-23T07:18:11.625Z",
+   "file": "1/T1.6-5.png",
+   "phase": "1",
+   "href": "shots/1/T1.6-5.png"
+  },
+  {
+   "taskId": "T1.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "375px layout without horizontal scroll",
+   "annotations": [],
+   "at": "2026-11-23T07:18:11.729Z",
+   "file": "1/T1.6-6.png",
+   "phase": "1",
+   "href": "shots/1/T1.6-6.png"
+  },
+  {
+   "taskId": "T1.8",
+   "kind": "after",
+   "step": "AC2 suggestion with Accept/Undo",
+   "attempt": 1,
+   "caption": "Write from a theme shows a reviewable suggestion with Accept and Discard; the original lyrics stay untouched underneath.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 46.8,
+     "w": 43.8,
+     "h": 24.2,
+     "label": "Suggestion box with Accept and Discard"
+    }
+   ],
+   "at": "2026-11-23T07:57:06.917Z",
+   "file": "1/T1.8-1.png",
+   "phase": "1",
+   "href": "shots/1/T1.8-1.png"
+  },
+  {
+   "taskId": "T1.8",
+   "kind": "after",
+   "step": "AC1 Fit to limit visible over limit",
+   "attempt": 1,
+   "caption": "Over the 3000-char limit the AI menu lists Fit to limit, but the item labels render near-black on the dark menu and are barely legible.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 46.8,
+     "w": 14.9,
+     "h": 22.9,
+     "label": "AI menu with Write, Rewrite and Fit to limit (low-contrast text)"
+    }
+   ],
+   "at": "2026-11-23T07:57:07.028Z",
+   "file": "1/T1.8-2.png",
+   "phase": "1",
+   "href": "shots/1/T1.8-2.png"
+  },
+  {
+   "taskId": "T1.8",
+   "kind": "after",
+   "step": "AC5: menu operable and legible",
+   "attempt": 3,
+   "caption": "The AI help menu items are now readable ink on the dark popover.",
+   "annotations": [
+    {
+     "x": 7.9,
+     "y": 69.5,
+     "w": 13,
+     "h": 11.5,
+     "label": "menu items in light ink"
+    }
+   ],
+   "at": "2026-11-23T08:02:37.805Z",
+   "file": "1/T1.8-3.png",
+   "phase": "1",
+   "href": "shots/1/T1.8-3.png"
+  },
+  {
+   "taskId": "T1.8",
+   "kind": "after",
+   "step": "AC1 Fit to limit visible over the limit",
+   "attempt": 19,
+   "caption": "Over the 3000-character limit the counter turns red and the AI help menu lists Fit to limit in legible ink.",
+   "annotations": [
+    {
+     "x": 7.9,
+     "y": 67.4,
+     "w": 13,
+     "h": 5.5,
+     "label": "Fit to limit item"
+    },
+    {
+     "x": 46.5,
+     "y": 37.6,
+     "w": 4.1,
+     "h": 2,
+     "label": "3247/3000 counter in danger red"
+    }
+   ],
+   "at": "2026-11-23T08:40:48.274Z",
+   "file": "1/T1.8-4.png",
+   "phase": "1",
+   "href": "shots/1/T1.8-4.png"
+  },
+  {
+   "taskId": "T1.8",
+   "kind": "after",
+   "step": "AC2 Accept replaces, Undo restores",
+   "attempt": 19,
+   "caption": "After Accept the suggestion replaces the lyrics and an Undo button appears; Undo restored the original text.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 47.3,
+     "w": 12.4,
+     "h": 5.5,
+     "label": "Lyrics replaced. with Undo"
+    }
+   ],
+   "at": "2026-11-23T08:40:48.404Z",
+   "file": "1/T1.8-5.png",
+   "phase": "1",
+   "href": "shots/1/T1.8-5.png"
+  },
+  {
+   "taskId": "T1.8",
+   "kind": "after",
+   "step": "AC3 loading state",
+   "attempt": 19,
+   "caption": "While a lyrics request is pending the AI help button is disabled and shows a spinner with Writing.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 47.3,
+     "w": 7.9,
+     "h": 5.5,
+     "label": "disabled trigger with spinner"
+    }
+   ],
+   "at": "2026-11-23T08:40:48.506Z",
+   "file": "1/T1.8-6.png",
+   "phase": "1",
+   "href": "shots/1/T1.8-6.png"
+  },
+  {
+   "taskId": "T1.8",
+   "kind": "after",
+   "step": "AC3 failure keeps lyrics",
+   "attempt": 19,
+   "caption": "A failed lyrics request shows the mapped toast and leaves the lyrics untouched.",
+   "annotations": [
+    {
+     "x": 80.7,
+     "y": 92.5,
+     "w": 18.1,
+     "h": 5.5,
+     "label": "failure toast"
+    },
+    {
+     "x": 6.9,
+     "y": 54.8,
+     "w": 43.8,
+     "h": 42.2,
+     "label": "lyrics unchanged"
+    }
+   ],
+   "at": "2026-11-23T08:40:48.600Z",
+   "file": "1/T1.8-7.png",
+   "phase": "1",
+   "href": "shots/1/T1.8-7.png"
+  },
+  {
+   "taskId": "T1.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Theme suggestion shown for review, lyrics untouched",
+   "annotations": [],
+   "at": "2026-11-23T07:25:35.187Z",
+   "file": "1/T1.10-1.png",
+   "phase": "1",
+   "href": "shots/1/T1.10-1.png"
+  },
+  {
+   "taskId": "T1.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "429 shows daily-limit copy, lyrics kept",
+   "annotations": [],
+   "at": "2026-11-23T07:25:35.339Z",
+   "file": "1/T1.10-2.png",
+   "phase": "1",
+   "href": "shots/1/T1.10-2.png"
+  },
+  {
+   "taskId": "T1.10",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Lyrics help at 375px, no overflow",
+   "annotations": [],
+   "at": "2026-11-23T07:25:35.455Z",
+   "file": "1/T1.10-3.png",
+   "phase": "1",
+   "href": "shots/1/T1.10-3.png"
+  },
+  {
+   "taskId": "T1.11",
+   "kind": "after",
+   "step": "AC1 trim updates duration; AC2 undo",
+   "attempt": 1,
+   "caption": "After Trim the displayed length drops to 0:04 and Undo and Reset become enabled.",
+   "annotations": [
+    {
+     "x": 53.8,
+     "y": 39.9,
+     "w": 39.4,
+     "h": 25,
+     "label": "Waveform with length and zoom"
+    },
+    {
+     "x": 55,
+     "y": 74,
+     "w": 32,
+     "h": 6,
+     "label": "Undo and Reset enabled"
+    }
+   ],
+   "at": "2026-11-23T07:57:07.126Z",
+   "file": "1/T1.11-1.png",
+   "phase": "1",
+   "href": "shots/1/T1.11-1.png"
+  },
+  {
+   "taskId": "T1.11",
+   "kind": "after",
+   "step": "Handles and waveform at 375px",
+   "attempt": 1,
+   "caption": "At 375px the waveform shows the selected region with its handles.",
+   "annotations": [
+    {
+     "x": 7.7,
+     "y": 54.6,
+     "w": 84.8,
+     "h": 14.2,
+     "label": "Waveform with selected region"
+    }
+   ],
+   "at": "2026-11-23T07:57:07.224Z",
+   "file": "1/T1.11-2.png",
+   "phase": "1",
+   "href": "shots/1/T1.11-2.png"
+  },
+  {
+   "taskId": "T1.12",
+   "kind": "after",
+   "step": "AC1 disabled tools; AC2 hint copy",
+   "attempt": 1,
+   "caption": "Before any selection the edit buttons are disabled and the hint reads Drag on the waveform to select a part.",
+   "annotations": [
+    {
+     "x": 54.8,
+     "y": 66.2,
+     "w": 37.5,
+     "h": 17.6,
+     "label": "Toolbar with edit tools disabled"
+    },
+    {
+     "x": 54.8,
+     "y": 81,
+     "w": 17.3,
+     "h": 2.2,
+     "label": "Exact hint copy"
+    }
+   ],
+   "at": "2026-11-23T07:57:07.323Z",
+   "file": "1/T1.12-1.png",
+   "phase": "1",
+   "href": "shots/1/T1.12-1.png"
+  },
+  {
+   "taskId": "T1.12",
+   "kind": "after",
+   "step": "AC5 toolbar wraps at 375px",
+   "attempt": 1,
+   "caption": "At 375px the toolbar wraps onto rows with no horizontal scroll and tall tap targets.",
+   "annotations": [
+    {
+     "x": 7.7,
+     "y": 70.6,
+     "w": 84.8,
+     "h": 18.5,
+     "label": "Wrapped toolbar"
+    }
+   ],
+   "at": "2026-11-23T07:57:07.422Z",
+   "file": "1/T1.12-2.png",
+   "phase": "1",
+   "href": "shots/1/T1.12-2.png"
+  },
+  {
+   "taskId": "T1.12",
+   "kind": "after",
+   "step": "Result controls legible",
+   "attempt": 3,
+   "caption": "Download pill under the player now reads in the ink colour on the dark surface.",
+   "annotations": [
+    {
+     "x": 0,
+     "y": 0,
+     "w": 40,
+     "h": 15,
+     "label": "Download label legible"
+    }
+   ],
+   "at": "2026-11-23T08:03:32.104Z",
+   "file": "1/T1.12-3.png",
+   "phase": "1",
+   "href": "shots/1/T1.12-3.png"
+  },
+  {
+   "taskId": "T1.16",
+   "kind": "after",
+   "step": "AC1 formats and estimate",
+   "attempt": 1,
+   "caption": "Export dialog offers MP3 or WAV with size estimates, plus Download and Save as new version.",
+   "annotations": [
+    {
+     "x": 32.5,
+     "y": 28.2,
+     "w": 35,
+     "h": 43.6,
+     "label": "Export dialog"
+    }
+   ],
+   "at": "2026-11-23T07:57:07.520Z",
+   "file": "1/T1.16-1.png",
+   "phase": "1",
+   "href": "shots/1/T1.16-1.png"
+  },
+  {
+   "taskId": "T1.16",
+   "kind": "after",
+   "step": "AC7 dialog at 375px",
+   "attempt": 1,
+   "caption": "The export dialog at 375px fits the screen with no horizontal scroll (scrollWidth 375).",
+   "annotations": [
+    {
+     "x": 4.3,
+     "y": 29.7,
+     "w": 91.5,
+     "h": 40.6,
+     "label": "Export dialog at 375px"
+    }
+   ],
+   "at": "2026-11-23T07:57:07.620Z",
+   "file": "1/T1.16-2.png",
+   "phase": "1",
+   "href": "shots/1/T1.16-2.png"
+  },
+  {
+   "taskId": "T1.18",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Editor under the song result shows the empty-selection hint with edit tools disabled",
+   "annotations": [],
+   "at": "2026-11-23T07:46:52.350Z",
+   "file": "1/T1.18-1.png",
+   "phase": "1",
+   "href": "shots/1/T1.18-1.png"
+  },
+  {
+   "taskId": "T1.18",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "After trimming a selection the editor Length drops below the original",
+   "annotations": [],
+   "at": "2026-11-23T07:46:52.494Z",
+   "file": "1/T1.18-2.png",
+   "phase": "1",
+   "href": "shots/1/T1.18-2.png"
+  },
+  {
+   "taskId": "T1.18",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Over-cap audio shows the exact export error copy",
+   "annotations": [],
+   "at": "2026-11-23T07:46:52.598Z",
+   "file": "1/T1.18-3.png",
+   "phase": "1",
+   "href": "shots/1/T1.18-3.png"
+  },
+  {
+   "taskId": "T1.18",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Region set by keyboard only and trimmed",
+   "annotations": [],
+   "at": "2026-11-23T07:46:52.706Z",
+   "file": "1/T1.18-4.png",
+   "phase": "1",
+   "href": "shots/1/T1.18-4.png"
+  },
+  {
+   "taskId": "T1.18",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Editor at 375px with the toolbar wrapped and no horizontal scroll",
+   "annotations": [],
+   "at": "2026-11-23T07:46:52.811Z",
+   "file": "1/T1.18-5.png",
+   "phase": "1",
+   "href": "shots/1/T1.18-5.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-23T12:59:55.578Z",
+   "type": "deliverable",
+   "tasks": [
+    "T1.1",
+    "T1.2",
+    "T1.3",
+    "T1.4",
+    "T1.5",
+    "T1.6",
+    "T1.7",
+    "T1.8",
+    "T1.9",
+    "T1.10",
+    "T1.11",
+    "T1.12",
+    "T1.13",
+    "T1.14",
+    "T1.15",
+    "T1.16",
+    "T1.17",
+    "T1.18",
+    "T1.19"
+   ],
+   "text": "Phase 1 Song studio: composer, lyrics AI assist, waveform editor, export"
+  },
   {
    "at": "2026-11-23T02:00:34.410Z",
    "type": "deliverable",
@@ -6151,6 +7148,62 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-23T08:41:01.492Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.8"
+   ],
+   "text": "Shot T1.8-2 is stale (captures the since-fixed low-contrast menu); superseded by T1.8-4 (a19). Drop T1.8-2 from the dashboard."
+  },
+  {
+   "at": "2026-11-23T08:41:01.386Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.8"
+   ],
+   "text": "No component unit spec exists for LyricsAiMenu.vue/useLyricsAssist.ts; loading spinner and generic-failure toast (AC3) are covered by neither unit nor e2e tests, only by verifier a19 live checks. Add a LyricsAiMenu component spec."
+  },
+  {
+   "at": "2026-11-23T08:30:58.106Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.3"
+   ],
+   "text": "History.test.ts (Phase 0, unchanged) leaves GET /media/assets unmocked: 7 SELF_SIGNED_CERT errors to the local API per web-suite run; exit stays 0, not a paid call; mock the fetch"
+  },
+  {
+   "at": "2026-11-23T08:14:13.372Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.5"
+   ],
+   "text": "apps/api/src/routes/media.test.ts:506 new copy of let index = 0 triggers a lint warning (0 errors)"
+  },
+  {
+   "at": "2026-11-23T08:14:13.261Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.12"
+   ],
+   "text": "Normalize is enabled before any region exists (whole-track op); AC1 says edit buttons are disabled until a region exists, so state the exception in copy or tooltip"
+  },
+  {
+   "at": "2026-11-23T08:14:13.145Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.3"
+   ],
+   "text": "cd apps/web && bun run test: 2194/2194 pass but exit 1 from EnvironmentTeardownError in untouched src/App.test.ts (unmocked getUserDetails fetch logs after teardown); root bun run test exits 0"
+  },
+  {
+   "at": "2026-11-23T08:14:13.019Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.6"
+   ],
+   "text": "song.spec @critical balance-drops scenario proves the drop on the UI chip only; readCredits asserts the stored balance unchanged because the POST is stubbed"
+  },
   {
    "at": "2026-11-23T02:00:17.782Z",
    "type": "advisory",
@@ -6274,820 +7327,615 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
-   "at": "2026-11-23T02:00:34.410Z",
+   "at": "2026-11-23T12:59:55.578Z",
    "type": "deliverable",
    "tasks": [
-    "T0.1",
-    "T0.2",
-    "T0.3",
-    "T0.4",
-    "T0.5",
-    "T0.6",
-    "T0.7",
-    "T0.8",
-    "T0.9",
-    "T0.10",
-    "T0.11",
-    "T0.12",
-    "T0.13",
-    "T0.14",
-    "T0.15",
-    "T0.16",
-    "T0.17",
-    "T0.18",
-    "T0.19",
-    "T0.20",
-    "T0.21",
-    "T0.22",
-    "T0.23",
-    "T0.24",
-    "T0.25",
-    "T0.26",
-    "T0.27",
-    "T0.28",
-    "T0.29",
-    "T0.30",
-    "T0.31"
+    "T1.1",
+    "T1.2",
+    "T1.3",
+    "T1.4",
+    "T1.5",
+    "T1.6",
+    "T1.7",
+    "T1.8",
+    "T1.9",
+    "T1.10",
+    "T1.11",
+    "T1.12",
+    "T1.13",
+    "T1.14",
+    "T1.15",
+    "T1.16",
+    "T1.17",
+    "T1.18",
+    "T1.19"
    ],
-   "text": "Phase 0 shared media infrastructure verified: registry/credits, media API + uploads, nav/player/history UI, e2e specs"
+   "text": "Phase 1 Song studio: composer, lyrics AI assist, waveform editor, export"
   },
   {
-   "at": "2026-11-23T02:00:27.643Z",
+   "at": "2026-11-23T12:59:52.712Z",
    "tasks": [
-    "T0.15"
+    "T1.8"
    ],
-   "attempt": "17",
+   "attempt": "1",
    "type": "verify_passed",
-   "evidence": "a14 blocker (AC5 401) cleared. Running API: unauthenticated POST /media/uploads returns 401 (was 500), POST /generate/audio/music also 401. clerk-auth.real.test.ts (real requireAuth, unmocked) 5/5 asserts 401. 429 and AC1-AC4 unchanged since a14 (upload e2e: sample.mp3 accepted with uploadId+durationSec, renamed .png rejected, both green this run). V1/V2/V3 as T0.13",
-   "fingerprint": "c0e15b71ddb7151b8cf72ed4531616345480fac43207c5041b1ba3eeed0ba62e",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a17.md"
+   "evidence": "The a20 blocker is fixed. V2 `bun run check` exits 0 (as above). No source changed since a20, so a20's proof still holds: V1 2197/2197, lyrics.spec 6/6 (Write+Accept, Fit only over the limit, Undo, 429 copy, keyboard/Escape focus return, 375px), the live 375px dark menu check, and shots T1.8-6 and T1.8-7 re-opened and accurate.",
+   "fingerprint": "13e9bb7fbbb2eb1c4add9a132d5977e042736da984075f82d2b17401706cb6be",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a21.md"
   },
   {
-   "at": "2026-11-23T02:00:27.642Z",
+   "at": "2026-11-23T12:59:52.712Z",
    "tasks": [
-    "T0.13"
+    "T1.4"
    ],
-   "attempt": "17",
+   "attempt": "1",
    "type": "verify_passed",
-   "evidence": "a14 blocker (AC3) cleared. Running API on :4388 picked up the change (no restart): unauthenticated GET /media/assets, GET /media/assets?type=audio&limit=5, GET /media/assets/abc, DELETE /media/assets/abc, POST /media/assets/abc/versions and a garbage Bearer token all return 401 {\"error\":\"Unauthenticated\"} (were 500). AC2 e2e \"fake audio appears in GET /media/assets\" green. V1 api type-check exit 0",
-   "fingerprint": "e0ad4c206c87e1f8061ad7651fd8f14319838ea1b31238afe0966883887141cd",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a17.md"
+   "evidence": "Unchanged since a20, so the PASS stands. The exact V1 coverage command ran 51/51, Song components and useMediaDraft are at 100%, and LyricsEditor's lowest value is funcs 87.5% (justified template binding). No skip or fail markers.",
+   "fingerprint": "57782b169e34f55df954289cafd4830f054d8d8346b0df12ec9a922277cbf4d1",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a21.md"
   },
   {
-   "at": "2026-11-23T02:00:17.782Z",
-   "type": "advisory",
+   "at": "2026-11-23T12:59:52.711Z",
    "tasks": [
-    "T0.13"
+    "T1.3"
    ],
-   "text": "resolveErrorStatus keys 401 on exact message \"Unauthenticated\"; wrap requireAuth into UnauthorizedError instead"
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "The a20 blocker is fixed. V2 `bun run check` now exits 0, with 0 errors and 17 warnings in 935 files (a21-check.log). There is no agent-browser-chrome-* dir in the repo root, and .gitignore:65 now ignores `agent-browser-chrome-*/`. No file under apps/ or packages/ changed after the a20 report (find -newer: 0 files), so a20's proof still holds: V1 web suite 2197/2197, song.spec 8/8, and the V3 agen",
+   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a21.md"
   },
   {
-   "at": "2026-11-23T02:00:17.693Z",
-   "type": "advisory",
-   "tasks": [
-    "T0.15"
-   ],
-   "text": "clerk-auth.real.test.ts mounts requireAuth on a bare app with a re-declared handler, not the real router/app.ts handler"
-  },
-  {
-   "at": "2026-11-23T01:58:14.601Z",
+   "at": "2026-11-23T12:59:09.899Z",
    "type": "verify_started",
    "tasks": [
-    "T0.13",
-    "T0.15"
+    "T1.3",
+    "T1.4",
+    "T1.8"
    ],
-   "attempt": "17"
+   "attempt": "1"
   },
   {
-   "at": "2026-11-23T01:58:11.262Z",
+   "at": "2026-11-23T12:54:10.973Z",
+   "type": "verify_started",
    "tasks": [
-    "T0.15"
+    "T1.3",
+    "T1.4",
+    "T1.8"
    ],
-   "type": "reviewer_verdict",
-   "evidence": "POST /media/uploads gets the same 401 mapping through the shared app.ts handler (app.ts:111). The builder's a16 report confirms no T0.15 source change, and the a14 evidence still holds: sniffMime uses magic bytes, there is a per-purpose MIME allowlist and byte cap, isUploadPurpose uses Object.hasOwn, multer allows 1 file, and uploadRateLimiter is keyed on userId.",
-   "fingerprint": "c0e15b71ddb7151b8cf72ed4531616345480fac43207c5041b1ba3eeed0ba62e",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a17.md",
-   "verdict": "PASS",
-   "reviewer": "security"
+   "attempt": "1"
   },
   {
-   "at": "2026-11-23T01:58:11.262Z",
+   "at": "2026-11-23T12:54:08.297Z",
+   "type": "run_started",
    "tasks": [
-    "T0.13"
+    "T1.1",
+    "T1.2",
+    "T1.3",
+    "T1.4",
+    "T1.5",
+    "T1.6",
+    "T1.7",
+    "T1.8",
+    "T1.9",
+    "T1.10",
+    "T1.11",
+    "T1.12",
+    "T1.13",
+    "T1.14",
+    "T1.15",
+    "T1.16",
+    "T1.17",
+    "T1.18",
+    "T1.19"
    ],
-   "type": "reviewer_verdict",
-   "evidence": "resolveErrorStatus (lib/errors.ts:83-87) keeps HttpError.statusCode first, maps only `error instanceof Error && message === \"Unauthenticated\"` (exact match, the clerk-sdk-node requireAuth rejection) to 401, and defaults everything else to 500. A 4xx/5xx HttpError cannot be remapped and a substring or non-Error value cannot match. requireAuth (middlewares/clerk.ts:40) still blocks the request befor",
-   "fingerprint": "e0ad4c206c87e1f8061ad7651fd8f14319838ea1b31238afe0966883887141cd",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a17.md",
-   "verdict": "PASS",
-   "reviewer": "security"
+   "pipeline": 2
   },
   {
-   "at": "2026-11-23T01:57:26.820Z",
+   "at": "2026-11-23T08:41:01.492Z",
+   "type": "advisory",
    "tasks": [
-    "T0.15"
+    "T1.8"
    ],
-   "type": "reviewer_verdict",
-   "evidence": "clerk-auth.real.test.ts runs the real requireAuth with no session against all five media routes (including POST /media/uploads) and asserts 401 through the same resolveErrorStatus; non-vacuous because requireAuth is unmocked. Earlier sniffing and cap checks remain as in a14.",
-   "fingerprint": "c0e15b71ddb7151b8cf72ed4531616345480fac43207c5041b1ba3eeed0ba62e",
-   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a17.md",
-   "verdict": "PASS",
-   "reviewer": "code"
+   "text": "Shot T1.8-2 is stale (captures the since-fixed low-contrast menu); superseded by T1.8-4 (a19). Drop T1.8-2 from the dashboard."
   },
   {
-   "at": "2026-11-23T01:57:26.818Z",
+   "at": "2026-11-23T08:41:01.386Z",
+   "type": "advisory",
    "tasks": [
-    "T0.13"
+    "T1.8"
    ],
-   "type": "reviewer_verdict",
-   "evidence": "Unauthenticated asset routes now return 401: resolveErrorStatus (errors.ts) maps Clerk's plain Error(\"Unauthenticated\") to 401, HttpError keeps its status, anything else gives 500; app.ts catch-all uses it. Message constant is named. Unit tests cover all three branches.",
-   "fingerprint": "e0ad4c206c87e1f8061ad7651fd8f14319838ea1b31238afe0966883887141cd",
-   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a17.md",
-   "verdict": "PASS",
-   "reviewer": "code"
+   "text": "No component unit spec exists for LyricsAiMenu.vue/useLyricsAssist.ts; loading spinner and generic-failure toast (AC3) are covered by neither unit nor e2e tests, only by verifier a19 live checks. Add a LyricsAiMenu component spec."
   },
   {
-   "at": "2026-11-23T01:57:05.558Z",
+   "at": "2026-11-23T08:32:47.924Z",
+   "type": "verify_started",
+   "tasks": [
+    "T1.3",
+    "T1.4",
+    "T1.8"
+   ],
+   "attempt": "19"
+  },
+  {
+   "at": "2026-11-23T08:32:47.797Z",
    "type": "preflight_passed",
    "tasks": [
-    "T0.15"
+    "T1.8"
    ],
-   "fingerprint": "c0e15b71ddb7151b8cf72ed4531616345480fac43207c5041b1ba3eeed0ba62e"
+   "fingerprint": "13e9bb7fbbb2eb1c4add9a132d5977e042736da984075f82d2b17401706cb6be",
+   "slop": "PASS"
   },
   {
-   "at": "2026-11-23T01:56:58.863Z",
+   "at": "2026-11-23T08:32:47.797Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.4"
+   ],
+   "fingerprint": "57782b169e34f55df954289cafd4830f054d8d8346b0df12ec9a922277cbf4d1",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:32:47.797Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.3"
+   ],
+   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:32:43.958Z",
+   "tasks": [
+    "T1.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "shot 1/T1.3-1.png shows the empty state with style chips, example ideas, counters (0/300, 0/3000), section tags and the \"Your first song\" prompt with a \"Try an example\" action; the disabled-reason guidance was checked in the previous pass and the UI is unchanged (only App.test.ts changed).",
+   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
+   "report": ".dashboard/media-studio/reports/phase-1-review-ux-sonnet-a17.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-23T08:32:41.632Z",
+   "tasks": [
+    "T1.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Song studio empty state (T1.3-1): clear hierarchy (serif title, style, ideas, lyrics), legible copy, consistent chips and dashed cards, warm palette held.",
+   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
+   "report": ".dashboard/media-studio/reports/phase-1-review-ui-sonnet-a17.md",
+   "verdict": "PASS",
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-23T08:32:35.492Z",
+   "tasks": [
+    "T1.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "App.test.ts diff only adds an afterEach that unmounts tracked wrappers and unstubs globals, plus a beforeEach fetch stub answering the /users call. No assertion, test case or expectation was removed or loosened, so the tests are not weakened. The router now lazy-loads SongStudio on /audio/song with requiresAuth, and the song components are unchanged since the last PASS, so AC1-AC7 stay met.",
+   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
+   "report": ".dashboard/media-studio/reports/phase-1-review-code-sonnet-a17.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-23T08:32:19.894Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.8"
+   ],
+   "fingerprint": "13e9bb7fbbb2eb1c4add9a132d5977e042736da984075f82d2b17401706cb6be",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:32:19.894Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.4"
+   ],
+   "fingerprint": "57782b169e34f55df954289cafd4830f054d8d8346b0df12ec9a922277cbf4d1",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:32:19.894Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.3"
+   ],
+   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:32:19.064Z",
    "type": "task_built",
    "tasks": [
-    "T0.15"
+    "T1.4"
    ],
-   "text": "AC5 401 confirmed via real-middleware test (a15 fix)",
+   "text": "LyricsEditor.vue 87.5% functions, 95.45% lines; shuffle clean",
    "files": [
-    "apps/api/src/middlewares/clerk-auth.real.test.ts"
+    "apps/web/src/components/Song/LyricsEditor.test.ts"
    ]
   },
   {
-   "at": "2026-11-23T01:56:45.578Z",
+   "at": "2026-11-23T08:31:51.781Z",
    "type": "task_started",
    "tasks": [
-    "T0.15"
+    "T1.4"
    ],
    "attempt": "2"
   },
   {
-   "at": "2026-11-23T01:56:45.493Z",
+   "at": "2026-11-23T08:31:51.678Z",
    "type": "build_started",
    "tasks": [
-    "T0.15"
+    "T1.4"
    ],
    "attempt": "16"
   },
   {
-   "at": "2026-11-23T01:56:40.962Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/intent/landing-and-credit-economics.md": "919cee8e29903d5f65c9a9342c8982a262af63cb",
-    "agent_docs/media-studio/TASKS.md": "d3cb5a69298c13234de2bdab55795fd34f842332",
-    "apps/api/src/app.ts": "3d41b4cf927d99371335340f3ac14aef6bdd560d",
-    "apps/api/src/lib/errors.test.ts": "e0770e366c45c2737beb93db25fd989a8e531a6c",
-    "apps/api/src/lib/errors.ts": "6e739e8e6b6436a517a3534db13bdb1486cad5f9",
-    "apps/api/src/lib/replicate.test.ts": "567970d9acb2b8cc9e01a23eb9a75713085faf5d",
-    "apps/api/src/lib/replicate.ts": "234fd5d23868cb12a2a2972472c3fea26caf80c7",
-    "apps/api/src/middlewares/multer.test.ts": "8fbd8ed19956f8afbbfb67779c4ed10e3dab222a",
-    "apps/api/src/middlewares/multer.ts": "73d12568e6a88aa72040250cac72fa2c3540cc05",
-    "apps/api/src/middlewares/rate-limit.test.ts": "35d4fe95992b43b91e2a78a231607cf782b9fe46",
-    "apps/api/src/middlewares/rate-limit.ts": "622260b8196ce83d33a81b26789571b9a61f370f",
-    "apps/api/src/queue/generation-queue.test.ts": "74859ccfb4b26688497c09f0002cd3f8aa48bf77",
-    "apps/api/src/queue/generation-queue.ts": "a1b33e5070fbf3223f928e7ba5df8fddde5fe4c8",
-    "apps/api/src/queue/generation-worker.test.ts": "beced8e9d528839077f222eec9073c82fcdec23d",
-    "apps/api/src/queue/generation-worker.ts": "44387fb0be435e82d3be1f355e9a3cd7758748d1",
-    "apps/api/src/routes/index.test.ts": "cc780647b477fd0d9c36b7181cefa54db35fc3e0",
-    "apps/api/src/routes/index.ts": "467462b6558fe748948598b3520244d1ef5d0e17",
-    "apps/api/src/routes/users.test.ts": "3f2fa42087dbab84e2e20f40c2ee1937e019224f",
-    "apps/api/src/services/cloudinary-service.test.ts": "deb875f61b943d9f075c547f2b946c7c1e0ffc67",
-    "apps/api/src/services/cloudinary-service.ts": "2e28378cfac3f47b0fb102ed19467c5889b5b008",
-    "apps/api/src/services/generation-service.ts": "62a5ccfe07541fff8ee8b1d1328369d309fcc11b",
-    "apps/api/src/utils/cloudinary.test.ts": "d7b8a86bc7c8a0f307a58502ca750fe4ad19dc53",
-    "apps/api/src/utils/cloudinary.ts": "ecaa7e037281a87c43ca1010be8fb408ecd10713",
-    "apps/api/src/utils/cronJobs.test.ts": "1ae9a0986367b162cf32ea9c4c149aeb26fef07f",
-    "apps/api/src/utils/cronJobs.ts": "934ddc029123f46e8b9509318281749afc6f2199",
-    "apps/web/e2e/support/cloudinaryMock.ts": "dee18993be8a380485d018e943ae2060cde675e3",
-    "apps/web/e2e/support/paidCallGuard.test.ts": "63bb74f30cce620ddc7aa9d98345417bddca973a",
-    "apps/web/e2e/support/paidCallGuard.ts": "c890dce7b29a426e2bf099fefff76d06ebb21411",
-    "apps/web/src/App.vue": "99202a017ee3c13516caed3a3584d893d85e0fec",
-    "apps/web/src/components.d.ts": "6d12970f270c8cd438ab33aca3ce9f4c8fecb411",
-    "apps/web/src/components/Dialogs/LowCreditsDialog.vue": "9ef26d80a70b716a5fab24dac2384132acbc8616",
-    "apps/web/src/components/Header/AppHeader.test.ts": "505ccaa31816ccef387f095ee7cea66603f1a00e",
-    "apps/web/src/components/Header/AppHeader.vue": "4e456749d33182b780d3c65634459e13bc7fb38a",
-    "apps/web/src/components/Header/NavTabs.test.ts": "b65e1c5a973612713395211cfc950b5a3ce6dbf7",
-    "apps/web/src/components/Header/NavTabs.vue": "612d67368ab49a3ced348193ffd8a78a4268b5f5",
-    "apps/web/src/components/History/FeatureIcon.vue": "818c25decfd1671d3897e68abecb1968012f7233",
-    "apps/web/src/components/History/Filter.vue": "39f283cb85a43c1c1d4ef99cf479b336858a61a5",
-    "apps/web/src/components/History/History.vue": "ab235f75c18b07927b677db54abd033d8d0e7d8e",
-    "apps/web/src/components/History/NoResults.vue": "eac2bbcfe3a6f8b3f5da7075f2931057c2b8941c",
-    "apps/web/src/components/Pricing/PricingModelCosts.test.ts": "18d27baeadb8f417d49dd0d023647cffed8e7c5d",
-    "apps/web/src/components/Pricing/PricingModelCosts.vue": "598d03ce26c98c5776808bcd814d12c5f7db5fab",
-    "apps/web/src/composables/useGlobalShortcuts.test.ts": "fc15e15973c192cf45c16cd1b3d4a8a2f1d9b4db",
-    "apps/web/src/composables/useGlobalShortcuts.ts": "fd90bf9b7bf184f2c35f63ca5dc172cf584cf295",
-    "apps/web/src/composables/usePricingCatalog.ts": "27a964cea3a64e541e8ed0bd71f10cc239e34d6b",
-    "apps/web/src/pages/Dashboard.vue": "6fa18aec3857d7df658999edfa8f0e607e4d6228",
-    "apps/web/src/router/index.ts": "a93c5b052a910e99c7ad4d503ed47572cc33460f",
-    "apps/web/src/stores/dialog.ts": "b5c4195eba27ccd2de1a6af1591b1e9937c8d079",
-    "apps/web/src/stores/history.test.ts": "1268b84fb61ec20006216d336643c4ccc1b9c797",
-    "apps/web/src/stores/history.ts": "e0382bf96281e13cd8b3b092a5cf6082e8a45003",
-    "apps/web/src/types/primitives.ts": "c483cac84ec6309bddb1c4d8c514fb2c203e61fc",
-    "apps/web/src/utils/constants.ts": "04c120249e8c6b4e48ae540253c1dd5c49158a65",
-    "apps/web/src/utils/dashboardRoutes.test.ts": "12c0db297b67412b3a802692ac626d5aa20504fd",
-    "apps/web/src/utils/dashboardRoutes.ts": "d0c91a47ca529fe2395cddac7476023085e0045c",
-    "apps/web/src/utils/generationCredits.ts": "32ee9a277058169bcd9d63491f305cb320fa4db4",
-    "apps/web/src/utils/models.test.ts": "f68934a14e8f6a516a25eff3f3464179c9b17413",
-    "apps/web/src/utils/models.ts": "4eb1959ebc9424ccc44a4fadedd3941b2024edbd",
-    "apps/web/src/utils/providerLogos.ts": "a5993a869a3ac91bbc9d07add11f9834a52f842d",
-    "apps/web/tailwind.semantic-plugin.js": "6bf0b803c6b116f0ff61a6f9622f02083b2f3713",
-    "docs/MODEL_ONBOARDING.md": "273f207bb259b0761f8b0b8f9ffcb22649b0c099",
-    "packages/shared/src/models/credits.test.ts": "0f93bf281bac3d0e4ea61f3668ae4a0f16d826f2",
-    "packages/shared/src/models/credits.ts": "08862c317f6da031176a184dff6d8b7ab6c658ec",
-    "packages/shared/src/models/index.ts": "3accb97dc213d6388ebd48256c2948191e1dcd2a",
-    "packages/shared/src/models/registry.test.ts": "3ffbff0bfdf9a4a75db0ac9660de90a816db9545",
-    "packages/shared/src/models/registry.ts": "c132c0cd46f86b4381193a534176659de7cb1f26",
-    "packages/shared/src/models/types.ts": "3c1f6e664f68eedf37b301e83035a921587602f2",
-    "packages/shared/src/schemas/index.ts": "0ffb66bd350898717301c125aa43b980d6749dac",
-    "packages/shared/src/types/api.ts": "05909a2a26f7951bca4faccdffc7eac5ffd1c6f4",
-    "packages/shared/src/types/domain.ts": "70a7b30e1626769e5091e732a0e0922ee0affe6e",
-    "packages/shared/src/types/index.ts": "61325ea431641a162d05675acabe42a9697b51d6",
-    "agent_docs/media-studio/APPROVALS.md": "e922dd49b6f2bbd8f3d140e0cbc18e07af49b488",
-    "apps/api/src/lib/credit-deduction.test.ts": "abdd9905ad50bf8f781023e81f7ad52ab8c2209a",
-    "apps/api/src/lib/credit-deduction.ts": "edb433a8bc77ef7d63467d25c8aab92b25042864",
-    "apps/api/src/lib/e2e-user.ts": "eadff69845926a04bb8c609d5f6013404d0a528a",
-    "apps/api/src/lib/fake-cloudinary.test.ts": "769bb3178fe3c5d9cf6d828c6f719378f1ef4bdc",
-    "apps/api/src/lib/fake-cloudinary.ts": "079c07795fa12f40cb0c3c1d322fddaa610fac20",
-    "apps/api/src/lib/lyrics-generator.test.ts": "b3f48287e613ee5b6faec62efecb017af66f2b41",
-    "apps/api/src/lib/lyrics-generator.ts": "20b02a763c95cf7c9fecf87de9b6b675e1c632a1",
-    "apps/api/src/lib/media-input.test.ts": "0c60efe190c3d5e9d218c8e765e1590429538b35",
-    "apps/api/src/lib/media-input.ts": "745cb4214136b4e4e63caf62ff8db0c6e69f18aa",
-    "apps/api/src/lib/media-upload.test.ts": "00eef7fbad08df864ac7c8dc4ba23cb71b9a7a6a",
-    "apps/api/src/lib/media-upload.ts": "766970a9b8c025dcab1c35060c700fd6bc884d15",
-    "apps/api/src/middlewares/clerk-auth.real.test.ts": "851457020d86f4e1000ab7251771c752536154b8",
-    "apps/api/src/models/media-asset.ts": "ec510c9e3b7e019f1e245c526cebb851c55a5f20",
-    "apps/api/src/models/media-upload.ts": "60047f80584938a40a4aac53ce8a0f2aaf617188",
-    "apps/api/src/queue/job-id.test.ts": "98f74730859aa13799d6c96d8e31bf408704547b",
-    "apps/api/src/queue/job-id.ts": "3cbb85103caac560bc6f0e1de7656558eba0b006",
-    "apps/api/src/routes/media.test.ts": "8b82bad0f8592529ffc544ef9047190bd58b6c54",
-    "apps/api/src/routes/media.ts": "51e617c46aaee7a7f2aa86b7fde7ebfc19012a0c",
-    "apps/api/src/services/media-asset-service.test.ts": "345dbbcf0dad012cd8b2d4b4211f9a0259f1a993",
-    "apps/api/src/services/media-asset-service.ts": "12082898c6b1591c6d1cdf8f696bdf24ab210e6f",
-    "apps/api/src/services/media-service.test.ts": "9bea477db7e5ef3e53c85653e18b92e8e3b7b6a1",
-    "apps/api/src/services/media-service.ts": "987f7e727728537524ff3b7bd756a3d3ad92437c",
-    "apps/web/e2e/fixtures/assets/sample.mp3": "18e5b5749fa4704bf7939b5a5e751f5da6c06d83",
-    "apps/web/e2e/fixtures/assets/sample.wav": "22f10726469ee46b443b6ca77c2e937a3d7c6390",
-    "apps/web/e2e/fixtures/media.ts": "fe0e54440e90aee845311d9fd8abc18e562393fe",
-    "apps/web/e2e/qa/media-nav-player.spec.ts": "32e4e41e728f2729840b48110a16519b284e73e5",
-    "apps/web/e2e/qa/media-pipeline.spec.ts": "e5ce794d0af6ddddaa3c684eb94947d3b0888c8a",
-    "apps/web/e2e/scenarios/media-nav-player.feature.md": "a0cb87b9474d19d53a9dfe57ceeea518b816fd73",
-    "apps/web/e2e/scenarios/media-pipeline.feature.md": "11cf6be130607d1b0672a011d11d3cdfffbe1312",
-    "apps/web/e2e/support/mediaAssetSeed.ts": "6e231dc19962897307b434780fcd72c7b32e0122",
-    "apps/web/src/components/Audio/AudioPlayer.vue": "aa2556695784458f7a8e0d11a46693dadc96c9be",
-    "apps/web/src/components/Audio/MiniPlayer.test.ts": "eb3e09d672f45da41e7f923d97271828d624b75a",
-    "apps/web/src/components/Audio/MiniPlayer.vue": "007895ec7297249e1fbee246c1f7a2a00cd0d1da",
-    "apps/web/src/components/Audio/PlayButton.test.ts": "565360e487c1917994a8d9d568e4405a002de59a",
-    "apps/web/src/components/Audio/PlayButton.vue": "4c2a930e00ff6e983daa3c59d6089a8898c13c3e",
-    "apps/web/src/components/Audio/TimeCode.test.ts": "6794d7dc635c342c6c2e708589b5d58ae43cdff2",
-    "apps/web/src/components/Audio/TimeCode.vue": "7887e9195f3061d5823e4c94479f7dc3f38f1170",
-    "apps/web/src/components/Audio/TrackCard.vue": "34b33ade07c9bc9c377cd2e38b111566a97f4ec4",
-    "apps/web/src/components/Header/NavMenuGroup.test.ts": "83d004173695f1d48d4df32aba4f1769ccc63222",
-    "apps/web/src/components/Header/NavMenuGroup.vue": "5b539e6866c793cf42003252a3838410a7a65ba9",
-    "apps/web/src/components/Header/NavMobileAccordion.vue": "3ce962303eb1e652522fe673d139a9b75d5da3dc",
-    "apps/web/src/components/Studio/JobProgress.test.ts": "bc5c85f38d0391dab374107ea848bf36daad35b4",
-    "apps/web/src/components/Studio/JobProgress.vue": "6139674fecd99dd7d567bbcc8b8ea91562fad802",
-    "apps/web/src/components/Studio/ResultCard.test.ts": "c52b7d88745750018dd5795d1a65beec55bcd493",
-    "apps/web/src/components/Studio/ResultCard.vue": "f0e72995e51d44756c3a256ed70520d30701656c",
-    "apps/web/src/components/Studio/ShortcutsPopover.test.ts": "5b4fafeb5618f7388cb28795b5bc115f7ac274e2",
-    "apps/web/src/components/Studio/ShortcutsPopover.vue": "a5c4882ebb03b55d457dce0d69ab81cfa99369ac",
-    "apps/web/src/components/Studio/StudioActionBar.test.ts": "919f1c1048e6080987d675cf724b66f19f39c2d1",
-    "apps/web/src/components/Studio/StudioActionBar.vue": "8665f0cb832cae353fbdcbfa9161765e26085208",
-    "apps/web/src/components/Studio/StudioEmptyState.test.ts": "2c75d11ac8b69517156208c0dbbf6253b720bf6c",
-    "apps/web/src/components/Studio/StudioEmptyState.vue": "95256da5a27a9f1df63ce8c597c96fcecaf5f238",
-    "apps/web/src/components/Studio/StudioErrorState.test.ts": "74e0a49900a19ba870cda5884b7d11e715b633d0",
-    "apps/web/src/components/Studio/StudioErrorState.vue": "557e82cb790fc9efed36bda6670e27c81ca74702",
-    "apps/web/src/components/Studio/StudioPlaceholder.test.ts": "15012773f6e2463462140ac5c28f74718487e48d",
-    "apps/web/src/components/Studio/StudioPlaceholder.vue": "716d733384951fa13206325864bf28d3d177c183",
-    "apps/web/src/components/Studio/StudioShell.test.ts": "f7c22eb313a8f4b132e3d2e90feb401d00ee5ce6",
-    "apps/web/src/components/Studio/StudioShell.vue": "f57a929fae7e4eb292b5d80d127b37fe57adbe3d",
-    "apps/web/src/composables/useMediaCost.test.ts": "59f888facacdc26e7ead385fedf1c9bf8a0f31eb",
-    "apps/web/src/composables/useMediaCost.ts": "64d2b123450a31d7b300aba3b7352745b5f30cb3",
-    "apps/web/src/composables/useMediaDraft.test.ts": "65feeb84c0cab9f93881bdea0578e7c47e5e3e9e",
-    "apps/web/src/composables/useMediaDraft.ts": "1847542fa3a5ceadf32da0b576c3613a914fef43",
-    "apps/web/src/composables/useMediaJob.test.ts": "2dde9b0a3be1ffc438a657d66093f51e674b09e5",
-    "apps/web/src/composables/useMediaJob.ts": "ae19d4c422abfdad26b39061438f7e11dccf107f",
-    "apps/web/src/stores/player.test.ts": "191ef120121968058d6c493d254c9f982bd37aef",
-    "apps/web/src/stores/player.ts": "b0baa5994be090412c3ae68d1f7ea7681cc2c8cd",
-    "apps/web/tsconfig.node.tsbuildinfo": "dccc289d31cac0321647df57b0c9490bae64a73a",
-    "packages/shared/src/models/media-limits.test.ts": "56cd32cd652a5727afaf8dbacb0d58c41239fb8a",
-    "packages/shared/src/models/media-limits.ts": "2d2b8e02569cc10f3fabbe54852d96230e148a86",
-    "packages/shared/src/models/media-shortcuts.ts": "185ba886463034e17b0e7da9fc1348bde7c08730",
-    "packages/shared/src/schemas/media.ts": "a374ff3058d46625b112a0a1aa95b812738bd6f1"
-   }
+   "at": "2026-11-23T08:31:46.122Z",
+   "tasks": [
+    "T1.8"
+   ],
+   "attempt": "15",
+   "type": "verify_inconclusive",
+   "text": "missing-from-report",
+   "sigs": [
+    "T1.8|inconclusive|missing-from-report"
+   ],
+   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
   },
   {
-   "at": "2026-11-23T01:56:40.904Z",
+   "at": "2026-11-23T08:31:46.122Z",
+   "tasks": [
+    "T1.19"
+   ],
+   "attempt": "15",
+   "type": "verify_passed",
+   "evidence": "V1 check exit 0; V2 root `bun run test` exit 0, 344 files 3840/3840; V3 model-docs passed (15 media models); V4 song+lyrics+editor --repeat-each=2 --workers=1: 43 passed, 0 failed, 0 flaky",
+   "fingerprint": "ec91a90a346654e166afc48dd7d73f736bc73fffd0d53c174ac3c4bf3d19aaa6",
+   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
+  },
+  {
+   "at": "2026-11-23T08:31:46.122Z",
+   "tasks": [
+    "T1.18"
+   ],
+   "attempt": "15",
+   "type": "verify_passed",
+   "evidence": "V1 `playwright test e2e/qa/editor.spec.ts --repeat-each=3 --workers=1` (E2E_SERVER=dev): 22 passed (7 scenarios x3 plus setup), 0 failed, 0 flaky. No test.fail, skip, only or fixme left in any phase spec. readCredits before and after equal in the export and version scenarios. The versions POST and the assets list are routed by page.route, and mediaGenerationStub acceptedRequestCount is 1",
+   "fingerprint": "eab18318e25728d20f0580b99563532463611ea0ae5478e39886b76d7b2646db",
+   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
+  },
+  {
+   "at": "2026-11-23T08:31:46.122Z",
+   "tasks": [
+    "T1.17"
+   ],
+   "attempt": "15",
+   "type": "verify_passed",
+   "evidence": "V1 coverage 71/71. All files 99.62 stmts / 99.09 branches / 100 funcs / 100 lines; the lowest is useAudioExport.ts at 98.38 branches. No it.fails, skip or only; no network calls (cdn.test URLs are only track fixtures)",
+   "fingerprint": "f1af7ac9228237ce883cab54f48f332834ea1b990735607aab3a3c25267b3e81",
+   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
+  },
+  {
+   "at": "2026-11-23T08:31:46.122Z",
+   "tasks": [
+    "T1.16"
+   ],
+   "attempt": "15",
+   "type": "verify_passed",
+   "evidence": "V1 api type-check exit 0; V2 api suite 86 files 1420/1420; V3 web suite exit 0 twice; V4 check exit 0. History grouping fixed: history.ts splitVersions moves versions out before groupByDate and puts them back after their parent. The e2e asserts the order [other, original, version] when the list arrives as version, other, original, and the screenshot confirms it. Shot T1.16-1 shows MP3/WAV with est",
+   "fingerprint": "b6122a654c83a4d1115f47cbc146300cc0e89ba501055e0d261f8b93c1cd1023",
+   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
+  },
+  {
+   "at": "2026-11-23T08:31:46.122Z",
+   "tasks": [
+    "T1.15"
+   ],
+   "attempt": "15",
+   "type": "verify_passed",
+   "evidence": "V1 web suite exit 0 twice; V2 check exit 0; worker, cap and cancel unit tests are in T1.17's 71/71; WAV export e2e green x3",
+   "fingerprint": "6b7a2aa60552008f9eea947cf9157cba9acf8567c0b2f54a668b34b65492935d",
+   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
+  },
+  {
+   "at": "2026-11-23T08:31:46.122Z",
+   "tasks": [
+    "T1.12"
+   ],
+   "attempt": "15",
+   "type": "verify_passed",
+   "evidence": "V1 web suite exit 0 twice; V2 check exit 0; shot T1.12-1 re-opened: edit tools are disabled and the exact hint \"Drag on the waveform to select a part.\" shows; 375px toolbar e2e green",
+   "fingerprint": "aa66222472bc0c3479518d988e5a86c719ecfc10cab2cbfbb0d92223ddbd2e1f",
+   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
+  },
+  {
+   "at": "2026-11-23T08:31:46.121Z",
+   "tasks": [
+    "T1.11"
+   ],
+   "attempt": "15",
+   "type": "verify_passed",
+   "evidence": "V1 web suite exit 0 twice; V2 check exit 0; editor e2e covers undo/redo keys, the shared element, keyboard region and 375px, all green x3 and x2. Shots T1.11-1/2 match their captions",
+   "fingerprint": "21aaced465208fe5ebf280f59939fdeb1a8c9a67771bdca9e196ee8c4b050a83",
+   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
+  },
+  {
+   "at": "2026-11-23T08:31:45.996Z",
    "type": "preflight_passed",
    "tasks": [
-    "T0.13"
+    "T1.19"
    ],
-   "fingerprint": "e0ad4c206c87e1f8061ad7651fd8f14319838ea1b31238afe0966883887141cd"
+   "fingerprint": "ec91a90a346654e166afc48dd7d73f736bc73fffd0d53c174ac3c4bf3d19aaa6"
   },
   {
-   "at": "2026-11-23T01:56:31.954Z",
+   "at": "2026-11-23T08:31:45.996Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.18"
+   ],
+   "fingerprint": "eab18318e25728d20f0580b99563532463611ea0ae5478e39886b76d7b2646db",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:31:45.996Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.17"
+   ],
+   "fingerprint": "f1af7ac9228237ce883cab54f48f332834ea1b990735607aab3a3c25267b3e81",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:31:45.996Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.16"
+   ],
+   "fingerprint": "b6122a654c83a4d1115f47cbc146300cc0e89ba501055e0d261f8b93c1cd1023",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:31:45.996Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.15"
+   ],
+   "fingerprint": "6b7a2aa60552008f9eea947cf9157cba9acf8567c0b2f54a668b34b65492935d"
+  },
+  {
+   "at": "2026-11-23T08:31:45.996Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.12"
+   ],
+   "fingerprint": "aa66222472bc0c3479518d988e5a86c719ecfc10cab2cbfbb0d92223ddbd2e1f",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:31:45.996Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.11"
+   ],
+   "fingerprint": "21aaced465208fe5ebf280f59939fdeb1a8c9a67771bdca9e196ee8c4b050a83",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:31:45.996Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.8"
+   ],
+   "fingerprint": "13e9bb7fbbb2eb1c4add9a132d5977e042736da984075f82d2b17401706cb6be",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:31:45.996Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.3"
+   ],
+   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:31:43.607Z",
    "type": "task_built",
    "tasks": [
-    "T0.13"
+    "T1.3"
    ],
-   "text": "Clerk Unauthenticated mapped to 401 in app error handler via resolveErrorStatus; real-middleware test",
+   "text": "flaky-env fixed by builder b5-a12: App.test.ts stubs /users fetch and unmounts wrappers; apps/web bun run test exit 0 twice (2197/2197)",
    "files": [
-    "apps/api/src/lib/errors.ts",
-    "apps/api/src/app.ts"
+    "apps/web/src/App.test.ts"
    ]
   },
   {
-   "at": "2026-11-23T01:55:59.151Z",
+   "at": "2026-11-23T08:31:43.502Z",
    "type": "task_started",
    "tasks": [
-    "T0.13"
+    "T1.3"
    ],
-   "attempt": "3"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-23T01:55:59.068Z",
-   "type": "build_started",
+   "at": "2026-11-23T08:31:30.196Z",
+   "type": "preflight_passed",
    "tasks": [
-    "T0.13"
+    "T1.19"
+   ],
+   "fingerprint": "ec91a90a346654e166afc48dd7d73f736bc73fffd0d53c174ac3c4bf3d19aaa6"
+  },
+  {
+   "at": "2026-11-23T08:31:30.196Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.18"
+   ],
+   "fingerprint": "eab18318e25728d20f0580b99563532463611ea0ae5478e39886b76d7b2646db",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:31:30.196Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.17"
+   ],
+   "fingerprint": "f1af7ac9228237ce883cab54f48f332834ea1b990735607aab3a3c25267b3e81",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:31:30.196Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.16"
+   ],
+   "fingerprint": "b6122a654c83a4d1115f47cbc146300cc0e89ba501055e0d261f8b93c1cd1023",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:31:30.196Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.15"
+   ],
+   "fingerprint": "6b7a2aa60552008f9eea947cf9157cba9acf8567c0b2f54a668b34b65492935d"
+  },
+  {
+   "at": "2026-11-23T08:31:30.196Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.12"
+   ],
+   "fingerprint": "aa66222472bc0c3479518d988e5a86c719ecfc10cab2cbfbb0d92223ddbd2e1f",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:31:30.196Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.11"
+   ],
+   "fingerprint": "21aaced465208fe5ebf280f59939fdeb1a8c9a67771bdca9e196ee8c4b050a83",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:31:30.196Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T1.8"
+   ],
+   "fingerprint": "13e9bb7fbbb2eb1c4add9a132d5977e042736da984075f82d2b17401706cb6be",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T08:30:58.106Z",
+   "type": "advisory",
+   "tasks": [
+    "T1.3"
+   ],
+   "text": "History.test.ts (Phase 0, unchanged) leaves GET /media/assets unmocked: 7 SELF_SIGNED_CERT errors to the local API per web-suite run; exit stays 0, not a paid call; mock the fetch"
+  },
+  {
+   "at": "2026-11-23T08:25:15.802Z",
+   "type": "verify_started",
+   "tasks": [
+    "T1.11",
+    "T1.12",
+    "T1.15",
+    "T1.16",
+    "T1.17",
+    "T1.18",
+    "T1.19"
    ],
    "attempt": "15"
   },
   {
-   "at": "2026-11-23T01:55:51.843Z",
+   "at": "2026-11-23T08:25:10.265Z",
+   "type": "preflight_passed",
    "tasks": [
-    "T0.31"
+    "T1.19"
    ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "V1 `bun run check` exit 0 (0 errors, 17 warnings); V2 `bun run test` 332 files, 3535/3535; V3 check:model-docs passes (15); V4 both specs --repeat-each=2 31 passed 0 failed 0 flaky",
-   "fingerprint": "3be2be289338b3848f535d00c650fc03c8ed52664f5600236040d99e3a6c4c9e",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+   "fingerprint": "ec91a90a346654e166afc48dd7d73f736bc73fffd0d53c174ac3c4bf3d19aaa6"
   },
   {
-   "at": "2026-11-23T01:55:51.843Z",
+   "at": "2026-11-23T08:25:10.265Z",
+   "type": "preflight_passed",
    "tasks": [
-    "T0.29"
+    "T1.18"
    ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "V1 --repeat-each=3 22 passed 0 failed 0 flaky; V2 @critical 4/4 incl. guard self-test; no allowRealPaidCalls or skip markers in the spec; the dropped credit scenario follows the logged user decision",
-   "fingerprint": "71d5e0146251347ebe88fe60cac83bcf929e5f995588b6eac9d65ed01ae0b18c",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+   "fingerprint": "eab18318e25728d20f0580b99563532463611ea0ae5478e39886b76d7b2646db",
+   "slop": "PASS"
   },
   {
-   "at": "2026-11-23T01:55:51.842Z",
+   "at": "2026-11-23T08:25:10.265Z",
+   "type": "preflight_passed",
    "tasks": [
-    "T0.28"
+    "T1.17"
    ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "V1 run 5 times in the exact 5-file combination: 69/69 each, 100% all metrics (a9 flake gone, fix only waits for Popover focus via vi.waitFor); V2 Audio+Studio+Header 209/209 x3; AC2 component tests added",
-   "fingerprint": "05cdbe564a0aba8cc56106eb4f08eacb3a49ab03cda76d20572bdc90849ef92b",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+   "fingerprint": "f1af7ac9228237ce883cab54f48f332834ea1b990735607aab3a3c25267b3e81",
+   "slop": "PASS"
   },
   {
-   "at": "2026-11-23T01:55:51.842Z",
+   "at": "2026-11-23T08:25:10.265Z",
+   "type": "preflight_passed",
    "tasks": [
-    "T0.27"
+    "T1.16"
    ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "V1 153/153, lowest useGlobalShortcuts.ts branches 96.29%; V2 473/473; check exit 0 (a9 formatting blocker cleared)",
-   "fingerprint": "b318536a7e5f08ea418a7d6c0a964a7c13047f302eccee2db0e82c0789ca9b0f",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+   "fingerprint": "b6122a654c83a4d1115f47cbc146300cc0e89ba501055e0d261f8b93c1cd1023",
+   "slop": "PASS"
   },
   {
-   "at": "2026-11-23T01:55:51.842Z",
+   "at": "2026-11-23T08:25:10.265Z",
+   "type": "preflight_passed",
    "tasks": [
-    "T0.25"
+    "T1.15"
    ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "useGlobalShortcuts() now registered in App.vue:29 (a9 blocker cleared). My agent-browser check on /audio/song: ? opens the Keyboard shortcuts dialog, Escape closes it, ? typed in an input does not open it; on /pricing with no track Space is not prevented and the page scrolls (evidence T0.25-a14-audio-song-popover.png); check exit 0",
-   "fingerprint": "d026898dffac6910352dce2eece84d5d7e2cbc670578d2d095b1f45d8334d7dc",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+   "fingerprint": "6b7a2aa60552008f9eea947cf9157cba9acf8567c0b2f54a668b34b65492935d"
   },
   {
-   "at": "2026-11-23T01:55:51.842Z",
+   "at": "2026-11-23T08:25:10.265Z",
+   "type": "preflight_passed",
    "tasks": [
-    "T0.24"
+    "T1.12"
    ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "component tests now exist: JobProgress (fake-timer elapsed, leave-page sentence, reduced motion), StudioErrorState (No credits were used., one action), StudioEmptyState (example action emits), ResultCard (focus on Play, toast, UnsavedResultNotice), StudioActionBar (149 no confirm, 150 confirm, focus on Cancel, reason line); bar is sticky at bottom: var(--mini-player-h) (StudioActionBar.vue:102-103",
-   "fingerprint": "6bf924d28f4a9b31b27b354d5a8f34bcc8a9117cff19eea0adb4ad30c6e8e6dd",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+   "fingerprint": "aa66222472bc0c3479518d988e5a86c719ecfc10cab2cbfbb0d92223ddbd2e1f",
+   "slop": "PASS"
   },
   {
-   "at": "2026-11-23T01:55:51.842Z",
+   "at": "2026-11-23T08:25:10.265Z",
+   "type": "preflight_passed",
    "tasks": [
-    "T0.23"
+    "T1.11"
    ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "stores+composables 473/473 (T0.27 V2); useMediaJob branches 98.57%; root run green",
-   "fingerprint": "a31a2a3d94a929979b564baf3a61efabc9597ef3d5ead35304c1cdae5908edbd",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+   "fingerprint": "21aaced465208fe5ebf280f59939fdeb1a8c9a67771bdca9e196ee8c4b050a83",
+   "slop": "PASS"
   },
   {
-   "at": "2026-11-23T01:55:51.841Z",
+   "at": "2026-11-23T08:24:59.505Z",
    "tasks": [
-    "T0.22"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "History tests green in root run; e2e \"History shows a stubbed fake asset with the Song filter\" green in gate run x2",
-   "fingerprint": "bb16320da5a1fb3af112eaad0c36fb942d955db65278e46de259f66790015102",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.841Z",
-   "tasks": [
-    "T0.21"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "component tests now cover AC2 keys/Space/Escape, AC3 close, AC4 no autoplay on mount, AC5 reduced-motion rule, AC6 --mini-player-h set/cleared (MiniPlayer.test.ts 15 tests); safe-area inset in MiniPlayer.vue:36,177; AC1 persistence e2e green in gate run",
-   "fingerprint": "4e2e9aa02f05f5426e67cd2c332e72543725c425463869cfa33cf1a78379f227",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.841Z",
-   "tasks": [
-    "T0.18"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "nav-player e2e green in gate run (31/31 with --repeat-each=2); NavMenuGroup tests 5/5 runs green; shots T0.18-1/2 unchanged since a9 PASS",
-   "fingerprint": "9f06cb563dfa5f874ca08dd36b755fe22254eb48d9bf7c03e2788921b8a8a331",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.841Z",
-   "tasks": [
-    "T0.17"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "V1 123/123, lowest media-upload.ts branches 98.61%; `bun run check` now exit 0 (a9 formatting blocker cleared)",
-   "fingerprint": "a1a13f083aed2e3ddaae50a7025a51666532bf81b3f89cb776dfc13d493fbeaa",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.841Z",
-   "tasks": [
-    "T0.16"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "check exit 0, root suite green; e2e upload sample.mp3 (uploadId + durationSec) and renamed .png rejected both pass in media-pipeline x3",
-   "fingerprint": "3fd777cad7e614ee320118ed61ffd11a2f035a957745cfbbf9fe46dd6afd7a34",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.840Z",
-   "tasks": [
-    "T0.14"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "V1 118/118, lowest utils/cloudinary.ts branches 94.11% (lines 51,178,195), all other files 97.5-100%",
-   "fingerprint": "fdfc5727cbd4662a34206f9900ec9d8fa393224fae69a4d40c97ef3187a50466",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.840Z",
-   "tasks": [
-    "T0.12"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "api suite green (root 3535/3535); media-asset-service branches 98.24% in T0.14 V1",
-   "fingerprint": "c2047aaf0e843fa249d46a2fc990b08f2ac4e769010ee47466ad36a8ae9c994c",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.840Z",
-   "tasks": [
-    "T0.11"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "V1 133/133 (6 files incl. job-id), statements/lines/functions 100%, lowest branches routes/media.ts 97.5% (line 84); V2 52/52",
-   "fingerprint": "c438a72b4596ec2c877fab797e6ca97ebcd25abf96fde66e59d5552d3f450037",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.840Z",
-   "tasks": [
-    "T0.10"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "api type-check exit 0; route/service tests 133/133 in T0.11 V1; root suite green",
-   "fingerprint": "3d8fbeaa4bba8da5f9b35960aec3ac547896ae5abcd0cd92cfe96f65058e369e",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.840Z",
-   "tasks": [
-    "T0.9"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "V1 grep `credits` in media-input.ts and schemas/media.ts returns nothing; MEDIA_PROMPT_MAX_CHARS moved into media-limits.ts (a9 blocker cleared); check exit 0",
-   "fingerprint": "73e116e58ac21f0301d46da833e20346b7dd2644fe98612c6cb63b84879012a5",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.840Z",
-   "tasks": [
-    "T0.8"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "V2 grep `kind === \"image\"` returns nothing; T0.11 V2 generation-service + worker 52/52; api type-check exit 0",
-   "fingerprint": "09e4f495bdf9b5257d4b2c453da5c93a12af0f42176231ea9f1d5b0fe5e24527",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.839Z",
-   "tasks": [
-    "T0.4"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "shared files unchanged since a9 (a9 V1 146 tests 100% all metrics, V2 51 tests 100%); still green in root run 3535/3535",
-   "fingerprint": "63ff27e42d3b2f1ecdf792ecdf13a78b772958e0c360b56b0f95c9ce72de1336",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.839Z",
-   "tasks": [
-    "T0.3"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "check:model-docs passes (15 media models); shared/api/web suites green inside root run 3535/3535; api type-check exit 0",
-   "fingerprint": "f18300be9eab4b7e79cdb30b03b1d452f5230dd4637bc314d0aaf1793e12de29",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.839Z",
-   "tasks": [
-    "T0.2"
-   ],
-   "attempt": "14",
-   "type": "verify_passed",
-   "evidence": "V1 grep shows 200 only on MEDIA_CREDITS_PER_USD (credits.ts:89) and 150 only on EXPENSIVE_JOB_CREDITS (media-limits.ts:13); MEDIA_PROMPT_MAX_CHARS and MAX_VERSION_FILE_BYTES now live in media-limits.ts:18,20; `bun run check` exit 0; root `bun run test` 3535/3535; api type-check exit 0",
-   "fingerprint": "78f36581349437bd102a493c189f4701ff9b7110e1ba781b40a1b6644ba48744",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.839Z",
-   "tasks": [
-    "T0.15"
-   ],
-   "attempt": "14",
-   "type": "verify_failed",
-   "category": "code-bug",
-   "text": "[code-bug] · AC5 \"An unauthenticated upload returns 401\" · POST /media/uploads with no session returns 500 {\"error\":\"Unauthenticated\"} from the running API (same root cause as T0.13). POST /generate/audio/music behaves the same way · The same fix as T0.13 resolves it. Add a test that asserts 401 for POST /media/uploads without mocking requireAuth away",
-   "files": [
-    "ac5 \"an unauthenticated upload returns 401\""
-   ],
-   "sigs": [
-    "T0.15|code-bug|ac5 \"an unauthenticated upload returns 401\""
-   ],
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:51.838Z",
-   "tasks": [
-    "T0.13"
-   ],
-   "attempt": "14",
-   "type": "verify_failed",
-   "category": "code-bug",
-   "text": "[code-bug] · AC3 \"Unauthenticated requests return 401 on every assets route\" · Against the running API with no session, GET /media/assets, GET /media/assets/abc, DELETE /media/assets/abc and POST /media/assets/abc/versions all return 500 {\"error\":\"Unauthenticated\"}. requireAuth (ClerkExpressRequireAuth, middlewares/clerk.ts:40) calls next(Error(\"Unauthenticated\")), which is not an HttpError, so th",
-   "files": [
-    "ac3 \"unauthenticated requests return 401 on every assets rou"
-   ],
-   "sigs": [
-    "T0.13|code-bug|ac3 \"unauthenticated requests return 401 on every assets rou"
-   ],
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
-  },
-  {
-   "at": "2026-11-23T01:55:25.992Z",
-   "type": "advisory",
-   "tasks": [
-    "T0.14"
-   ],
-   "text": "utils/cloudinary.ts branches 94.11% (lines 51,178,195 uncovered)"
-  },
-  {
-   "at": "2026-11-23T01:55:25.904Z",
-   "type": "advisory",
-   "tasks": [
-    "T0.21"
-   ],
-   "text": "shot T0.21-1 still shows the old doubled inline card player"
-  },
-  {
-   "at": "2026-11-23T01:55:25.807Z",
-   "type": "advisory",
-   "tasks": [
-    "T0.31"
-   ],
-   "text": "untracked apps/web/tsconfig.node.tsbuildinfo; add to .gitignore"
-  },
-  {
-   "at": "2026-11-23T01:55:25.712Z",
-   "type": "advisory",
-   "tasks": [
-    "T0.2"
-   ],
-   "text": "media-asset-service.ts:19-21 page-size/title constants live outside media-limits.ts"
-  },
-  {
-   "at": "2026-11-23T01:55:25.618Z",
-   "type": "advisory",
-   "tasks": [
-    "T0.29"
-   ],
-   "text": "media-pipeline.spec.ts:282 require-array-sort-compare lint warning"
-  },
-  {
-   "at": "2026-11-23T01:55:25.523Z",
-   "type": "advisory",
-   "tasks": [
-    "T0.17"
-   ],
-   "text": "lint warnings: routes/media.test.ts:122,337 unused index; lib/media-upload.ts:122 no-misused-spread"
-  },
-  {
-   "at": "2026-11-23T01:55:25.433Z",
-   "type": "advisory",
-   "tasks": [
-    "T0.25"
-   ],
-   "text": "useGlobalShortcuts.ts:112-116 prevents / on every route when tab=1 now that the listener is app-wide; guard on a composer being present"
-  },
-  {
-   "at": "2026-11-23T01:55:25.305Z",
-   "type": "advisory",
-   "tasks": [
-    "T0.29"
-   ],
-   "text": "media-pipeline.feature.md still lists the dropped exact-cost balance scenario; remove it and note the user decision"
-  },
-  {
-   "at": "2026-11-23T01:39:51.172Z",
-   "type": "verify_started",
-   "tasks": [
-    "T0.2",
-    "T0.3",
-    "T0.4",
-    "T0.8",
-    "T0.9",
-    "T0.10",
-    "T0.11",
-    "T0.12",
-    "T0.13",
-    "T0.14",
-    "T0.15",
-    "T0.16",
-    "T0.17",
-    "T0.18",
-    "T0.21",
-    "T0.22",
-    "T0.23",
-    "T0.24",
-    "T0.25",
-    "T0.27",
-    "T0.28",
-    "T0.29",
-    "T0.31"
-   ],
-   "attempt": "14"
-  },
-  {
-   "at": "2026-11-23T01:39:48.342Z",
-   "tasks": [
-    "T0.23"
+    "T1.16"
    ],
    "type": "reviewer_verdict",
-   "evidence": "useMediaJob mints the jobId with uuid v4 (useMediaJob.ts:227) and never sends credits or userId; useMediaCost and generationCredits are display-only, and the server recomputes both cost and balance",
-   "fingerprint": "a31a2a3d94a929979b564baf3a61efabc9597ef3d5ead35304c1cdae5908edbd",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
+   "evidence": "AC4 met: saveVersion calls addMediaAsset, and groupHistoryItems (splitVersions) places each version directly after its original in the original's date group. A version whose original is absent stays top-level. Both cases have tests in history.test.ts. createVersion creates the row with parentId and creditsCharged 0 (earlier checks unchanged). The other ACs are unchanged since a10.",
+   "fingerprint": "b6122a654c83a4d1115f47cbc146300cc0e89ba501055e0d261f8b93c1cd1023",
+   "report": ".dashboard/media-studio/reports/phase-1-review-code-sonnet-a14.md",
    "verdict": "PASS",
-   "reviewer": "security"
+   "reviewer": "code"
   },
   {
-   "at": "2026-11-23T01:39:48.342Z",
+   "at": "2026-11-23T08:24:57.002Z",
    "tasks": [
-    "T0.22"
+    "T1.16"
    ],
    "type": "reviewer_verdict",
-   "evidence": "History binds only server-sourced asset URLs to :href; the target=_blank link has rel=noopener (History.vue:383-386); there is no v-html or innerHTML; deleteMedia goes through the authenticated /media/assets API (stores/history.ts:156)",
-   "fingerprint": "bb16320da5a1fb3af112eaad0c36fb942d955db65278e46de259f66790015102",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T01:39:48.342Z",
-   "tasks": [
-    "T0.16"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "on a purpose mismatch the route runs removeTempFile before next(error) (media.ts:203); finally runs removeTempFile on every other path (media.ts:224); sweepExpiredMediaUploads deletes the Cloudinary file before the row and keeps the row on failure so the next run retries (cronJobs.ts)",
-   "fingerprint": "3fd777cad7e614ee320118ed61ffd11a2f035a957745cfbbf9fe46dd6afd7a34",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T01:39:48.342Z",
-   "tasks": [
-    "T0.15"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "sniffMime reads magic bytes and ignores the extension and the client MIME; there is a per-purpose MIME allowlist and byte cap (media-upload.ts:245-249); isUploadPurpose uses Object.hasOwn (media-upload.ts:93); multer caps files at 1 and fileSize per kind (multer.ts:72); uploadRateLimiter is keyed on the Clerk userId at 30 per 10 min",
-   "fingerprint": "c0e15b71ddb7151b8cf72ed4531616345480fac43207c5041b1ba3eeed0ba62e",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T01:39:48.341Z",
-   "tasks": [
-    "T0.13"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "the four /media/assets routes all run requireAuth and use sessionUserId; parseListQuery checks type against an allowlist and requires an integer limit (media.ts:120-134), which the service clamps; createVersion loads the parent through findOwnedAsset (media-asset-service.ts:220), so there is no IDOR",
-   "fingerprint": "e0ad4c206c87e1f8061ad7651fd8f14319838ea1b31238afe0966883887141cd",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T01:39:48.341Z",
-   "tasks": [
-    "T0.12"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "every MediaAsset find, update and delete filters on userId (media-asset-service.ts:134,150,158,206,251,263); a foreign or invalid id gives 404; the cascade delete is scoped by userId; the copy to Cloudinary uses fakeMediaUpload for e2e users (media-asset-service.ts:130)",
-   "fingerprint": "c2047aaf0e843fa249d46a2fc990b08f2ac4e769010ee47466ad36a8ae9c994c",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T01:39:48.341Z",
-   "tasks": [
-    "T0.10"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "userId comes only from req.auth (media.ts:67); order is zod, then registry check, then moderation, then a server-computed 402, then dedup (media.ts:80-109); hasExistingJob falls back to MediaAssetModel.exists once BullMQ has purged the job and rejects a live jobId owned by another user (media-service.ts:97-103); firstOutputUrl now accepts only https URLs, so a bare string never reaches Cloudinary ",
-   "fingerprint": "3d8fbeaa4bba8da5f9b35960aec3ac547896ae5abcd0cd92cfe96f65058e369e",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T01:39:48.341Z",
-   "tasks": [
-    "T0.9"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "MusicRequestSchema is a strict-shape z.object that drops unknown keys, limits prompt and negativePrompt to MEDIA_PROMPT_MAX_CHARS, requires seed to be an int and jobId to be a uuid (schemas/media.ts:7-16); validateMediaParams uses Object.hasOwn on the registry and its inputs (media-input.ts:10,31); no client credits or userId field is read",
-   "fingerprint": "73e116e58ac21f0301d46da833e20346b7dd2644fe98612c6cb63b84879012a5",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T01:39:48.340Z",
-   "tasks": [
-    "T0.8"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "updateAndGetUserCredits is one atomic findOneAndUpdate with a $expr balance guard (credit-deduction.ts:13-54); it throws on insufficient credits, so there is no partial or negative deduction; the queue keeps the jobId option",
-   "fingerprint": "09e4f495bdf9b5257d4b2c453da5c93a12af0f42176231ea9f1d5b0fe5e24527",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
+   "evidence": "the new splitVersions/groupHistoryItems code (apps/web/src/stores/history.ts:88-123) only regroups the user's own already-fetched assets by parentId. It uses a Map, not a plain object, so there is no prototype-pollution path. It renders no HTML and makes no new network call. addMediaAsset (:178-180) only prepends the server's 201 response to local state and dedupes by id. The server path is unchan",
+   "fingerprint": "b6122a654c83a4d1115f47cbc146300cc0e89ba501055e0d261f8b93c1cd1023",
+   "report": ".dashboard/media-studio/reports/phase-1-review-security-opus-a14.md",
    "verdict": "PASS",
    "reviewer": "security"
   }

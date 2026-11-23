@@ -28,6 +28,7 @@ const Refund = () => import('@/pages/RefundPolicy.vue');
 const Signin = () => import('@/pages/Signin.vue');
 const Signup = () => import('@/pages/Signup.vue');
 const Terms = () => import('@/pages/Terms.vue');
+const SongStudio = () => import('@/pages/SongStudio.vue');
 const StudioPlaceholder = () => import('@/components/Studio/StudioPlaceholder.vue');
 
 /** Studio routes stay on the placeholder until the slice that ships their page replaces them. */
@@ -102,7 +103,12 @@ const routes: RouteRecordRaw[] = [
     component: Dashboard,
   },
   studioPlaceholderRoute('/video', APP_SURFACE.VIDEO, { studio: 'video', label: 'Video' }),
-  studioPlaceholderRoute('/audio/song', APP_SURFACE.AUDIO_SONG, { studio: 'song', label: 'Song' }),
+  {
+    path: '/audio/song',
+    name: APP_SURFACE.AUDIO_SONG,
+    component: SongStudio,
+    meta: { requiresAuth: true },
+  },
   studioPlaceholderRoute('/audio/music', APP_SURFACE.AUDIO_MUSIC, {
     studio: 'music',
     label: 'Music',

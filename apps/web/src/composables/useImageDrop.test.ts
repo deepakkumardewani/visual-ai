@@ -156,7 +156,7 @@ describe('useImageDrop', () => {
     const enabled = ref(false);
     const { drop, wrapper } = setupDrop({ onImage, enabled });
 
-    expect(add.mock.calls.some((call) => call[0] === 'paste')).toBe(false);
+    expect(add.mock.calls.some((call: unknown[]) => call[0] === 'paste')).toBe(false);
 
     drop.handleDragOver({ preventDefault: vi.fn() } as unknown as DragEvent);
     drop.handleDrop({

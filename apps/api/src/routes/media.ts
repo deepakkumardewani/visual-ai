@@ -2,7 +2,7 @@ import { Router } from "express"
 import type { NextFunction, Request, Response } from "express"
 import multer from "multer"
 
-import { MAX_VERSION_FILE_BYTES, MusicRequestSchema } from "@visual-ai/shared"
+import { MAX_VERSION_FILE_BYTES, MusicRequestSchema, SongRequestSchema } from "@visual-ai/shared"
 import type { MediaAssetType, MediaModelKey } from "@visual-ai/shared"
 
 import { asyncHandler } from "../lib/async-handler.js"
@@ -12,6 +12,7 @@ import {
     createMediaUpload,
     parseUploadPurpose,
     removeTempFile,
+    sniffMime,
     UPLOAD_PURPOSES,
 } from "../lib/media-upload.js"
 import type { UploadPurpose } from "../lib/media-upload.js"
@@ -30,7 +31,9 @@ import {
 import {
     getAvailableCredits,
     getMusicCreditCost,
+    getSongCreditCost,
     hasExistingJob,
+    SONG_MODEL_KEY,
 } from "../services/media-service.js"
 
 export const mediaRoutes = Router()
@@ -41,6 +44,8 @@ const INSUFFICIENT_CREDITS_CODE = "INSUFFICIENT_CREDITS"
 
 const MEDIA_TYPES: readonly MediaAssetType[] = ["audio", "video"]
 const MEDIA_MIME_PATTERN = /^(audio|video)\//
+/** Enough leading bytes for every signature sniffMime checks. */
+const SNIFF_HEAD_BYTES = 16
 
 /** Exported edits only; content sniffing and per-type limits arrive with the upload middleware. */
 const versionUpload = multer({
@@ -54,6 +59,14 @@ const versionUpload = multer({
         cb(null, true)
     },
 })
+
+/** The client MIME is spoofable, so the file's magic bytes decide whether it is audio or video. */
+function assertAudioOrVideo(buffer: Buffer) {
+    const mime = sniffMime(Uint8Array.from(buffer.subarray(0, SNIFF_HEAD_BYTES)))
+    if (!mime || !MEDIA_MIME_PATTERN.test(mime)) {
+        throw new BadRequestError("file: unsupported or unrecognized file type")
+    }
+}
 
 /** Mirrors acceptResponse in routes/generate.ts so the web handles both identically. */
 function acceptResponse(res: Response) {
@@ -117,6 +130,52 @@ mediaRoutes.post(
     }),
 )
 
+mediaRoutes.post(
+    "/generate/audio/song",
+    // @ts-ignore
+    requireAuth,
+    asyncHandler(async (req: Request, res: Response) => {
+        const userId = sessionUserId(req)
+
+        const parsed = SongRequestSchema.safeParse(req.body)
+        if (!parsed.success) {
+            const [issue] = parsed.error.issues
+            throw new BadRequestError(
+                `${issue?.path.join(".") || "body"}: ${issue?.message ?? "invalid request"}`,
+            )
+        }
+        const { jobId, prompt, lyrics } = parsed.data
+        const params = { stylePrompt: prompt, lyrics }
+        validateMediaParams(SONG_MODEL_KEY, "song", params)
+
+        const required = getSongCreditCost()
+
+        const safety = await checkPromptSafety([prompt, lyrics].join("\n"))
+        if (!safety.safe) {
+            res.status(422).json({ code: PROMPT_REJECTED_CODE, error: PROMPT_REJECTED_MESSAGE })
+            return
+        }
+
+        const available = await getAvailableCredits(userId)
+        if (available < required) {
+            res.status(402).json({ code: INSUFFICIENT_CREDITS_CODE, required, available })
+            return
+        }
+
+        if (await hasExistingJob(jobId, userId)) {
+            acceptResponse(res)
+            return
+        }
+
+        await enqueueGeneration({
+            kind: "song",
+            body: { ...params, jobId, modelKey: SONG_MODEL_KEY, userId },
+            isPro: await resolveUserIsPro(userId),
+        })
+        acceptResponse(res)
+    }),
+)
+
 function parseListQuery(req: Request) {
     const { type, cursor, limit } = req.query
     if (type !== undefined && !MEDIA_TYPES.includes(type as MediaAssetType)) {
@@ -169,6 +228,7 @@ mediaRoutes.post(
     asyncHandler(async (req: Request, res: Response) => {
         const userId = sessionUserId(req)
         if (!req.file) throw new BadRequestError("file: required")
+        assertAudioOrVideo(req.file.buffer)
         res.status(201).json(await createVersion(userId, String(req.params.id), req.file.buffer))
     }),
 )

@@ -12,6 +12,17 @@ vi.mock("../lib/logger.js", () => ({
 
 vi.mock("../lib/prompt-actions.js", () => promptActions)
 
+const lyricsState = vi.hoisted(() => ({ generateLyrics: vi.fn() }))
+vi.mock("../lib/lyrics-generator.js", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("../lib/lyrics-generator.js")>()
+    return { ...actual, generateLyrics: lyricsState.generateLyrics }
+})
+
+// The limiter itself is covered in rate-limit.test.ts; here it is a pass-through.
+vi.mock("../middlewares/rate-limit.js", () => ({
+    lyricsRateLimiter: (_req: unknown, _res: unknown, next: () => void) => next(),
+}))
+
 vi.mock("../middlewares/clerk.js", () => ({
     requireAuth: (req: any, res: any, next: any) => {
         if (!req.auth) {
@@ -203,6 +214,95 @@ describe("promptRoutes", () => {
                     res,
                 ),
             ).rejects.toMatchObject({ statusCode: 502, message: "Failed to describe image" })
+        })
+    })
+
+    describe("POST /prompt/lyrics", () => {
+        const auth = { userId: "user_1" }
+
+        it("returns 401 when clerk auth is missing", async () => {
+            const res = mockRes()
+            await dispatch("post", "/prompt/lyrics", { body: { mode: "full", theme: "x" } }, res)
+            expect(res.statusCode).toBe(401)
+            expect(lyricsState.generateLyrics).not.toHaveBeenCalled()
+        })
+
+        it("returns lyrics and passes the Clerk user id and parsed request", async () => {
+            lyricsState.generateLyrics.mockResolvedValue("[Verse]\nhello")
+            const res = mockRes()
+            await dispatch(
+                "post",
+                "/prompt/lyrics",
+                { auth, body: { mode: "full", theme: "  a road trip  " } },
+                res,
+            )
+            expect(res.body).toEqual({ lyrics: "[Verse]\nhello" })
+            expect(lyricsState.generateLyrics).toHaveBeenCalledWith({
+                userId: "user_1",
+                request: { mode: "full", theme: "a road trip" },
+            })
+        })
+
+        it("throws BadRequestError naming the invalid field", async () => {
+            const res = mockRes()
+            await expect(
+                dispatch(
+                    "post",
+                    "/prompt/lyrics",
+                    { auth, body: { mode: "full", theme: "  " } },
+                    res,
+                ),
+            ).rejects.toMatchObject({
+                name: "BadRequestError",
+                statusCode: 400,
+                message: "theme: Theme is required",
+            })
+            expect(lyricsState.generateLyrics).not.toHaveBeenCalled()
+        })
+
+        it("falls back to a body label when the issue has no path", async () => {
+            const res = mockRes()
+            await expect(
+                dispatch("post", "/prompt/lyrics", { auth, body: undefined }, res),
+            ).rejects.toMatchObject({ statusCode: 400, message: expect.stringMatching(/^body: /) })
+        })
+
+        it("rejects an unknown mode", async () => {
+            const res = mockRes()
+            await expect(
+                dispatch("post", "/prompt/lyrics", { auth, body: { mode: "poem" } }, res),
+            ).rejects.toMatchObject({ statusCode: 400 })
+        })
+
+        it("responds 422 with the rejected code and never returns lyrics", async () => {
+            const { LyricsRejectedError } = await import("../lib/lyrics-generator.js")
+            lyricsState.generateLyrics.mockRejectedValue(new LyricsRejectedError())
+            const res = mockRes()
+            await dispatch(
+                "post",
+                "/prompt/lyrics",
+                { auth, body: { mode: "full", theme: "x" } },
+                res,
+            )
+            expect(res.statusCode).toBe(422)
+            expect(res.body).toEqual({
+                code: "PROMPT_REJECTED",
+                error: "This text can't be used. Try rephrasing it.",
+            })
+        })
+
+        it("propagates a 504 timeout error to the error handler", async () => {
+            const { HttpError } = await import("../lib/errors.js")
+            lyricsState.generateLyrics.mockRejectedValue(new HttpError(504, "too slow"))
+            const res = mockRes()
+            await expect(
+                dispatch(
+                    "post",
+                    "/prompt/lyrics",
+                    { auth, body: { mode: "full", theme: "x" } },
+                    res,
+                ),
+            ).rejects.toMatchObject({ statusCode: 504, message: "too slow" })
         })
     })
 })

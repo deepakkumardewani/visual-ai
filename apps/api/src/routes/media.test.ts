@@ -98,9 +98,9 @@ const LYRIA_COST = 12
 const PATH = "/generate/audio/music"
 
 /** Resolves when the handler answers via res.json, rejects when it forwards an error to next. */
-function post(req: Record<string, unknown>) {
+function post(req: Record<string, unknown>, path = PATH) {
     const layer = mediaRoutes.stack.find(
-        (entry: any) => entry.route?.path === PATH && entry.route.methods.post,
+        (entry: any) => entry.route?.path === path && entry.route.methods.post,
     )
     if (!layer) throw new Error("Missing route")
     const handles = layer.route!.stack.map((item: any) => item.handle)
@@ -306,6 +306,175 @@ describe("POST /generate/audio/music", () => {
     })
 })
 
+const SONG_PATH = "/generate/audio/song"
+const SONG_COST = 30
+const songBody = {
+    jobId: "5f0c9a52-7a8e-4a1b-9c1d-2f6c1c8e4b10",
+    prompt: "upbeat indie pop",
+    lyrics: "[Verse]\nWalking home in the rain",
+}
+const postSong = (body: unknown, req: Record<string, unknown> = { auth: { userId: "user_1" } }) =>
+    post({ ...req, body }, SONG_PATH)
+
+describe("POST /generate/audio/song", () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+        checkPromptSafety.mockResolvedValue({ safe: true })
+        getAvailableCredits.mockResolvedValue(100)
+        hasExistingJob.mockResolvedValue(false)
+        resolveUserIsPro.mockResolvedValue(false)
+        enqueueGeneration.mockResolvedValue(undefined)
+    })
+
+    it("accepts a valid body, answers 202 and enqueues a song job for the session user", async () => {
+        const res = await postSong(songBody)
+
+        expect(res.statusCode).toBe(202)
+        expect(res.body).toEqual({ message: "Processing started", status: "processing" })
+        expect(enqueueGeneration).toHaveBeenCalledTimes(1)
+        expect(enqueueGeneration).toHaveBeenCalledWith({
+            kind: "song",
+            body: {
+                stylePrompt: "upbeat indie pop",
+                lyrics: "[Verse]\nWalking home in the rain",
+                jobId: "5f0c9a52-7a8e-4a1b-9c1d-2f6c1c8e4b10",
+                modelKey: "MINIMAX_MUSIC_26",
+                userId: "user_1",
+            },
+            isPro: false,
+        })
+    })
+
+    it("passes the Pro flag through to the queue", async () => {
+        resolveUserIsPro.mockResolvedValue(true)
+
+        await postSong(songBody)
+
+        expect(resolveUserIsPro).toHaveBeenCalledWith("user_1")
+        expect(enqueueGeneration.mock.calls[0][0].isPro).toBe(true)
+    })
+
+    it("rejects an unauthenticated request with 401", async () => {
+        await expect(postSong(songBody, { auth: undefined })).rejects.toMatchObject({
+            statusCode: 401,
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("ignores a client modelKey, userId and audioFormat", async () => {
+        await postSong({
+            ...songBody,
+            modelKey: "MINIMAX_MUSIC_15",
+            userId: "attacker",
+            audioFormat: "wav",
+        })
+
+        const { body } = enqueueGeneration.mock.calls[0][0]
+        expect(body.modelKey).toBe("MINIMAX_MUSIC_26")
+        expect(body.userId).toBe("user_1")
+        expect(body).not.toHaveProperty("audioFormat")
+    })
+
+    it.each([
+        ["prompt", { prompt: "123456789" }, "prompt: Style must be at least 10 characters"],
+        ["prompt", { prompt: "x".repeat(301) }, "prompt: Style must be at most 300 characters"],
+        ["lyrics", { lyrics: "123456789" }, "lyrics: Lyrics must be at least 10 characters"],
+        ["lyrics", { lyrics: "x".repeat(3001) }, "lyrics: Lyrics must be at most 3000 characters"],
+        ["lyrics", { lyrics: " ".repeat(10) }, "lyrics: Lyrics must contain at least one line"],
+    ])("rejects an out-of-range %s with a field-level 400", async (_field, override, message) => {
+        await expect(postSong({ ...songBody, ...override })).rejects.toMatchObject({
+            statusCode: 400,
+            message,
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it.each([
+        ["prompt at 10", { prompt: "x".repeat(10) }],
+        ["prompt at 300", { prompt: "x".repeat(300) }],
+        ["lyrics at 10", { lyrics: "x".repeat(10) }],
+        ["lyrics at 3000", { lyrics: "x".repeat(3000) }],
+    ])("accepts the boundary %s", async (_name, override) => {
+        const res = await postSong({ ...songBody, ...override })
+
+        expect(res.statusCode).toBe(202)
+    })
+
+    it("falls back to a body-level message when the body is missing", async () => {
+        await expect(postSong(undefined)).rejects.toMatchObject({ statusCode: 400 })
+    })
+
+    it("moderates the style and the lyrics together", async () => {
+        await postSong(songBody)
+
+        expect(checkPromptSafety).toHaveBeenCalledWith(
+            "upbeat indie pop\n[Verse]\nWalking home in the rain",
+        )
+    })
+
+    it("answers 422 PROMPT_REJECTED and queues nothing when the lyrics fail safety", async () => {
+        checkPromptSafety.mockResolvedValue({ safe: false, reason: "nope" })
+
+        const res = await postSong(songBody)
+
+        expect(res.statusCode).toBe(422)
+        expect(res.body).toEqual({
+            code: "PROMPT_REJECTED",
+            error: "This text can't be used. Try rephrasing it.",
+        })
+        expect(getAvailableCredits).not.toHaveBeenCalled()
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("answers 402 with required and available and queues nothing when credits are short", async () => {
+        getAvailableCredits.mockResolvedValue(SONG_COST - 1)
+
+        const res = await postSong(songBody)
+
+        expect(res.statusCode).toBe(402)
+        expect(res.body).toEqual({
+            code: "INSUFFICIENT_CREDITS",
+            required: SONG_COST,
+            available: SONG_COST - 1,
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("allows a user whose credits exactly cover the cost", async () => {
+        getAvailableCredits.mockResolvedValue(SONG_COST)
+
+        const res = await postSong(songBody)
+
+        expect(res.statusCode).toBe(202)
+        expect(enqueueGeneration).toHaveBeenCalledTimes(1)
+    })
+
+    it("answers 202 without a second enqueue when the same jobId is already queued", async () => {
+        hasExistingJob.mockResolvedValue(true)
+
+        const res = await postSong(songBody)
+
+        expect(res.statusCode).toBe(202)
+        expect(hasExistingJob).toHaveBeenCalledWith(songBody.jobId, "user_1")
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("rejects a jobId owned by another user", async () => {
+        hasExistingJob.mockRejectedValue(
+            Object.assign(new Error("jobId: already in use"), { statusCode: 400 }),
+        )
+
+        await expect(postSong(songBody)).rejects.toMatchObject({ statusCode: 400 })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("propagates an enqueue failure", async () => {
+        enqueueGeneration.mockRejectedValue(new Error("redis down"))
+
+        await expect(postSong(songBody)).rejects.toThrow("redis down")
+    })
+})
+
 /** Drives the matching route's whole handler chain; settles on json, end or next(err). */
 function call(method: "get" | "delete" | "post", path: string, req: Record<string, unknown>) {
     const layer = mediaRoutes.stack.find(
@@ -454,7 +623,7 @@ describe("POST /media/assets/:id/versions", () => {
 
     it("creates a version from the uploaded buffer and answers 201", async () => {
         assets.createVersion.mockResolvedValue({ id: "v1" })
-        const buffer = Buffer.from("audio")
+        const buffer = Buffer.from("ID3 audio")
 
         const res = await call("post", VERSIONS, {
             ...session,
@@ -470,6 +639,17 @@ describe("POST /media/assets/:id/versions", () => {
     it("rejects a missing file with 400", async () => {
         await expect(
             call("post", VERSIONS, { ...session, params: { id: "a1" } }),
+        ).rejects.toMatchObject({ statusCode: 400 })
+        expect(assets.createVersion).not.toHaveBeenCalled()
+    })
+
+    it("rejects a file whose bytes are not audio or video with 400", async () => {
+        await expect(
+            call("post", VERSIONS, {
+                ...session,
+                params: { id: "a1" },
+                file: { buffer: Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]) },
+            }),
         ).rejects.toMatchObject({ statusCode: 400 })
         expect(assets.createVersion).not.toHaveBeenCalled()
     })

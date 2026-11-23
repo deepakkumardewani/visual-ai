@@ -9,6 +9,7 @@ const envMock = vi.hoisted(() => ({
 
 const rateLimitOptions = vi.hoisted(() => ({ value: null as Record<string, unknown> | null }))
 const ipKeyGeneratorMock = vi.hoisted(() => vi.fn((ip: string, _ipv6Subnet?: number) => `ip:${ip}`))
+const allOptions = vi.hoisted(() => ({ list: [] as Record<string, unknown>[] }))
 const redisStoreCtor = vi.hoisted(() => vi.fn())
 
 vi.mock("../config/env.js", () => ({
@@ -37,13 +38,16 @@ vi.mock("express-rate-limit", async (importOriginal) => {
         ipKeyGenerator: ipKeyGeneratorMock,
         default: (options: Record<string, unknown>) => {
             rateLimitOptions.value ??= options
+            allOptions.list.push(options)
             return actual.default(options)
         },
     }
 })
 
-const { sttRateLimiter } = await import("./rate-limit.js")
+const { sttRateLimiter, lyricsRateLimiter, uploadRateLimiter, LYRICS_DAILY_LIMIT } =
+    await import("./rate-limit.js")
 const testModeRateLimitOptions = rateLimitOptions.value
+const [, uploadOptions, lyricsOptions] = allOptions.list
 
 function mockResponse() {
     const headers: Record<string, string> = {}
@@ -78,11 +82,17 @@ type TestLimiterRequest = Omit<Partial<Request>, "auth"> & {
     ip?: string
 }
 
-async function invokeLimiter(req: TestLimiterRequest, res: ReturnType<typeof mockResponse>) {
+type Limiter = typeof sttRateLimiter
+
+async function invokeLimiter(
+    req: TestLimiterRequest,
+    res: ReturnType<typeof mockResponse>,
+    limiter: Limiter = sttRateLimiter,
+) {
     const next = vi.fn()
     await new Promise<void>((resolve, reject) => {
         res.waitForFinish(resolve)
-        sttRateLimiter(req as Request, res as unknown as Response, (err?: unknown) => {
+        limiter(req as Request, res as unknown as Response, (err?: unknown) => {
             if (err) {
                 reject(err)
                 return
@@ -184,6 +194,69 @@ describe("sttRateLimiter enforcement", () => {
         } finally {
             vi.useRealTimers()
         }
+    })
+})
+
+describe("uploadRateLimiter configuration", () => {
+    it("registers the upload window, limit and message", () => {
+        expect(uploadOptions).toMatchObject({
+            windowMs: 10 * 60 * 1000,
+            max: 30,
+            message: "Too many uploads. Try again later.",
+        })
+    })
+
+    it("allows requests through for an authenticated user", async () => {
+        const next = await invokeLimiter(
+            { auth: { userId: "upload-user" }, ip: "2.2.2.2" },
+            mockResponse(),
+            uploadRateLimiter,
+        )
+        expect(next).toHaveBeenCalled()
+    })
+})
+
+describe("lyricsRateLimiter", () => {
+    const DAY_MS = 24 * 60 * 60 * 1000
+    const DAILY_LIMIT_COPY = "Daily lyrics limit reached. Try again tomorrow."
+
+    it("registers a 30 per day limit with the daily-limit copy", () => {
+        expect(LYRICS_DAILY_LIMIT).toBe(30)
+        expect(lyricsOptions).toMatchObject({
+            windowMs: DAY_MS,
+            max: 30,
+            message: DAILY_LIMIT_COPY,
+        })
+    })
+
+    it("allows 30 requests then returns 429 with Retry-After on the 31st", async () => {
+        const request = { auth: { userId: "lyrics-user" }, ip: "3.3.3.3" }
+        for (let i = 0; i < 30; i++) {
+            const next = await invokeLimiter(request, mockResponse(), lyricsRateLimiter)
+            expect(next).toHaveBeenCalled()
+        }
+        const blocked = mockResponse()
+        const next = await invokeLimiter(request, blocked, lyricsRateLimiter)
+        expect(next).not.toHaveBeenCalled()
+        expect(blocked.statusCode).toBe(429)
+        expect(blocked.body).toEqual({ message: DAILY_LIMIT_COPY })
+        expect(blocked.getHeader("retry-after")).toBe(String(DAY_MS / 1000))
+    })
+
+    it("counts each user separately", async () => {
+        for (let i = 0; i < 30; i++) {
+            await invokeLimiter(
+                { auth: { userId: "heavy-user" }, ip: "4.4.4.4" },
+                mockResponse(),
+                lyricsRateLimiter,
+            )
+        }
+        const next = await invokeLimiter(
+            { auth: { userId: "light-user" }, ip: "4.4.4.4" },
+            mockResponse(),
+            lyricsRateLimiter,
+        )
+        expect(next).toHaveBeenCalled()
     })
 })
 
