@@ -63,3 +63,4 @@ node-jiti/
 playwright-transform-cache-*/
 
 agent-browser-chrome-*/
+*.tsbuildinfo
