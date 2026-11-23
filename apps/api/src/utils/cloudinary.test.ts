@@ -1,24 +1,28 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-const { upload, probe, toBuffer, jpeg, sharpFn, updateOne, mockLogger } = vi.hoisted(() => {
-    const toBuffer = vi.fn()
-    const jpeg = vi.fn(() => ({ toBuffer }))
-    return {
-        upload: vi.fn(),
-        probe: vi.fn(),
-        toBuffer,
-        jpeg,
-        sharpFn: vi.fn(() => ({ jpeg })),
-        updateOne: vi.fn(),
-        mockLogger: { error: vi.fn(), info: vi.fn() },
-    }
-})
+const { upload, uploadStream, probe, toBuffer, jpeg, sharpFn, updateOne, mockLogger } = vi.hoisted(
+    () => {
+        const toBuffer = vi.fn()
+        const jpeg = vi.fn(() => ({ toBuffer }))
+        return {
+            upload: vi.fn(),
+            uploadStream: vi.fn(),
+            probe: vi.fn(),
+            toBuffer,
+            jpeg,
+            sharpFn: vi.fn(() => ({ jpeg })),
+            updateOne: vi.fn(),
+            mockLogger: { error: vi.fn(), info: vi.fn() },
+        }
+    },
+)
 
 vi.mock("cloudinary", () => ({
     default: {
         v2: {
             uploader: {
                 upload: (...args: any[]) => Reflect.apply(upload, undefined, args),
+                upload_stream: (...args: any[]) => Reflect.apply(uploadStream, undefined, args),
             },
         },
     },
@@ -48,7 +52,12 @@ vi.mock("../models/user.js", () => ({
     },
 }))
 
-import { getImageDetails, uploadToCloudinary } from "./cloudinary.js"
+import {
+    buildMediaFolder,
+    getImageDetails,
+    uploadMediaToCloudinary,
+    uploadToCloudinary,
+} from "./cloudinary.js"
 
 const LARGE_BYTES = 11 * 1024 * 1024
 const SMALL_BYTES = 1024
@@ -318,5 +327,98 @@ describe("uploadToCloudinary", () => {
             { err: error },
             "Error uploading to Cloudinary",
         )
+    })
+})
+
+describe("uploadMediaToCloudinary", () => {
+    const response = {
+        secure_url: "https://res.example.com/a.mp3",
+        public_id: "folder/a",
+        format: "mp3",
+        bytes: 1234,
+        duration: 12.5,
+        width: 0,
+        height: 0,
+    }
+
+    beforeEach(() => {
+        vi.clearAllMocks()
+    })
+
+    it("uploads a remote URL as resource_type video and maps the result", async () => {
+        upload.mockResolvedValue(response)
+
+        const result = await uploadMediaToCloudinary("https://replicate.example/out.mp3", "f/u")
+
+        expect(upload).toHaveBeenCalledWith("https://replicate.example/out.mp3", {
+            folder: "f/u",
+            resource_type: "video",
+        })
+        expect(result).toEqual({
+            url: "https://res.example.com/a.mp3",
+            publicId: "folder/a",
+            format: "mp3",
+            bytes: 1234,
+            durationSec: 12.5,
+            width: 0,
+            height: 0,
+        })
+    })
+
+    it("leaves durationSec undefined when Cloudinary sends no numeric duration", async () => {
+        upload.mockResolvedValue({ ...response, duration: undefined })
+
+        const result = await uploadMediaToCloudinary("https://x/y.mp3", "f")
+
+        expect(result.durationSec).toBeUndefined()
+    })
+
+    it("propagates a URL upload failure", async () => {
+        upload.mockRejectedValue(new Error("boom"))
+
+        await expect(uploadMediaToCloudinary("https://x/y.mp3", "f")).rejects.toThrow("boom")
+    })
+
+    it("streams a buffer and resolves with the mapped result", async () => {
+        const end = vi.fn()
+        uploadStream.mockImplementation((_options, callback) => {
+            callback(undefined, response)
+            return { end }
+        })
+        const buffer = Buffer.from("audio")
+
+        const result = await uploadMediaToCloudinary(buffer, "f/u")
+
+        expect(uploadStream.mock.calls[0][0]).toEqual({ folder: "f/u", resource_type: "video" })
+        expect(end).toHaveBeenCalledWith(buffer)
+        expect(result.publicId).toBe("folder/a")
+    })
+
+    it("rejects with the Cloudinary error when the stream callback reports one", async () => {
+        uploadStream.mockImplementation((_options, callback) => {
+            callback(new Error("stream failed"), undefined)
+            return { end: vi.fn() }
+        })
+
+        await expect(uploadMediaToCloudinary(Buffer.from("a"), "f")).rejects.toThrow(
+            "stream failed",
+        )
+    })
+
+    it("rejects when the stream callback returns neither error nor result", async () => {
+        uploadStream.mockImplementation((_options, callback) => {
+            callback(undefined, undefined)
+            return { end: vi.fn() }
+        })
+
+        await expect(uploadMediaToCloudinary(Buffer.from("a"), "f")).rejects.toThrow(
+            "Cloudinary returned no upload result",
+        )
+    })
+})
+
+describe("buildMediaFolder", () => {
+    it("scopes the folder by base path, user and feature", () => {
+        expect(buildMediaFolder("user-1", "music")).toBe("private/development/uploads/user-1/music")
     })
 })

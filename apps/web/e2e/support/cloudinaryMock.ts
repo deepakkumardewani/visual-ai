@@ -7,13 +7,20 @@ const CLOUDINARY_ROUTE = '**/res.cloudinary.com/**';
 const CLOUDINARY_HOST = 'res.cloudinary.com';
 const VIDEO_PATH_SEGMENT = '/video/';
 const VIDEO_EXTENSION = '.mp4';
+const WAV_EXTENSION = '.wav';
+const AUDIO_EXTENSIONS = ['.mp3', WAV_EXTENSION];
 
 // __dirname: Playwright loads e2e files as CommonJS, where import.meta is unavailable.
 const ASSET_DIR = path.join(__dirname, '..', 'fixtures', 'assets');
 
-export type MockAsset = { file: string; contentType: 'video/mp4' | 'image/webp' };
+export type MockAsset = {
+  file: string;
+  contentType: 'video/mp4' | 'image/webp' | 'audio/mpeg' | 'audio/wav';
+};
 
 const VIDEO_ASSET: MockAsset = { file: 'placeholder.mp4', contentType: 'video/mp4' };
+const MP3_ASSET: MockAsset = { file: 'sample.mp3', contentType: 'audio/mpeg' };
+const WAV_ASSET: MockAsset = { file: 'sample.wav', contentType: 'audio/wav' };
 const IMAGE_ASSET: MockAsset = { file: 'placeholder.webp', contentType: 'image/webp' };
 
 export type CloudinaryRecorder = {
@@ -34,6 +41,10 @@ export function isCloudinaryUrl(url: string): boolean {
 /** Query strings are ignored so transformation params cannot flip the asset kind. */
 export function pickMockAsset(url: string): MockAsset {
   const { pathname } = new URL(url);
+  // Cloudinary stores audio under the video resource type, so the extension decides first.
+  if (AUDIO_EXTENSIONS.some((ext) => pathname.endsWith(ext))) {
+    return pathname.endsWith(WAV_EXTENSION) ? WAV_ASSET : MP3_ASSET;
+  }
   const isVideo = pathname.includes(VIDEO_PATH_SEGMENT) || pathname.endsWith(VIDEO_EXTENSION);
   return isVideo ? VIDEO_ASSET : IMAGE_ASSET;
 }

@@ -28,6 +28,16 @@ const Refund = () => import('@/pages/RefundPolicy.vue');
 const Signin = () => import('@/pages/Signin.vue');
 const Signup = () => import('@/pages/Signup.vue');
 const Terms = () => import('@/pages/Terms.vue');
+const StudioPlaceholder = () => import('@/components/Studio/StudioPlaceholder.vue');
+
+/** Studio routes stay on the placeholder until the slice that ships their page replaces them. */
+function studioPlaceholderRoute(
+  path: string,
+  name: string,
+  props: { studio: string; label: string },
+): RouteRecordRaw {
+  return { path, name, component: StudioPlaceholder, props, meta: { requiresAuth: true } };
+}
 
 const routes: RouteRecordRaw[] = [
   {
@@ -91,6 +101,32 @@ const routes: RouteRecordRaw[] = [
     name: APP_SURFACE.ASSETS,
     component: Dashboard,
   },
+  studioPlaceholderRoute('/video', APP_SURFACE.VIDEO, { studio: 'video', label: 'Video' }),
+  studioPlaceholderRoute('/audio/song', APP_SURFACE.AUDIO_SONG, { studio: 'song', label: 'Song' }),
+  studioPlaceholderRoute('/audio/music', APP_SURFACE.AUDIO_MUSIC, {
+    studio: 'music',
+    label: 'Music',
+  }),
+  studioPlaceholderRoute('/audio/speech', APP_SURFACE.AUDIO_SPEECH, {
+    studio: 'speech',
+    label: 'Speech',
+  }),
+  studioPlaceholderRoute('/tools/image-watermark', APP_SURFACE.TOOLS_IMAGE_WATERMARK, {
+    studio: 'tools',
+    label: 'Image watermark',
+  }),
+  studioPlaceholderRoute('/tools/video-watermark', APP_SURFACE.TOOLS_VIDEO_WATERMARK, {
+    studio: 'tools',
+    label: 'Video watermark',
+  }),
+  studioPlaceholderRoute('/tools/autocaption', APP_SURFACE.TOOLS_AUTOCAPTION, {
+    studio: 'tools',
+    label: 'Autocaption',
+  }),
+  studioPlaceholderRoute('/tools/sketch', APP_SURFACE.TOOLS_SKETCH, {
+    studio: 'tools',
+    label: 'Sketch to image',
+  }),
   {
     path: '/dashboard',
     name: 'dashboard',
@@ -192,7 +228,9 @@ router.beforeEach((to) => {
   const authRequiredRoutes = ['profile', 'explore-image'];
 
   // undefined means Clerk has not loaded yet. Redirecting then bounces a signed-in session through /signin.
-  if (authRequiredRoutes.includes(to.name as string) && isSignedIn.value === false) {
+  const requiresAuth =
+    authRequiredRoutes.includes(to.name as string) || Boolean(to.meta.requiresAuth);
+  if (requiresAuth && isSignedIn.value === false) {
     // Redirect to signin page if trying to access protected route while not authenticated
     return { name: 'signin', query: { redirect: to.fullPath } };
   }

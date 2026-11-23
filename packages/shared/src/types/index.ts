@@ -7,6 +7,10 @@ export type {
   ExploreFeedItem,
   ExploreFeedResponse,
   JobStatus,
+  MediaJobStage,
+  NoChargeReason,
+  MediaAssetType,
+  MediaAssetDto,
   PaymentProviderName,
   PaymentStatus,
   PaymentRecord,
@@ -28,4 +32,5 @@ export type {
   SavedPrompt,
   SavedPromptListResponse,
   SavedPromptCreateResponse,
+  MediaAssetListResponse,
 } from './api.js';

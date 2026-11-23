@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-16T10:23:37.707Z",
+ "generatedAt": "2026-11-23T02:00:34.438Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "media-studio",
@@ -8,6 +8,11 @@ window.DASHBOARD = {
  "tasksFile": "agent_docs/media-studio/TASKS.md",
  "projectRoot": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai",
  "docs": [
+  {
+   "name": "APPROVALS",
+   "href": "docs/APPROVALS.html",
+   "source": "agent_docs/media-studio/APPROVALS.md"
+  },
   {
    "name": "PLAN",
    "href": "docs/PLAN.html",
@@ -29,15 +34,26 @@ window.DASHBOARD = {
    "source": "agent_docs/media-studio/TASKS.md"
   }
  ],
- "costUsd": null,
- "elapsedMs": null,
- "costByRole": null,
+ "costUsd": 28.3629,
+ "elapsedMs": 55632876,
+ "costByRole": {
+  "builder": 9.805,
+  "unit": 4.4101,
+  "e2e": 2.2299,
+  "verifier": 6.5502,
+  "reviewer-ui": 0.605,
+  "reviewer-security": 2.948,
+  "reviewer-code": 1.1816,
+  "runner": 0.0941,
+  "reviewer-ux": 0.5391
+ },
  "totals": {
   "phases": 6,
   "tasks": 90,
   "byStatus": {
-   "ready": 3,
-   "waiting": 87
+   "verified": 31,
+   "ready": 2,
+   "waiting": 57
   }
  },
  "phases": [
@@ -45,7 +61,7 @@ window.DASHBOARD = {
    "id": "0",
    "name": "Shared media infrastructure",
    "startLine": 41,
-   "endLine": 652,
+   "endLine": 653,
    "adds": "Adds the shared plumbing every audio, video and tool surface uses: one model registry and credit function, a safe paid-call-free e2e harness, the job pipeline with charge-on-success, uploads and asset storage, the new header menus and routes, a persistent mini-player, media in History, and shortcuts. Users see the new Video, Audio and Tools menus (each opening an honest coming-soon page) and, once a generation exists, media in History with a player that survives navigation.",
    "tryInUi": [
     "Open the header and see Image, Video, Audio and Tools",
@@ -55,7 +71,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 0",
-    "line": 651,
+    "line": 652,
     "items": [
      "registry, credits, mocked e2e harness, pipeline, assets, uploads, nav and mini-player all verified by unit tests, the mocked media-pipeline and nav-player QA specs, and `bun run check` plus `bun run test`."
     ]
@@ -64,7 +80,7 @@ window.DASHBOARD = {
     {
      "id": "T0.1",
      "title": "Record owner approvals for new collections and libraries",
-     "done": false,
+     "done": true,
      "kind": "dod",
      "depends": [],
      "files": [
@@ -86,23 +102,35 @@ window.DASHBOARD = {
      ],
      "line": 46,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.2309,
+     "costApprox": true,
+     "elapsedMs": 21830532,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.2",
      "title": "Shared media limits, job kinds and the single credit function (S0.1a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.1"
@@ -132,8 +160,8 @@ window.DASHBOARD = {
      ],
      "line": 61,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -150,16 +178,31 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.0868,
+     "costApprox": true,
+     "elapsedMs": 55327820,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.3",
      "title": "Registry entries for all media models and the web catalog (S0.1b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.2"
@@ -191,8 +234,8 @@ window.DASHBOARD = {
      ],
      "line": 84,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -209,16 +252,31 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.0868,
+     "costApprox": true,
+     "elapsedMs": 55327820,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.4",
      "title": "Unit: shared credits, limits and registry",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T0.3"
@@ -244,23 +302,35 @@ window.DASHBOARD = {
      ],
      "line": 108,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.7385,
+     "costApprox": true,
+     "elapsedMs": 54693025,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.5",
      "title": "Extend the paid-call mocking harness: fake outputs and guard (S0.2a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.3"
@@ -291,8 +361,8 @@ window.DASHBOARD = {
      ],
      "line": 121,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -310,16 +380,31 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4839,
+     "costApprox": true,
+     "elapsedMs": 21026867,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.6",
      "title": "MediaGenerationStub and audio fixtures (S0.2b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.5"
@@ -345,8 +430,8 @@ window.DASHBOARD = {
      ],
      "line": 145,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -364,16 +449,31 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4839,
+     "costApprox": true,
+     "elapsedMs": 21026867,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.7",
      "title": "Unit: paid-call harness",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T0.6"
@@ -398,23 +498,35 @@ window.DASHBOARD = {
      ],
      "line": 165,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.3466,
+     "costApprox": true,
+     "elapsedMs": 20894332,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.8",
      "title": "Extract the shared credit deduction and generalise job kinds (S0.3a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.2"
@@ -444,8 +556,8 @@ window.DASHBOARD = {
      ],
      "line": 178,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -462,16 +574,31 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6463,
+     "costApprox": true,
+     "elapsedMs": 54354239,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.9",
      "title": "Media request schemas and payload builder (S0.3b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.8",
@@ -501,8 +628,8 @@ window.DASHBOARD = {
      ],
      "line": 201,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -519,16 +646,41 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.7752,
+     "costApprox": true,
+     "elapsedMs": 54354239,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.10",
      "title": "Media route and runMediaJob with LYRIA_2 as the reference kind (S0.3c)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.9",
@@ -558,8 +710,8 @@ window.DASHBOARD = {
      ],
      "line": 224,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -577,16 +729,41 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "CHANGES"
+       },
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.2996,
+     "costApprox": true,
+     "elapsedMs": 54122697,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.11",
      "title": "Unit: media pipeline",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T0.10"
@@ -596,7 +773,8 @@ window.DASHBOARD = {
       "apps/api/src/lib/media-input.ts",
       "apps/api/src/services/media-service.ts",
       "apps/api/src/routes/media.ts",
-      "apps/api/src/queue/generation-queue.ts"
+      "apps/api/src/queue/generation-queue.ts",
+      "apps/api/src/queue/job-id.ts"
      ],
      "gherkin": null,
      "do": null,
@@ -613,23 +791,35 @@ window.DASHBOARD = {
      ],
      "line": 247,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.8212,
+     "costApprox": true,
+     "elapsedMs": 53870366,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.12",
      "title": "MediaAsset model, service and Cloudinary resource type (S0.4a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.10",
@@ -661,8 +851,8 @@ window.DASHBOARD = {
      ],
      "line": 260,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -680,16 +870,31 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.8021,
+     "costApprox": true,
+     "elapsedMs": 53700323,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.13",
      "title": "Assets API and persist step in the job worker (S0.4b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.12"
@@ -715,8 +920,8 @@ window.DASHBOARD = {
      ],
      "line": 283,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -734,16 +939,51 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.4436,
+     "costApprox": true,
+     "elapsedMs": 53976125,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.14",
      "title": "Unit: assets",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T0.13"
@@ -767,23 +1007,35 @@ window.DASHBOARD = {
      ],
      "line": 304,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6438,
+     "costApprox": true,
+     "elapsedMs": 53506657,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.15",
      "title": "Upload middlewares, MIME sniffing and MediaUpload model (S0.5a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.13"
@@ -812,8 +1064,8 @@ window.DASHBOARD = {
      ],
      "line": 315,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -830,16 +1082,41 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.3153,
+     "costApprox": true,
+     "elapsedMs": 53660129,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.16",
      "title": "POST /media/uploads and expired-upload sweep (S0.5b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.15"
@@ -864,8 +1141,8 @@ window.DASHBOARD = {
      ],
      "line": 337,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -883,16 +1160,41 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "CHANGES",
+        "security": "CHANGES"
+       },
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.9278,
+     "costApprox": true,
+     "elapsedMs": 53384327,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.17",
      "title": "Unit: uploads",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T0.16"
@@ -916,23 +1218,42 @@ window.DASHBOARD = {
      ],
      "line": 357,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.0183,
+     "costApprox": true,
+     "elapsedMs": 53169887,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.18",
      "title": "Header menus: Video, Audio and Tools dropdowns plus mobile accordion (S0.6a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.2"
@@ -965,8 +1286,8 @@ window.DASHBOARD = {
      ],
      "line": 368,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -987,16 +1308,32 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.8206,
+     "costApprox": true,
+     "elapsedMs": 52972444,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.19",
      "title": "New routes, StudioShell, StudioPlaceholder and studio accent tokens (S0.6b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.18"
@@ -1026,8 +1363,8 @@ window.DASHBOARD = {
      ],
      "line": 393,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -1053,16 +1390,33 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.657,
+     "costApprox": true,
+     "elapsedMs": 19445905,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.20",
      "title": "Player store with one shared audio element (S0.7a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.19"
@@ -1091,8 +1445,8 @@ window.DASHBOARD = {
      ],
      "line": 416,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -1114,16 +1468,32 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.567,
+     "costApprox": true,
+     "elapsedMs": 19445905,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.21",
      "title": "MiniPlayer, AudioPlayer and TrackCard mounted in App.vue (S0.7b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.20"
@@ -1154,8 +1524,8 @@ window.DASHBOARD = {
      ],
      "line": 439,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -1176,16 +1546,32 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.8955,
+     "costApprox": true,
+     "elapsedMs": 52972444,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.22",
      "title": "History store and UI for media (S0.8a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.21",
@@ -1219,8 +1605,8 @@ window.DASHBOARD = {
      ],
      "line": 463,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -1247,16 +1633,45 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "CHANGES",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "code": "PASS",
+        "ui": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.3595,
+     "costApprox": true,
+     "elapsedMs": 52549071,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.23",
      "title": "useMediaJob and useMediaCost with 402 mapping (S0.8b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.22",
@@ -1286,8 +1701,8 @@ window.DASHBOARD = {
      ],
      "line": 488,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -1304,16 +1719,31 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.9388,
+     "costApprox": true,
+     "elapsedMs": 52549072,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.24",
      "title": "Shared studio view states and action bar (S0.8c)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.23",
@@ -1347,8 +1777,8 @@ window.DASHBOARD = {
      ],
      "line": 511,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -1374,16 +1804,33 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.9191,
+     "costApprox": true,
+     "elapsedMs": 52549072,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.25",
      "title": "Shortcuts, shortcuts popover and drafts (S0.9)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.21",
@@ -1417,8 +1864,8 @@ window.DASHBOARD = {
      ],
      "line": 536,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -1440,16 +1887,54 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "CHANGES",
+        "ui": "PASS",
+        "code": "CHANGES"
+       },
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "code": "PASS",
+        "ui": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "code": "PASS",
+        "ui": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.4045,
+     "costApprox": true,
+     "elapsedMs": 52549072,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.26",
      "title": "Docs, pricing list and FAQ for media models (S0.10)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T0.3"
@@ -1476,8 +1961,8 @@ window.DASHBOARD = {
      ],
      "line": 561,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -1499,16 +1984,32 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.8262,
+     "costApprox": true,
+     "elapsedMs": 18413534,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.27",
      "title": "Unit: player, history, job, drafts and shortcuts",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T0.26",
@@ -1537,23 +2038,42 @@ window.DASHBOARD = {
      ],
      "line": 580,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.152,
+     "costApprox": true,
+     "elapsedMs": 51768916,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.28",
      "title": "Unit: credits, cost and route helpers, studio components",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T0.27"
@@ -1580,36 +2100,59 @@ window.DASHBOARD = {
      ],
      "line": 593,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.2031,
+     "costApprox": true,
+     "elapsedMs": 51529124,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.29",
      "title": "E2E: media API pipeline, uploads and assets",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [
       "T0.28",
       "T0.17",
       "T0.14"
      ],
-     "files": [],
+     "files": [
+      "apps/web/e2e/scenarios/media-pipeline.feature.md"
+     ],
      "gherkin": null,
      "do": null,
      "spec": "`apps/web/e2e/qa/media-pipeline.spec.ts`",
      "filesDeclared": true,
      "acceptance": [
-      "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; readCredits from support/proPerksSeed.ts proves balance changes.",
+      "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; the failure variant uses readCredits from support/proPerksSeed.ts to prove the balance is unchanged. Credit deduction on success is covered by the T0.11 unit tests.",
       "AC2: paidCallGuard stays on and no real Replicate, Dodo or email call is made.",
       "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
@@ -1619,28 +2162,58 @@ window.DASHBOARD = {
      ],
      "line": 606,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "FAIL",
+       "slop": null,
+       "reviews": {},
+       "verifier": null
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.9835,
+     "costApprox": true,
+     "elapsedMs": 51379483,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.30",
      "title": "E2E: header menus, routes and mini-player persistence",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [
       "T0.29"
      ],
-     "files": [],
+     "files": [
+      "apps/web/e2e/scenarios/media-nav-player.feature.md"
+     ],
      "gherkin": null,
      "do": null,
      "spec": "`apps/web/e2e/qa/media-nav-player.spec.ts`",
@@ -1654,30 +2227,46 @@ window.DASHBOARD = {
       "V1: `cd apps/web && bunx playwright test e2e/qa/media-nav-player.spec.ts --repeat-each=3`",
       "V2: `cd apps/web && bunx playwright test e2e/qa/media-nav-player.spec.ts --grep @critical`"
      ],
-     "line": 621,
+     "line": 622,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.919,
+     "costApprox": true,
+     "elapsedMs": 2987694,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     },
     {
      "id": "T0.31",
      "title": "Gate: Phase 0 shared infrastructure",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [
       "T0.30"
      ],
-     "files": [],
+     "files": [
+      "agent_docs/intent/landing-and-credit-economics.md"
+     ],
      "gherkin": null,
      "do": null,
      "spec": null,
@@ -1693,33 +2282,52 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts e2e/qa/media-nav-player.spec.ts --repeat-each=2`"
      ],
-     "line": 636,
+     "line": 637,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T02:00:34.410Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5464,
+     "costApprox": true,
+     "elapsedMs": 35815836,
+     "summary": [
+      "T0.9: MEDIA_PROMPT_MAX_CHARS moved to packages/shared/src/models/media-limits.ts; schemas/media.ts imports it; schemas/index.ts no longer re-exports it (still exported via models). shared tests 259/25",
+      "T0.13: MAX_VERSION_FILE_BYTES (50 MB) moved to media-limits.ts, imported in apps/api/src/routes/media.ts. api route tests 252/252.",
+      "T0.25: useGlobalShortcuts() moved from Dashboard.vue to App.vue. agent-browser on /audio/song: ? opens popover, Escape closes. Shot T0.25-audio-song-popover registered. Web tests 70/70. vue-tsc errors"
+     ]
     }
    ],
-   "verified": 0,
+   "verified": 31,
    "total": 31,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 28.3428,
+   "elapsedMs": 55632876
   },
   {
    "id": "1",
    "name": "Song studio",
-   "startLine": 653,
-   "endLine": 984,
+   "startLine": 654,
+   "endLine": 985,
    "adds": "Users write lyrics (or have AI draft them), pick a style and generate a full song with Minimax Music 2.6, then play it, edit the waveform and export a new version. Every result lands in History.",
    "tryInUi": [
     "Open Audio then Song",
@@ -1729,7 +2337,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 1",
-    "line": 983,
+    "line": 984,
     "items": [
      "song generation, lyrics help, waveform editor and export verified by unit tests and the mocked song and editor QA specs."
     ]
@@ -1756,7 +2364,7 @@ window.DASHBOARD = {
       "V1: `grep -n wavesurfer agent_docs/media-studio/APPROVALS.md`",
       "V2: `git diff --name-only -- package.json apps/web/package.json bun.lock` returns nothing from this task"
      ],
-     "line": 658,
+     "line": 659,
      "ui": false,
      "status": "ready",
      "updatedAt": null,
@@ -1800,7 +2408,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run test` (existing api tests stay green)",
       "V4: `bun run check`"
      ],
-     "line": 671,
+     "line": 672,
      "ui": false,
      "status": "ready",
      "updatedAt": null,
@@ -1860,7 +2468,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 693,
+     "line": 694,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1916,7 +2524,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/components/Song src/composables/useMediaDraft.test.ts --coverage --coverage.include=src/components/Song/SongComposer.vue --coverage.include=src/components/Song/LyricsEditor.vue --coverage.include=src/components/Song/StylePresets.vue --coverage.include=src/composables/useMediaDraft.ts --coverage.reporter=text`"
      ],
-     "line": 717,
+     "line": 718,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -1955,7 +2563,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/routes/media.test.ts src/services/media-service.test.ts src/lib/media-input.test.ts --coverage --coverage.include=src/routes/media.ts --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.reporter=text`"
      ],
-     "line": 728,
+     "line": 729,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -1991,7 +2599,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/song.spec.ts --repeat-each=3`"
      ],
-     "line": 739,
+     "line": 740,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2038,7 +2646,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run test` (existing api tests stay green)",
       "V4: `bun run check`"
      ],
-     "line": 753,
+     "line": 754,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2096,7 +2704,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 777,
+     "line": 778,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2151,7 +2759,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/lib/lyrics-generator.test.ts src/routes/prompt.test.ts src/middlewares/rate-limit.test.ts --coverage --coverage.include=src/lib/lyrics-generator.ts --coverage.include=src/routes/prompt.ts --coverage.include=src/middlewares/rate-limit.ts --coverage.reporter=text`"
      ],
-     "line": 800,
+     "line": 801,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2187,7 +2795,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/lyrics.spec.ts --repeat-each=3`"
      ],
-     "line": 811,
+     "line": 812,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2235,7 +2843,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 825,
+     "line": 826,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2301,7 +2909,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 849,
+     "line": 850,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2356,7 +2964,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/utils/audioEditMath.test.ts src/composables/useAudioEditor.test.ts src/components/Audio/WaveformEditor.test.ts src/components/Audio/EditorToolbar.test.ts --coverage --coverage.include=src/utils/audioEditMath.ts --coverage.include=src/composables/useAudioEditor.ts --coverage.include=src/components/Audio/WaveformEditor.vue --coverage.include=src/components/Audio/EditorToolbar.vue --coverage.reporter=text`"
      ],
-     "line": 872,
+     "line": 873,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2394,7 +3002,7 @@ window.DASHBOARD = {
       "V1: `grep -n lamejs agent_docs/media-studio/APPROVALS.md`",
       "V2: `git diff --name-only -- package.json apps/web/package.json bun.lock` shows nothing from this task"
      ],
-     "line": 883,
+     "line": 884,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2438,7 +3046,7 @@ window.DASHBOARD = {
       "V1: `cd apps/web && bun run test` (existing web tests stay green)",
       "V2: `bun run check`"
      ],
-     "line": 897,
+     "line": 898,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2500,7 +3108,7 @@ window.DASHBOARD = {
       "V4: `bun run check`",
       "V5: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 918,
+     "line": 919,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2561,7 +3169,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/utils/wavEncoder.test.ts src/workers/mp3-encoder.worker.test.ts src/composables/useAudioExport.test.ts src/components/Audio/ExportDialog.test.ts --coverage --coverage.include=src/utils/wavEncoder.ts --coverage.include=src/workers/mp3-encoder.worker.ts --coverage.include=src/composables/useAudioExport.ts --coverage.include=src/components/Audio/ExportDialog.vue --coverage.reporter=text`"
      ],
-     "line": 944,
+     "line": 945,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2597,7 +3205,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/editor.spec.ts --repeat-each=3`"
      ],
-     "line": 955,
+     "line": 956,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2637,7 +3245,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/song.spec.ts e2e/qa/lyrics.spec.ts e2e/qa/editor.spec.ts --repeat-each=2`"
      ],
-     "line": 969,
+     "line": 970,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2662,8 +3270,8 @@ window.DASHBOARD = {
   {
    "id": "2",
    "name": "Music studio",
-   "startLine": 985,
-   "endLine": 1110,
+   "startLine": 986,
+   "endLine": 1111,
    "adds": "Users make instrumental music from a prompt with Lyria 2 or Stable Audio 2.5 and Minimax instrumental mode, with duration where the model supports it, and play and edit the result like a song.",
    "tryInUi": [
     "Open Audio then Music",
@@ -2673,7 +3281,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 2",
-    "line": 1109,
+    "line": 1110,
     "items": [
      "music generation across models verified by unit tests and the mocked music QA spec."
     ]
@@ -2708,7 +3316,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run test` (existing api tests stay green)",
       "V4: `bun run check`"
      ],
-     "line": 990,
+     "line": 991,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2768,7 +3376,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/music path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1012,
+     "line": 1013,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2831,7 +3439,7 @@ window.DASHBOARD = {
       "V5: `bun run check`",
       "V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/music path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1036,
+     "line": 1037,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2890,7 +3498,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/components/Music --coverage --coverage.include=src/components/Music/MusicComposer.vue --coverage.include=src/components/Music/MusicModelSelect.vue --coverage.include=src/components/Music/DurationControl.vue --coverage.reporter=text`"
      ],
-     "line": 1059,
+     "line": 1060,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -2929,7 +3537,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/lib/media-input.test.ts src/services/media-service.test.ts --coverage --coverage.include=src/lib/media-input.ts --coverage.include=src/services/media-service.ts --coverage.reporter=text`"
      ],
-     "line": 1070,
+     "line": 1071,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -2965,7 +3573,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/music.spec.ts --repeat-each=3`"
      ],
-     "line": 1081,
+     "line": 1082,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3003,7 +3611,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/music.spec.ts e2e/qa/song.spec.ts --repeat-each=2`"
      ],
-     "line": 1095,
+     "line": 1096,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3028,8 +3636,8 @@ window.DASHBOARD = {
   {
    "id": "3",
    "name": "Speech studio",
-   "startLine": 1111,
-   "endLine": 1407,
+   "startLine": 1112,
+   "endLine": 1408,
    "adds": "Users turn text into speech with Inworld or Minimax voices, mark up pauses and emotion with tag chips, clone their own voice with recorded consent, and get advice on length and cost.",
    "tryInUi": [
     "Open Audio then Speech",
@@ -3039,7 +3647,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 3",
-    "line": 1406,
+    "line": 1407,
     "items": [
      "speech, tags, model switching, the advisor and voice cloning verified by unit tests and the mocked speech QA specs."
     ]
@@ -3077,7 +3685,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run test` (existing api tests stay green)",
       "V4: `bun run check`"
      ],
-     "line": 1116,
+     "line": 1117,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3134,7 +3742,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run type-check`",
       "V4: `bun run check`"
      ],
-     "line": 1140,
+     "line": 1141,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3188,7 +3796,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1163,
+     "line": 1164,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3252,7 +3860,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1186,
+     "line": 1187,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3318,7 +3926,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1210,
+     "line": 1211,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3378,7 +3986,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1233,
+     "line": 1234,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3434,7 +4042,7 @@ window.DASHBOARD = {
       "V1: `grep -n -E 'Voice|VoiceConsent|CLONE_CONSENT|G4|G5|Q5|call 1 of 1' agent_docs/media-studio/APPROVALS.md`",
       "V2: `git status --short` shows only APPROVALS.md changed by this task"
      ],
-     "line": 1255,
+     "line": 1256,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3482,7 +4090,7 @@ window.DASHBOARD = {
       "V2: `cd apps/api && bun run test` (existing api tests stay green)",
       "V3: `bun run check`"
      ],
-     "line": 1271,
+     "line": 1272,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3543,7 +4151,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1295,
+     "line": 1296,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3602,7 +4210,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/composables/useTtsEditor.test.ts src/composables/useTtsAdvice.test.ts --coverage --coverage.include=src/composables/useTtsEditor.ts --coverage.include=src/composables/useTtsAdvice.ts --coverage.reporter=text`"
      ],
-     "line": 1320,
+     "line": 1321,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3639,7 +4247,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `bunx vp test run packages/shared/src/models/tts-tags.test.ts --coverage --coverage.include=packages/shared/src/models/tts-tags.ts --coverage.reporter=text`"
      ],
-     "line": 1331,
+     "line": 1332,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3680,7 +4288,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/components/Speech src/stores/voices.test.ts --coverage --coverage.include=src/components/Speech/SpeechComposer.vue --coverage.include=src/components/Speech/ConvertTagsDialog.vue --coverage.include=src/components/Speech/VoiceCloneDialog.vue --coverage.include=src/stores/voices.ts --coverage.include=src/components/Speech/TextAdvisor.vue --coverage.reporter=text`"
      ],
-     "line": 1342,
+     "line": 1343,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3720,7 +4328,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/services/voice-service.test.ts src/routes/voices.test.ts src/services/media-service.test.ts src/lib/media-input.test.ts --coverage --coverage.include=src/services/voice-service.ts --coverage.include=src/routes/voices.ts --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.reporter=text`"
      ],
-     "line": 1353,
+     "line": 1354,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3756,7 +4364,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/speech.spec.ts --repeat-each=3`"
      ],
-     "line": 1364,
+     "line": 1365,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3792,7 +4400,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/voice-clone.spec.ts --repeat-each=3`"
      ],
-     "line": 1378,
+     "line": 1379,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -3830,7 +4438,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/speech.spec.ts e2e/qa/voice-clone.spec.ts --repeat-each=2`"
      ],
-     "line": 1392,
+     "line": 1393,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3855,8 +4463,8 @@ window.DASHBOARD = {
   {
    "id": "4",
    "name": "Video studio",
-   "startLine": 1408,
-   "endLine": 1560,
+   "startLine": 1409,
+   "endLine": 1561,
    "adds": "Users generate short videos from text, from an image, or with their own audio, using P-Video or Wan 3, with a draft mode for cheap previews first.",
    "tryInUi": [
     "Open Video",
@@ -3866,7 +4474,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 4",
-    "line": 1559,
+    "line": 1560,
     "items": [
      "video generation, image and audio inputs and draft-first verified by unit tests and the mocked video QA spec."
     ]
@@ -3903,7 +4511,7 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run test` (existing api tests stay green)",
       "V4: `bun run check`"
      ],
-     "line": 1413,
+     "line": 1414,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -3963,7 +4571,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1436,
+     "line": 1437,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4030,7 +4638,7 @@ window.DASHBOARD = {
       "V5: `bun run check`",
       "V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1460,
+     "line": 1461,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4095,7 +4703,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1487,
+     "line": 1488,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4152,7 +4760,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/components/Video src/composables/useToolVideoUpload.test.ts --coverage --coverage.include=src/components/Video/VideoComposer.vue --coverage.include=src/components/Video/ImageInput.vue --coverage.include=src/components/Video/AudioInput.vue --coverage.include=src/components/Video/DraftToggle.vue --coverage.include=src/composables/useToolVideoUpload.ts --coverage.reporter=text`"
      ],
-     "line": 1509,
+     "line": 1510,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4191,7 +4799,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/services/media-service.test.ts src/lib/media-input.test.ts src/routes/media.test.ts --coverage --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.include=src/routes/media.ts --coverage.reporter=text`"
      ],
-     "line": 1520,
+     "line": 1521,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -4227,7 +4835,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/video.spec.ts --repeat-each=3`"
      ],
-     "line": 1531,
+     "line": 1532,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4265,7 +4873,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/video.spec.ts e2e/qa/media-nav-player.spec.ts --repeat-each=2`"
      ],
-     "line": 1545,
+     "line": 1546,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -4290,8 +4898,8 @@ window.DASHBOARD = {
   {
    "id": "5",
    "name": "Tools",
-   "startLine": 1561,
-   "endLine": 1737,
+   "startLine": 1562,
+   "endLine": 1738,
    "adds": "Users get four utilities: add a watermark to an image or video, create captions for a video, and turn a sketch into an image, each priced and shown before running, with handoffs to the other studios.",
    "tryInUi": [
     "Open Tools then Image watermark",
@@ -4301,7 +4909,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 5",
-    "line": 1736,
+    "line": 1737,
     "items": [
      "all four tools and handoffs verified by unit tests and the mocked tools QA specs."
     ]
@@ -4341,7 +4949,7 @@ window.DASHBOARD = {
       "V4: `bun run check`",
       "V5: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/image-watermark path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1566,
+     "line": 1567,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4412,7 +5020,7 @@ window.DASHBOARD = {
       "V5: `bun run check`",
       "V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/video-watermark path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1591,
+     "line": 1592,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4483,7 +5091,7 @@ window.DASHBOARD = {
       "V5: `bun run check`",
       "V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/autocaption path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1616,
+     "line": 1617,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4550,7 +5158,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/sketch path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1641,
+     "line": 1642,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4616,7 +5224,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1663,
+     "line": 1664,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4676,7 +5284,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/services/media-service.test.ts src/routes/media.test.ts src/lib/media-input.test.ts --coverage --coverage.include=src/services/media-service.ts --coverage.include=src/routes/media.ts --coverage.include=src/lib/media-input.ts --coverage.reporter=text`"
      ],
-     "line": 1685,
+     "line": 1686,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -4717,7 +5325,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/components/Tools src/composables/useSketchCanvas.test.ts src/composables/useStudioHandoff.test.ts src/components/Studio/HandoffMenu.test.ts --coverage --coverage.include=src/components/Tools/WatermarkForm.vue --coverage.include=src/components/Tools/CaptionResult.vue --coverage.include=src/composables/useSketchCanvas.ts --coverage.include=src/composables/useStudioHandoff.ts --coverage.include=src/components/Studio/HandoffMenu.vue --coverage.reporter=text`"
      ],
-     "line": 1696,
+     "line": 1697,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4753,7 +5361,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/tools.spec.ts --repeat-each=3`"
      ],
-     "line": 1707,
+     "line": 1708,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -4792,7 +5400,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts e2e/qa/media-nav-player.spec.ts e2e/qa/song.spec.ts e2e/qa/lyrics.spec.ts e2e/qa/editor.spec.ts e2e/qa/music.spec.ts e2e/qa/speech.spec.ts e2e/qa/voice-clone.spec.ts e2e/qa/video.spec.ts e2e/qa/tools.spec.ts --repeat-each=2`"
      ],
-     "line": 1721,
+     "line": 1722,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -4816,7 +5424,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/media-studio/TASKS.md phase 0",
+ "nextCommand": "/build-phases agent_docs/media-studio/TASKS.md phase 1",
  "questions": [
   {
    "at": "2026-11-16T02:52:56.327Z",
@@ -4826,8 +5434,8 @@ window.DASHBOARD = {
    "text": "G1: How is P-Video audio cost billed?",
    "default": "Stored audio duration clamped to 20 seconds, shown as Estimated",
    "alternatives": "Flat per-video price; bill on requested duration",
-   "answer": null,
-   "answeredAt": null
+   "answer": "T0.29 credit-drop: drop the scenario; amend Scenarios/AC1; rely on T0.11 credit-deduction unit tests",
+   "answeredAt": "2026-11-22T16:45:08.687Z"
   },
   {
    "at": "2026-11-16T02:52:56.377Z",
@@ -5074,272 +5682,1414 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [],
- "shots": [],
- "deliverables": [],
- "advisories": [],
+ "shots": [
+  {
+   "taskId": "T0.18",
+   "kind": "proof",
+   "step": "AC2/AC4 Audio menu opens",
+   "attempt": 1,
+   "caption": "Audio menu open with Song, Music and Speech; Audio tab highlighted with caret.",
+   "annotations": [
+    {
+     "x": 39,
+     "y": 8,
+     "w": 25,
+     "h": 24,
+     "label": "Audio dropdown items"
+    }
+   ],
+   "at": "2026-11-22T16:02:23.124Z",
+   "file": "0/T0.18-1.png",
+   "phase": "0",
+   "href": "shots/0/T0.18-1.png"
+  },
+  {
+   "taskId": "T0.18",
+   "kind": "proof",
+   "step": "AC6 mobile accordion",
+   "attempt": 1,
+   "caption": "At 375px the Audio and Tools groups form an accordion with no horizontal scroll.",
+   "annotations": [
+    {
+     "x": 4,
+     "y": 22,
+     "w": 92,
+     "h": 50,
+     "label": "Accordion items"
+    }
+   ],
+   "at": "2026-11-22T16:02:30.082Z",
+   "file": "0/T0.18-2.png",
+   "phase": "0",
+   "href": "shots/0/T0.18-2.png"
+  },
+  {
+   "taskId": "T0.19",
+   "kind": "proof",
+   "step": "AC6/AC4 mobile placeholder accent",
+   "attempt": 1,
+   "caption": "Music placeholder at 375px with a cool accent bar, no horizontal scroll.",
+   "annotations": [
+    {
+     "x": 4,
+     "y": 51,
+     "w": 92,
+     "h": 26,
+     "label": "Placeholder with studio accent"
+    }
+   ],
+   "at": "2026-11-22T16:02:30.151Z",
+   "file": "0/T0.19-1.png",
+   "phase": "0",
+   "href": "shots/0/T0.19-1.png"
+  },
+  {
+   "taskId": "T0.19",
+   "kind": "proof",
+   "step": "AC3 Song placeholder",
+   "attempt": 1,
+   "caption": "Song placeholder shows \"Song studio is coming soon\" and a Back to Image link.",
+   "annotations": [
+    {
+     "x": 7,
+     "y": 10,
+     "w": 35,
+     "h": 33,
+     "label": "Title, copy and Back to Image link"
+    }
+   ],
+   "at": "2026-11-22T16:02:34.030Z",
+   "file": "0/T0.19-2.png",
+   "phase": "0",
+   "href": "shots/0/T0.19-2.png"
+  },
+  {
+   "taskId": "T0.21",
+   "kind": "proof",
+   "step": "AC1 mini-player appears with title and time",
+   "attempt": 1,
+   "caption": "After pressing play on a track the 56px mini-player appears with title, scrubber, time readout and close button.",
+   "annotations": [
+    {
+     "x": 4,
+     "y": 93,
+     "w": 92,
+     "h": 7,
+     "label": "Mini-player bar"
+    }
+   ],
+   "at": "2026-11-22T16:03:28.725Z",
+   "file": "0/T0.21-1.png",
+   "phase": "0",
+   "href": "shots/0/T0.21-1.png"
+  },
+  {
+   "taskId": "T0.22",
+   "kind": "proof",
+   "step": "AC1/AC3 media in History",
+   "attempt": 1,
+   "caption": "History lists media under date groups with Song/Music/Speech/Video/Tools filter chips and play controls.",
+   "annotations": [
+    {
+     "x": 18,
+     "y": 10,
+     "w": 38,
+     "h": 12,
+     "label": "Media filter chips"
+    },
+    {
+     "x": 3,
+     "y": 31,
+     "w": 94,
+     "h": 9,
+     "label": "Audio items with play control"
+    }
+   ],
+   "at": "2026-11-22T16:03:21.940Z",
+   "file": "0/T0.22-1.png",
+   "phase": "0",
+   "href": "shots/0/T0.22-1.png"
+  },
+  {
+   "taskId": "T0.22",
+   "kind": "proof",
+   "step": "AC3 audio plays via shared player",
+   "attempt": 1,
+   "caption": "History audio item plays through the shared player (inline card and mini-player).",
+   "annotations": [
+    {
+     "x": 3,
+     "y": 31,
+     "w": 19,
+     "h": 19,
+     "label": "Inline player in card"
+    },
+    {
+     "x": 4,
+     "y": 93,
+     "w": 92,
+     "h": 7,
+     "label": "Shared mini-player"
+    }
+   ],
+   "at": "2026-11-22T16:03:28.799Z",
+   "file": "0/T0.22-2.png",
+   "phase": "0",
+   "href": "shots/0/T0.22-2.png"
+  },
+  {
+   "taskId": "T0.22",
+   "kind": "proof",
+   "step": "History audio card",
+   "attempt": 2,
+   "caption": "History audio card with mini-player (dark theme)",
+   "annotations": [
+    {
+     "x": 5,
+     "y": 20,
+     "w": 90,
+     "h": 25,
+     "label": "audio history card"
+    }
+   ],
+   "at": "2026-11-22T16:13:33.335Z",
+   "file": "0/T0.22-3.png",
+   "phase": "0",
+   "href": "shots/0/T0.22-3.png"
+  },
+  {
+   "taskId": "T0.22",
+   "kind": "proof",
+   "step": "History audio card",
+   "attempt": 2,
+   "caption": "History audio card with mini-player (light theme)",
+   "annotations": [
+    {
+     "x": 5,
+     "y": 20,
+     "w": 90,
+     "h": 25,
+     "label": "audio history card"
+    }
+   ],
+   "at": "2026-11-22T16:13:33.538Z",
+   "file": "0/T0.22-4.png",
+   "phase": "0",
+   "href": "shots/0/T0.22-4.png"
+  },
+  {
+   "taskId": "T0.25",
+   "kind": "proof",
+   "step": "AC3 popover lists every shortcut",
+   "attempt": 1,
+   "caption": "Shortcuts popover lists every media shortcut (Space, arrows, M, L, brackets) beside the existing ones.",
+   "annotations": [
+    {
+     "x": 34,
+     "y": 13,
+     "w": 32,
+     "h": 75,
+     "label": "Shortcut list"
+    }
+   ],
+   "at": "2026-11-22T16:02:43.357Z",
+   "file": "0/T0.25-1.png",
+   "phase": "0",
+   "href": "shots/0/T0.25-1.png"
+  },
+  {
+   "taskId": "T0.25",
+   "kind": "proof",
+   "step": "AC3: ? opens, Escape closes",
+   "attempt": 2,
+   "caption": "? opens the keyboard shortcuts popover (dark theme); Escape closes it",
+   "annotations": [
+    {
+     "x": 30,
+     "y": 15,
+     "w": 40,
+     "h": 60,
+     "label": "shortcuts popover"
+    }
+   ],
+   "at": "2026-11-22T16:13:33.215Z",
+   "file": "0/T0.25-2.png",
+   "phase": "0",
+   "href": "shots/0/T0.25-2.png"
+  },
+  {
+   "taskId": "T0.25",
+   "kind": "proof",
+   "step": "AC3: ? opens, Escape closes",
+   "attempt": 2,
+   "caption": "? opens the keyboard shortcuts popover (light theme); Escape closes it",
+   "annotations": [
+    {
+     "x": 30,
+     "y": 15,
+     "w": 40,
+     "h": 60,
+     "label": "shortcuts popover"
+    }
+   ],
+   "at": "2026-11-22T16:13:33.435Z",
+   "file": "0/T0.25-3.png",
+   "phase": "0",
+   "href": "shots/0/T0.25-3.png"
+  },
+  {
+   "taskId": "T0.25",
+   "kind": "proof",
+   "step": "AC3",
+   "attempt": 1,
+   "caption": "Verifier retake: ? on /create/image opens the Keyboard shortcuts popover listing all 12 MEDIA_SHORTCUTS (on /audio/song ? does nothing)",
+   "annotations": [
+    {
+     "x": 33.7,
+     "y": 12.6,
+     "w": 32.5,
+     "h": 74.8,
+     "label": "shortcuts popover"
+    }
+   ],
+   "at": "2026-11-22T16:32:47.512Z",
+   "file": "0/T0.25-4.png",
+   "phase": "0",
+   "href": "shots/0/T0.25-4.png"
+  },
+  {
+   "taskId": "T0.25",
+   "kind": "proof",
+   "step": "AC2/AC3: global shortcuts work on every route",
+   "attempt": 3,
+   "caption": "? opens the keyboard shortcuts popover on /audio/song, a non-Dashboard route.",
+   "annotations": [
+    {
+     "x": 35.7,
+     "y": 7.6,
+     "w": 28.6,
+     "h": 95,
+     "label": "Shortcuts popover open on /audio/song"
+    }
+   ],
+   "at": "2026-11-22T16:38:26.465Z",
+   "file": "0/T0.25-5.png",
+   "phase": "0",
+   "href": "shots/0/T0.25-5.png"
+  },
+  {
+   "taskId": "T0.26",
+   "kind": "proof",
+   "step": "AC2 pricing rows per media model",
+   "attempt": 1,
+   "caption": "Pricing lists one row per media model grouped Song, Music, Speech, Video with credit costs.",
+   "annotations": [
+    {
+     "x": 5,
+     "y": 57,
+     "w": 92,
+     "h": 40,
+     "label": "Media model price rows"
+    }
+   ],
+   "at": "2026-11-22T16:02:53.490Z",
+   "file": "0/T0.26-1.png",
+   "phase": "0",
+   "href": "shots/0/T0.26-1.png"
+  },
+  {
+   "taskId": "T0.26",
+   "kind": "proof",
+   "step": "AC3 no horizontal scroll at 375px",
+   "attempt": 1,
+   "caption": "At 375px the media price rows fit with no horizontal scroll (scrollWidth 375).",
+   "annotations": [
+    {
+     "x": 4,
+     "y": 50,
+     "w": 92,
+     "h": 48,
+     "label": "Media rows within viewport"
+    }
+   ],
+   "at": "2026-11-22T16:03:08.899Z",
+   "file": "0/T0.26-2.png",
+   "phase": "0",
+   "href": "shots/0/T0.26-2.png"
+  },
+  {
+   "taskId": "T0.26",
+   "kind": "proof",
+   "step": "AC3 media FAQs shown",
+   "attempt": 1,
+   "caption": "Pricing FAQ includes the media questions (speech model, tags, text limit, speech cost).",
+   "annotations": [
+    {
+     "x": 4,
+     "y": 38,
+     "w": 92,
+     "h": 58,
+     "label": "Media FAQ entries"
+    }
+   ],
+   "at": "2026-11-22T16:03:13.448Z",
+   "file": "0/T0.26-3.png",
+   "phase": "0",
+   "href": "shots/0/T0.26-3.png"
+  },
+  {
+   "taskId": "T0.30",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Audio menu open from the keyboard with the first item focused",
+   "annotations": [],
+   "at": "2026-11-22T15:58:47.639Z",
+   "file": "0/T0.30-1.png",
+   "phase": "0",
+   "href": "shots/0/T0.30-1.png"
+  },
+  {
+   "taskId": "T0.30",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Mini-player keeps playing the History track on a studio route",
+   "annotations": [],
+   "at": "2026-11-22T15:58:47.707Z",
+   "file": "0/T0.30-2.png",
+   "phase": "0",
+   "href": "shots/0/T0.30-2.png"
+  },
+  {
+   "taskId": "T0.30",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Second History track replaces the first in the mini-player",
+   "annotations": [],
+   "at": "2026-11-22T15:58:47.773Z",
+   "file": "0/T0.30-3.png",
+   "phase": "0",
+   "href": "shots/0/T0.30-3.png"
+  },
+  {
+   "taskId": "T0.30",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Question mark opens the keyboard shortcuts popover",
+   "annotations": [],
+   "at": "2026-11-22T15:58:47.840Z",
+   "file": "0/T0.30-4.png",
+   "phase": "0",
+   "href": "shots/0/T0.30-4.png"
+  },
+  {
+   "taskId": "T0.30",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "History with the Song filter shows only the song asset",
+   "annotations": [],
+   "at": "2026-11-22T15:58:47.912Z",
+   "file": "0/T0.30-5.png",
+   "phase": "0",
+   "href": "shots/0/T0.30-5.png"
+  },
+  {
+   "taskId": "T0.30",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "375px Audio accordion with 44px items and no horizontal scroll",
+   "annotations": [],
+   "at": "2026-11-22T15:58:47.981Z",
+   "file": "0/T0.30-6.png",
+   "phase": "0",
+   "href": "shots/0/T0.30-6.png"
+  }
+ ],
+ "deliverables": [
+  {
+   "at": "2026-11-23T02:00:34.410Z",
+   "type": "deliverable",
+   "tasks": [
+    "T0.1",
+    "T0.2",
+    "T0.3",
+    "T0.4",
+    "T0.5",
+    "T0.6",
+    "T0.7",
+    "T0.8",
+    "T0.9",
+    "T0.10",
+    "T0.11",
+    "T0.12",
+    "T0.13",
+    "T0.14",
+    "T0.15",
+    "T0.16",
+    "T0.17",
+    "T0.18",
+    "T0.19",
+    "T0.20",
+    "T0.21",
+    "T0.22",
+    "T0.23",
+    "T0.24",
+    "T0.25",
+    "T0.26",
+    "T0.27",
+    "T0.28",
+    "T0.29",
+    "T0.30",
+    "T0.31"
+   ],
+   "text": "Phase 0 shared media infrastructure verified: registry/credits, media API + uploads, nav/player/history UI, e2e specs"
+  }
+ ],
+ "advisories": [
+  {
+   "at": "2026-11-23T02:00:17.782Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.13"
+   ],
+   "text": "resolveErrorStatus keys 401 on exact message \"Unauthenticated\"; wrap requireAuth into UnauthorizedError instead"
+  },
+  {
+   "at": "2026-11-23T02:00:17.693Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.15"
+   ],
+   "text": "clerk-auth.real.test.ts mounts requireAuth on a bare app with a re-declared handler, not the real router/app.ts handler"
+  },
+  {
+   "at": "2026-11-23T01:55:25.992Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.14"
+   ],
+   "text": "utils/cloudinary.ts branches 94.11% (lines 51,178,195 uncovered)"
+  },
+  {
+   "at": "2026-11-23T01:55:25.904Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.21"
+   ],
+   "text": "shot T0.21-1 still shows the old doubled inline card player"
+  },
+  {
+   "at": "2026-11-23T01:55:25.807Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.31"
+   ],
+   "text": "untracked apps/web/tsconfig.node.tsbuildinfo; add to .gitignore"
+  },
+  {
+   "at": "2026-11-23T01:55:25.712Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.2"
+   ],
+   "text": "media-asset-service.ts:19-21 page-size/title constants live outside media-limits.ts"
+  },
+  {
+   "at": "2026-11-23T01:55:25.618Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.29"
+   ],
+   "text": "media-pipeline.spec.ts:282 require-array-sort-compare lint warning"
+  },
+  {
+   "at": "2026-11-23T01:55:25.523Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.17"
+   ],
+   "text": "lint warnings: routes/media.test.ts:122,337 unused index; lib/media-upload.ts:122 no-misused-spread"
+  },
+  {
+   "at": "2026-11-23T01:55:25.433Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.25"
+   ],
+   "text": "useGlobalShortcuts.ts:112-116 prevents / on every route when tab=1 now that the listener is app-wide; guard on a composer being present"
+  },
+  {
+   "at": "2026-11-23T01:55:25.305Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.29"
+   ],
+   "text": "media-pipeline.feature.md still lists the dropped exact-cost balance scenario; remove it and note the user decision"
+  },
+  {
+   "at": "2026-11-22T16:35:20.507Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.21"
+   ],
+   "text": "shot T0.21-1 shows the old doubled card player fixed later in T0.22-3/4"
+  },
+  {
+   "at": "2026-11-22T16:35:20.421Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.18"
+   ],
+   "text": "shot T0.18-1 does not show the /audio/music active highlight (AC4 unit-tested)"
+  },
+  {
+   "at": "2026-11-22T16:35:20.332Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.17"
+   ],
+   "text": "lint warning media-upload.ts:122 no-misused-spread"
+  },
+  {
+   "at": "2026-11-22T16:35:20.240Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.29"
+   ],
+   "text": "lint warnings media-pipeline.spec.ts:306 no-unsafe-optional-chaining, :365 require-array-sort-compare"
+  },
+  {
+   "at": "2026-11-22T16:35:20.134Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.6"
+   ],
+   "text": "moderated and slow MediaGenerationStub variants are never selected by any spec"
+  }
+ ],
  "activity": [
   {
-   "at": "2026-11-16T03:09:23.343Z",
-   "type": "answered",
-   "tasks": [],
-   "id": "Q23",
-   "text": "Default accepted: drafted copy ships"
+   "at": "2026-11-23T02:00:34.410Z",
+   "type": "deliverable",
+   "tasks": [
+    "T0.1",
+    "T0.2",
+    "T0.3",
+    "T0.4",
+    "T0.5",
+    "T0.6",
+    "T0.7",
+    "T0.8",
+    "T0.9",
+    "T0.10",
+    "T0.11",
+    "T0.12",
+    "T0.13",
+    "T0.14",
+    "T0.15",
+    "T0.16",
+    "T0.17",
+    "T0.18",
+    "T0.19",
+    "T0.20",
+    "T0.21",
+    "T0.22",
+    "T0.23",
+    "T0.24",
+    "T0.25",
+    "T0.26",
+    "T0.27",
+    "T0.28",
+    "T0.29",
+    "T0.30",
+    "T0.31"
+   ],
+   "text": "Phase 0 shared media infrastructure verified: registry/credits, media API + uploads, nav/player/history UI, e2e specs"
   },
   {
-   "at": "2026-11-16T03:09:23.289Z",
-   "type": "answered",
-   "tasks": [],
-   "id": "Q21",
-   "text": "Default accepted: credits only, all media tier standard"
+   "at": "2026-11-23T02:00:27.643Z",
+   "tasks": [
+    "T0.15"
+   ],
+   "attempt": "17",
+   "type": "verify_passed",
+   "evidence": "a14 blocker (AC5 401) cleared. Running API: unauthenticated POST /media/uploads returns 401 (was 500), POST /generate/audio/music also 401. clerk-auth.real.test.ts (real requireAuth, unmocked) 5/5 asserts 401. 429 and AC1-AC4 unchanged since a14 (upload e2e: sample.mp3 accepted with uploadId+durationSec, renamed .png rejected, both green this run). V1/V2/V3 as T0.13",
+   "fingerprint": "c0e15b71ddb7151b8cf72ed4531616345480fac43207c5041b1ba3eeed0ba62e",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a17.md"
   },
   {
-   "at": "2026-11-16T03:09:23.235Z",
-   "type": "answered",
-   "tasks": [],
-   "id": "Q20",
-   "text": "One owner-approved paid voice-clone test call before Phase 3 (call 1 of 1, main session only, announced with cost first); gate is T3.7"
+   "at": "2026-11-23T02:00:27.642Z",
+   "tasks": [
+    "T0.13"
+   ],
+   "attempt": "17",
+   "type": "verify_passed",
+   "evidence": "a14 blocker (AC3) cleared. Running API on :4388 picked up the change (no restart): unauthenticated GET /media/assets, GET /media/assets?type=audio&limit=5, GET /media/assets/abc, DELETE /media/assets/abc, POST /media/assets/abc/versions and a garbage Bearer token all return 401 {\"error\":\"Unauthenticated\"} (were 500). AC2 e2e \"fake audio appears in GET /media/assets\" green. V1 api type-check exit 0",
+   "fingerprint": "e0ad4c206c87e1f8061ad7651fd8f14319838ea1b31238afe0966883887141cd",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a17.md"
   },
   {
-   "at": "2026-11-16T03:09:23.183Z",
-   "type": "answered",
-   "tasks": [],
-   "id": "Q18",
-   "text": "Approved by owner 2026-11-16"
+   "at": "2026-11-23T02:00:17.782Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.13"
+   ],
+   "text": "resolveErrorStatus keys 401 on exact message \"Unauthenticated\"; wrap requireAuth into UnauthorizedError instead"
   },
   {
-   "at": "2026-11-16T03:09:23.130Z",
-   "type": "answered",
-   "tasks": [],
-   "id": "Q17",
-   "text": "Approved by owner 2026-11-16"
+   "at": "2026-11-23T02:00:17.693Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.15"
+   ],
+   "text": "clerk-auth.real.test.ts mounts requireAuth on a bare app with a re-declared handler, not the real router/app.ts handler"
   },
   {
-   "at": "2026-11-16T03:09:23.078Z",
-   "type": "answered",
-   "tasks": [],
-   "id": "Q14",
-   "text": "Default accepted: hidden until SONG_SAMPLE_LOOP_URL is set"
+   "at": "2026-11-23T01:58:14.601Z",
+   "type": "verify_started",
+   "tasks": [
+    "T0.13",
+    "T0.15"
+   ],
+   "attempt": "17"
   },
   {
-   "at": "2026-11-16T03:09:23.018Z",
-   "type": "answered",
-   "tasks": [],
-   "id": "Q10",
-   "text": "Read the public source first; only if that fails, one owner-approved paid run (call 1 of 1, main session only, announced with cost first)"
+   "at": "2026-11-23T01:58:11.262Z",
+   "tasks": [
+    "T0.15"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "POST /media/uploads gets the same 401 mapping through the shared app.ts handler (app.ts:111). The builder's a16 report confirms no T0.15 source change, and the a14 evidence still holds: sniffMime uses magic bytes, there is a per-purpose MIME allowlist and byte cap, isUploadPurpose uses Object.hasOwn, multer allows 1 file, and uploadRateLimiter is keyed on userId.",
+   "fingerprint": "c0e15b71ddb7151b8cf72ed4531616345480fac43207c5041b1ba3eeed0ba62e",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a17.md",
+   "verdict": "PASS",
+   "reviewer": "security"
   },
   {
-   "at": "2026-11-16T03:09:22.943Z",
-   "type": "answered",
-   "tasks": [],
-   "id": "Q9",
-   "text": "Approved by owner 2026-11-16: all four collections"
+   "at": "2026-11-23T01:58:11.262Z",
+   "tasks": [
+    "T0.13"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "resolveErrorStatus (lib/errors.ts:83-87) keeps HttpError.statusCode first, maps only `error instanceof Error && message === \"Unauthenticated\"` (exact match, the clerk-sdk-node requireAuth rejection) to 401, and defaults everything else to 500. A 4xx/5xx HttpError cannot be remapped and a substring or non-Error value cannot match. requireAuth (middlewares/clerk.ts:40) still blocks the request befor",
+   "fingerprint": "e0ad4c206c87e1f8061ad7651fd8f14319838ea1b31238afe0966883887141cd",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a17.md",
+   "verdict": "PASS",
+   "reviewer": "security"
   },
   {
-   "at": "2026-11-16T02:52:57.638Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q23",
-   "text": "Q8: Final legal copy for commercial use and the cloning consent sentence?",
-   "default": "Drafted copy ships; legal can revise without a spec change",
-   "alternatives": "Hold voice cloning until legal signs off"
+   "at": "2026-11-23T01:57:26.820Z",
+   "tasks": [
+    "T0.15"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "clerk-auth.real.test.ts runs the real requireAuth with no session against all five media routes (including POST /media/uploads) and asserts 401 through the same resolveErrorStatus; non-vacuous because requireAuth is unmocked. Earlier sniffing and cap checks remain as in a14.",
+   "fingerprint": "c0e15b71ddb7151b8cf72ed4531616345480fac43207c5041b1ba3eeed0ba62e",
+   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a17.md",
+   "verdict": "PASS",
+   "reviewer": "code"
   },
   {
-   "at": "2026-11-16T02:52:57.576Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q22",
-   "text": "Q7: Expose Chatterbox reference_audio zero-shot cloning?",
-   "default": "Not in v1",
-   "alternatives": "Expose it with the same consent flow"
+   "at": "2026-11-23T01:57:26.818Z",
+   "tasks": [
+    "T0.13"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Unauthenticated asset routes now return 401: resolveErrorStatus (errors.ts) maps Clerk's plain Error(\"Unauthenticated\") to 401, HttpError keeps its status, anything else gives 500; app.ts catch-all uses it. Message constant is named. Unit tests cover all three branches.",
+   "fingerprint": "e0ad4c206c87e1f8061ad7651fd8f14319838ea1b31238afe0966883887141cd",
+   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a17.md",
+   "verdict": "PASS",
+   "reviewer": "code"
   },
   {
-   "at": "2026-11-16T02:52:57.514Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q21",
-   "text": "Q6: Pro gating for media?",
-   "default": "Credits only; all media tier standard",
-   "alternatives": "Pro-only for Wan 3, Music 2.6 and voice cloning"
+   "at": "2026-11-23T01:57:05.558Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T0.15"
+   ],
+   "fingerprint": "c0e15b71ddb7151b8cf72ed4531616345480fac43207c5041b1ba3eeed0ba62e"
   },
   {
-   "at": "2026-11-16T02:52:57.452Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q20",
-   "text": "Q5: Do cloned voice ids expire vendor-side (cloning trains with speech-02-hd)?",
-   "default": "Assume they can: R-TTS-10 plus a \"no longer available, re-clone\" state",
-   "alternatives": "One owner-approved paid test call before Phase 3"
+   "at": "2026-11-23T01:56:58.863Z",
+   "type": "task_built",
+   "tasks": [
+    "T0.15"
+   ],
+   "text": "AC5 401 confirmed via real-middleware test (a15 fix)",
+   "files": [
+    "apps/api/src/middlewares/clerk-auth.real.test.ts"
+   ]
   },
   {
-   "at": "2026-11-16T02:52:57.387Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q19",
-   "text": "Q3: Cap media jobs in flight per user to avoid a finished job failing at deduction?",
-   "default": "No cap; charge-on-success as confirmed",
-   "alternatives": "Cap media jobs at 1 in flight per user"
+   "at": "2026-11-23T01:56:45.578Z",
+   "type": "task_started",
+   "tasks": [
+    "T0.15"
+   ],
+   "attempt": "2"
   },
   {
-   "at": "2026-11-16T02:52:57.320Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q18",
-   "text": "Approve installing @breezystack/lamejs for MP3 export?",
-   "default": "Planned; ask before the export task",
-   "alternatives": "WAV export only; another encoder"
+   "at": "2026-11-23T01:56:45.493Z",
+   "type": "build_started",
+   "tasks": [
+    "T0.15"
+   ],
+   "attempt": "16"
   },
   {
-   "at": "2026-11-16T02:52:57.257Z",
-   "type": "question",
+   "at": "2026-11-23T01:56:40.962Z",
+   "type": "dirty_snapshot",
    "tasks": [],
-   "id": "Q17",
-   "text": "Approve installing wavesurfer.js for the waveform editor?",
-   "default": "Planned; ask before the waveform task",
-   "alternatives": "Hand-rolled canvas waveform; another library"
+   "hashes": {
+    "agent_docs/intent/landing-and-credit-economics.md": "919cee8e29903d5f65c9a9342c8982a262af63cb",
+    "agent_docs/media-studio/TASKS.md": "d3cb5a69298c13234de2bdab55795fd34f842332",
+    "apps/api/src/app.ts": "3d41b4cf927d99371335340f3ac14aef6bdd560d",
+    "apps/api/src/lib/errors.test.ts": "e0770e366c45c2737beb93db25fd989a8e531a6c",
+    "apps/api/src/lib/errors.ts": "6e739e8e6b6436a517a3534db13bdb1486cad5f9",
+    "apps/api/src/lib/replicate.test.ts": "567970d9acb2b8cc9e01a23eb9a75713085faf5d",
+    "apps/api/src/lib/replicate.ts": "234fd5d23868cb12a2a2972472c3fea26caf80c7",
+    "apps/api/src/middlewares/multer.test.ts": "8fbd8ed19956f8afbbfb67779c4ed10e3dab222a",
+    "apps/api/src/middlewares/multer.ts": "73d12568e6a88aa72040250cac72fa2c3540cc05",
+    "apps/api/src/middlewares/rate-limit.test.ts": "35d4fe95992b43b91e2a78a231607cf782b9fe46",
+    "apps/api/src/middlewares/rate-limit.ts": "622260b8196ce83d33a81b26789571b9a61f370f",
+    "apps/api/src/queue/generation-queue.test.ts": "74859ccfb4b26688497c09f0002cd3f8aa48bf77",
+    "apps/api/src/queue/generation-queue.ts": "a1b33e5070fbf3223f928e7ba5df8fddde5fe4c8",
+    "apps/api/src/queue/generation-worker.test.ts": "beced8e9d528839077f222eec9073c82fcdec23d",
+    "apps/api/src/queue/generation-worker.ts": "44387fb0be435e82d3be1f355e9a3cd7758748d1",
+    "apps/api/src/routes/index.test.ts": "cc780647b477fd0d9c36b7181cefa54db35fc3e0",
+    "apps/api/src/routes/index.ts": "467462b6558fe748948598b3520244d1ef5d0e17",
+    "apps/api/src/routes/users.test.ts": "3f2fa42087dbab84e2e20f40c2ee1937e019224f",
+    "apps/api/src/services/cloudinary-service.test.ts": "deb875f61b943d9f075c547f2b946c7c1e0ffc67",
+    "apps/api/src/services/cloudinary-service.ts": "2e28378cfac3f47b0fb102ed19467c5889b5b008",
+    "apps/api/src/services/generation-service.ts": "62a5ccfe07541fff8ee8b1d1328369d309fcc11b",
+    "apps/api/src/utils/cloudinary.test.ts": "d7b8a86bc7c8a0f307a58502ca750fe4ad19dc53",
+    "apps/api/src/utils/cloudinary.ts": "ecaa7e037281a87c43ca1010be8fb408ecd10713",
+    "apps/api/src/utils/cronJobs.test.ts": "1ae9a0986367b162cf32ea9c4c149aeb26fef07f",
+    "apps/api/src/utils/cronJobs.ts": "934ddc029123f46e8b9509318281749afc6f2199",
+    "apps/web/e2e/support/cloudinaryMock.ts": "dee18993be8a380485d018e943ae2060cde675e3",
+    "apps/web/e2e/support/paidCallGuard.test.ts": "63bb74f30cce620ddc7aa9d98345417bddca973a",
+    "apps/web/e2e/support/paidCallGuard.ts": "c890dce7b29a426e2bf099fefff76d06ebb21411",
+    "apps/web/src/App.vue": "99202a017ee3c13516caed3a3584d893d85e0fec",
+    "apps/web/src/components.d.ts": "6d12970f270c8cd438ab33aca3ce9f4c8fecb411",
+    "apps/web/src/components/Dialogs/LowCreditsDialog.vue": "9ef26d80a70b716a5fab24dac2384132acbc8616",
+    "apps/web/src/components/Header/AppHeader.test.ts": "505ccaa31816ccef387f095ee7cea66603f1a00e",
+    "apps/web/src/components/Header/AppHeader.vue": "4e456749d33182b780d3c65634459e13bc7fb38a",
+    "apps/web/src/components/Header/NavTabs.test.ts": "b65e1c5a973612713395211cfc950b5a3ce6dbf7",
+    "apps/web/src/components/Header/NavTabs.vue": "612d67368ab49a3ced348193ffd8a78a4268b5f5",
+    "apps/web/src/components/History/FeatureIcon.vue": "818c25decfd1671d3897e68abecb1968012f7233",
+    "apps/web/src/components/History/Filter.vue": "39f283cb85a43c1c1d4ef99cf479b336858a61a5",
+    "apps/web/src/components/History/History.vue": "ab235f75c18b07927b677db54abd033d8d0e7d8e",
+    "apps/web/src/components/History/NoResults.vue": "eac2bbcfe3a6f8b3f5da7075f2931057c2b8941c",
+    "apps/web/src/components/Pricing/PricingModelCosts.test.ts": "18d27baeadb8f417d49dd0d023647cffed8e7c5d",
+    "apps/web/src/components/Pricing/PricingModelCosts.vue": "598d03ce26c98c5776808bcd814d12c5f7db5fab",
+    "apps/web/src/composables/useGlobalShortcuts.test.ts": "fc15e15973c192cf45c16cd1b3d4a8a2f1d9b4db",
+    "apps/web/src/composables/useGlobalShortcuts.ts": "fd90bf9b7bf184f2c35f63ca5dc172cf584cf295",
+    "apps/web/src/composables/usePricingCatalog.ts": "27a964cea3a64e541e8ed0bd71f10cc239e34d6b",
+    "apps/web/src/pages/Dashboard.vue": "6fa18aec3857d7df658999edfa8f0e607e4d6228",
+    "apps/web/src/router/index.ts": "a93c5b052a910e99c7ad4d503ed47572cc33460f",
+    "apps/web/src/stores/dialog.ts": "b5c4195eba27ccd2de1a6af1591b1e9937c8d079",
+    "apps/web/src/stores/history.test.ts": "1268b84fb61ec20006216d336643c4ccc1b9c797",
+    "apps/web/src/stores/history.ts": "e0382bf96281e13cd8b3b092a5cf6082e8a45003",
+    "apps/web/src/types/primitives.ts": "c483cac84ec6309bddb1c4d8c514fb2c203e61fc",
+    "apps/web/src/utils/constants.ts": "04c120249e8c6b4e48ae540253c1dd5c49158a65",
+    "apps/web/src/utils/dashboardRoutes.test.ts": "12c0db297b67412b3a802692ac626d5aa20504fd",
+    "apps/web/src/utils/dashboardRoutes.ts": "d0c91a47ca529fe2395cddac7476023085e0045c",
+    "apps/web/src/utils/generationCredits.ts": "32ee9a277058169bcd9d63491f305cb320fa4db4",
+    "apps/web/src/utils/models.test.ts": "f68934a14e8f6a516a25eff3f3464179c9b17413",
+    "apps/web/src/utils/models.ts": "4eb1959ebc9424ccc44a4fadedd3941b2024edbd",
+    "apps/web/src/utils/providerLogos.ts": "a5993a869a3ac91bbc9d07add11f9834a52f842d",
+    "apps/web/tailwind.semantic-plugin.js": "6bf0b803c6b116f0ff61a6f9622f02083b2f3713",
+    "docs/MODEL_ONBOARDING.md": "273f207bb259b0761f8b0b8f9ffcb22649b0c099",
+    "packages/shared/src/models/credits.test.ts": "0f93bf281bac3d0e4ea61f3668ae4a0f16d826f2",
+    "packages/shared/src/models/credits.ts": "08862c317f6da031176a184dff6d8b7ab6c658ec",
+    "packages/shared/src/models/index.ts": "3accb97dc213d6388ebd48256c2948191e1dcd2a",
+    "packages/shared/src/models/registry.test.ts": "3ffbff0bfdf9a4a75db0ac9660de90a816db9545",
+    "packages/shared/src/models/registry.ts": "c132c0cd46f86b4381193a534176659de7cb1f26",
+    "packages/shared/src/models/types.ts": "3c1f6e664f68eedf37b301e83035a921587602f2",
+    "packages/shared/src/schemas/index.ts": "0ffb66bd350898717301c125aa43b980d6749dac",
+    "packages/shared/src/types/api.ts": "05909a2a26f7951bca4faccdffc7eac5ffd1c6f4",
+    "packages/shared/src/types/domain.ts": "70a7b30e1626769e5091e732a0e0922ee0affe6e",
+    "packages/shared/src/types/index.ts": "61325ea431641a162d05675acabe42a9697b51d6",
+    "agent_docs/media-studio/APPROVALS.md": "e922dd49b6f2bbd8f3d140e0cbc18e07af49b488",
+    "apps/api/src/lib/credit-deduction.test.ts": "abdd9905ad50bf8f781023e81f7ad52ab8c2209a",
+    "apps/api/src/lib/credit-deduction.ts": "edb433a8bc77ef7d63467d25c8aab92b25042864",
+    "apps/api/src/lib/e2e-user.ts": "eadff69845926a04bb8c609d5f6013404d0a528a",
+    "apps/api/src/lib/fake-cloudinary.test.ts": "769bb3178fe3c5d9cf6d828c6f719378f1ef4bdc",
+    "apps/api/src/lib/fake-cloudinary.ts": "079c07795fa12f40cb0c3c1d322fddaa610fac20",
+    "apps/api/src/lib/lyrics-generator.test.ts": "b3f48287e613ee5b6faec62efecb017af66f2b41",
+    "apps/api/src/lib/lyrics-generator.ts": "20b02a763c95cf7c9fecf87de9b6b675e1c632a1",
+    "apps/api/src/lib/media-input.test.ts": "0c60efe190c3d5e9d218c8e765e1590429538b35",
+    "apps/api/src/lib/media-input.ts": "745cb4214136b4e4e63caf62ff8db0c6e69f18aa",
+    "apps/api/src/lib/media-upload.test.ts": "00eef7fbad08df864ac7c8dc4ba23cb71b9a7a6a",
+    "apps/api/src/lib/media-upload.ts": "766970a9b8c025dcab1c35060c700fd6bc884d15",
+    "apps/api/src/middlewares/clerk-auth.real.test.ts": "851457020d86f4e1000ab7251771c752536154b8",
+    "apps/api/src/models/media-asset.ts": "ec510c9e3b7e019f1e245c526cebb851c55a5f20",
+    "apps/api/src/models/media-upload.ts": "60047f80584938a40a4aac53ce8a0f2aaf617188",
+    "apps/api/src/queue/job-id.test.ts": "98f74730859aa13799d6c96d8e31bf408704547b",
+    "apps/api/src/queue/job-id.ts": "3cbb85103caac560bc6f0e1de7656558eba0b006",
+    "apps/api/src/routes/media.test.ts": "8b82bad0f8592529ffc544ef9047190bd58b6c54",
+    "apps/api/src/routes/media.ts": "51e617c46aaee7a7f2aa86b7fde7ebfc19012a0c",
+    "apps/api/src/services/media-asset-service.test.ts": "345dbbcf0dad012cd8b2d4b4211f9a0259f1a993",
+    "apps/api/src/services/media-asset-service.ts": "12082898c6b1591c6d1cdf8f696bdf24ab210e6f",
+    "apps/api/src/services/media-service.test.ts": "9bea477db7e5ef3e53c85653e18b92e8e3b7b6a1",
+    "apps/api/src/services/media-service.ts": "987f7e727728537524ff3b7bd756a3d3ad92437c",
+    "apps/web/e2e/fixtures/assets/sample.mp3": "18e5b5749fa4704bf7939b5a5e751f5da6c06d83",
+    "apps/web/e2e/fixtures/assets/sample.wav": "22f10726469ee46b443b6ca77c2e937a3d7c6390",
+    "apps/web/e2e/fixtures/media.ts": "fe0e54440e90aee845311d9fd8abc18e562393fe",
+    "apps/web/e2e/qa/media-nav-player.spec.ts": "32e4e41e728f2729840b48110a16519b284e73e5",
+    "apps/web/e2e/qa/media-pipeline.spec.ts": "e5ce794d0af6ddddaa3c684eb94947d3b0888c8a",
+    "apps/web/e2e/scenarios/media-nav-player.feature.md": "a0cb87b9474d19d53a9dfe57ceeea518b816fd73",
+    "apps/web/e2e/scenarios/media-pipeline.feature.md": "11cf6be130607d1b0672a011d11d3cdfffbe1312",
+    "apps/web/e2e/support/mediaAssetSeed.ts": "6e231dc19962897307b434780fcd72c7b32e0122",
+    "apps/web/src/components/Audio/AudioPlayer.vue": "aa2556695784458f7a8e0d11a46693dadc96c9be",
+    "apps/web/src/components/Audio/MiniPlayer.test.ts": "eb3e09d672f45da41e7f923d97271828d624b75a",
+    "apps/web/src/components/Audio/MiniPlayer.vue": "007895ec7297249e1fbee246c1f7a2a00cd0d1da",
+    "apps/web/src/components/Audio/PlayButton.test.ts": "565360e487c1917994a8d9d568e4405a002de59a",
+    "apps/web/src/components/Audio/PlayButton.vue": "4c2a930e00ff6e983daa3c59d6089a8898c13c3e",
+    "apps/web/src/components/Audio/TimeCode.test.ts": "6794d7dc635c342c6c2e708589b5d58ae43cdff2",
+    "apps/web/src/components/Audio/TimeCode.vue": "7887e9195f3061d5823e4c94479f7dc3f38f1170",
+    "apps/web/src/components/Audio/TrackCard.vue": "34b33ade07c9bc9c377cd2e38b111566a97f4ec4",
+    "apps/web/src/components/Header/NavMenuGroup.test.ts": "83d004173695f1d48d4df32aba4f1769ccc63222",
+    "apps/web/src/components/Header/NavMenuGroup.vue": "5b539e6866c793cf42003252a3838410a7a65ba9",
+    "apps/web/src/components/Header/NavMobileAccordion.vue": "3ce962303eb1e652522fe673d139a9b75d5da3dc",
+    "apps/web/src/components/Studio/JobProgress.test.ts": "bc5c85f38d0391dab374107ea848bf36daad35b4",
+    "apps/web/src/components/Studio/JobProgress.vue": "6139674fecd99dd7d567bbcc8b8ea91562fad802",
+    "apps/web/src/components/Studio/ResultCard.test.ts": "c52b7d88745750018dd5795d1a65beec55bcd493",
+    "apps/web/src/components/Studio/ResultCard.vue": "f0e72995e51d44756c3a256ed70520d30701656c",
+    "apps/web/src/components/Studio/ShortcutsPopover.test.ts": "5b4fafeb5618f7388cb28795b5bc115f7ac274e2",
+    "apps/web/src/components/Studio/ShortcutsPopover.vue": "a5c4882ebb03b55d457dce0d69ab81cfa99369ac",
+    "apps/web/src/components/Studio/StudioActionBar.test.ts": "919f1c1048e6080987d675cf724b66f19f39c2d1",
+    "apps/web/src/components/Studio/StudioActionBar.vue": "8665f0cb832cae353fbdcbfa9161765e26085208",
+    "apps/web/src/components/Studio/StudioEmptyState.test.ts": "2c75d11ac8b69517156208c0dbbf6253b720bf6c",
+    "apps/web/src/components/Studio/StudioEmptyState.vue": "95256da5a27a9f1df63ce8c597c96fcecaf5f238",
+    "apps/web/src/components/Studio/StudioErrorState.test.ts": "74e0a49900a19ba870cda5884b7d11e715b633d0",
+    "apps/web/src/components/Studio/StudioErrorState.vue": "557e82cb790fc9efed36bda6670e27c81ca74702",
+    "apps/web/src/components/Studio/StudioPlaceholder.test.ts": "15012773f6e2463462140ac5c28f74718487e48d",
+    "apps/web/src/components/Studio/StudioPlaceholder.vue": "716d733384951fa13206325864bf28d3d177c183",
+    "apps/web/src/components/Studio/StudioShell.test.ts": "f7c22eb313a8f4b132e3d2e90feb401d00ee5ce6",
+    "apps/web/src/components/Studio/StudioShell.vue": "f57a929fae7e4eb292b5d80d127b37fe57adbe3d",
+    "apps/web/src/composables/useMediaCost.test.ts": "59f888facacdc26e7ead385fedf1c9bf8a0f31eb",
+    "apps/web/src/composables/useMediaCost.ts": "64d2b123450a31d7b300aba3b7352745b5f30cb3",
+    "apps/web/src/composables/useMediaDraft.test.ts": "65feeb84c0cab9f93881bdea0578e7c47e5e3e9e",
+    "apps/web/src/composables/useMediaDraft.ts": "1847542fa3a5ceadf32da0b576c3613a914fef43",
+    "apps/web/src/composables/useMediaJob.test.ts": "2dde9b0a3be1ffc438a657d66093f51e674b09e5",
+    "apps/web/src/composables/useMediaJob.ts": "ae19d4c422abfdad26b39061438f7e11dccf107f",
+    "apps/web/src/stores/player.test.ts": "191ef120121968058d6c493d254c9f982bd37aef",
+    "apps/web/src/stores/player.ts": "b0baa5994be090412c3ae68d1f7ea7681cc2c8cd",
+    "apps/web/tsconfig.node.tsbuildinfo": "dccc289d31cac0321647df57b0c9490bae64a73a",
+    "packages/shared/src/models/media-limits.test.ts": "56cd32cd652a5727afaf8dbacb0d58c41239fb8a",
+    "packages/shared/src/models/media-limits.ts": "2d2b8e02569cc10f3fabbe54852d96230e148a86",
+    "packages/shared/src/models/media-shortcuts.ts": "185ba886463034e17b0e7da9fc1348bde7c08730",
+    "packages/shared/src/schemas/media.ts": "a374ff3058d46625b112a0a1aa95b812738bd6f1"
+   }
   },
   {
-   "at": "2026-11-16T02:52:57.192Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q16",
-   "text": "G16: Page file names?",
-   "default": "SPEC names: Music.vue, Speech.vue, Video.vue, Tool*.vue",
-   "alternatives": "*Studio.vue naming"
+   "at": "2026-11-23T01:56:40.904Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T0.13"
+   ],
+   "fingerprint": "e0ad4c206c87e1f8061ad7651fd8f14319838ea1b31238afe0966883887141cd"
   },
   {
-   "at": "2026-11-16T02:52:57.132Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q15",
-   "text": "G15: Shared package unit test command?",
-   "default": "bunx vp test run packages/shared/<spec> from the repo root",
-   "alternatives": "Add a test script to packages/shared"
+   "at": "2026-11-23T01:56:31.954Z",
+   "type": "task_built",
+   "tasks": [
+    "T0.13"
+   ],
+   "text": "Clerk Unauthenticated mapped to 401 in app error handler via resolveErrorStatus; real-middleware test",
+   "files": [
+    "apps/api/src/lib/errors.ts",
+    "apps/api/src/app.ts"
+   ]
   },
   {
-   "at": "2026-11-16T02:52:57.075Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q14",
-   "text": "G14: Song empty-state sample loop (R-SONG-8): which audio?",
-   "default": "Hidden until SONG_SAMPLE_LOOP_URL is set; the 3 example ideas still show",
-   "alternatives": "Owner-made loop from a manual generation; licensed stock loop"
+   "at": "2026-11-23T01:55:59.151Z",
+   "type": "task_started",
+   "tasks": [
+    "T0.13"
+   ],
+   "attempt": "3"
   },
   {
-   "at": "2026-11-16T02:52:57.012Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q13",
-   "text": "G13: Credit order for media jobs?",
-   "default": "Existing runGenerationJob order: run, persist, deduct once, copy to Cloudinary, complete",
-   "alternatives": "Reserve-then-settle (out of confirmed intent)"
+   "at": "2026-11-23T01:55:59.068Z",
+   "type": "build_started",
+   "tasks": [
+    "T0.13"
+   ],
+   "attempt": "15"
   },
   {
-   "at": "2026-11-16T02:52:56.934Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q12",
-   "text": "G12: Lyrics section rewrite and condense: one endpoint or two?",
-   "default": "Multiplexed on POST /prompt/lyrics",
-   "alternatives": "Separate endpoints"
+   "at": "2026-11-23T01:55:51.843Z",
+   "tasks": [
+    "T0.31"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "V1 `bun run check` exit 0 (0 errors, 17 warnings); V2 `bun run test` 332 files, 3535/3535; V3 check:model-docs passes (15); V4 both specs --repeat-each=2 31 passed 0 failed 0 flaky",
+   "fingerprint": "3be2be289338b3848f535d00c650fc03c8ed52664f5600236040d99e3a6c4c9e",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
   },
   {
-   "at": "2026-11-16T02:52:56.846Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q11",
-   "text": "G11: Is Sketch its own history type?",
-   "default": "No: FeatureType.SKETCH is routing, nav and labels only; results are normal images under the Images filter",
-   "alternatives": "Separate Sketch history filter"
+   "at": "2026-11-23T01:55:51.843Z",
+   "tasks": [
+    "T0.29"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "V1 --repeat-each=3 22 passed 0 failed 0 flaky; V2 @critical 4/4 incl. guard self-test; no allowRealPaidCalls or skip markers in the spec; the dropped credit scenario follows the logged user decision",
+   "fingerprint": "71d5e0146251347ebe88fe60cac83bcf929e5f995588b6eac9d65ed01ae0b18c",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
   },
   {
-   "at": "2026-11-16T02:52:56.762Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q10",
-   "text": "G10: Where does VIDEO_WATERMARK_PLACEMENT come from (never an unapproved paid run)?",
-   "default": "Public model source or example outputs; else null and the preview makes no position claim",
-   "alternatives": "Owner supplies a sample output; one approved paid run"
+   "at": "2026-11-23T01:55:51.842Z",
+   "tasks": [
+    "T0.28"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "V1 run 5 times in the exact 5-file combination: 69/69 each, 100% all metrics (a9 flake gone, fix only waits for Popover focus via vi.waitFor); V2 Audio+Studio+Header 209/209 x3; AC2 component tests added",
+   "fingerprint": "05cdbe564a0aba8cc56106eb4f08eacb3a49ab03cda76d20572bdc90849ef92b",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
   },
   {
-   "at": "2026-11-16T02:52:56.711Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q9",
-   "text": "G9: Approve four new Mongo collections: MediaAsset, MediaUpload, Voice, VoiceConsent?",
-   "default": "Planned as the first task, built only after owner approval",
-   "alternatives": "Reuse existing collections with a type field"
+   "at": "2026-11-23T01:55:51.842Z",
+   "tasks": [
+    "T0.27"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "V1 153/153, lowest useGlobalShortcuts.ts branches 96.29%; V2 473/473; check exit 0 (a9 formatting blocker cleared)",
+   "fingerprint": "b318536a7e5f08ea418a7d6c0a964a7c13047f302eccee2db0e82c0789ca9b0f",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
   },
   {
-   "at": "2026-11-16T02:52:56.657Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q8",
-   "text": "G8: What shows on a studio route before its page ships?",
-   "default": "StudioPlaceholder renders",
-   "alternatives": "Hide the nav item until the page ships"
+   "at": "2026-11-23T01:55:51.842Z",
+   "tasks": [
+    "T0.25"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "useGlobalShortcuts() now registered in App.vue:29 (a9 blocker cleared). My agent-browser check on /audio/song: ? opens the Keyboard shortcuts dialog, Escape closes it, ? typed in an input does not open it; on /pricing with no track Space is not prevented and the page scrolls (evidence T0.25-a14-audio-song-popover.png); check exit 0",
+   "fingerprint": "d026898dffac6910352dce2eece84d5d7e2cbc670578d2d095b1f45d8334d7dc",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
   },
   {
-   "at": "2026-11-16T02:52:56.607Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q7",
-   "text": "G7: Share one HTMLAudioElement between the mini-player and wavesurfer?",
-   "default": "One shared element",
-   "alternatives": "Separate elements kept in sync"
+   "at": "2026-11-23T01:55:51.842Z",
+   "tasks": [
+    "T0.24"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "component tests now exist: JobProgress (fake-timer elapsed, leave-page sentence, reduced motion), StudioErrorState (No credits were used., one action), StudioEmptyState (example action emits), ResultCard (focus on Play, toast, UnsavedResultNotice), StudioActionBar (149 no confirm, 150 confirm, focus on Cancel, reason line); bar is sticky at bottom: var(--mini-player-h) (StudioActionBar.vue:102-103",
+   "fingerprint": "6bf924d28f4a9b31b27b354d5a8f34bcc8a9117cff19eea0adb4ad30c6e8e6dd",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
   },
   {
-   "at": "2026-11-16T02:52:56.560Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q6",
-   "text": "G6: Add a blockSec field to the pricing unit for Autocaption?",
-   "default": "Yes, blockSec added",
-   "alternatives": "Bill autocaption per second with no blocks"
+   "at": "2026-11-23T01:55:51.842Z",
+   "tasks": [
+    "T0.23"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "stores+composables 473/473 (T0.27 V2); useMediaJob branches 98.57%; root run green",
+   "fingerprint": "a31a2a3d94a929979b564baf3a61efabc9597ef3d5ead35304c1cdae5908edbd",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
   },
   {
-   "at": "2026-11-16T02:52:56.515Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q5",
-   "text": "G5: How many cloned voices per user?",
-   "default": "MAX_VOICES_PER_USER = 10",
-   "alternatives": "Lower or higher cap; tie to plan tier"
+   "at": "2026-11-23T01:55:51.841Z",
+   "tasks": [
+    "T0.22"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "History tests green in root run; e2e \"History shows a stubbed fake asset with the Song filter\" green in gate run x2",
+   "fingerprint": "bb16320da5a1fb3af112eaad0c36fb942d955db65278e46de259f66790015102",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
   },
   {
-   "at": "2026-11-16T02:52:56.469Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q4",
-   "text": "G4: Keep the VoiceConsent record after a voice is deleted?",
-   "default": "Retained as an audit record",
-   "alternatives": "Delete it with the voice"
+   "at": "2026-11-23T01:55:51.841Z",
+   "tasks": [
+    "T0.21"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "component tests now cover AC2 keys/Space/Escape, AC3 close, AC4 no autoplay on mount, AC5 reduced-motion rule, AC6 --mini-player-h set/cleared (MiniPlayer.test.ts 15 tests); safe-area inset in MiniPlayer.vue:36,177; AC1 persistence e2e green in gate run",
+   "fingerprint": "4e2e9aa02f05f5426e67cd2c332e72543725c425463869cfa33cf1a78379f227",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
   },
   {
-   "at": "2026-11-16T02:52:56.423Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q3",
-   "text": "G3: One history cap for images plus media, or separate caps?",
-   "default": "One combined cap",
-   "alternatives": "Separate cap per media type"
+   "at": "2026-11-23T01:55:51.841Z",
+   "tasks": [
+    "T0.18"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "nav-player e2e green in gate run (31/31 with --repeat-each=2); NavMenuGroup tests 5/5 runs green; shots T0.18-1/2 unchanged since a9 PASS",
+   "fingerprint": "9f06cb563dfa5f874ca08dd36b755fe22254eb48d9bf7c03e2788921b8a8a331",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
   },
   {
-   "at": "2026-11-16T02:52:56.377Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q2",
-   "text": "G2: The /media/* endpoint names are not in the spec. Use the plan names?",
-   "default": "Use the plan names",
-   "alternatives": "Owner supplies different endpoint names"
+   "at": "2026-11-23T01:55:51.841Z",
+   "tasks": [
+    "T0.17"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "V1 123/123, lowest media-upload.ts branches 98.61%; `bun run check` now exit 0 (a9 formatting blocker cleared)",
+   "fingerprint": "a1a13f083aed2e3ddaae50a7025a51666532bf81b3f89cb776dfc13d493fbeaa",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
   },
   {
-   "at": "2026-11-16T02:52:56.327Z",
-   "type": "question",
-   "tasks": [],
-   "id": "Q1",
-   "text": "G1: How is P-Video audio cost billed?",
-   "default": "Stored audio duration clamped to 20 seconds, shown as Estimated",
-   "alternatives": "Flat per-video price; bill on requested duration"
+   "at": "2026-11-23T01:55:51.841Z",
+   "tasks": [
+    "T0.16"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "check exit 0, root suite green; e2e upload sample.mp3 (uploadId + durationSec) and renamed .png rejected both pass in media-pipeline x3",
+   "fingerprint": "3fd777cad7e614ee320118ed61ffd11a2f035a957745cfbbf9fe46dd6afd7a34",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-23T01:55:51.840Z",
+   "tasks": [
+    "T0.14"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "V1 118/118, lowest utils/cloudinary.ts branches 94.11% (lines 51,178,195), all other files 97.5-100%",
+   "fingerprint": "fdfc5727cbd4662a34206f9900ec9d8fa393224fae69a4d40c97ef3187a50466",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-23T01:55:51.840Z",
+   "tasks": [
+    "T0.12"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "api suite green (root 3535/3535); media-asset-service branches 98.24% in T0.14 V1",
+   "fingerprint": "c2047aaf0e843fa249d46a2fc990b08f2ac4e769010ee47466ad36a8ae9c994c",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-23T01:55:51.840Z",
+   "tasks": [
+    "T0.11"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "V1 133/133 (6 files incl. job-id), statements/lines/functions 100%, lowest branches routes/media.ts 97.5% (line 84); V2 52/52",
+   "fingerprint": "c438a72b4596ec2c877fab797e6ca97ebcd25abf96fde66e59d5552d3f450037",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-23T01:55:51.840Z",
+   "tasks": [
+    "T0.10"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "api type-check exit 0; route/service tests 133/133 in T0.11 V1; root suite green",
+   "fingerprint": "3d8fbeaa4bba8da5f9b35960aec3ac547896ae5abcd0cd92cfe96f65058e369e",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-23T01:55:51.840Z",
+   "tasks": [
+    "T0.9"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "V1 grep `credits` in media-input.ts and schemas/media.ts returns nothing; MEDIA_PROMPT_MAX_CHARS moved into media-limits.ts (a9 blocker cleared); check exit 0",
+   "fingerprint": "73e116e58ac21f0301d46da833e20346b7dd2644fe98612c6cb63b84879012a5",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-23T01:55:51.840Z",
+   "tasks": [
+    "T0.8"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "V2 grep `kind === \"image\"` returns nothing; T0.11 V2 generation-service + worker 52/52; api type-check exit 0",
+   "fingerprint": "09e4f495bdf9b5257d4b2c453da5c93a12af0f42176231ea9f1d5b0fe5e24527",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-23T01:55:51.839Z",
+   "tasks": [
+    "T0.4"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "shared files unchanged since a9 (a9 V1 146 tests 100% all metrics, V2 51 tests 100%); still green in root run 3535/3535",
+   "fingerprint": "63ff27e42d3b2f1ecdf792ecdf13a78b772958e0c360b56b0f95c9ce72de1336",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-23T01:55:51.839Z",
+   "tasks": [
+    "T0.3"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "check:model-docs passes (15 media models); shared/api/web suites green inside root run 3535/3535; api type-check exit 0",
+   "fingerprint": "f18300be9eab4b7e79cdb30b03b1d452f5230dd4637bc314d0aaf1793e12de29",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-23T01:55:51.839Z",
+   "tasks": [
+    "T0.2"
+   ],
+   "attempt": "14",
+   "type": "verify_passed",
+   "evidence": "V1 grep shows 200 only on MEDIA_CREDITS_PER_USD (credits.ts:89) and 150 only on EXPENSIVE_JOB_CREDITS (media-limits.ts:13); MEDIA_PROMPT_MAX_CHARS and MAX_VERSION_FILE_BYTES now live in media-limits.ts:18,20; `bun run check` exit 0; root `bun run test` 3535/3535; api type-check exit 0",
+   "fingerprint": "78f36581349437bd102a493c189f4701ff9b7110e1ba781b40a1b6644ba48744",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-23T01:55:51.839Z",
+   "tasks": [
+    "T0.15"
+   ],
+   "attempt": "14",
+   "type": "verify_failed",
+   "category": "code-bug",
+   "text": "[code-bug] · AC5 \"An unauthenticated upload returns 401\" · POST /media/uploads with no session returns 500 {\"error\":\"Unauthenticated\"} from the running API (same root cause as T0.13). POST /generate/audio/music behaves the same way · The same fix as T0.13 resolves it. Add a test that asserts 401 for POST /media/uploads without mocking requireAuth away",
+   "files": [
+    "ac5 \"an unauthenticated upload returns 401\""
+   ],
+   "sigs": [
+    "T0.15|code-bug|ac5 \"an unauthenticated upload returns 401\""
+   ],
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-23T01:55:51.838Z",
+   "tasks": [
+    "T0.13"
+   ],
+   "attempt": "14",
+   "type": "verify_failed",
+   "category": "code-bug",
+   "text": "[code-bug] · AC3 \"Unauthenticated requests return 401 on every assets route\" · Against the running API with no session, GET /media/assets, GET /media/assets/abc, DELETE /media/assets/abc and POST /media/assets/abc/versions all return 500 {\"error\":\"Unauthenticated\"}. requireAuth (ClerkExpressRequireAuth, middlewares/clerk.ts:40) calls next(Error(\"Unauthenticated\")), which is not an HttpError, so th",
+   "files": [
+    "ac3 \"unauthenticated requests return 401 on every assets rou"
+   ],
+   "sigs": [
+    "T0.13|code-bug|ac3 \"unauthenticated requests return 401 on every assets rou"
+   ],
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a14.md"
+  },
+  {
+   "at": "2026-11-23T01:55:25.992Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.14"
+   ],
+   "text": "utils/cloudinary.ts branches 94.11% (lines 51,178,195 uncovered)"
+  },
+  {
+   "at": "2026-11-23T01:55:25.904Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.21"
+   ],
+   "text": "shot T0.21-1 still shows the old doubled inline card player"
+  },
+  {
+   "at": "2026-11-23T01:55:25.807Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.31"
+   ],
+   "text": "untracked apps/web/tsconfig.node.tsbuildinfo; add to .gitignore"
+  },
+  {
+   "at": "2026-11-23T01:55:25.712Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.2"
+   ],
+   "text": "media-asset-service.ts:19-21 page-size/title constants live outside media-limits.ts"
+  },
+  {
+   "at": "2026-11-23T01:55:25.618Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.29"
+   ],
+   "text": "media-pipeline.spec.ts:282 require-array-sort-compare lint warning"
+  },
+  {
+   "at": "2026-11-23T01:55:25.523Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.17"
+   ],
+   "text": "lint warnings: routes/media.test.ts:122,337 unused index; lib/media-upload.ts:122 no-misused-spread"
+  },
+  {
+   "at": "2026-11-23T01:55:25.433Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.25"
+   ],
+   "text": "useGlobalShortcuts.ts:112-116 prevents / on every route when tab=1 now that the listener is app-wide; guard on a composer being present"
+  },
+  {
+   "at": "2026-11-23T01:55:25.305Z",
+   "type": "advisory",
+   "tasks": [
+    "T0.29"
+   ],
+   "text": "media-pipeline.feature.md still lists the dropped exact-cost balance scenario; remove it and note the user decision"
+  },
+  {
+   "at": "2026-11-23T01:39:51.172Z",
+   "type": "verify_started",
+   "tasks": [
+    "T0.2",
+    "T0.3",
+    "T0.4",
+    "T0.8",
+    "T0.9",
+    "T0.10",
+    "T0.11",
+    "T0.12",
+    "T0.13",
+    "T0.14",
+    "T0.15",
+    "T0.16",
+    "T0.17",
+    "T0.18",
+    "T0.21",
+    "T0.22",
+    "T0.23",
+    "T0.24",
+    "T0.25",
+    "T0.27",
+    "T0.28",
+    "T0.29",
+    "T0.31"
+   ],
+   "attempt": "14"
+  },
+  {
+   "at": "2026-11-23T01:39:48.342Z",
+   "tasks": [
+    "T0.23"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "useMediaJob mints the jobId with uuid v4 (useMediaJob.ts:227) and never sends credits or userId; useMediaCost and generationCredits are display-only, and the server recomputes both cost and balance",
+   "fingerprint": "a31a2a3d94a929979b564baf3a61efabc9597ef3d5ead35304c1cdae5908edbd",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T01:39:48.342Z",
+   "tasks": [
+    "T0.22"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "History binds only server-sourced asset URLs to :href; the target=_blank link has rel=noopener (History.vue:383-386); there is no v-html or innerHTML; deleteMedia goes through the authenticated /media/assets API (stores/history.ts:156)",
+   "fingerprint": "bb16320da5a1fb3af112eaad0c36fb942d955db65278e46de259f66790015102",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T01:39:48.342Z",
+   "tasks": [
+    "T0.16"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "on a purpose mismatch the route runs removeTempFile before next(error) (media.ts:203); finally runs removeTempFile on every other path (media.ts:224); sweepExpiredMediaUploads deletes the Cloudinary file before the row and keeps the row on failure so the next run retries (cronJobs.ts)",
+   "fingerprint": "3fd777cad7e614ee320118ed61ffd11a2f035a957745cfbbf9fe46dd6afd7a34",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T01:39:48.342Z",
+   "tasks": [
+    "T0.15"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "sniffMime reads magic bytes and ignores the extension and the client MIME; there is a per-purpose MIME allowlist and byte cap (media-upload.ts:245-249); isUploadPurpose uses Object.hasOwn (media-upload.ts:93); multer caps files at 1 and fileSize per kind (multer.ts:72); uploadRateLimiter is keyed on the Clerk userId at 30 per 10 min",
+   "fingerprint": "c0e15b71ddb7151b8cf72ed4531616345480fac43207c5041b1ba3eeed0ba62e",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T01:39:48.341Z",
+   "tasks": [
+    "T0.13"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "the four /media/assets routes all run requireAuth and use sessionUserId; parseListQuery checks type against an allowlist and requires an integer limit (media.ts:120-134), which the service clamps; createVersion loads the parent through findOwnedAsset (media-asset-service.ts:220), so there is no IDOR",
+   "fingerprint": "e0ad4c206c87e1f8061ad7651fd8f14319838ea1b31238afe0966883887141cd",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T01:39:48.341Z",
+   "tasks": [
+    "T0.12"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "every MediaAsset find, update and delete filters on userId (media-asset-service.ts:134,150,158,206,251,263); a foreign or invalid id gives 404; the cascade delete is scoped by userId; the copy to Cloudinary uses fakeMediaUpload for e2e users (media-asset-service.ts:130)",
+   "fingerprint": "c2047aaf0e843fa249d46a2fc990b08f2ac4e769010ee47466ad36a8ae9c994c",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T01:39:48.341Z",
+   "tasks": [
+    "T0.10"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "userId comes only from req.auth (media.ts:67); order is zod, then registry check, then moderation, then a server-computed 402, then dedup (media.ts:80-109); hasExistingJob falls back to MediaAssetModel.exists once BullMQ has purged the job and rejects a live jobId owned by another user (media-service.ts:97-103); firstOutputUrl now accepts only https URLs, so a bare string never reaches Cloudinary ",
+   "fingerprint": "3d8fbeaa4bba8da5f9b35960aec3ac547896ae5abcd0cd92cfe96f65058e369e",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T01:39:48.341Z",
+   "tasks": [
+    "T0.9"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "MusicRequestSchema is a strict-shape z.object that drops unknown keys, limits prompt and negativePrompt to MEDIA_PROMPT_MAX_CHARS, requires seed to be an int and jobId to be a uuid (schemas/media.ts:7-16); validateMediaParams uses Object.hasOwn on the registry and its inputs (media-input.ts:10,31); no client credits or userId field is read",
+   "fingerprint": "73e116e58ac21f0301d46da833e20346b7dd2644fe98612c6cb63b84879012a5",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T01:39:48.340Z",
+   "tasks": [
+    "T0.8"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "updateAndGetUserCredits is one atomic findOneAndUpdate with a $expr balance guard (credit-deduction.ts:13-54); it throws on insufficient credits, so there is no partial or negative deduction; the queue keeps the jobId option",
+   "fingerprint": "09e4f495bdf9b5257d4b2c453da5c93a12af0f42176231ea9f1d5b0fe5e24527",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a14.md",
+   "verdict": "PASS",
+   "reviewer": "security"
   }
  ]
 };

@@ -8,7 +8,6 @@ import { FeatureType } from '@/types';
 import { useAppStore } from '@/stores/app';
 
 import { useComposerPersistence } from '@/composables/useComposerPersistence';
-import { useGlobalShortcuts } from '@/composables/useGlobalShortcuts';
 import { usePageSeo } from '@/composables/usePageSeo';
 import { useStudioPromptPrefill } from '@/composables/useStudioPromptPrefill';
 
@@ -40,7 +39,6 @@ const isSmUp = useMediaQuery(`(min-width: ${CREATE_LAYOUT_SM}px)`);
 
 useComposerPersistence();
 useStudioPromptPrefill();
-useGlobalShortcuts();
 
 const isImageFeature = computed(() => !feature.value || feature.value === FeatureType.IMAGE);
 const settingsOpen = ref(false);

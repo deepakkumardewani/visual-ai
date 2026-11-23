@@ -7,6 +7,7 @@ import {
   PRO_PRICE_USD_MONTHLY,
   formatPrice,
   getCreditCost,
+  getModelKind,
   isSupportedCurrency,
   MODEL_REGISTRY,
   PREMIUM_CREDIT_COST,
@@ -183,7 +184,8 @@ export function usePricingCatalog() {
     for (const key in MODEL_REGISTRY) {
       const modelKey = key as ModelKey;
       const model = MODEL_REGISTRY[modelKey];
-      if (!model) continue;
+      // Media models are priced per job input, not by this flat table.
+      if (!model || getModelKind(model) !== 'image') continue;
 
       try {
         const row: PricingModelRow = {

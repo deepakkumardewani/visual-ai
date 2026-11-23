@@ -7,6 +7,7 @@ import {
     deleteCloudinaryUserData,
     deleteImageByObject,
     deleteImagesByPublicIds,
+    deleteMediaByPublicIds,
 } from "./cloudinary-service.js"
 
 vi.mock("cloudinary", () => ({
@@ -166,5 +167,45 @@ describe("deleteImageByObject", () => {
         )
 
         expect(cloudinary.api.delete_resources).not.toHaveBeenCalled()
+    })
+})
+
+describe("deleteMediaByPublicIds", () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+    })
+
+    it("deletes with resource_type video", async () => {
+        await deleteMediaByPublicIds(["a", "b"])
+
+        expect(cloudinary.api.delete_resources).toHaveBeenCalledWith(["a", "b"], {
+            resource_type: "video",
+        })
+    })
+
+    it("skips fake e2e ids and deletes only the real ones", async () => {
+        await deleteMediaByPublicIds(["e2e-fake/1", "real"])
+
+        expect(cloudinary.api.delete_resources).toHaveBeenCalledWith(["real"], {
+            resource_type: "video",
+        })
+    })
+
+    it("makes no call when every id is fake", async () => {
+        await deleteMediaByPublicIds(["e2e-fake/1"])
+
+        expect(cloudinary.api.delete_resources).not.toHaveBeenCalled()
+    })
+
+    it("does nothing for an empty list", async () => {
+        await deleteMediaByPublicIds([])
+
+        expect(cloudinary.api.delete_resources).not.toHaveBeenCalled()
+    })
+
+    it("swallows a Cloudinary failure so the record can still be removed", async () => {
+        vi.mocked(cloudinary.api.delete_resources).mockRejectedValueOnce(new Error("down"))
+
+        await expect(deleteMediaByPublicIds(["a"])).resolves.toBeUndefined()
     })
 })

@@ -46,7 +46,9 @@ export async function uploadToCloudinary(data: any) {
             imageId,
             aspectRatio = "",
             originalPublicId = "",
+            resourceType,
         } = data
+        const resourceOption = resourceType ? { resource_type: resourceType } : {}
         const basePath = `${env.CLOUDINARY_BASE_PATH}/${userId}`
         let image: IImageObject
 
@@ -60,6 +62,7 @@ export async function uploadToCloudinary(data: any) {
                 }
                 return cloudinary.v2.uploader.upload(imageString, {
                     folder: `${basePath}/${type}`,
+                    ...resourceOption,
                 })
             })
             const results = await Promise.all(uploadPromises)
@@ -118,6 +121,7 @@ export async function uploadToCloudinary(data: any) {
             }
             const result = await cloudinary.v2.uploader.upload(imageString, {
                 folder: `${basePath}/${type}`,
+                ...resourceOption,
                 ...(preserveAlpha ? { format: "png" } : {}),
             })
 
@@ -215,6 +219,56 @@ export async function uploadToCloudinary(data: any) {
         logger.error({ err: error }, "Error uploading to Cloudinary")
         throw error // Re-throw the error to be handled by the caller
     }
+}
+
+export interface MediaUploadResult {
+    url: string
+    publicId: string
+    format?: string
+    bytes: number
+    durationSec?: number
+    width?: number
+    height?: number
+}
+
+function toMediaUploadResult(result: cloudinary.UploadApiResponse): MediaUploadResult {
+    return {
+        url: result.secure_url,
+        publicId: result.public_id,
+        format: result.format,
+        bytes: result.bytes,
+        durationSec: typeof result.duration === "number" ? result.duration : undefined,
+        width: result.width,
+        height: result.height,
+    }
+}
+
+/**
+ * Uploads audio or video (a remote URL or an in-memory file) with resource_type "video",
+ * which is how Cloudinary stores both. Errors propagate so the caller can decide what to undo.
+ */
+export async function uploadMediaToCloudinary(
+    source: string | Buffer,
+    folder: string,
+): Promise<MediaUploadResult> {
+    const options = { folder, resource_type: "video" as const }
+    if (typeof source === "string") {
+        return toMediaUploadResult(await cloudinary.v2.uploader.upload(source, options))
+    }
+    return new Promise<MediaUploadResult>((resolve, reject) => {
+        const stream = cloudinary.v2.uploader.upload_stream(options, (error, result) => {
+            if (error || !result) {
+                reject(error ?? new Error("Cloudinary returned no upload result"))
+                return
+            }
+            resolve(toMediaUploadResult(result))
+        })
+        stream.end(source)
+    })
+}
+
+export function buildMediaFolder(userId: string, feature: string): string {
+    return `${env.CLOUDINARY_BASE_PATH}/${userId}/${feature}`
 }
 
 export async function getImageDetails(url: string) {

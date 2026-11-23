@@ -3,19 +3,20 @@ import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
-import type { GroupedObject } from '@/types';
-
 import { useCollectionsStore } from '@/stores/collections';
 import { useUserStore } from '@/stores/user';
 
 import { APP_SURFACE } from '@/utils/dashboardRoutes';
 
-defineProps<{
+const props = defineProps<{
   isFavorites?: boolean;
-  groupedHistory?: GroupedObject[];
+  groupedHistory?: readonly unknown[];
+  /** Images plus media; defaults to the image history length. */
+  totalCount?: number;
 }>();
 const router = useRouter();
 const { history } = storeToRefs(useUserStore());
+const itemCount = computed(() => props.totalCount ?? history.value.length);
 const { selectedCollectionId, collections } = storeToRefs(useCollectionsStore());
 
 const selectedCollectionName = computed(
@@ -30,7 +31,7 @@ function create() {
 </script>
 <template>
   <div
-    v-if="!isFavorites && history.length === 0"
+    v-if="!isFavorites && itemCount === 0"
     class="tw-flex tw-h-full tw-items-center tw-justify-center tw-px-6"
   >
     <div class="tw-text-center">
@@ -50,7 +51,7 @@ function create() {
   </div>
 
   <div
-    v-if="!isFavorites && history.length !== 0 && groupedHistory?.length === 0"
+    v-if="!isFavorites && itemCount !== 0 && groupedHistory?.length === 0"
     class="tw-flex tw-h-full tw-items-center tw-justify-center tw-px-6"
   >
     <div v-if="selectedCollectionId" class="tw-max-w-sm tw-text-center">

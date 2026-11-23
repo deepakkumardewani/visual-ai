@@ -2,10 +2,13 @@ import type { APIRequestContext, BrowserContext } from '@playwright/test';
 
 // Generation endpoints that enqueue a billable provider job (apps/api/src/routes/generate.ts):
 // POST /generate/image, /generate/<op>/image (upscale, revive, colorize, remove-bg) and the video
-// equivalents. /generate/reference-images only uploads files, so it is intentionally excluded.
-const PAID_PATH_PATTERN = /\/generate\/(?:[a-z-]+\/)?(?:image|video)\/?$/;
+// equivalents, plus the media routes: /generate/audio/* (song, music, speech, voices),
+// /generate/tools/* and the outbound-LLM /prompt/lyrics. /generate/reference-images only uploads
+// files, so it is intentionally excluded. Only ever broaden this pattern.
+export const PAID_PATH_PATTERN =
+  /\/generate\/(?:[a-z-]+\/)?(?:image|video)\/?$|\/generate\/(?:audio|tools)\/[a-z-]+\/?$|\/prompt\/lyrics\/?$/;
 const PAID_METHOD = 'POST';
-const PAID_ROUTE_GLOB = '**/generate/**';
+const PAID_ROUTE_GLOBS = ['**/generate/**', '**/prompt/lyrics**'];
 
 export const OPT_IN_HINT =
   'Stub it (generationStub fixture) or, only if the request is guaranteed to be rejected before ' +
@@ -46,15 +49,17 @@ export async function installPaidCallRouteGuard(
   context: BrowserContext,
   recorder: PaidCallRecorder,
 ): Promise<void> {
-  await context.route(PAID_ROUTE_GLOB, async (route) => {
-    const { method, url } = {
-      method: route.request().method(),
-      url: route.request().url(),
-    };
-    if (!isPaidCall(method, url)) return route.fallback();
-    recorder.hits.push(describePaidHit(method, url));
-    return route.abort('blockedbyclient');
-  });
+  for (const glob of PAID_ROUTE_GLOBS) {
+    await context.route(glob, async (route) => {
+      const { method, url } = {
+        method: route.request().method(),
+        url: route.request().url(),
+      };
+      if (!isPaidCall(method, url)) return route.fallback();
+      recorder.hits.push(describePaidHit(method, url));
+      return route.abort('blockedbyclient');
+    });
+  }
 }
 
 /**

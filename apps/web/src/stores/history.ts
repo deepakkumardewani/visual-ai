@@ -1,13 +1,112 @@
-import { getHistoryFullLevel, HISTORY_CAP, type HistoryFullLevel } from '@visual-ai/shared';
+import {
+  FeatureType,
+  getHistoryFullLevel,
+  HISTORY_CAP,
+  type HistoryFullLevel,
+  type IImageObject,
+  type MediaAssetDto,
+  type MediaAssetListResponse,
+} from '@visual-ai/shared';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
+import { groupByDate } from '@/pages/utils';
 import { useUserStore } from '@/stores/user';
+import { useFetch } from '@/composables/useFetch';
+import { createLogger } from '@/utils/logger';
+
+const log = createLogger('history');
+
+const MEDIA_ASSETS_PATH = '/media/assets';
+/** Assets per request; the loader follows cursors until the list ends. */
+const MEDIA_PAGE_SIZE = 50;
+/** Hard stop so a misbehaving cursor can never loop forever. */
+const MEDIA_MAX_PAGES = 20;
+
+export type HistoryChip = 'all' | 'images' | 'song' | 'music' | 'speech' | 'video' | 'tools';
+
+export const HISTORY_CHIPS: ReadonlyArray<{ id: HistoryChip; label: string }> = [
+  { id: 'all', label: 'All' },
+  { id: 'images', label: 'Images' },
+  { id: 'song', label: 'Song' },
+  { id: 'music', label: 'Music' },
+  { id: 'speech', label: 'Speech' },
+  { id: 'video', label: 'Video' },
+  { id: 'tools', label: 'Tools' },
+];
+
+/** Media features each chip shows; sketch results are normal images and sit under Images (G11). */
+const CHIP_MEDIA_FEATURES: Record<Exclude<HistoryChip, 'all' | 'images'>, readonly string[]> = {
+  song: [FeatureType.SONG],
+  music: [FeatureType.MUSIC],
+  speech: [FeatureType.SPEECH],
+  video: [FeatureType.VIDEO],
+  tools: [FeatureType.WATERMARK_IMAGE, FeatureType.WATERMARK_VIDEO, FeatureType.AUTOCAPTION],
+};
+
+export type HistoryItem =
+  | { kind: 'image'; item: IImageObject }
+  | { kind: 'media'; item: MediaAssetDto };
+
+export interface HistoryGroup {
+  title: string;
+  data: HistoryItem[];
+  isDeleting: boolean;
+}
+
+export function getHistoryItemId(entry: HistoryItem): string {
+  return (entry.kind === 'image' ? entry.item._id : entry.item.id) ?? '';
+}
+
+function getHistoryItemTime(entry: HistoryItem): number {
+  const createdAt = entry.item.createdAt;
+  return createdAt ? new Date(createdAt).getTime() : 0;
+}
+
+export function getHistoryItemFeature(entry: HistoryItem): string {
+  return entry.kind === 'image' ? entry.item.featureType : entry.item.feature;
+}
+
+/** Images and media as one list, newest first. */
+export function mergeHistoryItems(
+  images: readonly IImageObject[],
+  media: readonly MediaAssetDto[],
+): HistoryItem[] {
+  const entries: HistoryItem[] = [
+    ...images.map((item): HistoryItem => ({ kind: 'image', item })),
+    ...media.map((item): HistoryItem => ({ kind: 'media', item })),
+  ];
+  return entries.sort((a, b) => getHistoryItemTime(b) - getHistoryItemTime(a));
+}
+
+export function matchesChip(entry: HistoryItem, chip: HistoryChip): boolean {
+  if (chip === 'all') return true;
+  if (chip === 'images') return entry.kind === 'image';
+  return entry.kind === 'media' && CHIP_MEDIA_FEATURES[chip].includes(entry.item.feature);
+}
+
+/**
+ * Reuses groupByDate (which only reads createdAt) so media and images share one set of date
+ * headings; shells carry an index key so the original entries are recovered after grouping.
+ */
+export function groupHistoryItems(entries: readonly HistoryItem[]): HistoryGroup[] {
+  const shells = entries.map(
+    (entry, index) => ({ _id: String(index), createdAt: entry.item.createdAt }) as IImageObject,
+  );
+  return groupByDate(shells).map((group) => ({
+    title: group.title,
+    isDeleting: group.isDeleting,
+    data: group.data.map((shell) => entries[Number(shell._id)]),
+  }));
+}
 
 export const useHistoryStore = defineStore('history', () => {
   const selectedSize = ref('medium');
   const searchQuery = ref('');
   const selectedFeatureTypes = ref<string[]>([]);
+  const activeChip = ref<HistoryChip>('all');
+  const mediaAssets = ref<MediaAssetDto[]>([]);
+  const isMediaLoading = ref(false);
   const isBulkDeleting = ref(false);
   const isBulkFavoriting = ref(false);
   const isBulkDownloading = ref(false);
@@ -23,6 +122,49 @@ export const useHistoryStore = defineStore('history', () => {
     userStore.isReady ? getHistoryFullLevel(savedCount.value, historyCap.value) : 'none',
   );
 
+  async function fetchMediaPage(cursor: string | null): Promise<MediaAssetListResponse | null> {
+    const query = new URLSearchParams({ limit: String(MEDIA_PAGE_SIZE) });
+    if (cursor) query.set('cursor', cursor);
+    const { data, error } = await useFetch(
+      `${MEDIA_ASSETS_PATH}?${query}`,
+    ).json<MediaAssetListResponse>();
+    if (error.value || !data.value) {
+      log.error('loadMedia failed', { error: error.value, cursor });
+      return null;
+    }
+    return data.value;
+  }
+
+  async function loadMedia() {
+    if (isMediaLoading.value) return;
+    isMediaLoading.value = true;
+    const loaded: MediaAssetDto[] = [];
+    let cursor: string | null = null;
+    for (let page = 0; page < MEDIA_MAX_PAGES; page += 1) {
+      const response = await fetchMediaPage(cursor);
+      if (!response) break;
+      loaded.push(...response.items);
+      cursor = response.nextCursor;
+      if (!cursor) break;
+    }
+    // A failed page keeps what already loaded instead of blanking the list.
+    if (loaded.length > 0 || mediaAssets.value.length === 0) mediaAssets.value = loaded;
+    isMediaLoading.value = false;
+  }
+
+  /** Returns true once the server confirmed the delete and the asset left the list. */
+  async function deleteMedia(id: string): Promise<boolean> {
+    const { error } = await useFetch(`${MEDIA_ASSETS_PATH}/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    }).text();
+    if (error.value) {
+      log.error('deleteMedia failed', { error: error.value, assetId: id });
+      return false;
+    }
+    mediaAssets.value = mediaAssets.value.filter((asset) => asset.id !== id);
+    return true;
+  }
+
   return {
     historyCap,
     savedCount,
@@ -30,8 +172,13 @@ export const useHistoryStore = defineStore('history', () => {
     selectedSize,
     searchQuery,
     selectedFeatureTypes,
+    activeChip,
+    mediaAssets,
+    isMediaLoading,
     isBulkDeleting,
     isBulkFavoriting,
     isBulkDownloading,
+    loadMedia,
+    deleteMedia,
   };
 });

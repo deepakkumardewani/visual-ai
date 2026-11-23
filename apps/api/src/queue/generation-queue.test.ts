@@ -128,4 +128,30 @@ describe("enqueueGeneration", () => {
         expect(setStatus).toHaveBeenCalledWith("job_color", expect.any(Object))
         expect(add).toHaveBeenCalledWith("colorize", data, { jobId: "job_color", priority: 10 })
     })
+
+    it("enqueues a media job with its jobId as the BullMQ job id so a repeat is deduplicated", async () => {
+        const data = {
+            kind: "music" as const,
+            body: { jobId: "job_music", userId: "user_1", modelKey: "LYRIA_2" as const },
+            isPro: false,
+        }
+
+        await enqueueGeneration(data)
+
+        expect(setStatus).toHaveBeenCalledWith("job_music", expect.any(Object))
+        expect(add).toHaveBeenCalledTimes(1)
+        expect(add).toHaveBeenCalledWith("music", data, { jobId: "job_music", priority: 10 })
+    })
+
+    it("throws when a media job is missing jobId", async () => {
+        await expect(
+            enqueueGeneration({
+                kind: "speech",
+                body: { jobId: "", userId: "user_1", modelKey: "INWORLD_TTS_2" },
+                isPro: false,
+            }),
+        ).rejects.toMatchObject({ message: "jobId is required", statusCode: 400 })
+
+        expect(add).not.toHaveBeenCalled()
+    })
 })

@@ -1,3 +1,5 @@
+import type { MediaAssetDto } from './domain.js';
+
 // API request/response types
 
 export interface AIImageInput {
@@ -102,4 +104,11 @@ export interface SavedPromptListResponse {
 
 export interface SavedPromptCreateResponse {
   prompt: SavedPrompt;
+}
+
+/** One page of the signed-in user's media assets, newest first. */
+export interface MediaAssetListResponse {
+  items: MediaAssetDto[];
+  /** Opaque cursor for the next page; null on the last page. */
+  nextCursor: string | null;
 }

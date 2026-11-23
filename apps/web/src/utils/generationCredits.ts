@@ -40,13 +40,17 @@ export function getGenerationCreditCost(
   return getGenerationCreditBreakdown(noOfOutputs, { baseCostPerImage }).total;
 }
 
-/** True when the user's balance covers the configured generation cost. */
+/**
+ * True when the user's balance covers the cost. The one affordability helper: pass an output
+ * count (image runs) or a precomputed `{ cost }` (media jobs priced by getMediaCreditCost).
+ */
 export function canAffordGeneration(
   balance: number,
-  noOfOutputs: number,
+  outputsOrCost: number | { cost: number },
   baseCostPerImage = GENERATION_BASE_COST_PER_IMAGE,
 ): boolean {
-  return balance >= getGenerationCreditCost(noOfOutputs, baseCostPerImage);
+  if (typeof outputsOrCost === 'object') return balance >= outputsOrCost.cost;
+  return balance >= getGenerationCreditCost(outputsOrCost, baseCostPerImage);
 }
 
 /**

@@ -10,7 +10,12 @@ export type ModelProvider =
   | 'zimage'
   | 'community'
   | 'recraft'
-  | 'topaz';
+  | 'topaz'
+  | 'minimax'
+  | 'inworld'
+  | 'stability'
+  | 'resemble'
+  | 'alibaba';
 
 export interface SegmentedOption<T extends string | number = string> {
   label: string;

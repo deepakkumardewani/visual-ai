@@ -72,3 +72,16 @@ export class NotFoundError extends HttpError {
 export function isHttpError(error: unknown): error is HttpError {
     return error instanceof HttpError
 }
+
+/** Message Clerk's requireAuth passes to next() when there is no valid session. */
+const CLERK_UNAUTHENTICATED_MESSAGE = "Unauthenticated"
+
+/**
+ * HTTP status for any error reaching the catch-all handler. Clerk's requireAuth
+ * forwards a plain Error (not an HttpError), which must surface as 401, not 500.
+ */
+export function resolveErrorStatus(error: unknown): number {
+    if (isHttpError(error)) return error.statusCode
+    if (error instanceof Error && error.message === CLERK_UNAUTHENTICATED_MESSAGE) return 401
+    return 500
+}

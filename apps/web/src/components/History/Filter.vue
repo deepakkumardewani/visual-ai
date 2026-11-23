@@ -10,7 +10,7 @@ import {
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 
-import { useHistoryStore } from '@/stores/history';
+import { HISTORY_CHIPS, useHistoryStore } from '@/stores/history';
 
 import Popover from '@/components/primitives/Popover.vue';
 
@@ -24,7 +24,8 @@ const FEATURE_TYPE_OPTIONS = [
   { id: 'remove_bg', title: 'Remove BG' },
 ];
 
-const { selectedSize, selectedFeatureTypes, searchQuery } = storeToRefs(useHistoryStore());
+const { selectedSize, selectedFeatureTypes, searchQuery, activeChip } =
+  storeToRefs(useHistoryStore());
 
 const sizeOpen = ref(false);
 
@@ -62,6 +63,26 @@ function toggleFeatureType(id: string) {
 
 <template>
   <div class="tw-flex tw-w-full tw-flex-wrap tw-items-center tw-gap-2.5 sm:tw-w-auto">
+    <div
+      role="group"
+      aria-label="Filter by media type"
+      class="chip-row no-scrollbar"
+      data-testid="history-chips"
+    >
+      <button
+        v-for="chip in HISTORY_CHIPS"
+        :key="chip.id"
+        type="button"
+        class="chip"
+        :class="{ 'chip--active': activeChip === chip.id }"
+        :aria-pressed="activeChip === chip.id"
+        :data-testid="`history-chip-${chip.id}`"
+        @click="activeChip = chip.id"
+      >
+        {{ chip.label }}
+      </button>
+    </div>
+
     <div class="search-field" data-testid="history-search">
       <font-awesome-icon
         :icon="faSearch"
@@ -157,6 +178,50 @@ function toggleFeatureType(id: string) {
 </template>
 
 <style scoped lang="scss">
+.chip-row {
+  display: flex;
+  width: 100%;
+  gap: 0.375rem;
+  overflow-x: auto;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  min-height: 44px;
+  padding: 0 0.875rem;
+  border: 1px solid rgb(var(--tw-hairline));
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: rgb(var(--tw-ink-muted));
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    color: rgb(var(--tw-ink));
+  }
+
+  &:focus-visible {
+    outline: 2px solid #c98a5a;
+    outline-offset: 2px;
+  }
+}
+
+.chip--active {
+  border-color: rgba(201, 138, 90, 0.55);
+  background: rgba(201, 138, 90, 0.14);
+  color: rgb(var(--tw-ink));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip {
+    transition: none;
+  }
+}
+
 .search-field {
   display: flex;
   align-items: center;

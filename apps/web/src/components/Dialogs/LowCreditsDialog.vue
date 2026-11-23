@@ -30,6 +30,7 @@ const { dailyAllowance } = storeToRefs(userStore);
 const isCritical = computed(() => (userStore.dailyCredits || 0) + (userStore.credits || 0) <= 5);
 
 const creditRequirement = computed(() => {
+  if (dialogStore.lowCreditsShortfall) return dialogStore.lowCreditsShortfall.required;
   // Unified cost for all users (no Pro distinction)
   if (feature.value === FeatureType.IMAGE) return 1;
   if (
@@ -42,6 +43,12 @@ const creditRequirement = computed(() => {
   }
   return 1;
 });
+
+const availableCredits = computed(
+  () =>
+    dialogStore.lowCreditsShortfall?.available ??
+    (userStore.dailyCredits || 0) + (userStore.credits || 0),
+);
 
 const featureText = computed(() => {
   switch (feature.value) {
@@ -94,7 +101,7 @@ const featureText = computed(() => {
 
       <div class="low__chip" :class="{ 'low__chip--critical': isCritical }">
         <font-awesome-icon :icon="faCoins" aria-hidden="true" />
-        {{ (userStore.dailyCredits || 0) + (userStore.credits || 0) }} credits available
+        {{ availableCredits }} credits available
       </div>
     </div>
 

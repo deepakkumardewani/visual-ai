@@ -32,3 +32,6 @@ export type {
 
 export { CreateSavedPromptSchema } from './saved-prompt.js';
 export type { CreateSavedPrompt } from './saved-prompt.js';
+
+export { MusicRequestSchema } from './media.js';
+export type { MusicRequest } from './media.js';

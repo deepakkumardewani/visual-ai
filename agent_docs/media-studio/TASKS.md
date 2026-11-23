@@ -43,7 +43,7 @@
 **Adds:** Adds the shared plumbing every audio, video and tool surface uses: one model registry and credit function, a safe paid-call-free e2e harness, the job pipeline with charge-on-success, uploads and asset storage, the new header menus and routes, a persistent mini-player, media in History, and shortcuts. Users see the new Video, Audio and Tools menus (each opening an honest coming-soon page) and, once a generation exists, media in History with a player that survives navigation.
 **Try in UI:** Open the header and see Image, Video, Audio and Tools ; open Audio with the keyboard and press Escape ; open /audio/song and read the coming-soon page ; open History at 375px width
 
-### ☐ T0.1 Record owner approvals for new collections and libraries
+### ✅ T0.1 Record owner approvals for new collections and libraries
 
 - **Kind:** dod
 - **Files:** `agent_docs/media-studio/APPROVALS.md` (new)
@@ -58,7 +58,7 @@
   - V2: `grep -c -E '^- G(1[0-3]|[1-9]):' agent_docs/media-studio/APPROVALS.md` equals 13 and `grep -c -E 'wavesurfer|lamejs' agent_docs/media-studio/APPROVALS.md` is at least 2
   - V3: `git status --short` lists only agent_docs/media-studio/APPROVALS.md as new from this task
 
-### ☐ T0.2 Shared media limits, job kinds and the single credit function (S0.1a)
+### ✅ T0.2 Shared media limits, job kinds and the single credit function (S0.1a)
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/models/media-limits.ts` (new), `packages/shared/src/models/credits.ts` (edit), `packages/shared/src/models/types.ts` (edit), `packages/shared/src/types/domain.ts` (edit)
@@ -81,7 +81,7 @@
   - V3: `bunx vp test run packages/shared` (existing shared tests stay green)
   - V4: `cd apps/api && bun run type-check`
 
-### ☐ T0.3 Registry entries for all media models and the web catalog (S0.1b)
+### ✅ T0.3 Registry entries for all media models and the web catalog (S0.1b)
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/models/registry.ts` (edit), `apps/web/src/utils/models.ts` (edit), `apps/api/src/types/index.ts` (edit), `apps/web/src/types/index.ts` (edit), `apps/web/src/assets/providers/` (edit)
@@ -105,7 +105,7 @@
   - V4: `cd apps/api && bun run test` (existing api tests stay green)
   - V5: `cd apps/web && bun run test` (existing web tests stay green)
 
-### ☐ T0.4 Unit: shared credits, limits and registry
+### ✅ T0.4 Unit: shared credits, limits and registry
 
 - **Kind:** unit
 - **Files:** `packages/shared/src/models/credits.ts` (edit), `packages/shared/src/models/media-limits.ts` (edit), `packages/shared/src/models/registry.ts` (edit), `apps/web/src/utils/models.ts` (edit)
@@ -118,7 +118,7 @@
   - V1: `bunx vp test run packages/shared/src/models/credits.test.ts packages/shared/src/models/registry.test.ts packages/shared/src/models/media-limits.test.ts --coverage --coverage.include=packages/shared/src/models/credits.ts --coverage.include=packages/shared/src/models/media-limits.ts --coverage.include=packages/shared/src/models/registry.ts --coverage.reporter=text`
   - V2: `cd apps/web && npx vitest run src/utils/models.test.ts --coverage --coverage.include=src/utils/models.ts --coverage.reporter=text`
 
-### ☐ T0.5 Extend the paid-call mocking harness: fake outputs and guard (S0.2a)
+### ✅ T0.5 Extend the paid-call mocking harness: fake outputs and guard (S0.2a)
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/lib/replicate.ts` (edit), `apps/api/src/lib/lyrics-generator.ts` (new), `apps/web/e2e/support/paidCallGuard.ts` (edit), `apps/web/e2e/support/cloudinaryMock.ts` (edit)
@@ -142,7 +142,7 @@
   - V4: `cd apps/web && npx vitest run e2e/support/paidCallGuard.test.ts e2e/support/cloudinaryMock.test.ts` (existing harness tests stay green)
   - V5: `bun run check`
 
-### ☐ T0.6 MediaGenerationStub and audio fixtures (S0.2b)
+### ✅ T0.6 MediaGenerationStub and audio fixtures (S0.2b)
 
 - **Kind:** implementation
 - **Files:** `apps/web/e2e/fixtures/media.ts` (new), `apps/web/e2e/fixtures/assets/sample.wav` (new), `apps/web/e2e/fixtures/assets/sample.mp3` (new)
@@ -162,7 +162,7 @@
   - V2: `cd apps/web && npx vitest run e2e/support/paidCallGuard.test.ts e2e/support/cloudinaryMock.test.ts` (existing harness tests stay green)
   - V3: `bun run check`
 
-### ☐ T0.7 Unit: paid-call harness
+### ✅ T0.7 Unit: paid-call harness
 
 - **Kind:** unit
 - **Files:** `apps/api/src/lib/replicate.ts` (edit), `apps/api/src/lib/lyrics-generator.ts` (edit), `apps/web/e2e/support/paidCallGuard.ts` (edit)
@@ -175,7 +175,7 @@
   - V1: `cd apps/api && npx vitest run src/lib/replicate.test.ts src/lib/lyrics-generator.test.ts --coverage --coverage.include=src/lib/replicate.ts --coverage.include=src/lib/lyrics-generator.ts --coverage.reporter=text`
   - V2: `cd apps/web && npx vitest run e2e/support/paidCallGuard.test.ts --coverage --coverage.include=e2e/support/paidCallGuard.ts --coverage.reporter=text`
 
-### ☐ T0.8 Extract the shared credit deduction and generalise job kinds (S0.3a)
+### ✅ T0.8 Extract the shared credit deduction and generalise job kinds (S0.3a)
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/lib/credit-deduction.ts` (new), `apps/api/src/services/generation-service.ts` (edit), `apps/api/src/queue/generation-queue.ts` (edit), `apps/api/src/queue/generation-worker.ts` (edit)
@@ -198,7 +198,7 @@
   - V4: `cd apps/api && bun run test` (existing api tests stay green)
   - V5: `bun run check`
 
-### ☐ T0.9 Media request schemas and payload builder (S0.3b)
+### ✅ T0.9 Media request schemas and payload builder (S0.3b)
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/schemas/media.ts` (new), `packages/shared/src/schemas/index.ts` (edit), `apps/api/src/lib/media-input.ts` (new)
@@ -221,7 +221,7 @@
   - V4: `cd apps/api && bun run test` (existing api tests stay green)
   - V5: `bun run check`
 
-### ☐ T0.10 Media route and runMediaJob with LYRIA_2 as the reference kind (S0.3c)
+### ✅ T0.10 Media route and runMediaJob with LYRIA_2 as the reference kind (S0.3c)
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/media.ts` (new), `apps/api/src/routes/index.ts` (edit), `apps/api/src/services/media-service.ts` (new)
@@ -244,10 +244,10 @@
   - V2: `cd apps/api && bun run test` (existing api tests stay green)
   - V3: `bun run check`
 
-### ☐ T0.11 Unit: media pipeline
+### ✅ T0.11 Unit: media pipeline
 
 - **Kind:** unit
-- **Files:** `apps/api/src/lib/credit-deduction.ts` (edit), `apps/api/src/lib/media-input.ts` (edit), `apps/api/src/services/media-service.ts` (edit), `apps/api/src/routes/media.ts` (edit), `apps/api/src/queue/generation-queue.ts` (edit)
+- **Files:** `apps/api/src/lib/credit-deduction.ts` (edit), `apps/api/src/lib/media-input.ts` (edit), `apps/api/src/services/media-service.ts` (edit), `apps/api/src/routes/media.ts` (edit), `apps/api/src/queue/generation-queue.ts` (edit), `apps/api/src/queue/job-id.ts` (edit)
 - **Depends on:** T0.10
 - **Acceptance:**
   - AC1: Every file has at least 80% lines, branches, functions and statements coverage (target above 95%) and no it.fails is used.
@@ -257,7 +257,7 @@
   - V1: `cd apps/api && npx vitest run src/lib/credit-deduction.test.ts src/lib/media-input.test.ts src/services/media-service.test.ts src/routes/media.test.ts src/queue/generation-queue.test.ts --coverage --coverage.include=src/lib/credit-deduction.ts --coverage.include=src/lib/media-input.ts --coverage.include=src/services/media-service.ts --coverage.include=src/routes/media.ts --coverage.include=src/queue/generation-queue.ts --coverage.reporter=text`
   - V2: `cd apps/api && npx vitest run src/services/generation-service.test.ts src/queue/generation-worker.test.ts`
 
-### ☐ T0.12 MediaAsset model, service and Cloudinary resource type (S0.4a)
+### ✅ T0.12 MediaAsset model, service and Cloudinary resource type (S0.4a)
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/models/media-asset.ts` (new), `apps/api/src/services/media-asset-service.ts` (new), `apps/api/src/utils/cloudinary.ts` (edit), `apps/api/src/services/cloudinary-service.ts` (edit), `packages/shared/src/types/api.ts` (edit)
@@ -280,7 +280,7 @@
   - V3: `cd apps/api && bun run test` (existing api tests stay green)
   - V4: `bun run check`
 
-### ☐ T0.13 Assets API and persist step in the job worker (S0.4b)
+### ✅ T0.13 Assets API and persist step in the job worker (S0.4b)
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/media.ts` (edit), `apps/api/src/services/media-service.ts` (edit)
@@ -301,7 +301,7 @@
   - V2: `cd apps/api && bun run test` (existing api tests stay green)
   - V3: `bun run check`
 
-### ☐ T0.14 Unit: assets
+### ✅ T0.14 Unit: assets
 
 - **Kind:** unit
 - **Files:** `apps/api/src/services/media-asset-service.ts` (edit), `apps/api/src/services/cloudinary-service.ts` (edit), `apps/api/src/utils/cloudinary.ts` (edit), `apps/api/src/routes/media.ts` (edit)
@@ -312,7 +312,7 @@
 - **Verify:**
   - V1: `cd apps/api && npx vitest run src/services/media-asset-service.test.ts src/services/cloudinary-service.test.ts src/utils/cloudinary.test.ts src/routes/media.test.ts --coverage --coverage.include=src/services/media-asset-service.ts --coverage.include=src/services/cloudinary-service.ts --coverage.include=src/utils/cloudinary.ts --coverage.include=src/routes/media.ts --coverage.reporter=text`
 
-### ☐ T0.15 Upload middlewares, MIME sniffing and MediaUpload model (S0.5a)
+### ✅ T0.15 Upload middlewares, MIME sniffing and MediaUpload model (S0.5a)
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/middlewares/multer.ts` (edit), `apps/api/src/lib/media-upload.ts` (new), `apps/api/src/models/media-upload.ts` (new), `apps/api/src/middlewares/rate-limit.ts` (edit)
@@ -334,7 +334,7 @@
   - V2: `cd apps/api && bun run test` (existing api tests stay green)
   - V3: `bun run check`
 
-### ☐ T0.16 POST /media/uploads and expired-upload sweep (S0.5b)
+### ✅ T0.16 POST /media/uploads and expired-upload sweep (S0.5b)
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/media.ts` (edit), `apps/api/src/utils/cronJobs.ts` (edit)
@@ -354,7 +354,7 @@
   - V2: `cd apps/api && bun run test` (existing api tests stay green)
   - V3: `bun run check`
 
-### ☐ T0.17 Unit: uploads
+### ✅ T0.17 Unit: uploads
 
 - **Kind:** unit
 - **Files:** `apps/api/src/lib/media-upload.ts` (edit), `apps/api/src/middlewares/multer.ts` (edit), `apps/api/src/utils/cronJobs.ts` (edit), `apps/api/src/routes/media.ts` (edit)
@@ -365,7 +365,7 @@
 - **Verify:**
   - V1: `cd apps/api && npx vitest run src/lib/media-upload.test.ts src/middlewares/multer.test.ts src/utils/cronJobs.test.ts src/routes/media.test.ts --coverage --coverage.include=src/lib/media-upload.ts --coverage.include=src/middlewares/multer.ts --coverage.include=src/utils/cronJobs.ts --coverage.include=src/routes/media.ts --coverage.reporter=text`
 
-### ☐ T0.18 Header menus: Video, Audio and Tools dropdowns plus mobile accordion (S0.6a)
+### ✅ T0.18 Header menus: Video, Audio and Tools dropdowns plus mobile accordion (S0.6a)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Header/NavMenuGroup.vue` (new), `apps/web/src/components/Header/NavMobileAccordion.vue` (new), `apps/web/src/components/Header/NavTabs.vue` (edit), `apps/web/src/components/Header/AppHeader.vue` (edit), `apps/web/src/utils/dashboardRoutes.ts` (edit)
@@ -390,7 +390,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /create path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T0.19 New routes, StudioShell, StudioPlaceholder and studio accent tokens (S0.6b)
+### ✅ T0.19 New routes, StudioShell, StudioPlaceholder and studio accent tokens (S0.6b)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/router/index.ts` (edit), `apps/web/src/components/Studio/StudioShell.vue` (new), `apps/web/src/components/Studio/StudioPlaceholder.vue` (new), `apps/web/tailwind.semantic-plugin.js` (edit)
@@ -413,7 +413,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T0.20 Player store with one shared audio element (S0.7a)
+### ✅ T0.20 Player store with one shared audio element (S0.7a)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/stores/player.ts` (new), `apps/web/src/components/Audio/TimeCode.vue` (new), `apps/web/src/components/Audio/PlayButton.vue` (new)
@@ -436,7 +436,7 @@
   - V2: `bun run check`
   - V3: Visual check: no page mounts this yet; the agent-browser pass happens in T0.21
 
-### ☐ T0.21 MiniPlayer, AudioPlayer and TrackCard mounted in App.vue (S0.7b)
+### ✅ T0.21 MiniPlayer, AudioPlayer and TrackCard mounted in App.vue (S0.7b)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Audio/MiniPlayer.vue` (new), `apps/web/src/components/Audio/AudioPlayer.vue` (new), `apps/web/src/components/Audio/TrackCard.vue` (new), `apps/web/src/App.vue` (edit)
@@ -460,7 +460,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /assets path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T0.22 History store and UI for media (S0.8a)
+### ✅ T0.22 History store and UI for media (S0.8a)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/stores/history.ts` (edit), `apps/web/src/components/History/History.vue` (edit), `apps/web/src/components/History/FeatureIcon.vue` (edit), `apps/web/src/components/History/Filter.vue` (edit), `apps/web/src/components/History/ImageActionButtons.vue` (edit)
@@ -485,7 +485,7 @@
   - V3: `bun run check`
   - V4: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /assets path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T0.23 useMediaJob and useMediaCost with 402 mapping (S0.8b)
+### ✅ T0.23 useMediaJob and useMediaCost with 402 mapping (S0.8b)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/composables/useMediaJob.ts` (new), `apps/web/src/composables/useMediaCost.ts` (new), `apps/web/src/utils/generationCredits.ts` (edit)
@@ -508,7 +508,7 @@
   - V2: `cd apps/web && bun run test` (existing web tests stay green)
   - V3: `bun run check`
 
-### ☐ T0.24 Shared studio view states and action bar (S0.8c)
+### ✅ T0.24 Shared studio view states and action bar (S0.8c)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Studio/JobProgress.vue` (new), `apps/web/src/components/Studio/ResultCard.vue` (new), `apps/web/src/components/Studio/StudioEmptyState.vue` (new), `apps/web/src/components/Studio/StudioErrorState.vue` (new), `apps/web/src/components/Studio/StudioActionBar.vue` (new)
@@ -533,7 +533,7 @@
   - V2: `bun run check`
   - V3: Visual check: no page mounts this yet; the agent-browser pass happens in T1.3
 
-### ☐ T0.25 Shortcuts, shortcuts popover and drafts (S0.9)
+### ✅ T0.25 Shortcuts, shortcuts popover and drafts (S0.9)
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/models/media-shortcuts.ts` (new), `apps/web/src/composables/useGlobalShortcuts.ts` (edit), `apps/web/src/components/Studio/ShortcutsPopover.vue` (new), `apps/web/src/composables/useMediaDraft.ts` (new), `apps/web/src/components/Header/AppHeader.vue` (edit)
@@ -558,7 +558,7 @@
   - V4: `bun run check`
   - V5: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/song path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T0.26 Docs, pricing list and FAQ for media models (S0.10)
+### ✅ T0.26 Docs, pricing list and FAQ for media models (S0.10)
 
 - **Kind:** implementation
 - **Files:** `docs/MODEL_ONBOARDING.md` (edit), `scripts/check-model-docs.mjs` (edit), `apps/web/src/components/Pricing/PricingModelCosts.vue` (edit), `apps/web/src/utils/constants.ts` (edit)
@@ -577,7 +577,7 @@
   - V2: `cd apps/web && bun run test` (existing web tests stay green)
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /pricing path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T0.27 Unit: player, history, job, drafts and shortcuts
+### ✅ T0.27 Unit: player, history, job, drafts and shortcuts
 
 - **Kind:** unit
 - **Files:** `apps/web/src/stores/player.ts` (edit), `apps/web/src/stores/history.ts` (edit), `apps/web/src/composables/useMediaJob.ts` (edit), `apps/web/src/composables/useMediaDraft.ts` (edit), `apps/web/src/composables/useGlobalShortcuts.ts` (edit)
@@ -590,7 +590,7 @@
   - V1: `cd apps/web && npx vitest run src/stores/player.test.ts src/stores/history.test.ts src/composables/useMediaJob.test.ts src/composables/useMediaDraft.test.ts src/composables/useGlobalShortcuts.test.ts --coverage --coverage.include=src/stores/player.ts --coverage.include=src/stores/history.ts --coverage.include=src/composables/useMediaJob.ts --coverage.include=src/composables/useMediaDraft.ts --coverage.include=src/composables/useGlobalShortcuts.ts --coverage.reporter=text`
   - V2: `cd apps/web && npx vitest run src/stores src/composables`
 
-### ☐ T0.28 Unit: credits, cost and route helpers, studio components
+### ✅ T0.28 Unit: credits, cost and route helpers, studio components
 
 - **Kind:** unit
 - **Files:** `apps/web/src/utils/generationCredits.ts` (edit), `apps/web/src/composables/useMediaCost.ts` (edit), `apps/web/src/utils/dashboardRoutes.ts` (edit), `apps/web/src/components/Studio/StudioActionBar.vue` (edit), `apps/web/src/components/Header/NavMenuGroup.vue` (edit)
@@ -603,27 +603,28 @@
   - V1: `cd apps/web && npx vitest run src/utils/generationCredits.test.ts src/composables/useMediaCost.test.ts src/utils/dashboardRoutes.test.ts src/components/Studio/StudioActionBar.test.ts src/components/Header/NavMenuGroup.test.ts --coverage --coverage.include=src/utils/generationCredits.ts --coverage.include=src/composables/useMediaCost.ts --coverage.include=src/utils/dashboardRoutes.ts --coverage.include=src/components/Studio/StudioActionBar.vue --coverage.include=src/components/Header/NavMenuGroup.vue --coverage.reporter=text`
   - V2: `cd apps/web && npx vitest run src/components/Audio src/components/Studio src/components/Header`
 
-### ☐ T0.29 E2E: media API pipeline, uploads and assets
+### ✅ T0.29 E2E: media API pipeline, uploads and assets
 
 - **Kind:** e2e
-- **Scenarios:** `@critical` fake music generate returns 202, SSE completes and the balance drops by exactly the cost; `@critical` failure variant leaves the balance unchanged; `@critical` insufficient variant returns 402 with required and available and enqueues nothing; `@high` fake audio appears in GET /media/assets; `@high` uploading sample.mp3 returns an uploadId and durationSec; `@high` sample.mp3 renamed .png is rejected; `@critical` guard self-test: a deliberately un-intercepted POST to each broadened paid path is reported by the guard and never reaches a paid service
+- **Scenarios:** `@critical` failure variant leaves the balance unchanged; `@critical` insufficient variant returns 402 with required and available and enqueues nothing; `@high` fake audio appears in GET /media/assets; `@high` uploading sample.mp3 returns an uploadId and durationSec; `@high` sample.mp3 renamed .png is rejected; `@critical` guard self-test: a deliberately un-intercepted POST to each broadened paid path is reported by the guard and never reaches a paid service
 - **Spec:** `apps/web/e2e/qa/media-pipeline.spec.ts`
-- **Files:** none
+- **Files:** apps/web/e2e/scenarios/media-pipeline.feature.md
 - **Depends on:** T0.28, T0.17, T0.14
 - **Acceptance:**
-  - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; readCredits from support/proPerksSeed.ts proves balance changes.
+  - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; the failure variant uses readCredits from support/proPerksSeed.ts to prove the balance is unchanged. Credit deduction on success is covered by the T0.11 unit tests.
   - AC2: paidCallGuard stays on and no real Replicate, Dodo or email call is made.
   - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts --repeat-each=3`
   - V2: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts --grep @critical` shows the guard self-test scenario passing
+- **Log:** 2026-11-22 user decision: dropped the 'fake music generate ... balance drops by exactly the cost' scenario (it needs an un-intercepted paid POST, which paidCallGuard must keep blocking, and the guard stays un-narrowed). Credit deduction stays covered by the T0.11 unit tests.
 
-### ☐ T0.30 E2E: header menus, routes and mini-player persistence
+### ✅ T0.30 E2E: header menus, routes and mini-player persistence
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` each Audio and Tools menu item navigates to its route; `@critical` keyboard-only run opens Audio, moves, activates and Escape returns focus; `@critical` signed-out visit to /audio/song redirects to sign-in; `@critical` a track started from a History card keeps playing across navigation and a second track pauses the first; `@high` Space toggles the active player and ? opens the shortcuts popover; `@high` 375px accordion items are at least 44px and there is no horizontal scroll; `@high` History shows a stubbed fake asset with the Song filter; `@medium` Image tab still opens create
 - **Spec:** `apps/web/e2e/qa/media-nav-player.spec.ts`
-- **Files:** none
+- **Files:** apps/web/e2e/scenarios/media-nav-player.feature.md
 - **Depends on:** T0.29
 - **Acceptance:**
   - AC1: All scenarios pass using the media stub and sample.mp3 as the audio source.
@@ -633,10 +634,10 @@
   - V1: `cd apps/web && bunx playwright test e2e/qa/media-nav-player.spec.ts --repeat-each=3`
   - V2: `cd apps/web && bunx playwright test e2e/qa/media-nav-player.spec.ts --grep @critical`
 
-### ☐ T0.31 Gate: Phase 0 shared infrastructure
+### ✅ T0.31 Gate: Phase 0 shared infrastructure
 
 - **Kind:** gate
-- **Files:** none
+- **Files:** agent_docs/intent/landing-and-credit-economics.md
 - **Depends on:** T0.30
 - **Acceptance:**
   - AC1: Typecheck, lint, the full unit suites and both new QA specs pass.

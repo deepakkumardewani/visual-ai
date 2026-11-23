@@ -50,7 +50,10 @@ describe('PricingModelCosts', () => {
   it('renders the section heading and one column per category', () => {
     const wrapper = mountBoard();
     expect(wrapper.get('h2').text()).toBe('Model Credit Costs');
-    expect(wrapper.findAll('h3').map((h) => h.text())).toEqual(['Image Generation', 'Utilities']);
+    expect(wrapper.findAll('article h3').map((h) => h.text())).toEqual([
+      'Image Generation',
+      'Utilities',
+    ]);
     expect(wrapper.text()).toContain('Make pictures');
   });
 

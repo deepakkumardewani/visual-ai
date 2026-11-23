@@ -31,10 +31,13 @@ describe('NavTabs', () => {
     return mount(NavTabs, { global: { plugins: [pinia] } });
   };
 
-  it('renders Create, Explore, and Assets tabs', () => {
+  it('renders Image, Video, Audio, Tools, Explore, and Assets entries', () => {
     const wrapper = mountNavTabs();
 
-    expect(wrapper.get('[data-testid="nav-tab-create"]').text()).toBe('Create');
+    expect(wrapper.get('[data-testid="nav-tab-create"]').text()).toBe('Image');
+    expect(wrapper.get('[data-testid="nav-tab-video"]').text()).toBe('Video');
+    expect(wrapper.get('[data-testid="nav-menu-audio"]').text()).toContain('Audio');
+    expect(wrapper.get('[data-testid="nav-menu-tools"]').text()).toContain('Tools');
     expect(wrapper.get('[data-testid="nav-tab-explore"]').text()).toBe('Explore');
     expect(wrapper.get('[data-testid="nav-tab-assets"]').text()).toBe('Assets');
   });
@@ -75,7 +78,7 @@ describe('NavTabs', () => {
     const createTab = wrapper.get('[data-testid="nav-tab-create"]');
     await createTab.trigger('keydown', { key: 'ArrowRight' });
 
-    expect(push).toHaveBeenCalledWith({ name: APP_SURFACE.EXPLORE });
+    expect(push).toHaveBeenCalledWith({ name: APP_SURFACE.VIDEO });
   });
 
   it('wraps left from Create to Assets and jumps with Home and End', async () => {
@@ -112,9 +115,9 @@ describe('NavTabs', () => {
     const pill = mountNavTabs();
 
     expect(segmented.get('[data-testid="nav-tabs"]').classes()).toContain('nav-tabs--segmented');
-    expect(segmented.get('[data-testid="nav-tabs"]').classes()).not.toContain('tw-max-w-md');
+    expect(segmented.get('[data-testid="nav-tabs"]').classes()).not.toContain('tw-max-w-xl');
     expect(pill.get('[data-testid="nav-tabs"]').classes()).not.toContain('nav-tabs--segmented');
-    expect(pill.get('[data-testid="nav-tabs"]').classes()).toContain('tw-max-w-md');
+    expect(pill.get('[data-testid="nav-tabs"]').classes()).toContain('tw-max-w-xl');
     for (const tab of segmented.findAll('[role="tab"]')) {
       expect(tab.classes()).toContain('tw-flex-1');
       expect(tab.classes()).toContain('tw-basis-0');
@@ -126,7 +129,7 @@ describe('NavTabs', () => {
     const wrapper = mountNavTabs();
     const style = wrapper.get('.nav-tabs__slider').attributes('style') ?? '';
 
-    expect(style).toContain('translateX(200%)');
+    expect(style).toContain('translateX(500%)');
   });
 
   it('exposes only the active tab in the tab order', () => {

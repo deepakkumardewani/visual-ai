@@ -1,4 +1,5 @@
-import type { ModelKey } from './types.js';
+import type { MediaModelKey, MediaPricing, ModelKey } from './types.js';
+import { TTS_BILLING_UNIT_CHARS } from './media-limits.js';
 import { MODEL_REGISTRY } from './registry.js';
 
 /** Signup credits for new users */
@@ -34,7 +35,7 @@ export function getCreditCost(modelKey: ModelKey): number {
   }
 
   // Map model keys to credit costs
-  const costs: Record<ModelKey, number> = {
+  const costs: Partial<Record<ModelKey, number>> = {
     // Budget generation: 1 credit
     FLUX_QUICK: 1,
     FLUX_FAST: 1,
@@ -78,7 +79,93 @@ export function getCreditCost(modelKey: ModelKey): number {
 
   const cost = costs[modelKey];
   if (cost === undefined) {
+    // Media models have no flat cost; callers must use getMediaCreditCost.
     throw new Error(`No credit cost defined for model: ${modelKey}`);
   }
   return cost;
+}
+
+/** Credits charged per USD of Replicate cost on every media model (single source, D2). */
+export const MEDIA_CREDITS_PER_USD = 200;
+
+/** Every paid job costs at least this many credits. */
+export const MIN_JOB_CREDITS = 1;
+
+/** USD x rate is rounded to this many decimals before ceil to drop float noise. */
+const CREDIT_ROUND_DECIMALS = 6;
+/** Subtracted before ceil so 5.0000000001 never becomes 6. */
+const CEIL_EPSILON = 1e-9;
+
+/** The billable quantity of one media job; the variant must match the model's pricing unit. */
+export type MediaCostInput =
+  | { kind: 'file' }
+  | { kind: 'chars'; chars: number }
+  | { kind: 'seconds'; durationSec: number; resolution: string; draft?: boolean }
+  | { kind: 'run' }
+  | { kind: 'blocks'; videoSec: number };
+
+function round6(value: number): number {
+  const factor = 10 ** CREDIT_ROUND_DECIMALS;
+  return Math.round(value * factor) / factor;
+}
+
+function assertNonNegative(value: number, label: string): void {
+  if (!Number.isFinite(value) || value < 0) {
+    throw new Error(`Invalid ${label}: ${value}`);
+  }
+}
+
+function secondRate(pricing: MediaPricing, input: { resolution: string; draft?: boolean }): number {
+  const table = input.draft ? pricing.draftByResolution : pricing.byResolution;
+  const rate = table?.[input.resolution];
+  if (rate === undefined) {
+    throw new Error(`No ${input.draft ? 'draft ' : ''}price for resolution: ${input.resolution}`);
+  }
+  return rate;
+}
+
+/** Replicate cost in USD for one job; throws when `input` does not fit the pricing unit. */
+function getMediaUsd(
+  modelKey: MediaModelKey,
+  pricing: MediaPricing,
+  input: MediaCostInput,
+): number {
+  const mismatch = () =>
+    new Error(
+      `Cost input "${input.kind}" does not match ${modelKey} pricing unit "${pricing.unit}"`,
+    );
+  switch (input.kind) {
+    case 'file':
+      if (pricing.unit !== 'file') throw mismatch();
+      return pricing.usd;
+    case 'run':
+      if (pricing.unit !== 'run' || pricing.blockSec !== undefined) throw mismatch();
+      return pricing.usd;
+    case 'chars':
+      if (pricing.unit !== 'kChars' && pricing.unit !== 'kTokens') throw mismatch();
+      assertNonNegative(input.chars, 'chars');
+      return (pricing.usd * input.chars) / TTS_BILLING_UNIT_CHARS;
+    case 'seconds':
+      if (pricing.unit !== 'second') throw mismatch();
+      assertNonNegative(input.durationSec, 'durationSec');
+      return secondRate(pricing, input) * input.durationSec;
+    case 'blocks':
+      if (pricing.unit !== 'run' || pricing.blockSec === undefined) throw mismatch();
+      assertNonNegative(input.videoSec, 'videoSec');
+      return pricing.usd * Math.ceil(input.videoSec / pricing.blockSec);
+  }
+}
+
+/**
+ * Integer credits for one media job: max(MIN_JOB_CREDITS, ceil(usd x MEDIA_CREDITS_PER_USD)).
+ * Pure and shared by the web (before Generate) and the API (pre-check and deduction).
+ */
+export function getMediaCreditCost(modelKey: MediaModelKey, input: MediaCostInput): number {
+  const pricing = MODEL_REGISTRY[modelKey]?.media?.pricing;
+  if (!pricing) {
+    throw new Error(`Not a priced media model: ${modelKey}`);
+  }
+  const usd = getMediaUsd(modelKey, pricing, input);
+  const credits = Math.ceil(round6(usd * MEDIA_CREDITS_PER_USD) - CEIL_EPSILON);
+  return Math.max(MIN_JOB_CREDITS, credits);
 }

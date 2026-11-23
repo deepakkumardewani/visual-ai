@@ -10,7 +10,9 @@ import {
 import { IImageObject } from '@/types';
 
 const props = defineProps<{
-  item: IImageObject;
+  /** Image history item; media tiles pass `feature` instead. */
+  item?: IImageObject;
+  feature?: string;
 }>();
 
 const FEATURE_ICONS = {
@@ -21,7 +23,15 @@ const FEATURE_ICONS = {
   remove_bg: faObjectUngroup,
 } as const;
 
-const icon = computed(() => FEATURE_ICONS[props.item.featureType as keyof typeof FEATURE_ICONS]);
+/** Media features whose raw id reads badly as a label. */
+const FEATURE_LABELS: Record<string, string> = {
+  watermark_image: 'image watermark',
+  watermark_video: 'video watermark',
+};
+
+const featureType = computed(() => props.feature ?? props.item?.featureType ?? '');
+const icon = computed(() => FEATURE_ICONS[featureType.value as keyof typeof FEATURE_ICONS]);
+const label = computed(() => FEATURE_LABELS[featureType.value] ?? featureType.value);
 </script>
 <template>
   <span
@@ -33,7 +43,7 @@ const icon = computed(() => FEATURE_ICONS[props.item.featureType as keyof typeof
       class="tw-h-3 tw-w-3 tw-opacity-80"
       aria-hidden="true"
     />
-    {{ props.item.featureType }}
+    {{ label }}
   </span>
 </template>
 <style scoped lang="scss"></style>

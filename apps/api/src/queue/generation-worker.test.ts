@@ -46,6 +46,8 @@ vi.mock("../services/generation-service.js", () => ({
     processRemoveBg,
 }))
 
+vi.mock("../services/media-service.js", () => ({ processMusic: vi.fn() }))
+
 vi.mock("../services/redis-service.js", () => ({
     RedisService: class {
         setStatus = setStatus

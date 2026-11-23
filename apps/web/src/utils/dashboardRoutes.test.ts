@@ -8,6 +8,7 @@ import {
   dashboardRedirectLocation,
   isAppShellRoute,
   isValidFeatureParam,
+  NAV_MENU_GROUPS,
   resolveCreateFeature,
   tabFromRouteName,
 } from '@/utils/dashboardRoutes';
@@ -144,6 +145,68 @@ describe('dashboardRoutes', () => {
         query: {},
         hash: undefined,
       });
+    });
+  });
+
+  describe('studio routes', () => {
+    it('maps video to its own tab', () => {
+      expect(tabFromRouteName(APP_SURFACE.VIDEO)).toBe(4);
+    });
+
+    it('maps every /audio/* route to the Audio tab', () => {
+      for (const name of ['audio-song', 'audio-music', 'audio-speech']) {
+        expect(tabFromRouteName(name), name).toBe(5);
+      }
+    });
+
+    it('maps every /tools/* route to the Tools tab', () => {
+      for (const name of [
+        'tools-image-watermark',
+        'tools-video-watermark',
+        'tools-autocaption',
+        'tools-sketch',
+      ]) {
+        expect(tabFromRouteName(name), name).toBe(6);
+      }
+    });
+
+    it('treats every new studio route as an app shell route', () => {
+      for (const name of ['video', 'audio-song', 'audio-music', 'audio-speech', 'tools-sketch']) {
+        expect(isAppShellRoute({ name }), name).toBe(true);
+      }
+    });
+
+    it('exposes the Audio group with Song, Music and Speech in order', () => {
+      const audio = NAV_MENU_GROUPS.find((group) => group.id === 'audio');
+
+      expect(audio?.label).toBe('Audio');
+      expect(audio?.items.map((entry) => entry.label)).toEqual(['Song', 'Music', 'Speech']);
+      expect(audio?.items.map((entry) => entry.path)).toEqual([
+        '/audio/song',
+        '/audio/music',
+        '/audio/speech',
+      ]);
+    });
+
+    it('exposes the Tools group with the four tools in order', () => {
+      const tools = NAV_MENU_GROUPS.find((group) => group.id === 'tools');
+
+      expect(tools?.items.map((entry) => entry.label)).toEqual([
+        'Image watermark',
+        'Video watermark',
+        'Autocaption',
+        'Sketch to image',
+      ]);
+    });
+
+    it('gives every menu item a distinct route name, a description and an icon path', () => {
+      const items = NAV_MENU_GROUPS.flatMap((group) => group.items);
+
+      expect(new Set(items.map((entry) => entry.routeName)).size).toBe(items.length);
+      for (const entry of items) {
+        expect(entry.description.length, entry.label).toBeGreaterThan(0);
+        expect(entry.iconPath.length, entry.label).toBeGreaterThan(0);
+      }
     });
   });
 });

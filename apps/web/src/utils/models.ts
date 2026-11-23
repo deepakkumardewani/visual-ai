@@ -5,6 +5,7 @@ import {
   MODEL_REGISTRY,
   PREMIUM_MODEL_KEYS,
   getCreditCost,
+  type MediaModelKey,
   type ModelKey,
 } from '@visual-ai/shared';
 
@@ -26,7 +27,18 @@ function fromRegistry(
   };
 }
 
-/** Full model catalog — metadata from MODEL_REGISTRY; presentation fields local. */
+/**
+ * Media models carry no flat credit cost (it depends on the job input, see
+ * `getMediaCreditCost`), so they get their own builder instead of `fromRegistry`.
+ */
+function fromMediaRegistry(
+  key: MediaModelKey,
+  overrides: Omit<Model, 'id' | 'tier' | 'pricePerImage' | 'creditCost'>,
+): Model {
+  return { ...overrides, id: MODEL_IDS[key], tier: MODEL_REGISTRY[key].tier };
+}
+
+/** Image generation catalog — metadata from MODEL_REGISTRY; presentation fields local. */
 export const MODELS: Model[] = [
   // — Legacy FLUX models —
   fromRegistry('FLUX_BASIC', {
@@ -285,6 +297,116 @@ export const UPSCALER_MODELS: Model[] = [
   }),
 ];
 
+/**
+ * Media Studio catalog (14 user-facing models; the MINIMAX_VOICE_CLONE helper has no row).
+ * Kept apart from MODELS so the image picker, landing counts and pricing list never see it.
+ */
+export const MEDIA_MODELS: Model[] = [
+  fromMediaRegistry('LYRIA_2', {
+    title: 'Lyria 2',
+    provider: 'google',
+    description: 'Instrumental clips from a text prompt, 30 seconds each.',
+    bestAt: 'Instrumental clips',
+    iconUrl: 'google.png',
+    companyName: 'Google',
+  }),
+  fromMediaRegistry('MINIMAX_MUSIC_26', {
+    title: 'Minimax Music 2.6',
+    provider: 'minimax',
+    description: 'Full songs with vocals or instrumentals, up to 6 minutes.',
+    bestAt: 'Full songs',
+    companyName: 'Minimax',
+  }),
+  fromMediaRegistry('MINIMAX_MUSIC_15', {
+    title: 'Minimax Music 1.5',
+    provider: 'minimax',
+    description: 'Short songs from your lyrics at a lower cost.',
+    bestAt: 'Budget songs',
+    companyName: 'Minimax',
+  }),
+  fromMediaRegistry('STABLE_AUDIO_25', {
+    title: 'Stable Audio 2.5',
+    provider: 'stability',
+    description: 'Music and sound effects up to 190 seconds, flat price.',
+    bestAt: 'Sound effects',
+    companyName: 'Stability AI',
+  }),
+  fromMediaRegistry('IMAGE_WATERMARK', {
+    title: 'Image Watermark',
+    provider: 'community',
+    description: 'Stamp text or a logo on an image, single or tiled.',
+    bestAt: 'Branding images',
+    iconUrl: 'community.png',
+    companyName: 'Community',
+  }),
+  fromMediaRegistry('AUTOCAPTION', {
+    title: 'Autocaption',
+    provider: 'community',
+    description: 'Burn styled captions into a video and get the transcript.',
+    bestAt: 'Video captions',
+    iconUrl: 'community.png',
+    companyName: 'Community',
+  }),
+  fromMediaRegistry('VIDEO_WATERMARK', {
+    title: 'Video Watermark',
+    provider: 'community',
+    description: 'Add a text watermark to a video.',
+    bestAt: 'Branding videos',
+    iconUrl: 'community.png',
+    companyName: 'Community',
+  }),
+  fromMediaRegistry('INWORLD_TTS_2', {
+    title: 'Inworld TTS 2.0',
+    provider: 'inworld',
+    description: 'Expressive speech in 15 languages with preset voices.',
+    bestAt: 'Expressive speech',
+    companyName: 'Inworld',
+  }),
+  fromMediaRegistry('INWORLD_TTS_15_MAX', {
+    title: 'Inworld TTS 1.5 Max',
+    provider: 'inworld',
+    description: 'High-quality preset voices with speed and tone control.',
+    bestAt: 'Voice quality',
+    companyName: 'Inworld',
+  }),
+  fromMediaRegistry('MINIMAX_SPEECH_28_HD', {
+    title: 'Minimax Speech 2.8 HD',
+    provider: 'minimax',
+    description: 'Studio-grade speech with emotions, long text and cloned voices.',
+    bestAt: 'Long-form narration',
+    companyName: 'Minimax',
+  }),
+  fromMediaRegistry('MINIMAX_SPEECH_28_TURBO', {
+    title: 'Minimax Speech 2.8 Turbo',
+    provider: 'minimax',
+    description: 'Faster, cheaper Minimax speech with the same voices.',
+    bestAt: 'Fast narration',
+    companyName: 'Minimax',
+  }),
+  fromMediaRegistry('CHATTERBOX_TURBO', {
+    title: 'Chatterbox Turbo',
+    provider: 'resemble',
+    description: 'Short, natural speech with a preset voice list.',
+    bestAt: 'Short clips',
+    companyName: 'Resemble AI',
+  }),
+  fromMediaRegistry('P_VIDEO', {
+    title: 'P-Video',
+    provider: 'pruna',
+    description: 'Fast text or image to video with a cheap draft preview.',
+    bestAt: 'Draft then render',
+    iconUrl: 'prunaai.png',
+    companyName: 'Pruna',
+  }),
+  fromMediaRegistry('WAN_3', {
+    title: 'Wan 3',
+    provider: 'alibaba',
+    description: 'Cinematic video up to 30 seconds at 1080p.',
+    bestAt: 'Long cinematic clips',
+    companyName: 'Alibaba',
+  }),
+];
+
 const PROVIDER_DISPLAY_NAMES: Record<string, string> = {
   bfl: 'Black Forest Labs',
   openai: 'OpenAI',
@@ -296,6 +418,11 @@ const PROVIDER_DISPLAY_NAMES: Record<string, string> = {
   community: 'Community',
   recraft: 'Recraft',
   topaz: 'Topaz Labs',
+  minimax: 'Minimax',
+  inworld: 'Inworld',
+  stability: 'Stability AI',
+  resemble: 'Resemble AI',
+  alibaba: 'Alibaba',
 };
 
 export function getProviderDisplayName(provider: string): string {

@@ -24,8 +24,17 @@ vi.mock("replicate", () => ({
     default: replicateState.Replicate,
 }))
 
-const { replicate, runReplicate, FAKE_REPLICATE_OUTPUT_URL, buildModelInput, getModelReplicateId } =
-    await import("./replicate.js")
+const {
+    replicate,
+    runReplicate,
+    FAKE_REPLICATE_OUTPUT_URL,
+    FAKE_REPLICATE_AUDIO_URL,
+    FAKE_REPLICATE_VIDEO_URL,
+    FAKE_REPLICATE_TRANSCRIPT_URL,
+    FAKE_VOICE_ID,
+    buildModelInput,
+    getModelReplicateId,
+} = await import("./replicate.js")
 
 const BASE_PARAMS = {
     prompt: "a photo of a cat",
@@ -97,6 +106,50 @@ describe("runReplicate", () => {
     it("never treats an empty userId as a test user", async () => {
         envState.E2E_USER_IDS = [""]
         await runReplicate({ ...base, userId: "" })
+        expect(replicateState.run).toHaveBeenCalledTimes(1)
+    })
+})
+
+describe("runReplicate fake output by model kind", () => {
+    const E2E_USER = "user_e2e"
+
+    beforeEach(() => {
+        vi.clearAllMocks()
+        envState.E2E_USER_IDS = [E2E_USER]
+    })
+
+    const asModel = (key: Parameters<typeof getModelReplicateId>[0]) =>
+        getModelReplicateId(key) as `${string}/${string}`
+
+    it.each([
+        ["song", "MINIMAX_MUSIC_26", FAKE_REPLICATE_AUDIO_URL],
+        ["music", "LYRIA_2", FAKE_REPLICATE_AUDIO_URL],
+        ["speech", "MINIMAX_SPEECH_28_HD", FAKE_REPLICATE_AUDIO_URL],
+        ["voice clone", "MINIMAX_VOICE_CLONE", FAKE_VOICE_ID],
+        ["video", "P_VIDEO", FAKE_REPLICATE_VIDEO_URL],
+        ["video watermark", "VIDEO_WATERMARK", FAKE_REPLICATE_VIDEO_URL],
+        ["autocaption", "AUTOCAPTION", [FAKE_REPLICATE_VIDEO_URL, FAKE_REPLICATE_TRANSCRIPT_URL]],
+        ["image watermark", "IMAGE_WATERMARK", [FAKE_REPLICATE_OUTPUT_URL]],
+        ["image", "FLUX_BASIC", [FAKE_REPLICATE_OUTPUT_URL]],
+    ] as const)(
+        "returns the %s fixture without calling Replicate",
+        async (_label, key, expected) => {
+            await expect(
+                runReplicate({ userId: E2E_USER, model: asModel(key), input: {} }),
+            ).resolves.toEqual(expected)
+            expect(replicateState.run).not.toHaveBeenCalled()
+        },
+    )
+
+    it("falls back to the image fixture for a model missing from the registry", async () => {
+        await expect(
+            runReplicate({ userId: E2E_USER, model: "nobody/unknown-model", input: {} }),
+        ).resolves.toEqual([FAKE_REPLICATE_OUTPUT_URL])
+        expect(replicateState.run).not.toHaveBeenCalled()
+    })
+
+    it("selects the real client for a non-e2e user on a media model", async () => {
+        await runReplicate({ userId: "someone_else", model: asModel("P_VIDEO"), input: {} })
         expect(replicateState.run).toHaveBeenCalledTimes(1)
     })
 })

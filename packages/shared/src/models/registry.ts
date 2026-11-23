@@ -1,4 +1,28 @@
-import type { ModelDefinition, ModelKey } from './types.js';
+import type {
+  MediaFixedInputs,
+  MediaInputField,
+  MediaModelConfig,
+  MediaModelKey,
+  ModelDefinition,
+  ModelKey,
+} from './types.js';
+import {
+  CHATTERBOX_TEXT_LIMIT,
+  INWORLD_TEXT_LIMIT,
+  LYRIA_CLIP_SEC,
+  MINIMAX_SPEECH_TEXT_LIMIT,
+  MUSIC_15_LYRICS,
+  MUSIC_15_PROMPT,
+  MUSIC_26_LYRICS,
+  MUSIC_26_PROMPT,
+  P_VIDEO_DEFAULT_SEC,
+  P_VIDEO_MAX_SEC,
+  P_VIDEO_MIN_SEC,
+  STABLE_AUDIO_DURATION_SEC,
+  WAN_DEFAULT_SEC,
+  WAN_MAX_SEC,
+  WAN_MIN_SEC,
+} from './media-limits.js';
 
 /**
  * Aspect ratios from each model's Replicate OpenAPI `aspect_ratio` enum.
@@ -110,6 +134,99 @@ const PNG_JPG_WEBP = ['png', 'jpg', 'webp'] as Array<'png' | 'jpg' | 'webp' | 'j
 const JPG_PNG = ['jpg', 'png'] as Array<'png' | 'jpg' | 'webp' | 'jpeg'>;
 /** GPT Image 2 OpenAPI uses `jpeg` (not `jpg`) */
 const PNG_JPEG_WEBP = ['png', 'jpeg', 'webp'] as Array<'png' | 'jpg' | 'webp' | 'jpeg'>;
+
+// ── Media Studio ─────────────────────────────────────────────────────────────
+
+/**
+ * pricesVerifiedOn '2026-11-15': date each media model page, price and schema was last re-read.
+ * Prices below are the SPEC section 4 table; deltas seen on this date are in the T0.3 report.
+ */
+const MEDIA_PRICES_VERIFIED_ON = '2026-11-15';
+
+/** Autocaption bills per block of input video this long (gap G6). */
+const AUTOCAPTION_BLOCK_SEC = 30;
+
+/**
+ * Server-controlled inputs per media model (R-INF-1). `send` values are always set,
+ * `neverSend` keys are never sent, `alwaysSend` keys must come from the user so the
+ * vendor default never applies.
+ */
+export const FIXED_INPUTS: Record<MediaModelKey, MediaFixedInputs> = {
+  LYRIA_2: {},
+  // `audio_format` is the deprecated alias of `output_format`.
+  MINIMAX_MUSIC_26: { neverSend: ['audio_format'] },
+  MINIMAX_MUSIC_15: { neverSend: ['audio_format'] },
+  STABLE_AUDIO_25: {},
+  IMAGE_WATERMARK: {},
+  AUTOCAPTION: {},
+  // The model's default text is a vendor brand and must never reach the user's video.
+  VIDEO_WATERMARK: { alwaysSend: ['watermark'] },
+  INWORLD_TTS_2: {},
+  INWORLD_TTS_15_MAX: {},
+  MINIMAX_SPEECH_28_HD: {},
+  MINIMAX_SPEECH_28_TURBO: {},
+  CHATTERBOX_TURBO: {},
+  P_VIDEO: { send: { disable_safety_filter: false }, neverSend: ['no_op'] },
+  WAN_3: {},
+  MINIMAX_VOICE_CLONE: {},
+};
+
+/** App field -> Replicate input key table (declared once per model, read by the payload builder). */
+function mediaInputs(map: Record<string, string>): Record<string, MediaInputField> {
+  return Object.fromEntries(Object.entries(map).map(([field, inputKey]) => [field, { inputKey }]));
+}
+
+/** Registers a media model: standard tier, no image fields, fixed inputs looked up by key. */
+function mediaModel(
+  key: MediaModelKey,
+  base: Pick<ModelDefinition, 'replicateId' | 'label' | 'kind'>,
+  media: Omit<MediaModelConfig, 'fixedInputs' | 'pricesVerifiedOn'>,
+): ModelDefinition {
+  return {
+    key,
+    ...base,
+    tier: 'standard',
+    fields: {},
+    media: { ...media, fixedInputs: FIXED_INPUTS[key], pricesVerifiedOn: MEDIA_PRICES_VERIFIED_ON },
+  };
+}
+
+/** Shared by Minimax Music 2.6 / 1.5 (SPEC 5.1). */
+const MINIMAX_MUSIC_COMMON_INPUTS = {
+  stylePrompt: 'prompt',
+  lyrics: 'lyrics',
+  format: 'output_format',
+  bitrate: 'bitrate',
+  sampleRate: 'sample_rate',
+};
+
+/** Inworld inputs shared by TTS 2 and 1.5 Max (SPEC 5.2). */
+const INWORLD_COMMON_INPUTS = {
+  text: 'text',
+  voice: 'voice_id',
+  temperature: 'temperature',
+  speakingRate: 'speaking_rate',
+  textNormalization: 'text_normalization',
+  audioFormat: 'audio_format',
+  sampleRate: 'sample_rate',
+};
+
+/** Minimax Speech 2.8 HD / Turbo inputs (SPEC 5.2). */
+const MINIMAX_SPEECH_INPUTS = {
+  text: 'text',
+  voice: 'voice_id',
+  emotion: 'emotion',
+  speed: 'speed',
+  pitch: 'pitch',
+  volume: 'volume',
+  languageBoost: 'language_boost',
+  englishNormalization: 'english_normalization',
+  subtitleEnable: 'subtitle_enable',
+  channel: 'channel',
+  audioFormat: 'audio_format',
+  bitrate: 'bitrate',
+  sampleRate: 'sample_rate',
+};
 
 export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
   // ── Legacy Flux-1 generation ──────────────────────────────────────────────
@@ -592,6 +709,285 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       },
     },
   },
+  // ── Media Studio: music and song (SPEC 4, 5.1) ────────────────────────────
+
+  LYRIA_2: mediaModel(
+    'LYRIA_2',
+    { replicateId: 'google/lyria-2', label: 'Lyria 2', kind: 'music' },
+    {
+      // $0.002/s x the fixed clip length, billed per file.
+      durationSec: { min: LYRIA_CLIP_SEC, max: LYRIA_CLIP_SEC, default: LYRIA_CLIP_SEC },
+      pricing: { unit: 'file', usd: 0.06 },
+      // SPEC 5.1 Lyria 2
+      inputs: mediaInputs({ prompt: 'prompt', negativePrompt: 'negative_prompt', seed: 'seed' }),
+    },
+  ),
+
+  MINIMAX_MUSIC_26: mediaModel(
+    'MINIMAX_MUSIC_26',
+    { replicateId: 'minimax/music-2.6', label: 'Minimax Music 2.6', kind: 'song' },
+    {
+      lyrics: MUSIC_26_LYRICS,
+      prompt: MUSIC_26_PROMPT,
+      pricing: { unit: 'file', usd: 0.15 },
+      // SPEC 5.1 Minimax Music 2.6
+      inputs: mediaInputs({
+        ...MINIMAX_MUSIC_COMMON_INPUTS,
+        instrumental: 'is_instrumental',
+        autoLyrics: 'lyrics_optimizer',
+      }),
+    },
+  ),
+
+  MINIMAX_MUSIC_15: mediaModel(
+    'MINIMAX_MUSIC_15',
+    { replicateId: 'minimax/music-1.5', label: 'Minimax Music 1.5', kind: 'song' },
+    {
+      lyrics: MUSIC_15_LYRICS,
+      prompt: MUSIC_15_PROMPT,
+      pricing: { unit: 'file', usd: 0.03 },
+      // SPEC 5.1 Minimax Music 1.5 (no instrumental / auto-lyrics flags)
+      inputs: mediaInputs(MINIMAX_MUSIC_COMMON_INPUTS),
+    },
+  ),
+
+  STABLE_AUDIO_25: mediaModel(
+    'STABLE_AUDIO_25',
+    { replicateId: 'stability-ai/stable-audio-2.5', label: 'Stable Audio 2.5', kind: 'music' },
+    {
+      durationSec: STABLE_AUDIO_DURATION_SEC,
+      pricing: { unit: 'file', usd: 0.2 },
+      // SPEC 5.1 Stable Audio 2.5
+      inputs: mediaInputs({
+        prompt: 'prompt',
+        durationSec: 'duration',
+        steps: 'steps',
+        cfgScale: 'cfg_scale',
+        seed: 'seed',
+      }),
+    },
+  ),
+
+  // ── Media Studio: tools (SPEC 4, 5.4) ─────────────────────────────────────
+
+  IMAGE_WATERMARK: mediaModel(
+    'IMAGE_WATERMARK',
+    {
+      replicateId:
+        'littletry/image-watermark:e653be4c31a75f7f7327dee68500cd58f9bfe3cf57778488e28a739e8fb76f1c',
+      label: 'Image Watermark',
+      kind: 'tool',
+    },
+    {
+      pricing: { unit: 'run', usd: 0.00019 },
+      // SPEC 5.4 Image watermark
+      inputs: mediaInputs({
+        image: 'image',
+        mode: 'mode',
+        watermarkImage: 'watermark',
+        watermarkText: 'watermark_text',
+        position: 'position',
+        positionX: 'position_x',
+        positionY: 'position_y',
+        scale: 'scale',
+        margin: 'margin',
+        opacity: 'opacity',
+        rotation: 'rotation',
+        shadow: 'shadow',
+        backingPlate: 'backing_plate',
+        tileSpacingX: 'tile_spacing_x',
+        tileSpacingY: 'tile_spacing_y',
+        outputFormat: 'output_format',
+        quality: 'quality',
+        preserveMetadata: 'preserve_metadata',
+      }),
+    },
+  ),
+
+  AUTOCAPTION: mediaModel(
+    'AUTOCAPTION',
+    {
+      replicateId:
+        'fictions-ai/autocaption:18a45ff0d95feb4449d192bbdc06b4a6df168fa33def76dfc51b78ae224b599b',
+      label: 'Autocaption',
+      kind: 'tool',
+    },
+    {
+      pricing: { unit: 'run', usd: 0.055, blockSec: AUTOCAPTION_BLOCK_SEC },
+      // SPEC 5.4 Autocaption
+      inputs: mediaInputs({
+        video: 'video_file_input',
+        font: 'font',
+        color: 'color',
+        highlightColor: 'highlight_color',
+        strokeColor: 'stroke_color',
+        strokeWidth: 'stroke_width',
+        opacity: 'opacity',
+        fontSize: 'fontsize',
+        maxChars: 'MaxChars',
+        kerning: 'kerning',
+        subsPosition: 'subs_position',
+        translate: 'translate',
+        rightToLeft: 'right_to_left',
+        outputVideo: 'output_video',
+        outputTranscript: 'output_transcript',
+        transcriptFile: 'transcript_file_input',
+      }),
+    },
+  ),
+
+  VIDEO_WATERMARK: mediaModel(
+    'VIDEO_WATERMARK',
+    {
+      replicateId:
+        'charlesmccarthy/addwatermark:f274d1efdd9d249cef68fccd028d70e4134b2d59f2b02b42a4e78350849d0e57',
+      label: 'Video Watermark',
+      kind: 'tool',
+    },
+    {
+      pricing: { unit: 'run', usd: 0.00045 },
+      // SPEC 5.4 Video watermark (text + size only; no position/opacity inputs exist)
+      inputs: mediaInputs({ video: 'video', watermarkText: 'watermark', size: 'size' }),
+    },
+  ),
+
+  // ── Media Studio: speech (SPEC 4, 5.2) ────────────────────────────────────
+
+  INWORLD_TTS_2: mediaModel(
+    'INWORLD_TTS_2',
+    { replicateId: 'inworld/realtime-tts-2', label: 'Inworld TTS 2.0', kind: 'tts' },
+    {
+      textLimit: INWORLD_TEXT_LIMIT,
+      voices: 'inworld',
+      pricing: { unit: 'kChars', usd: 0.025 },
+      // SPEC 5.2 Inworld 2 (the only Inworld model with a language input)
+      inputs: mediaInputs({ ...INWORLD_COMMON_INPUTS, language: 'language' }),
+    },
+  ),
+
+  INWORLD_TTS_15_MAX: mediaModel(
+    'INWORLD_TTS_15_MAX',
+    { replicateId: 'inworld/realtime-tts-1.5-max', label: 'Inworld TTS 1.5 Max', kind: 'tts' },
+    {
+      textLimit: INWORLD_TEXT_LIMIT,
+      voices: 'inworld',
+      pricing: { unit: 'kChars', usd: 0.035 },
+      // SPEC 5.2 Inworld 1.5 Max (no language input)
+      inputs: mediaInputs(INWORLD_COMMON_INPUTS),
+    },
+  ),
+
+  MINIMAX_SPEECH_28_HD: mediaModel(
+    'MINIMAX_SPEECH_28_HD',
+    { replicateId: 'minimax/speech-2.8-hd', label: 'Minimax Speech 2.8 HD', kind: 'tts' },
+    {
+      textLimit: MINIMAX_SPEECH_TEXT_LIMIT,
+      voices: 'minimax',
+      // Billed per input token; tokens are treated as characters (A4).
+      pricing: { unit: 'kTokens', usd: 0.1 },
+      // SPEC 5.2 Minimax 2.8 HD / Turbo
+      inputs: mediaInputs(MINIMAX_SPEECH_INPUTS),
+    },
+  ),
+
+  MINIMAX_SPEECH_28_TURBO: mediaModel(
+    'MINIMAX_SPEECH_28_TURBO',
+    { replicateId: 'minimax/speech-2.8-turbo', label: 'Minimax Speech 2.8 Turbo', kind: 'tts' },
+    {
+      textLimit: MINIMAX_SPEECH_TEXT_LIMIT,
+      voices: 'minimax',
+      pricing: { unit: 'kTokens', usd: 0.06 },
+      // SPEC 5.2 Minimax 2.8 HD / Turbo
+      inputs: mediaInputs(MINIMAX_SPEECH_INPUTS),
+    },
+  ),
+
+  CHATTERBOX_TURBO: mediaModel(
+    'CHATTERBOX_TURBO',
+    { replicateId: 'resemble-ai/chatterbox-turbo', label: 'Chatterbox Turbo', kind: 'tts' },
+    {
+      textLimit: CHATTERBOX_TEXT_LIMIT,
+      voices: 'chatterbox',
+      pricing: { unit: 'kChars', usd: 0.025 },
+      // SPEC 5.2 Chatterbox Turbo (reference_audio not exposed in v1, Q7)
+      inputs: mediaInputs({
+        text: 'text',
+        voice: 'voice',
+        temperature: 'temperature',
+        topP: 'top_p',
+        topK: 'top_k',
+        repetitionPenalty: 'repetition_penalty',
+        seed: 'seed',
+      }),
+    },
+  ),
+
+  // Helper only: no picker or pricing-list row.
+  MINIMAX_VOICE_CLONE: mediaModel(
+    'MINIMAX_VOICE_CLONE',
+    { replicateId: 'minimax/voice-cloning', label: 'Minimax Voice Cloning', kind: 'tts' },
+    {
+      pricing: { unit: 'run', usd: 3 },
+      // SPEC 4 helper row: voice file, `model` enum, `accuracy` 0-1
+      inputs: mediaInputs({ voiceFile: 'voice_file', model: 'model', accuracy: 'accuracy' }),
+    },
+  ),
+
+  // ── Media Studio: video (SPEC 4, 5.3) ─────────────────────────────────────
+
+  P_VIDEO: mediaModel(
+    'P_VIDEO',
+    { replicateId: 'prunaai/p-video', label: 'P-Video', kind: 'video' },
+    {
+      durationSec: { min: P_VIDEO_MIN_SEC, max: P_VIDEO_MAX_SEC, default: P_VIDEO_DEFAULT_SEC },
+      pricing: {
+        unit: 'second',
+        usd: 0.02,
+        byResolution: { '720p': 0.02, '1080p': 0.04 },
+        draftByResolution: { '720p': 0.005, '1080p': 0.01 },
+      },
+      // SPEC 5.3 P-Video
+      inputs: mediaInputs({
+        prompt: 'prompt',
+        image: 'image',
+        lastFrameImage: 'last_frame_image',
+        audio: 'audio',
+        durationSec: 'duration',
+        resolution: 'resolution',
+        aspectRatio: 'aspect_ratio',
+        fps: 'fps',
+        draft: 'draft',
+        saveAudio: 'save_audio',
+        promptUpsampling: 'prompt_upsampling',
+        seed: 'seed',
+      }),
+    },
+  ),
+
+  WAN_3: mediaModel(
+    'WAN_3',
+    { replicateId: 'alibaba/wan-3', label: 'Wan 3', kind: 'video' },
+    {
+      durationSec: { min: WAN_MIN_SEC, max: WAN_MAX_SEC, default: WAN_DEFAULT_SEC },
+      // `usd` is the 720p rate, the UI default resolution.
+      pricing: {
+        unit: 'second',
+        usd: 0.07,
+        byResolution: { '480p': 0.035, '720p': 0.07, '1080p': 0.14 },
+      },
+      // SPEC 5.3 Wan 3
+      inputs: mediaInputs({
+        prompt: 'prompt',
+        image: 'image',
+        durationSec: 'duration',
+        resolution: 'resolution',
+        aspectRatio: 'aspect_ratio',
+        negativePrompt: 'negative_prompt',
+        promptExpansion: 'enable_prompt_expansion',
+        seed: 'seed',
+      }),
+    },
+  ),
 };
 
 /**

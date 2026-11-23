@@ -4,11 +4,13 @@ import { computed, watch } from 'vue';
 import { useUser } from 'vue-clerk';
 import { useRoute, useRouter } from 'vue-router';
 
+import { useGlobalShortcuts } from '@/composables/useGlobalShortcuts';
 import { useAppStore } from '@/stores/app';
 import { useDialogStore, CHAIN_ACTION_LABELS } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
 import AppFooter from '@/components/AppFooter.vue';
+import MiniPlayer from '@/components/Audio/MiniPlayer.vue';
 import ConfirmChainActionDialog from '@/components/Dialogs/ConfirmChainActionDialog.vue';
 import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue';
 import AppHeader from '@/components/Header/AppHeader.vue';
@@ -23,6 +25,8 @@ const { user, isLoaded } = useUser();
 const { snackbar, snackbarTimeout, snackbarText } = storeToRefs(appStore);
 const { showChainActionDialog, chainAction, chainActionCreditCost, chainActionExtraCopy } =
   storeToRefs(dialogStore);
+// App-level so media keys and `?` work on every route, not only the Dashboard.
+useGlobalShortcuts();
 const route = useRoute();
 const router = useRouter();
 const chainActionName = computed(() => CHAIN_ACTION_LABELS[chainAction.value]);
@@ -34,7 +38,8 @@ watch(
     if (!currentUser) {
       // Signed-out visitors never fetch a profile; the header waits on this flag.
       userStore.isReady = true;
-      const protectedRoute = route.name === 'profile' || route.name === 'explore-image';
+      const protectedRoute =
+        route.name === 'profile' || route.name === 'explore-image' || route.meta.requiresAuth;
       if (protectedRoute) {
         void router.replace({ name: 'signin', query: { redirect: route.fullPath } });
       }
@@ -116,6 +121,7 @@ const isHeaderInFlowBand = computed(
       <ReferralDialog />
     </div>
     <AppFooter v-if="isFooterVisible" />
+    <MiniPlayer />
 
     <Toast v-model="snackbar" :timeout="snackbarTimeout" :text="snackbarText" />
     <ConfirmChainActionDialog

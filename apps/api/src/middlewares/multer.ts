@@ -2,6 +2,9 @@ import { v2 as cloudinary } from "cloudinary"
 import multer from "multer"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
 import { v1 as uuidv1 } from "uuid"
+import { BadRequestError } from "../lib/errors.js"
+import { maxBytesForKind, uploadTooLargeError } from "../lib/media-upload.js"
+import type { UploadKind, UploadPurpose } from "../lib/media-upload.js"
 
 import { isAcceptedImageMime, MAX_IMAGE_BYTES, MAX_REFERENCE_IMAGE_COUNT } from "@visual-ai/shared"
 
@@ -62,3 +65,26 @@ export const memoryUpload = multer({
         cb(null, true)
     },
 })
+
+// The purpose decides the exact cap and allowed types; these instances only bound the request
+// (memory kinds) or spool to disk (video) so a large file never sits in memory.
+function createKindUpload(kind: UploadKind, storage: multer.StorageEngine) {
+    return multer({ storage, limits: { fileSize: maxBytesForKind(kind), files: 1 } })
+}
+
+export const audioUpload = createKindUpload("audio", multer.memoryStorage())
+export const toolImageUpload = createKindUpload("image", multer.memoryStorage())
+export const videoUpload = createKindUpload("video", multer.diskStorage({}))
+
+export const UPLOAD_BY_KIND: Record<UploadKind, multer.Multer> = {
+    audio: audioUpload,
+    image: toolImageUpload,
+    video: videoUpload,
+}
+
+/** Maps Multer's size error to the 413 the client shows copy for; other Multer errors become 400. */
+export function mapUploadError(err: unknown, purpose: UploadPurpose): unknown {
+    if (!(err instanceof multer.MulterError)) return err
+    if (err.code === "LIMIT_FILE_SIZE") return uploadTooLargeError(purpose)
+    return new BadRequestError(`file: ${err.message}`)
+}

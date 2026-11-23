@@ -9,6 +9,15 @@ export enum FeatureType {
   COLORIZE = 'colorize',
   REVIVE = 'revive',
   REMOVE_BG = 'remove_bg',
+  SONG = 'song',
+  MUSIC = 'music',
+  SPEECH = 'speech',
+  VIDEO = 'video',
+  WATERMARK_IMAGE = 'watermark_image',
+  WATERMARK_VIDEO = 'watermark_video',
+  AUTOCAPTION = 'autocaption',
+  /** Routing, nav and labels only (G11): sketch results are stored as normal image history. */
+  SKETCH = 'sketch',
 }
 
 export interface IImage {
@@ -59,6 +68,44 @@ export interface ExploreFeedResponse {
   nextCursor: string | null;
 }
 
+/** Progress stages a media job reports over SSE. */
+export type MediaJobStage = 'queued' | 'composing' | 'mastering' | 'saving';
+
+/** Why a job ended without charging credits. */
+export type NoChargeReason =
+  | 'FAILED'
+  | 'CANCELED'
+  | 'MODERATED'
+  | 'TIMEOUT'
+  | 'CONTENT_SAFETY'
+  | 'VOICE_UNAVAILABLE';
+
+export type MediaAssetType = 'audio' | 'video';
+
+/** Client-facing media asset; the Replicate output URL is never exposed after the Cloudinary copy. */
+export interface MediaAssetDto {
+  id: string;
+  type: MediaAssetType;
+  feature: FeatureType;
+  modelKey: string;
+  title: string;
+  url: string;
+  format?: string;
+  bytes?: number;
+  durationSec?: number;
+  width?: number;
+  height?: number;
+  posterUrl?: string;
+  transcriptUrl?: string;
+  prompt?: string;
+  lyrics?: string;
+  parentId?: string;
+  creditsCharged: number;
+  /** False when the history cap was reached and the asset was delivered but not stored. */
+  saved: boolean;
+  createdAt?: string;
+}
+
 export interface JobStatus {
   status: string;
   image: IImageObject | undefined;
@@ -68,6 +115,16 @@ export interface JobStatus {
   savedToHistory?: boolean;
   /** User-facing explanation, set on 'error' status for known/expected failure reasons (e.g. moderation rejection) */
   message?: string;
+  /** Media jobs: current pipeline stage. */
+  stage?: MediaJobStage;
+  elapsedMs?: number;
+  assetId?: string;
+  asset?: MediaAssetDto;
+  /** Media jobs: credits charged on success. */
+  credits?: number;
+  /** Set on 'error' status when the failure cost the user nothing. */
+  noCharge?: true;
+  reason?: NoChargeReason;
 }
 
 export type PaymentProviderName = 'razorpay' | 'dodo';

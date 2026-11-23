@@ -7,8 +7,10 @@ import { env } from "../config/env.js"
 import { redisClient } from "../config/redis.js"
 
 const STT_LIMIT_MESSAGE = "Too many voice requests. Try again later."
+const UPLOAD_LIMIT_MESSAGE = "Too many uploads. Try again later."
+const UPLOAD_RATE_LIMIT = { windowMs: 10 * 60 * 1000, max: 30 } as const
 
-function sttRateLimitKey(req: Request): string {
+function userRateLimitKey(req: Request): string {
     const userId = req.auth?.userId
     if (userId) {
         return userId
@@ -16,28 +18,47 @@ function sttRateLimitKey(req: Request): string {
     return ipKeyGenerator(req.ip ?? "127.0.0.1", 56)
 }
 
-function createStore() {
+function createStore(name: string) {
     if (env.NODE_ENV === "test") {
         return undefined
     }
     return new RedisStore({
         sendCommand: (command: string, ...args: string[]) =>
             redisClient.call(command, ...args) as Promise<number>,
-        prefix: `${env.QUEUE_PREFIX}:stt-rl:`,
+        prefix: `${env.QUEUE_PREFIX}:${name}-rl:`,
     })
 }
 
-export const sttRateLimiter = rateLimit({
-    windowMs: STT_RATE_LIMIT.windowMs,
-    max: STT_RATE_LIMIT.max,
-    standardHeaders: true,
-    legacyHeaders: false,
+function createUserRateLimiter(options: {
+    name: string
+    windowMs: number
+    max: number
+    message: string
+}) {
+    return rateLimit({
+        windowMs: options.windowMs,
+        max: options.max,
+        standardHeaders: true,
+        legacyHeaders: false,
+        message: options.message,
+        keyGenerator: userRateLimitKey,
+        store: createStore(options.name),
+        handler: (_req, res, _next, limitOptions) => {
+            const retryAfterSeconds = Math.ceil(limitOptions.windowMs / 1000)
+            res.setHeader("Retry-After", String(retryAfterSeconds))
+            res.status(limitOptions.statusCode).json({ message: options.message })
+        },
+    })
+}
+
+export const sttRateLimiter = createUserRateLimiter({
+    name: "stt",
+    ...STT_RATE_LIMIT,
     message: STT_LIMIT_MESSAGE,
-    keyGenerator: sttRateLimitKey,
-    store: createStore(),
-    handler: (req, res, _next, options) => {
-        const retryAfterSeconds = Math.ceil(options.windowMs / 1000)
-        res.setHeader("Retry-After", String(retryAfterSeconds))
-        res.status(options.statusCode).json({ message: STT_LIMIT_MESSAGE })
-    },
+})
+
+export const uploadRateLimiter = createUserRateLimiter({
+    name: "upload",
+    ...UPLOAD_RATE_LIMIT,
+    message: UPLOAD_LIMIT_MESSAGE,
 })

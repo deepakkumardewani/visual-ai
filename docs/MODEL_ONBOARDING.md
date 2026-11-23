@@ -83,6 +83,33 @@ Candidate models and pricing research: [MODELS_COMPARISON.md](../MODELS_COMPARIS
       API returns 400 (via `validateModelParams`), not a silent drop or a
       Replicate 422.
 
+## 5. Media Studio models (music, song, speech, video, tools)
+
+Media models live in the same `MODEL_REGISTRY` but are **not** image models: they declare a
+`kind` (`music` | `song` | `tts` | `video` | `tool`) and a `media` block, built with the
+`mediaModel()` helper in [registry.ts](../packages/shared/src/models/registry.ts). They have no
+flat `pricePerImage` and `getCreditCost` throws for them; price every job with
+`getMediaCreditCost(modelKey, input)` from `@visual-ai/shared`.
+
+- [ ] Add the key to `MediaModelKey` in [types.ts](../packages/shared/src/models/types.ts).
+- [ ] `media.pricing` — `unit` (`file` | `second` | `kChars` | `kTokens` | `run`) and `usd` (Replicate
+      cost per unit). Per-second models add `byResolution` (and `draftByResolution`); Autocaption-style
+      runs add `blockSec`. Credits are `max(1, ceil(usd x MEDIA_CREDITS_PER_USD))`, never typed by hand.
+- [ ] `media.inputs` — app field name to Replicate input key (`mediaInputs({ prompt: 'prompt', ... })`).
+      Payload building in `apps/api/src/lib/media-input.ts` reads this map; do not add per-model branches.
+- [ ] `FIXED_INPUTS[key]` — values the server always sends (`send`), keys it must never send
+      (`neverSend`) and inputs it always sets so a vendor default never reaches Replicate (`alwaysSend`).
+- [ ] `pricesVerifiedOn` — ISO date you re-read the price and schema on the Replicate model page
+      (set once through `MEDIA_PRICES_VERIFIED_ON`).
+- [ ] Limits (`durationSec`, `lyrics`, `prompt`, `textLimit`, `voices`) come from
+      [media-limits.ts](../packages/shared/src/models/media-limits.ts); reuse the constants.
+- [ ] Web: add the card to `apps/web/src/utils/models.ts` through the media builder (not `fromRegistry`).
+      The pricing page lists it automatically in `PricingModelCosts.vue`, grouped by kind with its
+      unit; helper-only models (voice cloning) are excluded there.
+- [ ] Run `bun run check:model-docs`. It fails when a media entry lacks a kind, pricing (known unit,
+      positive `usd`), `inputs`, `fixedInputs` or an ISO `pricesVerifiedOn`. Add `--schemas` (needs
+      `REPLICATE_API_TOKEN`) to also dump aspect/format enums from Replicate.
+
 ## Common pitfalls
 
 - Adding the registry entry but forgetting the `ModelKey` union in
@@ -94,4 +121,6 @@ Candidate models and pricing research: [MODELS_COMPARISON.md](../MODELS_COMPARIS
 - Sending `num_outputs`/`aspect_ratio`/etc. to a model that doesn't accept
   them (Replicate 422) — should be prevented by `validateModelParams`, but
   double-check the registry's `fields` match the model's actual schema.
+- Typing a media model's credit cost anywhere (pricing page, docs, tests): derive it from
+  `getMediaCreditCost` so it can't drift from what the API charges.
 - Manually setting `isPro` instead of letting it derive from `tier`.

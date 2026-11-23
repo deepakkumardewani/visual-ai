@@ -36,7 +36,7 @@ vi.mock("express-rate-limit", async (importOriginal) => {
         ...actual,
         ipKeyGenerator: ipKeyGeneratorMock,
         default: (options: Record<string, unknown>) => {
-            rateLimitOptions.value = options
+            rateLimitOptions.value ??= options
             return actual.default(options)
         },
     }

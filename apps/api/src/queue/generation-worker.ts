@@ -10,8 +10,10 @@ import {
     processRevive,
     processUpscale,
 } from "../services/generation-service.js"
+import { processMusic } from "../services/media-service.js"
 import { RedisService } from "../services/redis-service.js"
 import { GENERATION_QUEUE_NAME, type GenerationJobData } from "./generation-queue.js"
+import { getJobId } from "./job-id.js"
 
 const logger = createLogger("generation-worker")
 
@@ -33,6 +35,18 @@ async function processGenerationJob(job: Job<GenerationJobData>): Promise<void> 
         case "remove-bg":
             await processRemoveBg(data.props)
             return
+        case "music":
+            await processMusic(data.body)
+            return
+        case "song":
+        case "speech":
+        case "video":
+        case "image-watermark":
+        case "video-watermark":
+        case "autocaption":
+        case "voice-clone":
+            // Media processors land with runMediaJob (later Phase 0 tasks); fail loudly rather than drop the job.
+            throw new Error(`No processor registered for media job kind: ${data.kind}`)
         default: {
             const _exhaustive: never = data
             throw new Error(`Unknown generation job kind: ${JSON.stringify(_exhaustive)}`)
@@ -54,7 +68,7 @@ export function startGenerationWorker(): Worker<GenerationJobData> {
         const maxAttempts = job.opts.attempts ?? 1
         if (job.attemptsMade < maxAttempts) return
 
-        const jobId = job.data.kind === "image" ? job.data.body.jobId : job.data.props.body.jobId
+        const jobId = getJobId(job.data)
 
         try {
             await new RedisService().setStatus(jobId, {

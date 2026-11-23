@@ -16,6 +16,8 @@ export type ConfirmChainActionOptions = {
   extraCopy?: string;
 };
 
+export type LowCreditsShortfall = { required: number; available: number };
+
 let settleChainConfirm: ((confirmed: boolean) => void) | null = null;
 let copyReferralReturnFocus: HTMLElement | null = null;
 
@@ -34,6 +36,8 @@ export const useDialogStore = defineStore('dialog', () => {
   const originalImage = ref('');
   const enhancedImage = ref('');
   const lowCreditsDialog = ref(false);
+  /** Set by media jobs whose 402 reports the exact amounts; null keeps the per-feature copy. */
+  const lowCreditsShortfall = ref<LowCreditsShortfall | null>(null);
   const signupDialog = ref(false);
   const referralOfferDialog = ref(false);
   const showChainActionDialog = ref(false);
@@ -58,7 +62,8 @@ export const useDialogStore = defineStore('dialog', () => {
     settleChainConfirm = null;
     settle?.(confirmed);
   }
-  function showLowCredits() {
+  function showLowCredits(shortfall?: LowCreditsShortfall) {
+    lowCreditsShortfall.value = shortfall ?? null;
     showLowCreditsDialog.value = true;
   }
   function hideLowCredits() {
@@ -135,6 +140,7 @@ export const useDialogStore = defineStore('dialog', () => {
     showReferralDialog,
     showCopyReferralDialog,
     showLowCreditsDialog,
+    lowCreditsShortfall,
     showBuyCreditsDialog,
     showDeleteDialog,
     imageUrl,

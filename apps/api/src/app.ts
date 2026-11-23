@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid"
 
 import { connectDB } from "./config/mongo.js"
 import { env } from "./config/env.js"
-import { isHttpError } from "./lib/errors.js"
+import { resolveErrorStatus } from "./lib/errors.js"
 import { logger } from "./lib/logger.js"
 import { healthCheckRoute } from "./routes/healthcheck.js"
 import { router } from "./routes/index.js"
@@ -108,7 +108,7 @@ app.use("/", router)
 // (and anything else) reach the client with the right status code and a clean
 // log line, instead of Express's default handler dumping a raw stack trace.
 app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
-    const statusCode = isHttpError(err) ? err.statusCode : 500
+    const statusCode = resolveErrorStatus(err)
     const message = err instanceof Error ? err.message : "Internal server error"
     logger.error({ err }, `${req.method} ${req.url} ${statusCode} ${message}`)
     res.status(statusCode).json({ error: message })

@@ -17,11 +17,16 @@ export const KNOWN_PROVIDERS: readonly ModelProvider[] = [
   'community',
   'recraft',
   'topaz',
+  'minimax',
+  'inworld',
+  'stability',
+  'resemble',
+  'alibaba',
 ] as const;
 
 /**
  * Brand marks sourced from Simple Icons (OpenAI, Google) and LobeHub icons
- * (BFL, ByteDance, xAI). Pruna and Z-Image have no public brand mark and
+ * (BFL, ByteDance, xAI). Pruna, Z-Image and the media providers have no public brand mark and
  * intentionally fall back to a lettermark.
  */
 const PROVIDER_LOGOS: Partial<Record<ModelProvider, string>> = {
@@ -43,6 +48,11 @@ const PROVIDER_LABELS: Record<ModelProvider, string> = {
   community: 'Community',
   recraft: 'Recraft',
   topaz: 'Topaz',
+  minimax: 'Minimax',
+  inworld: 'Inworld',
+  stability: 'Stability',
+  resemble: 'Resemble',
+  alibaba: 'Alibaba',
 };
 
 export function isKnownProvider(provider: string): provider is ModelProvider {

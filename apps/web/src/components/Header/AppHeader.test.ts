@@ -259,6 +259,7 @@ describe('AppHeader', () => {
       const order = clusterOrder(mountWithPlan(PLAN.FREE));
 
       expect(order).toEqual([
+        'header-shortcuts',
         'referral-offer-stub',
         'upgrade-button',
         'credits-chip-stub',
@@ -269,14 +270,24 @@ describe('AppHeader', () => {
     it('omits Upgrade for a Pro user on the dashboard', () => {
       const order = clusterOrder(mountWithPlan(PLAN.PRO));
 
-      expect(order).toEqual(['referral-offer-stub', 'credits-chip-stub', 'user-menu-stub']);
+      expect(order).toEqual([
+        'header-shortcuts',
+        'referral-offer-stub',
+        'credits-chip-stub',
+        'user-menu-stub',
+      ]);
     });
 
     it('omits Earn below 768 while keeping Upgrade', () => {
       isWideRef.value = false;
       const order = clusterOrder(mountWithPlan(PLAN.FREE));
 
-      expect(order).toEqual(['upgrade-button', 'credits-chip-stub', 'user-menu-stub']);
+      expect(order).toEqual([
+        'header-shortcuts',
+        'upgrade-button',
+        'credits-chip-stub',
+        'user-menu-stub',
+      ]);
     });
 
     it('shows no Upgrade or credits off the dashboard', () => {

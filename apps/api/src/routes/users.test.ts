@@ -55,6 +55,16 @@ vi.mock("../services/cloudinary-service.js", () => ({
         Reflect.apply(deleteCloudinaryUserData, undefined, args),
 }))
 
+// multer.test.ts is imported below; it needs the real purpose limits and size error.
+vi.mock("../lib/media-upload.js", async () => {
+    const actual =
+        await vi.importActual<typeof import("../lib/media-upload.js")>("../lib/media-upload.js")
+    return {
+        maxBytesForKind: actual.maxBytesForKind,
+        uploadTooLargeError: actual.uploadTooLargeError,
+    }
+})
+
 vi.mock("nodemailer", () => ({
     default: {
         createTransport: (...args: any[]) => Reflect.apply(createTransport, undefined, args),

@@ -1,15 +1,26 @@
 <script setup lang="ts">
-import { groupByDate } from '@/pages/utils';
-import { faCircleCheck, faXmark } from '@/plugins/icons';
+import { faCircleCheck, faDownload, faTrashAlt, faXmark } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
 
-import type { GroupedObject, IImage, IImageObject } from '@/types';
+import type { IImage, IImageObject, MediaAssetDto } from '@visual-ai/shared';
 
+import { useAppStore } from '@/stores/app';
 import { useCollectionsStore } from '@/stores/collections';
 import { useDialogStore } from '@/stores/dialog';
-import { useHistoryStore } from '@/stores/history';
+import {
+  getHistoryItemFeature,
+  getHistoryItemId,
+  groupHistoryItems,
+  matchesChip,
+  mergeHistoryItems,
+  useHistoryStore,
+  type HistoryGroup,
+  type HistoryItem,
+} from '@/stores/history';
+import type { PlayerTrack } from '@/stores/player';
 import { useUserStore } from '@/stores/user';
 
+import TrackCard from '@/components/Audio/TrackCard.vue';
 import ImageDialog from '@/components/Dialogs/ImageDialog.vue';
 import CollectionsStrip from '@/components/History/CollectionsStrip.vue';
 import FeatureIcon from '@/components/History/FeatureIcon.vue';
@@ -17,6 +28,7 @@ import Filter from '@/components/History/Filter.vue';
 import ImageActionButtons from '@/components/History/ImageActionButtons.vue';
 import NoResults from '@/components/History/NoResults.vue';
 import SelectActionButtons from '@/components/History/SelectActionButtons.vue';
+import AppModal from '@/components/AppModal.vue';
 
 import { thumbUrl } from '@/utils/cloudinaryUrl';
 import { SIZE_CLASSES } from '@/utils/constants';
@@ -28,6 +40,8 @@ const props = withDefaults(defineProps<{ isFavorites?: boolean; embedded?: boole
 const userStore = useUserStore();
 const dialogStore = useDialogStore();
 const collectionsStore = useCollectionsStore();
+const appStore = useAppStore();
+const historyStore = useHistoryStore();
 
 const {
   isBulkDeleting,
@@ -36,11 +50,15 @@ const {
   selectedSize,
   selectedFeatureTypes,
   searchQuery,
-} = storeToRefs(useHistoryStore());
+  activeChip,
+  mediaAssets,
+} = storeToRefs(historyStore);
 const { selectedCollectionId, collections } = storeToRefs(collectionsStore);
 const { history } = storeToRefs(userStore);
 
-const groupedHistory = ref<GroupedObject[]>([]);
+const groupedHistory = ref<HistoryGroup[]>([]);
+const mediaPendingDelete = ref<MediaAssetDto | null>(null);
+const isDeletingMedia = ref(false);
 const imageDialogItem = ref<IImageObject | undefined>();
 const sizeClasses = SIZE_CLASSES;
 
@@ -81,6 +99,10 @@ const isImageSelected = (imageId: string) => {
   return selectedImages.value.some((item) => item._id === imageId);
 };
 
+/** Bulk actions are image-only; media items are managed one at a time. */
+const imagesInGroup = (group: HistoryGroup): IImageObject[] =>
+  group.data.flatMap((entry) => (entry.kind === 'image' ? [entry.item] : []));
+
 const selectAllInGroup = (groupData: IImageObject[]) => {
   groupData.forEach((item) => {
     selectedImages.value.push(item);
@@ -104,46 +126,76 @@ const toggleGroupSelection = (groupData: IImageObject[]) => {
   }
 };
 
+const toPlayerTrack = (asset: MediaAssetDto): PlayerTrack => ({
+  id: asset.id,
+  title: asset.title,
+  src: asset.url,
+  artworkUrl: asset.posterUrl,
+});
+
+const closeMediaDelete = () => {
+  mediaPendingDelete.value = null;
+};
+
+const confirmMediaDelete = async () => {
+  const asset = mediaPendingDelete.value;
+  if (!asset || isDeletingMedia.value) return;
+  isDeletingMedia.value = true;
+  const deleted = await historyStore.deleteMedia(asset.id);
+  isDeletingMedia.value = false;
+  mediaPendingDelete.value = null;
+  appStore.snackbarText = deleted ? 'Deleted' : 'Could not delete. Please try again.';
+  appStore.snackbar = true;
+};
+
+const isImageVisible = (item: IImageObject, searchTerm: string) => {
+  if (searchTerm && !item.prompt?.toLowerCase().includes(searchTerm)) return false;
+  if (props.isFavorites && !item.isFavorite) return false;
+  if (!selectedCollectionId.value) return true;
+  const active = collections.value.find((c) => c.id === selectedCollectionId.value);
+  return item._id != null && new Set(active?.imageIds ?? []).has(item._id);
+};
+
+const isMediaVisible = (asset: MediaAssetDto, searchTerm: string) => {
+  // Favorites and collections only hold images.
+  if (props.isFavorites || selectedCollectionId.value) return false;
+  if (!searchTerm) return true;
+  return [asset.prompt, asset.title].some((text) => text?.toLowerCase().includes(searchTerm));
+};
+
+const isEntryVisible = (entry: HistoryItem, searchTerm: string, featureTypes: string[]) => {
+  if (!matchesChip(entry, activeChip.value)) return false;
+  if (featureTypes.length > 0 && !featureTypes.includes(getHistoryItemFeature(entry))) {
+    return false;
+  }
+  return entry.kind === 'image'
+    ? isImageVisible(entry.item, searchTerm)
+    : isMediaVisible(entry.item, searchTerm);
+};
+
 watch(
-  [history, selectedFeatureTypes, searchQuery, selectedCollectionId, collections],
-  ([newHistory, newFeatureTypes, query]) => {
-    if (newHistory) {
-      let filteredHistory = newHistory;
-
-      // Feature type filter
-      if (newFeatureTypes.length > 0) {
-        filteredHistory = filteredHistory.filter((item: IImageObject) =>
-          newFeatureTypes.includes(item.featureType),
-        );
-      }
-
-      // Search query filter
-      if (query.trim()) {
-        const searchTerm = query.toLowerCase().trim();
-        filteredHistory = filteredHistory.filter((item: IImageObject) =>
-          item.prompt?.toLowerCase().includes(searchTerm),
-        );
-      }
-
-      // Favorites filter
-      if (props.isFavorites) {
-        filteredHistory = filteredHistory.filter((item: IImageObject) => item.isFavorite);
-      }
-
-      // Collection filter (client-side over loaded history)
-      if (selectedCollectionId.value) {
-        const active = collections.value.find((c) => c.id === selectedCollectionId.value);
-        const ids = new Set(active?.imageIds ?? []);
-        filteredHistory = filteredHistory.filter(
-          (item: IImageObject) => item._id != null && ids.has(item._id),
-        );
-      }
-
-      groupedHistory.value = groupByDate(filteredHistory);
-    }
+  [
+    history,
+    mediaAssets,
+    selectedFeatureTypes,
+    searchQuery,
+    activeChip,
+    selectedCollectionId,
+    collections,
+  ],
+  () => {
+    const searchTerm = searchQuery.value.toLowerCase().trim();
+    const visible = mergeHistoryItems(history.value, mediaAssets.value).filter((entry) =>
+      isEntryVisible(entry, searchTerm, selectedFeatureTypes.value),
+    );
+    groupedHistory.value = groupHistoryItems(visible);
   },
   { immediate: true, deep: true },
 );
+
+onMounted(() => {
+  void historyStore.loadMedia();
+});
 
 watch(
   [isBulkDeleting, isBulkFavoriting, isBulkDownloading],
@@ -158,7 +210,7 @@ watch(
 <template>
   <div class="history-container tw-flex tw-flex-col">
     <div
-      v-if="history.length > 0"
+      v-if="history.length + mediaAssets.length > 0"
       class="history-toolbar tw-relative tw-flex tw-flex-none tw-items-center tw-border-b tw-border-hairline/70 tw-py-4"
     >
       <!-- Default chrome always occupies space so selection mode cannot shift layout -->
@@ -200,7 +252,11 @@ watch(
     <CollectionsStrip v-if="history.length > 0 && !props.isFavorites" />
 
     <div class="history-scroll tw-flex-1 tw-overflow-y-auto tw-pb-16 tw-pt-6 no-scrollbar">
-      <NoResults :isFavorites="props.isFavorites" :groupedHistory="groupedHistory" />
+      <NoResults
+        :isFavorites="props.isFavorites"
+        :groupedHistory="groupedHistory"
+        :totalCount="history.length + mediaAssets.length"
+      />
 
       <div
         v-for="(item, groupIndex) in groupedHistory"
@@ -212,100 +268,178 @@ watch(
           <h3 class="history-date-group__title">{{ item.title }}</h3>
           <span class="history-date-group__count" aria-hidden="true">{{ item.data.length }}</span>
           <button
+            v-if="imagesInGroup(item).length > 0"
             type="button"
             class="group-check"
             :class="{
               'group-check--visible': isSelecting,
               'tw-cursor-not-allowed': isBulkBusy,
-              'tw-text-accent': areAllSelectedInGroup(item.data),
-              'tw-text-ink-faint': !areAllSelectedInGroup(item.data),
+              'tw-text-accent': areAllSelectedInGroup(imagesInGroup(item)),
+              'tw-text-ink-faint': !areAllSelectedInGroup(imagesInGroup(item)),
             }"
             :aria-label="`Select all in ${item.title}`"
-            @click="toggleGroupSelection(item.data)"
+            @click="toggleGroupSelection(imagesInGroup(item))"
           >
             <font-awesome-icon :icon="faCircleCheck" class="tw-h-4 tw-w-4" aria-hidden="true" />
           </button>
         </div>
 
         <div :class="['asset-grid', sizeClasses[selectedSize as keyof typeof sizeClasses]]">
-          <div
-            v-for="subItem in item.data"
-            :key="subItem._id"
-            class="asset-tile tw-relative tw-aspect-square tw-cursor-pointer tw-overflow-hidden tw-rounded-card tw-bg-surface-2"
-            :class="{
-              'asset-tile--selecting': isSelecting,
-              'asset-tile--selected': isImageSelected(subItem._id ?? ''),
-              'asset-tile--idle': !isImageSelected(subItem._id ?? ''),
-              'tw-opacity-50':
-                isBulkDeleting || isBulkFavoriting || (isBulkDownloading && isSelecting),
-            }"
-            @click="showImage(subItem)"
-          >
-            <img
-              v-if="subItem.images.length === 1"
-              :src="thumbUrl(getImageUrl(subItem.images[0]))"
-              :alt="subItem.prompt?.slice(0, 80) || subItem.featureType"
-              loading="lazy"
-              class="asset-tile__img tw-h-full tw-w-full tw-object-cover"
-            />
-
+          <template v-for="entry in item.data" :key="getHistoryItemId(entry)">
             <div
-              v-else
-              class="multi-image-stack tw-h-full"
-              :class="`multi-image-stack--${Math.min(subItem.images.length, 4)}`"
+              v-if="entry.kind === 'image'"
+              class="asset-tile tw-relative tw-aspect-square tw-cursor-pointer tw-overflow-hidden tw-rounded-card tw-bg-surface-2"
+              :class="{
+                'asset-tile--selecting': isSelecting,
+                'asset-tile--selected': isImageSelected(entry.item._id ?? ''),
+                'asset-tile--idle': !isImageSelected(entry.item._id ?? ''),
+                'tw-opacity-50':
+                  isBulkDeleting || isBulkFavoriting || (isBulkDownloading && isSelecting),
+              }"
+              @click="showImage(entry.item)"
             >
+              <img
+                v-if="entry.item.images.length === 1"
+                :src="thumbUrl(getImageUrl(entry.item.images[0]))"
+                :alt="entry.item.prompt?.slice(0, 80) || entry.item.featureType"
+                loading="lazy"
+                class="asset-tile__img tw-h-full tw-w-full tw-object-cover"
+              />
+
               <div
-                v-for="(img, index) in subItem.images.slice(0, 4)"
-                :key="index"
-                class="multi-image-stack__cell"
+                v-else
+                class="multi-image-stack tw-h-full"
+                :class="`multi-image-stack--${Math.min(entry.item.images.length, 4)}`"
               >
-                <img
-                  :src="thumbUrl(getImageUrl(img))"
-                  :alt="subItem.prompt?.slice(0, 80) || subItem.featureType"
-                  loading="lazy"
-                  class="asset-tile__img tw-h-full tw-w-full tw-object-cover"
+                <div
+                  v-for="(img, index) in entry.item.images.slice(0, 4)"
+                  :key="index"
+                  class="multi-image-stack__cell"
+                >
+                  <img
+                    :src="thumbUrl(getImageUrl(img))"
+                    :alt="entry.item.prompt?.slice(0, 80) || entry.item.featureType"
+                    loading="lazy"
+                    class="asset-tile__img tw-h-full tw-w-full tw-object-cover"
+                  />
+                </div>
+              </div>
+
+              <div class="tile-overlay tw-pointer-events-none tw-absolute tw-inset-0">
+                <div
+                  class="tw-absolute tw-inset-x-0 tw-top-0 tw-h-16 tw-bg-gradient-to-b tw-from-black/45 tw-to-transparent"
                 />
+                <div class="tw-relative tw-z-10 tw-flex tw-items-start tw-justify-between tw-p-2">
+                  <div class="tw-flex tw-items-center tw-gap-1.5">
+                    <button
+                      type="button"
+                      class="tw-pointer-events-auto tw-flex tw-h-7 tw-w-7 tw-items-center tw-justify-center"
+                      :class="isBulkBusy ? 'tw-cursor-not-allowed' : 'tw-cursor-pointer'"
+                      :aria-label="
+                        isImageSelected(entry.item._id ?? '') ? 'Deselect image' : 'Select image'
+                      "
+                      @click.stop="toggleImageSelection($event, entry.item)"
+                    >
+                      <font-awesome-icon
+                        :icon="faCircleCheck"
+                        class="tw-h-[18px] tw-w-[18px] tw-drop-shadow"
+                        :class="
+                          isImageSelected(entry.item._id ?? '')
+                            ? 'tw-text-accent'
+                            : 'tw-text-white/80'
+                        "
+                        aria-hidden="true"
+                      />
+                    </button>
+                    <FeatureIcon :item="entry.item" />
+                  </div>
+
+                  <div class="tw-pointer-events-auto tw-flex tw-flex-col tw-gap-1.5">
+                    <ImageActionButtons :item="entry.item" />
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div class="tile-overlay tw-pointer-events-none tw-absolute tw-inset-0">
-              <div
-                class="tw-absolute tw-inset-x-0 tw-top-0 tw-h-16 tw-bg-gradient-to-b tw-from-black/45 tw-to-transparent"
+            <article
+              v-else
+              class="tw-flex tw-flex-col tw-gap-2"
+              :data-testid="`history-${entry.item.type}-item`"
+            >
+              <TrackCard v-if="entry.item.type === 'audio'" :track="toPlayerTrack(entry.item)" />
+              <video
+                v-else
+                :src="entry.item.url"
+                :poster="entry.item.posterUrl"
+                :aria-label="entry.item.title"
+                controls
+                preload="none"
+                playsinline
+                class="tw-aspect-video tw-w-full tw-rounded-card tw-bg-surface-2 tw-object-cover"
               />
-              <div class="tw-relative tw-z-10 tw-flex tw-items-start tw-justify-between tw-p-2">
-                <div class="tw-flex tw-items-center tw-gap-1.5">
-                  <button
-                    type="button"
-                    class="tw-pointer-events-auto tw-flex tw-h-7 tw-w-7 tw-items-center tw-justify-center"
-                    :class="isBulkBusy ? 'tw-cursor-not-allowed' : 'tw-cursor-pointer'"
-                    :aria-label="
-                      isImageSelected(subItem._id ?? '') ? 'Deselect image' : 'Select image'
-                    "
-                    @click.stop="toggleImageSelection($event, subItem)"
+              <div class="tw-flex tw-items-center tw-gap-2">
+                <FeatureIcon :feature="entry.item.feature" />
+                <div class="tw-ml-auto tw-flex tw-items-center tw-gap-1">
+                  <a
+                    :href="entry.item.url"
+                    download
+                    target="_blank"
+                    rel="noopener"
+                    class="media-action"
+                    :aria-label="`Download ${entry.item.title}`"
                   >
                     <font-awesome-icon
-                      :icon="faCircleCheck"
-                      class="tw-h-[18px] tw-w-[18px] tw-drop-shadow"
-                      :class="
-                        isImageSelected(subItem._id ?? '') ? 'tw-text-accent' : 'tw-text-white/80'
-                      "
+                      :icon="faDownload"
+                      class="tw-h-3.5 tw-w-3.5"
+                      aria-hidden="true"
+                    />
+                  </a>
+                  <button
+                    type="button"
+                    class="media-action"
+                    :aria-label="`Delete ${entry.item.title}`"
+                    @click="mediaPendingDelete = entry.item"
+                  >
+                    <font-awesome-icon
+                      :icon="faTrashAlt"
+                      class="tw-h-3.5 tw-w-3.5"
                       aria-hidden="true"
                     />
                   </button>
-                  <FeatureIcon :item="subItem" />
-                </div>
-
-                <div class="tw-pointer-events-auto tw-flex tw-flex-col tw-gap-1.5">
-                  <ImageActionButtons :item="subItem" />
                 </div>
               </div>
-            </div>
-          </div>
+            </article>
+          </template>
         </div>
       </div>
     </div>
   </div>
   <ImageDialog :item="imageDialogItem" />
+  <AppModal
+    :open="mediaPendingDelete !== null"
+    max-width="28rem"
+    labelled-by="delete-media-title"
+    described-by="delete-media-desc"
+    @close="closeMediaDelete"
+  >
+    <template #title>
+      <span id="delete-media-title">Delete {{ mediaPendingDelete?.type ?? 'item' }}</span>
+    </template>
+    <p id="delete-media-desc" class="tw-m-0 tw-text-sm tw-text-ink-muted">
+      Are you sure you want to delete "{{ mediaPendingDelete?.title }}"? This action cannot be
+      undone.
+    </p>
+    <template #actions>
+      <button type="button" class="media-confirm-btn" @click="closeMediaDelete">Keep</button>
+      <button
+        type="button"
+        class="media-confirm-btn media-confirm-btn--danger"
+        :disabled="isDeletingMedia"
+        @click="confirmMediaDelete"
+      >
+        {{ isDeletingMedia ? 'Deleting…' : 'Delete' }}
+      </button>
+    </template>
+  </AppModal>
 </template>
 
 <style scoped lang="scss">
@@ -454,7 +588,51 @@ watch(
   width: 100%;
 }
 
+/* 44px tap target on every pointer; the visible glyph stays small. */
+.media-action,
+.media-confirm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border-radius: 9999px;
+  color: rgb(var(--tw-ink-muted));
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: rgb(var(--tw-ink));
+  }
+
+  &:focus-visible {
+    outline: 2px solid #c98a5a;
+    outline-offset: 2px;
+  }
+}
+
+.media-action {
+  min-width: 44px;
+}
+
+.media-confirm-btn {
+  padding: 0 1.15rem;
+  border: 1px solid rgb(var(--tw-border));
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.media-confirm-btn--danger {
+  border-color: rgba(176, 60, 60, 0.45);
+  color: #e08585;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .media-action,
+  .media-confirm-btn,
   .asset-tile__img,
   .tile-overlay {
     transition: none;

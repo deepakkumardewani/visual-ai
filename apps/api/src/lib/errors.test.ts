@@ -7,6 +7,7 @@ import {
     NotFoundError,
     UnauthorizedError,
     isHttpError,
+    resolveErrorStatus,
 } from "./errors.js"
 
 describe("HttpError", () => {
@@ -93,5 +94,20 @@ describe("isHttpError", () => {
         expect(isHttpError("string")).toBe(false)
         expect(isHttpError(null)).toBe(false)
         expect(isHttpError(undefined)).toBe(false)
+    })
+})
+
+describe("resolveErrorStatus", () => {
+    it("uses the HttpError status", () => {
+        expect(resolveErrorStatus(new NotFoundError())).toBe(404)
+    })
+
+    it("maps Clerk's plain Unauthenticated error to 401", () => {
+        expect(resolveErrorStatus(new Error("Unauthenticated"))).toBe(401)
+    })
+
+    it("defaults to 500", () => {
+        expect(resolveErrorStatus(new Error("boom"))).toBe(500)
+        expect(resolveErrorStatus("boom")).toBe(500)
     })
 })

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { MODEL_IDS } from '@visual-ai/shared';
+import { MODEL_IDS, MODEL_REGISTRY, getModelKind, type MediaModelKey } from '@visual-ai/shared';
 import type { Model } from '@/types/model';
 import {
   filterModelsBySearch,
@@ -13,6 +13,7 @@ import {
   getModelLogoUrl,
   getModelSpeedHint,
   groupModelsByProvider,
+  MEDIA_MODELS,
   MODELS,
   PICKER_SECTION,
   sortByCostThenName,
@@ -448,5 +449,64 @@ describe('filterModelsBySearch', () => {
       const result = filterModelsBySearch([luna, sibling, forge], 'moonworks');
       expect(result).toEqual([luna, sibling]);
     });
+  });
+});
+
+describe('media models catalog', () => {
+  const USER_FACING_MEDIA_KEYS: MediaModelKey[] = [
+    'LYRIA_2',
+    'MINIMAX_MUSIC_26',
+    'MINIMAX_MUSIC_15',
+    'STABLE_AUDIO_25',
+    'IMAGE_WATERMARK',
+    'AUTOCAPTION',
+    'VIDEO_WATERMARK',
+    'INWORLD_TTS_2',
+    'INWORLD_TTS_15_MAX',
+    'MINIMAX_SPEECH_28_HD',
+    'MINIMAX_SPEECH_28_TURBO',
+    'CHATTERBOX_TURBO',
+    'P_VIDEO',
+    'WAN_3',
+  ];
+
+  it('lists the 14 user-facing media models and omits the voice-clone helper', () => {
+    expect(MEDIA_MODELS.map((m) => m.id).sort()).toEqual([...USER_FACING_MEDIA_KEYS].sort());
+    expect(MEDIA_MODELS.map((m) => m.id)).not.toContain(MODEL_IDS.MINIMAX_VOICE_CLONE);
+  });
+
+  it('fills the presentation fields and takes tier from the registry', () => {
+    for (const model of MEDIA_MODELS) {
+      expect(model.title).toBeTruthy();
+      expect(model.description).toBeTruthy();
+      expect(model.bestAt).toBeTruthy();
+      expect(model.companyName).toBeTruthy();
+      expect(model.tier).toBe(MODEL_REGISTRY[model.id as MediaModelKey].tier);
+    }
+  });
+
+  it('has no flat credit cost or per-image price', () => {
+    for (const model of MEDIA_MODELS) {
+      expect(model.creditCost).toBeUndefined();
+      expect(model.pricePerImage).toBeUndefined();
+    }
+  });
+
+  it('keeps media keys out of the image picker and upscaler lists', () => {
+    const imageIds = new Set([...MODELS, ...UPSCALER_MODELS].map((m) => m.id));
+    for (const key of USER_FACING_MEDIA_KEYS) {
+      expect(imageIds.has(key)).toBe(false);
+    }
+    for (const model of MODELS) {
+      expect(getModelKind(MODEL_REGISTRY[model.id as keyof typeof MODEL_REGISTRY])).toBe('image');
+    }
+  });
+
+  it('resolves display names for the media providers', () => {
+    expect(getProviderDisplayName('minimax')).toBe('Minimax');
+    expect(getProviderDisplayName('inworld')).toBe('Inworld');
+    expect(getProviderDisplayName('stability')).toBe('Stability AI');
+    expect(getProviderDisplayName('resemble')).toBe('Resemble AI');
+    expect(getProviderDisplayName('alibaba')).toBe('Alibaba');
   });
 });

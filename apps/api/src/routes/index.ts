@@ -7,6 +7,7 @@ import { creditsRoute } from "../routes/credits.js"
 import { exploreRoutes } from "../routes/explore.js"
 import { generateRoute } from "../routes/generate.js"
 import { imageRoutes } from "../routes/image.js"
+import { mediaRoutes } from "../routes/media.js"
 import { paymentsApiRouter, paymentsPublicRouter } from "../payments/router.js"
 import { promptRoutes } from "../routes/prompt.js"
 import { savedPromptsRoutes } from "../routes/saved-prompts.js"
@@ -19,6 +20,8 @@ router.use(generateRoute)
 router.use(promptRoutes)
 router.use(sttRoute)
 router.use(savedPromptsRoutes)
+// Applies requireAuth per route, like generateRoute
+router.use(mediaRoutes)
 // Public (signed-token) unsubscribe: must stay above the requireAuth mounts below
 router.use(emailRoutes)
 // Public pricing display; must stay above the requireAuth mounts below

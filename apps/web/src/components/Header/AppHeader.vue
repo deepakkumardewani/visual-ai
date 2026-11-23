@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { faQuestionCircle } from '@/plugins/icons';
 import { storeToRefs } from 'pinia';
 import { useMutationObserver, useResizeObserver } from '@vueuse/core';
 import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
 import { SignedIn, SignedOut, useAuth } from 'vue-clerk';
 import { useRoute } from 'vue-router';
 
+import { shortcutsHelpOpen } from '@/composables/useGlobalShortcuts';
 import { useHeaderBreakpoint } from '@/composables/useHeaderBreakpoint';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
@@ -15,8 +17,10 @@ import ReferralOfferDialog from '@/components/Dialogs/ReferralOfferDialog.vue';
 import FeatureSelect from '@/components/Header/FeatureSelect.vue';
 import HeaderActions from '@/components/Header/HeaderActions.vue';
 import Logo from '@/components/Header/Logo.vue';
+import NavMobileAccordion from '@/components/Header/NavMobileAccordion.vue';
 import NavTabs from '@/components/Header/NavTabs.vue';
 import ReferralOffer from '@/components/Header/ReferralOffer.vue';
+import ShortcutsPopover from '@/components/Studio/ShortcutsPopover.vue';
 import ThemeButton from '@/components/Header/ThemeButton.vue';
 import UserMenu from '@/components/Header/UserMenu.vue';
 
@@ -164,6 +168,17 @@ onBeforeUnmount(() => document.documentElement.style.removeProperty(APP_HEADER_H
             </SignedOut>
 
             <SignedIn>
+              <button
+                v-if="isDashboard"
+                type="button"
+                data-testid="header-shortcuts"
+                class="tw-inline-flex tw-h-11 tw-w-11 tw-items-center tw-justify-center tw-rounded-full tw-border tw-border-border/60 tw-bg-surface-1/50 tw-text-ink-muted tw-transition-colors tw-duration-fast hover:tw-bg-surface-2 hover:tw-text-ink-primary focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-2 focus-visible:tw-outline-accent"
+                aria-label="Keyboard shortcuts"
+                title="Keyboard shortcuts (?)"
+                @click="shortcutsHelpOpen = true"
+              >
+                <font-awesome-icon :icon="faQuestionCircle" aria-hidden="true" />
+              </button>
               <HeaderActions v-if="isDashboard" />
               <template v-else>
                 <CustomButton title="Dashboard" />
@@ -183,11 +198,15 @@ onBeforeUnmount(() => document.documentElement.style.removeProperty(APP_HEADER_H
           aria-hidden="true"
           class="tw-h-11 tw-w-full tw-animate-pulse tw-rounded-full tw-bg-surface-2"
         />
-        <NavTabs v-else variant="segmented" />
+        <template v-else>
+          <NavTabs variant="segmented" />
+          <NavMobileAccordion />
+        </template>
       </div>
     </header>
     <BuyMoreCreditsDialog />
     <ReferralOfferDialog />
+    <ShortcutsPopover />
   </div>
 </template>
 
