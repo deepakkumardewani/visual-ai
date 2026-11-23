@@ -4,7 +4,11 @@ import {
   MEDIA_PROMPT_MAX_CHARS,
   SONG_LYRICS_LIMITS,
   SONG_PROMPT_LIMITS,
+  STABLE_AUDIO_CFG_SCALE,
+  STABLE_AUDIO_STEPS,
 } from '../models/media-limits.js';
+import { MODEL_REGISTRY } from '../models/registry.js';
+import type { MediaModelConfig } from '../models/types.js';
 
 /** Fields every media request carries; cost and userId are never accepted from the client. */
 const mediaRequestBase = {
@@ -12,12 +16,76 @@ const mediaRequestBase = {
   modelKey: z.string().min(1, 'modelKey is required'),
 };
 
-export const MusicRequestSchema = z.object({
-  ...mediaRequestBase,
-  prompt: z.string().min(1, 'Prompt is required').max(MEDIA_PROMPT_MAX_CHARS),
-  negativePrompt: z.string().max(MEDIA_PROMPT_MAX_CHARS).optional(),
-  seed: z.number().int().optional(),
-});
+/** Models the Music studio offers; Minimax 2.6 is served here only as an instrumental. */
+export const MUSIC_STUDIO_MODEL_KEYS = ['STABLE_AUDIO_25', 'LYRIA_2', 'MINIMAX_MUSIC_26'] as const;
+export type MusicStudioModelKey = (typeof MUSIC_STUDIO_MODEL_KEYS)[number];
+
+type NumericRange = { min: number; max: number };
+
+/** Resolves the documented range of a numeric music field for one model, or undefined if unbounded. */
+const MUSIC_FIELD_RANGES: Record<string, (media: MediaModelConfig) => NumericRange | undefined> = {
+  durationSec: (media) => media.durationSec,
+  steps: () => STABLE_AUDIO_STEPS,
+  cfgScale: () => STABLE_AUDIO_CFG_SCALE,
+};
+
+function mediaConfigOf(modelKey: string): MediaModelConfig | undefined {
+  return Object.hasOwn(MODEL_REGISTRY, modelKey)
+    ? MODEL_REGISTRY[modelKey as keyof typeof MODEL_REGISTRY]?.media
+    : undefined;
+}
+
+/**
+ * Model-dependent rules, driven by the registry (no per-model branches). Fields a model does not
+ * declare are rejected by the API's validateMediaParams; here only declared fields are bounded.
+ * An unknown modelKey is left to the API so its error message stays unchanged.
+ */
+function refineMusicRequest(
+  request: { modelKey: string } & Record<string, unknown>,
+  ctx: z.RefinementCtx,
+): void {
+  const media = mediaConfigOf(request.modelKey);
+  if (!media) return;
+
+  for (const [field, rangeOf] of Object.entries(MUSIC_FIELD_RANGES)) {
+    const value = request[field];
+    const range = rangeOf(media);
+    if (typeof value !== 'number' || !range || !Object.hasOwn(media.inputs, field)) continue;
+    if (value < range.min || value > range.max) {
+      ctx.addIssue({
+        code: 'custom',
+        path: [field],
+        message: `${field} must be between ${range.min} and ${range.max}`,
+      });
+    }
+  }
+
+  // The studio has no lyrics step, so a model with an instrumental switch must have it on.
+  if (Object.hasOwn(media.inputs, 'instrumental') && request.instrumental !== true) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['instrumental'],
+      message: 'instrumental must be true for this model in the Music studio',
+    });
+  }
+}
+
+/**
+ * Music body. The optional fields are only valid for models whose registry inputs declare them;
+ * cost and quantity are never accepted from the client.
+ */
+export const MusicRequestSchema = z
+  .object({
+    ...mediaRequestBase,
+    prompt: z.string().min(1, 'Prompt is required').max(MEDIA_PROMPT_MAX_CHARS),
+    negativePrompt: z.string().max(MEDIA_PROMPT_MAX_CHARS).optional(),
+    seed: z.number().int().optional(),
+    durationSec: z.number().int().optional(),
+    steps: z.number().int().optional(),
+    cfgScale: z.number().optional(),
+    instrumental: z.boolean().optional(),
+  })
+  .superRefine(refineMusicRequest);
 
 export type MusicRequest = z.infer<typeof MusicRequestSchema>;
 

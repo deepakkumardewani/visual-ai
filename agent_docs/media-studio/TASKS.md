@@ -988,7 +988,7 @@
 **Adds:** Users make instrumental music from a prompt with Lyria 2 or Stable Audio 2.5 and Minimax instrumental mode, with duration where the model supports it, and play and edit the result like a song.
 **Try in UI:** Open Audio then Music ; describe a mood and press Generate ; switch model and see the duration control appear or disappear ; play the result from History
 
-### ☐ T2.1 Music schema and per-model payloads (S2.1a)
+### ✅ T2.1 Music schema and per-model payloads (S2.1a)
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/schemas/media.ts` (edit), `apps/api/src/lib/media-input.ts` (edit), `apps/api/src/services/media-service.ts` (edit)
@@ -998,11 +998,11 @@
 - **Risk:** high
 - **Surfaces:** security,logic
 - **Spec:** R-MUS-1, R-MUS-2, R-MUS-3, R-INF-4
-- **Do:** Extend the Phase 0 music schema: durationSec only for models whose registry media.inputs declares it (Stable Audio 2.5), within its documented range as named constants; Lyria never receives a duration. Billing is per file for Lyria and per second for Stable Audio via getMediaCreditCost with server-side quantity. Data-driven from the registry, no per-model if branches. Tests are not written here: T2.5, T2.6 cover Unit (music unit task): Lyria payload and 400 for duration; Unit: Stable Audio range boundaries; Unit: cost uses server-side duration; Unit: deduct once success, zero failure.
+- **Do:** Extend the Phase 0 music schema: durationSec only for models whose registry media.inputs declares it (Stable Audio 2.5), within its documented range as named constants; Lyria never receives a duration. Billing is flat per file for both Lyria and Stable Audio (SPEC R-MUS-5, owner decision on Q24/Q25), computed server-side via getMediaCreditCost. Data-driven from the registry, no per-model if branches. Tests are not written here: T2.5, T2.6 cover Unit (music unit task): Lyria payload and 400 for duration; Unit: Stable Audio range boundaries; Unit: cost uses server-side duration; Unit: deduct once success, zero failure.
 - **Acceptance:**
   - AC1: Lyria payload has no duration field even if the client sends one; the request is rejected with a field-level 400.
   - AC2: Stable Audio accepts durations inside its range and rejects those outside it with 400.
-  - AC3: Cost for Stable Audio scales with the server-side duration, not a client value.
+  - AC3: Cost for Stable Audio is the flat per-file price from the registry, computed server-side and independent of any client-sent value.
   - AC4: Charge happens once on success only.
 - **Verify:**
   - V1: `bunx vp test run packages/shared` (existing shared tests stay green)
@@ -1010,7 +1010,7 @@
   - V3: `cd apps/api && bun run test` (existing api tests stay green)
   - V4: `bun run check`
 
-### ☐ T2.2 Music studio page (S2.1b)
+### ✅ T2.2 Music studio page (S2.1b)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/pages/Music.vue` (new), `apps/web/src/components/Music/MusicComposer.vue` (new), `apps/web/src/components/Music/MusicModelSelect.vue` (new), `apps/web/src/components/Music/DurationControl.vue` (new), `apps/web/src/router/index.ts` (edit)
@@ -1034,7 +1034,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/music path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T2.3 Minimax instrumental mode and model notes (S2.2)
+### ✅ T2.3 Minimax instrumental mode and model notes (S2.2)
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/schemas/media.ts` (edit), `apps/api/src/lib/media-input.ts` (edit), `apps/web/src/components/Music/MusicModelSelect.vue` (edit), `apps/web/src/components/Music/MusicComposer.vue` (edit)
@@ -1057,7 +1057,7 @@
   - V5: `bun run check`
   - V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/music path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T2.4 Unit: Music composer and controls
+### ✅ T2.4 Unit: Music composer and controls
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Music/MusicComposer.vue` (edit), `apps/web/src/components/Music/MusicModelSelect.vue` (edit), `apps/web/src/components/Music/DurationControl.vue` (edit)
@@ -1068,7 +1068,7 @@
 - **Verify:**
   - V1: `cd apps/web && npx vitest run src/components/Music --coverage --coverage.include=src/components/Music/MusicComposer.vue --coverage.include=src/components/Music/MusicModelSelect.vue --coverage.include=src/components/Music/DurationControl.vue --coverage.reporter=text`
 
-### ☐ T2.5 Unit: Music schema, input builder and service
+### ✅ T2.5 Unit: Music schema, input builder and service
 
 - **Kind:** unit
 - **Files:** `packages/shared/src/schemas/media.ts` (edit), `apps/api/src/lib/media-input.ts` (edit), `apps/api/src/services/media-service.ts` (edit)
@@ -1079,7 +1079,7 @@
 - **Verify:**
   - V1: `cd apps/api && npx vitest run src/lib/media-input.test.ts src/services/media-service.test.ts --coverage --coverage.include=src/lib/media-input.ts --coverage.include=src/services/media-service.ts --coverage.reporter=text`
 
-### ☐ T2.6 E2E: Music studio
+### ✅ T2.6 E2E: Music studio
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` generate with Lyria charges the per-file cost once; `@critical` 402 and failure states; `@high` duration control only on Stable Audio; `@high` Minimax instrumental hides lyrics; `@high` keyboard-only flow; `@medium` 375px layout; `@medium` result plays in History
@@ -1093,7 +1093,7 @@
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/music.spec.ts --repeat-each=3`
 
-### ☐ T2.7 Gate: Phase 2 Music studio
+### ✅ T2.7 Gate: Phase 2 Music studio
 
 - **Kind:** gate
 - **Files:** none

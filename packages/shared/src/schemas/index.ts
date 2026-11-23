@@ -33,5 +33,16 @@ export type {
 export { CreateSavedPromptSchema } from './saved-prompt.js';
 export type { CreateSavedPrompt } from './saved-prompt.js';
 
-export { LyricsRequestSchema, MusicRequestSchema, SongRequestSchema } from './media.js';
-export type { LyricsRequest, LyricsResponse, MusicRequest, SongRequest } from './media.js';
+export {
+  LyricsRequestSchema,
+  MUSIC_STUDIO_MODEL_KEYS,
+  MusicRequestSchema,
+  SongRequestSchema,
+} from './media.js';
+export type {
+  LyricsRequest,
+  LyricsResponse,
+  MusicRequest,
+  MusicStudioModelKey,
+  SongRequest,
+} from './media.js';

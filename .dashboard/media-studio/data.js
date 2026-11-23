@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-23T12:59:55.607Z",
+ "generatedAt": "2026-11-23T13:39:37.967Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "media-studio",
@@ -34,26 +34,26 @@ window.DASHBOARD = {
    "source": "agent_docs/media-studio/TASKS.md"
   }
  ],
- "costUsd": 46.1848,
- "elapsedMs": 76742502,
+ "costUsd": 53.7836,
+ "elapsedMs": 78821972,
  "costByRole": {
-  "verifier": 11.9847,
-  "builder": 15.7571,
-  "unit": 6.448,
-  "e2e": 3.9495,
-  "reviewer-security": 4.0808,
-  "reviewer-ux": 0.9888,
-  "reviewer-code": 1.8545,
-  "reviewer-ui": 1.0273,
+  "reviewer-security": 4.9819,
+  "unit": 6.9275,
+  "reviewer-ux": 1.3184,
+  "e2e": 4.4179,
+  "reviewer-code": 2.3328,
+  "builder": 17.4765,
+  "verifier": 14.8963,
+  "reviewer-ui": 1.3381,
   "runner": 0.0941
  },
  "totals": {
   "phases": 6,
   "tasks": 90,
   "byStatus": {
-   "verified": 50,
+   "verified": 57,
    "ready": 1,
-   "waiting": 39
+   "waiting": 32
   }
  },
  "phases": [
@@ -2367,7 +2367,7 @@ window.DASHBOARD = {
      "line": 659,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2425,7 +2425,7 @@ window.DASHBOARD = {
      "line": 672,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -2502,7 +2502,7 @@ window.DASHBOARD = {
      "line": 694,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2587,7 +2587,7 @@ window.DASHBOARD = {
      "line": 718,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2649,7 +2649,7 @@ window.DASHBOARD = {
      "line": 729,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2699,7 +2699,7 @@ window.DASHBOARD = {
      "line": 740,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2762,7 +2762,7 @@ window.DASHBOARD = {
      "line": 754,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -2847,7 +2847,7 @@ window.DASHBOARD = {
      "line": 778,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2931,7 +2931,7 @@ window.DASHBOARD = {
      "line": 801,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -2981,7 +2981,7 @@ window.DASHBOARD = {
      "line": 812,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -3045,7 +3045,7 @@ window.DASHBOARD = {
      "line": 826,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -3142,7 +3142,7 @@ window.DASHBOARD = {
      "line": 850,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -3226,7 +3226,7 @@ window.DASHBOARD = {
      "line": 873,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -3280,7 +3280,7 @@ window.DASHBOARD = {
      "line": 884,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -3338,7 +3338,7 @@ window.DASHBOARD = {
      "line": 898,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -3427,7 +3427,7 @@ window.DASHBOARD = {
      "line": 919,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -3519,7 +3519,7 @@ window.DASHBOARD = {
      "line": 945,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -3571,7 +3571,7 @@ window.DASHBOARD = {
      "line": 956,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -3634,7 +3634,7 @@ window.DASHBOARD = {
      "line": 970,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T12:59:55.578Z",
+     "updatedAt": "2026-11-23T13:00:20.615Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -3704,7 +3704,7 @@ window.DASHBOARD = {
     {
      "id": "T2.1",
      "title": "Music schema and per-model payloads (S2.1a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T1.19"
@@ -3715,13 +3715,13 @@ window.DASHBOARD = {
       "apps/api/src/services/media-service.ts"
      ],
      "gherkin": null,
-     "do": "Extend the Phase 0 music schema: durationSec only for models whose registry media.inputs declares it (Stable Audio 2.5), within its documented range as named constants; Lyria never receives a duration. Billing is per file for Lyria and per second for Stable Audio via getMediaCreditCost with server-side quantity. Data-driven from the registry, no per-model if branches. Tests are not written here: T2.5, T2.6 cover Unit (music unit task): Lyria payload and 400 for duration; Unit: Stable Audio range boundaries; Unit: cost uses server-side duration; Unit: deduct once success, zero failure.",
+     "do": "Extend the Phase 0 music schema: durationSec only for models whose registry media.inputs declares it (Stable Audio 2.5), within its documented range as named constants; Lyria never receives a duration. Billing is flat per file for both Lyria and Stable Audio (SPEC R-MUS-5, owner decision on Q24/Q25), computed server-side via getMediaCreditCost. Data-driven from the registry, no per-model if branches. Tests are not written here: T2.5, T2.6 cover Unit (music unit task): Lyria payload and 400 for duration; Unit: Stable Audio range boundaries; Unit: cost uses server-side duration; Unit: deduct once success, zero failure.",
      "spec": "R-MUS-1, R-MUS-2, R-MUS-3, R-INF-4",
      "filesDeclared": true,
      "acceptance": [
       "AC1: Lyria payload has no duration field even if the client sends one; the request is rejected with a field-level 400.",
       "AC2: Stable Audio accepts durations inside its range and rejects those outside it with 400.",
-      "AC3: Cost for Stable Audio scales with the server-side duration, not a client value.",
+      "AC3: Cost for Stable Audio is the flat per-file price from the registry, computed server-side and independent of any client-sent value.",
       "AC4: Charge happens once on success only."
      ],
      "verify": [
@@ -3732,8 +3732,8 @@ window.DASHBOARD = {
      ],
      "line": 991,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T13:39:37.934Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -3751,16 +3751,37 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": null
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.651,
+     "costApprox": true,
+     "elapsedMs": 2079470,
      "summary": []
     },
     {
      "id": "T2.2",
      "title": "Music studio page (S2.1b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T2.1"
@@ -3792,8 +3813,8 @@ window.DASHBOARD = {
      ],
      "line": 1013,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T13:39:37.934Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -3815,16 +3836,28 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.3548,
+     "costApprox": true,
+     "elapsedMs": 1622674,
      "summary": []
     },
     {
      "id": "T2.3",
      "title": "Minimax instrumental mode and model notes (S2.2)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T2.2"
@@ -3855,8 +3888,8 @@ window.DASHBOARD = {
      ],
      "line": 1037,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T13:39:37.934Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -3882,16 +3915,41 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "CHANGES",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.8982,
+     "costApprox": true,
+     "elapsedMs": 1622674,
      "summary": []
     },
     {
      "id": "T2.4",
      "title": "Unit: Music composer and controls",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T2.3"
@@ -3914,23 +3972,33 @@ window.DASHBOARD = {
      ],
      "line": 1060,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T13:39:37.934Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5136,
+     "costApprox": true,
+     "elapsedMs": 1353640,
      "summary": []
     },
     {
      "id": "T2.5",
      "title": "Unit: Music schema, input builder and service",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T2.4"
@@ -3953,23 +4021,31 @@ window.DASHBOARD = {
      ],
      "line": 1071,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T13:39:37.934Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5737,
+     "costApprox": true,
+     "elapsedMs": 1353640,
      "summary": []
     },
     {
      "id": "T2.6",
      "title": "E2E: Music studio",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [
       "T2.5"
@@ -3989,23 +4065,40 @@ window.DASHBOARD = {
      ],
      "line": 1082,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T13:39:37.934Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.205,
+     "costApprox": true,
+     "elapsedMs": 1444929,
      "summary": []
     },
     {
      "id": "T2.7",
      "title": "Gate: Phase 2 Music studio",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [
       "T2.6"
@@ -4027,25 +4120,33 @@ window.DASHBOARD = {
      ],
      "line": 1096,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-23T13:39:37.934Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.4024,
+     "costApprox": true,
+     "elapsedMs": 1068435,
      "summary": []
     }
    ],
-   "verified": 0,
+   "verified": 7,
    "total": 7,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 7.5987,
+   "elapsedMs": 2079470
   },
   {
    "id": "3",
@@ -4101,7 +4202,7 @@ window.DASHBOARD = {
      ],
      "line": 1117,
      "ui": false,
-     "status": "waiting",
+     "status": "ready",
      "updatedAt": null,
      "verifierRouted": true,
      "pending": [],
@@ -5838,7 +5939,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/media-studio/TASKS.md phase 2",
+ "nextCommand": "/build-phases agent_docs/media-studio/TASKS.md phase 3",
  "questions": [
   {
    "at": "2026-11-16T02:52:56.327Z",
@@ -6092,10 +6193,75 @@ window.DASHBOARD = {
    "alternatives": "Hold voice cloning until legal signs off",
    "answer": "Default accepted: drafted copy ships",
    "answeredAt": "2026-11-16T03:09:23.343Z"
+  },
+  {
+   "at": "2026-11-23T13:09:06.308Z",
+   "type": "question",
+   "tasks": [
+    "T2.1"
+   ],
+   "id": "Q24",
+   "text": "AC3 says Stable Audio cost scales with duration, but registry/SPEC price it flat per file",
+   "default": "flat per-file cost computed server-side, duration validated only",
+   "alternatives": "change registry to per-second",
+   "answer": null,
+   "answeredAt": null
+  },
+  {
+   "at": "2026-11-23T13:35:40.820Z",
+   "type": "question",
+   "tasks": [
+    "T2.1"
+   ],
+   "id": "Q25",
+   "text": "AC3 says Stable Audio cost scales with duration, but SPEC.md (lines 89, 218, 221, 301) and the registry price it flat at $0.20 per file. Code follows SPEC. Amend AC3 to flat per-file, or change SPEC and registry to per-second?",
+   "answer": "Flat per file; AC3 and Do text amended in TASKS.md",
+   "answeredAt": "2026-11-23T13:36:49.967Z"
   }
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-23T13:00:20.615Z",
+   "ok": true,
+   "phase": "1",
+   "tasks": [
+    "T1.1",
+    "T1.2",
+    "T1.3",
+    "T1.4",
+    "T1.5",
+    "T1.6",
+    "T1.7",
+    "T1.8",
+    "T1.9",
+    "T1.10",
+    "T1.11",
+    "T1.12",
+    "T1.13",
+    "T1.14",
+    "T1.15",
+    "T1.16",
+    "T1.17",
+    "T1.18",
+    "T1.19"
+   ],
+   "attempt": "1",
+   "branch": "feature/media-studio",
+   "pushed": true,
+   "evidence": "song e2e 8/8, lyrics e2e 6/6, web 2197/2197, lowest unit coverage 87.5% funcs (LyricsEditor)",
+   "error": null,
+   "sha": "54dfc63962934a247043eb24e706425cc613db8d",
+   "shortSha": "54dfc63",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/54dfc63962934a247043eb24e706425cc613db8d",
+   "subject": "feat(media): phase 1 song studio",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-23T18:30:12+05:30",
+   "filesChanged": 60,
+   "added": 9343,
+   "removed": 871
+  },
   {
    "at": "2026-11-23T02:00:53.725Z",
    "ok": true,
@@ -7079,9 +7245,376 @@ window.DASHBOARD = {
    "file": "1/T1.18-5.png",
    "phase": "1",
    "href": "shots/1/T1.18-5.png"
+  },
+  {
+   "taskId": "T2.2",
+   "kind": "proof",
+   "step": "AC1 empty state copy",
+   "attempt": 2,
+   "caption": "Empty state shows the exact copy and a Try an example button.",
+   "annotations": [
+    {
+     "x": 54.4,
+     "y": 12.2,
+     "w": 40,
+     "h": 20,
+     "label": "empty-state copy and example button"
+    }
+   ],
+   "at": "2026-11-23T13:17:07.311Z",
+   "file": "2/T2.2-1.png",
+   "phase": "2",
+   "href": "shots/2/T2.2-1.png"
+  },
+  {
+   "taskId": "T2.2",
+   "kind": "proof",
+   "step": "AC1/AC2/AC3 example fills prompt, model select, no duration for Lyria",
+   "attempt": 2,
+   "caption": "Example filled the prompt; model list with one-line notes, Lyria selected has no duration control.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 24,
+     "w": 43.8,
+     "h": 20,
+     "label": "prompt filled by example"
+    },
+    {
+     "x": 6.9,
+     "y": 58.8,
+     "w": 43.8,
+     "h": 31,
+     "label": "model select with notes"
+    }
+   ],
+   "at": "2026-11-23T13:17:07.437Z",
+   "file": "2/T2.2-2.png",
+   "phase": "2",
+   "href": "shots/2/T2.2-2.png"
+  },
+  {
+   "taskId": "T2.2",
+   "kind": "proof",
+   "step": "AC2 duration visible only for supporting models",
+   "attempt": 2,
+   "caption": "Stable Audio selected: prompt kept and Duration control appears.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 92.7,
+     "w": 43.8,
+     "h": 7,
+     "label": "duration control"
+    },
+    {
+     "x": 6.9,
+     "y": 58.8,
+     "w": 43.8,
+     "h": 9.4,
+     "label": "selected model"
+    }
+   ],
+   "at": "2026-11-23T13:17:07.561Z",
+   "file": "2/T2.2-3.png",
+   "phase": "2",
+   "href": "shots/2/T2.2-3.png"
+  },
+  {
+   "taskId": "T2.2",
+   "kind": "proof",
+   "step": "AC6 the draft survives a reload",
+   "attempt": 1,
+   "caption": "After typing a prompt and reloading the page, the typed prompt is restored from the draft.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 30.2,
+     "w": 43.8,
+     "h": 16.3,
+     "label": "prompt restored after reload"
+    }
+   ],
+   "at": "2026-11-23T13:28:27.786Z",
+   "file": "2/T2.2-4.png",
+   "phase": "2",
+   "href": "shots/2/T2.2-4.png"
+  },
+  {
+   "taskId": "T2.2",
+   "kind": "proof",
+   "step": "AC4/AC5 Mod+Enter submits; 402 dialog is the shared component",
+   "attempt": 1,
+   "caption": "Ctrl+Enter in the prompt submits; the server answers 402 for the 8-credit QA user, so the shared Low credits dialog opens.",
+   "annotations": [
+    {
+     "x": 31.3,
+     "y": 25.8,
+     "w": 37.5,
+     "h": 48.4,
+     "label": "shared Low credits dialog after Mod+Enter"
+    }
+   ],
+   "at": "2026-11-23T13:28:27.955Z",
+   "file": "2/T2.2-5.png",
+   "phase": "2",
+   "href": "shots/2/T2.2-5.png"
+  },
+  {
+   "taskId": "T2.3",
+   "kind": "proof",
+   "step": "AC4 visible focus ring",
+   "attempt": 2,
+   "caption": "Keyboard focus shows a visible ring on the mood chip.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 38.3,
+     "w": 13.6,
+     "h": 6.1,
+     "label": "focus ring"
+    }
+   ],
+   "at": "2026-11-23T13:17:07.682Z",
+   "file": "2/T2.3-1.png",
+   "phase": "2",
+   "href": "shots/2/T2.3-1.png"
+  },
+  {
+   "taskId": "T2.3",
+   "kind": "proof",
+   "step": "dark mode",
+   "attempt": 2,
+   "caption": "Studio in dark theme is legible with sufficient contrast.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 12,
+     "w": 43.8,
+     "h": 80,
+     "label": "composer in dark mode"
+    }
+   ],
+   "at": "2026-11-23T13:17:07.802Z",
+   "file": "2/T2.3-2.png",
+   "phase": "2",
+   "href": "shots/2/T2.3-2.png"
+  },
+  {
+   "taskId": "T2.3",
+   "kind": "proof",
+   "step": "AC4 375px layout",
+   "attempt": 2,
+   "caption": "At 375px there is no horizontal scroll (375/375).",
+   "annotations": [
+    {
+     "x": 0,
+     "y": 0,
+     "w": 100,
+     "h": 100,
+     "label": "no horizontal overflow"
+    }
+   ],
+   "at": "2026-11-23T13:17:07.923Z",
+   "file": "2/T2.3-3.png",
+   "phase": "2",
+   "href": "shots/2/T2.3-3.png"
+  },
+  {
+   "taskId": "T2.3",
+   "kind": "proof",
+   "step": "AC2/AC4 light 1280px",
+   "attempt": 3,
+   "caption": "Light theme, 1280px: model cards use the light surface and dark ink tokens; Minimax shows its instrumental-only line.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 47.1,
+     "w": 43.8,
+     "h": 24.4,
+     "label": "model cards readable on light surface"
+    }
+   ],
+   "at": "2026-11-23T13:19:33.323Z",
+   "file": "2/T2.3-4.png",
+   "phase": "2",
+   "href": "shots/2/T2.3-4.png"
+  },
+  {
+   "taskId": "T2.3",
+   "kind": "proof",
+   "step": "AC4 375px light",
+   "attempt": 3,
+   "caption": "Light theme, 375px: cards stay legible with no horizontal scroll.",
+   "annotations": [
+    {
+     "x": 4,
+     "y": 17,
+     "w": 92,
+     "h": 41,
+     "label": "model cards at 375px"
+    }
+   ],
+   "at": "2026-11-23T13:19:33.485Z",
+   "file": "2/T2.3-5.png",
+   "phase": "2",
+   "href": "shots/2/T2.3-5.png"
+  },
+  {
+   "taskId": "T2.3",
+   "kind": "proof",
+   "step": "dark parity",
+   "attempt": 3,
+   "caption": "Dark theme, 1280px: same cards on the dark surface.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 46.8,
+     "w": 43.8,
+     "h": 24.4,
+     "label": "model cards in dark"
+    }
+   ],
+   "at": "2026-11-23T13:19:33.605Z",
+   "file": "2/T2.3-6.png",
+   "phase": "2",
+   "href": "shots/2/T2.3-6.png"
+  },
+  {
+   "taskId": "T2.3",
+   "kind": "proof",
+   "step": "AC2 lyrics hidden and one-line note in instrumental mode",
+   "attempt": 1,
+   "caption": "Minimax 2.6 Instrumental selected: no lyrics field, a one-line instrumental note under the model list, result generated via the stub.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 75.7,
+     "w": 43.8,
+     "h": 9.2,
+     "label": "Minimax 2.6 Instrumental selected"
+    },
+    {
+     "x": 6.9,
+     "y": 87.5,
+     "w": 31.5,
+     "h": 3.3,
+     "label": "one-line instrumental note, no lyrics field"
+    }
+   ],
+   "at": "2026-11-23T13:26:38.729Z",
+   "file": "2/T2.3-7.png",
+   "phase": "2",
+   "href": "shots/2/T2.3-7.png"
+  },
+  {
+   "taskId": "T2.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Lyria generate: result card, balance dropped by 12",
+   "annotations": [],
+   "at": "2026-11-23T13:13:39.602Z",
+   "file": "2/T2.6-1.png",
+   "phase": "2",
+   "href": "shots/2/T2.6-1.png"
+  },
+  {
+   "taskId": "T2.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "402 opens Low credits dialog",
+   "annotations": [],
+   "at": "2026-11-23T13:13:39.787Z",
+   "file": "2/T2.6-2.png",
+   "phase": "2",
+   "href": "shots/2/T2.6-2.png"
+  },
+  {
+   "taskId": "T2.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Failure shows No credits were used",
+   "annotations": [],
+   "at": "2026-11-23T13:13:39.929Z",
+   "file": "2/T2.6-3.png",
+   "phase": "2",
+   "href": "shots/2/T2.6-3.png"
+  },
+  {
+   "taskId": "T2.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Duration control only on Stable Audio, cost 40",
+   "annotations": [],
+   "at": "2026-11-23T13:13:40.073Z",
+   "file": "2/T2.6-4.png",
+   "phase": "2",
+   "href": "shots/2/T2.6-4.png"
+  },
+  {
+   "taskId": "T2.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Music studio at 375px",
+   "annotations": [],
+   "at": "2026-11-23T13:13:40.215Z",
+   "file": "2/T2.6-5.png",
+   "phase": "2",
+   "href": "shots/2/T2.6-5.png"
+  },
+  {
+   "taskId": "T2.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Lyria success, seeded balance, chip shows realistic remaining credits",
+   "annotations": [],
+   "at": "2026-11-23T13:33:20.422Z",
+   "file": "2/T2.6-6.png",
+   "phase": "2",
+   "href": "shots/2/T2.6-6.png"
+  },
+  {
+   "taskId": "T2.6",
+   "kind": "proof",
+   "step": null,
+   "attempt": 2,
+   "caption": "Verifier retake (x3 run): Lyria success, seeded 500, chip 488 after the per-file 12; supersedes stale T2.6-1 (-4)",
+   "annotations": [
+    {
+     "x": 86,
+     "y": 0,
+     "w": 9,
+     "h": 7,
+     "label": "balance 488"
+    }
+   ],
+   "at": "2026-11-23T13:35:19.941Z",
+   "file": "2/T2.6-7.png",
+   "phase": "2",
+   "href": "shots/2/T2.6-7.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-23T13:39:37.934Z",
+   "type": "deliverable",
+   "tasks": [
+    "T2.1",
+    "T2.2",
+    "T2.3",
+    "T2.4",
+    "T2.5",
+    "T2.6",
+    "T2.7"
+   ],
+   "text": "Phase 2 music studio: schema, Music page, Minimax instrumental, unit and e2e tests"
+  },
   {
    "at": "2026-11-23T12:59:55.578Z",
    "type": "deliverable",
@@ -7148,6 +7681,46 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-23T13:35:20.068Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.6"
+   ],
+   "text": "Stale proof shot 2/T2.6-1 still shows the impossible -4 balance with caption \"balance dropped by 12\"; superseded by 2/T2.6-6 and the verifier retake"
+  },
+  {
+   "at": "2026-11-23T13:29:05.983Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.3"
+   ],
+   "text": "shot 2/T2.3-4 caption claims instrumental note but Lyria is selected; retaken as 2/T2.3-7"
+  },
+  {
+   "at": "2026-11-23T13:29:05.827Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.2"
+   ],
+   "text": "Music.vue Mod+Enter, draft restore and disabled reason have no automated test (verified manually only)"
+  },
+  {
+   "at": "2026-11-23T13:29:05.671Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.2"
+   ],
+   "text": "402 Low credits dialog in Music studio says 'To generate an AI image'"
+  },
+  {
+   "at": "2026-11-23T13:29:05.514Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.6"
+   ],
+   "text": "apps/web/e2e/qa/music.spec.ts:112 QA user has 8 credits so stubbed remaining is -4 (shot shows -4); other stubbed-success scenarios skip readCredits"
+  },
   {
    "at": "2026-11-23T08:41:01.492Z",
    "type": "advisory",
@@ -7327,617 +7900,680 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
-   "at": "2026-11-23T12:59:55.578Z",
+   "at": "2026-11-23T13:39:37.934Z",
    "type": "deliverable",
    "tasks": [
-    "T1.1",
-    "T1.2",
-    "T1.3",
-    "T1.4",
-    "T1.5",
-    "T1.6",
-    "T1.7",
-    "T1.8",
-    "T1.9",
-    "T1.10",
-    "T1.11",
-    "T1.12",
-    "T1.13",
-    "T1.14",
-    "T1.15",
-    "T1.16",
-    "T1.17",
-    "T1.18",
-    "T1.19"
+    "T2.1",
+    "T2.2",
+    "T2.3",
+    "T2.4",
+    "T2.5",
+    "T2.6",
+    "T2.7"
    ],
-   "text": "Phase 1 Song studio: composer, lyrics AI assist, waveform editor, export"
+   "text": "Phase 2 music studio: schema, Music page, Minimax instrumental, unit and e2e tests"
   },
   {
-   "at": "2026-11-23T12:59:52.712Z",
+   "at": "2026-11-23T13:39:35.152Z",
    "tasks": [
-    "T1.8"
+    "T2.1"
    ],
-   "attempt": "1",
+   "attempt": "3",
    "type": "verify_passed",
-   "evidence": "The a20 blocker is fixed. V2 `bun run check` exits 0 (as above). No source changed since a20, so a20's proof still holds: V1 2197/2197, lyrics.spec 6/6 (Write+Accept, Fit only over the limit, Undo, 429 copy, keyboard/Escape focus return, 375px), the live 375px dark menu check, and shots T1.8-6 and T1.8-7 re-opened and accurate.",
-   "fingerprint": "13e9bb7fbbb2eb1c4add9a132d5977e042736da984075f82d2b17401706cb6be",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a21.md"
+   "evidence": "AC1 met: the route test \"rejects a duration for a model without one, with a field-level 400\" passes, and validateMediaParams rejects any field LYRIA_2 does not declare, so Lyria never gets a duration. AC2 met: media.test.ts accepts STABLE_AUDIO_DURATION_SEC.min/max and rejects min-1/max+1 with path ['durationSec'], the range comes from the registry's media.durationSec through superRefine, and ther",
+   "fingerprint": "54fee9a44c78200b4c16f4fc816d2e378dbd643cd763f696d8cfa63eb8b36804",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a6.md"
   },
   {
-   "at": "2026-11-23T12:59:52.712Z",
-   "tasks": [
-    "T1.4"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "Unchanged since a20, so the PASS stands. The exact V1 coverage command ran 51/51, Song components and useMediaDraft are at 100%, and LyricsEditor's lowest value is funcs 87.5% (justified template binding). No skip or fail markers.",
-   "fingerprint": "57782b169e34f55df954289cafd4830f054d8d8346b0df12ec9a922277cbf4d1",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a21.md"
-  },
-  {
-   "at": "2026-11-23T12:59:52.711Z",
-   "tasks": [
-    "T1.3"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "The a20 blocker is fixed. V2 `bun run check` now exits 0, with 0 errors and 17 warnings in 935 files (a21-check.log). There is no agent-browser-chrome-* dir in the repo root, and .gitignore:65 now ignores `agent-browser-chrome-*/`. No file under apps/ or packages/ changed after the a20 report (find -newer: 0 files), so a20's proof still holds: V1 web suite 2197/2197, song.spec 8/8, and the V3 agen",
-   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a21.md"
-  },
-  {
-   "at": "2026-11-23T12:59:09.899Z",
+   "at": "2026-11-23T13:38:18.324Z",
    "type": "verify_started",
    "tasks": [
-    "T1.3",
-    "T1.4",
-    "T1.8"
+    "T2.1"
    ],
-   "attempt": "1"
+   "attempt": "3"
   },
   {
-   "at": "2026-11-23T12:54:10.973Z",
-   "type": "verify_started",
+   "at": "2026-11-23T13:38:18.126Z",
    "tasks": [
-    "T1.3",
-    "T1.4",
-    "T1.8"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-23T12:54:08.297Z",
-   "type": "run_started",
-   "tasks": [
-    "T1.1",
-    "T1.2",
-    "T1.3",
-    "T1.4",
-    "T1.5",
-    "T1.6",
-    "T1.7",
-    "T1.8",
-    "T1.9",
-    "T1.10",
-    "T1.11",
-    "T1.12",
-    "T1.13",
-    "T1.14",
-    "T1.15",
-    "T1.16",
-    "T1.17",
-    "T1.18",
-    "T1.19"
-   ],
-   "pipeline": 2
-  },
-  {
-   "at": "2026-11-23T08:41:01.492Z",
-   "type": "advisory",
-   "tasks": [
-    "T1.8"
-   ],
-   "text": "Shot T1.8-2 is stale (captures the since-fixed low-contrast menu); superseded by T1.8-4 (a19). Drop T1.8-2 from the dashboard."
-  },
-  {
-   "at": "2026-11-23T08:41:01.386Z",
-   "type": "advisory",
-   "tasks": [
-    "T1.8"
-   ],
-   "text": "No component unit spec exists for LyricsAiMenu.vue/useLyricsAssist.ts; loading spinner and generic-failure toast (AC3) are covered by neither unit nor e2e tests, only by verifier a19 live checks. Add a LyricsAiMenu component spec."
-  },
-  {
-   "at": "2026-11-23T08:32:47.924Z",
-   "type": "verify_started",
-   "tasks": [
-    "T1.3",
-    "T1.4",
-    "T1.8"
-   ],
-   "attempt": "19"
-  },
-  {
-   "at": "2026-11-23T08:32:47.797Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.8"
-   ],
-   "fingerprint": "13e9bb7fbbb2eb1c4add9a132d5977e042736da984075f82d2b17401706cb6be",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:32:47.797Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.4"
-   ],
-   "fingerprint": "57782b169e34f55df954289cafd4830f054d8d8346b0df12ec9a922277cbf4d1",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:32:47.797Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.3"
-   ],
-   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:32:43.958Z",
-   "tasks": [
-    "T1.3"
+    "T2.1"
    ],
    "type": "reviewer_verdict",
-   "evidence": "shot 1/T1.3-1.png shows the empty state with style chips, example ideas, counters (0/300, 0/3000), section tags and the \"Your first song\" prompt with a \"Try an example\" action; the disabled-reason guidance was checked in the previous pass and the UI is unchanged (only App.test.ts changed).",
-   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
-   "report": ".dashboard/media-studio/reports/phase-1-review-ux-sonnet-a17.md",
+   "evidence": "AC3 re-checked against new task text: getMusicCostInput (apps/api/src/services/media-service.ts:76-81) derives quantity only from registry pricing.unit (STABLE_AUDIO_25 unit 'file', usd 0.2 at packages/shared/src/models/registry.ts:759), takes no request field, throws 400 on unknown unit; getMusicCreditCost used in route (apps/api/src/routes/media.ts:104) and recomputed in processMusic (media-serv",
+   "fingerprint": "54fee9a44c78200b4c16f4fc816d2e378dbd643cd763f696d8cfa63eb8b36804",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a6.md",
    "verdict": "PASS",
-   "reviewer": "ux"
+   "reviewer": "security"
   },
   {
-   "at": "2026-11-23T08:32:41.632Z",
+   "at": "2026-11-23T13:38:13.033Z",
    "tasks": [
-    "T1.3"
+    "T2.1"
    ],
    "type": "reviewer_verdict",
-   "evidence": "Song studio empty state (T1.3-1): clear hierarchy (serif title, style, ideas, lyrics), legible copy, consistent chips and dashed cards, warm palette held.",
-   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
-   "report": ".dashboard/media-studio/reports/phase-1-review-ui-sonnet-a17.md",
+   "evidence": "AC3 re-checked against new task text: getMusicCostInput (apps/api/src/services/media-service.ts:76-81) derives quantity only from registry pricing.unit (STABLE_AUDIO_25 unit 'file', usd 0.2 at packages/shared/src/models/registry.ts:759), takes no request field, throws 400 on unknown unit; getMusicCreditCost used in route (apps/api/src/routes/media.ts:104) and recomputed in processMusic (media-serv",
+   "fingerprint": "54fee9a44c78200b4c16f4fc816d2e378dbd643cd763f696d8cfa63eb8b36804",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a6.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T13:38:02.815Z",
+   "tasks": [
+    "T2.1"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1: Lyria declares no durationSec input, so validateMediaParams rejects it with a field-level 400; buildMediaInput maps only declared inputs. AC2: refineMusicRequest bounds durationSec against the registry range using named constants. AC3 (amended): cost comes from getMusicCostInput and getMediaCreditCost, which read the flat per-file registry price. It is server-derived and never uses a client v",
+   "fingerprint": "54fee9a44c78200b4c16f4fc816d2e378dbd643cd763f696d8cfa63eb8b36804",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a6.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-23T13:37:45.202Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.1"
+   ],
+   "fingerprint": "54fee9a44c78200b4c16f4fc816d2e378dbd643cd763f696d8cfa63eb8b36804"
+  },
+  {
+   "at": "2026-11-23T13:37:43.972Z",
+   "type": "task_started",
+   "tasks": [
+    "T2.1"
+   ],
+   "attempt": "3"
+  },
+  {
+   "at": "2026-11-23T13:37:01.841Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/media-studio/TASKS.md": "dacc0edf0d4fdee5b90307e18005d243bd44c4fa",
+    "apps/api/src/lib/media-input.test.ts": "f835bfbf8954a3fe7f4e462da054eb24de2295aa",
+    "apps/api/src/lib/media-input.ts": "8f9b33565d6979e52583c26b40a5ab219bce4d31",
+    "apps/api/src/routes/media.test.ts": "b15a44948a718a06a16d1a2d1a19e9c29cb3f608",
+    "apps/web/e2e/support/proPerksSeed.ts": "4ebf727c46530ebe4937940cd39664335138a742",
+    "apps/web/src/components.d.ts": "ab9bc12c7db39686ab43ec969a5771583f39dddb",
+    "apps/web/src/router/index.ts": "66234b7d1519f4aee9648732ce1fbca3fb8f5d2e",
+    "packages/shared/src/schemas/index.ts": "d2e6e6beab087df195c4bda024ec5811f60fa869",
+    "packages/shared/src/schemas/media.ts": "f7a414e021cea34537def69b2a86c6c29de7960c",
+    "apps/web/e2e/qa/music.spec.ts": "573b6647f93da99bbbdfd361a54328a98c4401dc",
+    "apps/web/src/components/Music/DurationControl.test.ts": "5e7c693fc6de75ca575b33a0b37b038d16eb6d1b",
+    "apps/web/src/components/Music/DurationControl.vue": "d12303ed1e8f0862017e9d6930490345a54dbceb",
+    "apps/web/src/components/Music/MusicComposer.test.ts": "dd1a09aa9cc5cc27ece66b0f693905926f019595",
+    "apps/web/src/components/Music/MusicComposer.vue": "0295664a5659d469bac6711846f15b93cb67d609",
+    "apps/web/src/components/Music/MusicModelSelect.test.ts": "a0a0e773d64a483e5cec8d3647560c111d88a40f",
+    "apps/web/src/components/Music/MusicModelSelect.vue": "592a0d17a61d7938e9e6e418119e376f9be54a85",
+    "apps/web/src/pages/Music.vue": "fdf99740cbd70cc20800c26285473c33cd83f3e8",
+    "packages/shared/src/schemas/media.test.ts": "41e8351feda6401617b140fb064726d2863a487e"
+   }
+  },
+  {
+   "at": "2026-11-23T13:36:49.967Z",
+   "type": "answered",
+   "tasks": [],
+   "id": "Q25",
+   "text": "Flat per file; AC3 and Do text amended in TASKS.md"
+  },
+  {
+   "at": "2026-11-23T13:35:40.820Z",
+   "type": "question",
+   "tasks": [
+    "T2.1"
+   ],
+   "id": "Q25",
+   "text": "AC3 says Stable Audio cost scales with duration, but SPEC.md (lines 89, 218, 221, 301) and the registry price it flat at $0.20 per file. Code follows SPEC. Amend AC3 to flat per-file, or change SPEC and registry to per-second?"
+  },
+  {
+   "at": "2026-11-23T13:35:37.844Z",
+   "tasks": [
+    "T2.6"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "`E2E_SERVER=dev bunx playwright test e2e/qa/music.spec.ts --repeat-each=3 --workers=1` gives 25 passed (49.1s) against the running dev server: 8 scenarios x3 plus setup, 0 flaky. The a4 BLOCKING item is fixed. beforeAll seeds 500 credits through setCredits, and afterAll restores the original value (the DB read after the run is {credits:8,dailyCredits:0}, the same as before). The Lyria charge scena",
+   "fingerprint": "ff4ebe8e3c0f7efc05950a8356a95a7d11a3f07f57ff333437f4ef1bde374b32",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a5.md"
+  },
+  {
+   "at": "2026-11-23T13:35:20.068Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.6"
+   ],
+   "text": "Stale proof shot 2/T2.6-1 still shows the impossible -4 balance with caption \"balance dropped by 12\"; superseded by 2/T2.6-6 and the verifier retake"
+  },
+  {
+   "at": "2026-11-23T13:33:47.073Z",
+   "type": "verify_started",
+   "tasks": [
+    "T2.6"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-23T13:33:44.227Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "apps/api/src/lib/media-input.test.ts": "f835bfbf8954a3fe7f4e462da054eb24de2295aa",
+    "apps/api/src/lib/media-input.ts": "8f9b33565d6979e52583c26b40a5ab219bce4d31",
+    "apps/api/src/routes/media.test.ts": "b15a44948a718a06a16d1a2d1a19e9c29cb3f608",
+    "apps/web/e2e/support/proPerksSeed.ts": "4ebf727c46530ebe4937940cd39664335138a742",
+    "apps/web/src/components.d.ts": "ab9bc12c7db39686ab43ec969a5771583f39dddb",
+    "apps/web/src/router/index.ts": "66234b7d1519f4aee9648732ce1fbca3fb8f5d2e",
+    "packages/shared/src/schemas/index.ts": "d2e6e6beab087df195c4bda024ec5811f60fa869",
+    "packages/shared/src/schemas/media.ts": "f7a414e021cea34537def69b2a86c6c29de7960c",
+    "apps/web/e2e/qa/music.spec.ts": "573b6647f93da99bbbdfd361a54328a98c4401dc",
+    "apps/web/src/components/Music/DurationControl.test.ts": "5e7c693fc6de75ca575b33a0b37b038d16eb6d1b",
+    "apps/web/src/components/Music/DurationControl.vue": "d12303ed1e8f0862017e9d6930490345a54dbceb",
+    "apps/web/src/components/Music/MusicComposer.test.ts": "dd1a09aa9cc5cc27ece66b0f693905926f019595",
+    "apps/web/src/components/Music/MusicComposer.vue": "0295664a5659d469bac6711846f15b93cb67d609",
+    "apps/web/src/components/Music/MusicModelSelect.test.ts": "a0a0e773d64a483e5cec8d3647560c111d88a40f",
+    "apps/web/src/components/Music/MusicModelSelect.vue": "592a0d17a61d7938e9e6e418119e376f9be54a85",
+    "apps/web/src/pages/Music.vue": "fdf99740cbd70cc20800c26285473c33cd83f3e8",
+    "packages/shared/src/schemas/media.test.ts": "41e8351feda6401617b140fb064726d2863a487e"
+   }
+  },
+  {
+   "at": "2026-11-23T13:33:44.127Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.6"
+   ],
+   "fingerprint": "ff4ebe8e3c0f7efc05950a8356a95a7d11a3f07f57ff333437f4ef1bde374b32",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T13:33:28.327Z",
+   "type": "task_built",
+   "tasks": [
+    "T2.6"
+   ],
+   "text": "e2e PASS 8/8 flake x3, readCredits asserted",
+   "files": [
+    "e2e"
+   ]
+  },
+  {
+   "at": "2026-11-23T13:32:01.718Z",
+   "type": "task_started",
+   "tasks": [
+    "T2.6"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-23T13:32:01.496Z",
+   "type": "build_started",
+   "tasks": [
+    "T2.6"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-23T13:31:58.356Z",
+   "tasks": [
+    "T2.7"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "`bun run check` 0 errors (17 pre-existing warnings, none in phase 2 lines). `bun run test` 348 files / 3886 tests pass. `bun run check:model-docs` passed (15 media models). `playwright test music.spec.ts song.spec.ts --repeat-each=2 --workers=1`: 33 passed. No regression in song or image suites.",
+   "fingerprint": "9260cebcd2f22976bdfba519adc5e64493f23d27b8393ea159e68b7140091c4f",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-23T13:31:58.356Z",
+   "tasks": [
+    "T2.5"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "api coverage run 2 files / 63 tests pass, media-input.ts 100/100/100/100 and media-service.ts 100/100/100/100. Shared media.ts 24 tests 100/100/100/100 with the istanbul provider (the v8 provider errors with \"coverageFilesDirectory is required\", a tooling version mismatch, not a test defect). Marker grep is clean.",
+   "fingerprint": "647cfdb75546fbc6a0be0eb050f26e1c8bc48218aa018bcc7119e84aa9f08a19",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-23T13:31:58.356Z",
+   "tasks": [
+    "T2.4"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "`vitest run src/components/Music --coverage` 3 files / 19 tests pass. DurationControl, MusicComposer and MusicModelSelect are each 100% stmts/branches/funcs/lines. No it.fails, skip or only (grep clean). No network fakes needed.",
+   "fingerprint": "79200cc0bd163ae776af06bf4aa416547e6969149d0ccbce2cb3e8991ecea8b7",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-23T13:31:58.356Z",
+   "tasks": [
+    "T2.3"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "Payload for Minimax is `instrumental:true` with no `lyrics` (e2e assertion). The schema rejects instrumental!=true for MINIMAX_MUSIC_26. buildMediaInput maps prompt to stylePrompt (media-input.test). The Lyrics field is absent and the one-line note \"Instrumental only: lyrics are not used...\" shows (retaken proof 2/T2.3-7). Cost badge 30 per file. 375px and keyboard covered by e2e. Shared, api and ",
+   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-23T13:31:58.356Z",
+   "tasks": [
+    "T2.2"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "Verified in agent-browser on the dev server. Exact empty copy shown, \"Try an example\" fills \"Calm piano, rainy evening\", Generate is disabled with the reason \"Describe the music you want to make.\" The draft survives a reload (\"verifier draft check ambient pads\" restored; shot 2/T2.2-4). Ctrl+Enter submits and the shared Low credits 402 dialog opens (shot 2/T2.2-5). The handler accepts metaKey or c",
+   "fingerprint": "8923dfed4d9c5635e8a5c0b7d9752042231350620b72c735454669d92bd17eba",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-23T13:31:58.356Z",
+   "tasks": [
+    "T2.6"
+   ],
+   "attempt": "1",
+   "type": "verify_failed",
+   "category": "test-quality",
+   "text": "[test-quality] · AC2 \"Each scenario that spends credits asserts the balance through readCredits\" · Four scenarios run a stubbed successful generation via `setVariant('success', { credits: X })` and never call readCredits: duration (music.spec.ts:188), Minimax (:215), keyboard (:234) and History (:279). Separately, the \"charges the per-file cost once\" scenario (:112-117) runs on the QA user with 8 ",
+   "files": [
+    "ac2 \"each scenario that spends credits asserts the balance t"
+   ],
+   "sigs": [
+    "T2.6|test-quality|ac2 \"each scenario that spends credits asserts the balance t"
+   ],
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-23T13:31:58.355Z",
+   "tasks": [
+    "T2.1"
+   ],
+   "attempt": "1",
+   "type": "blocked",
+   "category": "spec-issue",
+   "text": "[spec-issue] · AC3 \"Cost for Stable Audio scales with the server-side duration\" contradicts SPEC.md: line 89 (Stable Audio \"Flat price\"), R-MUS-2 line 218 (\"flat price\"), R-MUS-5 line 221 (\"duration vs price is flat, so show 'Longer is the same price'\") and pricing table line 301 (\"per file (flat, any duration)\", 0.20 USD / 40 credits). The task's own Do line (\"per second for Stable Audio\") agrees",
+   "fingerprint": "cf87978a4a1398580f8cfc405e0e5688058e4c4ceadd8c994b3460b4005bcdc4",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
+  },
+  {
+   "at": "2026-11-23T13:29:05.983Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.3"
+   ],
+   "text": "shot 2/T2.3-4 caption claims instrumental note but Lyria is selected; retaken as 2/T2.3-7"
+  },
+  {
+   "at": "2026-11-23T13:29:05.827Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.2"
+   ],
+   "text": "Music.vue Mod+Enter, draft restore and disabled reason have no automated test (verified manually only)"
+  },
+  {
+   "at": "2026-11-23T13:29:05.671Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.2"
+   ],
+   "text": "402 Low credits dialog in Music studio says 'To generate an AI image'"
+  },
+  {
+   "at": "2026-11-23T13:29:05.514Z",
+   "type": "advisory",
+   "tasks": [
+    "T2.6"
+   ],
+   "text": "apps/web/e2e/qa/music.spec.ts:112 QA user has 8 credits so stubbed remaining is -4 (shot shows -4); other stubbed-success scenarios skip readCredits"
+  },
+  {
+   "at": "2026-11-23T13:21:41.165Z",
+   "type": "verify_started",
+   "tasks": [
+    "T2.1",
+    "T2.2",
+    "T2.3",
+    "T2.4",
+    "T2.5",
+    "T2.6",
+    "T2.7"
+   ],
+   "attempt": "1"
+  },
+  {
+   "at": "2026-11-23T13:21:38.272Z",
+   "tasks": [
+    "T2.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Model cards are now one-line-note rows with credits and duration inline, selected state is a clear blue ring (Lyria, then Stable Audio in T2.2-3), Duration appears only for Stable Audio, and the empty state shows the \"Your first track\" copy with \"Try an example\". Light 1280 and 375 shots show dark ink on a warm surface with no overflow.",
+   "fingerprint": "8923dfed4d9c5635e8a5c0b7d9752042231350620b72c735454669d92bd17eba",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a4.md",
    "verdict": "PASS",
    "reviewer": "ui"
   },
   {
-   "at": "2026-11-23T08:32:35.492Z",
+   "at": "2026-11-23T13:21:35.970Z",
    "tasks": [
-    "T1.3"
+    "T2.2"
    ],
    "type": "reviewer_verdict",
-   "evidence": "App.test.ts diff only adds an afterEach that unmounts tracked wrappers and unstubs globals, plus a beforeEach fetch stub answering the /users call. No assertion, test case or expectation was removed or loosened, so the tests are not weakened. The router now lazy-loads SongStudio on /audio/song with requiresAuth, and the song components are unchanged since the last PASS, so AC1-AC7 stay met.",
-   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
-   "report": ".dashboard/media-studio/reports/phase-1-review-code-sonnet-a17.md",
+   "evidence": "The a2 report had no BLOCKING items. Re-checked the restyled MusicModelSelect.vue: the card uses the theme tokens --tw-surface-1, --tw-surface-2, --tw-border and --tw-ink-primary, all defined for light and dark in src/style.scss, plus --studio-accent from the StudioShell scope. The native radio stays keyboard-operable (visually hidden, full-size, :has(:focus-visible) outline), min-height is 44px a",
+   "fingerprint": "8923dfed4d9c5635e8a5c0b7d9752042231350620b72c735454669d92bd17eba",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a4.md",
    "verdict": "PASS",
    "reviewer": "code"
   },
   {
-   "at": "2026-11-23T08:32:19.894Z",
-   "type": "preflight_passed",
+   "at": "2026-11-23T13:21:30.200Z",
    "tasks": [
-    "T1.8"
-   ],
-   "fingerprint": "13e9bb7fbbb2eb1c4add9a132d5977e042736da984075f82d2b17401706cb6be",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:32:19.894Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.4"
-   ],
-   "fingerprint": "57782b169e34f55df954289cafd4830f054d8d8346b0df12ec9a922277cbf4d1",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:32:19.894Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.3"
-   ],
-   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:32:19.064Z",
-   "type": "task_built",
-   "tasks": [
-    "T1.4"
-   ],
-   "text": "LyricsEditor.vue 87.5% functions, 95.45% lines; shuffle clean",
-   "files": [
-    "apps/web/src/components/Song/LyricsEditor.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-23T08:31:51.781Z",
-   "type": "task_started",
-   "tasks": [
-    "T1.4"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-23T08:31:51.678Z",
-   "type": "build_started",
-   "tasks": [
-    "T1.4"
-   ],
-   "attempt": "16"
-  },
-  {
-   "at": "2026-11-23T08:31:46.122Z",
-   "tasks": [
-    "T1.8"
-   ],
-   "attempt": "15",
-   "type": "verify_inconclusive",
-   "text": "missing-from-report",
-   "sigs": [
-    "T1.8|inconclusive|missing-from-report"
-   ],
-   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
-  },
-  {
-   "at": "2026-11-23T08:31:46.122Z",
-   "tasks": [
-    "T1.19"
-   ],
-   "attempt": "15",
-   "type": "verify_passed",
-   "evidence": "V1 check exit 0; V2 root `bun run test` exit 0, 344 files 3840/3840; V3 model-docs passed (15 media models); V4 song+lyrics+editor --repeat-each=2 --workers=1: 43 passed, 0 failed, 0 flaky",
-   "fingerprint": "ec91a90a346654e166afc48dd7d73f736bc73fffd0d53c174ac3c4bf3d19aaa6",
-   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
-  },
-  {
-   "at": "2026-11-23T08:31:46.122Z",
-   "tasks": [
-    "T1.18"
-   ],
-   "attempt": "15",
-   "type": "verify_passed",
-   "evidence": "V1 `playwright test e2e/qa/editor.spec.ts --repeat-each=3 --workers=1` (E2E_SERVER=dev): 22 passed (7 scenarios x3 plus setup), 0 failed, 0 flaky. No test.fail, skip, only or fixme left in any phase spec. readCredits before and after equal in the export and version scenarios. The versions POST and the assets list are routed by page.route, and mediaGenerationStub acceptedRequestCount is 1",
-   "fingerprint": "eab18318e25728d20f0580b99563532463611ea0ae5478e39886b76d7b2646db",
-   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
-  },
-  {
-   "at": "2026-11-23T08:31:46.122Z",
-   "tasks": [
-    "T1.17"
-   ],
-   "attempt": "15",
-   "type": "verify_passed",
-   "evidence": "V1 coverage 71/71. All files 99.62 stmts / 99.09 branches / 100 funcs / 100 lines; the lowest is useAudioExport.ts at 98.38 branches. No it.fails, skip or only; no network calls (cdn.test URLs are only track fixtures)",
-   "fingerprint": "f1af7ac9228237ce883cab54f48f332834ea1b990735607aab3a3c25267b3e81",
-   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
-  },
-  {
-   "at": "2026-11-23T08:31:46.122Z",
-   "tasks": [
-    "T1.16"
-   ],
-   "attempt": "15",
-   "type": "verify_passed",
-   "evidence": "V1 api type-check exit 0; V2 api suite 86 files 1420/1420; V3 web suite exit 0 twice; V4 check exit 0. History grouping fixed: history.ts splitVersions moves versions out before groupByDate and puts them back after their parent. The e2e asserts the order [other, original, version] when the list arrives as version, other, original, and the screenshot confirms it. Shot T1.16-1 shows MP3/WAV with est",
-   "fingerprint": "b6122a654c83a4d1115f47cbc146300cc0e89ba501055e0d261f8b93c1cd1023",
-   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
-  },
-  {
-   "at": "2026-11-23T08:31:46.122Z",
-   "tasks": [
-    "T1.15"
-   ],
-   "attempt": "15",
-   "type": "verify_passed",
-   "evidence": "V1 web suite exit 0 twice; V2 check exit 0; worker, cap and cancel unit tests are in T1.17's 71/71; WAV export e2e green x3",
-   "fingerprint": "6b7a2aa60552008f9eea947cf9157cba9acf8567c0b2f54a668b34b65492935d",
-   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
-  },
-  {
-   "at": "2026-11-23T08:31:46.122Z",
-   "tasks": [
-    "T1.12"
-   ],
-   "attempt": "15",
-   "type": "verify_passed",
-   "evidence": "V1 web suite exit 0 twice; V2 check exit 0; shot T1.12-1 re-opened: edit tools are disabled and the exact hint \"Drag on the waveform to select a part.\" shows; 375px toolbar e2e green",
-   "fingerprint": "aa66222472bc0c3479518d988e5a86c719ecfc10cab2cbfbb0d92223ddbd2e1f",
-   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
-  },
-  {
-   "at": "2026-11-23T08:31:46.121Z",
-   "tasks": [
-    "T1.11"
-   ],
-   "attempt": "15",
-   "type": "verify_passed",
-   "evidence": "V1 web suite exit 0 twice; V2 check exit 0; editor e2e covers undo/redo keys, the shared element, keyboard region and 375px, all green x3 and x2. Shots T1.11-1/2 match their captions",
-   "fingerprint": "21aaced465208fe5ebf280f59939fdeb1a8c9a67771bdca9e196ee8c4b050a83",
-   "report": ".dashboard/media-studio/reports/phase-1-verifier-a15.md"
-  },
-  {
-   "at": "2026-11-23T08:31:45.996Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.19"
-   ],
-   "fingerprint": "ec91a90a346654e166afc48dd7d73f736bc73fffd0d53c174ac3c4bf3d19aaa6"
-  },
-  {
-   "at": "2026-11-23T08:31:45.996Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.18"
-   ],
-   "fingerprint": "eab18318e25728d20f0580b99563532463611ea0ae5478e39886b76d7b2646db",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:31:45.996Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.17"
-   ],
-   "fingerprint": "f1af7ac9228237ce883cab54f48f332834ea1b990735607aab3a3c25267b3e81",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:31:45.996Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.16"
-   ],
-   "fingerprint": "b6122a654c83a4d1115f47cbc146300cc0e89ba501055e0d261f8b93c1cd1023",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:31:45.996Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.15"
-   ],
-   "fingerprint": "6b7a2aa60552008f9eea947cf9157cba9acf8567c0b2f54a668b34b65492935d"
-  },
-  {
-   "at": "2026-11-23T08:31:45.996Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.12"
-   ],
-   "fingerprint": "aa66222472bc0c3479518d988e5a86c719ecfc10cab2cbfbb0d92223ddbd2e1f",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:31:45.996Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.11"
-   ],
-   "fingerprint": "21aaced465208fe5ebf280f59939fdeb1a8c9a67771bdca9e196ee8c4b050a83",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:31:45.996Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.8"
-   ],
-   "fingerprint": "13e9bb7fbbb2eb1c4add9a132d5977e042736da984075f82d2b17401706cb6be",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:31:45.996Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.3"
-   ],
-   "fingerprint": "56f0ee6e933137039545cf41f9b8fdafd5d9de515802cc87eec22ecd9dbcbd88",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:31:43.607Z",
-   "type": "task_built",
-   "tasks": [
-    "T1.3"
-   ],
-   "text": "flaky-env fixed by builder b5-a12: App.test.ts stubs /users fetch and unmounts wrappers; apps/web bun run test exit 0 twice (2197/2197)",
-   "files": [
-    "apps/web/src/App.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-23T08:31:43.502Z",
-   "type": "task_started",
-   "tasks": [
-    "T1.3"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-23T08:31:30.196Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.19"
-   ],
-   "fingerprint": "ec91a90a346654e166afc48dd7d73f736bc73fffd0d53c174ac3c4bf3d19aaa6"
-  },
-  {
-   "at": "2026-11-23T08:31:30.196Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.18"
-   ],
-   "fingerprint": "eab18318e25728d20f0580b99563532463611ea0ae5478e39886b76d7b2646db",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:31:30.196Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.17"
-   ],
-   "fingerprint": "f1af7ac9228237ce883cab54f48f332834ea1b990735607aab3a3c25267b3e81",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:31:30.196Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.16"
-   ],
-   "fingerprint": "b6122a654c83a4d1115f47cbc146300cc0e89ba501055e0d261f8b93c1cd1023",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:31:30.196Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.15"
-   ],
-   "fingerprint": "6b7a2aa60552008f9eea947cf9157cba9acf8567c0b2f54a668b34b65492935d"
-  },
-  {
-   "at": "2026-11-23T08:31:30.196Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.12"
-   ],
-   "fingerprint": "aa66222472bc0c3479518d988e5a86c719ecfc10cab2cbfbb0d92223ddbd2e1f",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:31:30.196Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.11"
-   ],
-   "fingerprint": "21aaced465208fe5ebf280f59939fdeb1a8c9a67771bdca9e196ee8c4b050a83",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:31:30.196Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.8"
-   ],
-   "fingerprint": "13e9bb7fbbb2eb1c4add9a132d5977e042736da984075f82d2b17401706cb6be",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:30:58.106Z",
-   "type": "advisory",
-   "tasks": [
-    "T1.3"
-   ],
-   "text": "History.test.ts (Phase 0, unchanged) leaves GET /media/assets unmocked: 7 SELF_SIGNED_CERT errors to the local API per web-suite run; exit stays 0, not a paid call; mock the fetch"
-  },
-  {
-   "at": "2026-11-23T08:25:15.802Z",
-   "type": "verify_started",
-   "tasks": [
-    "T1.11",
-    "T1.12",
-    "T1.15",
-    "T1.16",
-    "T1.17",
-    "T1.18",
-    "T1.19"
-   ],
-   "attempt": "15"
-  },
-  {
-   "at": "2026-11-23T08:25:10.265Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.19"
-   ],
-   "fingerprint": "ec91a90a346654e166afc48dd7d73f736bc73fffd0d53c174ac3c4bf3d19aaa6"
-  },
-  {
-   "at": "2026-11-23T08:25:10.265Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.18"
-   ],
-   "fingerprint": "eab18318e25728d20f0580b99563532463611ea0ae5478e39886b76d7b2646db",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:25:10.265Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.17"
-   ],
-   "fingerprint": "f1af7ac9228237ce883cab54f48f332834ea1b990735607aab3a3c25267b3e81",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:25:10.265Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.16"
-   ],
-   "fingerprint": "b6122a654c83a4d1115f47cbc146300cc0e89ba501055e0d261f8b93c1cd1023",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:25:10.265Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.15"
-   ],
-   "fingerprint": "6b7a2aa60552008f9eea947cf9157cba9acf8567c0b2f54a668b34b65492935d"
-  },
-  {
-   "at": "2026-11-23T08:25:10.265Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.12"
-   ],
-   "fingerprint": "aa66222472bc0c3479518d988e5a86c719ecfc10cab2cbfbb0d92223ddbd2e1f",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:25:10.265Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T1.11"
-   ],
-   "fingerprint": "21aaced465208fe5ebf280f59939fdeb1a8c9a67771bdca9e196ee8c4b050a83",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T08:24:59.505Z",
-   "tasks": [
-    "T1.16"
+    "T2.2"
    ],
    "type": "reviewer_verdict",
-   "evidence": "AC4 met: saveVersion calls addMediaAsset, and groupHistoryItems (splitVersions) places each version directly after its original in the original's date group. A version whose original is absent stays top-level. Both cases have tests in history.test.ts. createVersion creates the row with parentId and creditsCharged 0 (earlier checks unchanged). The other ACs are unchanged since a10.",
-   "fingerprint": "b6122a654c83a4d1115f47cbc146300cc0e89ba501055e0d261f8b93c1cd1023",
-   "report": ".dashboard/media-studio/reports/phase-1-review-code-sonnet-a14.md",
+   "evidence": "shot 2/T2.2-3.png shows the restyled model cards. The selected card has an accent border, each card shows its credits and length, and the prompt is kept. Source MusicModelSelect.vue: a native radio group in a fieldset with a \"Model\" legend, the input stretched over the card so the whole card is clickable, arrow-key navigation, `:has(:focus-visible)` focus ring, 44px min height, reduced-motion resp",
+   "fingerprint": "8923dfed4d9c5635e8a5c0b7d9752042231350620b72c735454669d92bd17eba",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a4.md",
    "verdict": "PASS",
-   "reviewer": "code"
+   "reviewer": "ux"
   },
   {
-   "at": "2026-11-23T08:24:57.002Z",
+   "at": "2026-11-23T13:21:08.722Z",
    "tasks": [
-    "T1.16"
+    "T2.3"
    ],
    "type": "reviewer_verdict",
-   "evidence": "the new splitVersions/groupHistoryItems code (apps/web/src/stores/history.ts:88-123) only regroups the user's own already-fetched assets by parentId. It uses a Map, not a plain object, so there is no prototype-pollution path. It renders no HTML and makes no new network call. addMediaAsset (:178-180) only prepends the server's 201 response to local state and dedupes by id. The server path is unchan",
-   "fingerprint": "b6122a654c83a4d1115f47cbc146300cc0e89ba501055e0d261f8b93c1cd1023",
-   "report": ".dashboard/media-studio/reports/phase-1-review-security-opus-a14.md",
+   "evidence": "MusicRequestSchema (packages/shared/src/schemas/media.ts) strips unknown keys so client lyrics/autoLyrics/stylePrompt never survive parse; refineMusicRequest rejects any model declaring `instrumental` unless instrumental===true (AC1 enforced server-side, not just hidden in UI); route (apps/api/src/routes/media.ts:93-101) runs validateMediaParams, which 400s undeclared fields after resolveField ali",
+   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a3.md",
    "verdict": "PASS",
    "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T13:21:03.586Z",
+   "tasks": [
+    "T2.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "MusicRequestSchema (packages/shared/src/schemas/media.ts) strips unknown keys so client lyrics/autoLyrics/stylePrompt never survive parse; refineMusicRequest rejects any model declaring `instrumental` unless instrumental===true (AC1 enforced server-side, not just hidden in UI); route (apps/api/src/routes/media.ts:93-101) runs validateMediaParams, which 400s undeclared fields after resolveField ali",
+   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a3.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T13:20:35.400Z",
+   "tasks": [
+    "T2.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1: refineMusicRequest requires instrumental=true for any model whose registry inputs declare it (MINIMAX_MUSIC_26). Music.vue sends `instrumental: true` when accepts('instrumental'). Zod strips any unknown lyrics field, and `lyrics` is not in MusicRequestSchema. resolveField maps `prompt` to `stylePrompt`, and buildMediaInput maps it to `is_instrumental` plus `prompt` per the SPEC 5.1 row. MINIM",
+   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a3.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-23T13:20:35.263Z",
+   "tasks": [
+    "T2.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Light cards now use a warm light surface with dark ink (Stable Audio, Lyria, Minimax titles and notes read clearly, selected Lyria has a blue ring), matching the prompt field and chips. Dark parity holds. 375px light shows wrapped notes with no overflow (shots T2.3-4..6).",
+   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a3.md",
+   "verdict": "PASS",
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-23T13:20:29.158Z",
+   "tasks": [
+    "T2.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "shots 2/T2.3-4.png (light 1280px: three model cards with cost and length, selected card has accent border, Generate disabled with reason \"Describe the music you want to make.\"), 2/T2.3-5.png (375px: cards wrap cleanly, no overflow, tap targets 44px+), plus attempt-2 shots 2/T2.3-1.png (focus ring), 2/T2.3-2.png (dark), 2/T2.3-3.png (375px no horizontal scroll). Source: MusicModelSelect.vue is a na",
+   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a3.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-23T13:20:05.796Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.2"
+   ],
+   "fingerprint": "8923dfed4d9c5635e8a5c0b7d9752042231350620b72c735454669d92bd17eba",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T13:20:05.796Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.1"
+   ],
+   "fingerprint": "cf87978a4a1398580f8cfc405e0e5688058e4c4ceadd8c994b3460b4005bcdc4"
+  },
+  {
+   "at": "2026-11-23T13:20:01.772Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.7"
+   ],
+   "fingerprint": "9260cebcd2f22976bdfba519adc5e64493f23d27b8393ea159e68b7140091c4f"
+  },
+  {
+   "at": "2026-11-23T13:20:01.772Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.6"
+   ],
+   "fingerprint": "6e3af6e1f0fccb39a44f85a67cf190f46f220c1f29b1ee85ede776ef5e371145",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T13:19:59.134Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.5"
+   ],
+   "fingerprint": "647cfdb75546fbc6a0be0eb050f26e1c8bc48218aa018bcc7119e84aa9f08a19"
+  },
+  {
+   "at": "2026-11-23T13:19:59.134Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.4"
+   ],
+   "fingerprint": "79200cc0bd163ae776af06bf4aa416547e6969149d0ccbce2cb3e8991ecea8b7",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T13:19:55.208Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "apps/api/src/lib/media-input.test.ts": "f835bfbf8954a3fe7f4e462da054eb24de2295aa",
+    "apps/api/src/lib/media-input.ts": "8f9b33565d6979e52583c26b40a5ab219bce4d31",
+    "apps/api/src/routes/media.test.ts": "b15a44948a718a06a16d1a2d1a19e9c29cb3f608",
+    "apps/web/src/components.d.ts": "ab9bc12c7db39686ab43ec969a5771583f39dddb",
+    "apps/web/src/router/index.ts": "66234b7d1519f4aee9648732ce1fbca3fb8f5d2e",
+    "packages/shared/src/schemas/index.ts": "d2e6e6beab087df195c4bda024ec5811f60fa869",
+    "packages/shared/src/schemas/media.ts": "f7a414e021cea34537def69b2a86c6c29de7960c",
+    "apps/web/e2e/qa/music.spec.ts": "faa1a38f736f9b22972d2b17223a67212e593a68",
+    "apps/web/src/components/Music/DurationControl.test.ts": "5e7c693fc6de75ca575b33a0b37b038d16eb6d1b",
+    "apps/web/src/components/Music/DurationControl.vue": "d12303ed1e8f0862017e9d6930490345a54dbceb",
+    "apps/web/src/components/Music/MusicComposer.test.ts": "dd1a09aa9cc5cc27ece66b0f693905926f019595",
+    "apps/web/src/components/Music/MusicComposer.vue": "0295664a5659d469bac6711846f15b93cb67d609",
+    "apps/web/src/components/Music/MusicModelSelect.test.ts": "a0a0e773d64a483e5cec8d3647560c111d88a40f",
+    "apps/web/src/components/Music/MusicModelSelect.vue": "592a0d17a61d7938e9e6e418119e376f9be54a85",
+    "apps/web/src/pages/Music.vue": "fdf99740cbd70cc20800c26285473c33cd83f3e8",
+    "packages/shared/src/schemas/media.test.ts": "41e8351feda6401617b140fb064726d2863a487e"
+   }
+  },
+  {
+   "at": "2026-11-23T13:19:55.101Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T2.3"
+   ],
+   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-23T13:18:31.623Z",
+   "type": "task_started",
+   "tasks": [
+    "T2.3"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-23T13:18:31.369Z",
+   "type": "build_started",
+   "tasks": [
+    "T2.3"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-23T13:18:27.180Z",
+   "tasks": [
+    "T2.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "isServedAs widens music route only to MUSIC_STUDIO_MODEL_KEYS (MINIMAX_MUSIC_26), not Minimax 1.5; refine forces instrumental=true server-side for models declaring it and lyrics are stripped by the schema, so no lyrics reach the payload; prompt alias to stylePrompt only when model lacks prompt, and the aliased text is the same prompt that passes checkPromptSafety; Minimax cost uses its own per-fil",
+   "fingerprint": "8208bcd2901326e8a58ca6343854977dca98a14d682b9ae0962f9ffc2b3c0226",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a2.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T13:18:27.180Z",
+   "tasks": [
+    "T2.1"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "MusicRequestSchema (packages/shared/src/schemas/media.ts) is a stripping z.object with typed fields; durationSec/steps/cfgScale int/number bounded by registry ranges in refineMusicRequest only when the model declares the field; route (apps/api/src/routes/media.ts:93-101) parses then validateMediaParams 400s any field the model does not declare (Lyria + durationSec rejected); buildMediaInput (apps/",
+   "fingerprint": "cf87978a4a1398580f8cfc405e0e5688058e4c4ceadd8c994b3460b4005bcdc4",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a2.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T13:18:20.319Z",
+   "tasks": [
+    "T2.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "isServedAs widens music route only to MUSIC_STUDIO_MODEL_KEYS (MINIMAX_MUSIC_26), not Minimax 1.5; refine forces instrumental=true server-side for models declaring it and lyrics are stripped by the schema, so no lyrics reach the payload; prompt alias to stylePrompt only when model lacks prompt, and the aliased text is the same prompt that passes checkPromptSafety; Minimax cost uses its own per-fil",
+   "fingerprint": "8208bcd2901326e8a58ca6343854977dca98a14d682b9ae0962f9ffc2b3c0226",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a2.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T13:18:20.318Z",
+   "tasks": [
+    "T2.1"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "MusicRequestSchema (packages/shared/src/schemas/media.ts) is a stripping z.object with typed fields; durationSec/steps/cfgScale int/number bounded by registry ranges in refineMusicRequest only when the model declares the field; route (apps/api/src/routes/media.ts:93-101) parses then validateMediaParams 400s any field the model does not declare (Lyria + durationSec rejected); buildMediaInput (apps/",
+   "fingerprint": "cf87978a4a1398580f8cfc405e0e5688058e4c4ceadd8c994b3460b4005bcdc4",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a2.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-23T13:18:06.219Z",
+   "tasks": [
+    "T2.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1: the schema forces instrumental=true for models that declare it. The unknown lyrics field is stripped by Zod, so no user lyrics are sent. resolveField maps prompt to stylePrompt, giving is_instrumental plus prompt, which matches the SPEC 5.1 instrumental row. AC2: the lyrics field is never rendered and the instrumental note is shown. AC3: the cost badge uses getMediaCreditCost per file. AC4: s",
+   "fingerprint": "8208bcd2901326e8a58ca6343854977dca98a14d682b9ae0962f9ffc2b3c0226",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a2.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-23T13:18:06.219Z",
+   "tasks": [
+    "T2.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1: exact empty copy plus a \"Try an example\" button that fills draft.prompt. AC2: DurationControl renders only if accepts('durationSec') && range, and Lyria does not declare it. AC3: modelKey is separate from the draft prompt, and useMediaCost is reactive to modelKey. AC4: disabledReason feeds StudioActionBar; Mod+Enter via onKeyStroke, guarded by disabledReason and isBusy. AC5: reuses JobProgres",
+   "fingerprint": "0d3d8e7db1f2974096fb311bb75952181bc8b89e85add24cbdd250d1127b6228",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a2.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-23T13:18:06.219Z",
+   "tasks": [
+    "T2.1"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1: Lyria declares no durationSec input, so validateMediaParams rejects it with a field-level 400 (\"durationSec: not supported\"); buildMediaInput only maps declared inputs. AC2: refineMusicRequest bounds durationSec, steps and cfgScale from the registry range (named constants) and returns a path-level issue. AC3: judged under Q24, see ADVISORY. AC4: processMusic uses getMusicCreditCost derived fr",
+   "fingerprint": "cf87978a4a1398580f8cfc405e0e5688058e4c4ceadd8c994b3460b4005bcdc4",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a2.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-23T13:17:58.419Z",
+   "tasks": [
+    "T2.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Empty-state copy exact with example button; clear page title, prompt, chips and model list hierarchy; model notes one line each; Duration appears only for Stable Audio (shots T2.2-1..3)",
+   "fingerprint": "0d3d8e7db1f2974096fb311bb75952181bc8b89e85add24cbdd250d1127b6228",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a2.md",
+   "verdict": "PASS",
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-23T13:17:58.419Z",
+   "tasks": [
+    "T2.3"
+   ],
+   "type": "reviewer_verdict",
+   "category": "ui",
+   "text": "[ui] · apps/web/src/components/Music/MusicModelSelect.vue (375px light shot T2.3-3) · In light theme the model cards render as dark translucent grey blocks (selected Stable Audio and unselected Lyria alike), and the grey description and credit text on them is low contrast and hard to read. It also breaks the light/dark parity the task claims · Give the cards a light-theme surface token and ink tok",
+   "files": [
+    "apps/web/src/components/Music/MusicModelSelect.vue"
+   ],
+   "sigs": [
+    "T2.3|ui|apps/web/src/components/Music/MusicModelSelect.vue"
+   ],
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a2.md",
+   "verdict": "CHANGES",
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-23T13:17:52.111Z",
+   "tasks": [
+    "T2.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "shots 2/T2.3-1.png (focus ring on chip), 2/T2.3-2.png (dark theme), 2/T2.3-3.png (375px, no horizontal scroll). Source: MusicComposer.vue shows a one-line instrumental note for Minimax and has no lyrics field, so lyrics are hidden. Cost per file shows in each model row.",
+   "fingerprint": "8208bcd2901326e8a58ca6343854977dca98a14d682b9ae0962f9ffc2b3c0226",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a2.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-23T13:17:52.110Z",
+   "tasks": [
+    "T2.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "shots 2/T2.2-1.png (exact empty copy plus \"Try an example\"), 2/T2.2-2.png (example fills prompt, Lyria has no duration), 2/T2.2-3.png (Stable Audio shows Duration, prompt kept). Source: Music.vue passes a disabled reason to StudioActionBar, Mod+Enter submits, queued/running/succeeded/failed/rejected states and credit dialogs are handled, radio model list is keyboard-native, all controls have label",
+   "fingerprint": "0d3d8e7db1f2974096fb311bb75952181bc8b89e85add24cbdd250d1127b6228",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a2.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
   }
  ]
 };

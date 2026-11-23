@@ -219,15 +219,22 @@ describe("POST /generate/audio/music", () => {
 
     it("rejects a modelKey of another kind with 400", async () => {
         await expect(
-            post(authed({ ...validBody, modelKey: "MINIMAX_MUSIC_26" })),
+            post(authed({ ...validBody, modelKey: "MINIMAX_MUSIC_15" })),
         ).rejects.toMatchObject({ statusCode: 400 })
     })
 
+    it("rejects a duration for a model without one, with a field-level 400", async () => {
+        await expect(post(authed({ ...validBody, durationSec: 10 }))).rejects.toMatchObject({
+            statusCode: 400,
+            message: expect.stringContaining("durationSec"),
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
     it("drops a field the schema does not declare instead of forwarding it to the queue", async () => {
-        const res = await post(authed({ ...validBody, durationSec: 10, credits: 0 }))
+        const res = await post(authed({ ...validBody, credits: 0 }))
 
         expect(res.statusCode).toBe(202)
-        expect(enqueueGeneration.mock.calls[0][0].body).not.toHaveProperty("durationSec")
         expect(enqueueGeneration.mock.calls[0][0].body).not.toHaveProperty("credits")
     })
 

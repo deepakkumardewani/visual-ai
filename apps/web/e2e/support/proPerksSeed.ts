@@ -81,6 +81,14 @@ export async function readCredits(userId: string): Promise<CreditBalance> {
   });
 }
 
+/** Sets the stored balance directly; callers restore the value read beforehand. */
+export async function setCredits(userId: string, balance: CreditBalance): Promise<void> {
+  await withUsers(async (users) => {
+    const result = await users.updateOne({ userId }, { $set: balance });
+    if (result.matchedCount !== 1) throw new Error(`[e2e] user ${userId} not found`);
+  });
+}
+
 /** Active Pro subscription written Mongo-direct, as the webhook would leave it. */
 export async function makePro(userId: string): Promise<void> {
   await withUsers(async (users) => {

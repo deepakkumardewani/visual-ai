@@ -29,6 +29,7 @@ const Signin = () => import('@/pages/Signin.vue');
 const Signup = () => import('@/pages/Signup.vue');
 const Terms = () => import('@/pages/Terms.vue');
 const SongStudio = () => import('@/pages/SongStudio.vue');
+const Music = () => import('@/pages/Music.vue');
 const StudioPlaceholder = () => import('@/components/Studio/StudioPlaceholder.vue');
 
 /** Studio routes stay on the placeholder until the slice that ships their page replaces them. */
@@ -109,10 +110,12 @@ const routes: RouteRecordRaw[] = [
     component: SongStudio,
     meta: { requiresAuth: true },
   },
-  studioPlaceholderRoute('/audio/music', APP_SURFACE.AUDIO_MUSIC, {
-    studio: 'music',
-    label: 'Music',
-  }),
+  {
+    path: '/audio/music',
+    name: APP_SURFACE.AUDIO_MUSIC,
+    component: Music,
+    meta: { requiresAuth: true },
+  },
   studioPlaceholderRoute('/audio/speech', APP_SURFACE.AUDIO_SPEECH, {
     studio: 'speech',
     label: 'Speech',

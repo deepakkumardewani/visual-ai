@@ -80,6 +80,25 @@ describe("buildMediaInput", () => {
         expect(input).toEqual({ prompt: "upbeat indie pop", lyrics: "[Verse]\nHello there" })
     })
 
+    it("maps the Music studio prompt to Minimax's style prompt input", () => {
+        const input = buildMediaInput("MINIMAX_MUSIC_26", "music", {
+            prompt: "lofi beats",
+            instrumental: true,
+        })
+
+        expect(input).toMatchObject({ prompt: "lofi beats", is_instrumental: true })
+    })
+
+    it("does not alias prompt for a model that declares neither prompt nor stylePrompt", () => {
+        expect(buildMediaInput("VIDEO_WATERMARK", "tool", { prompt: "x", video: "v" })).toEqual({
+            video: "v",
+            watermark: "",
+        })
+        expect(() => validateMediaParams("VIDEO_WATERMARK", "tool", { prompt: "x" })).toThrow(
+            "prompt: not supported",
+        )
+    })
+
     it("rejects an unknown modelKey", () => {
         expect(() => buildMediaInput("NOPE", "music", {})).toThrow('modelKey: unknown model "NOPE"')
     })
@@ -89,8 +108,8 @@ describe("buildMediaInput", () => {
     })
 
     it("rejects a modelKey of another kind", () => {
-        expect(() => buildMediaInput("MINIMAX_MUSIC_26", "music", {})).toThrow(
-            'modelKey: "MINIMAX_MUSIC_26" is not a music model',
+        expect(() => buildMediaInput("MINIMAX_MUSIC_15", "music", {})).toThrow(
+            'modelKey: "MINIMAX_MUSIC_15" is not a music model',
         )
     })
 
