@@ -99,6 +99,28 @@ describe("buildMediaInput", () => {
         )
     })
 
+    it("maps Minimax speech fields to Replicate inputs for a tts model", () => {
+        expect(
+            buildMediaInput("MINIMAX_SPEECH_28_HD", "tts", {
+                text: "Hello",
+                voice: "Calm_Woman",
+                emotion: "happy",
+            }),
+        ).toEqual({ text: "Hello", voice_id: "Calm_Woman", emotion: "happy" })
+    })
+
+    it("rejects a music model used as a tts model", () => {
+        expect(() => buildMediaInput("LYRIA_2", "tts", { text: "x" })).toThrow(
+            expect.objectContaining({ statusCode: 400 }),
+        )
+    })
+
+    it("does not treat a tts model as a music-studio model", () => {
+        expect(() => buildMediaInput("MINIMAX_SPEECH_28_HD", "music", { prompt: "x" })).toThrow(
+            "not a music model",
+        )
+    })
+
     it("rejects an unknown modelKey", () => {
         expect(() => buildMediaInput("NOPE", "music", {})).toThrow('modelKey: unknown model "NOPE"')
     })
@@ -170,6 +192,13 @@ describe("validateMediaParams", () => {
     it("rejects a cross-kind modelKey", () => {
         expect(() => validateMediaParams("LYRIA_2", "song", {})).toThrow(
             'modelKey: "LYRIA_2" is not a song model',
+        )
+    })
+
+    it("accepts a declared speech field and rejects a music-only field on a tts model", () => {
+        expect(() => validateMediaParams("INWORLD_TTS_2", "tts", { text: "x" })).not.toThrow()
+        expect(() => validateMediaParams("INWORLD_TTS_2", "tts", { negativePrompt: "x" })).toThrow(
+            expect.objectContaining({ statusCode: 400 }),
         )
     })
 })

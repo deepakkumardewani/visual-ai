@@ -6,8 +6,8 @@ Source: `agent_docs/media-studio/TASKS.md` (open questions and defaults), SPEC R
 
 - MediaAsset: approved 2026-11-16 by the owner.
 - MediaUpload (24h TTL): approved 2026-11-16 by the owner.
-- Voice: approved 2026-11-16 by the owner.
-- VoiceConsent (append-only): approved 2026-11-16 by the owner.
+- Voice: NOT NEEDED (not built). Voice cloning dropped by owner decision, 2026-11-24.
+- VoiceConsent (append-only): NOT NEEDED (not built). Voice cloning dropped by owner decision, 2026-11-24.
 
 ## New npm packages
 
@@ -19,8 +19,8 @@ Source: `agent_docs/media-studio/TASKS.md` (open questions and defaults), SPEC R
 - G1: default applied. P-Video audio cost is billed on stored audio duration clamped to 20 seconds and shown as Estimated.
 - G2: default applied. The `/media/*` endpoints are not named in the spec; the plan's names are used.
 - G3: default applied. One combined history cap for images plus media.
-- G4: default applied. The consent record is retained after a voice is deleted.
-- G5: default applied. MAX_VOICES_PER_USER = 10.
+- G4: NOT NEEDED (voice cloning dropped 2026-11-24; no consent record is built).
+- G5: NOT NEEDED (voice cloning dropped 2026-11-24; no voice limit is built).
 - G6: default applied. `blockSec` is added to the pricing unit for Autocaption.
 - G7: default applied. One HTMLAudioElement is shared with wavesurfer.
 - G8: default applied. StudioPlaceholder renders until a page ships.
@@ -33,6 +33,12 @@ Source: `agent_docs/media-studio/TASKS.md` (open questions and defaults), SPEC R
 ## Other resolutions (2026-11-16)
 
 - G14: resolved 2026-11-16, default accepted. The Song sample loop row (R-SONG-8) renders only when SONG_SAMPLE_LOOP_URL is set; the 3 example ideas still show.
-- Q5: resolved 2026-11-16. Exactly one owner-approved paid clone test call, made by the main orchestrator only, before dependent Phase 3 work (see T3.7).
+- Q5: CANCELLED 2026-11-24. The paid voice-clone test call is cancelled: 0 of 1 made (no call 1 of 1), and none will be. No paid call was made.
 - Q6: resolved 2026-11-16, default accepted. Credits only; every media model has `tier: 'standard'`; no Pro gating.
 - Q8: resolved 2026-11-16, default accepted. The drafted commercial-use copy and the consent sentence ship as written; legal may revise later without a spec change.
+
+## Voice cloning descope (2026-11-24)
+
+- Voice cloning is dropped from the product by owner decision on 2026-11-24 (SPEC R-TTS-10 descoped).
+- The Q5 test call is cancelled: 0 of 1 made, none will be. No paid Replicate call was made.
+- Voice and VoiceConsent collections, CLONE_CONSENT_TEXT and CURRENT_CONSENT_VERSION, and gaps G4 and G5 are NOT NEEDED (not built).

@@ -482,6 +482,172 @@ describe("POST /generate/audio/song", () => {
     })
 })
 
+const SPEECH_PATH = "/generate/audio/speech"
+// 1000 characters on Inworld TTS 2 cost 5 credits (registry rate), independent of the client.
+const SPEECH_TEXT_1000 = "a".repeat(1000)
+const SPEECH_COST_1000 = 5
+const speechBody = {
+    jobId: "5f0c9a52-7a8e-4a1b-9c1d-2f6c1c8e4b10",
+    modelKey: "INWORLD_TTS_2",
+    text: SPEECH_TEXT_1000,
+    voice: "Ashley",
+}
+const postSpeech = (body: unknown) => post({ auth: { userId: "user_1" }, body }, SPEECH_PATH)
+
+describe("POST /generate/audio/speech", () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+        checkPromptSafety.mockResolvedValue({ safe: true })
+        getAvailableCredits.mockResolvedValue(1000)
+        hasExistingJob.mockResolvedValue(false)
+        resolveUserIsPro.mockResolvedValue(false)
+        enqueueGeneration.mockResolvedValue(undefined)
+    })
+
+    it("accepts a valid body, answers 202 and enqueues a speech job without client cost fields", async () => {
+        const res = await postSpeech({ ...speechBody, chars: 1, credits: 0, creditCost: 0 })
+
+        expect(res.statusCode).toBe(202)
+        expect(enqueueGeneration).toHaveBeenCalledTimes(1)
+        const { kind, body, isPro } = enqueueGeneration.mock.calls[0][0]
+        expect(kind).toBe("speech")
+        expect(isPro).toBe(false)
+        expect(body).toMatchObject({
+            jobId: speechBody.jobId,
+            modelKey: "INWORLD_TTS_2",
+            text: SPEECH_TEXT_1000,
+            userId: "user_1",
+        })
+        expect(body).not.toHaveProperty("creditCost")
+        expect(body).not.toHaveProperty("chars")
+    })
+
+    it("rejects an unauthenticated request with 401", async () => {
+        await expect(
+            post({ auth: undefined, body: speechBody }, SPEECH_PATH),
+        ).rejects.toMatchObject({ statusCode: 401 })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("prices the 402 pre-check from the submitted text, not a client-sent count", async () => {
+        getAvailableCredits.mockResolvedValue(SPEECH_COST_1000 - 1)
+
+        const res = await postSpeech({ ...speechBody, chars: 1, creditCost: 0 })
+
+        expect(res.statusCode).toBe(402)
+        expect(res.body).toEqual({
+            code: "INSUFFICIENT_CREDITS",
+            required: SPEECH_COST_1000,
+            available: SPEECH_COST_1000 - 1,
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("allows a user whose credits exactly cover the server-computed cost", async () => {
+        getAvailableCredits.mockResolvedValue(SPEECH_COST_1000)
+
+        const res = await postSpeech(speechBody)
+
+        expect(res.statusCode).toBe(202)
+        expect(enqueueGeneration).toHaveBeenCalledTimes(1)
+    })
+
+    it.each([
+        ["INWORLD_TTS_2", 2000],
+        ["CHATTERBOX_TURBO", 500],
+        ["MINIMAX_SPEECH_28_HD", 10000],
+    ])("accepts %s text at its %i-character limit", async (modelKey, limit) => {
+        const res = await postSpeech({ ...speechBody, modelKey, text: "a".repeat(limit) })
+
+        expect(res.statusCode).toBe(202)
+    })
+
+    it.each([
+        ["INWORLD_TTS_2", 2000],
+        ["CHATTERBOX_TURBO", 500],
+        ["MINIMAX_SPEECH_28_HD", 10000],
+    ])(
+        "rejects %s text one past its %i-character limit with a field-level 400",
+        async (modelKey, limit) => {
+            await expect(
+                postSpeech({ ...speechBody, modelKey, text: "a".repeat(limit + 1) }),
+            ).rejects.toMatchObject({
+                statusCode: 400,
+                message: `text: Text must be at most ${limit} characters for this model`,
+            })
+            expect(enqueueGeneration).not.toHaveBeenCalled()
+        },
+    )
+
+    it.each([
+        ["empty", ""],
+        ["whitespace only", "  \n "],
+    ])("rejects %s text with a field-level 400", async (_name, text) => {
+        await expect(postSpeech({ ...speechBody, text })).rejects.toMatchObject({
+            statusCode: 400,
+            message: "text: Text is required",
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("rejects the voice-clone model key with 400", async () => {
+        await expect(
+            postSpeech({ ...speechBody, modelKey: "MINIMAX_VOICE_CLONE" }),
+        ).rejects.toMatchObject({ statusCode: 400 })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("rejects a non-speech model key with 400", async () => {
+        await expect(postSpeech({ ...speechBody, modelKey: "LYRIA_2" })).rejects.toMatchObject({
+            statusCode: 400,
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("falls back to a body-level 400 when the body is missing", async () => {
+        await expect(postSpeech(undefined)).rejects.toMatchObject({ statusCode: 400 })
+    })
+
+    it("answers 422 PROMPT_REJECTED and queues nothing when the text fails safety", async () => {
+        checkPromptSafety.mockResolvedValue({ safe: false, reason: "nope" })
+
+        const res = await postSpeech(speechBody)
+
+        expect(res.statusCode).toBe(422)
+        expect(res.body).toEqual({
+            code: "PROMPT_REJECTED",
+            error: "This text can't be used. Try rephrasing it.",
+        })
+        expect(checkPromptSafety).toHaveBeenCalledWith(SPEECH_TEXT_1000)
+        expect(getAvailableCredits).not.toHaveBeenCalled()
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("passes the Pro flag through to the queue", async () => {
+        resolveUserIsPro.mockResolvedValue(true)
+
+        await postSpeech(speechBody)
+
+        expect(enqueueGeneration.mock.calls[0][0].isPro).toBe(true)
+    })
+
+    it("answers 202 without a second enqueue when the same jobId is already queued", async () => {
+        hasExistingJob.mockResolvedValue(true)
+
+        const res = await postSpeech(speechBody)
+
+        expect(res.statusCode).toBe(202)
+        expect(hasExistingJob).toHaveBeenCalledWith(speechBody.jobId, "user_1")
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("propagates an enqueue failure", async () => {
+        enqueueGeneration.mockRejectedValue(new Error("redis down"))
+
+        await expect(postSpeech(speechBody)).rejects.toThrow("redis down")
+    })
+})
+
 /** Drives the matching route's whole handler chain; settles on json, end or next(err). */
 function call(method: "get" | "delete" | "post", path: string, req: Record<string, unknown>) {
     const layer = mediaRoutes.stack.find(

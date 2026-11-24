@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-23T13:39:37.967Z",
+ "generatedAt": "2026-11-24T08:14:56.456Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "media-studio",
@@ -34,26 +34,26 @@ window.DASHBOARD = {
    "source": "agent_docs/media-studio/TASKS.md"
   }
  ],
- "costUsd": 53.7836,
- "elapsedMs": 78821972,
+ "costUsd": 65.6872,
+ "elapsedMs": 98615201,
  "costByRole": {
-  "reviewer-security": 4.9819,
-  "unit": 6.9275,
-  "reviewer-ux": 1.3184,
-  "e2e": 4.4179,
-  "reviewer-code": 2.3328,
-  "builder": 17.4765,
-  "verifier": 14.8963,
-  "reviewer-ui": 1.3381,
+  "reviewer-security": 5.8733,
+  "unit": 8.4183,
+  "reviewer-ux": 1.8549,
+  "e2e": 5.0157,
+  "reviewer-code": 3.0525,
+  "builder": 20.7157,
+  "verifier": 18.8104,
+  "reviewer-ui": 1.8522,
   "runner": 0.0941
  },
  "totals": {
   "phases": 6,
-  "tasks": 90,
+  "tasks": 87,
   "byStatus": {
-   "verified": 57,
+   "verified": 70,
    "ready": 1,
-   "waiting": 32
+   "waiting": 16
   }
  },
  "phases": [
@@ -2154,7 +2154,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; the failure variant uses readCredits from support/proPerksSeed.ts to prove the balance is unchanged. Credit deduction on success is covered by the T0.11 unit tests.",
       "AC2: paidCallGuard stays on and no real Replicate, Dodo or email call is made.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts --repeat-each=3`",
@@ -2221,7 +2221,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass using the media stub and sample.mp3 as the audio source.",
       "AC2: No test starts the server and no un-intercepted paid call occurs.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/media-nav-player.spec.ts --repeat-each=3`",
@@ -2691,7 +2691,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/song.spec.ts --repeat-each=3`"
@@ -2973,7 +2973,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/lyrics.spec.ts --repeat-each=3`"
@@ -3563,7 +3563,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/editor.spec.ts --repeat-each=3`"
@@ -3733,7 +3733,7 @@ window.DASHBOARD = {
      "line": 991,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T13:39:37.934Z",
+     "updatedAt": "2026-11-23T13:39:55.052Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -3814,7 +3814,7 @@ window.DASHBOARD = {
      "line": 1013,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T13:39:37.934Z",
+     "updatedAt": "2026-11-23T13:39:55.052Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -3889,7 +3889,7 @@ window.DASHBOARD = {
      "line": 1037,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T13:39:37.934Z",
+     "updatedAt": "2026-11-23T13:39:55.052Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -3973,7 +3973,7 @@ window.DASHBOARD = {
      "line": 1060,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T13:39:37.934Z",
+     "updatedAt": "2026-11-23T13:39:55.052Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4022,7 +4022,7 @@ window.DASHBOARD = {
      "line": 1071,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T13:39:37.934Z",
+     "updatedAt": "2026-11-23T13:39:55.052Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4058,7 +4058,7 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/music.spec.ts --repeat-each=3`"
@@ -4066,7 +4066,7 @@ window.DASHBOARD = {
      "line": 1082,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-23T13:39:37.934Z",
+     "updatedAt": "2026-11-23T13:39:55.052Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4121,7 +4121,7 @@ window.DASHBOARD = {
      "line": 1096,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-23T13:39:37.934Z",
+     "updatedAt": "2026-11-23T13:39:55.052Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4152,26 +4152,25 @@ window.DASHBOARD = {
    "id": "3",
    "name": "Speech studio",
    "startLine": 1112,
-   "endLine": 1408,
-   "adds": "Users turn text into speech with Inworld or Minimax voices, mark up pauses and emotion with tag chips, clone their own voice with recorded consent, and get advice on length and cost.",
+   "endLine": 1343,
+   "adds": "Users turn text into speech with Inworld or Minimax voices, mark up pauses and emotion with tag chips, and get advice on length and cost.",
    "tryInUi": [
     "Open Audio then Speech",
     "type text and insert a pause chip",
-    "switch model and see tags converted or flagged",
-    "clone a voice after ticking consent"
+    "switch model and see tags converted or flagged"
    ],
    "checkpoint": {
     "title": "Checkpoint 3",
-    "line": 1407,
+    "line": 1342,
     "items": [
-     "speech, tags, model switching, the advisor and voice cloning verified by unit tests and the mocked speech QA specs."
+     "speech, tags, model switching and the advisor verified by unit tests and the mocked speech QA spec."
     ]
    },
    "tasks": [
     {
      "id": "T3.1",
      "title": "Speech schema, endpoint and billing quantity (S3.1a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T2.7"
@@ -4202,8 +4201,8 @@ window.DASHBOARD = {
      ],
      "line": 1117,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -4221,16 +4220,32 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.7842,
+     "costApprox": true,
+     "elapsedMs": 3634979,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     },
     {
      "id": "T3.2",
      "title": "Shared TTS tag library (S3.1b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T3.1"
@@ -4259,8 +4274,8 @@ window.DASHBOARD = {
      ],
      "line": 1141,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4273,16 +4288,31 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5638,
+     "costApprox": true,
+     "elapsedMs": 3634979,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     },
     {
      "id": "T3.3",
      "title": "Speech studio page, plain text mode and voice select (S3.1c)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T3.2"
@@ -4313,8 +4343,8 @@ window.DASHBOARD = {
      ],
      "line": 1164,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4336,16 +4366,66 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "CHANGES",
+        "code": "PASS"
+       },
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ui": "PASS",
+        "code": "PASS",
+        "ux": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "code": "PASS",
+        "ui": "PASS",
+        "ux": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 4,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "code": "PASS",
+        "ux": "PASS",
+        "ui": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.6099,
+     "costApprox": true,
+     "elapsedMs": 19582190,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     },
     {
      "id": "T3.4",
      "title": "TipTap tag editor with TagChipNode (S3.2)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T3.3"
@@ -4377,8 +4457,8 @@ window.DASHBOARD = {
      ],
      "line": 1187,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4405,16 +4485,34 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 2.174,
+     "costApprox": true,
+     "elapsedMs": 3990644,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     },
     {
      "id": "T3.5",
      "title": "Model switching with tag conversion (S3.3)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T3.4"
@@ -4443,8 +4541,8 @@ window.DASHBOARD = {
      ],
      "line": 1211,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4466,16 +4564,55 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "code": "PASS",
+        "ui": "PASS",
+        "ux": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 4,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "code": "PASS",
+        "ux": "PASS",
+        "ui": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.6827,
+     "costApprox": true,
+     "elapsedMs": 19582190,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     },
     {
      "id": "T3.6",
      "title": "Length advisor, cost note and FAQ (S3.4)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T3.5"
@@ -4503,8 +4640,8 @@ window.DASHBOARD = {
      ],
      "line": 1234,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": false,
      "pending": [],
      "risk": "low",
@@ -4526,16 +4663,33 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS"
+       },
+       "verifier": "skipped"
+      }
+     ],
+     "costUsd": 0.699,
+     "costApprox": true,
+     "elapsedMs": 4149329,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     },
     {
      "id": "T3.7",
-     "title": "Record the voice collections and consent copy approvals, and run the one voice-clone expiry test",
-     "done": false,
+     "title": "Record the voice cloning descope",
+     "done": true,
      "kind": "dod",
      "depends": [
       "T3.6"
@@ -4544,14 +4698,12 @@ window.DASHBOARD = {
       "agent_docs/media-studio/APPROVALS.md"
      ],
      "gherkin": null,
-     "do": "Confirm in APPROVALS.md that the Voice and VoiceConsent collections are approved (owner, 2026-11-16, from T0.1); no question is asked. Record the final CLONE_CONSENT_TEXT wording and CURRENT_CONSENT_VERSION (the drafted copy ships as written, Q8 accepted 2026-11-16) and the retention rule for VoiceConsent after a voice is deleted (gap G4: retained). Q5 (RESOLVED 2026-11-16): exactly ONE owner-approved paid voice-clone test call is allowed, to confirm whether cloned voice ids expire vendor-side, before any Phase 3 work that depends on the answer (T3.8 onward). Maximum one call ever; only the main orchestrator session makes it (never a test, an e2e run or an automated retry); immediately before it the orchestrator tells the user the endpoint/model (minimax/voice-cloning), the expected cost and that it is call 1 of 1. Record the finding (expired or not, and when checked) in APPROVALS.md. R-TTS-10 and the \"no longer available, re-clone\" state stay in the design regardless of the result. Make no code change.",
-     "spec": "R-TTS-11, R-TTS-12",
+     "do": "Record in APPROVALS.md that voice cloning is dropped from the product by owner decision (2026-11-24), that the Q5 paid test call is cancelled (0 of 1 made, none will be), and that the Voice and VoiceConsent collections, CLONE_CONSENT_TEXT / CURRENT_CONSENT_VERSION, and gaps G4 and G5 are not needed (not built). Make no code change.",
+     "spec": "R-TTS-10 (descoped)",
      "filesDeclared": true,
      "acceptance": [
-      "AC1: APPROVALS.md records Voice and VoiceConsent as approved with a date.",
-      "AC2: The consent text and version are recorded.",
-      "AC3: Gap G4 (retain consent on delete) and G5 (10 voices) show the default applied or the owner's answer.",
-      "AC4: APPROVALS.md records the Q5 test call as call 1 of 1 with its finding, or states that the orchestrator has not yet made it and T3.8 is blocked until it does; no second call exists."
+      "AC1: APPROVALS.md records the voice cloning descope with its date.",
+      "AC2: APPROVALS.md records that no paid call was made (Q5 cancelled, 0 of 1 made)."
      ],
      "verify": [
       "V1: `grep -n -E 'Voice|VoiceConsent|CLONE_CONSENT|G4|G5|Q5|call 1 of 1' agent_docs/media-studio/APPROVALS.md`",
@@ -4559,155 +4711,39 @@ window.DASHBOARD = {
      ],
      "line": 1256,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
-    },
-    {
-     "id": "T3.8",
-     "title": "Voice clone endpoint, consent audit and voice models (S3.5a)",
-     "done": false,
-     "kind": "implementation",
-     "depends": [
-      "T3.7"
-     ],
-     "files": [
-      "apps/api/src/models/voice.ts",
-      "apps/api/src/models/voice-consent.ts",
-      "apps/api/src/services/voice-service.ts",
-      "apps/api/src/routes/voices.ts",
-      "apps/api/src/routes/index.ts"
-     ],
-     "gherkin": null,
-     "do": "Copy the route pattern of routes/media.ts. Order in POST /generate/audio/voices: requireAuth, Zod (uploadId, name, consent true with consentVersion equal to CURRENT_CONSENT_VERSION, never a client URL), the voice count check against MAX_VOICES_PER_USER, the 402 pre-check, then an append-only VoiceConsent row (userId, consentVersion, text hash, timestamp, uploadId) is written BEFORE any paid call is queued, then enqueue with jobId idempotency. The worker deducts once via the shared deduction only on success and stores the Voice with the provider voice id. DELETE /voices/:id removes the Voice and the provider voice but retains VoiceConsent (G4). All reads scope by userId; the voice sample upload is kept only as long as needed and then deleted. Never log sample audio or consent text. Tests are not written here: T3.13, T3.14 cover Unit (voice unit task): consent missing or stale; Unit: call-order spy shows consent write before enqueue; Unit: consent write failure queues nothing; Unit: limit 409 and 402 ordering; Unit: deduct once success, zero failure; Unit: delete retains consent and IDOR 404; Unit: URL body rejected.",
-     "spec": "R-TTS-11, R-TTS-12, R-INF-17",
-     "filesDeclared": true,
-     "acceptance": [
-      "AC1: A request without consent true or with a stale consentVersion returns 400 and nothing is written.",
-      "AC2: The VoiceConsent row exists before the paid call is queued, asserted by call order in a test.",
-      "AC3: If writing the consent row fails, nothing is queued and no credits are touched.",
-      "AC4: An 11th voice returns 409 with the limit copy; an insufficient balance returns 402 before consent is written or anything queued.",
-      "AC5: Credits are deducted once only on success; on failure no deduction and the consent row remains.",
-      "AC6: DELETE removes the voice but leaves VoiceConsent; another user's voice id returns 404.",
-      "AC7: A client-supplied URL instead of uploadId is rejected."
-     ],
-     "verify": [
-      "V1: `cd apps/api && bun run type-check`",
-      "V2: `cd apps/api && bun run test` (existing api tests stay green)",
-      "V3: `bun run check`"
-     ],
-     "line": 1272,
-     "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
-     "verifierRouted": true,
-     "pending": [],
-     "risk": "high",
-     "surfaces": [
-      "security",
-      "logic"
-     ],
-     "reviewers": [
+     "attempts": [
       {
-       "name": "code",
-       "model": "sonnet"
-      },
-      {
-       "name": "security",
-       "model": "opus"
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
-    },
-    {
-     "id": "T3.9",
-     "title": "Voice clone flow in the Speech studio (S3.5b)",
-     "done": false,
-     "kind": "implementation",
-     "depends": [
-      "T3.8"
-     ],
-     "files": [
-      "apps/web/src/components/Speech/VoiceCloneDialog.vue",
-      "apps/web/src/components/Speech/VoiceSampleUpload.vue",
-      "apps/web/src/stores/voices.ts",
-      "apps/web/src/components/Speech/VoiceSelect.vue",
-      "apps/web/src/components/Speech/MyVoices.vue"
-     ],
-     "gherkin": null,
-     "do": "Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look; obey Standing UI rules in the header. Design intent: a serious, plain consent step, not a dark pattern. The dialog shows the exact CLONE_CONSENT_TEXT, an unchecked checkbox the user must tick, then the sample upload with its limits, cost and a Create voice button disabled until consent and a valid sample exist. MyVoices lists voices with Delete behind a confirmation dialog whose default focus is Cancel. The upload goes to POST /media/uploads and only the uploadId is sent on create. Errors show no-credit copy. Tests are not written here: T3.12, T3.14 cover Component (voices unit task): default unchecked and disabled states; Component: consent text equals constant; Component: limit copy; Component: delete confirmation focus; E2E clone spec: 402 sends no create request; Component: limit disable; Component: focus trap; E2E clone spec at 375px.",
-     "spec": "R-TTS-11, R-TTS-12, R-QOL-2, R-QOL-4",
-     "filesDeclared": true,
-     "acceptance": [
-      "AC1: The consent checkbox is unchecked by default and Create voice stays disabled until it is ticked and a valid sample is uploaded.",
-      "AC2: The dialog shows the exact consent text from the constant.",
-      "AC3: A sample over the size or duration limit shows the specific limit copy and is not uploaded.",
-      "AC4: Delete opens a confirmation with default focus on Cancel and removes the voice only after Confirm.",
-      "AC5: A 402 opens the low-credits dialog and no consent request is sent.",
-      "AC6: At 10 voices the create button is disabled with the limit reason.",
-      "AC7: Focus is trapped in dialogs and returns to the trigger on close.",
-      "AC8: At 375px width there is no horizontal scroll and tap targets are at least 44px high. With prefers-reduced-motion the animations are disabled."
-     ],
-     "verify": [
-      "V1: `cd apps/web && bun run test` (existing web tests stay green)",
-      "V2: `bun run check`",
-      "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
-     ],
-     "line": 1296,
-     "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
-     "verifierRouted": true,
-     "pending": [],
-     "risk": "high",
-     "surfaces": [
-      "ui",
-      "security"
-     ],
-     "reviewers": [
-      {
-       "name": "code",
-       "model": "sonnet"
-      },
-      {
-       "name": "ux",
-       "model": "sonnet"
-      },
-      {
-       "name": "ui",
-       "model": "sonnet"
-      },
-      {
-       "name": "security",
-       "model": "opus"
-      }
-     ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "costUsd": 0.3402,
+     "costApprox": true,
+     "elapsedMs": 2297434,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     },
     {
      "id": "T3.10",
      "title": "Unit: TTS tags and editor composables",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
-      "T3.9"
+      "T3.7"
      ],
      "files": [
       "packages/shared/src/models/tts-tags.ts",
@@ -4725,25 +4761,38 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/composables/useTtsEditor.test.ts src/composables/useTtsAdvice.test.ts --coverage --coverage.include=src/composables/useTtsEditor.ts --coverage.include=src/composables/useTtsAdvice.ts --coverage.reporter=text`"
      ],
-     "line": 1321,
+     "line": 1270,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6271,
+     "costApprox": true,
+     "elapsedMs": 2245407,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     },
     {
      "id": "T3.11",
      "title": "Unit: shared TTS tags",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T3.10"
@@ -4762,25 +4811,38 @@ window.DASHBOARD = {
      "verify": [
       "V1: `bunx vp test run packages/shared/src/models/tts-tags.test.ts --coverage --coverage.include=packages/shared/src/models/tts-tags.ts --coverage.reporter=text`"
      ],
-     "line": 1332,
+     "line": 1281,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.3496,
+     "costApprox": true,
+     "elapsedMs": 2245407,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     },
     {
      "id": "T3.12",
-     "title": "Unit: Speech components and voices store",
-     "done": false,
+     "title": "Unit: Speech components",
+     "done": true,
      "kind": "unit",
      "depends": [
       "T3.11"
@@ -4788,8 +4850,6 @@ window.DASHBOARD = {
      "files": [
       "apps/web/src/components/Speech/SpeechComposer.vue",
       "apps/web/src/components/Speech/ConvertTagsDialog.vue",
-      "apps/web/src/components/Speech/VoiceCloneDialog.vue",
-      "apps/web/src/stores/voices.ts",
       "apps/web/src/components/Speech/TextAdvisor.vue"
      ],
      "gherkin": null,
@@ -4801,34 +4861,47 @@ window.DASHBOARD = {
       "AC2: Mock-only: Replicate, DeepSeek, Cloudinary, Dodo and email clients are injected fakes or vi.mock stubs; no test makes a network call, starts a server or reads a live key."
      ],
      "verify": [
-      "V1: `cd apps/web && npx vitest run src/components/Speech src/stores/voices.test.ts --coverage --coverage.include=src/components/Speech/SpeechComposer.vue --coverage.include=src/components/Speech/ConvertTagsDialog.vue --coverage.include=src/components/Speech/VoiceCloneDialog.vue --coverage.include=src/stores/voices.ts --coverage.include=src/components/Speech/TextAdvisor.vue --coverage.reporter=text`"
+      "V1: `cd apps/web && npx vitest run src/components/Speech --coverage --coverage.include=src/components/Speech/SpeechComposer.vue --coverage.include=src/components/Speech/ConvertTagsDialog.vue --coverage.include=src/components/Speech/TextAdvisor.vue --coverage.reporter=text`"
      ],
-     "line": 1343,
+     "line": 1292,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.868,
+     "costApprox": true,
+     "elapsedMs": 18403655,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     },
     {
      "id": "T3.13",
-     "title": "Unit: Speech and voice services",
-     "done": false,
+     "title": "Unit: Speech services",
+     "done": true,
      "kind": "unit",
      "depends": [
       "T3.12"
      ],
      "files": [
-      "apps/api/src/services/voice-service.ts",
-      "apps/api/src/routes/voices.ts",
       "apps/api/src/services/media-service.ts",
       "apps/api/src/lib/media-input.ts"
      ],
@@ -4841,27 +4914,54 @@ window.DASHBOARD = {
       "AC2: Mock-only: Replicate, DeepSeek, Cloudinary, Dodo and email clients are injected fakes or vi.mock stubs; no test makes a network call, starts a server or reads a live key."
      ],
      "verify": [
-      "V1: `cd apps/api && npx vitest run src/services/voice-service.test.ts src/routes/voices.test.ts src/services/media-service.test.ts src/lib/media-input.test.ts --coverage --coverage.include=src/services/voice-service.ts --coverage.include=src/routes/voices.ts --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.reporter=text`"
+      "V1: `cd apps/api && npx vitest run src/services/media-service.test.ts src/lib/media-input.test.ts --coverage --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.reporter=text`"
      ],
-     "line": 1354,
+     "line": 1303,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.1567,
+     "costApprox": true,
+     "elapsedMs": 18403656,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     },
     {
      "id": "T3.14",
      "title": "E2E: Speech studio and tags",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [
       "T3.13"
@@ -4874,69 +4974,48 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/speech.spec.ts --repeat-each=3`"
      ],
-     "line": 1365,
+     "line": 1314,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
-    },
-    {
-     "id": "T3.15",
-     "title": "E2E: Voice cloning consent and limits",
-     "done": false,
-     "kind": "e2e",
-     "depends": [
-      "T3.14"
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
      ],
-     "files": [],
-     "gherkin": null,
-     "do": null,
-     "spec": "`apps/web/e2e/qa/voice-clone.spec.ts`",
-     "filesDeclared": true,
-     "acceptance": [
-      "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
-      "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
-     ],
-     "verify": [
-      "V1: `cd apps/web && bunx playwright test e2e/qa/voice-clone.spec.ts --repeat-each=3`"
-     ],
-     "line": 1379,
-     "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
-     "verifierRouted": true,
-     "pending": [],
-     "risk": null,
-     "surfaces": null,
-     "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "costUsd": 0.7666,
+     "costApprox": true,
+     "elapsedMs": 1911928,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     },
     {
      "id": "T3.16",
      "title": "Gate: Phase 3 Speech studio",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [
-      "T3.15"
+      "T3.14"
      ],
      "files": [],
      "gherkin": null,
@@ -4951,35 +5030,48 @@ window.DASHBOARD = {
       "V1: `bun run check`",
       "V2: `bun run test`",
       "V3: `bun run check:model-docs`",
-      "V4: `cd apps/web && bunx playwright test e2e/qa/speech.spec.ts e2e/qa/voice-clone.spec.ts --repeat-each=2`"
+      "V4: `cd apps/web && bunx playwright test e2e/qa/speech.spec.ts --repeat-each=2`"
      ],
-     "line": 1393,
+     "line": 1328,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T08:14:56.422Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.2816,
+     "costApprox": true,
+     "elapsedMs": 1674275,
+     "summary": [
+      "T3.3 VoiceSelect.vue: fallback stored in a const, assigned, notice built from it. New VoiceSelect.test.ts checks \"Voice changed to English_Wiselady\" after Inworld -> Minimax switch; confirmed it fails",
+      "T3.3 SpeechModelSelect.vue: Minimax HD blurb no longer says voice cloning.",
+      "T3.3 AC5 proof: the e2e insufficient-credits.png was taken before the dialog's enter animation finished. Re-ran the same mocked e2e flow (MediaGenerationStub, no paid call) in a throwaway spec (delete",
+      "T3.5 ConvertTagsDialog.vue: unscoped <=640px rule raises .app-modal__close to 2.75rem (44px) via .app-modal:has(.convert-tags-body). Not re-measured in a browser."
+     ]
     }
    ],
-   "verified": 0,
-   "total": 16,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "verified": 13,
+   "total": 13,
+   "complete": true,
+   "costUsd": 11.9034,
+   "elapsedMs": 19793229
   },
   {
    "id": "4",
    "name": "Video studio",
-   "startLine": 1409,
-   "endLine": 1561,
+   "startLine": 1344,
+   "endLine": 1496,
    "adds": "Users generate short videos from text, from an image, or with their own audio, using P-Video or Wan 3, with a draft mode for cheap previews first.",
    "tryInUi": [
     "Open Video",
@@ -4989,7 +5081,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 4",
-    "line": 1560,
+    "line": 1495,
     "items": [
      "video generation, image and audio inputs and draft-first verified by unit tests and the mocked video QA spec."
     ]
@@ -5026,9 +5118,9 @@ window.DASHBOARD = {
       "V3: `cd apps/api && bun run test` (existing api tests stay green)",
       "V4: `bun run check`"
      ],
-     "line": 1414,
+     "line": 1349,
      "ui": false,
-     "status": "waiting",
+     "status": "ready",
      "updatedAt": null,
      "verifierRouted": true,
      "pending": [],
@@ -5086,7 +5178,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1437,
+     "line": 1372,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -5153,7 +5245,7 @@ window.DASHBOARD = {
       "V5: `bun run check`",
       "V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1461,
+     "line": 1396,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -5218,7 +5310,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1488,
+     "line": 1423,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -5275,7 +5367,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/components/Video src/composables/useToolVideoUpload.test.ts --coverage --coverage.include=src/components/Video/VideoComposer.vue --coverage.include=src/components/Video/ImageInput.vue --coverage.include=src/components/Video/AudioInput.vue --coverage.include=src/components/Video/DraftToggle.vue --coverage.include=src/composables/useToolVideoUpload.ts --coverage.reporter=text`"
      ],
-     "line": 1510,
+     "line": 1445,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -5314,7 +5406,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/services/media-service.test.ts src/lib/media-input.test.ts src/routes/media.test.ts --coverage --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.include=src/routes/media.ts --coverage.reporter=text`"
      ],
-     "line": 1521,
+     "line": 1456,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -5345,12 +5437,12 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/video.spec.ts --repeat-each=3`"
      ],
-     "line": 1532,
+     "line": 1467,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -5388,7 +5480,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/video.spec.ts e2e/qa/media-nav-player.spec.ts --repeat-each=2`"
      ],
-     "line": 1546,
+     "line": 1481,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -5413,8 +5505,8 @@ window.DASHBOARD = {
   {
    "id": "5",
    "name": "Tools",
-   "startLine": 1562,
-   "endLine": 1738,
+   "startLine": 1497,
+   "endLine": 1673,
    "adds": "Users get four utilities: add a watermark to an image or video, create captions for a video, and turn a sketch into an image, each priced and shown before running, with handoffs to the other studios.",
    "tryInUi": [
     "Open Tools then Image watermark",
@@ -5424,7 +5516,7 @@ window.DASHBOARD = {
    ],
    "checkpoint": {
     "title": "Checkpoint 5",
-    "line": 1737,
+    "line": 1672,
     "items": [
      "all four tools and handoffs verified by unit tests and the mocked tools QA specs."
     ]
@@ -5464,7 +5556,7 @@ window.DASHBOARD = {
       "V4: `bun run check`",
       "V5: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/image-watermark path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1567,
+     "line": 1502,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -5535,7 +5627,7 @@ window.DASHBOARD = {
       "V5: `bun run check`",
       "V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/video-watermark path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1592,
+     "line": 1527,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -5606,7 +5698,7 @@ window.DASHBOARD = {
       "V5: `bun run check`",
       "V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/autocaption path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1617,
+     "line": 1552,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -5673,7 +5765,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/sketch path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1642,
+     "line": 1577,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -5739,7 +5831,7 @@ window.DASHBOARD = {
       "V2: `bun run check`",
       "V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`"
      ],
-     "line": 1664,
+     "line": 1599,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -5799,7 +5891,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/api && npx vitest run src/services/media-service.test.ts src/routes/media.test.ts src/lib/media-input.test.ts --coverage --coverage.include=src/services/media-service.ts --coverage.include=src/routes/media.ts --coverage.include=src/lib/media-input.ts --coverage.reporter=text`"
      ],
-     "line": 1686,
+     "line": 1621,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -5840,7 +5932,7 @@ window.DASHBOARD = {
      "verify": [
       "V1: `cd apps/web && npx vitest run src/components/Tools src/composables/useSketchCanvas.test.ts src/composables/useStudioHandoff.test.ts src/components/Studio/HandoffMenu.test.ts --coverage --coverage.include=src/components/Tools/WatermarkForm.vue --coverage.include=src/components/Tools/CaptionResult.vue --coverage.include=src/composables/useSketchCanvas.ts --coverage.include=src/composables/useStudioHandoff.ts --coverage.include=src/components/Studio/HandoffMenu.vue --coverage.reporter=text`"
      ],
-     "line": 1697,
+     "line": 1632,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -5871,12 +5963,12 @@ window.DASHBOARD = {
      "acceptance": [
       "AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.",
       "AC2: Each scenario that spends credits asserts the balance through readCredits.",
-      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
+      "AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server."
      ],
      "verify": [
       "V1: `cd apps/web && bunx playwright test e2e/qa/tools.spec.ts --repeat-each=3`"
      ],
-     "line": 1708,
+     "line": 1643,
      "ui": true,
      "status": "waiting",
      "updatedAt": null,
@@ -5915,7 +6007,7 @@ window.DASHBOARD = {
       "V3: `bun run check:model-docs`",
       "V4: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts e2e/qa/media-nav-player.spec.ts e2e/qa/song.spec.ts e2e/qa/lyrics.spec.ts e2e/qa/editor.spec.ts e2e/qa/music.spec.ts e2e/qa/speech.spec.ts e2e/qa/voice-clone.spec.ts e2e/qa/video.spec.ts e2e/qa/tools.spec.ts --repeat-each=2`"
      ],
-     "line": 1722,
+     "line": 1657,
      "ui": false,
      "status": "waiting",
      "updatedAt": null,
@@ -5939,7 +6031,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/media-studio/TASKS.md phase 3",
+ "nextCommand": "/build-phases agent_docs/media-studio/TASKS.md phase 4",
  "questions": [
   {
    "at": "2026-11-16T02:52:56.327Z",
@@ -5993,8 +6085,8 @@ window.DASHBOARD = {
    "text": "G5: How many cloned voices per user?",
    "default": "MAX_VOICES_PER_USER = 10",
    "alternatives": "Lower or higher cap; tie to plan tier",
-   "answer": null,
-   "answeredAt": null
+   "answer": "Owner decision: no voice cloning. Skip the paid clone test call; descope clone work (T3.8, T3.9, T3.15 removed, clone parts dropped from other P3 tasks).",
+   "answeredAt": "2026-11-24T03:07:17.359Z"
   },
   {
    "at": "2026-11-16T02:52:56.560Z",
@@ -6221,6 +6313,35 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-23T13:39:55.052Z",
+   "ok": true,
+   "phase": "2",
+   "tasks": [
+    "T2.1",
+    "T2.2",
+    "T2.3",
+    "T2.4",
+    "T2.5",
+    "T2.6",
+    "T2.7"
+   ],
+   "attempt": "6",
+   "branch": "feature/media-studio",
+   "pushed": true,
+   "evidence": "e2e music 25/25 x3, unit 100% lines",
+   "error": null,
+   "sha": "7e0357df6f0b7ed99ce59b660b8d08dee4ff2320",
+   "shortSha": "7e0357d",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/7e0357df6f0b7ed99ce59b660b8d08dee4ff2320",
+   "subject": "feat(media): phase 2 music studio",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-23T19:09:47+05:30",
+   "filesChanged": 21,
+   "added": 2620,
+   "removed": 505
+  },
   {
    "at": "2026-11-23T13:00:20.615Z",
    "ok": true,
@@ -7598,9 +7719,725 @@ window.DASHBOARD = {
    "file": "2/T2.6-7.png",
    "phase": "2",
    "href": "shots/2/T2.6-7.png"
+  },
+  {
+   "taskId": "T3.3",
+   "kind": "proof",
+   "step": "AC1 empty state copy",
+   "attempt": null,
+   "caption": "Speech studio empty state with tag toolbar, script counter, model and voice select.",
+   "annotations": [
+    {
+     "x": 55,
+     "y": 13,
+     "w": 45,
+     "h": 20,
+     "label": "script editor with live counter"
+    }
+   ],
+   "at": "2026-11-24T02:55:57.016Z",
+   "file": "3/T3.3-1.png",
+   "phase": "3",
+   "href": "shots/3/T3.3-1.png"
+  },
+  {
+   "taskId": "T3.3",
+   "kind": "proof",
+   "step": "AC2: cost updates and reads Estimated for Minimax",
+   "attempt": 3,
+   "caption": "Minimax Speech 2.8 HD selected: the cost reads 21 credits with an Estimated label for a 1,012-character script.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 92,
+     "w": 13,
+     "h": 4.5,
+     "label": "21 credits with Estimated label"
+    },
+    {
+     "x": 6.9,
+     "y": 45.8,
+     "w": 43.8,
+     "h": 9.5,
+     "label": "Minimax Speech 2.8 HD selected"
+    }
+   ],
+   "at": "2026-11-24T03:34:24.373Z",
+   "file": "3/T3.3-2.png",
+   "phase": "3",
+   "href": "shots/3/T3.3-2.png"
+  },
+  {
+   "taskId": "T3.3",
+   "kind": "proof",
+   "step": "AC3: over-limit counter in danger colour, text not truncated",
+   "attempt": 3,
+   "caption": "Chatterbox Turbo with 501 characters: the counter turns danger red and the full script stays in the editor.",
+   "annotations": [
+    {
+     "x": 47,
+     "y": 20.5,
+     "w": 4,
+     "h": 2.5,
+     "label": "501/500 counter in danger red"
+    },
+    {
+     "x": 6.9,
+     "y": 38.5,
+     "w": 44,
+     "h": 35,
+     "label": "whole script kept"
+    }
+   ],
+   "at": "2026-11-24T03:34:24.559Z",
+   "file": "3/T3.3-3.png",
+   "phase": "3",
+   "href": "shots/3/T3.3-3.png"
+  },
+  {
+   "taskId": "T3.3",
+   "kind": "proof",
+   "step": "AC3: Generate disabled with a reason",
+   "attempt": 3,
+   "caption": "Over the Chatterbox limit Generate is disabled and the reason under it names the excess characters.",
+   "annotations": [
+    {
+     "x": 40.6,
+     "y": 92,
+     "w": 10,
+     "h": 4.9,
+     "label": "Generate disabled"
+    },
+    {
+     "x": 6.9,
+     "y": 97.8,
+     "w": 43.8,
+     "h": 2.2,
+     "label": "reason: 512 characters over the 500 limit"
+    }
+   ],
+   "at": "2026-11-24T03:34:24.730Z",
+   "file": "3/T3.3-4.png",
+   "phase": "3",
+   "href": "shots/3/T3.3-4.png"
+  },
+  {
+   "taskId": "T3.3",
+   "kind": "proof",
+   "step": "AC1: Try an example fills the text",
+   "attempt": 3,
+   "caption": "After Try an example the editor holds the example script and the counter reads 63/2,000",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 31,
+     "w": 43.8,
+     "h": 18,
+     "label": "example text"
+    },
+    {
+     "x": 46.5,
+     "y": 15.5,
+     "w": 4.5,
+     "h": 3,
+     "label": "counter"
+    }
+   ],
+   "at": "2026-11-24T03:44:19.869Z",
+   "file": "3/T3.3-5.png",
+   "phase": "3",
+   "href": "shots/3/T3.3-5.png"
+  },
+  {
+   "taskId": "T3.3",
+   "kind": "proof",
+   "step": "AC4: voice fallback notice (fails: names the previous voice)",
+   "attempt": 3,
+   "caption": "Minimax HD selected with English_Wiselady, but the status notice reads Voice changed to Andy (the old voice)",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 82,
+     "w": 43.8,
+     "h": 5,
+     "label": "selected voice"
+    },
+    {
+     "x": 6.6,
+     "y": 87.6,
+     "w": 10,
+     "h": 2.2,
+     "label": "wrong notice"
+    }
+   ],
+   "at": "2026-11-24T03:44:20.083Z",
+   "file": "3/T3.3-6.png",
+   "phase": "3",
+   "href": "shots/3/T3.3-6.png"
+  },
+  {
+   "taskId": "T3.3",
+   "kind": "proof",
+   "step": "AC5: success uses shared result card",
+   "attempt": 3,
+   "caption": "Stubbed success shows the shared result card, player, download and editor",
+   "annotations": [
+    {
+     "x": 53.7,
+     "y": 10,
+     "w": 39.4,
+     "h": 17.8,
+     "label": "result card"
+    }
+   ],
+   "at": "2026-11-24T03:44:20.239Z",
+   "file": "3/T3.3-7.png",
+   "phase": "3",
+   "href": "shots/3/T3.3-7.png"
+  },
+  {
+   "taskId": "T3.3",
+   "kind": "proof",
+   "step": "AC5: no-charge failure uses shared error state",
+   "attempt": 3,
+   "caption": "Stubbed failure shows Generation failed. No credits were used. with Try again",
+   "annotations": [
+    {
+     "x": 53.7,
+     "y": 12.2,
+     "w": 39.4,
+     "h": 15.3,
+     "label": "error state"
+    }
+   ],
+   "at": "2026-11-24T03:44:20.393Z",
+   "file": "3/T3.3-8.png",
+   "phase": "3",
+   "href": "shots/3/T3.3-8.png"
+  },
+  {
+   "taskId": "T3.3",
+   "kind": "proof",
+   "step": "AC5: 402",
+   "attempt": 5,
+   "caption": "A 402 from generate opens the Low credits dialog showing 2 credits available; nothing is queued.",
+   "annotations": [
+    {
+     "x": 31.3,
+     "y": 30.7,
+     "w": 37.5,
+     "h": 38.8,
+     "label": "Low credits dialog with required and available credits"
+    }
+   ],
+   "at": "2026-11-24T03:47:00.736Z",
+   "file": "3/T3.3-9.png",
+   "phase": "3",
+   "href": "shots/3/T3.3-9.png"
+  },
+  {
+   "taskId": "T3.3",
+   "kind": "proof",
+   "step": "AC4: voice fallback notice names the new voice",
+   "attempt": 8,
+   "caption": "After switching from Inworld TTS 2.0 to Minimax Speech 2.8 HD, the selected voice and the status notice both name English_Wiselady.",
+   "annotations": [
+    {
+     "x": 4,
+     "y": 89,
+     "w": 92,
+     "h": 6,
+     "label": "selected fallback voice English_Wiselady"
+    },
+    {
+     "x": 4,
+     "y": 95.5,
+     "w": 52,
+     "h": 2.5,
+     "label": "notice reads Voice changed to English_Wiselady"
+    }
+   ],
+   "at": "2026-11-24T03:54:21.697Z",
+   "file": "3/T3.3-10.png",
+   "phase": "3",
+   "href": "shots/3/T3.3-10.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": "AC1: inserting a tag adds one chip",
+   "attempt": null,
+   "caption": "Laugh chip inserted inline at the cursor in the speech editor",
+   "annotations": [
+    {
+     "x": 16.5,
+     "y": 36.9,
+     "w": 6.1,
+     "h": 3.5,
+     "label": "Laugh chip with remove button"
+    }
+   ],
+   "at": "2026-11-24T03:20:09.950Z",
+   "file": "3/T3.4-1.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-1.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": "AC2: pause outside 0.1 to 10 seconds is rejected",
+   "attempt": null,
+   "caption": "A pause of 99 seconds is rejected with an inline range message",
+   "annotations": [
+    {
+     "x": 30.2,
+     "y": 43.4,
+     "w": 8.8,
+     "h": 3.5,
+     "label": "Pause chip with invalid 99 value"
+    },
+    {
+     "x": 30.2,
+     "y": 46.9,
+     "w": 8.8,
+     "h": 5.3,
+     "label": "Inline range message"
+    }
+   ],
+   "at": "2026-11-24T03:20:48.305Z",
+   "file": "3/T3.4-2.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-2.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": "AC1: pause chip inserted from the toolbar",
+   "attempt": null,
+   "caption": "Pause chip with an editable seconds field sits inline after the text",
+   "annotations": [
+    {
+     "x": 30.2,
+     "y": 43.4,
+     "w": 8.8,
+     "h": 3.5,
+     "label": "Pause chip with seconds field"
+    },
+    {
+     "x": 29,
+     "y": 36.3,
+     "w": 6,
+     "h": 4.7,
+     "label": "Pause toolbar button"
+    }
+   ],
+   "at": "2026-11-24T03:20:48.483Z",
+   "file": "3/T3.4-3.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-3.png"
+  },
+  {
+   "taskId": "T3.4",
+   "kind": "proof",
+   "step": "AC7: 375px has no horizontal scroll and 44px targets",
+   "attempt": null,
+   "caption": "At 375px the tag toolbar wraps, nothing scrolls sideways and chips are 44px high",
+   "annotations": [
+    {
+     "x": 3,
+     "y": 41,
+     "w": 94,
+     "h": 24,
+     "label": "Wrapped tag toolbar with 44px buttons"
+    },
+    {
+     "x": 4,
+     "y": 80,
+     "w": 92,
+     "h": 12,
+     "label": "Editor with Laugh and Pause chips"
+    }
+   ],
+   "at": "2026-11-24T03:22:02.895Z",
+   "file": "3/T3.4-4.png",
+   "phase": "3",
+   "href": "shots/3/T3.4-4.png"
+  },
+  {
+   "taskId": "T3.5",
+   "kind": "proof",
+   "step": "AC1: supported-tag switch has no dialog",
+   "attempt": null,
+   "caption": "Switching to Inworld TTS 1.5 Max, which supports Laugh, changes the model with no dialog and keeps the chip",
+   "annotations": [
+    {
+     "x": 8,
+     "y": 93,
+     "w": 50,
+     "h": 6,
+     "label": "Inworld 1.5 Max selected, text unchanged"
+    },
+    {
+     "x": 16.5,
+     "y": 43.5,
+     "w": 6.1,
+     "h": 3.5,
+     "label": "Laugh chip kept"
+    }
+   ],
+   "at": "2026-11-24T03:20:35.536Z",
+   "file": "3/T3.5-1.png",
+   "phase": "3",
+   "href": "shots/3/T3.5-1.png"
+  },
+  {
+   "taskId": "T3.5",
+   "kind": "proof",
+   "step": "AC2: dialog lists each approximated and dropped tag",
+   "attempt": null,
+   "caption": "Switching to Chatterbox Turbo opens a dialog listing the pause tag that will be removed",
+   "annotations": [
+    {
+     "x": 33,
+     "y": 50.5,
+     "w": 30,
+     "h": 5,
+     "label": "Removed list names pause of 1 s"
+    },
+    {
+     "x": 49.5,
+     "y": 60.9,
+     "w": 18,
+     "h": 5.5,
+     "label": "Keep original and Convert actions"
+    }
+   ],
+   "at": "2026-11-24T03:21:06.005Z",
+   "file": "3/T3.5-2.png",
+   "phase": "3",
+   "href": "shots/3/T3.5-2.png"
+  },
+  {
+   "taskId": "T3.5",
+   "kind": "proof",
+   "step": "AC3: Convert applies the conversion and offers Undo",
+   "attempt": null,
+   "caption": "After Convert the model is Chatterbox Turbo and an Undo notice appears",
+   "annotations": [
+    {
+     "x": 13.7,
+     "y": 59.8,
+     "w": 50.3,
+     "h": 5.7,
+     "label": "Converted notice with Undo"
+    },
+    {
+     "x": 6.9,
+     "y": 46,
+     "w": 73,
+     "h": 12.5,
+     "label": "Chatterbox Turbo selected"
+    }
+   ],
+   "at": "2026-11-24T03:21:13.119Z",
+   "file": "3/T3.5-3.png",
+   "phase": "3",
+   "href": "shots/3/T3.5-3.png"
+  },
+  {
+   "taskId": "T3.5",
+   "kind": "proof",
+   "step": "AC3: Undo restores the previous text",
+   "attempt": null,
+   "caption": "Undo restores the pause chip and the previous model",
+   "annotations": [
+    {
+     "x": 30.2,
+     "y": 43.4,
+     "w": 8.8,
+     "h": 3.5,
+     "label": "Pause chip restored"
+    },
+    {
+     "x": 6.9,
+     "y": 92.9,
+     "w": 73,
+     "h": 7,
+     "label": "Inworld 1.5 Max selected again"
+    }
+   ],
+   "at": "2026-11-24T03:21:36.819Z",
+   "file": "3/T3.5-4.png",
+   "phase": "3",
+   "href": "shots/3/T3.5-4.png"
+  },
+  {
+   "taskId": "T3.5",
+   "kind": "proof",
+   "step": "AC4/AC5: Escape keeps old model, focus returns to model select",
+   "attempt": null,
+   "caption": "Escape closes the dialog: the model stays Inworld 1.5 Max and focus returns to the model list",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 10.8,
+     "w": 73,
+     "h": 10.8,
+     "label": "Inworld 1.5 Max still selected"
+    },
+    {
+     "x": 6.9,
+     "y": 46,
+     "w": 73,
+     "h": 11,
+     "label": "Focus ring back on the model option"
+    }
+   ],
+   "at": "2026-11-24T03:21:47.776Z",
+   "file": "3/T3.5-5.png",
+   "phase": "3",
+   "href": "shots/3/T3.5-5.png"
+  },
+  {
+   "taskId": "T3.5",
+   "kind": "proof",
+   "step": "AC6: 375px dialog layout and targets",
+   "attempt": null,
+   "caption": "At 375px the conversion dialog fits without sideways scroll; Keep original and Convert are 44px high (the close X measures 40px)",
+   "annotations": [
+    {
+     "x": 4,
+     "y": 27,
+     "w": 92,
+     "h": 43,
+     "label": "Dialog fits the 375px viewport"
+    },
+    {
+     "x": 30,
+     "y": 64,
+     "w": 60,
+     "h": 7,
+     "label": "Keep original and Convert at 44px"
+    }
+   ],
+   "at": "2026-11-24T03:22:10.685Z",
+   "file": "3/T3.5-6.png",
+   "phase": "3",
+   "href": "shots/3/T3.5-6.png"
+  },
+  {
+   "taskId": "T3.5",
+   "kind": "proof",
+   "step": "AC6: tap targets at least 44px at 375px (fails: close button 40px)",
+   "attempt": 3,
+   "caption": "At 375px the dialog close button measures 40x40px, below the 44px tap target AC6 requires.",
+   "annotations": [
+    {
+     "x": 81.2,
+     "y": 29.1,
+     "w": 10.7,
+     "h": 4.9,
+     "label": "Close dialog button 40x40px"
+    }
+   ],
+   "at": "2026-11-24T03:34:24.905Z",
+   "file": "3/T3.5-7.png",
+   "phase": "3",
+   "href": "shots/3/T3.5-7.png"
+  },
+  {
+   "taskId": "T3.5",
+   "kind": "proof",
+   "step": "AC6: tap targets at least 44px at 375px",
+   "attempt": 8,
+   "caption": "At 375px the conversion dialog fits with no sideways scroll; the close button, Keep original and Convert all measure 44px high.",
+   "annotations": [
+    {
+     "x": 80,
+     "y": 29.1,
+     "w": 11.7,
+     "h": 5.4,
+     "label": "close button 44x44px"
+    },
+    {
+     "x": 30.4,
+     "y": 64.3,
+     "w": 58.7,
+     "h": 5.4,
+     "label": "Keep original and Convert 44px high"
+    }
+   ],
+   "at": "2026-11-24T03:54:21.890Z",
+   "file": "3/T3.5-8.png",
+   "phase": "3",
+   "href": "shots/3/T3.5-8.png"
+  },
+  {
+   "taskId": "T3.6",
+   "kind": "proof",
+   "step": "AC5 375px layout",
+   "attempt": null,
+   "caption": "Speech studio at 375px with no horizontal scroll.",
+   "annotations": [
+    {
+     "x": 0,
+     "y": 0,
+     "w": 100,
+     "h": 100,
+     "label": "single column layout"
+    }
+   ],
+   "at": "2026-11-24T02:55:57.228Z",
+   "file": "3/T3.6-1.png",
+   "phase": "3",
+   "href": "shots/3/T3.6-1.png"
+  },
+  {
+   "taskId": "T3.14",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Speech generated with the stubbed job, result card shown",
+   "annotations": [],
+   "at": "2026-11-24T03:17:34.049Z",
+   "file": "3/T3.14-1.png",
+   "phase": "3",
+   "href": "shots/3/T3.14-1.png"
+  },
+  {
+   "taskId": "T3.14",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Over-limit script: red counter, Generate disabled with reason",
+   "annotations": [],
+   "at": "2026-11-24T03:17:34.251Z",
+   "file": "3/T3.14-2.png",
+   "phase": "3",
+   "href": "shots/3/T3.14-2.png"
+  },
+  {
+   "taskId": "T3.14",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Model switch dialog listing the tag that will be removed",
+   "annotations": [],
+   "at": "2026-11-24T03:17:34.390Z",
+   "file": "3/T3.14-3.png",
+   "phase": "3",
+   "href": "shots/3/T3.14-3.png"
+  },
+  {
+   "taskId": "T3.14",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Speech studio at 375px, no horizontal scroll",
+   "annotations": [],
+   "at": "2026-11-24T03:17:34.527Z",
+   "file": "3/T3.14-4.png",
+   "phase": "3",
+   "href": "shots/3/T3.14-4.png"
+  },
+  {
+   "taskId": "T3.14",
+   "kind": "proof",
+   "step": "AC1: success scenario passes with the stub",
+   "attempt": 3,
+   "caption": "Speech generated with the stubbed job; result card shown",
+   "annotations": [
+    {
+     "x": 53.7,
+     "y": 10,
+     "w": 39.4,
+     "h": 17.8,
+     "label": "result card"
+    }
+   ],
+   "at": "2026-11-24T03:44:20.545Z",
+   "file": "3/T3.14-5.png",
+   "phase": "3",
+   "href": "shots/3/T3.14-5.png"
+  },
+  {
+   "taskId": "T3.14",
+   "kind": "proof",
+   "step": "AC1: over-limit scenario",
+   "attempt": 3,
+   "caption": "Over-limit script: danger counter, Generate disabled with reason",
+   "annotations": [],
+   "at": "2026-11-24T03:44:20.690Z",
+   "file": "3/T3.14-6.png",
+   "phase": "3",
+   "href": "shots/3/T3.14-6.png"
+  },
+  {
+   "taskId": "T3.14",
+   "kind": "proof",
+   "step": "AC1: model switch dialog scenario",
+   "attempt": 3,
+   "caption": "Model switch dialog listing the tag that will be removed",
+   "annotations": [],
+   "at": "2026-11-24T03:44:20.834Z",
+   "file": "3/T3.14-7.png",
+   "phase": "3",
+   "href": "shots/3/T3.14-7.png"
+  },
+  {
+   "taskId": "T3.14",
+   "kind": "proof",
+   "step": "AC2: failure scenario, balance unchanged",
+   "attempt": 3,
+   "caption": "Failure shows No credits were used.; spec asserts balance via readCredits",
+   "annotations": [
+    {
+     "x": 53.7,
+     "y": 12.2,
+     "w": 39.4,
+     "h": 15.3,
+     "label": "error state"
+    }
+   ],
+   "at": "2026-11-24T03:44:20.977Z",
+   "file": "3/T3.14-8.png",
+   "phase": "3",
+   "href": "shots/3/T3.14-8.png"
+  },
+  {
+   "taskId": "T3.14",
+   "kind": "proof",
+   "step": "AC1: 375px scenario",
+   "attempt": 3,
+   "caption": "Speech studio at 375px, no horizontal scroll",
+   "annotations": [],
+   "at": "2026-11-24T03:44:21.118Z",
+   "file": "3/T3.14-9.png",
+   "phase": "3",
+   "href": "shots/3/T3.14-9.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-24T08:14:56.422Z",
+   "type": "deliverable",
+   "tasks": [
+    "T3.1",
+    "T3.2",
+    "T3.3",
+    "T3.4",
+    "T3.5",
+    "T3.6",
+    "T3.7",
+    "T3.10",
+    "T3.11",
+    "T3.12",
+    "T3.13",
+    "T3.14",
+    "T3.16"
+   ],
+   "text": "Phase 3 Speech studio: TTS schema/route, tag model, composer, tag editor, convert dialog, advisor, tests"
+  },
   {
    "at": "2026-11-23T13:39:37.934Z",
    "type": "deliverable",
@@ -7681,6 +8518,102 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-24T08:14:29.719Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.5"
+   ],
+   "text": "Superseded failure shot T3.5-7 (40px close button) remains in the manifest; T3.5-8 shows the fixed 44px target"
+  },
+  {
+   "at": "2026-11-24T08:14:29.588Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.3"
+   ],
+   "text": "Superseded proof shots T3.3-6 (wrong voice notice) and T3.3-2 (old \"Voice changed to Andy\" line, \"voice cloning\" copy) remain in the manifest; T3.3-10 is the current proof"
+  },
+  {
+   "at": "2026-11-24T08:14:29.416Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.12"
+   ],
+   "text": "ConvertTagsDialog.vue branches 91.3% (lines 17,39 pending-null fallbacks), below the 95% target"
+  },
+  {
+   "at": "2026-11-24T03:54:49.794Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.13"
+   ],
+   "text": "media.test.ts non-speech model key case does not assert enqueueGeneration was not called"
+  },
+  {
+   "at": "2026-11-24T03:54:49.599Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.12"
+   ],
+   "text": "ConvertTagsDialog.vue branches 91.3% (lines 17,38), below the 95% target"
+  },
+  {
+   "at": "2026-11-24T03:54:49.377Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.3"
+   ],
+   "text": "Shared Low credits dialog on /audio/speech says \"To generate an AI image, 5 credits are required\" (shot T3.3-9); copy is image-specific"
+  },
+  {
+   "at": "2026-11-24T03:44:42.186Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.12"
+   ],
+   "text": "[test-quality] ConvertTagsDialog.vue branches 91.3% (lines 17,38 uncovered); above 80% floor, below 95% target"
+  },
+  {
+   "at": "2026-11-24T03:44:42.023Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.14"
+   ],
+   "text": "[test-quality] e2e screenshots convert-dialog.png and insufficient-credits.png do not show the open dialog (assertions pass); proof shot T3.14-7 therefore does not show the dialog, T3.5-2 does"
+  },
+  {
+   "at": "2026-11-24T03:44:41.871Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.3"
+   ],
+   "text": "[code-bug] SpeechModelSelect Minimax Speech 2.8 HD blurb still says \"voice cloning\" after the descope"
+  },
+  {
+   "at": "2026-11-24T03:44:41.718Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.4"
+   ],
+   "text": "[code-bug] a chip takes two arrow presses to cross; typing while a chip is node-selected replaces it (undo restores). AC4 met as written"
+  },
+  {
+   "at": "2026-11-24T03:44:41.547Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.10"
+   ],
+   "text": "[test-quality] useTtsEditor.ts lines 144-152 and 200-201 have uncovered branches; engineer justified only 144 (152 is its onUpdate twin)"
+  },
+  {
+   "at": "2026-11-24T03:44:41.300Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.11"
+   ],
+   "text": "[flaky-env] V1 (bunx vp test run --coverage) errors \"coverageFilesDirectory is required\"; fallback npx vitest --coverage gives tts-tags.ts 98.26/94.44/100/98.91, line 377 uncovered"
+  },
   {
    "at": "2026-11-23T13:35:20.068Z",
    "type": "advisory",
@@ -7900,680 +8833,782 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
-   "at": "2026-11-23T13:39:37.934Z",
+   "at": "2026-11-24T08:14:56.422Z",
    "type": "deliverable",
    "tasks": [
-    "T2.1",
-    "T2.2",
-    "T2.3",
-    "T2.4",
-    "T2.5",
-    "T2.6",
-    "T2.7"
+    "T3.1",
+    "T3.2",
+    "T3.3",
+    "T3.4",
+    "T3.5",
+    "T3.6",
+    "T3.7",
+    "T3.10",
+    "T3.11",
+    "T3.12",
+    "T3.13",
+    "T3.14",
+    "T3.16"
    ],
-   "text": "Phase 2 music studio: schema, Music page, Minimax instrumental, unit and e2e tests"
+   "text": "Phase 3 Speech studio: TTS schema/route, tag model, composer, tag editor, convert dialog, advisor, tests"
   },
   {
-   "at": "2026-11-23T13:39:35.152Z",
+   "at": "2026-11-24T08:14:53.254Z",
    "tasks": [
-    "T2.1"
+    "T3.13"
    ],
-   "attempt": "3",
+   "attempt": "1",
    "type": "verify_passed",
-   "evidence": "AC1 met: the route test \"rejects a duration for a model without one, with a field-level 400\" passes, and validateMediaParams rejects any field LYRIA_2 does not declare, so Lyria never gets a duration. AC2 met: media.test.ts accepts STABLE_AUDIO_DURATION_SEC.min/max and rejects min-1/max+1 with path ['durationSec'], the range comes from the registry's media.durationSec through superRefine, and ther",
-   "fingerprint": "54fee9a44c78200b4c16f4fc816d2e378dbd643cd763f696d8cfa63eb8b36804",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a6.md"
+   "evidence": "V1 2 files / 76 tests passed (media-input 25, media-service 51); media-input.ts and media-service.ts 100/100/100/100; fakes only (fake.invalid / cdn.invalid URLs, injected Cloudinary/Replicate fns); no skip markers",
+   "fingerprint": "208ecb6061a538109b179351b35a4bf0b96dee095344599e1e6c3acf6e67e330",
+   "report": ".dashboard/media-studio/reports/phase-3-verifier-a12.md"
   },
   {
-   "at": "2026-11-23T13:38:18.324Z",
+   "at": "2026-11-24T08:14:53.253Z",
+   "tasks": [
+    "T3.12"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "V1 4 files / 21 tests passed; SpeechComposer.vue 100/100/100/100, TextAdvisor.vue 100/100/100/100, ConvertTagsDialog.vue 100 stmts / 91.3 branch / 100 funcs / 100 lines (uncovered 17,39 are justified pending===null fallbacks); no it.fails/skip/only/fixme/snapshot/ignore markers",
+   "fingerprint": "0232cc1363892c82abfde9d2e2cc25dc9ec3338a9003e72745fe2154c73445de",
+   "report": ".dashboard/media-studio/reports/phase-3-verifier-a12.md"
+  },
+  {
+   "at": "2026-11-24T08:14:53.253Z",
+   "tasks": [
+    "T3.5"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "a8 BLOCKING (ConvertTagsDialog.vue:38 format) cleared, the only file changed since a8; V1 2285/2285, V2 clean; AC1-AC6 shots T3.5-1..6 and T3.5-8 (opened T3.5-2 dialog lists \"pause of 1 s\" Removed; T3.5-8 375px close/Keep/Convert 44px); reduced motion handled in SpeechModelSelect.vue and AppModal.vue",
+   "fingerprint": "1b524e4d5a2bd194503d78bbaa637535ec750a836a2e33bd8c85607df5af926b",
+   "report": ".dashboard/media-studio/reports/phase-3-verifier-a12.md"
+  },
+  {
+   "at": "2026-11-24T08:14:53.253Z",
+   "tasks": [
+    "T3.3"
+   ],
+   "attempt": "1",
+   "type": "verify_passed",
+   "evidence": "a8 BLOCKING (format) cleared: V2 `bun run check` exit 0, \"All 1090 files are correctly formatted\", 0 errors / 17 warnings (none in Speech files); V1 web 258 files / 2285 tests passed; AC1-AC6 proven by shots T3.3-1,2,3,4,5,7,8,9,10 (opened T3.3-2 Estimated 21 credits, T3.3-10 notice names English_Wiselady); Speech files unchanged since the a8 live checks",
+   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
+   "report": ".dashboard/media-studio/reports/phase-3-verifier-a12.md"
+  },
+  {
+   "at": "2026-11-24T08:14:29.719Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.5"
+   ],
+   "text": "Superseded failure shot T3.5-7 (40px close button) remains in the manifest; T3.5-8 shows the fixed 44px target"
+  },
+  {
+   "at": "2026-11-24T08:14:29.588Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.3"
+   ],
+   "text": "Superseded proof shots T3.3-6 (wrong voice notice) and T3.3-2 (old \"Voice changed to Andy\" line, \"voice cloning\" copy) remain in the manifest; T3.3-10 is the current proof"
+  },
+  {
+   "at": "2026-11-24T08:14:29.416Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.12"
+   ],
+   "text": "ConvertTagsDialog.vue branches 91.3% (lines 17,39 pending-null fallbacks), below the 95% target"
+  },
+  {
+   "at": "2026-11-24T08:11:59.059Z",
    "type": "verify_started",
    "tasks": [
-    "T2.1"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-11-23T13:38:18.126Z",
-   "tasks": [
-    "T2.1"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC3 re-checked against new task text: getMusicCostInput (apps/api/src/services/media-service.ts:76-81) derives quantity only from registry pricing.unit (STABLE_AUDIO_25 unit 'file', usd 0.2 at packages/shared/src/models/registry.ts:759), takes no request field, throws 400 on unknown unit; getMusicCreditCost used in route (apps/api/src/routes/media.ts:104) and recomputed in processMusic (media-serv",
-   "fingerprint": "54fee9a44c78200b4c16f4fc816d2e378dbd643cd763f696d8cfa63eb8b36804",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a6.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T13:38:13.033Z",
-   "tasks": [
-    "T2.1"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC3 re-checked against new task text: getMusicCostInput (apps/api/src/services/media-service.ts:76-81) derives quantity only from registry pricing.unit (STABLE_AUDIO_25 unit 'file', usd 0.2 at packages/shared/src/models/registry.ts:759), takes no request field, throws 400 on unknown unit; getMusicCreditCost used in route (apps/api/src/routes/media.ts:104) and recomputed in processMusic (media-serv",
-   "fingerprint": "54fee9a44c78200b4c16f4fc816d2e378dbd643cd763f696d8cfa63eb8b36804",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a6.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T13:38:02.815Z",
-   "tasks": [
-    "T2.1"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1: Lyria declares no durationSec input, so validateMediaParams rejects it with a field-level 400; buildMediaInput maps only declared inputs. AC2: refineMusicRequest bounds durationSec against the registry range using named constants. AC3 (amended): cost comes from getMusicCostInput and getMediaCreditCost, which read the flat per-file registry price. It is server-derived and never uses a client v",
-   "fingerprint": "54fee9a44c78200b4c16f4fc816d2e378dbd643cd763f696d8cfa63eb8b36804",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a6.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-23T13:37:45.202Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T2.1"
-   ],
-   "fingerprint": "54fee9a44c78200b4c16f4fc816d2e378dbd643cd763f696d8cfa63eb8b36804"
-  },
-  {
-   "at": "2026-11-23T13:37:43.972Z",
-   "type": "task_started",
-   "tasks": [
-    "T2.1"
-   ],
-   "attempt": "3"
-  },
-  {
-   "at": "2026-11-23T13:37:01.841Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/media-studio/TASKS.md": "dacc0edf0d4fdee5b90307e18005d243bd44c4fa",
-    "apps/api/src/lib/media-input.test.ts": "f835bfbf8954a3fe7f4e462da054eb24de2295aa",
-    "apps/api/src/lib/media-input.ts": "8f9b33565d6979e52583c26b40a5ab219bce4d31",
-    "apps/api/src/routes/media.test.ts": "b15a44948a718a06a16d1a2d1a19e9c29cb3f608",
-    "apps/web/e2e/support/proPerksSeed.ts": "4ebf727c46530ebe4937940cd39664335138a742",
-    "apps/web/src/components.d.ts": "ab9bc12c7db39686ab43ec969a5771583f39dddb",
-    "apps/web/src/router/index.ts": "66234b7d1519f4aee9648732ce1fbca3fb8f5d2e",
-    "packages/shared/src/schemas/index.ts": "d2e6e6beab087df195c4bda024ec5811f60fa869",
-    "packages/shared/src/schemas/media.ts": "f7a414e021cea34537def69b2a86c6c29de7960c",
-    "apps/web/e2e/qa/music.spec.ts": "573b6647f93da99bbbdfd361a54328a98c4401dc",
-    "apps/web/src/components/Music/DurationControl.test.ts": "5e7c693fc6de75ca575b33a0b37b038d16eb6d1b",
-    "apps/web/src/components/Music/DurationControl.vue": "d12303ed1e8f0862017e9d6930490345a54dbceb",
-    "apps/web/src/components/Music/MusicComposer.test.ts": "dd1a09aa9cc5cc27ece66b0f693905926f019595",
-    "apps/web/src/components/Music/MusicComposer.vue": "0295664a5659d469bac6711846f15b93cb67d609",
-    "apps/web/src/components/Music/MusicModelSelect.test.ts": "a0a0e773d64a483e5cec8d3647560c111d88a40f",
-    "apps/web/src/components/Music/MusicModelSelect.vue": "592a0d17a61d7938e9e6e418119e376f9be54a85",
-    "apps/web/src/pages/Music.vue": "fdf99740cbd70cc20800c26285473c33cd83f3e8",
-    "packages/shared/src/schemas/media.test.ts": "41e8351feda6401617b140fb064726d2863a487e"
-   }
-  },
-  {
-   "at": "2026-11-23T13:36:49.967Z",
-   "type": "answered",
-   "tasks": [],
-   "id": "Q25",
-   "text": "Flat per file; AC3 and Do text amended in TASKS.md"
-  },
-  {
-   "at": "2026-11-23T13:35:40.820Z",
-   "type": "question",
-   "tasks": [
-    "T2.1"
-   ],
-   "id": "Q25",
-   "text": "AC3 says Stable Audio cost scales with duration, but SPEC.md (lines 89, 218, 221, 301) and the registry price it flat at $0.20 per file. Code follows SPEC. Amend AC3 to flat per-file, or change SPEC and registry to per-second?"
-  },
-  {
-   "at": "2026-11-23T13:35:37.844Z",
-   "tasks": [
-    "T2.6"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "`E2E_SERVER=dev bunx playwright test e2e/qa/music.spec.ts --repeat-each=3 --workers=1` gives 25 passed (49.1s) against the running dev server: 8 scenarios x3 plus setup, 0 flaky. The a4 BLOCKING item is fixed. beforeAll seeds 500 credits through setCredits, and afterAll restores the original value (the DB read after the run is {credits:8,dailyCredits:0}, the same as before). The Lyria charge scena",
-   "fingerprint": "ff4ebe8e3c0f7efc05950a8356a95a7d11a3f07f57ff333437f4ef1bde374b32",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a5.md"
-  },
-  {
-   "at": "2026-11-23T13:35:20.068Z",
-   "type": "advisory",
-   "tasks": [
-    "T2.6"
-   ],
-   "text": "Stale proof shot 2/T2.6-1 still shows the impossible -4 balance with caption \"balance dropped by 12\"; superseded by 2/T2.6-6 and the verifier retake"
-  },
-  {
-   "at": "2026-11-23T13:33:47.073Z",
-   "type": "verify_started",
-   "tasks": [
-    "T2.6"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-23T13:33:44.227Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "apps/api/src/lib/media-input.test.ts": "f835bfbf8954a3fe7f4e462da054eb24de2295aa",
-    "apps/api/src/lib/media-input.ts": "8f9b33565d6979e52583c26b40a5ab219bce4d31",
-    "apps/api/src/routes/media.test.ts": "b15a44948a718a06a16d1a2d1a19e9c29cb3f608",
-    "apps/web/e2e/support/proPerksSeed.ts": "4ebf727c46530ebe4937940cd39664335138a742",
-    "apps/web/src/components.d.ts": "ab9bc12c7db39686ab43ec969a5771583f39dddb",
-    "apps/web/src/router/index.ts": "66234b7d1519f4aee9648732ce1fbca3fb8f5d2e",
-    "packages/shared/src/schemas/index.ts": "d2e6e6beab087df195c4bda024ec5811f60fa869",
-    "packages/shared/src/schemas/media.ts": "f7a414e021cea34537def69b2a86c6c29de7960c",
-    "apps/web/e2e/qa/music.spec.ts": "573b6647f93da99bbbdfd361a54328a98c4401dc",
-    "apps/web/src/components/Music/DurationControl.test.ts": "5e7c693fc6de75ca575b33a0b37b038d16eb6d1b",
-    "apps/web/src/components/Music/DurationControl.vue": "d12303ed1e8f0862017e9d6930490345a54dbceb",
-    "apps/web/src/components/Music/MusicComposer.test.ts": "dd1a09aa9cc5cc27ece66b0f693905926f019595",
-    "apps/web/src/components/Music/MusicComposer.vue": "0295664a5659d469bac6711846f15b93cb67d609",
-    "apps/web/src/components/Music/MusicModelSelect.test.ts": "a0a0e773d64a483e5cec8d3647560c111d88a40f",
-    "apps/web/src/components/Music/MusicModelSelect.vue": "592a0d17a61d7938e9e6e418119e376f9be54a85",
-    "apps/web/src/pages/Music.vue": "fdf99740cbd70cc20800c26285473c33cd83f3e8",
-    "packages/shared/src/schemas/media.test.ts": "41e8351feda6401617b140fb064726d2863a487e"
-   }
-  },
-  {
-   "at": "2026-11-23T13:33:44.127Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T2.6"
-   ],
-   "fingerprint": "ff4ebe8e3c0f7efc05950a8356a95a7d11a3f07f57ff333437f4ef1bde374b32",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T13:33:28.327Z",
-   "type": "task_built",
-   "tasks": [
-    "T2.6"
-   ],
-   "text": "e2e PASS 8/8 flake x3, readCredits asserted",
-   "files": [
-    "e2e"
-   ]
-  },
-  {
-   "at": "2026-11-23T13:32:01.718Z",
-   "type": "task_started",
-   "tasks": [
-    "T2.6"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-23T13:32:01.496Z",
-   "type": "build_started",
-   "tasks": [
-    "T2.6"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-23T13:31:58.356Z",
-   "tasks": [
-    "T2.7"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "`bun run check` 0 errors (17 pre-existing warnings, none in phase 2 lines). `bun run test` 348 files / 3886 tests pass. `bun run check:model-docs` passed (15 media models). `playwright test music.spec.ts song.spec.ts --repeat-each=2 --workers=1`: 33 passed. No regression in song or image suites.",
-   "fingerprint": "9260cebcd2f22976bdfba519adc5e64493f23d27b8393ea159e68b7140091c4f",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
-  },
-  {
-   "at": "2026-11-23T13:31:58.356Z",
-   "tasks": [
-    "T2.5"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "api coverage run 2 files / 63 tests pass, media-input.ts 100/100/100/100 and media-service.ts 100/100/100/100. Shared media.ts 24 tests 100/100/100/100 with the istanbul provider (the v8 provider errors with \"coverageFilesDirectory is required\", a tooling version mismatch, not a test defect). Marker grep is clean.",
-   "fingerprint": "647cfdb75546fbc6a0be0eb050f26e1c8bc48218aa018bcc7119e84aa9f08a19",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
-  },
-  {
-   "at": "2026-11-23T13:31:58.356Z",
-   "tasks": [
-    "T2.4"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "`vitest run src/components/Music --coverage` 3 files / 19 tests pass. DurationControl, MusicComposer and MusicModelSelect are each 100% stmts/branches/funcs/lines. No it.fails, skip or only (grep clean). No network fakes needed.",
-   "fingerprint": "79200cc0bd163ae776af06bf4aa416547e6969149d0ccbce2cb3e8991ecea8b7",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
-  },
-  {
-   "at": "2026-11-23T13:31:58.356Z",
-   "tasks": [
-    "T2.3"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "Payload for Minimax is `instrumental:true` with no `lyrics` (e2e assertion). The schema rejects instrumental!=true for MINIMAX_MUSIC_26. buildMediaInput maps prompt to stylePrompt (media-input.test). The Lyrics field is absent and the one-line note \"Instrumental only: lyrics are not used...\" shows (retaken proof 2/T2.3-7). Cost badge 30 per file. 375px and keyboard covered by e2e. Shared, api and ",
-   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
-  },
-  {
-   "at": "2026-11-23T13:31:58.356Z",
-   "tasks": [
-    "T2.2"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "Verified in agent-browser on the dev server. Exact empty copy shown, \"Try an example\" fills \"Calm piano, rainy evening\", Generate is disabled with the reason \"Describe the music you want to make.\" The draft survives a reload (\"verifier draft check ambient pads\" restored; shot 2/T2.2-4). Ctrl+Enter submits and the shared Low credits 402 dialog opens (shot 2/T2.2-5). The handler accepts metaKey or c",
-   "fingerprint": "8923dfed4d9c5635e8a5c0b7d9752042231350620b72c735454669d92bd17eba",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
-  },
-  {
-   "at": "2026-11-23T13:31:58.356Z",
-   "tasks": [
-    "T2.6"
-   ],
-   "attempt": "1",
-   "type": "verify_failed",
-   "category": "test-quality",
-   "text": "[test-quality] · AC2 \"Each scenario that spends credits asserts the balance through readCredits\" · Four scenarios run a stubbed successful generation via `setVariant('success', { credits: X })` and never call readCredits: duration (music.spec.ts:188), Minimax (:215), keyboard (:234) and History (:279). Separately, the \"charges the per-file cost once\" scenario (:112-117) runs on the QA user with 8 ",
-   "files": [
-    "ac2 \"each scenario that spends credits asserts the balance t"
-   ],
-   "sigs": [
-    "T2.6|test-quality|ac2 \"each scenario that spends credits asserts the balance t"
-   ],
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
-  },
-  {
-   "at": "2026-11-23T13:31:58.355Z",
-   "tasks": [
-    "T2.1"
-   ],
-   "attempt": "1",
-   "type": "blocked",
-   "category": "spec-issue",
-   "text": "[spec-issue] · AC3 \"Cost for Stable Audio scales with the server-side duration\" contradicts SPEC.md: line 89 (Stable Audio \"Flat price\"), R-MUS-2 line 218 (\"flat price\"), R-MUS-5 line 221 (\"duration vs price is flat, so show 'Longer is the same price'\") and pricing table line 301 (\"per file (flat, any duration)\", 0.20 USD / 40 credits). The task's own Do line (\"per second for Stable Audio\") agrees",
-   "fingerprint": "cf87978a4a1398580f8cfc405e0e5688058e4c4ceadd8c994b3460b4005bcdc4",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a4.md"
-  },
-  {
-   "at": "2026-11-23T13:29:05.983Z",
-   "type": "advisory",
-   "tasks": [
-    "T2.3"
-   ],
-   "text": "shot 2/T2.3-4 caption claims instrumental note but Lyria is selected; retaken as 2/T2.3-7"
-  },
-  {
-   "at": "2026-11-23T13:29:05.827Z",
-   "type": "advisory",
-   "tasks": [
-    "T2.2"
-   ],
-   "text": "Music.vue Mod+Enter, draft restore and disabled reason have no automated test (verified manually only)"
-  },
-  {
-   "at": "2026-11-23T13:29:05.671Z",
-   "type": "advisory",
-   "tasks": [
-    "T2.2"
-   ],
-   "text": "402 Low credits dialog in Music studio says 'To generate an AI image'"
-  },
-  {
-   "at": "2026-11-23T13:29:05.514Z",
-   "type": "advisory",
-   "tasks": [
-    "T2.6"
-   ],
-   "text": "apps/web/e2e/qa/music.spec.ts:112 QA user has 8 credits so stubbed remaining is -4 (shot shows -4); other stubbed-success scenarios skip readCredits"
-  },
-  {
-   "at": "2026-11-23T13:21:41.165Z",
-   "type": "verify_started",
-   "tasks": [
-    "T2.1",
-    "T2.2",
-    "T2.3",
-    "T2.4",
-    "T2.5",
-    "T2.6",
-    "T2.7"
+    "T3.3",
+    "T3.5",
+    "T3.12",
+    "T3.13"
    ],
    "attempt": "1"
   },
   {
-   "at": "2026-11-23T13:21:38.272Z",
+   "at": "2026-11-24T08:11:53.437Z",
+   "type": "run_started",
    "tasks": [
-    "T2.2"
+    "T3.1",
+    "T3.2",
+    "T3.3",
+    "T3.4",
+    "T3.5",
+    "T3.6",
+    "T3.7",
+    "T3.10",
+    "T3.11",
+    "T3.12",
+    "T3.13",
+    "T3.14",
+    "T3.16"
+   ],
+   "pipeline": 2
+  },
+  {
+   "at": "2026-11-24T03:57:40.392Z",
+   "type": "verify_passed",
+   "tasks": [
+    "T3.6"
+   ],
+   "evidence": "all reviewers passed; no verifier routed (risk=low)",
+   "fingerprint": "3690e68c2187d07450b96115861c7472e5e4b4d744d1c1bb25aed85f763e2c49",
+   "skipped": "verifier"
+  },
+  {
+   "at": "2026-11-24T03:57:40.384Z",
+   "tasks": [
+    "T3.6"
    ],
    "type": "reviewer_verdict",
-   "evidence": "Model cards are now one-line-note rows with credits and duration inline, selected state is a clear blue ring (Lyria, then Stable Audio in T2.2-3), Duration appears only for Stable Audio, and the empty state shows the \"Your first track\" copy with \"Try an example\". Light 1280 and 375 shots show dark ink on a warm surface with no overflow.",
-   "fingerprint": "8923dfed4d9c5635e8a5c0b7d9752042231350620b72c735454669d92bd17eba",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a4.md",
+   "evidence": "Speech page at 375px shows no horizontal scroll, and the chip toolbar wraps cleanly.",
+   "fingerprint": "3690e68c2187d07450b96115861c7472e5e4b4d744d1c1bb25aed85f763e2c49",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a11.md",
    "verdict": "PASS",
    "reviewer": "ui"
   },
   {
-   "at": "2026-11-23T13:21:35.970Z",
+   "at": "2026-11-24T03:57:40.384Z",
    "tasks": [
-    "T2.2"
+    "T3.5"
    ],
    "type": "reviewer_verdict",
-   "evidence": "The a2 report had no BLOCKING items. Re-checked the restyled MusicModelSelect.vue: the card uses the theme tokens --tw-surface-1, --tw-surface-2, --tw-border and --tw-ink-primary, all defined for light and dark in src/style.scss, plus --studio-accent from the StudioShell scope. The native radio stays keyboard-operable (visually hidden, full-size, :has(:focus-visible) outline), min-height is 44px a",
-   "fingerprint": "8923dfed4d9c5635e8a5c0b7d9752042231350620b72c735454669d92bd17eba",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a4.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-23T13:21:30.200Z",
-   "tasks": [
-    "T2.2"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "shot 2/T2.2-3.png shows the restyled model cards. The selected card has an accent border, each card shows its credits and length, and the prompt is kept. Source MusicModelSelect.vue: a native radio group in a fieldset with a \"Model\" legend, the input stretched over the card so the whole card is clickable, arrow-key navigation, `:has(:focus-visible)` focus ring, 44px min height, reduced-motion resp",
-   "fingerprint": "8923dfed4d9c5635e8a5c0b7d9752042231350620b72c735454669d92bd17eba",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a4.md",
-   "verdict": "PASS",
-   "reviewer": "ux"
-  },
-  {
-   "at": "2026-11-23T13:21:08.722Z",
-   "tasks": [
-    "T2.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "MusicRequestSchema (packages/shared/src/schemas/media.ts) strips unknown keys so client lyrics/autoLyrics/stylePrompt never survive parse; refineMusicRequest rejects any model declaring `instrumental` unless instrumental===true (AC1 enforced server-side, not just hidden in UI); route (apps/api/src/routes/media.ts:93-101) runs validateMediaParams, which 400s undeclared fields after resolveField ali",
-   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a3.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T13:21:03.586Z",
-   "tasks": [
-    "T2.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "MusicRequestSchema (packages/shared/src/schemas/media.ts) strips unknown keys so client lyrics/autoLyrics/stylePrompt never survive parse; refineMusicRequest rejects any model declaring `instrumental` unless instrumental===true (AC1 enforced server-side, not just hidden in UI); route (apps/api/src/routes/media.ts:93-101) runs validateMediaParams, which 400s undeclared fields after resolveField ali",
-   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a3.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T13:20:35.400Z",
-   "tasks": [
-    "T2.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1: refineMusicRequest requires instrumental=true for any model whose registry inputs declare it (MINIMAX_MUSIC_26). Music.vue sends `instrumental: true` when accepts('instrumental'). Zod strips any unknown lyrics field, and `lyrics` is not in MusicRequestSchema. resolveField maps `prompt` to `stylePrompt`, and buildMediaInput maps it to `is_instrumental` plus `prompt` per the SPEC 5.1 row. MINIM",
-   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a3.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-23T13:20:35.263Z",
-   "tasks": [
-    "T2.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "Light cards now use a warm light surface with dark ink (Stable Audio, Lyria, Minimax titles and notes read clearly, selected Lyria has a blue ring), matching the prompt field and chips. Dark parity holds. 375px light shows wrapped notes with no overflow (shots T2.3-4..6).",
-   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a3.md",
+   "evidence": "Conversion dialog is legible at desktop and 375px; the close button, Keep original and Convert are 44px (shot 8). Shots T3.5-7 and T3.3-6 are superseded by later fixes.",
+   "fingerprint": "1b524e4d5a2bd194503d78bbaa637535ec750a836a2e33bd8c85607df5af926b",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a11.md",
    "verdict": "PASS",
    "reviewer": "ui"
   },
   {
-   "at": "2026-11-23T13:20:29.158Z",
+   "at": "2026-11-24T03:57:40.383Z",
    "tasks": [
-    "T2.3"
+    "T3.3"
    ],
    "type": "reviewer_verdict",
-   "evidence": "shots 2/T2.3-4.png (light 1280px: three model cards with cost and length, selected card has accent border, Generate disabled with reason \"Describe the music you want to make.\"), 2/T2.3-5.png (375px: cards wrap cleanly, no overflow, tap targets 44px+), plus attempt-2 shots 2/T2.3-1.png (focus ring), 2/T2.3-2.png (dark), 2/T2.3-3.png (375px no horizontal scroll). Source: MusicModelSelect.vue is a na",
-   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a3.md",
+   "evidence": "Speech studio layout, model list, counter, disabled-reason, low-credits dialog (shot 9) and voice/notice agreement (shot 10) read cleanly.",
+   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a11.md",
+   "verdict": "PASS",
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-24T03:57:40.204Z",
+   "tasks": [
+    "T3.6"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "shot T3.6-1 (375px, no sideways scroll) and the earlier estimate and FAQ shots. Attempt 8 findings still hold.",
+   "fingerprint": "3690e68c2187d07450b96115861c7472e5e4b4d744d1c1bb25aed85f763e2c49",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a11.md",
    "verdict": "PASS",
    "reviewer": "ux"
   },
   {
-   "at": "2026-11-23T13:20:05.796Z",
-   "type": "preflight_passed",
+   "at": "2026-11-24T03:57:40.204Z",
    "tasks": [
-    "T2.2"
+    "T3.5"
    ],
-   "fingerprint": "8923dfed4d9c5635e8a5c0b7d9752042231350620b72c735454669d92bd17eba",
-   "slop": "PASS"
+   "type": "reviewer_verdict",
+   "evidence": "shots T3.5-1..6 and the new T3.5-8 (375px dialog \"Switch to Minimax Speech 2.8 HD?\" lists Removed: breathe, states that Convert changes the text and can be undone, with Keep original and Convert buttons that are not clipped). Undo and focus return were confirmed in the earlier shots.",
+   "fingerprint": "1b524e4d5a2bd194503d78bbaa637535ec750a836a2e33bd8c85607df5af926b",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a11.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
   },
   {
-   "at": "2026-11-23T13:20:05.796Z",
-   "type": "preflight_passed",
+   "at": "2026-11-24T03:57:40.203Z",
    "tasks": [
-    "T2.1"
+    "T3.3"
    ],
-   "fingerprint": "cf87978a4a1398580f8cfc405e0e5688058e4c4ceadd8c994b3460b4005bcdc4"
+   "type": "reviewer_verdict",
+   "evidence": "shots T3.3-1 (empty state), T3.3-3/4 (over-limit, Generate disabled), T3.3-8 (failure, Try again), T3.3-9 (402 Low credits dialog) and the new T3.3-10 (375px: voice notice now reads \"Voice changed to English_Wiselady\", 5 model cards readable, no overflow). Attempt 8 findings still hold; only formatting has changed since.",
+   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a11.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
   },
   {
-   "at": "2026-11-23T13:20:01.772Z",
-   "type": "preflight_passed",
+   "at": "2026-11-24T03:57:40.010Z",
    "tasks": [
-    "T2.7"
+    "T3.6"
    ],
-   "fingerprint": "9260cebcd2f22976bdfba519adc5e64493f23d27b8393ea159e68b7140091c4f"
+   "type": "reviewer_verdict",
+   "evidence": "AC1 met: `useTtsAdvice.seconds` is a computed over `toValue(options.doc)`, and SpeechComposer passes `tts.doc.value`. `doc` is a shallowRef that is replaced on every edit, so the parent re-renders and the child receives the new array. Test \"recomputes when the doc changes\" covers it. Empty and whitespace-only docs return 0. ; AC2 met: `level` is `near` at exactly 90% of the limit and `over` above ",
+   "fingerprint": "3690e68c2187d07450b96115861c7472e5e4b4d744d1c1bb25aed85f763e2c49",
+   "report": ".dashboard/media-studio/reports/media-studio-review-code-haiku-a11.md",
+   "verdict": "PASS",
+   "reviewer": "code"
   },
   {
-   "at": "2026-11-23T13:20:01.772Z",
-   "type": "preflight_passed",
+   "at": "2026-11-24T03:57:39.778Z",
    "tasks": [
-    "T2.6"
+    "T3.5"
    ],
-   "fingerprint": "6e3af6e1f0fccb39a44f85a67cf190f46f220c1f29b1ee85ede776ef5e371145",
-   "slop": "PASS"
+   "type": "reviewer_verdict",
+   "evidence": "AC1 requestModelSwitch switches directly when findUnsupportedTags is empty. AC2 ConvertTagsDialog lists the Approximated and Removed tags, including suggestedEmotion. AC3 confirmSwitch stores undoState (doc, model, emotion) and undoConversion restores all three. AC4 keep and close both emit keep, which calls cancelSwitch, and modelKey is only written on confirm. AC5 AppModal runs with trap-focus. ",
+   "fingerprint": "1b524e4d5a2bd194503d78bbaa637535ec750a836a2e33bd8c85607df5af926b",
+   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a11.md",
+   "verdict": "PASS",
+   "reviewer": "code"
   },
   {
-   "at": "2026-11-23T13:19:59.134Z",
-   "type": "preflight_passed",
+   "at": "2026-11-24T03:57:39.777Z",
    "tasks": [
-    "T2.5"
+    "T3.3"
    ],
-   "fingerprint": "647cfdb75546fbc6a0be0eb050f26e1c8bc48218aa018bcc7119e84aa9f08a19"
+   "type": "reviewer_verdict",
+   "evidence": "AC1 to AC6 unchanged from the a8 PASS. The SpeechModelSelect radios are controlled and snap back to the committed model in onSelect. I spot-read SpeechModelSelect and found no behavioural change, only formatting.",
+   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
+   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a11.md",
+   "verdict": "PASS",
+   "reviewer": "code"
   },
   {
-   "at": "2026-11-23T13:19:59.134Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T2.4"
-   ],
-   "fingerprint": "79200cc0bd163ae776af06bf4aa416547e6969149d0ccbce2cb3e8991ecea8b7",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-23T13:19:55.208Z",
+   "at": "2026-11-24T03:56:22.914Z",
    "type": "dirty_snapshot",
    "tasks": [],
    "hashes": {
-    "apps/api/src/lib/media-input.test.ts": "f835bfbf8954a3fe7f4e462da054eb24de2295aa",
-    "apps/api/src/lib/media-input.ts": "8f9b33565d6979e52583c26b40a5ab219bce4d31",
-    "apps/api/src/routes/media.test.ts": "b15a44948a718a06a16d1a2d1a19e9c29cb3f608",
-    "apps/web/src/components.d.ts": "ab9bc12c7db39686ab43ec969a5771583f39dddb",
-    "apps/web/src/router/index.ts": "66234b7d1519f4aee9648732ce1fbca3fb8f5d2e",
-    "packages/shared/src/schemas/index.ts": "d2e6e6beab087df195c4bda024ec5811f60fa869",
-    "packages/shared/src/schemas/media.ts": "f7a414e021cea34537def69b2a86c6c29de7960c",
-    "apps/web/e2e/qa/music.spec.ts": "faa1a38f736f9b22972d2b17223a67212e593a68",
-    "apps/web/src/components/Music/DurationControl.test.ts": "5e7c693fc6de75ca575b33a0b37b038d16eb6d1b",
-    "apps/web/src/components/Music/DurationControl.vue": "d12303ed1e8f0862017e9d6930490345a54dbceb",
-    "apps/web/src/components/Music/MusicComposer.test.ts": "dd1a09aa9cc5cc27ece66b0f693905926f019595",
-    "apps/web/src/components/Music/MusicComposer.vue": "0295664a5659d469bac6711846f15b93cb67d609",
-    "apps/web/src/components/Music/MusicModelSelect.test.ts": "a0a0e773d64a483e5cec8d3647560c111d88a40f",
-    "apps/web/src/components/Music/MusicModelSelect.vue": "592a0d17a61d7938e9e6e418119e376f9be54a85",
-    "apps/web/src/pages/Music.vue": "fdf99740cbd70cc20800c26285473c33cd83f3e8",
-    "packages/shared/src/schemas/media.test.ts": "41e8351feda6401617b140fb064726d2863a487e"
+    "agent_docs/media-studio/APPROVALS.md": "70f5ca564e2fe45c93c7a2d765341fb64f81b171",
+    "agent_docs/media-studio/SPEC.md": "d4a927689a767909a05b9a2894a593c6a4fd78ab",
+    "agent_docs/media-studio/TASKS.md": "bfe2e55f673c37b5b0b07db9a71017c9c5b81795",
+    "apps/api/src/lib/media-input.test.ts": "92a1caf751d324aac1bbd250a1d25efc11b713f6",
+    "apps/api/src/queue/generation-worker.ts": "4089d687fc6db74b159f88bae2f75358440b7185",
+    "apps/api/src/routes/media.test.ts": "2ba968b32f1c5ebf2925dbba8650badf5b7facb7",
+    "apps/api/src/routes/media.ts": "746ff968726cfc65fa3fe6da7da689004d8ed590",
+    "apps/api/src/services/media-service.test.ts": "1bee1f95457e632d37993ec9c1f387900e0e8bac",
+    "apps/api/src/services/media-service.ts": "b477104dd6be5ada6db5d4b659216de4dcefdec4",
+    "apps/web/package.json": "5fc460b45789e9a124e4d379241bb8ec14cfe60a",
+    "apps/web/src/components.d.ts": "9a8a99d15abca5639e57f6d6823196841750f29b",
+    "apps/web/src/router/index.ts": "3f31c2e0eb9b3797c6f808e691bcb14e3c7e7c91",
+    "bun.lock": "71613f800ce3dbff5e91fed474b4b73cb5b49509",
+    "packages/shared/src/models/index.ts": "f505b6ada7b9b11fe42d5d381f431070e61265d7",
+    "packages/shared/src/models/media-limits.ts": "d4197c320b5c9b888dd14438bb2f19e9a65f1ad7",
+    "packages/shared/src/schemas/index.ts": "babecbeeb3e2d2de3ca280528d414a6397f6b036",
+    "packages/shared/src/schemas/media.test.ts": "51ae9189f077442c12dab51c0d8dba7cd642f0a3",
+    "packages/shared/src/schemas/media.ts": "f7aeb359daa12e1fc6a00ab10611bcd8cae75433",
+    "apps/web/e2e/qa/speech.spec.ts": "95e632a6bd918952888b480127a4d3f115a8a23e",
+    "apps/web/src/components/Speech/ConvertTagsDialog.test.ts": "ac460076d19556306b8bd1307c6157397c1dc594",
+    "apps/web/src/components/Speech/ConvertTagsDialog.vue": "b251fa3a72dbd1f2673a70a199769fc432210231",
+    "apps/web/src/components/Speech/SpeechComposer.test.ts": "e7189797a5e43c1dda6d32e9256830fc15e1b2ea",
+    "apps/web/src/components/Speech/SpeechComposer.vue": "1456a89fba68c28193b912f280b904f50dead341",
+    "apps/web/src/components/Speech/SpeechModelSelect.vue": "bd11114b0d9ada02e1531fa76a08aa0020c9ec78",
+    "apps/web/src/components/Speech/TagChipNode.ts": "8b1fbf497d13dcf657d2b80a57792b4fd3c10f83",
+    "apps/web/src/components/Speech/TagToolbar.vue": "8ae47e49d92ebf823ae343abaf5b869cac69be2f",
+    "apps/web/src/components/Speech/TextAdvisor.test.ts": "51b33973cb22d6f04956357d3f96aecab901752a",
+    "apps/web/src/components/Speech/TextAdvisor.vue": "86ccf42f18b0aad78a626aee2011e84c75b93f10",
+    "apps/web/src/components/Speech/TtsEditor.vue": "3f95c3f608b4f0af8222469869c95e3478228b00",
+    "apps/web/src/components/Speech/VoiceSelect.test.ts": "5729b0cd4c4d0bec3bdadc22cb50d5ae30744578",
+    "apps/web/src/components/Speech/VoiceSelect.vue": "f69d7a383c3e6089d5f0b55353a034035a8a10bd",
+    "apps/web/src/composables/useTtsAdvice.test.ts": "39275e10a291039a71a91f267b37da92e4644743",
+    "apps/web/src/composables/useTtsAdvice.ts": "7e1630d60588012b7689e84f764a90a7ace7a626",
+    "apps/web/src/composables/useTtsEditor.test.ts": "527384460c6a51a74acbea347bf4ef66dd3b9a83",
+    "apps/web/src/composables/useTtsEditor.ts": "3be1ca190e7cf7888801c9500979c41d56be0891",
+    "apps/web/src/pages/Speech.vue": "7cabc4af182bec67d701bd26b13a19d66f995b55",
+    "packages/shared/src/models/tts-tags.test.ts": "5f736bd278923d427f9b2bbb5913844f898450d6",
+    "packages/shared/src/models/tts-tags.ts": "ad4ce1196d628d46e43726e5970363b44af4fcbe"
    }
   },
   {
-   "at": "2026-11-23T13:19:55.101Z",
+   "at": "2026-11-24T03:56:22.771Z",
    "type": "preflight_passed",
    "tasks": [
-    "T2.3"
+    "T3.13"
    ],
-   "fingerprint": "01b74dd6f16444bee31e64e62b4af84fa4a2586f68eb9241698abe8d2aa49c46",
+   "fingerprint": "208ecb6061a538109b179351b35a4bf0b96dee095344599e1e6c3acf6e67e330"
+  },
+  {
+   "at": "2026-11-24T03:56:22.771Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T3.12"
+   ],
+   "fingerprint": "0232cc1363892c82abfde9d2e2cc25dc9ec3338a9003e72745fe2154c73445de",
    "slop": "PASS"
   },
   {
-   "at": "2026-11-23T13:18:31.623Z",
+   "at": "2026-11-24T03:56:22.771Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T3.6"
+   ],
+   "fingerprint": "3690e68c2187d07450b96115861c7472e5e4b4d744d1c1bb25aed85f763e2c49",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-24T03:56:17.954Z",
+   "type": "task_built",
+   "tasks": [
+    "T3.3",
+    "T3.5"
+   ],
+   "text": "format fix, bun run check 0 errors",
+   "files": [
+    "apps/web/src/components/Speech/VoiceSelect.test.ts",
+    "apps/web/src/components/Speech/ConvertTagsDialog.vue"
+   ]
+  },
+  {
+   "at": "2026-11-24T03:56:17.711Z",
+   "type": "task_built",
+   "tasks": [
+    "T3.13"
+   ],
+   "text": "unit a10 PASS: check clean, 100% lines, shuffle clean",
+   "files": [
+    "apps/api/src/routes/media.test.ts",
+    "packages/shared/src/schemas/media.test.ts"
+   ]
+  },
+  {
+   "at": "2026-11-24T03:55:43.715Z",
    "type": "task_started",
    "tasks": [
-    "T2.3"
+    "T3.13"
    ],
-   "attempt": "2"
+   "attempt": "3"
   },
   {
-   "at": "2026-11-23T13:18:31.369Z",
+   "at": "2026-11-24T03:55:41.078Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/media-studio/APPROVALS.md": "70f5ca564e2fe45c93c7a2d765341fb64f81b171",
+    "agent_docs/media-studio/SPEC.md": "d4a927689a767909a05b9a2894a593c6a4fd78ab",
+    "agent_docs/media-studio/TASKS.md": "bfe2e55f673c37b5b0b07db9a71017c9c5b81795",
+    "apps/api/src/lib/media-input.test.ts": "92a1caf751d324aac1bbd250a1d25efc11b713f6",
+    "apps/api/src/queue/generation-worker.ts": "4089d687fc6db74b159f88bae2f75358440b7185",
+    "apps/api/src/routes/media.test.ts": "d1e5fdc77547ace31ad09e1f120f4f9a78cde23f",
+    "apps/api/src/routes/media.ts": "746ff968726cfc65fa3fe6da7da689004d8ed590",
+    "apps/api/src/services/media-service.test.ts": "1bee1f95457e632d37993ec9c1f387900e0e8bac",
+    "apps/api/src/services/media-service.ts": "b477104dd6be5ada6db5d4b659216de4dcefdec4",
+    "apps/web/package.json": "5fc460b45789e9a124e4d379241bb8ec14cfe60a",
+    "apps/web/src/components.d.ts": "9a8a99d15abca5639e57f6d6823196841750f29b",
+    "apps/web/src/router/index.ts": "3f31c2e0eb9b3797c6f808e691bcb14e3c7e7c91",
+    "bun.lock": "71613f800ce3dbff5e91fed474b4b73cb5b49509",
+    "packages/shared/src/models/index.ts": "f505b6ada7b9b11fe42d5d381f431070e61265d7",
+    "packages/shared/src/models/media-limits.ts": "d4197c320b5c9b888dd14438bb2f19e9a65f1ad7",
+    "packages/shared/src/schemas/index.ts": "babecbeeb3e2d2de3ca280528d414a6397f6b036",
+    "packages/shared/src/schemas/media.test.ts": "51ae9189f077442c12dab51c0d8dba7cd642f0a3",
+    "packages/shared/src/schemas/media.ts": "f7aeb359daa12e1fc6a00ab10611bcd8cae75433",
+    "apps/web/e2e/qa/speech.spec.ts": "95e632a6bd918952888b480127a4d3f115a8a23e",
+    "apps/web/src/components/Speech/ConvertTagsDialog.test.ts": "ac460076d19556306b8bd1307c6157397c1dc594",
+    "apps/web/src/components/Speech/ConvertTagsDialog.vue": "b251fa3a72dbd1f2673a70a199769fc432210231",
+    "apps/web/src/components/Speech/SpeechComposer.test.ts": "e7189797a5e43c1dda6d32e9256830fc15e1b2ea",
+    "apps/web/src/components/Speech/SpeechComposer.vue": "1456a89fba68c28193b912f280b904f50dead341",
+    "apps/web/src/components/Speech/SpeechModelSelect.vue": "bd11114b0d9ada02e1531fa76a08aa0020c9ec78",
+    "apps/web/src/components/Speech/TagChipNode.ts": "8b1fbf497d13dcf657d2b80a57792b4fd3c10f83",
+    "apps/web/src/components/Speech/TagToolbar.vue": "8ae47e49d92ebf823ae343abaf5b869cac69be2f",
+    "apps/web/src/components/Speech/TextAdvisor.test.ts": "51b33973cb22d6f04956357d3f96aecab901752a",
+    "apps/web/src/components/Speech/TextAdvisor.vue": "86ccf42f18b0aad78a626aee2011e84c75b93f10",
+    "apps/web/src/components/Speech/TtsEditor.vue": "3f95c3f608b4f0af8222469869c95e3478228b00",
+    "apps/web/src/components/Speech/VoiceSelect.test.ts": "5729b0cd4c4d0bec3bdadc22cb50d5ae30744578",
+    "apps/web/src/components/Speech/VoiceSelect.vue": "f69d7a383c3e6089d5f0b55353a034035a8a10bd",
+    "apps/web/src/composables/useTtsAdvice.test.ts": "39275e10a291039a71a91f267b37da92e4644743",
+    "apps/web/src/composables/useTtsAdvice.ts": "7e1630d60588012b7689e84f764a90a7ace7a626",
+    "apps/web/src/composables/useTtsEditor.test.ts": "527384460c6a51a74acbea347bf4ef66dd3b9a83",
+    "apps/web/src/composables/useTtsEditor.ts": "3be1ca190e7cf7888801c9500979c41d56be0891",
+    "apps/web/src/pages/Speech.vue": "7cabc4af182bec67d701bd26b13a19d66f995b55",
+    "packages/shared/src/models/tts-tags.test.ts": "5f736bd278923d427f9b2bbb5913844f898450d6",
+    "packages/shared/src/models/tts-tags.ts": "ad4ce1196d628d46e43726e5970363b44af4fcbe"
+   }
+  },
+  {
+   "at": "2026-11-24T03:55:40.845Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T3.5"
+   ],
+   "fingerprint": "1b524e4d5a2bd194503d78bbaa637535ec750a836a2e33bd8c85607df5af926b",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-24T03:55:40.845Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T3.3"
+   ],
+   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-24T03:55:06.676Z",
+   "type": "task_started",
+   "tasks": [
+    "T3.3",
+    "T3.5"
+   ],
+   "attempt": "4"
+  },
+  {
+   "at": "2026-11-24T03:55:06.443Z",
    "type": "build_started",
    "tasks": [
-    "T2.3"
+    "T3.3",
+    "T3.5",
+    "T3.13"
    ],
-   "attempt": "2"
+   "attempt": "9"
   },
   {
-   "at": "2026-11-23T13:18:27.180Z",
+   "at": "2026-11-24T03:55:01.707Z",
    "tasks": [
-    "T2.3"
+    "T3.12"
    ],
-   "type": "reviewer_verdict",
-   "evidence": "isServedAs widens music route only to MUSIC_STUDIO_MODEL_KEYS (MINIMAX_MUSIC_26), not Minimax 1.5; refine forces instrumental=true server-side for models declaring it and lyrics are stripped by the schema, so no lyrics reach the payload; prompt alias to stylePrompt only when model lacks prompt, and the aliased text is the same prompt that passes checkPromptSafety; Minimax cost uses its own per-fil",
-   "fingerprint": "8208bcd2901326e8a58ca6343854977dca98a14d682b9ae0962f9ffc2b3c0226",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a2.md",
-   "verdict": "PASS",
-   "reviewer": "security"
+   "attempt": "8",
+   "type": "verify_passed",
+   "evidence": "V1 21/21 tests (4 files incl. new VoiceSelect.test.ts); SpeechComposer.vue 100/100/100/100, TextAdvisor.vue 100/100/100/100, ConvertTagsDialog.vue 100 / 91.3 branch / 100 / 100; no it.fails/skip/only/snapshot",
+   "fingerprint": "2415647e8050219870380d124602040736e9d138466f6387f2204600bbedc3c9",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a8.md"
   },
   {
-   "at": "2026-11-23T13:18:27.180Z",
+   "at": "2026-11-24T03:55:01.707Z",
    "tasks": [
-    "T2.1"
+    "T3.4"
    ],
-   "type": "reviewer_verdict",
-   "evidence": "MusicRequestSchema (packages/shared/src/schemas/media.ts) is a stripping z.object with typed fields; durationSec/steps/cfgScale int/number bounded by registry ranges in refineMusicRequest only when the model declares the field; route (apps/api/src/routes/media.ts:93-101) parses then validateMediaParams 400s any field the model does not declare (Lyria + durationSec rejected); buildMediaInput (apps/",
-   "fingerprint": "cf87978a4a1398580f8cfc405e0e5688058e4c4ceadd8c994b3460b4005bcdc4",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a2.md",
-   "verdict": "PASS",
-   "reviewer": "security"
+   "attempt": "8",
+   "type": "verify_passed",
+   "evidence": "T3.4 files unchanged since a5 (where its ACs and e2e were proven); V1 `cd apps/web && bun run test` 258 files / 2285 tests passed; V2 formatting failures are all in files of other tasks (see BLOCKING), `vp check --no-fmt` 0 errors / 17 warnings; shots T3.4-1..4 still valid",
+   "fingerprint": "85722c05ebb83ef8dfa29f0b4e69eb177a7041221c8e321e072e5c6744ec65da",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a8.md"
   },
   {
-   "at": "2026-11-23T13:18:20.319Z",
+   "at": "2026-11-24T03:55:01.707Z",
    "tasks": [
-    "T2.3"
+    "T3.13"
    ],
-   "type": "reviewer_verdict",
-   "evidence": "isServedAs widens music route only to MUSIC_STUDIO_MODEL_KEYS (MINIMAX_MUSIC_26), not Minimax 1.5; refine forces instrumental=true server-side for models declaring it and lyrics are stripped by the schema, so no lyrics reach the payload; prompt alias to stylePrompt only when model lacks prompt, and the aliased text is the same prompt that passes checkPromptSafety; Minimax cost uses its own per-fil",
-   "fingerprint": "8208bcd2901326e8a58ca6343854977dca98a14d682b9ae0962f9ffc2b3c0226",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a2.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T13:18:20.318Z",
-   "tasks": [
-    "T2.1"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "MusicRequestSchema (packages/shared/src/schemas/media.ts) is a stripping z.object with typed fields; durationSec/steps/cfgScale int/number bounded by registry ranges in refineMusicRequest only when the model declares the field; route (apps/api/src/routes/media.ts:93-101) parses then validateMediaParams 400s any field the model does not declare (Lyria + durationSec rejected); buildMediaInput (apps/",
-   "fingerprint": "cf87978a4a1398580f8cfc405e0e5688058e4c4ceadd8c994b3460b4005bcdc4",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a2.md",
-   "verdict": "PASS",
-   "reviewer": "security"
-  },
-  {
-   "at": "2026-11-23T13:18:06.219Z",
-   "tasks": [
-    "T2.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1: the schema forces instrumental=true for models that declare it. The unknown lyrics field is stripped by Zod, so no user lyrics are sent. resolveField maps prompt to stylePrompt, giving is_instrumental plus prompt, which matches the SPEC 5.1 instrumental row. AC2: the lyrics field is never rendered and the instrumental note is shown. AC3: the cost badge uses getMediaCreditCost per file. AC4: s",
-   "fingerprint": "8208bcd2901326e8a58ca6343854977dca98a14d682b9ae0962f9ffc2b3c0226",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a2.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-23T13:18:06.219Z",
-   "tasks": [
-    "T2.2"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1: exact empty copy plus a \"Try an example\" button that fills draft.prompt. AC2: DurationControl renders only if accepts('durationSec') && range, and Lyria does not declare it. AC3: modelKey is separate from the draft prompt, and useMediaCost is reactive to modelKey. AC4: disabledReason feeds StudioActionBar; Mod+Enter via onKeyStroke, guarded by disabledReason and isBusy. AC5: reuses JobProgres",
-   "fingerprint": "0d3d8e7db1f2974096fb311bb75952181bc8b89e85add24cbdd250d1127b6228",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a2.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-23T13:18:06.219Z",
-   "tasks": [
-    "T2.1"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1: Lyria declares no durationSec input, so validateMediaParams rejects it with a field-level 400 (\"durationSec: not supported\"); buildMediaInput only maps declared inputs. AC2: refineMusicRequest bounds durationSec, steps and cfgScale from the registry range (named constants) and returns a path-level issue. AC3: judged under Q24, see ADVISORY. AC4: processMusic uses getMusicCreditCost derived fr",
-   "fingerprint": "cf87978a4a1398580f8cfc405e0e5688058e4c4ceadd8c994b3460b4005bcdc4",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a2.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-23T13:17:58.419Z",
-   "tasks": [
-    "T2.2"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "Empty-state copy exact with example button; clear page title, prompt, chips and model list hierarchy; model notes one line each; Duration appears only for Stable Audio (shots T2.2-1..3)",
-   "fingerprint": "0d3d8e7db1f2974096fb311bb75952181bc8b89e85add24cbdd250d1127b6228",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a2.md",
-   "verdict": "PASS",
-   "reviewer": "ui"
-  },
-  {
-   "at": "2026-11-23T13:17:58.419Z",
-   "tasks": [
-    "T2.3"
-   ],
-   "type": "reviewer_verdict",
-   "category": "ui",
-   "text": "[ui] · apps/web/src/components/Music/MusicModelSelect.vue (375px light shot T2.3-3) · In light theme the model cards render as dark translucent grey blocks (selected Stable Audio and unselected Lyria alike), and the grey description and credit text on them is low contrast and hard to read. It also breaks the light/dark parity the task claims · Give the cards a light-theme surface token and ink tok",
+   "attempt": "8",
+   "type": "verify_failed",
+   "category": "type-lint",
+   "text": "[type-lint] · `bun run check` · exit 1 \"Formatting issues found\" in apps/api/src/routes/media.test.ts:569 and packages/shared/src/schemas/media.test.ts:252 (the it.each titles added for the speech cases exceed the line width) · run `bunx vp check --fix` on both files and re-run `bun run check`",
    "files": [
-    "apps/web/src/components/Music/MusicModelSelect.vue"
+    "bun run check"
    ],
    "sigs": [
-    "T2.3|ui|apps/web/src/components/Music/MusicModelSelect.vue"
+    "T3.13|type-lint|bun run check"
    ],
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a2.md",
-   "verdict": "CHANGES",
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a8.md"
+  },
+  {
+   "at": "2026-11-24T03:55:01.707Z",
+   "tasks": [
+    "T3.5"
+   ],
+   "attempt": "8",
+   "type": "verify_failed",
+   "category": "type-lint",
+   "text": "[type-lint] · V2 `bun run check` · exit 1 \"Formatting issues found\" in apps/web/src/components/Speech/ConvertTagsDialog.vue:38 (the div with class \"body convert-tags-body\" must wrap its attributes) · run `bunx vp check --fix` on the file and re-run `bun run check`",
+   "files": [
+    "v2 `bun run check"
+   ],
+   "sigs": [
+    "T3.5|type-lint|v2 `bun run check"
+   ],
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a8.md"
+  },
+  {
+   "at": "2026-11-24T03:55:01.706Z",
+   "tasks": [
+    "T3.3"
+   ],
+   "attempt": "8",
+   "type": "verify_failed",
+   "category": "type-lint",
+   "text": "[type-lint] · V2 `bun run check` · exit 1 \"Formatting issues found\" in apps/web/src/components/Speech/VoiceSelect.test.ts:17 (the setProps call exceeds the line width; the EXTRA test added by the fix) · run `bunx vp check --fix` on the file (line wrap only) and re-run `bun run check`",
+   "files": [
+    "v2 `bun run check"
+   ],
+   "sigs": [
+    "T3.3|type-lint|v2 `bun run check"
+   ],
+   "report": ".dashboard/media-studio/reports/media-studio-verifier-a8.md"
+  },
+  {
+   "at": "2026-11-24T03:54:49.794Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.13"
+   ],
+   "text": "media.test.ts non-speech model key case does not assert enqueueGeneration was not called"
+  },
+  {
+   "at": "2026-11-24T03:54:49.599Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.12"
+   ],
+   "text": "ConvertTagsDialog.vue branches 91.3% (lines 17,38), below the 95% target"
+  },
+  {
+   "at": "2026-11-24T03:54:49.377Z",
+   "type": "advisory",
+   "tasks": [
+    "T3.3"
+   ],
+   "text": "Shared Low credits dialog on /audio/speech says \"To generate an AI image, 5 credits are required\" (shot T3.3-9); copy is image-specific"
+  },
+  {
+   "at": "2026-11-24T03:50:10.815Z",
+   "type": "verify_started",
+   "tasks": [
+    "T3.3",
+    "T3.4",
+    "T3.5",
+    "T3.12",
+    "T3.13"
+   ],
+   "attempt": "9"
+  },
+  {
+   "at": "2026-11-24T03:50:04.211Z",
+   "tasks": [
+    "T3.4"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "attempt-3 recheck: the a5 report had no BLOCKING items, and none of the five T3.4 files has changed since it was written (all mtimes are 08:19-08:24, before the a5 report at 08:55). A re-grep confirms the sinks. There is no innerHTML, v-html, :href or target= in TtsEditor.vue, TagToolbar.vue, TagChipNode.ts or useTtsEditor.ts. The chip DOM is built with createElement, className and textContent onl",
+   "fingerprint": "85722c05ebb83ef8dfa29f0b4e69eb177a7041221c8e321e072e5c6744ec65da",
+   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a8.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-24T03:50:04.049Z",
+   "type": "verify_passed",
+   "tasks": [
+    "T3.6"
+   ],
+   "evidence": "all reviewers passed; no verifier routed (risk=low)",
+   "fingerprint": "75e375949ee03f161a78666d3ee4c3d0b25c3d7b3d9b03d08bfeae224fd7763d",
+   "skipped": "verifier"
+  },
+  {
+   "at": "2026-11-24T03:50:04.041Z",
+   "tasks": [
+    "T3.6"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "shot T3.3-6 (top of the page) shows \"Estimated spoken length: 4 s\", the Minimax estimate note and the FAQ link. T3.6-1 shows 375px with no sideways scroll. TextAdvisor.vue source: near and over warnings use role=status, the split suggestion appears, the FAQ link is 44px with focus-visible, and the over-limit warning points to the reason beside Generate.",
+   "fingerprint": "75e375949ee03f161a78666d3ee4c3d0b25c3d7b3d9b03d08bfeae224fd7763d",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a8.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-24T03:50:04.041Z",
+   "tasks": [
+    "T3.5"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "shots T3.5-1..6 show no dialog when tags are supported, a dialog listing what is approximated or removed, Convert followed by an Undo banner, Undo restoring the model and chip, Escape returning focus to the model list, and a 375px dialog with 44px buttons. ConvertTagsDialog.vue has trap-focus, a labelled title and description, and a mobile rule that enlarges the close X to 44px.",
+   "fingerprint": "51441ef3e9d5af97daa0357c9c713997107e89dd05e25ef267b3d64a655dbeeb",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a8.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-24T03:50:04.041Z",
+   "tasks": [
+    "T3.4"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "shots T3.4-1..4 show the chip inserted, a pause of 99 rejected inline, an editable pause chip and 375px wrapping with 44px chips. Attempt 1 and 2 findings still hold.",
+   "fingerprint": "85722c05ebb83ef8dfa29f0b4e69eb177a7041221c8e321e072e5c6744ec65da",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a8.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-24T03:50:04.040Z",
+   "tasks": [
+    "T3.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "shots T3.3-1 (empty state with Try an example), T3.3-3/4 (counter turns red, Generate disabled with the excess named), T3.3-7 (result card), T3.3-8 (failure with \"No credits were used\" and Try again) and T3.3-9 (402 opens the Low credits dialog, nothing queued). VoiceSelect.vue is a fieldset with a legend, 44px options, focus-visible and a role=status notice. The notice now builds from the fallbac",
+   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a8.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-24T03:50:03.872Z",
+   "tasks": [
+    "T3.6"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "The advisor lines (spoken length, \"Estimated\" cost note, FAQ link) are legible and subordinate to the editor (T3.3-2, T3.6-1).",
+   "fingerprint": "75e375949ee03f161a78666d3ee4c3d0b25c3d7b3d9b03d08bfeae224fd7763d",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a8.md",
+   "verdict": "PASS",
    "reviewer": "ui"
   },
   {
-   "at": "2026-11-23T13:17:52.111Z",
+   "at": "2026-11-24T03:50:03.872Z",
    "tasks": [
-    "T2.3"
+    "T3.5"
    ],
    "type": "reviewer_verdict",
-   "evidence": "shots 2/T2.3-1.png (focus ring on chip), 2/T2.3-2.png (dark theme), 2/T2.3-3.png (375px, no horizontal scroll). Source: MusicComposer.vue shows a one-line instrumental note for Minimax and has no lyrics field, so lyrics are hidden. Cost per file shows in each model row.",
-   "fingerprint": "8208bcd2901326e8a58ca6343854977dca98a14d682b9ae0962f9ffc2b3c0226",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a2.md",
+   "evidence": "The dialog is clear at 1280 and 375px (T3.5-2, T3.5-6): serif title, a \"Removed\" list, and Keep original and Convert as the clear primary action. The earlier blocker is fixed in source. ConvertTagsDialog.vue:141-147 sets the close button to 2.75rem (44px) at 640px and below. The selector's specificity beats AppModal's own 2.5rem rule.",
+   "fingerprint": "51441ef3e9d5af97daa0357c9c713997107e89dd05e25ef267b3d64a655dbeeb",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a8.md",
    "verdict": "PASS",
-   "reviewer": "ux"
+   "reviewer": "ui"
   },
   {
-   "at": "2026-11-23T13:17:52.110Z",
+   "at": "2026-11-24T03:50:03.872Z",
    "tasks": [
-    "T2.2"
+    "T3.4"
    ],
    "type": "reviewer_verdict",
-   "evidence": "shots 2/T2.2-1.png (exact empty copy plus \"Try an example\"), 2/T2.2-2.png (example fills prompt, Lyria has no duration), 2/T2.2-3.png (Stable Audio shows Duration, prompt kept). Source: Music.vue passes a disabled reason to StudioActionBar, Mod+Enter submits, queued/running/succeeded/failed/rejected states and credit dialogs are handled, radio model list is keyboard-native, all controls have label",
-   "fingerprint": "0d3d8e7db1f2974096fb311bb75952181bc8b89e85add24cbdd250d1127b6228",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a2.md",
+   "evidence": "Tag chips, the inline pause field and the toolbar read clearly (T3.4-1, T3.6-1). At 375px the toolbar wraps cleanly with 44px chips and nothing scrolls sideways.",
+   "fingerprint": "85722c05ebb83ef8dfa29f0b4e69eb177a7041221c8e321e072e5c6744ec65da",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a8.md",
    "verdict": "PASS",
-   "reviewer": "ux"
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-24T03:50:03.871Z",
+   "tasks": [
+    "T3.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Composer, model list, voice rows, cost row and Generate read clearly in the dark on-system look (T3.3-2). The \"Preset voice\" blocker stays fixed. The voice notice reads \"Voice changed to Andy\" in T3.3-6, but VoiceSelect.vue:34-37 now builds it from the fallback voice, so that shot predates the fix.",
+   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
+   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a8.md",
+   "verdict": "PASS",
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-24T03:50:03.678Z",
+   "tasks": [
+    "T3.6"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1 met: `useTtsAdvice.seconds` recomputes from the doc (SpeechComposer passes the live doc); the test \"recomputes when the doc changes\" covers it. AC2 met: `level` is `near` at exactly 90% and `over` above the limit, with remaining characters in the warning text and a pointer to the disabled reason. AC3 met: `ESTIMATE_NOTE` renders when `estimated` is true, and `estimated` is true only for MINIMA",
+   "fingerprint": "75e375949ee03f161a78666d3ee4c3d0b25c3d7b3d9b03d08bfeae224fd7763d",
+   "report": ".dashboard/media-studio/reports/media-studio-review-code-haiku-a8.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-24T03:50:03.454Z",
+   "tasks": [
+    "T3.5"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1 requestModelSwitch changes the model directly when findUnsupportedTags is empty. AC2 ConvertTagsDialog lists the Approximated and Removed tags, and suggestedEmotion is shown. AC3 confirmSwitch stores the previous doc, model and emotion in undoState, and SpeechComposer shows an Undo button that calls undoConversion. AC4 Keep original, Escape and the close button all emit keep, which calls cance",
+   "fingerprint": "51441ef3e9d5af97daa0357c9c713997107e89dd05e25ef267b3d64a655dbeeb",
+   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a8.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-24T03:50:03.454Z",
+   "tasks": [
+    "T3.4"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1 to AC7 unchanged since the previous report, whose items were all advisory. Nothing in the diff regresses them.",
+   "fingerprint": "85722c05ebb83ef8dfa29f0b4e69eb177a7041221c8e321e072e5c6744ec65da",
+   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a8.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-24T03:50:03.453Z",
+   "tasks": [
+    "T3.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1 to AC6 still met. The VoiceSelect fallback notice is built from the `fallback` const (defineModel lags the parent re-render), is cleared on each model change, and is announced through role=status. Keep-or-default voice logic is intact. The 44px targets and focus rings are in the styles.",
+   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
+   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a8.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-24T03:48:53.770Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T3.12"
+   ],
+   "fingerprint": "2415647e8050219870380d124602040736e9d138466f6387f2204600bbedc3c9",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-24T03:48:53.770Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T3.6"
+   ],
+   "fingerprint": "75e375949ee03f161a78666d3ee4c3d0b25c3d7b3d9b03d08bfeae224fd7763d",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-24T03:48:53.770Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T3.4"
+   ],
+   "fingerprint": "85722c05ebb83ef8dfa29f0b4e69eb177a7041221c8e321e072e5c6744ec65da",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-24T03:48:47.111Z",
+   "type": "dirty_snapshot",
+   "tasks": [],
+   "hashes": {
+    "agent_docs/media-studio/APPROVALS.md": "70f5ca564e2fe45c93c7a2d765341fb64f81b171",
+    "agent_docs/media-studio/SPEC.md": "d4a927689a767909a05b9a2894a593c6a4fd78ab",
+    "agent_docs/media-studio/TASKS.md": "bfe2e55f673c37b5b0b07db9a71017c9c5b81795",
+    "apps/api/src/lib/media-input.test.ts": "92a1caf751d324aac1bbd250a1d25efc11b713f6",
+    "apps/api/src/queue/generation-worker.ts": "4089d687fc6db74b159f88bae2f75358440b7185",
+    "apps/api/src/routes/media.test.ts": "6f638dff71c131e08afd0c3c56b0f54785a8c119",
+    "apps/api/src/routes/media.ts": "746ff968726cfc65fa3fe6da7da689004d8ed590",
+    "apps/api/src/services/media-service.test.ts": "1bee1f95457e632d37993ec9c1f387900e0e8bac",
+    "apps/api/src/services/media-service.ts": "b477104dd6be5ada6db5d4b659216de4dcefdec4",
+    "apps/web/package.json": "5fc460b45789e9a124e4d379241bb8ec14cfe60a",
+    "apps/web/src/components.d.ts": "9a8a99d15abca5639e57f6d6823196841750f29b",
+    "apps/web/src/router/index.ts": "3f31c2e0eb9b3797c6f808e691bcb14e3c7e7c91",
+    "bun.lock": "71613f800ce3dbff5e91fed474b4b73cb5b49509",
+    "packages/shared/src/models/index.ts": "f505b6ada7b9b11fe42d5d381f431070e61265d7",
+    "packages/shared/src/models/media-limits.ts": "d4197c320b5c9b888dd14438bb2f19e9a65f1ad7",
+    "packages/shared/src/schemas/index.ts": "babecbeeb3e2d2de3ca280528d414a6397f6b036",
+    "packages/shared/src/schemas/media.test.ts": "962cb41890db33c2da19556a4dcc033385b264b5",
+    "packages/shared/src/schemas/media.ts": "f7aeb359daa12e1fc6a00ab10611bcd8cae75433",
+    "apps/web/e2e/qa/speech.spec.ts": "95e632a6bd918952888b480127a4d3f115a8a23e",
+    "apps/web/src/components/Speech/ConvertTagsDialog.test.ts": "ac460076d19556306b8bd1307c6157397c1dc594",
+    "apps/web/src/components/Speech/ConvertTagsDialog.vue": "12b95f3984580c756e1d05d316017bfdeadaed76",
+    "apps/web/src/components/Speech/SpeechComposer.test.ts": "e7189797a5e43c1dda6d32e9256830fc15e1b2ea",
+    "apps/web/src/components/Speech/SpeechComposer.vue": "1456a89fba68c28193b912f280b904f50dead341",
+    "apps/web/src/components/Speech/SpeechModelSelect.vue": "bd11114b0d9ada02e1531fa76a08aa0020c9ec78",
+    "apps/web/src/components/Speech/TagChipNode.ts": "8b1fbf497d13dcf657d2b80a57792b4fd3c10f83",
+    "apps/web/src/components/Speech/TagToolbar.vue": "8ae47e49d92ebf823ae343abaf5b869cac69be2f",
+    "apps/web/src/components/Speech/TextAdvisor.test.ts": "51b33973cb22d6f04956357d3f96aecab901752a",
+    "apps/web/src/components/Speech/TextAdvisor.vue": "86ccf42f18b0aad78a626aee2011e84c75b93f10",
+    "apps/web/src/components/Speech/TtsEditor.vue": "3f95c3f608b4f0af8222469869c95e3478228b00",
+    "apps/web/src/components/Speech/VoiceSelect.test.ts": "a8df8046d3149707c992175311146bdb283c911f",
+    "apps/web/src/components/Speech/VoiceSelect.vue": "f69d7a383c3e6089d5f0b55353a034035a8a10bd",
+    "apps/web/src/composables/useTtsAdvice.test.ts": "39275e10a291039a71a91f267b37da92e4644743",
+    "apps/web/src/composables/useTtsAdvice.ts": "7e1630d60588012b7689e84f764a90a7ace7a626",
+    "apps/web/src/composables/useTtsEditor.test.ts": "527384460c6a51a74acbea347bf4ef66dd3b9a83",
+    "apps/web/src/composables/useTtsEditor.ts": "3be1ca190e7cf7888801c9500979c41d56be0891",
+    "apps/web/src/pages/Speech.vue": "7cabc4af182bec67d701bd26b13a19d66f995b55",
+    "packages/shared/src/models/tts-tags.test.ts": "5f736bd278923d427f9b2bbb5913844f898450d6",
+    "packages/shared/src/models/tts-tags.ts": "ad4ce1196d628d46e43726e5970363b44af4fcbe"
+   }
+  },
+  {
+   "at": "2026-11-24T03:48:46.963Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T3.13"
+   ],
+   "fingerprint": "81394ad0f8b09d2de8e7026bb2fca16629aa54452c04de586f2d2677e9e4da39"
   }
  ]
 };

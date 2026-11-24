@@ -6,6 +6,8 @@ import {
   MUSIC_STUDIO_MODEL_KEYS,
   MusicRequestSchema,
   SongRequestSchema,
+  SPEECH_MODEL_KEYS,
+  SpeechRequestSchema,
 } from './media.js';
 import {
   MEDIA_PROMPT_MAX_CHARS,
@@ -213,5 +215,83 @@ describe('LyricsRequestSchema', () => {
 
   it('rejects an unknown mode', () => {
     expect(LyricsRequestSchema.safeParse({ mode: 'poem', theme: 'x' }).success).toBe(false);
+  });
+});
+
+describe('SpeechRequestSchema', () => {
+  const LIMITS = {
+    INWORLD_TTS_2: 2000,
+    INWORLD_TTS_15_MAX: 2000,
+    MINIMAX_SPEECH_28_HD: 10000,
+    MINIMAX_SPEECH_28_TURBO: 10000,
+    CHATTERBOX_TURBO: 500,
+  } as const;
+
+  function speech(overrides: Record<string, unknown>) {
+    return SpeechRequestSchema.safeParse({
+      jobId: JOB_ID,
+      modelKey: 'INWORLD_TTS_2',
+      text: 'Hello there',
+      ...overrides,
+    });
+  }
+
+  function firstIssue(result: ReturnType<typeof speech>) {
+    return result.success ? undefined : result.error.issues[0];
+  }
+
+  it('offers exactly the five speech models and excludes voice cloning', () => {
+    expect([...SPEECH_MODEL_KEYS].sort()).toEqual(Object.keys(LIMITS).sort());
+    expect(SPEECH_MODEL_KEYS).not.toContain('MINIMAX_VOICE_CLONE');
+  });
+
+  it('accepts a minimal valid body', () => {
+    expect(speech({}).success).toBe(true);
+  });
+
+  it.each(Object.entries(LIMITS))(
+    'accepts %s text at its %i-character limit',
+    (modelKey, limit) => {
+      expect(speech({ modelKey, text: 'a'.repeat(limit) }).success).toBe(true);
+    },
+  );
+
+  it.each(Object.entries(LIMITS))(
+    'rejects %s text one past its %i-character limit on the text field',
+    (modelKey, limit) => {
+      const issue = firstIssue(speech({ modelKey, text: 'a'.repeat(limit + 1) }));
+
+      expect(issue?.path).toEqual(['text']);
+      expect(issue?.message).toBe(`Text must be at most ${limit} characters for this model`);
+    },
+  );
+
+  it.each([
+    ['empty', ''],
+    ['whitespace only', ' \n\t '],
+  ])('rejects %s text', (_name, text) => {
+    const issue = firstIssue(speech({ text }));
+
+    expect(issue?.path).toEqual(['text']);
+    expect(issue?.message).toBe('Text is required');
+  });
+
+  it.each(['MINIMAX_VOICE_CLONE', 'LYRIA_2', 'NOT_A_MODEL'])(
+    'rejects the non-speech model key %s on the modelKey field',
+    (modelKey) => {
+      expect(firstIssue(speech({ modelKey }))?.path).toEqual(['modelKey']);
+    },
+  );
+
+  it('rejects an optional short field over 100 characters', () => {
+    expect(speech({ voice: 'v'.repeat(101) }).success).toBe(false);
+    expect(speech({ voice: 'v'.repeat(100) }).success).toBe(true);
+  });
+
+  it('does not carry an unknown client count through to the parsed data', () => {
+    const result = speech({ chars: 1, creditCost: 0 });
+
+    expect(result.success && 'chars' in result.data).toBe(false);
+    expect(result.success && 'creditCost' in result.data).toBe(false);
   });
 });

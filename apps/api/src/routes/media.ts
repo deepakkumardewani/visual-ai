@@ -2,7 +2,12 @@ import { Router } from "express"
 import type { NextFunction, Request, Response } from "express"
 import multer from "multer"
 
-import { MAX_VERSION_FILE_BYTES, MusicRequestSchema, SongRequestSchema } from "@visual-ai/shared"
+import {
+    MAX_VERSION_FILE_BYTES,
+    MusicRequestSchema,
+    SongRequestSchema,
+    SpeechRequestSchema,
+} from "@visual-ai/shared"
 import type { MediaAssetType, MediaModelKey } from "@visual-ai/shared"
 
 import { asyncHandler } from "../lib/async-handler.js"
@@ -32,6 +37,7 @@ import {
     getAvailableCredits,
     getMusicCreditCost,
     getSongCreditCost,
+    getSpeechCreditCost,
     hasExistingJob,
     SONG_MODEL_KEY,
 } from "../services/media-service.js"
@@ -170,6 +176,53 @@ mediaRoutes.post(
         await enqueueGeneration({
             kind: "song",
             body: { ...params, jobId, modelKey: SONG_MODEL_KEY, userId },
+            isPro: await resolveUserIsPro(userId),
+        })
+        acceptResponse(res)
+    }),
+)
+
+mediaRoutes.post(
+    "/generate/audio/speech",
+    // @ts-ignore
+    requireAuth,
+    asyncHandler(async (req: Request, res: Response) => {
+        const userId = sessionUserId(req)
+
+        const parsed = SpeechRequestSchema.safeParse(req.body)
+        if (!parsed.success) {
+            const [issue] = parsed.error.issues
+            throw new BadRequestError(
+                `${issue?.path.join(".") || "body"}: ${issue?.message ?? "invalid request"}`,
+            )
+        }
+        const { jobId, modelKey, ...params } = parsed.data
+        validateMediaParams(modelKey, "tts", params)
+
+        const mediaKey = modelKey as MediaModelKey
+        // Quantity comes from the submitted text, never from a client-sent count or cost.
+        const required = getSpeechCreditCost(mediaKey, params.text)
+
+        const safety = await checkPromptSafety(params.text)
+        if (!safety.safe) {
+            res.status(422).json({ code: PROMPT_REJECTED_CODE, error: PROMPT_REJECTED_MESSAGE })
+            return
+        }
+
+        const available = await getAvailableCredits(userId)
+        if (available < required) {
+            res.status(402).json({ code: INSUFFICIENT_CREDITS_CODE, required, available })
+            return
+        }
+
+        if (await hasExistingJob(jobId, userId)) {
+            acceptResponse(res)
+            return
+        }
+
+        await enqueueGeneration({
+            kind: "speech",
+            body: { ...params, jobId, modelKey: mediaKey, userId },
             isPro: await resolveUserIsPro(userId),
         })
         acceptResponse(res)

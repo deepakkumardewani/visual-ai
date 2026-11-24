@@ -139,3 +139,78 @@ export type LyricsRequest = z.infer<typeof LyricsRequestSchema>;
 export interface LyricsResponse {
   lyrics: string;
 }
+
+/** Models the Speech studio offers (R-TTS-1); the voice-clone model is also `tts` but never speaks text. */
+export const SPEECH_MODEL_KEYS = [
+  'INWORLD_TTS_2',
+  'INWORLD_TTS_15_MAX',
+  'MINIMAX_SPEECH_28_HD',
+  'MINIMAX_SPEECH_28_TURBO',
+  'CHATTERBOX_TURBO',
+] as const;
+export type SpeechModelKey = (typeof SPEECH_MODEL_KEYS)[number];
+
+const SPEECH_SHORT_FIELD_MAX_CHARS = 100;
+
+const speechShortText = z.string().max(SPEECH_SHORT_FIELD_MAX_CHARS);
+
+/** The model's own text limit, from the registry; undefined for an unknown or non-speech key. */
+function speechTextLimit(modelKey: string): number | undefined {
+  if (!(SPEECH_MODEL_KEYS as readonly string[]).includes(modelKey)) return undefined;
+  return mediaConfigOf(modelKey)?.textLimit;
+}
+
+function refineSpeechRequest(
+  request: { modelKey: string; text: string },
+  ctx: z.RefinementCtx,
+): void {
+  const limit = speechTextLimit(request.modelKey);
+  if (limit === undefined) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['modelKey'],
+      message: `modelKey must be one of ${SPEECH_MODEL_KEYS.join(', ')}`,
+    });
+    return;
+  }
+  if (request.text.length > limit) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['text'],
+      message: `Text must be at most ${limit} characters for this model`,
+    });
+  }
+}
+
+/**
+ * Speech body. `text` is the final serialized text (tags already in the model's native syntax);
+ * the billable character count is always recomputed from it server-side, so no count or cost is
+ * accepted. Which optional fields a model really takes is enforced by validateMediaParams.
+ */
+export const SpeechRequestSchema = z
+  .object({
+    ...mediaRequestBase,
+    text: z.string().refine((text) => text.trim().length > 0, 'Text is required'),
+    voice: speechShortText.optional(),
+    language: speechShortText.optional(),
+    temperature: z.number().optional(),
+    speakingRate: z.number().optional(),
+    textNormalization: speechShortText.optional(),
+    audioFormat: speechShortText.optional(),
+    sampleRate: z.number().int().optional(),
+    emotion: speechShortText.optional(),
+    speed: z.number().optional(),
+    pitch: z.number().optional(),
+    volume: z.number().optional(),
+    languageBoost: speechShortText.optional(),
+    englishNormalization: z.boolean().optional(),
+    channel: speechShortText.optional(),
+    bitrate: z.number().int().optional(),
+    topP: z.number().optional(),
+    topK: z.number().int().optional(),
+    repetitionPenalty: z.number().optional(),
+    seed: z.number().int().optional(),
+  })
+  .superRefine(refineSpeechRequest);
+
+export type SpeechRequest = z.infer<typeof SpeechRequestSchema>;

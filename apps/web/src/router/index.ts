@@ -30,6 +30,7 @@ const Signup = () => import('@/pages/Signup.vue');
 const Terms = () => import('@/pages/Terms.vue');
 const SongStudio = () => import('@/pages/SongStudio.vue');
 const Music = () => import('@/pages/Music.vue');
+const Speech = () => import('@/pages/Speech.vue');
 const StudioPlaceholder = () => import('@/components/Studio/StudioPlaceholder.vue');
 
 /** Studio routes stay on the placeholder until the slice that ships their page replaces them. */
@@ -116,10 +117,12 @@ const routes: RouteRecordRaw[] = [
     component: Music,
     meta: { requiresAuth: true },
   },
-  studioPlaceholderRoute('/audio/speech', APP_SURFACE.AUDIO_SPEECH, {
-    studio: 'speech',
-    label: 'Speech',
-  }),
+  {
+    path: '/audio/speech',
+    name: APP_SURFACE.AUDIO_SPEECH,
+    component: Speech,
+    meta: { requiresAuth: true },
+  },
   studioPlaceholderRoute('/tools/image-watermark', APP_SURFACE.TOOLS_IMAGE_WATERMARK, {
     studio: 'tools',
     label: 'Image watermark',

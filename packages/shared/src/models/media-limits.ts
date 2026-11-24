@@ -59,6 +59,10 @@ export const INWORLD_TEXT_LIMIT = 2000;
 export const MINIMAX_SPEECH_TEXT_LIMIT = 10000;
 export const CHATTERBOX_TEXT_LIMIT = 500;
 
+/** Bounds of an editable pause chip, in seconds; one range for every model that supports pauses. */
+export const TTS_PAUSE_MIN_SEC = 0.1;
+export const TTS_PAUSE_MAX_SEC = 10;
+
 /** Credit pricing is per 1,000 billed characters or tokens. */
 export const TTS_BILLING_UNIT_CHARS = 1000;
 

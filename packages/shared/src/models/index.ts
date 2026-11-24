@@ -9,3 +9,4 @@ export * from './plans.js';
 export * from './stt.js';
 export * from './intro.js';
 export * from './media-shortcuts.js';
+export * from './tts-tags.js';

@@ -48,8 +48,11 @@ const {
     getMusicCreditCost,
     hasExistingJob,
     getSongCreditCost,
+    getSpeechCharCount,
+    getSpeechCreditCost,
     processMusic,
     processSong,
+    processSpeech,
     runMediaJob,
     SONG_MODEL_KEY,
 } = await import("./media-service.js")
@@ -480,6 +483,92 @@ describe("processSong", () => {
         const { services } = makeServices()
 
         await processSong({ ...songBody, stylePrompt: 5 }, services)
+
+        expect(services.persistAsset).toHaveBeenCalledWith(expect.objectContaining({ prompt: "" }))
+    })
+})
+
+describe("speech cost", () => {
+    it("counts the characters of the final serialized text", () => {
+        expect(getSpeechCharCount("Hello <#0.5#> world")).toBe(19)
+    })
+
+    it("counts an empty text as zero characters", () => {
+        expect(getSpeechCharCount("")).toBe(0)
+    })
+
+    it("prices Minimax HD at 20 credits per 1000 characters", () => {
+        expect(getSpeechCreditCost("MINIMAX_SPEECH_28_HD", "a".repeat(1000))).toBe(20)
+        expect(getSpeechCreditCost("MINIMAX_SPEECH_28_HD", "a".repeat(2500))).toBe(50)
+    })
+
+    it("prices Minimax Turbo cheaper than HD for the same text", () => {
+        expect(getSpeechCreditCost("MINIMAX_SPEECH_28_TURBO", "a".repeat(1000))).toBe(12)
+    })
+
+    it("rejects a model that has no character pricing", () => {
+        expect(() => getSpeechCreditCost("LYRIA_2", "hello")).toThrow()
+    })
+})
+
+describe("processSpeech", () => {
+    beforeEach(() => vi.clearAllMocks())
+
+    const text = "a".repeat(1000)
+    const speechBody: MediaJobBody = {
+        jobId: "job_123456",
+        userId: "user_1",
+        modelKey: "MINIMAX_SPEECH_28_HD",
+        text,
+        voice: "Calm_Woman",
+        speed: 1.2,
+    }
+
+    it("maps text and voice to Replicate input, excluding envelope fields", async () => {
+        runReplicate.mockResolvedValue(OUTPUT_URL)
+        const { services } = makeServices()
+
+        await processSpeech(speechBody, services)
+
+        expect(runReplicate.mock.calls[0][0].input).toEqual({
+            text,
+            voice_id: "Calm_Woman",
+            speed: 1.2,
+        })
+        expect(services.persistAsset).toHaveBeenCalledWith(
+            expect.objectContaining({
+                modelKey: "MINIMAX_SPEECH_28_HD",
+                featureType: FeatureType.SPEECH,
+                prompt: text,
+            }),
+        )
+    })
+
+    it("charges the server-computed cost once and ignores a client-sent cost", async () => {
+        runReplicate.mockResolvedValue(OUTPUT_URL)
+        const { services } = makeServices()
+
+        await processSpeech({ ...speechBody, creditCost: 1, chars: 1 }, services)
+
+        expect(services.deductCredits).toHaveBeenCalledTimes(1)
+        expect(services.deductCredits).toHaveBeenCalledWith("user_1", 20)
+    })
+
+    it("deducts nothing when generation fails", async () => {
+        runReplicate.mockRejectedValue(new Error("replicate down"))
+        const { services } = makeServices()
+
+        await processSpeech(speechBody, services)
+
+        expect(services.deductCredits).not.toHaveBeenCalled()
+        expect(services.persistAsset).not.toHaveBeenCalled()
+    })
+
+    it("treats a non-string text as empty", async () => {
+        runReplicate.mockResolvedValue(OUTPUT_URL)
+        const { services } = makeServices()
+
+        await processSpeech({ ...speechBody, text: 5 }, services)
 
         expect(services.persistAsset).toHaveBeenCalledWith(expect.objectContaining({ prompt: "" }))
     })

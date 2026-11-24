@@ -313,3 +313,37 @@ export async function processSong(body: MediaJobBody, services?: MediaJobService
         services,
     )
 }
+
+/**
+ * The billable quantity of a speech job: the length of the final serialized text. Computed here,
+ * never read from the client; Minimax tokens are billed as characters (assumption A4).
+ */
+export function getSpeechCharCount(text: string): number {
+    return text.length
+}
+
+export function getSpeechCreditCost(modelKey: MediaModelKey, text: string): number {
+    return getMediaCreditCost(modelKey, { kind: "chars", chars: getSpeechCharCount(text) })
+}
+
+export async function processSpeech(
+    body: MediaJobBody,
+    services?: MediaJobServices,
+): Promise<void> {
+    const modelKey = body.modelKey as MediaModelKey
+    const params = modelParamsOf(body)
+    const text = typeof params.text === "string" ? params.text : ""
+    return runMediaJob(
+        {
+            jobId: body.jobId,
+            userId: body.userId,
+            modelKey,
+            featureType: FeatureType.SPEECH,
+            input: buildMediaInput(modelKey, "tts", params),
+            prompt: text,
+            // Recomputed here: the queued payload carries no trusted cost.
+            creditCost: getSpeechCreditCost(modelKey, text),
+        },
+        services,
+    )
+}

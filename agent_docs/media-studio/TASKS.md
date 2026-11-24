@@ -613,7 +613,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; the failure variant uses readCredits from support/proPerksSeed.ts to prove the balance is unchanged. Credit deduction on success is covered by the T0.11 unit tests.
   - AC2: paidCallGuard stays on and no real Replicate, Dodo or email call is made.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts --repeat-each=3`
   - V2: `cd apps/web && bunx playwright test e2e/qa/media-pipeline.spec.ts --grep @critical` shows the guard self-test scenario passing
@@ -629,7 +629,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass using the media stub and sample.mp3 as the audio source.
   - AC2: No test starts the server and no un-intercepted paid call occurs.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/media-nav-player.spec.ts --repeat-each=3`
   - V2: `cd apps/web && bunx playwright test e2e/qa/media-nav-player.spec.ts --grep @critical`
@@ -747,7 +747,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/song.spec.ts --repeat-each=3`
 
@@ -819,7 +819,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/lyrics.spec.ts --repeat-each=3`
 
@@ -963,7 +963,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/editor.spec.ts --repeat-each=3`
 
@@ -1089,7 +1089,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/music.spec.ts --repeat-each=3`
 
@@ -1111,10 +1111,10 @@
 
 ## Phase 3: Speech studio
 
-**Adds:** Users turn text into speech with Inworld or Minimax voices, mark up pauses and emotion with tag chips, clone their own voice with recorded consent, and get advice on length and cost.
-**Try in UI:** Open Audio then Speech ; type text and insert a pause chip ; switch model and see tags converted or flagged ; clone a voice after ticking consent
+**Adds:** Users turn text into speech with Inworld or Minimax voices, mark up pauses and emotion with tag chips, and get advice on length and cost.
+**Try in UI:** Open Audio then Speech ; type text and insert a pause chip ; switch model and see tags converted or flagged
 
-### ☐ T3.1 Speech schema, endpoint and billing quantity (S3.1a)
+### ✅ T3.1 Speech schema, endpoint and billing quantity (S3.1a)
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/schemas/media.ts` (edit), `apps/api/src/lib/media-input.ts` (edit), `apps/api/src/routes/media.ts` (edit), `apps/api/src/services/media-service.ts` (edit)
@@ -1138,7 +1138,7 @@
   - V3: `cd apps/api && bun run test` (existing api tests stay green)
   - V4: `bun run check`
 
-### ☐ T3.2 Shared TTS tag library (S3.1b)
+### ✅ T3.2 Shared TTS tag library (S3.1b)
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/models/tts-tags.ts` (new), `packages/shared/src/models/media-limits.ts` (edit), `packages/shared/src/index.ts` (edit)
@@ -1161,7 +1161,7 @@
   - V3: `cd apps/api && bun run type-check`
   - V4: `bun run check`
 
-### ☐ T3.3 Speech studio page, plain text mode and voice select (S3.1c)
+### ✅ T3.3 Speech studio page, plain text mode and voice select (S3.1c)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/pages/Speech.vue` (new), `apps/web/src/components/Speech/SpeechComposer.vue` (new), `apps/web/src/components/Speech/VoiceSelect.vue` (new), `apps/web/src/components/Speech/SpeechModelSelect.vue` (new), `apps/web/src/router/index.ts` (edit)
@@ -1184,7 +1184,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T3.4 TipTap tag editor with TagChipNode (S3.2)
+### ✅ T3.4 TipTap tag editor with TagChipNode (S3.2)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Speech/TtsEditor.vue` (new), `apps/web/src/components/Speech/TagChipNode.ts` (new), `apps/web/src/components/Speech/TagToolbar.vue` (new), `apps/web/src/composables/useTtsEditor.ts` (new), `apps/web/package.json` (edit)
@@ -1208,7 +1208,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T3.5 Model switching with tag conversion (S3.3)
+### ✅ T3.5 Model switching with tag conversion (S3.3)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Speech/ConvertTagsDialog.vue` (new), `apps/web/src/components/Speech/SpeechModelSelect.vue` (edit), `apps/web/src/composables/useTtsEditor.ts` (edit)
@@ -1231,7 +1231,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T3.6 Length advisor, cost note and FAQ (S3.4)
+### ✅ T3.6 Length advisor, cost note and FAQ (S3.4)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Speech/TextAdvisor.vue` (new), `apps/web/src/composables/useTtsAdvice.ts` (new), `apps/web/src/utils/constants.ts` (edit)
@@ -1253,83 +1253,32 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T3.7 Record the voice collections and consent copy approvals, and run the one voice-clone expiry test
+### ✅ T3.7 Record the voice cloning descope
 
 - **Kind:** dod
 - **Files:** `agent_docs/media-studio/APPROVALS.md` (edit)
 - **Depends on:** T3.6
-- **Spec:** R-TTS-11, R-TTS-12
-- **Do:** Confirm in APPROVALS.md that the Voice and VoiceConsent collections are approved (owner, 2026-11-16, from T0.1); no question is asked. Record the final CLONE_CONSENT_TEXT wording and CURRENT_CONSENT_VERSION (the drafted copy ships as written, Q8 accepted 2026-11-16) and the retention rule for VoiceConsent after a voice is deleted (gap G4: retained). Q5 (RESOLVED 2026-11-16): exactly ONE owner-approved paid voice-clone test call is allowed, to confirm whether cloned voice ids expire vendor-side, before any Phase 3 work that depends on the answer (T3.8 onward). Maximum one call ever; only the main orchestrator session makes it (never a test, an e2e run or an automated retry); immediately before it the orchestrator tells the user the endpoint/model (minimax/voice-cloning), the expected cost and that it is call 1 of 1. Record the finding (expired or not, and when checked) in APPROVALS.md. R-TTS-10 and the "no longer available, re-clone" state stay in the design regardless of the result. Make no code change.
+- **Spec:** R-TTS-10 (descoped)
+- **Do:** Record in APPROVALS.md that voice cloning is dropped from the product by owner decision (2026-11-24), that the Q5 paid test call is cancelled (0 of 1 made, none will be), and that the Voice and VoiceConsent collections, CLONE_CONSENT_TEXT / CURRENT_CONSENT_VERSION, and gaps G4 and G5 are not needed (not built). Make no code change.
 - **Acceptance:**
-  - AC1: APPROVALS.md records Voice and VoiceConsent as approved with a date.
-  - AC2: The consent text and version are recorded.
-  - AC3: Gap G4 (retain consent on delete) and G5 (10 voices) show the default applied or the owner's answer.
-  - AC4: APPROVALS.md records the Q5 test call as call 1 of 1 with its finding, or states that the orchestrator has not yet made it and T3.8 is blocked until it does; no second call exists.
+  - AC1: APPROVALS.md records the voice cloning descope with its date.
+  - AC2: APPROVALS.md records that no paid call was made (Q5 cancelled, 0 of 1 made).
 - **Verify:**
   - V1: `grep -n -E 'Voice|VoiceConsent|CLONE_CONSENT|G4|G5|Q5|call 1 of 1' agent_docs/media-studio/APPROVALS.md`
   - V2: `git status --short` shows only APPROVALS.md changed by this task
 
-### ☐ T3.8 Voice clone endpoint, consent audit and voice models (S3.5a)
-
-- **Kind:** implementation
-- **Files:** `apps/api/src/models/voice.ts` (new), `apps/api/src/models/voice-consent.ts` (new), `apps/api/src/services/voice-service.ts` (new), `apps/api/src/routes/voices.ts` (new), `apps/api/src/routes/index.ts` (edit)
-- **Depends on:** T3.7
-- **Creates:** VoiceModel, VoiceConsentModel, createVoice, deleteVoice, voiceRoutes, POST /generate/audio/voices, GET /voices, DELETE /voices/:id, CURRENT_CONSENT_VERSION, CLONE_CONSENT_TEXT, CLONE_TRAINING_MODEL, CLONE_ACCURACY
-- **Uses:** MediaUploadModel, requireAuth, runMediaJob, updateAndGetUserCredits, getMediaCreditCost, MAX_VOICES_PER_USER, MINIMAX_VOICE_CLONE, uploadRateLimiter
-- **Risk:** high
-- **Surfaces:** security,logic
-- **Spec:** R-TTS-11, R-TTS-12, R-INF-17
-- **Do:** Copy the route pattern of routes/media.ts. Order in POST /generate/audio/voices: requireAuth, Zod (uploadId, name, consent true with consentVersion equal to CURRENT_CONSENT_VERSION, never a client URL), the voice count check against MAX_VOICES_PER_USER, the 402 pre-check, then an append-only VoiceConsent row (userId, consentVersion, text hash, timestamp, uploadId) is written BEFORE any paid call is queued, then enqueue with jobId idempotency. The worker deducts once via the shared deduction only on success and stores the Voice with the provider voice id. DELETE /voices/:id removes the Voice and the provider voice but retains VoiceConsent (G4). All reads scope by userId; the voice sample upload is kept only as long as needed and then deleted. Never log sample audio or consent text. Tests are not written here: T3.13, T3.14 cover Unit (voice unit task): consent missing or stale; Unit: call-order spy shows consent write before enqueue; Unit: consent write failure queues nothing; Unit: limit 409 and 402 ordering; Unit: deduct once success, zero failure; Unit: delete retains consent and IDOR 404; Unit: URL body rejected.
-- **Acceptance:**
-  - AC1: A request without consent true or with a stale consentVersion returns 400 and nothing is written.
-  - AC2: The VoiceConsent row exists before the paid call is queued, asserted by call order in a test.
-  - AC3: If writing the consent row fails, nothing is queued and no credits are touched.
-  - AC4: An 11th voice returns 409 with the limit copy; an insufficient balance returns 402 before consent is written or anything queued.
-  - AC5: Credits are deducted once only on success; on failure no deduction and the consent row remains.
-  - AC6: DELETE removes the voice but leaves VoiceConsent; another user's voice id returns 404.
-  - AC7: A client-supplied URL instead of uploadId is rejected.
-- **Verify:**
-  - V1: `cd apps/api && bun run type-check`
-  - V2: `cd apps/api && bun run test` (existing api tests stay green)
-  - V3: `bun run check`
-
-### ☐ T3.9 Voice clone flow in the Speech studio (S3.5b)
-
-- **Kind:** implementation
-- **Files:** `apps/web/src/components/Speech/VoiceCloneDialog.vue` (new), `apps/web/src/components/Speech/VoiceSampleUpload.vue` (new), `apps/web/src/stores/voices.ts` (new), `apps/web/src/components/Speech/VoiceSelect.vue` (edit), `apps/web/src/components/Speech/MyVoices.vue` (new)
-- **Depends on:** T3.8
-- **Creates:** VoiceCloneDialog, VoiceSampleUpload, useVoicesStore, MyVoices
-- **Uses:** useMediaJob, AppModal, VoiceSelect, ConfirmChainActionDialog, POST /media/uploads, CLONE_CONSENT_TEXT
-- **Risk:** high
-- **Surfaces:** ui,security
-- **Spec:** R-TTS-11, R-TTS-12, R-QOL-2, R-QOL-4
-- **Do:** Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look; obey Standing UI rules in the header. Design intent: a serious, plain consent step, not a dark pattern. The dialog shows the exact CLONE_CONSENT_TEXT, an unchecked checkbox the user must tick, then the sample upload with its limits, cost and a Create voice button disabled until consent and a valid sample exist. MyVoices lists voices with Delete behind a confirmation dialog whose default focus is Cancel. The upload goes to POST /media/uploads and only the uploadId is sent on create. Errors show no-credit copy. Tests are not written here: T3.12, T3.14 cover Component (voices unit task): default unchecked and disabled states; Component: consent text equals constant; Component: limit copy; Component: delete confirmation focus; E2E clone spec: 402 sends no create request; Component: limit disable; Component: focus trap; E2E clone spec at 375px.
-- **Acceptance:**
-  - AC1: The consent checkbox is unchecked by default and Create voice stays disabled until it is ticked and a valid sample is uploaded.
-  - AC2: The dialog shows the exact consent text from the constant.
-  - AC3: A sample over the size or duration limit shows the specific limit copy and is not uploaded.
-  - AC4: Delete opens a confirmation with default focus on Cancel and removes the voice only after Confirm.
-  - AC5: A 402 opens the low-credits dialog and no consent request is sent.
-  - AC6: At 10 voices the create button is disabled with the limit reason.
-  - AC7: Focus is trapped in dialogs and returns to the trigger on close.
-  - AC8: At 375px width there is no horizontal scroll and tap targets are at least 44px high. With prefers-reduced-motion the animations are disabled.
-- **Verify:**
-  - V1: `cd apps/web && bun run test` (existing web tests stay green)
-  - V2: `bun run check`
-  - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /audio/speech path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
-
-### ☐ T3.10 Unit: TTS tags and editor composables
+### ✅ T3.10 Unit: TTS tags and editor composables
 
 - **Kind:** unit
 - **Files:** `packages/shared/src/models/tts-tags.ts` (edit), `apps/web/src/composables/useTtsEditor.ts` (edit), `apps/web/src/composables/useTtsAdvice.ts` (edit)
-- **Depends on:** T3.9
+- **Depends on:** T3.7
 - **Acceptance:**
   - AC1: Every file has at least 80% lines, branches, functions and statements coverage (target above 95%) and no it.fails is used.
   - AC2: Mock-only: Replicate, DeepSeek, Cloudinary, Dodo and email clients are injected fakes or vi.mock stubs; no test makes a network call, starts a server or reads a live key.
 - **Verify:**
   - V1: `cd apps/web && npx vitest run src/composables/useTtsEditor.test.ts src/composables/useTtsAdvice.test.ts --coverage --coverage.include=src/composables/useTtsEditor.ts --coverage.include=src/composables/useTtsAdvice.ts --coverage.reporter=text`
 
-### ☐ T3.11 Unit: shared TTS tags
+### ✅ T3.11 Unit: shared TTS tags
 
 - **Kind:** unit
 - **Files:** `packages/shared/src/models/tts-tags.ts` (edit)
@@ -1340,29 +1289,29 @@
 - **Verify:**
   - V1: `bunx vp test run packages/shared/src/models/tts-tags.test.ts --coverage --coverage.include=packages/shared/src/models/tts-tags.ts --coverage.reporter=text`
 
-### ☐ T3.12 Unit: Speech components and voices store
+### ✅ T3.12 Unit: Speech components
 
 - **Kind:** unit
-- **Files:** `apps/web/src/components/Speech/SpeechComposer.vue` (edit), `apps/web/src/components/Speech/ConvertTagsDialog.vue` (edit), `apps/web/src/components/Speech/VoiceCloneDialog.vue` (edit), `apps/web/src/stores/voices.ts` (edit), `apps/web/src/components/Speech/TextAdvisor.vue` (edit)
+- **Files:** `apps/web/src/components/Speech/SpeechComposer.vue` (edit), `apps/web/src/components/Speech/ConvertTagsDialog.vue` (edit), `apps/web/src/components/Speech/TextAdvisor.vue` (edit)
 - **Depends on:** T3.11
 - **Acceptance:**
   - AC1: Every file has at least 80% lines, branches, functions and statements coverage (target above 95%) and no it.fails is used.
   - AC2: Mock-only: Replicate, DeepSeek, Cloudinary, Dodo and email clients are injected fakes or vi.mock stubs; no test makes a network call, starts a server or reads a live key.
 - **Verify:**
-  - V1: `cd apps/web && npx vitest run src/components/Speech src/stores/voices.test.ts --coverage --coverage.include=src/components/Speech/SpeechComposer.vue --coverage.include=src/components/Speech/ConvertTagsDialog.vue --coverage.include=src/components/Speech/VoiceCloneDialog.vue --coverage.include=src/stores/voices.ts --coverage.include=src/components/Speech/TextAdvisor.vue --coverage.reporter=text`
+  - V1: `cd apps/web && npx vitest run src/components/Speech --coverage --coverage.include=src/components/Speech/SpeechComposer.vue --coverage.include=src/components/Speech/ConvertTagsDialog.vue --coverage.include=src/components/Speech/TextAdvisor.vue --coverage.reporter=text`
 
-### ☐ T3.13 Unit: Speech and voice services
+### ✅ T3.13 Unit: Speech services
 
 - **Kind:** unit
-- **Files:** `apps/api/src/services/voice-service.ts` (edit), `apps/api/src/routes/voices.ts` (edit), `apps/api/src/services/media-service.ts` (edit), `apps/api/src/lib/media-input.ts` (edit)
+- **Files:** `apps/api/src/services/media-service.ts` (edit), `apps/api/src/lib/media-input.ts` (edit)
 - **Depends on:** T3.12
 - **Acceptance:**
   - AC1: Every file has at least 80% lines, branches, functions and statements coverage (target above 95%) and no it.fails is used.
   - AC2: Mock-only: Replicate, DeepSeek, Cloudinary, Dodo and email clients are injected fakes or vi.mock stubs; no test makes a network call, starts a server or reads a live key.
 - **Verify:**
-  - V1: `cd apps/api && npx vitest run src/services/voice-service.test.ts src/routes/voices.test.ts src/services/media-service.test.ts src/lib/media-input.test.ts --coverage --coverage.include=src/services/voice-service.ts --coverage.include=src/routes/voices.ts --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.reporter=text`
+  - V1: `cd apps/api && npx vitest run src/services/media-service.test.ts src/lib/media-input.test.ts --coverage --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.reporter=text`
 
-### ☐ T3.14 E2E: Speech studio and tags
+### ✅ T3.14 E2E: Speech studio and tags
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` generate speech charges the server-computed cost once; `@critical` 402 and failure states; `@high` pause chip insert and range validation; `@high` model switch dialog convert and cancel; `@high` over-limit text disables Generate and is not truncated; `@high` keyboard-only compose; `@medium` 375px layout; `@medium` advisor warnings
@@ -1372,29 +1321,15 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/speech.spec.ts --repeat-each=3`
 
-### ☐ T3.15 E2E: Voice cloning consent and limits
-
-- **Kind:** e2e
-- **Scenarios:** `@critical` Create voice is disabled until consent is ticked and a sample uploaded; `@critical` consent request is recorded before generation is queued (asserted by request order); `@critical` 402 sends no create request; `@high` delete asks for confirmation and removes the voice; `@high` over-limit sample shows the limit copy; `@high` 11th voice is blocked; `@medium` 375px layout
-- **Spec:** `apps/web/e2e/qa/voice-clone.spec.ts`
-- **Files:** none
-- **Depends on:** T3.14
-- **Acceptance:**
-  - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
-  - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
-- **Verify:**
-  - V1: `cd apps/web && bunx playwright test e2e/qa/voice-clone.spec.ts --repeat-each=3`
-
-### ☐ T3.16 Gate: Phase 3 Speech studio
+### ✅ T3.16 Gate: Phase 3 Speech studio
 
 - **Kind:** gate
 - **Files:** none
-- **Depends on:** T3.15
+- **Depends on:** T3.14
 - **Acceptance:**
   - AC1: Typecheck, lint, full unit suites and the phase QA specs pass.
   - AC2: No regression in image generation or earlier phases.
@@ -1402,9 +1337,9 @@
   - V1: `bun run check`
   - V2: `bun run test`
   - V3: `bun run check:model-docs`
-  - V4: `cd apps/web && bunx playwright test e2e/qa/speech.spec.ts e2e/qa/voice-clone.spec.ts --repeat-each=2`
+  - V4: `cd apps/web && bunx playwright test e2e/qa/speech.spec.ts --repeat-each=2`
 
-🔶 **Checkpoint 3**: speech, tags, model switching, the advisor and voice cloning verified by unit tests and the mocked speech QA specs.
+🔶 **Checkpoint 3**: speech, tags, model switching and the advisor verified by unit tests and the mocked speech QA spec.
 
 ## Phase 4: Video studio
 
@@ -1539,7 +1474,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/video.spec.ts --repeat-each=3`
 
@@ -1715,7 +1650,7 @@
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
   - AC2: Each scenario that spends credits asserts the balance through readCredits.
-  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics, /generate/audio/voices), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
+  - AC3: Mock-only: MediaGenerationStub (or GenerationStub for image paths) intercepts the paid POST itself (POST /generate/audio/_, /generate/video, /generate/tools/_, /generate/image, /prompt/lyrics), not only progress and result URLs; the API serves the E2E_USER_IDS Clerk user its fake Replicate client; paidCallGuard fails the run on any un-intercepted paid call and is never bypassed, narrowed or opted out of; no test starts the server.
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/tools.spec.ts --repeat-each=3`
 

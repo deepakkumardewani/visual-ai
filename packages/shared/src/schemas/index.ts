@@ -38,6 +38,8 @@ export {
   MUSIC_STUDIO_MODEL_KEYS,
   MusicRequestSchema,
   SongRequestSchema,
+  SPEECH_MODEL_KEYS,
+  SpeechRequestSchema,
 } from './media.js';
 export type {
   LyricsRequest,
@@ -45,4 +47,6 @@ export type {
   MusicRequest,
   MusicStudioModelKey,
   SongRequest,
+  SpeechModelKey,
+  SpeechRequest,
 } from './media.js';
