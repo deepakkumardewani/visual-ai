@@ -10,7 +10,12 @@ import {
     processRevive,
     processUpscale,
 } from "../services/generation-service.js"
-import { processMusic, processSong, processSpeech } from "../services/media-service.js"
+import {
+    processMusic,
+    processSong,
+    processSpeech,
+    processVideo,
+} from "../services/media-service.js"
 import { RedisService } from "../services/redis-service.js"
 import { GENERATION_QUEUE_NAME, type GenerationJobData } from "./generation-queue.js"
 import { getJobId } from "./job-id.js"
@@ -45,6 +50,8 @@ async function processGenerationJob(job: Job<GenerationJobData>): Promise<void> 
             await processSpeech(data.body)
             return
         case "video":
+            await processVideo(data.body)
+            return
         case "image-watermark":
         case "video-watermark":
         case "autocaption":

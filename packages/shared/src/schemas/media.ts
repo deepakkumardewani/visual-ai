@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import {
   MEDIA_PROMPT_MAX_CHARS,
+  P_VIDEO_MAX_SEC,
   SONG_LYRICS_LIMITS,
   SONG_PROMPT_LIMITS,
   STABLE_AUDIO_CFG_SCALE,
@@ -214,3 +215,101 @@ export const SpeechRequestSchema = z
   .superRefine(refineSpeechRequest);
 
 export type SpeechRequest = z.infer<typeof SpeechRequestSchema>;
+
+/** Models the Video studio offers (R-VID-1). */
+export const VIDEO_STUDIO_MODEL_KEYS = ['P_VIDEO', 'WAN_3'] as const;
+export type VideoStudioModelKey = (typeof VIDEO_STUDIO_MODEL_KEYS)[number];
+
+/** The ranges and switches one video model supports, read from its registry entry. */
+export interface VideoModelOptions {
+  durationSec: { min: number; max: number; default: number };
+  resolutions: string[];
+  /** The model's default resolution: the rate named by `pricing.usd`. */
+  defaultResolution: string;
+  supportsDraft: boolean;
+  supportsAudio: boolean;
+}
+
+/** Registry-driven (no per-model branches); undefined for a key the Video studio does not serve. */
+export function getVideoModelOptions(modelKey: string): VideoModelOptions | undefined {
+  if (!(VIDEO_STUDIO_MODEL_KEYS as readonly string[]).includes(modelKey)) return undefined;
+  const media = mediaConfigOf(modelKey);
+  const byResolution = media?.pricing.byResolution;
+  if (!media?.durationSec || !byResolution) return undefined;
+  const resolutions = Object.keys(byResolution);
+  const defaultResolution =
+    resolutions.find((resolution) => byResolution[resolution] === media.pricing.usd) ??
+    resolutions[0]!;
+  return {
+    durationSec: media.durationSec,
+    resolutions,
+    defaultResolution,
+    supportsDraft: Object.hasOwn(media.inputs, 'draft') && Boolean(media.pricing.draftByResolution),
+    supportsAudio: Object.hasOwn(media.inputs, 'audio'),
+  };
+}
+
+/**
+ * The seconds a video job is billed for: the requested length, or, when an audio file drives the
+ * run, its stored length rounded up and clamped to P_VIDEO_MAX_SEC (gap G1). Shared so the
+ * web estimate and the server charge use one rule.
+ */
+export function getVideoBillableSeconds(params: {
+  durationSec: number;
+  audioDurationSec?: number;
+}): number {
+  if (params.audioDurationSec === undefined) return params.durationSec;
+  return Math.min(Math.ceil(params.audioDurationSec), P_VIDEO_MAX_SEC);
+}
+
+function addVideoIssue(ctx: z.RefinementCtx, path: string, message: string): void {
+  ctx.addIssue({ code: 'custom', path: [path], message });
+}
+
+function refineVideoRequest(
+  request: {
+    modelKey: string;
+    durationSec: number;
+    resolution: string;
+    draft?: boolean;
+    audioUploadId?: string;
+  },
+  ctx: z.RefinementCtx,
+): void {
+  const options = getVideoModelOptions(request.modelKey);
+  if (!options) {
+    addVideoIssue(ctx, 'modelKey', `modelKey must be one of ${VIDEO_STUDIO_MODEL_KEYS.join(', ')}`);
+    return;
+  }
+  const { min, max } = options.durationSec;
+  if (request.durationSec < min || request.durationSec > max) {
+    addVideoIssue(ctx, 'durationSec', `durationSec must be between ${min} and ${max}`);
+  }
+  if (!options.resolutions.includes(request.resolution)) {
+    addVideoIssue(ctx, 'resolution', `resolution must be one of ${options.resolutions.join(', ')}`);
+  }
+  if (request.draft && !options.supportsDraft) {
+    addVideoIssue(ctx, 'draft', 'draft is not available for this model');
+  }
+  if (request.audioUploadId && !options.supportsAudio) {
+    addVideoIssue(ctx, 'audioUploadId', 'audio is not available for this model');
+  }
+}
+
+/**
+ * Video body. Image and audio arrive only as upload ids (never client URLs); the billable
+ * duration, resolution and draft pricing are recomputed server-side, so no cost is accepted.
+ */
+export const VideoRequestSchema = z
+  .object({
+    ...mediaRequestBase,
+    prompt: z.string().trim().min(1, 'Prompt is required').max(MEDIA_PROMPT_MAX_CHARS),
+    durationSec: z.number().int(),
+    resolution: z.string().min(1, 'resolution is required'),
+    draft: z.boolean().optional(),
+    imageUploadId: z.string().min(1).optional(),
+    audioUploadId: z.string().min(1).optional(),
+  })
+  .superRefine(refineVideoRequest);
+
+export type VideoRequest = z.infer<typeof VideoRequestSchema>;

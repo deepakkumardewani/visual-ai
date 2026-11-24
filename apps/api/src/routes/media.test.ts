@@ -14,6 +14,7 @@ const assets = vi.hoisted(() => ({
     copyMediaAssetToCloudinary: vi.fn(),
     discardMediaAsset: vi.fn(),
 }))
+const uploadModel = vi.hoisted(() => ({ findOne: vi.fn() }))
 const multerOptions = vi.hoisted(() => ({ current: undefined as any }))
 const uploads = vi.hoisted(() => ({
     createMediaUpload: vi.fn(),
@@ -81,7 +82,7 @@ vi.mock("../services/media-service.js", async () => {
     return { ...actual, getAvailableCredits, hasExistingJob }
 })
 vi.mock("../models/user.js", () => ({ UserModel: {} }))
-vi.mock("../models/media-upload.js", () => ({ MediaUploadModel: {} }))
+vi.mock("../models/media-upload.js", () => ({ MediaUploadModel: uploadModel }))
 vi.mock("../lib/credit-deduction.js", () => ({
     updateAndGetUserCredits: vi.fn(),
 }))
@@ -692,6 +693,243 @@ const LIST = "/media/assets"
 const ONE = "/media/assets/:id"
 const VERSIONS = "/media/assets/:id/versions"
 const session = { auth: { userId: "user_1" } }
+
+const VIDEO_PATH = "/generate/video"
+const VIDEO_IMAGE_ID = "665f1f77bcf86cd799439011"
+const VIDEO_AUDIO_ID = "665f1f77bcf86cd799439012"
+const videoBody = {
+    jobId: "5f0c9a52-7a8e-4a1b-9c1d-2f6c1c8e4b10",
+    modelKey: "P_VIDEO",
+    prompt: "a fox running through snow",
+    durationSec: 5,
+    resolution: "720p",
+}
+// 5s of P_VIDEO at 720p costs 20 credits (registry rate), independent of the client.
+const VIDEO_COST_5S_720P = 20
+const postVideo = (body: unknown) => post({ auth: { userId: "user_1" }, body }, VIDEO_PATH)
+const storedVideoUpload = (overrides: Record<string, unknown> = {}) => ({
+    lean: vi.fn().mockResolvedValue({ _id: "u1", url: "https://cdn.invalid/u", ...overrides }),
+})
+
+describe("POST /generate/video", () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+        checkPromptSafety.mockResolvedValue({ safe: true })
+        getAvailableCredits.mockResolvedValue(1000)
+        hasExistingJob.mockResolvedValue(false)
+        resolveUserIsPro.mockResolvedValue(false)
+        enqueueGeneration.mockResolvedValue(undefined)
+    })
+
+    it("accepts a valid body, answers 202 and enqueues a video job without client cost fields", async () => {
+        const res = await postVideo({ ...videoBody, creditCost: 0, credits: 0 })
+
+        expect(res.statusCode).toBe(202)
+        expect(enqueueGeneration).toHaveBeenCalledTimes(1)
+        const { kind, body, isPro } = enqueueGeneration.mock.calls[0][0]
+        expect(kind).toBe("video")
+        expect(isPro).toBe(false)
+        expect(body).toMatchObject({
+            jobId: videoBody.jobId,
+            modelKey: "P_VIDEO",
+            prompt: videoBody.prompt,
+            durationSec: 5,
+            resolution: "720p",
+            userId: "user_1",
+        })
+        expect(body).not.toHaveProperty("creditCost")
+        expect(body).not.toHaveProperty("credits")
+    })
+
+    it("passes the pro flag to the queue", async () => {
+        resolveUserIsPro.mockResolvedValue(true)
+
+        await postVideo(videoBody)
+
+        expect(enqueueGeneration.mock.calls[0][0].isPro).toBe(true)
+    })
+
+    it("rejects an unauthenticated request with 401", async () => {
+        await expect(post({ auth: undefined, body: videoBody }, VIDEO_PATH)).rejects.toMatchObject({
+            statusCode: 401,
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it.each([
+        ["P_VIDEO", 1],
+        ["P_VIDEO", 20],
+        ["WAN_3", 2],
+        ["WAN_3", 30],
+    ])("accepts %s at its %is duration boundary", async (modelKey, durationSec) => {
+        const res = await postVideo({ ...videoBody, modelKey, durationSec })
+
+        expect(res.statusCode).toBe(202)
+    })
+
+    it.each([
+        ["P_VIDEO", 0, 1, 20],
+        ["P_VIDEO", 21, 1, 20],
+        ["WAN_3", 1, 2, 30],
+        ["WAN_3", 31, 2, 30],
+    ])(
+        "rejects %s durationSec %i outside its range with a field-level 400",
+        async (modelKey, durationSec, min, max) => {
+            await expect(postVideo({ ...videoBody, modelKey, durationSec })).rejects.toMatchObject({
+                statusCode: 400,
+                message: `durationSec: durationSec must be between ${min} and ${max}`,
+            })
+            expect(enqueueGeneration).not.toHaveBeenCalled()
+        },
+    )
+
+    it("rejects a non-integer duration with a field-level 400", async () => {
+        await expect(postVideo({ ...videoBody, durationSec: 2.5 })).rejects.toMatchObject({
+            statusCode: 400,
+            message: expect.stringMatching(/^durationSec: /),
+        })
+    })
+
+    it("rejects a resolution the model does not offer with a field-level 400", async () => {
+        await expect(postVideo({ ...videoBody, resolution: "480p" })).rejects.toMatchObject({
+            statusCode: 400,
+            message: "resolution: resolution must be one of 720p, 1080p",
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("rejects draft on a model without draft pricing", async () => {
+        await expect(
+            postVideo({ ...videoBody, modelKey: "WAN_3", draft: true }),
+        ).rejects.toMatchObject({
+            statusCode: 400,
+            message: "draft: draft is not available for this model",
+        })
+    })
+
+    it("rejects an audio attachment on a model without audio input", async () => {
+        await expect(
+            postVideo({ ...videoBody, modelKey: "WAN_3", audioUploadId: VIDEO_AUDIO_ID }),
+        ).rejects.toMatchObject({
+            statusCode: 400,
+            message: "audioUploadId: audio is not available for this model",
+        })
+    })
+
+    it("rejects a model the Video studio does not serve", async () => {
+        await expect(postVideo({ ...videoBody, modelKey: "LYRIA_2" })).rejects.toMatchObject({
+            statusCode: 400,
+            message: "modelKey: modelKey must be one of P_VIDEO, WAN_3",
+        })
+    })
+
+    it("rejects an empty prompt with a field-level 400", async () => {
+        await expect(postVideo({ ...videoBody, prompt: "  " })).rejects.toMatchObject({
+            statusCode: 400,
+            message: "prompt: Prompt is required",
+        })
+    })
+
+    it("names the body when the request is not an object", async () => {
+        await expect(postVideo(undefined)).rejects.toMatchObject({
+            statusCode: 400,
+            message: expect.any(String),
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("answers 422 for an unsafe prompt and queues nothing", async () => {
+        checkPromptSafety.mockResolvedValue({ safe: false })
+
+        const res = await postVideo(videoBody)
+
+        expect(res.statusCode).toBe(422)
+        expect(res.body).toMatchObject({ code: "PROMPT_REJECTED" })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("answers 422 before 402 when the prompt is unsafe and credits are short", async () => {
+        checkPromptSafety.mockResolvedValue({ safe: false })
+        getAvailableCredits.mockResolvedValue(0)
+
+        const res = await postVideo(videoBody)
+
+        expect(res.statusCode).toBe(422)
+    })
+
+    it("answers 402 with the server-computed cost before queueing", async () => {
+        getAvailableCredits.mockResolvedValue(VIDEO_COST_5S_720P - 1)
+
+        const res = await postVideo({ ...videoBody, creditCost: 0 })
+
+        expect(res.statusCode).toBe(402)
+        expect(res.body).toEqual({
+            code: "INSUFFICIENT_CREDITS",
+            required: VIDEO_COST_5S_720P,
+            available: VIDEO_COST_5S_720P - 1,
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("allows a user whose credits exactly cover the cost", async () => {
+        getAvailableCredits.mockResolvedValue(VIDEO_COST_5S_720P)
+
+        const res = await postVideo(videoBody)
+
+        expect(res.statusCode).toBe(202)
+    })
+
+    it("prices the pre-check at the draft rate", async () => {
+        getAvailableCredits.mockResolvedValue(4)
+
+        const res = await postVideo({ ...videoBody, draft: true })
+
+        expect(res.statusCode).toBe(402)
+        expect(res.body).toMatchObject({ required: 5 })
+    })
+
+    it("prices audio-driven runs from the stored audio duration, not the client duration", async () => {
+        uploadModel.findOne.mockReturnValue(storedVideoUpload({ durationSec: 10.2 }))
+        getAvailableCredits.mockResolvedValue(10)
+
+        const res = await postVideo({ ...videoBody, audioUploadId: VIDEO_AUDIO_ID })
+
+        expect(res.statusCode).toBe(402)
+        expect(res.body).toMatchObject({ required: 44, available: 10 })
+    })
+
+    it("queues the attachment ids, never URLs", async () => {
+        uploadModel.findOne.mockReturnValue(storedVideoUpload())
+
+        await postVideo({ ...videoBody, imageUploadId: VIDEO_IMAGE_ID })
+
+        expect(enqueueGeneration.mock.calls[0][0].body).toMatchObject({
+            imageUploadId: VIDEO_IMAGE_ID,
+        })
+        expect(enqueueGeneration.mock.calls[0][0].body).not.toHaveProperty("imageUrl")
+    })
+
+    it("rejects an attachment that is not the caller's before charging or queueing", async () => {
+        uploadModel.findOne.mockReturnValue({ lean: vi.fn().mockResolvedValue(null) })
+
+        await expect(
+            postVideo({ ...videoBody, imageUploadId: VIDEO_IMAGE_ID }),
+        ).rejects.toMatchObject({
+            statusCode: 400,
+            message: "imageUploadId: upload not found or expired",
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("answers 202 without queueing a duplicate job id", async () => {
+        hasExistingJob.mockResolvedValue(true)
+
+        const res = await postVideo(videoBody)
+
+        expect(res.statusCode).toBe(202)
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+})
 
 describe("GET /media/assets", () => {
     beforeEach(() => {

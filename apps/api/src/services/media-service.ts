@@ -1,6 +1,7 @@
 import type { Prediction } from "replicate"
+import { Types } from "mongoose"
 
-import { getMediaCreditCost, MODEL_REGISTRY } from "@visual-ai/shared"
+import { getMediaCreditCost, getVideoBillableSeconds, MODEL_REGISTRY } from "@visual-ai/shared"
 import type {
     MediaAssetDto,
     MediaCostInput,
@@ -12,9 +13,12 @@ import { updateAndGetUserCredits } from "../lib/credit-deduction.js"
 import { BadRequestError } from "../lib/errors.js"
 import { createLogger, shortId } from "../lib/logger.js"
 import { buildMediaInput } from "../lib/media-input.js"
+import { deleteUploadedFile } from "../lib/media-upload.js"
+import type { UploadPurpose } from "../lib/media-upload.js"
 import { isContentSafetyError } from "../lib/prompt-moderation.js"
 import { runReplicate } from "../lib/replicate.js"
 import { MediaAssetModel } from "../models/media-asset.js"
+import { MediaUploadModel } from "../models/media-upload.js"
 import { UserModel as User } from "../models/user.js"
 import { generationQueue, type MediaJobBody } from "../queue/generation-queue.js"
 import {
@@ -346,4 +350,178 @@ export async function processSpeech(
         },
         services,
     )
+}
+
+/** The upload purposes a video job's image and audio attachments must have been stored under. */
+const VIDEO_IMAGE_PURPOSE: UploadPurpose = "video-image"
+const VIDEO_AUDIO_PURPOSE: UploadPurpose = "video-audio"
+
+export interface VideoUploadIds {
+    imageUploadId?: string
+    audioUploadId?: string
+}
+
+export interface VideoAttachments {
+    imageUrl?: string
+    audioUrl?: string
+    /** Stored duration of the audio file (read from Cloudinary at upload), never a client value. */
+    audioDurationSec?: number
+}
+
+interface StoredUpload {
+    _id: unknown
+    url: string
+    publicId: string
+    mime: string
+    durationSec?: number | null
+}
+
+/** Only the owner's own, unexpired upload of the expected purpose may be attached. */
+async function findOwnedUpload(
+    uploadId: string,
+    userId: string,
+    purpose: UploadPurpose,
+    field: string,
+): Promise<StoredUpload> {
+    const row = Types.ObjectId.isValid(uploadId)
+        ? await MediaUploadModel.findOne({
+              _id: uploadId,
+              userId,
+              purpose,
+              expiresAt: { $gt: new Date() },
+          }).lean()
+        : null
+    if (!row) throw new BadRequestError(`${field}: upload not found or expired`)
+    return row
+}
+
+/** Resolves the attached uploads to their stored URLs and audio length. */
+export async function resolveVideoAttachments(
+    userId: string,
+    ids: VideoUploadIds,
+): Promise<VideoAttachments> {
+    const [image, audio] = await Promise.all([
+        ids.imageUploadId
+            ? findOwnedUpload(ids.imageUploadId, userId, VIDEO_IMAGE_PURPOSE, "imageUploadId")
+            : undefined,
+        ids.audioUploadId
+            ? findOwnedUpload(ids.audioUploadId, userId, VIDEO_AUDIO_PURPOSE, "audioUploadId")
+            : undefined,
+    ])
+    // Without a stored length the charge would fall back to the client's duration: refuse instead.
+    if (audio && !audio.durationSec) {
+        throw new BadRequestError(
+            "audioUploadId: the audio length could not be read. Upload it again.",
+        )
+    }
+    return {
+        imageUrl: image?.url,
+        audioUrl: audio?.url,
+        audioDurationSec: audio?.durationSec ?? undefined,
+    }
+}
+
+export interface VideoCostParams {
+    durationSec: number
+    resolution: string
+    draft?: boolean
+    audioDurationSec?: number
+}
+
+export function getVideoCreditCost(modelKey: MediaModelKey, params: VideoCostParams): number {
+    return getMediaCreditCost(modelKey, {
+        kind: "seconds",
+        durationSec: getVideoBillableSeconds(params),
+        resolution: params.resolution,
+        draft: params.draft,
+    })
+}
+
+/** Attachment ids and the client-side cost inputs never reach Replicate; the URLs replace them. */
+const VIDEO_ATTACHMENT_FIELDS: readonly string[] = ["imageUploadId", "audioUploadId"]
+
+function videoParamsOf(body: MediaJobBody): Record<string, unknown> {
+    return Object.fromEntries(
+        Object.entries(modelParamsOf(body)).filter(
+            ([field]) => !VIDEO_ATTACHMENT_FIELDS.includes(field),
+        ),
+    )
+}
+
+/** Wraps the job-status sink to learn whether the job reached `completed` (charged and delivered). */
+function trackCompletion(services: MediaJobServices): {
+    services: MediaJobServices
+    completed: () => boolean
+} {
+    let completed = false
+    return {
+        completed: () => completed,
+        services: {
+            ...services,
+            jobStatus: {
+                setStatus: (jobId, status) => {
+                    if (status.status === "completed") completed = true
+                    return services.jobStatus.setStatus(jobId, status)
+                },
+            },
+        },
+    }
+}
+
+/** Attached files are single-use: once the video is delivered they are removed everywhere. */
+async function deleteConsumedUploads(userId: string, ids: VideoUploadIds): Promise<void> {
+    const uploadIds = [ids.imageUploadId, ids.audioUploadId].filter(
+        (id): id is string => typeof id === "string",
+    )
+    const rows = await MediaUploadModel.find({ _id: { $in: uploadIds }, userId }).lean()
+    for (const row of rows) {
+        try {
+            await deleteUploadedFile(row)
+            await MediaUploadModel.deleteOne({ _id: row._id })
+        } catch (error) {
+            // Left in place: the hourly expired-upload sweep retries it.
+            logger.error({ err: error, uploadId: String(row._id) }, "Failed to delete used upload")
+        }
+    }
+}
+
+export async function processVideo(
+    body: MediaJobBody,
+    services: MediaJobServices = defaultServices,
+): Promise<void> {
+    const modelKey = body.modelKey as MediaModelKey
+    const params = videoParamsOf(body)
+    const ids: VideoUploadIds = {
+        imageUploadId: typeof body.imageUploadId === "string" ? body.imageUploadId : undefined,
+        audioUploadId: typeof body.audioUploadId === "string" ? body.audioUploadId : undefined,
+    }
+    const attachments = await resolveVideoAttachments(body.userId, ids)
+    const costParams: VideoCostParams = {
+        durationSec: Number(params.durationSec),
+        resolution: String(params.resolution),
+        draft: params.draft === true,
+        audioDurationSec: attachments.audioDurationSec,
+    }
+    const tracked = trackCompletion(services)
+    await runMediaJob(
+        {
+            jobId: body.jobId,
+            userId: body.userId,
+            modelKey,
+            featureType: FeatureType.VIDEO,
+            input: buildMediaInput(modelKey, "video", {
+                ...params,
+                // The server-derived length, so the model never runs longer than what was billed.
+                durationSec: getVideoBillableSeconds(costParams),
+                image: attachments.imageUrl,
+                audio: attachments.audioUrl,
+            }),
+            prompt: typeof params.prompt === "string" ? params.prompt : "",
+            // Recomputed here: the queued payload carries no trusted cost.
+            creditCost: getVideoCreditCost(modelKey, costParams),
+        },
+        tracked.services,
+    )
+    // A draft keeps its files so "Render final" can reuse them; the expired-upload sweep covers the rest.
+    if (tracked.completed() && !costParams.draft) await deleteConsumedUploads(body.userId, ids)
 }

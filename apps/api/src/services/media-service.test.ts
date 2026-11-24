@@ -8,8 +8,17 @@ const User = vi.hoisted(() => ({ findOne: vi.fn() }))
 const getJob = vi.hoisted(() => vi.fn())
 const assetExists = vi.hoisted(() => vi.fn())
 const redisSetStatus = vi.hoisted(() => vi.fn())
+const uploadModel = vi.hoisted(() => ({
+    findOne: vi.fn(),
+    find: vi.fn(),
+    deleteOne: vi.fn(),
+}))
+const deleteUploadedFile = vi.hoisted(() => vi.fn())
+const loggerError = vi.hoisted(() => vi.fn())
 
 vi.mock("../lib/replicate.js", () => ({ runReplicate }))
+vi.mock("../models/media-upload.js", () => ({ MediaUploadModel: uploadModel }))
+vi.mock("../lib/media-upload.js", () => ({ deleteUploadedFile }))
 vi.mock("../models/user.js", () => ({ UserModel: User }))
 vi.mock("../lib/credit-deduction.js", () => ({ updateAndGetUserCredits: vi.fn() }))
 vi.mock("../models/media-asset.js", () => ({ MediaAssetModel: { exists: assetExists } }))
@@ -38,7 +47,7 @@ vi.mock("./redis-service.js", () => ({
     },
 }))
 vi.mock("../lib/logger.js", () => ({
-    createLogger: () => ({ debug: vi.fn(), error: vi.fn(), info: vi.fn() }),
+    createLogger: () => ({ debug: vi.fn(), error: loggerError, info: vi.fn() }),
     shortId: (id: string) => id.slice(0, 6),
 }))
 
@@ -48,6 +57,9 @@ const {
     getMusicCreditCost,
     hasExistingJob,
     getSongCreditCost,
+    getVideoCreditCost,
+    processVideo,
+    resolveVideoAttachments,
     getSpeechCharCount,
     getSpeechCreditCost,
     processMusic,
@@ -571,5 +583,296 @@ describe("processSpeech", () => {
         await processSpeech({ ...speechBody, text: 5 }, services)
 
         expect(services.persistAsset).toHaveBeenCalledWith(expect.objectContaining({ prompt: "" }))
+    })
+})
+
+const IMAGE_ID = "665f1f77bcf86cd799439011"
+const AUDIO_ID = "665f1f77bcf86cd799439012"
+const leanOf = <T>(value: T) => ({ lean: vi.fn().mockResolvedValue(value) })
+const storedUpload = (overrides: Record<string, unknown> = {}) => ({
+    _id: "u1",
+    url: "https://cdn.invalid/u1",
+    publicId: "pid",
+    mime: "image/png",
+    ...overrides,
+})
+
+describe("video cost", () => {
+    it.each([
+        ["P_VIDEO", "720p", false, 5, 20],
+        ["P_VIDEO", "1080p", false, 5, 40],
+        ["P_VIDEO", "720p", true, 5, 5],
+        ["P_VIDEO", "1080p", true, 5, 10],
+        ["WAN_3", "480p", false, 5, 35],
+        ["WAN_3", "720p", false, 5, 70],
+        ["WAN_3", "1080p", false, 5, 140],
+    ] as const)(
+        "prices %s %s draft=%s for %is at %i credits",
+        (key, resolution, draft, sec, cost) => {
+            expect(getVideoCreditCost(key, { durationSec: sec, resolution, draft })).toBe(cost)
+        },
+    )
+
+    it("scales linearly with duration", () => {
+        expect(getVideoCreditCost("P_VIDEO", { durationSec: 1, resolution: "720p" })).toBe(4)
+        expect(getVideoCreditCost("P_VIDEO", { durationSec: 20, resolution: "720p" })).toBe(80)
+    })
+
+    it("bills audio-driven runs on the rounded-up stored audio length", () => {
+        expect(
+            getVideoCreditCost("P_VIDEO", {
+                durationSec: 5,
+                resolution: "720p",
+                audioDurationSec: 10.2,
+            }),
+        ).toBe(44)
+    })
+
+    it("clamps the audio billable length to 20 seconds", () => {
+        expect(
+            getVideoCreditCost("P_VIDEO", {
+                durationSec: 5,
+                resolution: "720p",
+                audioDurationSec: 90,
+            }),
+        ).toBe(80)
+    })
+
+    it("rejects a draft price that does not exist", () => {
+        expect(() =>
+            getVideoCreditCost("WAN_3", { durationSec: 5, resolution: "720p", draft: true }),
+        ).toThrow()
+    })
+})
+
+describe("resolveVideoAttachments", () => {
+    beforeEach(() => vi.clearAllMocks())
+
+    it("returns nothing when no upload is attached", async () => {
+        await expect(resolveVideoAttachments("user_1", {})).resolves.toEqual({
+            imageUrl: undefined,
+            audioUrl: undefined,
+            audioDurationSec: undefined,
+        })
+        expect(uploadModel.findOne).not.toHaveBeenCalled()
+    })
+
+    it("resolves urls and the stored audio duration, scoped to the owner and purpose", async () => {
+        uploadModel.findOne
+            .mockReturnValueOnce(leanOf(storedUpload({ url: "https://cdn.invalid/i.png" })))
+            .mockReturnValueOnce(
+                leanOf(storedUpload({ url: "https://cdn.invalid/a.mp3", durationSec: 12.5 })),
+            )
+
+        const result = await resolveVideoAttachments("user_1", {
+            imageUploadId: IMAGE_ID,
+            audioUploadId: AUDIO_ID,
+        })
+
+        expect(result).toEqual({
+            imageUrl: "https://cdn.invalid/i.png",
+            audioUrl: "https://cdn.invalid/a.mp3",
+            audioDurationSec: 12.5,
+        })
+        expect(uploadModel.findOne).toHaveBeenCalledWith(
+            expect.objectContaining({ _id: IMAGE_ID, userId: "user_1", purpose: "video-image" }),
+        )
+        expect(uploadModel.findOne).toHaveBeenCalledWith(
+            expect.objectContaining({ _id: AUDIO_ID, userId: "user_1", purpose: "video-audio" }),
+        )
+    })
+
+    it("rejects audio with no stored duration rather than billing the client's length", async () => {
+        uploadModel.findOne.mockReturnValue(leanOf(storedUpload({ durationSec: null })))
+
+        await expect(
+            resolveVideoAttachments("user_1", { audioUploadId: AUDIO_ID }),
+        ).rejects.toMatchObject({ statusCode: 400 })
+    })
+
+    it("rejects an upload that is missing, foreign, consumed or expired with a field-level 400", async () => {
+        uploadModel.findOne.mockReturnValue(leanOf(null))
+
+        await expect(
+            resolveVideoAttachments("user_1", { imageUploadId: IMAGE_ID }),
+        ).rejects.toMatchObject({
+            statusCode: 400,
+            message: "imageUploadId: upload not found or expired",
+        })
+    })
+
+    it("rejects a malformed id without querying the database", async () => {
+        await expect(
+            resolveVideoAttachments("user_1", { audioUploadId: "not-an-object-id" }),
+        ).rejects.toMatchObject({
+            statusCode: 400,
+            message: "audioUploadId: upload not found or expired",
+        })
+        expect(uploadModel.findOne).not.toHaveBeenCalled()
+    })
+})
+
+describe("processVideo", () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+        uploadModel.findOne.mockReturnValue(leanOf(null))
+        uploadModel.find.mockReturnValue(leanOf([]))
+        deleteUploadedFile.mockResolvedValue(undefined)
+        uploadModel.deleteOne.mockResolvedValue(undefined)
+    })
+
+    const videoBody: MediaJobBody = {
+        jobId: "job_123456",
+        userId: "user_1",
+        modelKey: "P_VIDEO",
+        prompt: "a fox running",
+        durationSec: 5,
+        resolution: "720p",
+    }
+
+    it("charges the server-computed cost once and ignores a client-sent cost", async () => {
+        runReplicate.mockResolvedValue("https://fake.invalid/out.mp4")
+        const { services } = makeServices()
+
+        await processVideo({ ...videoBody, creditCost: 1 }, services)
+
+        expect(services.deductCredits).toHaveBeenCalledTimes(1)
+        expect(services.deductCredits).toHaveBeenCalledWith("user_1", 20)
+    })
+
+    it("charges the draft rate when draft is set", async () => {
+        runReplicate.mockResolvedValue("https://fake.invalid/out.mp4")
+        const { services } = makeServices()
+
+        await processVideo({ ...videoBody, draft: true }, services)
+
+        expect(services.deductCredits).toHaveBeenCalledWith("user_1", 5)
+    })
+
+    it("persists a video asset under the video feature with the prompt", async () => {
+        runReplicate.mockResolvedValue("https://fake.invalid/out.mp4")
+        const { services } = makeServices()
+
+        await processVideo(videoBody, services)
+
+        expect(services.persistAsset).toHaveBeenCalledWith(
+            expect.objectContaining({
+                modelKey: "P_VIDEO",
+                featureType: FeatureType.VIDEO,
+                prompt: "a fox running",
+                outputUrl: "https://fake.invalid/out.mp4",
+            }),
+        )
+    })
+
+    it("uses an empty prompt when none is a string", async () => {
+        runReplicate.mockResolvedValue("https://fake.invalid/out.mp4")
+        const { services } = makeServices()
+
+        await processVideo({ ...videoBody, prompt: 5 }, services)
+
+        expect(services.persistAsset).toHaveBeenCalledWith(expect.objectContaining({ prompt: "" }))
+    })
+
+    it("sends attachment urls to Replicate and bills the stored audio length, not a client value", async () => {
+        runReplicate.mockResolvedValue("https://fake.invalid/out.mp4")
+        uploadModel.findOne
+            .mockReturnValueOnce(leanOf(storedUpload({ url: "https://cdn.invalid/i.png" })))
+            .mockReturnValueOnce(
+                leanOf(storedUpload({ url: "https://cdn.invalid/a.mp3", durationSec: 60 })),
+            )
+        const { services } = makeServices()
+
+        await processVideo(
+            { ...videoBody, imageUploadId: IMAGE_ID, audioUploadId: AUDIO_ID, audioDurationSec: 1 },
+            services,
+        )
+
+        const input = runReplicate.mock.calls[0][0].input
+        expect(input).toMatchObject({
+            image: "https://cdn.invalid/i.png",
+            audio: "https://cdn.invalid/a.mp3",
+        })
+        expect(input).not.toHaveProperty("imageUploadId")
+        expect(input).not.toHaveProperty("audioUploadId")
+        expect(services.deductCredits).toHaveBeenCalledWith("user_1", 80)
+    })
+
+    it("deletes the used uploads after a delivered final render", async () => {
+        runReplicate.mockResolvedValue("https://fake.invalid/out.mp4")
+        const row = storedUpload()
+        uploadModel.findOne.mockReturnValue(leanOf(row))
+        uploadModel.find.mockReturnValue(leanOf([row]))
+        const { services } = makeServices()
+
+        await processVideo({ ...videoBody, imageUploadId: IMAGE_ID }, services)
+
+        expect(uploadModel.find).toHaveBeenCalledWith({
+            _id: { $in: [IMAGE_ID] },
+            userId: "user_1",
+        })
+        expect(deleteUploadedFile).toHaveBeenCalledWith(row)
+        expect(uploadModel.deleteOne).toHaveBeenCalledWith({ _id: "u1" })
+    })
+
+    it("keeps the uploads after a draft so Render final can reuse them", async () => {
+        runReplicate.mockResolvedValue("https://fake.invalid/out.mp4")
+        uploadModel.findOne.mockReturnValue(leanOf(storedUpload()))
+        const { services } = makeServices()
+
+        await processVideo({ ...videoBody, draft: true, imageUploadId: IMAGE_ID }, services)
+
+        expect(deleteUploadedFile).not.toHaveBeenCalled()
+        expect(uploadModel.deleteOne).not.toHaveBeenCalled()
+    })
+
+    it("keeps the uploads and deducts nothing when generation fails", async () => {
+        runReplicate.mockRejectedValue(new Error("replicate down"))
+        uploadModel.findOne.mockReturnValue(leanOf(storedUpload()))
+        const { services } = makeServices()
+
+        await processVideo({ ...videoBody, imageUploadId: IMAGE_ID }, services)
+
+        expect(services.deductCredits).not.toHaveBeenCalled()
+        expect(services.persistAsset).not.toHaveBeenCalled()
+        expect(uploadModel.find).not.toHaveBeenCalled()
+        expect(deleteUploadedFile).not.toHaveBeenCalled()
+    })
+
+    it("logs and continues when removing one upload fails, still removing the next", async () => {
+        runReplicate.mockResolvedValue("https://fake.invalid/out.mp4")
+        const first = storedUpload({ _id: "u1" })
+        const second = storedUpload({ _id: "u2" })
+        uploadModel.findOne.mockReturnValue(leanOf(first))
+        uploadModel.find.mockReturnValue(leanOf([first, second]))
+        deleteUploadedFile.mockRejectedValueOnce(new Error("cloudinary down"))
+        const { services } = makeServices()
+
+        await processVideo({ ...videoBody, imageUploadId: IMAGE_ID }, services)
+
+        expect(loggerError).toHaveBeenCalledWith(
+            expect.objectContaining({ uploadId: "u1" }),
+            "Failed to delete used upload",
+        )
+        expect(uploadModel.deleteOne).toHaveBeenCalledTimes(1)
+        expect(uploadModel.deleteOne).toHaveBeenCalledWith({ _id: "u2" })
+    })
+
+    it("rejects before generating when an attachment is not the caller's", async () => {
+        const { services } = makeServices()
+
+        await expect(
+            processVideo({ ...videoBody, imageUploadId: IMAGE_ID }, services),
+        ).rejects.toMatchObject({ statusCode: 400 })
+        expect(runReplicate).not.toHaveBeenCalled()
+        expect(services.deductCredits).not.toHaveBeenCalled()
+    })
+
+    it("uses the default services when none are injected", async () => {
+        runReplicate.mockRejectedValue(new Error("down"))
+
+        await processVideo(videoBody)
+
+        expect(redisSetStatus).toHaveBeenCalled()
     })
 })

@@ -40,6 +40,10 @@ export {
   SongRequestSchema,
   SPEECH_MODEL_KEYS,
   SpeechRequestSchema,
+  VIDEO_STUDIO_MODEL_KEYS,
+  VideoRequestSchema,
+  getVideoBillableSeconds,
+  getVideoModelOptions,
 } from './media.js';
 export type {
   LyricsRequest,
@@ -49,4 +53,7 @@ export type {
   SongRequest,
   SpeechModelKey,
   SpeechRequest,
+  VideoModelOptions,
+  VideoRequest,
+  VideoStudioModelKey,
 } from './media.js';

@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-24T08:14:56.456Z",
+ "generatedAt": "2026-11-24T10:02:28.897Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "media-studio",
@@ -34,26 +34,26 @@ window.DASHBOARD = {
    "source": "agent_docs/media-studio/TASKS.md"
   }
  ],
- "costUsd": 65.6872,
- "elapsedMs": 98615201,
+ "costUsd": 74.5766,
+ "elapsedMs": 104760211,
  "costByRole": {
-  "reviewer-security": 5.8733,
-  "unit": 8.4183,
-  "reviewer-ux": 1.8549,
-  "e2e": 5.0157,
-  "reviewer-code": 3.0525,
-  "builder": 20.7157,
-  "verifier": 18.8104,
-  "reviewer-ui": 1.8522,
+  "reviewer-security": 6.6203,
+  "unit": 9.1034,
+  "reviewer-ux": 2.1046,
+  "e2e": 6.0184,
+  "reviewer-code": 3.3346,
+  "builder": 23.2112,
+  "verifier": 21.9842,
+  "reviewer-ui": 2.1058,
   "runner": 0.0941
  },
  "totals": {
   "phases": 6,
   "tasks": 87,
   "byStatus": {
-   "verified": 70,
+   "verified": 78,
    "ready": 1,
-   "waiting": 16
+   "waiting": 8
   }
  },
  "phases": [
@@ -4202,7 +4202,7 @@ window.DASHBOARD = {
      "line": 1117,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -4275,7 +4275,7 @@ window.DASHBOARD = {
      "line": 1141,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4344,7 +4344,7 @@ window.DASHBOARD = {
      "line": 1164,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4458,7 +4458,7 @@ window.DASHBOARD = {
      "line": 1187,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4542,7 +4542,7 @@ window.DASHBOARD = {
      "line": 1211,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4641,7 +4641,7 @@ window.DASHBOARD = {
      "line": 1234,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": false,
      "pending": [],
      "risk": "low",
@@ -4712,7 +4712,7 @@ window.DASHBOARD = {
      "line": 1256,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4764,7 +4764,7 @@ window.DASHBOARD = {
      "line": 1270,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4814,7 +4814,7 @@ window.DASHBOARD = {
      "line": 1281,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4866,7 +4866,7 @@ window.DASHBOARD = {
      "line": 1292,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4919,7 +4919,7 @@ window.DASHBOARD = {
      "line": 1303,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -4982,7 +4982,7 @@ window.DASHBOARD = {
      "line": 1314,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -5035,7 +5035,7 @@ window.DASHBOARD = {
      "line": 1328,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-24T08:14:56.422Z",
+     "updatedAt": "2026-11-24T08:15:12.646Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -5090,7 +5090,7 @@ window.DASHBOARD = {
     {
      "id": "T4.1",
      "title": "Video schema, endpoint and cost (S4.1a)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T3.16"
@@ -5120,8 +5120,8 @@ window.DASHBOARD = {
      ],
      "line": 1349,
      "ui": false,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T10:02:28.863Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -5139,16 +5139,30 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.1188,
+     "costApprox": true,
+     "elapsedMs": 2525285,
+     "summary": [
+      "Video.vue: after a non-draft job succeeds, image and audio attachments (and previews) are cleared; drafts keep them.",
+      "media-service.ts: audio with no stored durationSec is rejected with a field-level 400 (never billed on the client duration); processVideo now sends the server-derived billable duration to Replicate. D"
+     ]
     },
     {
      "id": "T4.2",
      "title": "Video studio page (S4.1b)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T4.1"
@@ -5180,8 +5194,8 @@ window.DASHBOARD = {
      ],
      "line": 1372,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T10:02:28.863Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -5203,16 +5217,31 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.9131,
+     "costApprox": true,
+     "elapsedMs": 2525285,
+     "summary": [
+      "Video.vue: after a non-draft job succeeds, image and audio attachments (and previews) are cleared; drafts keep them.",
+      "media-service.ts: audio with no stored durationSec is rejected with a field-level 400 (never billed on the client duration); processVideo now sends the server-derived billable duration to Replicate. D"
+     ]
     },
     {
      "id": "T4.3",
      "title": "Image and audio inputs with upload hook (S4.2)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T4.2"
@@ -5247,8 +5276,8 @@ window.DASHBOARD = {
      ],
      "line": 1396,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T10:02:28.863Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -5275,16 +5304,44 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "CHANGES",
+        "security": "PASS"
+       },
+       "verifier": null
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "code": "PASS",
+        "ux": "PASS",
+        "ui": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.2866,
+     "costApprox": true,
+     "elapsedMs": 2525286,
+     "summary": [
+      "Video.vue: after a non-draft job succeeds, image and audio attachments (and previews) are cleared; drafts keep them.",
+      "media-service.ts: audio with no stored durationSec is rejected with a field-level 400 (never billed on the client duration); processVideo now sends the server-derived billable duration to Replicate. D"
+     ]
     },
     {
      "id": "T4.4",
      "title": "Draft first flow (S4.3)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T4.3"
@@ -5312,8 +5369,8 @@ window.DASHBOARD = {
      ],
      "line": 1423,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T10:02:28.863Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -5335,16 +5392,31 @@ window.DASHBOARD = {
        "model": "sonnet"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.2427,
+     "costApprox": true,
+     "elapsedMs": 2525286,
+     "summary": [
+      "Video.vue: after a non-draft job succeeds, image and audio attachments (and previews) are cleared; drafts keep them.",
+      "media-service.ts: audio with no stored durationSec is rejected with a field-level 400 (never billed on the client duration); processVideo now sends the server-derived billable duration to Replicate. D"
+     ]
     },
     {
      "id": "T4.5",
      "title": "Unit: Video composer, inputs and upload hook",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T4.4"
@@ -5369,23 +5441,36 @@ window.DASHBOARD = {
      ],
      "line": 1445,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T10:02:28.863Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.5854,
+     "costApprox": true,
+     "elapsedMs": 2181620,
+     "summary": [
+      "Video.vue: after a non-draft job succeeds, image and audio attachments (and previews) are cleared; drafts keep them.",
+      "media-service.ts: audio with no stored durationSec is rejected with a field-level 400 (never billed on the client duration); processVideo now sends the server-derived billable duration to Replicate. D"
+     ]
     },
     {
      "id": "T4.6",
      "title": "Unit: Video service and schema",
-     "done": false,
+     "done": true,
      "kind": "unit",
      "depends": [
       "T4.5"
@@ -5408,28 +5493,41 @@ window.DASHBOARD = {
      ],
      "line": 1456,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T10:02:28.863Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6265,
+     "costApprox": true,
+     "elapsedMs": 2181620,
+     "summary": [
+      "Video.vue: after a non-draft job succeeds, image and audio attachments (and previews) are cleared; drafts keep them.",
+      "media-service.ts: audio with no stored durationSec is rejected with a field-level 400 (never billed on the client duration); processVideo now sends the server-derived billable duration to Replicate. D"
+     ]
     },
     {
      "id": "T4.7",
      "title": "E2E: Video studio",
-     "done": false,
+     "done": true,
      "kind": "e2e",
      "depends": [
       "T4.6"
      ],
-     "files": [],
+     "files": [
+      "apps/web/e2e/fixtures/media.ts"
+     ],
      "gherkin": null,
      "do": null,
      "spec": "`apps/web/e2e/qa/video.spec.ts`",
@@ -5444,28 +5542,50 @@ window.DASHBOARD = {
      ],
      "line": 1467,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T10:02:28.863Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.7995,
+     "costApprox": true,
+     "elapsedMs": 5609233,
+     "summary": [
+      "Video.vue: after a non-draft job succeeds, image and audio attachments (and previews) are cleared; drafts keep them.",
+      "media-service.ts: audio with no stored durationSec is rejected with a field-level 400 (never billed on the client duration); processVideo now sends the server-derived billable duration to Replicate. D"
+     ]
     },
     {
      "id": "T4.8",
      "title": "Gate: Phase 4 Video studio",
-     "done": false,
+     "done": true,
      "kind": "gate",
      "depends": [
       "T4.7"
      ],
-     "files": [],
+     "files": [
+      "apps/web/e2e/qa/media-nav-player.spec.ts"
+     ],
      "gherkin": null,
      "do": null,
      "spec": null,
@@ -5482,25 +5602,43 @@ window.DASHBOARD = {
      ],
      "line": 1481,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T10:02:28.863Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "FAIL"
+      },
+      {
+       "n": 2,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.3168,
+     "costApprox": true,
+     "elapsedMs": 5315430,
+     "summary": [
+      "Video.vue: after a non-draft job succeeds, image and audio attachments (and previews) are cleared; drafts keep them.",
+      "media-service.ts: audio with no stored durationSec is rejected with a field-level 400 (never billed on the client duration); processVideo now sends the server-derived billable duration to Replicate. D"
+     ]
     }
    ],
-   "verified": 0,
+   "verified": 8,
    "total": 8,
-   "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "complete": true,
+   "costUsd": 8.8894,
+   "elapsedMs": 6145010
   },
   {
    "id": "5",
@@ -5558,7 +5696,7 @@ window.DASHBOARD = {
      ],
      "line": 1502,
      "ui": true,
-     "status": "waiting",
+     "status": "ready",
      "updatedAt": null,
      "verifierRouted": true,
      "pending": [],
@@ -6031,7 +6169,7 @@ window.DASHBOARD = {
   }
  ],
  "current": null,
- "nextCommand": "/build-phases agent_docs/media-studio/TASKS.md phase 4",
+ "nextCommand": "/build-phases agent_docs/media-studio/TASKS.md phase 5",
  "questions": [
   {
    "at": "2026-11-16T02:52:56.327Z",
@@ -6313,6 +6451,41 @@ window.DASHBOARD = {
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-24T08:15:12.646Z",
+   "ok": true,
+   "phase": "3",
+   "tasks": [
+    "T3.1",
+    "T3.2",
+    "T3.3",
+    "T3.4",
+    "T3.5",
+    "T3.6",
+    "T3.7",
+    "T3.10",
+    "T3.11",
+    "T3.12",
+    "T3.13",
+    "T3.14",
+    "T3.16"
+   ],
+   "attempt": "1",
+   "branch": "feature/media-studio",
+   "pushed": true,
+   "evidence": "T3.12 21/21, T3.13 76/76, web 2285 tests; lowest cov 91.3% branches",
+   "error": null,
+   "sha": "78e831cf48528794c238d72e8017e47a8e559925",
+   "shortSha": "78e831c",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/78e831cf48528794c238d72e8017e47a8e559925",
+   "subject": "feat(media): phase 3 speech studio",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-24T13:45:04+05:30",
+   "filesChanged": 43,
+   "added": 6433,
+   "removed": 1025
+  },
   {
    "at": "2026-11-23T13:39:55.052Z",
    "ok": true,
@@ -8415,9 +8588,485 @@ window.DASHBOARD = {
    "file": "3/T3.14-9.png",
    "phase": "3",
    "href": "shots/3/T3.14-9.png"
+  },
+  {
+   "taskId": "T4.2",
+   "kind": "proof",
+   "step": "AC1/AC2 empty state and ranges",
+   "attempt": null,
+   "caption": "Video studio empty state with exact copy and example button; duration and resolution controls for P-Video.",
+   "annotations": [
+    {
+     "x": 55,
+     "y": 15,
+     "w": 40,
+     "h": 15,
+     "label": "empty state copy and example"
+    },
+    {
+     "x": 7,
+     "y": 43,
+     "w": 40,
+     "h": 30,
+     "label": "duration and resolution for P-Video"
+    }
+   ],
+   "at": "2026-11-24T08:25:15.337Z",
+   "file": "4/T4.2-1.png",
+   "phase": "4",
+   "href": "shots/4/T4.2-1.png"
+  },
+  {
+   "taskId": "T4.2",
+   "kind": "proof",
+   "step": "AC7 375px layout",
+   "attempt": null,
+   "caption": "At 375px the studio stacks with no horizontal scroll.",
+   "annotations": [
+    {
+     "x": 0,
+     "y": 0,
+     "w": 100,
+     "h": 100,
+     "label": "single column, no horizontal scroll"
+    }
+   ],
+   "at": "2026-11-24T08:25:15.543Z",
+   "file": "4/T4.2-2.png",
+   "phase": "4",
+   "href": "shots/4/T4.2-2.png"
+  },
+  {
+   "taskId": "T4.3",
+   "kind": "proof",
+   "step": "AC6 inputs available",
+   "attempt": null,
+   "caption": "Start image and Audio track inputs with picker buttons.",
+   "annotations": [
+    {
+     "x": 7,
+     "y": 74,
+     "w": 40,
+     "h": 25,
+     "label": "image and audio drop zones"
+    }
+   ],
+   "at": "2026-11-24T08:25:15.698Z",
+   "file": "4/T4.3-1.png",
+   "phase": "4",
+   "href": "shots/4/T4.3-1.png"
+  },
+  {
+   "taskId": "T4.3",
+   "kind": "proof",
+   "step": "AC1/AC2: image thumbnail with Remove; audio duration and Estimated cost",
+   "attempt": 2,
+   "caption": "An attached image shows its thumbnail with Remove, the attached audio shows its 5 s duration, and the cost badge reads Estimated.",
+   "annotations": [
+    {
+     "x": 7.6,
+     "y": 63.2,
+     "w": 4.4,
+     "h": 5.6,
+     "label": "image thumbnail"
+    },
+    {
+     "x": 44.4,
+     "y": 63.8,
+     "w": 5.5,
+     "h": 4.4,
+     "label": "Remove control"
+    },
+    {
+     "x": 7.6,
+     "y": 78.2,
+     "w": 4,
+     "h": 1.8,
+     "label": "stored audio duration"
+    },
+    {
+     "x": 6.9,
+     "y": 91.3,
+     "w": 11.6,
+     "h": 2.8,
+     "label": "cost badge reads Estimated"
+    }
+   ],
+   "at": "2026-11-24T08:58:47.774Z",
+   "file": "4/T4.3-2.png",
+   "phase": "4",
+   "href": "shots/4/T4.3-2.png"
+  },
+  {
+   "taskId": "T4.3",
+   "kind": "proof",
+   "step": "AC3: audio over 20MB rejected with limit copy",
+   "attempt": 2,
+   "caption": "A 21 MB audio file is rejected before upload with the copy \"Audio must be 20 MB or smaller.\"",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 79.1,
+     "w": 43.8,
+     "h": 2,
+     "label": "exact 20 MB limit copy"
+    }
+   ],
+   "at": "2026-11-24T08:58:47.983Z",
+   "file": "4/T4.3-3.png",
+   "phase": "4",
+   "href": "shots/4/T4.3-3.png"
+  },
+  {
+   "taskId": "T4.3",
+   "kind": "proof",
+   "step": "AC5: non-audio file renamed .mp3 rejected",
+   "attempt": 2,
+   "caption": "A text file renamed .mp3 is rejected by the server sniff and no audio is attached.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 79.1,
+     "w": 43.8,
+     "h": 2,
+     "label": "server rejection of the renamed file"
+    },
+    {
+     "x": 6.9,
+     "y": 68.2,
+     "w": 43.8,
+     "h": 10,
+     "label": "audio slot stays empty"
+    }
+   ],
+   "at": "2026-11-24T08:58:48.130Z",
+   "file": "4/T4.3-4.png",
+   "phase": "4",
+   "href": "shots/4/T4.3-4.png"
+  },
+  {
+   "taskId": "T4.4",
+   "kind": "proof",
+   "step": "AC1/AC4: toggle shows saving; cost badge",
+   "attempt": 1,
+   "caption": "Draft preview switch on by default, with the saving (15 credits) beside its label and the 5-credit cost on the action bar.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 80.8,
+     "w": 43.8,
+     "h": 7.5,
+     "label": "Draft preview switch with saving label"
+    },
+    {
+     "x": 6.9,
+     "y": 91.6,
+     "w": 5.8,
+     "h": 3.9,
+     "label": "Cost badge at draft price"
+    }
+   ],
+   "at": "2026-11-24T08:48:34.109Z",
+   "file": "4/T4.4-1.png",
+   "phase": "4",
+   "href": "shots/4/T4.4-1.png"
+  },
+  {
+   "taskId": "T4.4",
+   "kind": "proof",
+   "step": "AC4: toggling draft updates cost badge",
+   "attempt": 1,
+   "caption": "Draft switched off: the cost badge updates immediately to the full 20 credits.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 80.8,
+     "w": 43.8,
+     "h": 7.5,
+     "label": "Draft switch off"
+    },
+    {
+     "x": 6.9,
+     "y": 91.6,
+     "w": 6.5,
+     "h": 3.9,
+     "label": "Cost badge now full price"
+    }
+   ],
+   "at": "2026-11-24T08:48:34.271Z",
+   "file": "4/T4.4-2.png",
+   "phase": "4",
+   "href": "shots/4/T4.4-2.png"
+  },
+  {
+   "taskId": "T4.4",
+   "kind": "proof",
+   "step": "AC2: draft result labelled Draft",
+   "attempt": 1,
+   "caption": "A draft result carries a visible Draft label above the video.",
+   "annotations": [
+    {
+     "x": 53.8,
+     "y": 12.2,
+     "w": 4,
+     "h": 3.3,
+     "label": "Draft label"
+    }
+   ],
+   "at": "2026-11-24T08:48:34.428Z",
+   "file": "4/T4.4-3.png",
+   "phase": "4",
+   "href": "shots/4/T4.4-3.png"
+  },
+  {
+   "taskId": "T4.4",
+   "kind": "proof",
+   "step": "AC3: Render final with full price",
+   "attempt": 1,
+   "caption": "Render final at full quality action shows the full 20-credit price before confirming.",
+   "annotations": [
+    {
+     "x": 53.8,
+     "y": 90.5,
+     "w": 23.3,
+     "h": 6.1,
+     "label": "Render final button with 20 credits"
+    }
+   ],
+   "at": "2026-11-24T08:48:34.585Z",
+   "file": "4/T4.4-4.png",
+   "phase": "4",
+   "href": "shots/4/T4.4-4.png"
+  },
+  {
+   "taskId": "T4.4",
+   "kind": "proof",
+   "step": "AC5: 375px layout",
+   "attempt": 1,
+   "caption": "At 375px the draft switch and cost badge fit with no horizontal scroll and a tall tap target.",
+   "annotations": [
+    {
+     "x": 4.3,
+     "y": 58.4,
+     "w": 91.5,
+     "h": 6.7,
+     "label": "Draft switch full-width tap target"
+    },
+    {
+     "x": 8.5,
+     "y": 69.7,
+     "w": 19.9,
+     "h": 3.4,
+     "label": "Cost badge"
+    }
+   ],
+   "at": "2026-11-24T08:48:34.742Z",
+   "file": "4/T4.4-5.png",
+   "phase": "4",
+   "href": "shots/4/T4.4-5.png"
+  },
+  {
+   "taskId": "T4.4",
+   "kind": "proof",
+   "step": "AC2 at 375px",
+   "attempt": 1,
+   "caption": "At 375px the draft result shows the Draft label above the video.",
+   "annotations": [
+    {
+     "x": 4.3,
+     "y": 53.8,
+     "w": 13.8,
+     "h": 3,
+     "label": "Draft label"
+    }
+   ],
+   "at": "2026-11-24T08:48:34.901Z",
+   "file": "4/T4.4-6.png",
+   "phase": "4",
+   "href": "shots/4/T4.4-6.png"
+  },
+  {
+   "taskId": "T4.7",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Video generated: result card with native video, balance updated once",
+   "annotations": [],
+   "at": "2026-11-24T08:33:36.880Z",
+   "file": "4/T4.7-1.png",
+   "phase": "4",
+   "href": "shots/4/T4.7-1.png"
+  },
+  {
+   "taskId": "T4.7",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "154-credit Wan 3 job opens the confirm dialog with Cancel focused",
+   "annotations": [],
+   "at": "2026-11-24T08:33:37.140Z",
+   "file": "4/T4.7-2.png",
+   "phase": "4",
+   "href": "shots/4/T4.7-2.png"
+  },
+  {
+   "taskId": "T4.7",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Draft result with Draft label and Render final action",
+   "annotations": [],
+   "at": "2026-11-24T08:33:37.323Z",
+   "file": "4/T4.7-3.png",
+   "phase": "4",
+   "href": "shots/4/T4.7-3.png"
+  },
+  {
+   "taskId": "T4.7",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Image and audio attached; cost badge reads Estimated",
+   "annotations": [],
+   "at": "2026-11-24T08:33:37.506Z",
+   "file": "4/T4.7-4.png",
+   "phase": "4",
+   "href": "shots/4/T4.7-4.png"
+  },
+  {
+   "taskId": "T4.7",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "402 opens the Low credits dialog",
+   "annotations": [],
+   "at": "2026-11-24T08:33:37.689Z",
+   "file": "4/T4.7-5.png",
+   "phase": "4",
+   "href": "shots/4/T4.7-5.png"
+  },
+  {
+   "taskId": "T4.7",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "Failure shows No credits were used.",
+   "annotations": [],
+   "at": "2026-11-24T08:33:37.873Z",
+   "file": "4/T4.7-6.png",
+   "phase": "4",
+   "href": "shots/4/T4.7-6.png"
+  },
+  {
+   "taskId": "T4.7",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "375px layout, no horizontal scroll",
+   "annotations": [],
+   "at": "2026-11-24T08:33:38.240Z",
+   "file": "4/T4.7-7.png",
+   "phase": "4",
+   "href": "shots/4/T4.7-7.png"
+  },
+  {
+   "taskId": "T4.7",
+   "kind": "proof",
+   "step": "@high image and audio attach with Estimated cost",
+   "attempt": 2,
+   "caption": "Image and audio attached; the cost badge reads Estimated (replaces the cropped T4.7-4 shot).",
+   "annotations": [
+    {
+     "x": 7.6,
+     "y": 63.2,
+     "w": 4.4,
+     "h": 5.6,
+     "label": "image thumbnail"
+    },
+    {
+     "x": 6.9,
+     "y": 91.3,
+     "w": 11.6,
+     "h": 2.8,
+     "label": "Estimated cost badge"
+    }
+   ],
+   "at": "2026-11-24T08:58:48.275Z",
+   "file": "4/T4.7-8.png",
+   "phase": "4",
+   "href": "shots/4/T4.7-8.png"
+  },
+  {
+   "taskId": "T4.7",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "150-credit confirm dialog fully open, Cancel focused",
+   "annotations": [],
+   "at": "2026-11-24T09:17:09.883Z",
+   "file": "4/T4.7-9.png",
+   "phase": "4",
+   "href": "shots/4/T4.7-9.png"
+  },
+  {
+   "taskId": "T4.7",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "402 Low credits dialog fully shown (5 required, 2 available)",
+   "annotations": [],
+   "at": "2026-11-24T09:17:10.036Z",
+   "file": "4/T4.7-10.png",
+   "phase": "4",
+   "href": "shots/4/T4.7-10.png"
+  },
+  {
+   "taskId": "T4.7",
+   "kind": "proof",
+   "step": "@critical 150-credit job asks for confirmation and Cancel is the default",
+   "attempt": 3,
+   "caption": "154-credit Wan 3 job opened by keyboard: the confirm dialog is fully open and Cancel holds default focus with its visible focus ring (supersedes T4.7-9, whose mouse-opened dialog shows no ring).",
+   "annotations": [
+    {
+     "x": 51.3,
+     "y": 54.2,
+     "w": 6.1,
+     "h": 5.6,
+     "label": "Cancel focused by default (focus ring)"
+    },
+    {
+     "x": 40.4,
+     "y": 47.5,
+     "w": 10,
+     "h": 3.5,
+     "label": "cost 154 credits"
+    }
+   ],
+   "at": "2026-11-24T09:31:44.671Z",
+   "file": "4/T4.7-11.png",
+   "phase": "4",
+   "href": "shots/4/T4.7-11.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-24T10:02:28.863Z",
+   "type": "deliverable",
+   "tasks": [
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8"
+   ],
+   "text": "Phase 4 video studio: API route, page, uploads, draft/render-final, unit and e2e tests",
+   "files": [
+    "apps/web/src/pages/Video.vue"
+   ]
+  },
   {
    "at": "2026-11-24T08:14:56.422Z",
    "type": "deliverable",
@@ -8518,6 +9167,78 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-24T10:02:12.637Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.7"
+   ],
+   "text": "Verify V1 has no --workers=1; it was added because of the upload rate limit (30 per 10 min)"
+  },
+  {
+   "at": "2026-11-24T10:02:12.497Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.7"
+   ],
+   "text": "Shot T4.7-9 was mouse-opened so no focus ring; verifier retook as 4/T4.7-11 via keyboard (focus-visible ring on Cancel)"
+  },
+  {
+   "at": "2026-11-24T10:02:12.353Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.7"
+   ],
+   "text": "Low credits dialog (shot 4/T4.7-10) says \"To generate an AI image\" on the Video studio; shared copy is not feature-aware"
+  },
+  {
+   "at": "2026-11-24T09:01:43.082Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.4"
+   ],
+   "text": "T4.4-4 shot shows the cost badge mid-tween at 12 with Draft still on; AC3 full-price badge proven by e2e (video.spec.ts:295), not by the shot. Render final test does not compare jobIds or re-send attachments (source: useMediaJob uuidv4 per start, Video.vue keeps attachments after draft)"
+  },
+  {
+   "at": "2026-11-24T09:01:42.930Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.3"
+   ],
+   "text": "Renamed-file rejection shows raw server text \"file: unsupported or unrecognized file type\"; Seconds stepper stays enabled while audio drives the length"
+  },
+  {
+   "at": "2026-11-24T09:01:42.771Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.1"
+   ],
+   "text": "videoPosterUrl and the video posterUrl write (media-asset-service.ts:84,159) have no unit test; e2e stub asset has no posterUrl so poster rendering is never exercised"
+  },
+  {
+   "at": "2026-11-24T09:01:42.588Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.2"
+   ],
+   "text": "At >=1024px the fixed mini-player covers the static Generate button (no bottom padding for --mini-player-h)"
+  },
+  {
+   "at": "2026-11-24T09:01:42.446Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.7"
+   ],
+   "text": "Engineer report claims reverse overlap (audio stops video) is covered by a component test; no VideoResult test exists (behaviour in VideoResult.vue:27-34, source only)"
+  },
+  {
+   "at": "2026-11-24T09:01:42.245Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.7"
+   ],
+   "text": "T4.7-4 shot caption claims the Estimated badge but is cropped above it; verifier re-shot as 4/T4.7-8"
+  },
   {
    "at": "2026-11-24T08:14:29.719Z",
    "type": "advisory",
@@ -8833,782 +9554,692 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
-   "at": "2026-11-24T08:14:56.422Z",
+   "at": "2026-11-24T10:02:28.863Z",
    "type": "deliverable",
    "tasks": [
-    "T3.1",
-    "T3.2",
-    "T3.3",
-    "T3.4",
-    "T3.5",
-    "T3.6",
-    "T3.7",
-    "T3.10",
-    "T3.11",
-    "T3.12",
-    "T3.13",
-    "T3.14",
-    "T3.16"
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8"
    ],
-   "text": "Phase 3 Speech studio: TTS schema/route, tag model, composer, tag editor, convert dialog, advisor, tests"
+   "text": "Phase 4 video studio: API route, page, uploads, draft/render-final, unit and e2e tests",
+   "files": [
+    "apps/web/src/pages/Video.vue"
+   ]
   },
   {
-   "at": "2026-11-24T08:14:53.254Z",
+   "at": "2026-11-24T10:02:24.259Z",
    "tasks": [
-    "T3.13"
+    "T4.8"
    ],
-   "attempt": "1",
+   "attempt": "3",
    "type": "verify_passed",
-   "evidence": "V1 2 files / 76 tests passed (media-input 25, media-service 51); media-input.ts and media-service.ts 100/100/100/100; fakes only (fake.invalid / cdn.invalid URLs, injected Cloudinary/Replicate fns); no skip markers",
-   "fingerprint": "208ecb6061a538109b179351b35a4bf0b96dee095344599e1e6c3acf6e67e330",
-   "report": ".dashboard/media-studio/reports/phase-3-verifier-a12.md"
+   "evidence": "V1 `bun run check` exits 0 with 0 errors and 17 warnings (the same as a7). V2 root `bun run test` gives 361 files, 4190/4190. V3 check:model-docs passes (15 models). V4 `video.spec + media-nav-player.spec --repeat-each=2 --workers=1` gives 41/41 in 57.6s, finishing 15:31:53, which is more than 10 minutes after the V1 run. The media-nav-player.spec gate edit swaps the stale placeholder testid for `",
+   "fingerprint": "6f7a49054ffc8439efa91c8a7fd16f0ce09f0f98ffd276d57c555c14f94ad06a",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a10.md"
   },
   {
-   "at": "2026-11-24T08:14:53.253Z",
+   "at": "2026-11-24T10:02:24.258Z",
    "tasks": [
-    "T3.12"
+    "T4.7"
    ],
-   "attempt": "1",
+   "attempt": "3",
    "type": "verify_passed",
-   "evidence": "V1 4 files / 21 tests passed; SpeechComposer.vue 100/100/100/100, TextAdvisor.vue 100/100/100/100, ConvertTagsDialog.vue 100 stmts / 91.3 branch / 100 funcs / 100 lines (uncovered 17,39 are justified pending===null fallbacks); no it.fails/skip/only/fixme/snapshot/ignore markers",
-   "fingerprint": "0232cc1363892c82abfde9d2e2cc25dc9ec3338a9003e72745fe2154c73445de",
-   "report": ".dashboard/media-studio/reports/phase-3-verifier-a12.md"
+   "evidence": "Verify V1 `bunx playwright test e2e/qa/video.spec.ts --repeat-each=3 --workers=1` (E2E_SERVER=dev) gives 37/37 x3 clean in 1.0m, finishing 15:11:15. The a7 BLOCKING flake is fixed. `holdProgress()` (fixtures/media.ts:216-225) gates the /progress route, and the spec asserts `job-progress` visible plus `result-card` count 0 before release (video.spec.ts:157-173). That is stronger than before, not we",
+   "fingerprint": "818208da0f66d59c301a050cb388aecbf5f4377c0850b1cde2a2a98fad0ea3a3",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a10.md"
   },
   {
-   "at": "2026-11-24T08:14:53.253Z",
-   "tasks": [
-    "T3.5"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "a8 BLOCKING (ConvertTagsDialog.vue:38 format) cleared, the only file changed since a8; V1 2285/2285, V2 clean; AC1-AC6 shots T3.5-1..6 and T3.5-8 (opened T3.5-2 dialog lists \"pause of 1 s\" Removed; T3.5-8 375px close/Keep/Convert 44px); reduced motion handled in SpeechModelSelect.vue and AppModal.vue",
-   "fingerprint": "1b524e4d5a2bd194503d78bbaa637535ec750a836a2e33bd8c85607df5af926b",
-   "report": ".dashboard/media-studio/reports/phase-3-verifier-a12.md"
-  },
-  {
-   "at": "2026-11-24T08:14:53.253Z",
-   "tasks": [
-    "T3.3"
-   ],
-   "attempt": "1",
-   "type": "verify_passed",
-   "evidence": "a8 BLOCKING (format) cleared: V2 `bun run check` exit 0, \"All 1090 files are correctly formatted\", 0 errors / 17 warnings (none in Speech files); V1 web 258 files / 2285 tests passed; AC1-AC6 proven by shots T3.3-1,2,3,4,5,7,8,9,10 (opened T3.3-2 Estimated 21 credits, T3.3-10 notice names English_Wiselady); Speech files unchanged since the a8 live checks",
-   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
-   "report": ".dashboard/media-studio/reports/phase-3-verifier-a12.md"
-  },
-  {
-   "at": "2026-11-24T08:14:29.719Z",
+   "at": "2026-11-24T10:02:12.637Z",
    "type": "advisory",
    "tasks": [
-    "T3.5"
+    "T4.7"
    ],
-   "text": "Superseded failure shot T3.5-7 (40px close button) remains in the manifest; T3.5-8 shows the fixed 44px target"
+   "text": "Verify V1 has no --workers=1; it was added because of the upload rate limit (30 per 10 min)"
   },
   {
-   "at": "2026-11-24T08:14:29.588Z",
+   "at": "2026-11-24T10:02:12.497Z",
    "type": "advisory",
    "tasks": [
-    "T3.3"
+    "T4.7"
    ],
-   "text": "Superseded proof shots T3.3-6 (wrong voice notice) and T3.3-2 (old \"Voice changed to Andy\" line, \"voice cloning\" copy) remain in the manifest; T3.3-10 is the current proof"
+   "text": "Shot T4.7-9 was mouse-opened so no focus ring; verifier retook as 4/T4.7-11 via keyboard (focus-visible ring on Cancel)"
   },
   {
-   "at": "2026-11-24T08:14:29.416Z",
+   "at": "2026-11-24T10:02:12.353Z",
    "type": "advisory",
    "tasks": [
-    "T3.12"
+    "T4.7"
    ],
-   "text": "ConvertTagsDialog.vue branches 91.3% (lines 17,39 pending-null fallbacks), below the 95% target"
+   "text": "Low credits dialog (shot 4/T4.7-10) says \"To generate an AI image\" on the Video studio; shared copy is not feature-aware"
   },
   {
-   "at": "2026-11-24T08:11:59.059Z",
+   "at": "2026-11-24T09:29:10.799Z",
    "type": "verify_started",
    "tasks": [
-    "T3.3",
-    "T3.5",
-    "T3.12",
-    "T3.13"
-   ],
-   "attempt": "1"
-  },
-  {
-   "at": "2026-11-24T08:11:53.437Z",
-   "type": "run_started",
-   "tasks": [
-    "T3.1",
-    "T3.2",
-    "T3.3",
-    "T3.4",
-    "T3.5",
-    "T3.6",
-    "T3.7",
-    "T3.10",
-    "T3.11",
-    "T3.12",
-    "T3.13",
-    "T3.14",
-    "T3.16"
-   ],
-   "pipeline": 2
-  },
-  {
-   "at": "2026-11-24T03:57:40.392Z",
-   "type": "verify_passed",
-   "tasks": [
-    "T3.6"
-   ],
-   "evidence": "all reviewers passed; no verifier routed (risk=low)",
-   "fingerprint": "3690e68c2187d07450b96115861c7472e5e4b4d744d1c1bb25aed85f763e2c49",
-   "skipped": "verifier"
-  },
-  {
-   "at": "2026-11-24T03:57:40.384Z",
-   "tasks": [
-    "T3.6"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "Speech page at 375px shows no horizontal scroll, and the chip toolbar wraps cleanly.",
-   "fingerprint": "3690e68c2187d07450b96115861c7472e5e4b4d744d1c1bb25aed85f763e2c49",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a11.md",
-   "verdict": "PASS",
-   "reviewer": "ui"
-  },
-  {
-   "at": "2026-11-24T03:57:40.384Z",
-   "tasks": [
-    "T3.5"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "Conversion dialog is legible at desktop and 375px; the close button, Keep original and Convert are 44px (shot 8). Shots T3.5-7 and T3.3-6 are superseded by later fixes.",
-   "fingerprint": "1b524e4d5a2bd194503d78bbaa637535ec750a836a2e33bd8c85607df5af926b",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a11.md",
-   "verdict": "PASS",
-   "reviewer": "ui"
-  },
-  {
-   "at": "2026-11-24T03:57:40.383Z",
-   "tasks": [
-    "T3.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "Speech studio layout, model list, counter, disabled-reason, low-credits dialog (shot 9) and voice/notice agreement (shot 10) read cleanly.",
-   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a11.md",
-   "verdict": "PASS",
-   "reviewer": "ui"
-  },
-  {
-   "at": "2026-11-24T03:57:40.204Z",
-   "tasks": [
-    "T3.6"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "shot T3.6-1 (375px, no sideways scroll) and the earlier estimate and FAQ shots. Attempt 8 findings still hold.",
-   "fingerprint": "3690e68c2187d07450b96115861c7472e5e4b4d744d1c1bb25aed85f763e2c49",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a11.md",
-   "verdict": "PASS",
-   "reviewer": "ux"
-  },
-  {
-   "at": "2026-11-24T03:57:40.204Z",
-   "tasks": [
-    "T3.5"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "shots T3.5-1..6 and the new T3.5-8 (375px dialog \"Switch to Minimax Speech 2.8 HD?\" lists Removed: breathe, states that Convert changes the text and can be undone, with Keep original and Convert buttons that are not clipped). Undo and focus return were confirmed in the earlier shots.",
-   "fingerprint": "1b524e4d5a2bd194503d78bbaa637535ec750a836a2e33bd8c85607df5af926b",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a11.md",
-   "verdict": "PASS",
-   "reviewer": "ux"
-  },
-  {
-   "at": "2026-11-24T03:57:40.203Z",
-   "tasks": [
-    "T3.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "shots T3.3-1 (empty state), T3.3-3/4 (over-limit, Generate disabled), T3.3-8 (failure, Try again), T3.3-9 (402 Low credits dialog) and the new T3.3-10 (375px: voice notice now reads \"Voice changed to English_Wiselady\", 5 model cards readable, no overflow). Attempt 8 findings still hold; only formatting has changed since.",
-   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a11.md",
-   "verdict": "PASS",
-   "reviewer": "ux"
-  },
-  {
-   "at": "2026-11-24T03:57:40.010Z",
-   "tasks": [
-    "T3.6"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1 met: `useTtsAdvice.seconds` is a computed over `toValue(options.doc)`, and SpeechComposer passes `tts.doc.value`. `doc` is a shallowRef that is replaced on every edit, so the parent re-renders and the child receives the new array. Test \"recomputes when the doc changes\" covers it. Empty and whitespace-only docs return 0. ; AC2 met: `level` is `near` at exactly 90% of the limit and `over` above ",
-   "fingerprint": "3690e68c2187d07450b96115861c7472e5e4b4d744d1c1bb25aed85f763e2c49",
-   "report": ".dashboard/media-studio/reports/media-studio-review-code-haiku-a11.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-24T03:57:39.778Z",
-   "tasks": [
-    "T3.5"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1 requestModelSwitch switches directly when findUnsupportedTags is empty. AC2 ConvertTagsDialog lists the Approximated and Removed tags, including suggestedEmotion. AC3 confirmSwitch stores undoState (doc, model, emotion) and undoConversion restores all three. AC4 keep and close both emit keep, which calls cancelSwitch, and modelKey is only written on confirm. AC5 AppModal runs with trap-focus. ",
-   "fingerprint": "1b524e4d5a2bd194503d78bbaa637535ec750a836a2e33bd8c85607df5af926b",
-   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a11.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-24T03:57:39.777Z",
-   "tasks": [
-    "T3.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1 to AC6 unchanged from the a8 PASS. The SpeechModelSelect radios are controlled and snap back to the committed model in onSelect. I spot-read SpeechModelSelect and found no behavioural change, only formatting.",
-   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
-   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a11.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-24T03:56:22.914Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/media-studio/APPROVALS.md": "70f5ca564e2fe45c93c7a2d765341fb64f81b171",
-    "agent_docs/media-studio/SPEC.md": "d4a927689a767909a05b9a2894a593c6a4fd78ab",
-    "agent_docs/media-studio/TASKS.md": "bfe2e55f673c37b5b0b07db9a71017c9c5b81795",
-    "apps/api/src/lib/media-input.test.ts": "92a1caf751d324aac1bbd250a1d25efc11b713f6",
-    "apps/api/src/queue/generation-worker.ts": "4089d687fc6db74b159f88bae2f75358440b7185",
-    "apps/api/src/routes/media.test.ts": "2ba968b32f1c5ebf2925dbba8650badf5b7facb7",
-    "apps/api/src/routes/media.ts": "746ff968726cfc65fa3fe6da7da689004d8ed590",
-    "apps/api/src/services/media-service.test.ts": "1bee1f95457e632d37993ec9c1f387900e0e8bac",
-    "apps/api/src/services/media-service.ts": "b477104dd6be5ada6db5d4b659216de4dcefdec4",
-    "apps/web/package.json": "5fc460b45789e9a124e4d379241bb8ec14cfe60a",
-    "apps/web/src/components.d.ts": "9a8a99d15abca5639e57f6d6823196841750f29b",
-    "apps/web/src/router/index.ts": "3f31c2e0eb9b3797c6f808e691bcb14e3c7e7c91",
-    "bun.lock": "71613f800ce3dbff5e91fed474b4b73cb5b49509",
-    "packages/shared/src/models/index.ts": "f505b6ada7b9b11fe42d5d381f431070e61265d7",
-    "packages/shared/src/models/media-limits.ts": "d4197c320b5c9b888dd14438bb2f19e9a65f1ad7",
-    "packages/shared/src/schemas/index.ts": "babecbeeb3e2d2de3ca280528d414a6397f6b036",
-    "packages/shared/src/schemas/media.test.ts": "51ae9189f077442c12dab51c0d8dba7cd642f0a3",
-    "packages/shared/src/schemas/media.ts": "f7aeb359daa12e1fc6a00ab10611bcd8cae75433",
-    "apps/web/e2e/qa/speech.spec.ts": "95e632a6bd918952888b480127a4d3f115a8a23e",
-    "apps/web/src/components/Speech/ConvertTagsDialog.test.ts": "ac460076d19556306b8bd1307c6157397c1dc594",
-    "apps/web/src/components/Speech/ConvertTagsDialog.vue": "b251fa3a72dbd1f2673a70a199769fc432210231",
-    "apps/web/src/components/Speech/SpeechComposer.test.ts": "e7189797a5e43c1dda6d32e9256830fc15e1b2ea",
-    "apps/web/src/components/Speech/SpeechComposer.vue": "1456a89fba68c28193b912f280b904f50dead341",
-    "apps/web/src/components/Speech/SpeechModelSelect.vue": "bd11114b0d9ada02e1531fa76a08aa0020c9ec78",
-    "apps/web/src/components/Speech/TagChipNode.ts": "8b1fbf497d13dcf657d2b80a57792b4fd3c10f83",
-    "apps/web/src/components/Speech/TagToolbar.vue": "8ae47e49d92ebf823ae343abaf5b869cac69be2f",
-    "apps/web/src/components/Speech/TextAdvisor.test.ts": "51b33973cb22d6f04956357d3f96aecab901752a",
-    "apps/web/src/components/Speech/TextAdvisor.vue": "86ccf42f18b0aad78a626aee2011e84c75b93f10",
-    "apps/web/src/components/Speech/TtsEditor.vue": "3f95c3f608b4f0af8222469869c95e3478228b00",
-    "apps/web/src/components/Speech/VoiceSelect.test.ts": "5729b0cd4c4d0bec3bdadc22cb50d5ae30744578",
-    "apps/web/src/components/Speech/VoiceSelect.vue": "f69d7a383c3e6089d5f0b55353a034035a8a10bd",
-    "apps/web/src/composables/useTtsAdvice.test.ts": "39275e10a291039a71a91f267b37da92e4644743",
-    "apps/web/src/composables/useTtsAdvice.ts": "7e1630d60588012b7689e84f764a90a7ace7a626",
-    "apps/web/src/composables/useTtsEditor.test.ts": "527384460c6a51a74acbea347bf4ef66dd3b9a83",
-    "apps/web/src/composables/useTtsEditor.ts": "3be1ca190e7cf7888801c9500979c41d56be0891",
-    "apps/web/src/pages/Speech.vue": "7cabc4af182bec67d701bd26b13a19d66f995b55",
-    "packages/shared/src/models/tts-tags.test.ts": "5f736bd278923d427f9b2bbb5913844f898450d6",
-    "packages/shared/src/models/tts-tags.ts": "ad4ce1196d628d46e43726e5970363b44af4fcbe"
-   }
-  },
-  {
-   "at": "2026-11-24T03:56:22.771Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T3.13"
-   ],
-   "fingerprint": "208ecb6061a538109b179351b35a4bf0b96dee095344599e1e6c3acf6e67e330"
-  },
-  {
-   "at": "2026-11-24T03:56:22.771Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T3.12"
-   ],
-   "fingerprint": "0232cc1363892c82abfde9d2e2cc25dc9ec3338a9003e72745fe2154c73445de",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-24T03:56:22.771Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T3.6"
-   ],
-   "fingerprint": "3690e68c2187d07450b96115861c7472e5e4b4d744d1c1bb25aed85f763e2c49",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-24T03:56:17.954Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.3",
-    "T3.5"
-   ],
-   "text": "format fix, bun run check 0 errors",
-   "files": [
-    "apps/web/src/components/Speech/VoiceSelect.test.ts",
-    "apps/web/src/components/Speech/ConvertTagsDialog.vue"
-   ]
-  },
-  {
-   "at": "2026-11-24T03:56:17.711Z",
-   "type": "task_built",
-   "tasks": [
-    "T3.13"
-   ],
-   "text": "unit a10 PASS: check clean, 100% lines, shuffle clean",
-   "files": [
-    "apps/api/src/routes/media.test.ts",
-    "packages/shared/src/schemas/media.test.ts"
-   ]
-  },
-  {
-   "at": "2026-11-24T03:55:43.715Z",
-   "type": "task_started",
-   "tasks": [
-    "T3.13"
+    "T4.7",
+    "T4.8"
    ],
    "attempt": "3"
   },
   {
-   "at": "2026-11-24T03:55:41.078Z",
+   "at": "2026-11-24T09:29:07.868Z",
    "type": "dirty_snapshot",
    "tasks": [],
    "hashes": {
-    "agent_docs/media-studio/APPROVALS.md": "70f5ca564e2fe45c93c7a2d765341fb64f81b171",
-    "agent_docs/media-studio/SPEC.md": "d4a927689a767909a05b9a2894a593c6a4fd78ab",
-    "agent_docs/media-studio/TASKS.md": "bfe2e55f673c37b5b0b07db9a71017c9c5b81795",
-    "apps/api/src/lib/media-input.test.ts": "92a1caf751d324aac1bbd250a1d25efc11b713f6",
-    "apps/api/src/queue/generation-worker.ts": "4089d687fc6db74b159f88bae2f75358440b7185",
-    "apps/api/src/routes/media.test.ts": "d1e5fdc77547ace31ad09e1f120f4f9a78cde23f",
-    "apps/api/src/routes/media.ts": "746ff968726cfc65fa3fe6da7da689004d8ed590",
-    "apps/api/src/services/media-service.test.ts": "1bee1f95457e632d37993ec9c1f387900e0e8bac",
-    "apps/api/src/services/media-service.ts": "b477104dd6be5ada6db5d4b659216de4dcefdec4",
-    "apps/web/package.json": "5fc460b45789e9a124e4d379241bb8ec14cfe60a",
-    "apps/web/src/components.d.ts": "9a8a99d15abca5639e57f6d6823196841750f29b",
-    "apps/web/src/router/index.ts": "3f31c2e0eb9b3797c6f808e691bcb14e3c7e7c91",
-    "bun.lock": "71613f800ce3dbff5e91fed474b4b73cb5b49509",
-    "packages/shared/src/models/index.ts": "f505b6ada7b9b11fe42d5d381f431070e61265d7",
-    "packages/shared/src/models/media-limits.ts": "d4197c320b5c9b888dd14438bb2f19e9a65f1ad7",
-    "packages/shared/src/schemas/index.ts": "babecbeeb3e2d2de3ca280528d414a6397f6b036",
-    "packages/shared/src/schemas/media.test.ts": "51ae9189f077442c12dab51c0d8dba7cd642f0a3",
-    "packages/shared/src/schemas/media.ts": "f7aeb359daa12e1fc6a00ab10611bcd8cae75433",
-    "apps/web/e2e/qa/speech.spec.ts": "95e632a6bd918952888b480127a4d3f115a8a23e",
-    "apps/web/src/components/Speech/ConvertTagsDialog.test.ts": "ac460076d19556306b8bd1307c6157397c1dc594",
-    "apps/web/src/components/Speech/ConvertTagsDialog.vue": "b251fa3a72dbd1f2673a70a199769fc432210231",
-    "apps/web/src/components/Speech/SpeechComposer.test.ts": "e7189797a5e43c1dda6d32e9256830fc15e1b2ea",
-    "apps/web/src/components/Speech/SpeechComposer.vue": "1456a89fba68c28193b912f280b904f50dead341",
-    "apps/web/src/components/Speech/SpeechModelSelect.vue": "bd11114b0d9ada02e1531fa76a08aa0020c9ec78",
-    "apps/web/src/components/Speech/TagChipNode.ts": "8b1fbf497d13dcf657d2b80a57792b4fd3c10f83",
-    "apps/web/src/components/Speech/TagToolbar.vue": "8ae47e49d92ebf823ae343abaf5b869cac69be2f",
-    "apps/web/src/components/Speech/TextAdvisor.test.ts": "51b33973cb22d6f04956357d3f96aecab901752a",
-    "apps/web/src/components/Speech/TextAdvisor.vue": "86ccf42f18b0aad78a626aee2011e84c75b93f10",
-    "apps/web/src/components/Speech/TtsEditor.vue": "3f95c3f608b4f0af8222469869c95e3478228b00",
-    "apps/web/src/components/Speech/VoiceSelect.test.ts": "5729b0cd4c4d0bec3bdadc22cb50d5ae30744578",
-    "apps/web/src/components/Speech/VoiceSelect.vue": "f69d7a383c3e6089d5f0b55353a034035a8a10bd",
-    "apps/web/src/composables/useTtsAdvice.test.ts": "39275e10a291039a71a91f267b37da92e4644743",
-    "apps/web/src/composables/useTtsAdvice.ts": "7e1630d60588012b7689e84f764a90a7ace7a626",
-    "apps/web/src/composables/useTtsEditor.test.ts": "527384460c6a51a74acbea347bf4ef66dd3b9a83",
-    "apps/web/src/composables/useTtsEditor.ts": "3be1ca190e7cf7888801c9500979c41d56be0891",
-    "apps/web/src/pages/Speech.vue": "7cabc4af182bec67d701bd26b13a19d66f995b55",
-    "packages/shared/src/models/tts-tags.test.ts": "5f736bd278923d427f9b2bbb5913844f898450d6",
-    "packages/shared/src/models/tts-tags.ts": "ad4ce1196d628d46e43726e5970363b44af4fcbe"
+    "agent_docs/media-studio/TASKS.md": "9047534f5d10477c97650dc17bda9ef4709659d3",
+    "apps/api/src/queue/generation-worker.ts": "2918bd544f2ff595b06bb00228791f12ea4ebbd0",
+    "apps/api/src/routes/media.test.ts": "96ac68ac0f7980304d45225515da18c05c92b408",
+    "apps/api/src/routes/media.ts": "13e96dc9de2bbcdcfe45070e00e7e37faf18bca3",
+    "apps/api/src/services/media-asset-service.ts": "04d69fa3745074c66d3ba1994a87ac46d133aa49",
+    "apps/api/src/services/media-service.test.ts": "e355cc814377e13991967383388a3116db88eb03",
+    "apps/api/src/services/media-service.ts": "4b1450d3c9781a45602e2e72e2e31aafaf6d6b71",
+    "apps/web/e2e/fixtures/media.ts": "87f361cd2340ee9454b5d6285db3860beaa2dd26",
+    "apps/web/e2e/qa/media-nav-player.spec.ts": "9cd47dacd607e734d006df7f4978f803f56c3080",
+    "apps/web/src/components.d.ts": "a0ef84be23e55bfd75d23238cda2b47d47489bdf",
+    "apps/web/src/router/index.ts": "6c4df4ad0857988f12fccfa247ec3e8e0ffc95a5",
+    "packages/shared/src/schemas/index.ts": "2d09447c0616d653a93a4c0b868015701cc7f606",
+    "packages/shared/src/schemas/media.ts": "5d2a1bf7adda6590e50bb15651cf038df1726706",
+    "apps/web/e2e/qa/video.spec.ts": "d7d8f566016d60960724ce36458951051b7378ca",
+    "apps/web/src/components/Video/AttachedFile.vue": "3b88df102c311cc7aaf2db1ac3ddb3067b275ad3",
+    "apps/web/src/components/Video/AudioInput.test.ts": "6976e0c45dedaa02c0dded5dea874d2f557d89a8",
+    "apps/web/src/components/Video/AudioInput.vue": "b2cde069cbdab2a1913b746a43854ca9884b48f5",
+    "apps/web/src/components/Video/DraftToggle.test.ts": "762e5ecfce364ddc6534a6e55912212551cb0aa9",
+    "apps/web/src/components/Video/DraftToggle.vue": "fe25bfccae86352b4791b104ea6b5ea96ff2523a",
+    "apps/web/src/components/Video/ImageInput.test.ts": "1700aedbfdb6ea6a0625fb6ad2fc4f0f5fd67f2c",
+    "apps/web/src/components/Video/ImageInput.vue": "f71efffe46b7ac3f6c80bdf57c46ed99ec69599c",
+    "apps/web/src/components/Video/UploadDropZone.vue": "d0eeec79a5f1d27e6fa000628640fe8e40e27f66",
+    "apps/web/src/components/Video/VideoComposer.test.ts": "7e2d2621da1d4e545112e187a07db3d661cf9796",
+    "apps/web/src/components/Video/VideoComposer.vue": "9c313a7962877a42459986258d7ac60424bdc5bc",
+    "apps/web/src/components/Video/VideoResult.vue": "1aca72d7ee3124a392c3d804671cf5cfa989b2d7",
+    "apps/web/src/components/Video/VideoSettings.vue": "62ab5234e39af47f149ab1bbf11d9218abc563d6",
+    "apps/web/src/composables/useToolVideoUpload.test.ts": "d66b4d7dcf6a55a09c337137cbc92731a87fbe5d",
+    "apps/web/src/composables/useToolVideoUpload.ts": "68c05f8149b0b61f2af5701eab7c502d7e6b9661",
+    "apps/web/src/pages/Video.vue": "485b2c63eb70feca027afbaff6ee8d1b2ab0e67c"
    }
   },
   {
-   "at": "2026-11-24T03:55:40.845Z",
+   "at": "2026-11-24T09:29:07.708Z",
    "type": "preflight_passed",
    "tasks": [
-    "T3.5"
+    "T4.8"
    ],
-   "fingerprint": "1b524e4d5a2bd194503d78bbaa637535ec750a836a2e33bd8c85607df5af926b",
+   "fingerprint": "6f7a49054ffc8439efa91c8a7fd16f0ce09f0f98ffd276d57c555c14f94ad06a"
+  },
+  {
+   "at": "2026-11-24T09:29:07.708Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T4.7"
+   ],
+   "fingerprint": "818208da0f66d59c301a050cb388aecbf5f4377c0850b1cde2a2a98fad0ea3a3",
    "slop": "PASS"
   },
   {
-   "at": "2026-11-24T03:55:40.845Z",
-   "type": "preflight_passed",
+   "at": "2026-11-24T09:29:00.257Z",
+   "type": "task_built",
    "tasks": [
-    "T3.3"
+    "T4.8"
    ],
-   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
-   "slop": "PASS"
+   "text": "gate V1-V4 pass: 4190 tests, e2e 41 x2",
+   "files": [
+    "apps/web/e2e/qa/media-nav-player.spec.ts"
+   ]
   },
   {
-   "at": "2026-11-24T03:55:06.676Z",
+   "at": "2026-11-24T09:17:26.569Z",
    "type": "task_started",
    "tasks": [
-    "T3.3",
-    "T3.5"
+    "T4.8"
    ],
-   "attempt": "4"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-24T03:55:06.443Z",
+   "at": "2026-11-24T09:17:26.412Z",
    "type": "build_started",
    "tasks": [
-    "T3.3",
-    "T3.5",
-    "T3.13"
+    "T4.8"
    ],
-   "attempt": "9"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-24T03:55:01.707Z",
+   "at": "2026-11-24T09:17:22.977Z",
+   "type": "task_built",
    "tasks": [
-    "T3.12"
+    "T4.7"
    ],
-   "attempt": "8",
+   "text": "e2e PASS 37/37 x3 clean; progress made deterministic, shots retaken",
+   "files": [
+    "apps/web/e2e/qa/video.spec.ts",
+    "apps/web/e2e/fixtures/media.ts"
+   ]
+  },
+  {
+   "at": "2026-11-24T09:02:07.486Z",
+   "type": "task_started",
+   "tasks": [
+    "T4.7"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-24T09:02:07.273Z",
+   "type": "build_started",
+   "tasks": [
+    "T4.7"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-24T09:02:04.535Z",
+   "tasks": [
+    "T4.6"
+   ],
+   "attempt": "2",
    "type": "verify_passed",
-   "evidence": "V1 21/21 tests (4 files incl. new VoiceSelect.test.ts); SpeechComposer.vue 100/100/100/100, TextAdvisor.vue 100/100/100/100, ConvertTagsDialog.vue 100 / 91.3 branch / 100 / 100; no it.fails/skip/only/snapshot",
-   "fingerprint": "2415647e8050219870380d124602040736e9d138466f6387f2204600bbedc3c9",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a8.md"
+   "evidence": "rerun Verify V1 gives 222/222. media-service.ts and media-input.ts are 100% on all metrics. routes/media.ts is 100 stmts / 95 branch / 100 funcs / 100 lines; uncovered 106,153,199,246 are `issues[0]?.` fallbacks (justified). No it.fails.",
+   "fingerprint": "3dba9137a46e357d598c11019fa9e050ba412c1b336668cf74316d65051e55e8",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
   },
   {
-   "at": "2026-11-24T03:55:01.707Z",
+   "at": "2026-11-24T09:02:04.535Z",
    "tasks": [
-    "T3.4"
+    "T4.5"
    ],
-   "attempt": "8",
+   "attempt": "2",
    "type": "verify_passed",
-   "evidence": "T3.4 files unchanged since a5 (where its ACs and e2e were proven); V1 `cd apps/web && bun run test` 258 files / 2285 tests passed; V2 formatting failures are all in files of other tasks (see BLOCKING), `vp check --no-fmt` 0 errors / 17 warnings; shots T3.4-1..4 still valid",
-   "fingerprint": "85722c05ebb83ef8dfa29f0b4e69eb177a7041221c8e321e072e5c6744ec65da",
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a8.md"
+   "evidence": "rerun Verify V1 gives 40/40 tests, all 5 files 100/100/100/100. The skip/fails/only grep is empty, and mocks go through vi.mock(useFetch).",
+   "fingerprint": "3da8671d26ef24420ad64246d3830e93d8e70af05c4fe6534f87ff51e0219a3f",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
   },
   {
-   "at": "2026-11-24T03:55:01.707Z",
+   "at": "2026-11-24T09:02:04.535Z",
    "tasks": [
-    "T3.13"
+    "T4.4"
    ],
-   "attempt": "8",
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "e2e covers draft on by default with \"saves 15 credits\", the Draft label, and Render final showing 20 credits with the prompt kept, draft:false and 2 accepted POSTs. Cost toggles 5 to 20. Fresh jobId per start (useMediaJob.ts:227 uuidv4). Attachments are kept after a draft (Video.vue watch) and re-sent via buildRequest. Shot T4.4-4 shows a mid-tween badge (advisory). web 2325/2325.",
+   "fingerprint": "338582ab9c83abc3204bda468478f31b8a204ef15b102147052d1a3c6051eb97",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
+  },
+  {
+   "at": "2026-11-24T09:02:04.535Z",
+   "tasks": [
+    "T4.3"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "AC1/AC2/AC3/AC5 retaken by me as shots 4/T4.3-2..4 (thumbnail plus Remove, 5 s plus Estimated, the 21 MB file rejected with \"Audio must be 20 MB or smaller.\", the renamed .mp3 rejected by the server). AC4 has a unit test (stored 60 s billed at 80, the 20 s clamp, null duration -> 400) and a route test (stored 10.2 s -> required 44). AC6 has a keyboard picker e2e. api/web/shared suites green.",
+   "fingerprint": "26a921c556b8d65e072ef8b22652b6aed025239d001b85b301d56b382568124e",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
+  },
+  {
+   "at": "2026-11-24T09:02:04.534Z",
+   "tasks": [
+    "T4.2"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "web 2325/2325, check clean. e2e verifies the empty copy, Wan 3 hiding draft (70 to 154 cost), a 154-credit confirm with Cancel focused, a paused video with controls and no autoplay, Generate closing the mini-player with no audio playing, success/402/failure through the shared components, and 375px with no h-scroll and every tap target at least 44px. Model switch clamps duration and resolution (Vid",
+   "fingerprint": "c2b2491afa1badc30a4ffd017747411b46d00b6bbd88de4e048d1b7426a6029d",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
+  },
+  {
+   "at": "2026-11-24T09:02:04.534Z",
+   "tasks": [
+    "T4.1"
+   ],
+   "attempt": "2",
+   "type": "verify_passed",
+   "evidence": "shared 386/386; api type-check exit 0; api 1509/1509; `bun run check` 0 errors (all 17 warnings in HEAD-era files). AC1 route tests cover P_VIDEO 1/20 and WAN_3 2/30 boundaries, plus 0/21/1/31 -> field-level 400. AC2 cost table (7 rows plus draft) checked against getVideoCreditCost, with processVideo deducting 20 (and 5 with draft) whatever the client cost. AC3 422 before 402, with no enqueue. AC4",
+   "fingerprint": "0b26e8f90852473fe99f7921c59b595e0e12513cc73e85914b128f83e024d4d1",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
+  },
+  {
+   "at": "2026-11-24T09:02:04.534Z",
+   "tasks": [
+    "T4.8"
+   ],
+   "attempt": "2",
    "type": "verify_failed",
-   "category": "type-lint",
-   "text": "[type-lint] · `bun run check` · exit 1 \"Formatting issues found\" in apps/api/src/routes/media.test.ts:569 and packages/shared/src/schemas/media.test.ts:252 (the it.each titles added for the speech cases exceed the line width) · run `bunx vp check --fix` on both files and re-run `bun run check`",
+   "category": "test-quality",
+   "text": "[test-quality] · AC1 \"phase QA specs pass\" · Gate V4 (`video.spec + media-nav-player.spec --repeat-each=2`) passed 41/41 in this run. V1-V3 are also green: check 0 errors, root `bun run test` 4190/4190, model-docs pass. But video.spec has the confirmed flake above, so the phase QA spec does not pass reliably · Re-run the gate after the T4.7 fix.",
    "files": [
-    "bun run check"
+    "ac1 \"phase qa specs pass\""
    ],
    "sigs": [
-    "T3.13|type-lint|bun run check"
+    "T4.8|test-quality|ac1 \"phase qa specs pass\""
    ],
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a8.md"
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
   },
   {
-   "at": "2026-11-24T03:55:01.707Z",
+   "at": "2026-11-24T09:02:04.534Z",
    "tasks": [
-    "T3.5"
+    "T4.7"
    ],
-   "attempt": "8",
+   "attempt": "2",
    "type": "verify_failed",
-   "category": "type-lint",
-   "text": "[type-lint] · V2 `bun run check` · exit 1 \"Formatting issues found\" in apps/web/src/components/Speech/ConvertTagsDialog.vue:38 (the div with class \"body convert-tags-body\" must wrap its attributes) · run `bunx vp check --fix` on the file and re-run `bun run check`",
+   "category": "test-quality",
+   "text": "[test-quality] · e2e/qa/video.spec.ts:157 (`@critical generate a video charges the server cost once`) · The Verify run `--repeat-each=3 --workers=1` gave 36 passed and 1 failed. The failing check is `getByTestId('job-progress')` toBeVisible, which timed out. The page had already reached the result (chip 480, Download link), because the `slow` stub variant (e2e/fixtures/media.ts:127-133) writes eve",
    "files": [
-    "v2 `bun run check"
+    "e2e/qa/video.spec.ts"
    ],
    "sigs": [
-    "T3.5|type-lint|v2 `bun run check"
+    "T4.7|test-quality|e2e/qa/video.spec.ts"
    ],
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a8.md"
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
   },
   {
-   "at": "2026-11-24T03:55:01.706Z",
-   "tasks": [
-    "T3.3"
-   ],
-   "attempt": "8",
-   "type": "verify_failed",
-   "category": "type-lint",
-   "text": "[type-lint] · V2 `bun run check` · exit 1 \"Formatting issues found\" in apps/web/src/components/Speech/VoiceSelect.test.ts:17 (the setProps call exceeds the line width; the EXTRA test added by the fix) · run `bunx vp check --fix` on the file (line wrap only) and re-run `bun run check`",
-   "files": [
-    "v2 `bun run check"
-   ],
-   "sigs": [
-    "T3.3|type-lint|v2 `bun run check"
-   ],
-   "report": ".dashboard/media-studio/reports/media-studio-verifier-a8.md"
-  },
-  {
-   "at": "2026-11-24T03:54:49.794Z",
+   "at": "2026-11-24T09:01:43.082Z",
    "type": "advisory",
    "tasks": [
-    "T3.13"
+    "T4.4"
    ],
-   "text": "media.test.ts non-speech model key case does not assert enqueueGeneration was not called"
+   "text": "T4.4-4 shot shows the cost badge mid-tween at 12 with Draft still on; AC3 full-price badge proven by e2e (video.spec.ts:295), not by the shot. Render final test does not compare jobIds or re-send attachments (source: useMediaJob uuidv4 per start, Video.vue keeps attachments after draft)"
   },
   {
-   "at": "2026-11-24T03:54:49.599Z",
+   "at": "2026-11-24T09:01:42.930Z",
    "type": "advisory",
    "tasks": [
-    "T3.12"
+    "T4.3"
    ],
-   "text": "ConvertTagsDialog.vue branches 91.3% (lines 17,38), below the 95% target"
+   "text": "Renamed-file rejection shows raw server text \"file: unsupported or unrecognized file type\"; Seconds stepper stays enabled while audio drives the length"
   },
   {
-   "at": "2026-11-24T03:54:49.377Z",
+   "at": "2026-11-24T09:01:42.771Z",
    "type": "advisory",
    "tasks": [
-    "T3.3"
+    "T4.1"
    ],
-   "text": "Shared Low credits dialog on /audio/speech says \"To generate an AI image, 5 credits are required\" (shot T3.3-9); copy is image-specific"
+   "text": "videoPosterUrl and the video posterUrl write (media-asset-service.ts:84,159) have no unit test; e2e stub asset has no posterUrl so poster rendering is never exercised"
   },
   {
-   "at": "2026-11-24T03:50:10.815Z",
+   "at": "2026-11-24T09:01:42.588Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.2"
+   ],
+   "text": "At >=1024px the fixed mini-player covers the static Generate button (no bottom padding for --mini-player-h)"
+  },
+  {
+   "at": "2026-11-24T09:01:42.446Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.7"
+   ],
+   "text": "Engineer report claims reverse overlap (audio stops video) is covered by a component test; no VideoResult test exists (behaviour in VideoResult.vue:27-34, source only)"
+  },
+  {
+   "at": "2026-11-24T09:01:42.245Z",
+   "type": "advisory",
+   "tasks": [
+    "T4.7"
+   ],
+   "text": "T4.7-4 shot caption claims the Estimated badge but is cropped above it; verifier re-shot as 4/T4.7-8"
+  },
+  {
+   "at": "2026-11-24T08:52:14.483Z",
    "type": "verify_started",
    "tasks": [
-    "T3.3",
-    "T3.4",
-    "T3.5",
-    "T3.12",
-    "T3.13"
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8"
    ],
-   "attempt": "9"
+   "attempt": "2"
   },
   {
-   "at": "2026-11-24T03:50:04.211Z",
+   "at": "2026-11-24T08:52:12.151Z",
    "tasks": [
-    "T3.4"
+    "T4.3"
    ],
    "type": "reviewer_verdict",
-   "evidence": "attempt-3 recheck: the a5 report had no BLOCKING items, and none of the five T3.4 files has changed since it was written (all mtimes are 08:19-08:24, before the a5 report at 08:55). A re-grep confirms the sinks. There is no innerHTML, v-html, :href or target= in TtsEditor.vue, TagToolbar.vue, TagChipNode.ts or useTtsEditor.ts. The chip DOM is built with createElement, className and textContent onl",
-   "fingerprint": "85722c05ebb83ef8dfa29f0b4e69eb177a7041221c8e321e072e5c6744ec65da",
-   "report": ".dashboard/media-studio/reports/media-studio-review-security-opus-a8.md",
+   "evidence": "findOwnedUpload (media-service.ts:380) validates the ObjectId and filters by userId, purpose and unexpired expiresAt, so there is no IDOR and no reuse across purposes. The a4 advisory is fixed: audio with no stored durationSec is rejected with a 400 (:412), so billing never falls back to the client duration. The a4 underbilling advisory is fixed: Replicate now gets durationSec = getVideoBillableSe",
+   "fingerprint": "26a921c556b8d65e072ef8b22652b6aed025239d001b85b301d56b382568124e",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a6.md",
    "verdict": "PASS",
    "reviewer": "security"
   },
   {
-   "at": "2026-11-24T03:50:04.049Z",
-   "type": "verify_passed",
+   "at": "2026-11-24T08:52:12.150Z",
    "tasks": [
-    "T3.6"
-   ],
-   "evidence": "all reviewers passed; no verifier routed (risk=low)",
-   "fingerprint": "75e375949ee03f161a78666d3ee4c3d0b25c3d7b3d9b03d08bfeae224fd7763d",
-   "skipped": "verifier"
-  },
-  {
-   "at": "2026-11-24T03:50:04.041Z",
-   "tasks": [
-    "T3.6"
+    "T4.1"
    ],
    "type": "reviewer_verdict",
-   "evidence": "shot T3.3-6 (top of the page) shows \"Estimated spoken length: 4 s\", the Minimax estimate note and the FAQ link. T3.6-1 shows 375px with no sideways scroll. TextAdvisor.vue source: near and over warnings use role=status, the split suggestion appears, the FAQ link is 44px with focus-visible, and the over-limit warning points to the reason beside Generate.",
-   "fingerprint": "75e375949ee03f161a78666d3ee4c3d0b25c3d7b3d9b03d08bfeae224fd7763d",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a8.md",
+   "evidence": "Route /generate/video (routes/media.ts:238) uses requireAuth and the session userId. VideoRequestSchema.safeParse strips unknown fields, and validateMediaParams runs next. The cost comes from getVideoCreditCost on the server, with the audio length taken from stored uploads (:253-261). The order is then safety 422, balance 402, and hasExistingJob scoped to userId, before enqueue. processVideo (medi",
+   "fingerprint": "0b26e8f90852473fe99f7921c59b595e0e12513cc73e85914b128f83e024d4d1",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a6.md",
    "verdict": "PASS",
-   "reviewer": "ux"
+   "reviewer": "security"
   },
   {
-   "at": "2026-11-24T03:50:04.041Z",
+   "at": "2026-11-24T08:51:57.645Z",
    "tasks": [
-    "T3.5"
+    "T4.4"
    ],
    "type": "reviewer_verdict",
-   "evidence": "shots T3.5-1..6 show no dialog when tags are supported, a dialog listing what is approximated or removed, Convert followed by an Undo banner, Undo restoring the model and chip, Escape returning focus to the model list, and a 375px dialog with 44px buttons. ConvertTagsDialog.vue has trap-focus, a labelled title and description, and a mobile rule that enlarges the close X to 44px.",
-   "fingerprint": "51441ef3e9d5af97daa0357c9c713997107e89dd05e25ef267b3d64a655dbeeb",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a8.md",
-   "verdict": "PASS",
-   "reviewer": "ux"
-  },
-  {
-   "at": "2026-11-24T03:50:04.041Z",
-   "tasks": [
-    "T3.4"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "shots T3.4-1..4 show the chip inserted, a pause of 99 rejected inline, an editable pause chip and 375px wrapping with 44px chips. Attempt 1 and 2 findings still hold.",
-   "fingerprint": "85722c05ebb83ef8dfa29f0b4e69eb177a7041221c8e321e072e5c6744ec65da",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a8.md",
-   "verdict": "PASS",
-   "reviewer": "ux"
-  },
-  {
-   "at": "2026-11-24T03:50:04.040Z",
-   "tasks": [
-    "T3.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "shots T3.3-1 (empty state with Try an example), T3.3-3/4 (counter turns red, Generate disabled with the excess named), T3.3-7 (result card), T3.3-8 (failure with \"No credits were used\" and Try again) and T3.3-9 (402 opens the Low credits dialog, nothing queued). VoiceSelect.vue is a fieldset with a legend, 44px options, focus-visible and a role=status notice. The notice now builds from the fallbac",
-   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ux-sonnet-a8.md",
-   "verdict": "PASS",
-   "reviewer": "ux"
-  },
-  {
-   "at": "2026-11-24T03:50:03.872Z",
-   "tasks": [
-    "T3.6"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "The advisor lines (spoken length, \"Estimated\" cost note, FAQ link) are legible and subordinate to the editor (T3.3-2, T3.6-1).",
-   "fingerprint": "75e375949ee03f161a78666d3ee4c3d0b25c3d7b3d9b03d08bfeae224fd7763d",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a8.md",
+   "evidence": "Draft preview, Draft label and Render final: the saving copy sits beside the switch, the cost badge changes between 5 and 20, and the Draft pill sits above the video. The action bar (cost and Generate) now stays in view at 1280x720 and 375px, so the earlier below-the-fold advisory is resolved. Render final is the single filled action on the result side.",
+   "fingerprint": "338582ab9c83abc3204bda468478f31b8a204ef15b102147052d1a3c6051eb97",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a6.md",
    "verdict": "PASS",
    "reviewer": "ui"
   },
   {
-   "at": "2026-11-24T03:50:03.872Z",
+   "at": "2026-11-24T08:51:57.644Z",
    "tasks": [
-    "T3.5"
+    "T4.3"
    ],
    "type": "reviewer_verdict",
-   "evidence": "The dialog is clear at 1280 and 375px (T3.5-2, T3.5-6): serif title, a \"Removed\" list, and Keep original and Convert as the clear primary action. The earlier blocker is fixed in source. ConvertTagsDialog.vue:141-147 sets the close button to 2.75rem (44px) at 640px and below. The selector's specificity beats AppModal's own 2.5rem rule.",
-   "fingerprint": "51441ef3e9d5af97daa0357c9c713997107e89dd05e25ef267b3d64a655dbeeb",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a8.md",
+   "evidence": "Image and audio inputs: dashed drop zones with copper pill buttons are consistent and legible. The Choose buttons are tap-sized at 375px.",
+   "fingerprint": "26a921c556b8d65e072ef8b22652b6aed025239d001b85b301d56b382568124e",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a6.md",
    "verdict": "PASS",
    "reviewer": "ui"
   },
   {
-   "at": "2026-11-24T03:50:03.872Z",
+   "at": "2026-11-24T08:51:57.644Z",
    "tasks": [
-    "T3.4"
+    "T4.2"
    ],
    "type": "reviewer_verdict",
-   "evidence": "Tag chips, the inline pause field and the toolbar read clearly (T3.4-1, T3.6-1). At 375px the toolbar wraps cleanly with 44px chips and nothing scrolls sideways.",
-   "fingerprint": "85722c05ebb83ef8dfa29f0b4e69eb177a7041221c8e321e072e5c6744ec65da",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a8.md",
+   "evidence": "Video studio page: warm dark palette, serif title, copper accents and the hairline dashed empty card match the design system. The empty-state copy is clear. The 375px stack has no overflow.",
+   "fingerprint": "c2b2491afa1badc30a4ffd017747411b46d00b6bbd88de4e048d1b7426a6029d",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a6.md",
    "verdict": "PASS",
    "reviewer": "ui"
   },
   {
-   "at": "2026-11-24T03:50:03.871Z",
+   "at": "2026-11-24T08:51:51.669Z",
    "tasks": [
-    "T3.3"
+    "T4.4"
    ],
    "type": "reviewer_verdict",
-   "evidence": "Composer, model list, voice rows, cost row and Generate read clearly in the dark on-system look (T3.3-2). The \"Preset voice\" blocker stays fixed. The voice notice reads \"Voice changed to Andy\" in T3.3-6, but VoiceSelect.vue:34-37 now builds it from the fallback voice, so that shot predates the fix.",
-   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
-   "report": ".dashboard/media-studio/reports/media-studio-review-ui-sonnet-a8.md",
+   "evidence": "shots 4/T4.4-1.png to 4/T4.4-6.png. The Draft toggle has a visible label, a saving hint and a cost that updates (5 credits at 375px). Render final restores full price. The layout fits at 375px.",
+   "fingerprint": "338582ab9c83abc3204bda468478f31b8a204ef15b102147052d1a3c6051eb97",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a6.md",
    "verdict": "PASS",
-   "reviewer": "ui"
+   "reviewer": "ux"
   },
   {
-   "at": "2026-11-24T03:50:03.678Z",
+   "at": "2026-11-24T08:51:51.668Z",
    "tasks": [
-    "T3.6"
+    "T4.3"
    ],
    "type": "reviewer_verdict",
-   "evidence": "AC1 met: `useTtsAdvice.seconds` recomputes from the doc (SpeechComposer passes the live doc); the test \"recomputes when the doc changes\" covers it. AC2 met: `level` is `near` at exactly 90% and `over` above the limit, with remaining characters in the warning text and a pointer to the disabled reason. AC3 met: `ESTIMATE_NOTE` renders when `estimated` is true, and `estimated` is true only for MINIMA",
-   "fingerprint": "75e375949ee03f161a78666d3ee4c3d0b25c3d7b3d9b03d08bfeae224fd7763d",
-   "report": ".dashboard/media-studio/reports/media-studio-review-code-haiku-a8.md",
+   "evidence": "shot 4/T4.3-1.png. The \"Choose image\" and \"Choose audio\" pickers are real buttons with a clear optional label, and the upload zones fit at 375px (4/T4.4-5.png).",
+   "fingerprint": "26a921c556b8d65e072ef8b22652b6aed025239d001b85b301d56b382568124e",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a6.md",
    "verdict": "PASS",
-   "reviewer": "code"
+   "reviewer": "ux"
   },
   {
-   "at": "2026-11-24T03:50:03.454Z",
+   "at": "2026-11-24T08:51:51.668Z",
    "tasks": [
-    "T3.5"
+    "T4.2"
    ],
    "type": "reviewer_verdict",
-   "evidence": "AC1 requestModelSwitch changes the model directly when findUnsupportedTags is empty. AC2 ConvertTagsDialog lists the Approximated and Removed tags, and suggestedEmotion is shown. AC3 confirmSwitch stores the previous doc, model and emotion in undoState, and SpeechComposer shows an Undo button that calls undoConversion. AC4 Keep original, Escape and the close button all emit keep, which calls cance",
-   "fingerprint": "51441ef3e9d5af97daa0357c9c713997107e89dd05e25ef267b3d64a655dbeeb",
-   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a8.md",
+   "evidence": "shots 4/T4.2-1.png (empty state, example button, duration and resolution controls) and 4/T4.2-2.png (375px stack, no overflow). Video.vue gives the disabled Generate a reason (disabledReason) and guards generate() against busy state.",
+   "fingerprint": "c2b2491afa1badc30a4ffd017747411b46d00b6bbd88de4e048d1b7426a6029d",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a6.md",
    "verdict": "PASS",
-   "reviewer": "code"
+   "reviewer": "ux"
   },
   {
-   "at": "2026-11-24T03:50:03.454Z",
+   "at": "2026-11-24T08:51:49.152Z",
    "tasks": [
-    "T3.4"
+    "T4.4"
    ],
    "type": "reviewer_verdict",
-   "evidence": "AC1 to AC7 unchanged since the previous report, whose items were all advisory. Nothing in the diff regresses them.",
-   "fingerprint": "85722c05ebb83ef8dfa29f0b4e69eb177a7041221c8e321e072e5c6744ec65da",
-   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a8.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-24T03:50:03.453Z",
-   "tasks": [
-    "T3.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1 to AC6 still met. The VoiceSelect fallback notice is built from the `fallback` const (defineModel lags the parent re-render), is cleared on each model change, and is announced through role=status. Keep-or-default voice logic is intact. The 44px targets and focus rings are in the styles.",
-   "fingerprint": "c3c134b72a6b6b5e6943773050dd8cd92c1326bbee1b04f9c4f04988d7cd95e5",
-   "report": ".dashboard/media-studio/reports/media-studio-review-code-sonnet-a8.md",
+   "evidence": "AC1-AC4 unchanged and met (DraftToggle, Draft label, render-final flips toggle with full cost, reactive cost on isDraft).",
+   "fingerprint": "338582ab9c83abc3204bda468478f31b8a204ef15b102147052d1a3c6051eb97",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a6.md",
    "verdict": "PASS",
    "reviewer": "code"
   },
   {
-   "at": "2026-11-24T03:48:53.770Z",
+   "at": "2026-11-24T08:51:49.152Z",
+   "tasks": [
+    "T4.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Previous blocker 1 fixed: Video.vue watch on state.phase clears image/audio and revokes preview URLs after a non-draft success, keeps them after a draft. Previous blocker 2 fixed: media-service.ts throws BadRequestError when audio has no durationSec, and a unit test (\"rejects audio with no stored duration...\") covers it.",
+   "fingerprint": "26a921c556b8d65e072ef8b22652b6aed025239d001b85b301d56b382568124e",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a6.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-24T08:51:49.152Z",
+   "tasks": [
+    "T4.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1-AC6 unchanged and met (empty copy, registry ranges, shared StudioActionBar, player.close on generate, native video via ResultCard, shared Studio components).",
+   "fingerprint": "c2b2491afa1badc30a4ffd017747411b46d00b6bbd88de4e048d1b7426a6029d",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a6.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-24T08:51:49.151Z",
+   "tasks": [
+    "T4.1"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1-AC5 unchanged since the previous report; registry-driven validation, server-side cost, safety 422 before 402 before enqueue, video poster, deduction in runMediaJob. resolveVideoAttachments now rejects audio with no stored duration (400), so the charge cannot fall back to the client's length.",
+   "fingerprint": "0b26e8f90852473fe99f7921c59b595e0e12513cc73e85914b128f83e024d4d1",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a6.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-24T08:51:24.765Z",
    "type": "preflight_passed",
    "tasks": [
-    "T3.12"
+    "T4.8"
    ],
-   "fingerprint": "2415647e8050219870380d124602040736e9d138466f6387f2204600bbedc3c9",
+   "fingerprint": "f258a5bf618a4828b966899ce30b6969b509f357e4df07365641d81a2153e49e"
+  },
+  {
+   "at": "2026-11-24T08:51:24.765Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T4.7"
+   ],
+   "fingerprint": "0ab5d1cbdefc2e015d99588c0bc1678e7aee50c45dcba7bfb4127e36578a9464",
    "slop": "PASS"
   },
   {
-   "at": "2026-11-24T03:48:53.770Z",
+   "at": "2026-11-24T08:51:24.765Z",
    "type": "preflight_passed",
    "tasks": [
-    "T3.6"
+    "T4.6"
    ],
-   "fingerprint": "75e375949ee03f161a78666d3ee4c3d0b25c3d7b3d9b03d08bfeae224fd7763d",
+   "fingerprint": "3dba9137a46e357d598c11019fa9e050ba412c1b336668cf74316d65051e55e8"
+  },
+  {
+   "at": "2026-11-24T08:51:24.765Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T4.5"
+   ],
+   "fingerprint": "3da8671d26ef24420ad64246d3830e93d8e70af05c4fe6534f87ff51e0219a3f",
    "slop": "PASS"
   },
   {
-   "at": "2026-11-24T03:48:53.770Z",
+   "at": "2026-11-24T08:51:19.758Z",
    "type": "preflight_passed",
    "tasks": [
-    "T3.4"
+    "T4.4"
    ],
-   "fingerprint": "85722c05ebb83ef8dfa29f0b4e69eb177a7041221c8e321e072e5c6744ec65da",
+   "fingerprint": "338582ab9c83abc3204bda468478f31b8a204ef15b102147052d1a3c6051eb97",
    "slop": "PASS"
   },
   {
-   "at": "2026-11-24T03:48:47.111Z",
+   "at": "2026-11-24T08:51:19.758Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T4.2"
+   ],
+   "fingerprint": "c2b2491afa1badc30a4ffd017747411b46d00b6bbd88de4e048d1b7426a6029d",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-24T08:51:19.758Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T4.1"
+   ],
+   "fingerprint": "0b26e8f90852473fe99f7921c59b595e0e12513cc73e85914b128f83e024d4d1"
+  },
+  {
+   "at": "2026-11-24T08:51:15.377Z",
    "type": "dirty_snapshot",
    "tasks": [],
    "hashes": {
-    "agent_docs/media-studio/APPROVALS.md": "70f5ca564e2fe45c93c7a2d765341fb64f81b171",
-    "agent_docs/media-studio/SPEC.md": "d4a927689a767909a05b9a2894a593c6a4fd78ab",
-    "agent_docs/media-studio/TASKS.md": "bfe2e55f673c37b5b0b07db9a71017c9c5b81795",
-    "apps/api/src/lib/media-input.test.ts": "92a1caf751d324aac1bbd250a1d25efc11b713f6",
-    "apps/api/src/queue/generation-worker.ts": "4089d687fc6db74b159f88bae2f75358440b7185",
-    "apps/api/src/routes/media.test.ts": "6f638dff71c131e08afd0c3c56b0f54785a8c119",
-    "apps/api/src/routes/media.ts": "746ff968726cfc65fa3fe6da7da689004d8ed590",
-    "apps/api/src/services/media-service.test.ts": "1bee1f95457e632d37993ec9c1f387900e0e8bac",
-    "apps/api/src/services/media-service.ts": "b477104dd6be5ada6db5d4b659216de4dcefdec4",
-    "apps/web/package.json": "5fc460b45789e9a124e4d379241bb8ec14cfe60a",
-    "apps/web/src/components.d.ts": "9a8a99d15abca5639e57f6d6823196841750f29b",
-    "apps/web/src/router/index.ts": "3f31c2e0eb9b3797c6f808e691bcb14e3c7e7c91",
-    "bun.lock": "71613f800ce3dbff5e91fed474b4b73cb5b49509",
-    "packages/shared/src/models/index.ts": "f505b6ada7b9b11fe42d5d381f431070e61265d7",
-    "packages/shared/src/models/media-limits.ts": "d4197c320b5c9b888dd14438bb2f19e9a65f1ad7",
-    "packages/shared/src/schemas/index.ts": "babecbeeb3e2d2de3ca280528d414a6397f6b036",
-    "packages/shared/src/schemas/media.test.ts": "962cb41890db33c2da19556a4dcc033385b264b5",
-    "packages/shared/src/schemas/media.ts": "f7aeb359daa12e1fc6a00ab10611bcd8cae75433",
-    "apps/web/e2e/qa/speech.spec.ts": "95e632a6bd918952888b480127a4d3f115a8a23e",
-    "apps/web/src/components/Speech/ConvertTagsDialog.test.ts": "ac460076d19556306b8bd1307c6157397c1dc594",
-    "apps/web/src/components/Speech/ConvertTagsDialog.vue": "12b95f3984580c756e1d05d316017bfdeadaed76",
-    "apps/web/src/components/Speech/SpeechComposer.test.ts": "e7189797a5e43c1dda6d32e9256830fc15e1b2ea",
-    "apps/web/src/components/Speech/SpeechComposer.vue": "1456a89fba68c28193b912f280b904f50dead341",
-    "apps/web/src/components/Speech/SpeechModelSelect.vue": "bd11114b0d9ada02e1531fa76a08aa0020c9ec78",
-    "apps/web/src/components/Speech/TagChipNode.ts": "8b1fbf497d13dcf657d2b80a57792b4fd3c10f83",
-    "apps/web/src/components/Speech/TagToolbar.vue": "8ae47e49d92ebf823ae343abaf5b869cac69be2f",
-    "apps/web/src/components/Speech/TextAdvisor.test.ts": "51b33973cb22d6f04956357d3f96aecab901752a",
-    "apps/web/src/components/Speech/TextAdvisor.vue": "86ccf42f18b0aad78a626aee2011e84c75b93f10",
-    "apps/web/src/components/Speech/TtsEditor.vue": "3f95c3f608b4f0af8222469869c95e3478228b00",
-    "apps/web/src/components/Speech/VoiceSelect.test.ts": "a8df8046d3149707c992175311146bdb283c911f",
-    "apps/web/src/components/Speech/VoiceSelect.vue": "f69d7a383c3e6089d5f0b55353a034035a8a10bd",
-    "apps/web/src/composables/useTtsAdvice.test.ts": "39275e10a291039a71a91f267b37da92e4644743",
-    "apps/web/src/composables/useTtsAdvice.ts": "7e1630d60588012b7689e84f764a90a7ace7a626",
-    "apps/web/src/composables/useTtsEditor.test.ts": "527384460c6a51a74acbea347bf4ef66dd3b9a83",
-    "apps/web/src/composables/useTtsEditor.ts": "3be1ca190e7cf7888801c9500979c41d56be0891",
-    "apps/web/src/pages/Speech.vue": "7cabc4af182bec67d701bd26b13a19d66f995b55",
-    "packages/shared/src/models/tts-tags.test.ts": "5f736bd278923d427f9b2bbb5913844f898450d6",
-    "packages/shared/src/models/tts-tags.ts": "ad4ce1196d628d46e43726e5970363b44af4fcbe"
+    "agent_docs/media-studio/TASKS.md": "c3f562c7ad9212307756042453163c19495051cf",
+    "apps/api/src/queue/generation-worker.ts": "2918bd544f2ff595b06bb00228791f12ea4ebbd0",
+    "apps/api/src/routes/media.test.ts": "96ac68ac0f7980304d45225515da18c05c92b408",
+    "apps/api/src/routes/media.ts": "13e96dc9de2bbcdcfe45070e00e7e37faf18bca3",
+    "apps/api/src/services/media-asset-service.ts": "04d69fa3745074c66d3ba1994a87ac46d133aa49",
+    "apps/api/src/services/media-service.test.ts": "e355cc814377e13991967383388a3116db88eb03",
+    "apps/api/src/services/media-service.ts": "4b1450d3c9781a45602e2e72e2e31aafaf6d6b71",
+    "apps/web/e2e/qa/media-nav-player.spec.ts": "9cd47dacd607e734d006df7f4978f803f56c3080",
+    "apps/web/src/components.d.ts": "a0ef84be23e55bfd75d23238cda2b47d47489bdf",
+    "apps/web/src/router/index.ts": "6c4df4ad0857988f12fccfa247ec3e8e0ffc95a5",
+    "packages/shared/src/schemas/index.ts": "2d09447c0616d653a93a4c0b868015701cc7f606",
+    "packages/shared/src/schemas/media.ts": "5d2a1bf7adda6590e50bb15651cf038df1726706",
+    "apps/web/e2e/qa/video.spec.ts": "83a72072c9d0fd2eeca4de66f2aa57f488df653f",
+    "apps/web/src/components/Video/AttachedFile.vue": "3b88df102c311cc7aaf2db1ac3ddb3067b275ad3",
+    "apps/web/src/components/Video/AudioInput.test.ts": "6976e0c45dedaa02c0dded5dea874d2f557d89a8",
+    "apps/web/src/components/Video/AudioInput.vue": "b2cde069cbdab2a1913b746a43854ca9884b48f5",
+    "apps/web/src/components/Video/DraftToggle.test.ts": "762e5ecfce364ddc6534a6e55912212551cb0aa9",
+    "apps/web/src/components/Video/DraftToggle.vue": "fe25bfccae86352b4791b104ea6b5ea96ff2523a",
+    "apps/web/src/components/Video/ImageInput.test.ts": "1700aedbfdb6ea6a0625fb6ad2fc4f0f5fd67f2c",
+    "apps/web/src/components/Video/ImageInput.vue": "f71efffe46b7ac3f6c80bdf57c46ed99ec69599c",
+    "apps/web/src/components/Video/UploadDropZone.vue": "d0eeec79a5f1d27e6fa000628640fe8e40e27f66",
+    "apps/web/src/components/Video/VideoComposer.test.ts": "7e2d2621da1d4e545112e187a07db3d661cf9796",
+    "apps/web/src/components/Video/VideoComposer.vue": "9c313a7962877a42459986258d7ac60424bdc5bc",
+    "apps/web/src/components/Video/VideoResult.vue": "1aca72d7ee3124a392c3d804671cf5cfa989b2d7",
+    "apps/web/src/components/Video/VideoSettings.vue": "62ab5234e39af47f149ab1bbf11d9218abc563d6",
+    "apps/web/src/composables/useToolVideoUpload.test.ts": "d66b4d7dcf6a55a09c337137cbc92731a87fbe5d",
+    "apps/web/src/composables/useToolVideoUpload.ts": "68c05f8149b0b61f2af5701eab7c502d7e6b9661",
+    "apps/web/src/pages/Video.vue": "485b2c63eb70feca027afbaff6ee8d1b2ab0e67c"
    }
   },
   {
-   "at": "2026-11-24T03:48:46.963Z",
+   "at": "2026-11-24T08:51:15.188Z",
    "type": "preflight_passed",
    "tasks": [
-    "T3.13"
+    "T4.3"
    ],
-   "fingerprint": "81394ad0f8b09d2de8e7026bb2fca16629aa54452c04de586f2d2677e9e4da39"
+   "fingerprint": "26a921c556b8d65e072ef8b22652b6aed025239d001b85b301d56b382568124e",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-24T08:50:16.119Z",
+   "type": "task_started",
+   "tasks": [
+    "T4.3"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-24T08:50:15.954Z",
+   "type": "build_started",
+   "tasks": [
+    "T4.3"
+   ],
+   "attempt": "2"
+  },
+  {
+   "at": "2026-11-24T08:50:12.686Z",
+   "tasks": [
+    "T4.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Attachments arrive only as uploadIds. findOwnedUpload (media-service.ts:200) validates the ObjectId and filters by userId, the expected purpose, not consumed and unexpired, so there is no IDOR and no cross-purpose reuse such as a tool-video passed as video-image. Billable audio seconds come from the stored MediaUpload.durationSec (getVideoBillableSeconds clamps to P_VIDEO_MAX_SEC), never from the ",
+   "fingerprint": "6efcc96579c2d4a3275522265535b59f76fe1c0ee7a4f6af515c907f17d3a72d",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a4.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-24T08:50:12.685Z",
+   "tasks": [
+    "T4.1"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "VideoRequestSchema (schemas/media.ts:465) is a non-passthrough z.object, so unknown fields such as lastFrameImage or aspectRatio are stripped before validateMediaParams/buildMediaInput; jobId is a UUID, prompt is trimmed and capped at MEDIA_PROMPT_MAX_CHARS, durationSec is an int checked against registry min/max, resolution is checked against registry keys and draft is gated on supportsDraft (refi",
+   "fingerprint": "561880e1d443bd3999e17414f998c992d23ce5d46d229292f15b2e53c3a6ac4c",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a4.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-24T08:49:41.387Z",
+   "tasks": [
+    "T4.4"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1 DraftToggle shows saving, v-if on supportsDraft; AC2 Draft label; AC3 render-final flips toggle, full cost on button and bar, new submit gets new jobId; AC4 cost reactive on isDraft; 44px targets and focus rings present",
+   "fingerprint": "32538050164c878e4a309b87397ce06a2e91317f4ddc8d0729c936ce7c422398",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a4.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-24T08:49:41.387Z",
+   "tasks": [
+    "T4.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1 empty copy and example fill; AC2 ranges/resolutions from getVideoModelOptions with model-switch clamping; AC3 shared StudioActionBar; AC4 player.close() on generate and ResultCard pause/watch both directions; AC5 native video via ResultCard; AC6 shared Studio components used",
+   "fingerprint": "024f83dc694554d23563d166bfc25c51f9942815472e6f76a5679a5c7279d575",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a4.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-24T08:49:41.387Z",
+   "tasks": [
+    "T4.1"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1 field-level 400 via refineVideoRequest (duration, resolution, draft, audio ranges from registry); AC2 getVideoCreditCost recomputed server-side in route and again in processVideo; AC3 safety 422 precedes 402 precedes enqueue; AC4 copyMediaAssetToCloudinary sets posterUrl for video; AC5 deduction stays in runMediaJob, worker case wired",
+   "fingerprint": "561880e1d443bd3999e17414f998c992d23ce5d46d229292f15b2e53c3a6ac4c",
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a4.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-24T08:49:41.386Z",
+   "tasks": [
+    "T4.3"
+   ],
+   "type": "reviewer_verdict",
+   "category": "logic",
+   "text": "[logic] · apps/web/src/pages/Video.vue:generate / apps/api/src/services/media-service.ts:processVideo end · After a non-draft success the server deletes the attached uploads, but the page keeps image/audio refs, so the next Generate sends dead uploadIds and gets 400 \"upload not found or expired\" · Clear image.value and audio.value (and their previews) when a non-draft job reaches succeeded; keep t",
+   "files": [
+    "apps/web/src/pages/Video.vue",
+    "apps/api/src/services/media-service.ts"
+   ],
+   "sigs": [
+    "T4.3|logic|apps/web/src/pages/Video.vue",
+    "T4.3|logic|apps/api/src/services/media-service.ts"
+   ],
+   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a4.md",
+   "verdict": "CHANGES",
+   "reviewer": "code"
   }
  ]
 };

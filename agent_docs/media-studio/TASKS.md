@@ -1346,7 +1346,7 @@
 **Adds:** Users generate short videos from text, from an image, or with their own audio, using P-Video or Wan 3, with a draft mode for cheap previews first.
 **Try in UI:** Open Video ; write a prompt and press Generate ; attach an image or audio file ; try a draft first then a final render
 
-### ☐ T4.1 Video schema, endpoint and cost (S4.1a)
+### ✅ T4.1 Video schema, endpoint and cost (S4.1a)
 
 - **Kind:** implementation
 - **Files:** `packages/shared/src/schemas/media.ts` (edit), `apps/api/src/lib/media-input.ts` (edit), `apps/api/src/routes/media.ts` (edit), `apps/api/src/services/media-service.ts` (edit)
@@ -1369,7 +1369,7 @@
   - V3: `cd apps/api && bun run test` (existing api tests stay green)
   - V4: `bun run check`
 
-### ☐ T4.2 Video studio page (S4.1b)
+### ✅ T4.2 Video studio page (S4.1b)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/pages/Video.vue` (new), `apps/web/src/components/Video/VideoComposer.vue` (new), `apps/web/src/components/Video/VideoSettings.vue` (new), `apps/web/src/components/Video/VideoResult.vue` (new), `apps/web/src/router/index.ts` (edit)
@@ -1393,7 +1393,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T4.3 Image and audio inputs with upload hook (S4.2)
+### ✅ T4.3 Image and audio inputs with upload hook (S4.2)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/composables/useToolVideoUpload.ts` (new), `apps/web/src/components/Video/ImageInput.vue` (new), `apps/web/src/components/Video/AudioInput.vue` (new), `apps/api/src/services/media-service.ts` (edit), `packages/shared/src/schemas/media.ts` (edit)
@@ -1420,7 +1420,7 @@
   - V5: `bun run check`
   - V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T4.4 Draft first flow (S4.3)
+### ✅ T4.4 Draft first flow (S4.3)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/components/Video/DraftToggle.vue` (new), `apps/web/src/components/Video/VideoResult.vue` (edit), `apps/web/src/pages/Video.vue` (edit)
@@ -1442,7 +1442,7 @@
   - V2: `bun run check`
   - V3: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /video path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T4.5 Unit: Video composer, inputs and upload hook
+### ✅ T4.5 Unit: Video composer, inputs and upload hook
 
 - **Kind:** unit
 - **Files:** `apps/web/src/components/Video/VideoComposer.vue` (edit), `apps/web/src/components/Video/ImageInput.vue` (edit), `apps/web/src/components/Video/AudioInput.vue` (edit), `apps/web/src/components/Video/DraftToggle.vue` (edit), `apps/web/src/composables/useToolVideoUpload.ts` (edit)
@@ -1453,7 +1453,7 @@
 - **Verify:**
   - V1: `cd apps/web && npx vitest run src/components/Video src/composables/useToolVideoUpload.test.ts --coverage --coverage.include=src/components/Video/VideoComposer.vue --coverage.include=src/components/Video/ImageInput.vue --coverage.include=src/components/Video/AudioInput.vue --coverage.include=src/components/Video/DraftToggle.vue --coverage.include=src/composables/useToolVideoUpload.ts --coverage.reporter=text`
 
-### ☐ T4.6 Unit: Video service and schema
+### ✅ T4.6 Unit: Video service and schema
 
 - **Kind:** unit
 - **Files:** `apps/api/src/services/media-service.ts` (edit), `apps/api/src/lib/media-input.ts` (edit), `apps/api/src/routes/media.ts` (edit)
@@ -1464,12 +1464,12 @@
 - **Verify:**
   - V1: `cd apps/api && npx vitest run src/services/media-service.test.ts src/lib/media-input.test.ts src/routes/media.test.ts --coverage --coverage.include=src/services/media-service.ts --coverage.include=src/lib/media-input.ts --coverage.include=src/routes/media.ts --coverage.reporter=text`
 
-### ☐ T4.7 E2E: Video studio
+### ✅ T4.7 E2E: Video studio
 
 - **Kind:** e2e
 - **Scenarios:** `@critical` generate a video charges the server cost once; `@critical` 402 and failure states; `@critical` 150-credit job asks for confirmation and Cancel is the default; `@high` draft then render final; `@high` image and audio attach with Estimated cost; `@high` video and audio players never overlap; `@high` keyboard-only compose; `@medium` 375px layout
 - **Spec:** `apps/web/e2e/qa/video.spec.ts`
-- **Files:** none
+- **Files:** `apps/web/e2e/fixtures/media.ts`
 - **Depends on:** T4.6
 - **Acceptance:**
   - AC1: All scenarios pass with MediaGenerationStub and the e2e user fake client; no un-intercepted paid call occurs.
@@ -1478,10 +1478,10 @@
 - **Verify:**
   - V1: `cd apps/web && bunx playwright test e2e/qa/video.spec.ts --repeat-each=3`
 
-### ☐ T4.8 Gate: Phase 4 Video studio
+### ✅ T4.8 Gate: Phase 4 Video studio
 
 - **Kind:** gate
-- **Files:** none
+- **Files:** `apps/web/e2e/qa/media-nav-player.spec.ts`
 - **Depends on:** T4.7
 - **Acceptance:**
   - AC1: Typecheck, lint, full unit suites and the phase QA specs pass.

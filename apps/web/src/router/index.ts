@@ -30,6 +30,7 @@ const Signup = () => import('@/pages/Signup.vue');
 const Terms = () => import('@/pages/Terms.vue');
 const SongStudio = () => import('@/pages/SongStudio.vue');
 const Music = () => import('@/pages/Music.vue');
+const Video = () => import('@/pages/Video.vue');
 const Speech = () => import('@/pages/Speech.vue');
 const StudioPlaceholder = () => import('@/components/Studio/StudioPlaceholder.vue');
 
@@ -104,7 +105,12 @@ const routes: RouteRecordRaw[] = [
     name: APP_SURFACE.ASSETS,
     component: Dashboard,
   },
-  studioPlaceholderRoute('/video', APP_SURFACE.VIDEO, { studio: 'video', label: 'Video' }),
+  {
+    path: '/video',
+    name: APP_SURFACE.VIDEO,
+    component: Video,
+    meta: { requiresAuth: true },
+  },
   {
     path: '/audio/song',
     name: APP_SURFACE.AUDIO_SONG,

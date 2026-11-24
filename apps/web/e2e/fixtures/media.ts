@@ -70,6 +70,8 @@ export interface MediaGenerationStub {
   acceptedRequestCount: () => number;
   /** "POST <url>" for every media POST the stub intercepted, accepted or not. */
   interceptedPosts: () => string[];
+  /** Holds the next progress streams open until the returned release function is called. */
+  holdProgress: () => () => void;
 }
 
 function segmentOf(url: string): string {
@@ -143,6 +145,7 @@ export const test = base.extend<{ mediaGenerationStub: MediaGenerationStub }>({
     const intercepted: string[] = [];
     // The progress stream carries no path, so remember the last accepted POST to shape its asset.
     let lastPostUrl = `${E2E_WEB_ORIGIN}/generate/audio/song`;
+    let progressGate: Promise<void> | null = null;
 
     await page.route(MEDIA_POST_PATTERN, async (route) => {
       const request = route.request();
@@ -182,13 +185,14 @@ export const test = base.extend<{ mediaGenerationStub: MediaGenerationStub }>({
       });
     });
 
-    await page.route(/\/progress\?jobId=/, (route) =>
-      route.fulfill({
+    await page.route(/\/progress\?jobId=/, async (route) => {
+      if (progressGate) await progressGate;
+      return route.fulfill({
         status: 200,
         headers: SSE_HEADERS,
         body: progressBody(variant, lastPostUrl, options),
-      }),
-    );
+      });
+    });
 
     // Result URLs: served locally so playback never touches Cloudinary or Replicate.
     await page.route(`**${FIXTURE_ASSET_PATH}/*`, (route) => {
@@ -209,6 +213,16 @@ export const test = base.extend<{ mediaGenerationStub: MediaGenerationStub }>({
       },
       acceptedRequestCount: () => acceptedCount,
       interceptedPosts: () => [...intercepted],
+      holdProgress: () => {
+        let release = () => {};
+        progressGate = new Promise<void>((resolve) => {
+          release = () => {
+            progressGate = null;
+            resolve();
+          };
+        });
+        return release;
+      },
     });
 
     // Fail loudly if a paid media POST slipped past this stub to the network guard.

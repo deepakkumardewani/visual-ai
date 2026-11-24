@@ -75,6 +75,21 @@ export function toMediaAssetDto(doc: AssetDoc): MediaAssetDto {
     }
 }
 
+const CLOUDINARY_UPLOAD_SEGMENT = "/upload/"
+/** Cloudinary transformation that renders the first frame of a video. */
+const POSTER_FRAME_TRANSFORM = "so_0"
+const FILE_EXTENSION_PATTERN = /\.[a-z0-9]+$/i
+
+/** Still image of a stored video's first frame; same asset id, jpg extension. */
+export function videoPosterUrl(videoUrl: string): string {
+    const still = videoUrl.replace(FILE_EXTENSION_PATTERN, "")
+    const withFrame = still.replace(
+        CLOUDINARY_UPLOAD_SEGMENT,
+        `${CLOUDINARY_UPLOAD_SEGMENT}${POSTER_FRAME_TRANSFORM}/`,
+    )
+    return `${withFrame}.jpg`
+}
+
 function assertObjectId(id: string): void {
     if (!mongoose.isValidObjectId(id)) throw new NotFoundError("Asset not found")
 }
@@ -141,6 +156,7 @@ export async function copyMediaAssetToCloudinary(
                 durationSec: uploaded.durationSec,
                 width: uploaded.width,
                 height: uploaded.height,
+                posterUrl: asset.type === "video" ? videoPosterUrl(uploaded.url) : undefined,
             },
             { new: true },
         )
