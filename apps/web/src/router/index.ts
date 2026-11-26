@@ -32,16 +32,10 @@ const SongStudio = () => import('@/pages/SongStudio.vue');
 const Music = () => import('@/pages/Music.vue');
 const Video = () => import('@/pages/Video.vue');
 const Speech = () => import('@/pages/Speech.vue');
-const StudioPlaceholder = () => import('@/components/Studio/StudioPlaceholder.vue');
-
-/** Studio routes stay on the placeholder until the slice that ships their page replaces them. */
-function studioPlaceholderRoute(
-  path: string,
-  name: string,
-  props: { studio: string; label: string },
-): RouteRecordRaw {
-  return { path, name, component: StudioPlaceholder, props, meta: { requiresAuth: true } };
-}
+const ToolImageWatermark = () => import('@/pages/ToolImageWatermark.vue');
+const ToolVideoWatermark = () => import('@/pages/ToolVideoWatermark.vue');
+const ToolAutocaption = () => import('@/pages/ToolAutocaption.vue');
+const ToolSketchToImage = () => import('@/pages/ToolSketchToImage.vue');
 
 const routes: RouteRecordRaw[] = [
   {
@@ -129,22 +123,30 @@ const routes: RouteRecordRaw[] = [
     component: Speech,
     meta: { requiresAuth: true },
   },
-  studioPlaceholderRoute('/tools/image-watermark', APP_SURFACE.TOOLS_IMAGE_WATERMARK, {
-    studio: 'tools',
-    label: 'Image watermark',
-  }),
-  studioPlaceholderRoute('/tools/video-watermark', APP_SURFACE.TOOLS_VIDEO_WATERMARK, {
-    studio: 'tools',
-    label: 'Video watermark',
-  }),
-  studioPlaceholderRoute('/tools/autocaption', APP_SURFACE.TOOLS_AUTOCAPTION, {
-    studio: 'tools',
-    label: 'Autocaption',
-  }),
-  studioPlaceholderRoute('/tools/sketch', APP_SURFACE.TOOLS_SKETCH, {
-    studio: 'tools',
-    label: 'Sketch to image',
-  }),
+  {
+    path: '/tools/image-watermark',
+    name: APP_SURFACE.TOOLS_IMAGE_WATERMARK,
+    component: ToolImageWatermark,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/tools/video-watermark',
+    name: APP_SURFACE.TOOLS_VIDEO_WATERMARK,
+    component: ToolVideoWatermark,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/tools/autocaption',
+    name: APP_SURFACE.TOOLS_AUTOCAPTION,
+    component: ToolAutocaption,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/tools/sketch',
+    name: APP_SURFACE.TOOLS_SKETCH,
+    component: ToolSketchToImage,
+    meta: { requiresAuth: true },
+  },
   {
     path: '/dashboard',
     name: 'dashboard',

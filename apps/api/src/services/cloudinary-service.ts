@@ -2,6 +2,7 @@ import { v2 as cloudinary } from "cloudinary"
 
 import { isFakeCloudinaryId } from "../lib/fake-cloudinary.js"
 import { createLogger } from "../lib/logger.js"
+import type { MediaResourceType } from "../utils/cloudinary.js"
 import { FeatureType, IImageObject } from "../types/index.js"
 
 const logger = createLogger("cloudinary-service")
@@ -56,16 +57,19 @@ export async function deleteImageByObject(imageObject: IImageObject): Promise<vo
 }
 
 /**
- * Deletes audio/video resources, which Cloudinary files under resource_type "video".
+ * Deletes media resources of one resource_type (audio and video are filed under "video").
  * Errors are logged and not re-thrown, like the image helpers: an orphaned file must not
  * block removing the user's record.
  */
-export async function deleteMediaByPublicIds(allPublicIds: string[]): Promise<void> {
+export async function deleteMediaByPublicIds(
+    allPublicIds: string[],
+    resourceType: MediaResourceType = "video",
+): Promise<void> {
     // Fake e2e assets have nothing to delete on the real account.
     const publicIds = allPublicIds.filter((id) => !isFakeCloudinaryId(id))
     if (publicIds.length === 0) return
     try {
-        await cloudinary.api.delete_resources(publicIds, { resource_type: "video" })
+        await cloudinary.api.delete_resources(publicIds, { resource_type: resourceType })
     } catch (error) {
         logger.error({ err: error }, "Error deleting media from Cloudinary")
     }

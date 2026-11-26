@@ -11,10 +11,13 @@ import {
     processUpscale,
 } from "../services/generation-service.js"
 import {
+    processAutocaption,
+    processImageWatermark,
     processMusic,
     processSong,
     processSpeech,
     processVideo,
+    processVideoWatermark,
 } from "../services/media-service.js"
 import { RedisService } from "../services/redis-service.js"
 import { GENERATION_QUEUE_NAME, type GenerationJobData } from "./generation-queue.js"
@@ -53,8 +56,14 @@ async function processGenerationJob(job: Job<GenerationJobData>): Promise<void> 
             await processVideo(data.body)
             return
         case "image-watermark":
+            await processImageWatermark(data.body)
+            return
         case "video-watermark":
+            await processVideoWatermark(data.body)
+            return
         case "autocaption":
+            await processAutocaption(data.body)
+            return
         case "voice-clone":
             // Media processors land with runMediaJob (later Phase 0 tasks); fail loudly rather than drop the job.
             throw new Error(`No processor registered for media job kind: ${data.kind}`)

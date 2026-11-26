@@ -221,6 +221,9 @@ export async function uploadToCloudinary(data: any) {
     }
 }
 
+/** Cloudinary files audio and video under "video", pictures under "image" and text files under "raw". */
+export type MediaResourceType = "video" | "image" | "raw"
+
 export interface MediaUploadResult {
     url: string
     publicId: string
@@ -250,8 +253,9 @@ function toMediaUploadResult(result: cloudinary.UploadApiResponse): MediaUploadR
 export async function uploadMediaToCloudinary(
     source: string | Buffer,
     folder: string,
+    resourceType: MediaResourceType = "video",
 ): Promise<MediaUploadResult> {
-    const options = { folder, resource_type: "video" as const }
+    const options = { folder, resource_type: resourceType }
     if (typeof source === "string") {
         return toMediaUploadResult(await cloudinary.v2.uploader.upload(source, options))
     }

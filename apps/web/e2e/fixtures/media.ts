@@ -12,6 +12,13 @@ const E2E_MEDIA_JOB_ID = 'e2e-media-stub-job';
 const FIXTURE_ASSET_PATH = '/e2e-media';
 const FIXTURE_AUDIO_URL = `${E2E_WEB_ORIGIN}${FIXTURE_ASSET_PATH}/sample.mp3`;
 const FIXTURE_VIDEO_URL = `${E2E_WEB_ORIGIN}${FIXTURE_ASSET_PATH}/placeholder.mp4`;
+const FIXTURE_IMAGE_URL = `${E2E_WEB_ORIGIN}${FIXTURE_ASSET_PATH}/placeholder.webp`;
+const FIXTURE_TRANSCRIPT_URL = `${E2E_WEB_ORIGIN}${FIXTURE_ASSET_PATH}/transcript.txt`;
+const CONTENT_TYPE_BY_EXT: Record<string, string> = {
+  '.mp4': 'video/mp4',
+  '.webp': 'image/webp',
+  '.txt': 'text/plain; charset=utf-8',
+};
 const ASSET_DIR = path.join(__dirname, 'assets');
 
 const DEFAULT_CREDITS_CHARGED = 10;
@@ -39,6 +46,8 @@ const SSE_HEADERS = {
 // Every paid media POST (SPEC R-INF-4); the stub intercepts the POST itself, not only the stream.
 const MEDIA_POST_PATTERN =
   /\/generate\/(?:audio\/[a-z-]+|tools\/[a-z-]+|video)\/?$|\/prompt\/lyrics\/?$/;
+const IMAGE_PATH_PATTERN = /\/generate\/tools\/image-watermark\/?$/;
+const AUTOCAPTION_PATH_PATTERN = /\/generate\/tools\/autocaption\/?$/;
 const VIDEO_PATH_PATTERN = /\/generate\/(?:video|tools\/(?:video-watermark|autocaption))\/?$/;
 const FEATURE_BY_SEGMENT: Record<string, string> = {
   song: 'song',
@@ -79,15 +88,18 @@ function segmentOf(url: string): string {
 }
 
 function buildAsset(url: string, credits: number): MediaAssetDto {
-  const isVideo = VIDEO_PATH_PATTERN.test(new URL(url).pathname);
+  const { pathname } = new URL(url);
+  const isVideo = VIDEO_PATH_PATTERN.test(pathname);
+  const isImage = IMAGE_PATH_PATTERN.test(pathname);
   const segment = segmentOf(url);
   return {
     id: `e2e-${E2E_MEDIA_JOB_ID}`,
-    type: isVideo ? 'video' : 'audio',
+    type: isImage ? 'image' : isVideo ? 'video' : 'audio',
     feature: (FEATURE_BY_SEGMENT[segment] ?? 'song') as FeatureType,
     modelKey: 'E2E_STUB',
     title: 'E2E stub asset',
-    url: isVideo ? FIXTURE_VIDEO_URL : FIXTURE_AUDIO_URL,
+    url: isImage ? FIXTURE_IMAGE_URL : isVideo ? FIXTURE_VIDEO_URL : FIXTURE_AUDIO_URL,
+    ...(AUTOCAPTION_PATH_PATTERN.test(pathname) ? { transcriptUrl: FIXTURE_TRANSCRIPT_URL } : {}),
     durationSec: FIXTURE_DURATION_SEC,
     creditsCharged: credits,
     saved: true,
@@ -197,7 +209,7 @@ export const test = base.extend<{ mediaGenerationStub: MediaGenerationStub }>({
     // Result URLs: served locally so playback never touches Cloudinary or Replicate.
     await page.route(`**${FIXTURE_ASSET_PATH}/*`, (route) => {
       const file = path.basename(new URL(route.request().url()).pathname);
-      const contentType = file.endsWith('.mp4') ? 'video/mp4' : 'audio/mpeg';
+      const contentType = CONTENT_TYPE_BY_EXT[path.extname(file)] ?? 'audio/mpeg';
       return route.fulfill({
         status: 200,
         contentType,

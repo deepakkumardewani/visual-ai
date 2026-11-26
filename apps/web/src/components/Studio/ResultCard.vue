@@ -7,6 +7,7 @@ import type { IImageObject } from '@/types';
 import type { MediaAssetDto } from '@visual-ai/shared';
 
 import TrackCard from '@/components/Audio/TrackCard.vue';
+import HandoffMenu from '@/components/Studio/HandoffMenu.vue';
 import UnsavedResultNotice from '@/components/Dashboard/Canvas/UnsavedResultNotice.vue';
 
 import { useAppStore } from '@/stores/app';
@@ -81,6 +82,13 @@ watch(() => props.asset.id, revealResult);
       @dismiss="dismissedAssetId = asset.id"
     />
     <TrackCard v-if="asset.type === 'audio'" :track="track" />
+    <img
+      v-else-if="asset.type === 'image'"
+      :src="asset.url"
+      :alt="asset.title"
+      class="result-image"
+      data-testid="result-image"
+    />
     <video
       v-else
       ref="videoEl"
@@ -91,19 +99,29 @@ watch(() => props.asset.id, revealResult);
       playsinline
       class="result-video"
     />
-    <a
-      :href="asset.url"
-      :download="asset.title"
-      data-testid="result-download"
-      class="result-download"
-    >
-      <font-awesome-icon :icon="faDownload" aria-hidden="true" />
-      Download
-    </a>
+    <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-2">
+      <a
+        :href="asset.url"
+        :download="asset.title"
+        data-testid="result-download"
+        class="result-download"
+      >
+        <font-awesome-icon :icon="faDownload" aria-hidden="true" />
+        Download
+      </a>
+      <HandoffMenu :asset="asset" />
+    </div>
   </section>
 </template>
 
 <style scoped lang="scss">
+.result-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+}
+
 .result-video {
   width: 100%;
   border-radius: 0.75rem;
@@ -113,7 +131,6 @@ watch(() => props.asset.id, revealResult);
 .result-download {
   display: inline-flex;
   align-items: center;
-  align-self: flex-start;
   gap: 0.5rem;
   min-height: 44px;
   padding: 0 1rem;

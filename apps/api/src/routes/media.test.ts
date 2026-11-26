@@ -931,6 +931,223 @@ describe("POST /generate/video", () => {
     })
 })
 
+const TOOL_UPLOAD_ID = "665f1f77bcf86cd799439031"
+const TOOL_JOB_ID = "5f0c9a52-7a8e-4a1b-9c1d-2f6c1c8e4b10"
+const toolUpload = (overrides: Record<string, unknown> = {}) => ({
+    lean: vi.fn().mockResolvedValue({ _id: "u1", url: "https://cdn.invalid/u", ...overrides }),
+})
+
+describe.each([
+    {
+        name: "image-watermark",
+        kind: "image-watermark",
+        modelKey: "IMAGE_WATERMARK",
+        purpose: "tool-image",
+        stored: {},
+        required: 1,
+        body: {
+            jobId: TOOL_JOB_ID,
+            uploadId: TOOL_UPLOAD_ID,
+            watermarkText: "(c) Me",
+            position: "center",
+            scale: 0.2,
+            opacity: 0.5,
+        },
+    },
+    {
+        name: "video-watermark",
+        kind: "video-watermark",
+        modelKey: "VIDEO_WATERMARK",
+        purpose: "tool-video",
+        stored: { durationSec: 60 },
+        required: 1,
+        body: { jobId: TOOL_JOB_ID, uploadId: TOOL_UPLOAD_ID, watermarkText: "Me", size: 40 },
+    },
+    {
+        name: "autocaption",
+        kind: "autocaption",
+        modelKey: "AUTOCAPTION",
+        purpose: "tool-video",
+        // 31s is two started 30s blocks at 11 credits each.
+        stored: { durationSec: 31 },
+        required: 22,
+        body: { jobId: TOOL_JOB_ID, uploadId: TOOL_UPLOAD_ID },
+    },
+])("POST /generate/tools/$name", ({ name, kind, modelKey, purpose, stored, required, body }) => {
+    const path = `/generate/tools/${name}`
+    const run = (reqBody: unknown) => post({ auth: { userId: "user_1" }, body: reqBody }, path)
+
+    beforeEach(() => {
+        vi.clearAllMocks()
+        uploadModel.findOne.mockReturnValue(toolUpload(stored))
+        getAvailableCredits.mockResolvedValue(1000)
+        hasExistingJob.mockResolvedValue(false)
+        resolveUserIsPro.mockResolvedValue(false)
+        enqueueGeneration.mockResolvedValue(undefined)
+    })
+
+    it("answers 202 and enqueues the job with the server-set model key and no client cost", async () => {
+        const res = await run({ ...body, creditCost: 0 })
+
+        expect(res.statusCode).toBe(202)
+        const queued = enqueueGeneration.mock.calls[0][0]
+        expect(queued.kind).toBe(kind)
+        expect(queued.body).toMatchObject({ ...body, modelKey, userId: "user_1" })
+        expect(queued.body).not.toHaveProperty("creditCost")
+        expect(uploadModel.findOne).toHaveBeenCalledWith(
+            expect.objectContaining({ _id: TOOL_UPLOAD_ID, userId: "user_1", purpose }),
+        )
+    })
+
+    it("overrides a client-sent model key", async () => {
+        await run({ ...body, modelKey: "LYRIA_2" })
+
+        expect(enqueueGeneration.mock.calls[0][0].body.modelKey).toBe(modelKey)
+    })
+
+    it("rejects an unauthenticated request with 401", async () => {
+        await expect(post({ auth: undefined, body }, path)).rejects.toMatchObject({
+            statusCode: 401,
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("rejects a missing upload id with a field-level 400", async () => {
+        await expect(run({ ...body, uploadId: "" })).rejects.toMatchObject({
+            statusCode: 400,
+            message: expect.stringMatching(/^uploadId: /),
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("rejects an upload that is not the caller's before checking credits", async () => {
+        uploadModel.findOne.mockReturnValue({ lean: vi.fn().mockResolvedValue(null) })
+
+        await expect(run(body)).rejects.toMatchObject({
+            statusCode: 400,
+            message: "uploadId: upload not found or expired",
+        })
+        expect(getAvailableCredits).not.toHaveBeenCalled()
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("answers 402 with the server-computed cost and queues nothing", async () => {
+        getAvailableCredits.mockResolvedValue(required - 1)
+
+        const res = await run(body)
+
+        expect(res.statusCode).toBe(402)
+        expect(res.body).toEqual({
+            code: "INSUFFICIENT_CREDITS",
+            required,
+            available: required - 1,
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("allows a user whose credits exactly cover the cost", async () => {
+        getAvailableCredits.mockResolvedValue(required)
+
+        expect((await run(body)).statusCode).toBe(202)
+    })
+
+    it("answers 202 without enqueueing again for a job that already exists", async () => {
+        hasExistingJob.mockResolvedValue(true)
+
+        const res = await run(body)
+
+        expect(res.statusCode).toBe(202)
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("passes the pro flag to the queue", async () => {
+        resolveUserIsPro.mockResolvedValue(true)
+
+        await run(body)
+
+        expect(enqueueGeneration.mock.calls[0][0].isPro).toBe(true)
+    })
+})
+
+describe("tool route input validation", () => {
+    const image = {
+        jobId: TOOL_JOB_ID,
+        uploadId: TOOL_UPLOAD_ID,
+        watermarkText: "Me",
+        position: "center",
+        scale: 0.2,
+        opacity: 0.5,
+    }
+    const video = { jobId: TOOL_JOB_ID, uploadId: TOOL_UPLOAD_ID, watermarkText: "Me", size: 40 }
+    const runImage = (b: unknown) =>
+        post({ auth: { userId: "user_1" }, body: b }, "/generate/tools/image-watermark")
+    const runVideo = (b: unknown) =>
+        post({ auth: { userId: "user_1" }, body: b }, "/generate/tools/video-watermark")
+
+    beforeEach(() => {
+        vi.clearAllMocks()
+        uploadModel.findOne.mockReturnValue(toolUpload({ durationSec: 60 }))
+        getAvailableCredits.mockResolvedValue(1000)
+        hasExistingJob.mockResolvedValue(false)
+        resolveUserIsPro.mockResolvedValue(false)
+        enqueueGeneration.mockResolvedValue(undefined)
+    })
+
+    it.each(["", "   "])(
+        "rejects blank watermark text %j so the provider default is never sent",
+        async (text) => {
+            await expect(runImage({ ...image, watermarkText: text })).rejects.toMatchObject({
+                statusCode: 400,
+                message: expect.stringMatching(/^watermarkText: /),
+            })
+            await expect(runVideo({ ...video, watermarkText: text })).rejects.toMatchObject({
+                statusCode: 400,
+            })
+            expect(enqueueGeneration).not.toHaveBeenCalled()
+        },
+    )
+
+    it("accepts image text at 500 characters and rejects 501", async () => {
+        expect((await runImage({ ...image, watermarkText: "a".repeat(500) })).statusCode).toBe(202)
+        await expect(runImage({ ...image, watermarkText: "a".repeat(501) })).rejects.toMatchObject({
+            statusCode: 400,
+        })
+    })
+
+    it("accepts video text at 100 characters and rejects 101", async () => {
+        expect((await runVideo({ ...video, watermarkText: "a".repeat(100) })).statusCode).toBe(202)
+        await expect(runVideo({ ...video, watermarkText: "a".repeat(101) })).rejects.toMatchObject({
+            statusCode: 400,
+        })
+    })
+
+    it("rejects an unknown image position", async () => {
+        await expect(runImage({ ...image, position: "middle" })).rejects.toMatchObject({
+            statusCode: 400,
+        })
+    })
+
+    it.each([0, 501, 2.5])("rejects video size %s", async (size) => {
+        await expect(runVideo({ ...video, size })).rejects.toMatchObject({ statusCode: 400 })
+    })
+
+    it("refuses a video over the 120 second cap with the limit copy and queues nothing", async () => {
+        uploadModel.findOne.mockReturnValue(toolUpload({ durationSec: 121 }))
+
+        await expect(runVideo(video)).rejects.toMatchObject({
+            statusCode: 400,
+            message: "uploadId: Videos up to 2 minutes and 100 MB",
+        })
+        expect(enqueueGeneration).not.toHaveBeenCalled()
+    })
+
+    it("refuses a video with no stored duration", async () => {
+        uploadModel.findOne.mockReturnValue(toolUpload({ durationSec: undefined }))
+
+        await expect(runVideo(video)).rejects.toMatchObject({ statusCode: 400 })
+    })
+})
+
 describe("GET /media/assets", () => {
     beforeEach(() => {
         vi.clearAllMocks()
@@ -963,7 +1180,7 @@ describe("GET /media/assets", () => {
 
     it("rejects an unknown type with 400", async () => {
         await expect(
-            call("get", LIST, { ...session, query: { type: "image" } }),
+            call("get", LIST, { ...session, query: { type: "document" } }),
         ).rejects.toMatchObject({ statusCode: 400 })
         expect(assets.listMediaAssets).not.toHaveBeenCalled()
     })

@@ -28,6 +28,9 @@ const REFERENCE_UPLOAD_ERROR =
 /** Error code the API returns with a 403 when a non-Pro user requests a premium model. */
 const PREMIUM_MODEL_REQUIRES_PRO = 'PREMIUM_MODEL_REQUIRES_PRO';
 
+/** Error code the API returns with a 402 when the balance cannot cover the generation. */
+const INSUFFICIENT_CREDITS = 'INSUFFICIENT_CREDITS';
+
 type RetryAction = 'generate' | 'upscale' | 'colorize' | 'remove_bg' | 'revive';
 
 interface RetryEntry {
@@ -200,9 +203,14 @@ export const useGenerateStore = defineStore('generate', () => {
    * Uploads staged reference files before generation. Orphaned Cloudinary objects after a
    * failed generation are acceptable — we only send URLs that survive an in-flight remove.
    */
-  async function uploadReferenceImagesForGenerate(): Promise<string[] | null> {
+  async function uploadReferenceImagesForGenerate(
+    overrideFiles?: File[],
+  ): Promise<string[] | null> {
     const asideStore = useAsideStore();
-    const staged = [...asideStore.referenceImages];
+    // A surface that owns its reference (the sketch tool) must not touch the create page's.
+    const staged = overrideFiles
+      ? overrideFiles.map((file, index) => ({ localId: `override-${index}`, file }))
+      : [...asideStore.referenceImages];
     if (!staged.length) return [];
 
     const uploadBatch = staged.map((item) => ({
@@ -228,7 +236,11 @@ export const useGenerateStore = defineStore('generate', () => {
       return null;
     }
 
-    const stillPresent = new Set(asideStore.referenceImages.map((item) => item.localId));
+    const stillPresent = new Set(
+      overrideFiles
+        ? staged.map((item) => item.localId)
+        : asideStore.referenceImages.map((item) => item.localId),
+    );
     const urls: string[] = [];
     for (let i = 0; i < uploadBatch.length; i += 1) {
       const { localId } = uploadBatch[i];
@@ -239,7 +251,7 @@ export const useGenerateStore = defineStore('generate', () => {
     return urls;
   }
 
-  async function generateImage(imgData?: ImageBody) {
+  async function generateImage(imgData?: ImageBody, referenceFiles?: File[]) {
     appStore.sendSignal('generate_image');
     isLoading.value = true;
     clearFeatureError(FeatureType.IMAGE);
@@ -248,7 +260,7 @@ export const useGenerateStore = defineStore('generate', () => {
     activePrompt.value = imgData?.prompt ?? '';
     images.value = [];
 
-    const referenceImageUrls = await uploadReferenceImagesForGenerate();
+    const referenceImageUrls = await uploadReferenceImagesForGenerate(referenceFiles);
     if (referenceImageUrls === null) {
       isLoading.value = false;
       appStore.closeEventSource('image');
@@ -291,12 +303,17 @@ export const useGenerateStore = defineStore('generate', () => {
       },
       // The error body carries the `code` that tells a premium-gate 403 apart from a real failure.
       { updateDataOnError: true },
-    ).json<IGenerateResponse & { code?: string }>();
+    ).json<IGenerateResponse & { code?: string; required?: number; available?: number }>();
     if (error.value) {
       isLoading.value = false;
       appStore.closeEventSource('image');
       if (data.value?.code === PREMIUM_MODEL_REQUIRES_PRO) {
         dialogStore.showPricing();
+        return;
+      }
+      if (data.value?.code === INSUFFICIENT_CREDITS) {
+        const { required = 0, available = 0 } = data.value;
+        dialogStore.showLowCredits({ required, available });
         return;
       }
       log.error('generateImage failed', { error: error.value, jobId: imgData?.jobId });

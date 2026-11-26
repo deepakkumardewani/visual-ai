@@ -1,4 +1,10 @@
-import { MAX_VIDEO_AUDIO_BYTES, WAN_FIRST_FRAME_MAX_BYTES } from '@visual-ai/shared';
+import {
+  MAX_IMAGE_BYTES,
+  MAX_TOOL_VIDEO_BYTES,
+  MAX_TOOL_VIDEO_SECONDS,
+  MAX_VIDEO_AUDIO_BYTES,
+  WAN_FIRST_FRAME_MAX_BYTES,
+} from '@visual-ai/shared';
 import { computed, onBeforeUnmount, ref, type Ref } from 'vue';
 
 import { useFetch } from '@/composables/useFetch';
@@ -6,7 +12,10 @@ import { createLogger } from '@/utils/logger';
 
 const log = createLogger('toolVideoUpload');
 
-export type VideoUploadPurpose = 'video-image' | 'video-audio';
+export type VideoUploadPurpose = 'video-image' | 'video-audio' | 'tool-image' | 'tool-video';
+
+/** Purposes that keep a local object URL: a thumbnail for images, a frame source for video. */
+const PREVIEW_PURPOSES: readonly VideoUploadPurpose[] = ['video-image', 'tool-image', 'tool-video'];
 
 /** An attachment the server has stored; only `uploadId` is ever sent with a video request. */
 export interface UploadedFile {
@@ -34,10 +43,16 @@ interface PurposeRules {
   mimePrefix: string;
   tooLargeCopy: string;
   wrongTypeCopy: string;
+  /** Longest accepted playback length; the server reports it after the upload. */
+  maxDurationSec?: number;
+  tooLongCopy?: string;
 }
 
 const BYTES_PER_MB = 1024 * 1024;
 const mb = (bytes: number) => Math.round(bytes / BYTES_PER_MB);
+
+/** One sentence for both caps, as the spec words it. */
+export const TOOL_VIDEO_LIMIT_COPY = 'Videos up to 2 minutes and 100 MB';
 
 export const VIDEO_UPLOAD_RULES: Record<VideoUploadPurpose, PurposeRules> = {
   'video-image': {
@@ -53,6 +68,22 @@ export const VIDEO_UPLOAD_RULES: Record<VideoUploadPurpose, PurposeRules> = {
     mimePrefix: 'audio/',
     tooLargeCopy: `Audio must be ${mb(MAX_VIDEO_AUDIO_BYTES)} MB or smaller.`,
     wrongTypeCopy: 'Choose an MP3, WAV or FLAC file.',
+  },
+  'tool-image': {
+    accept: 'image/jpeg,image/png,image/webp',
+    maxBytes: MAX_IMAGE_BYTES,
+    mimePrefix: 'image/',
+    tooLargeCopy: `Image must be ${mb(MAX_IMAGE_BYTES)} MB or smaller.`,
+    wrongTypeCopy: 'Choose a JPG, PNG or WEBP image.',
+  },
+  'tool-video': {
+    accept: 'video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm',
+    maxBytes: MAX_TOOL_VIDEO_BYTES,
+    mimePrefix: 'video/',
+    tooLargeCopy: TOOL_VIDEO_LIMIT_COPY,
+    wrongTypeCopy: 'Choose an MP4, MOV or WEBM video.',
+    maxDurationSec: MAX_TOOL_VIDEO_SECONDS,
+    tooLongCopy: TOOL_VIDEO_LIMIT_COPY,
   },
 };
 
@@ -119,12 +150,20 @@ export function useToolVideoUpload(
       fail(rejectionCopy(code, data.value));
       return;
     }
+    const { maxDurationSec, tooLongCopy } = rules;
+    if (
+      maxDurationSec &&
+      !((data.value.durationSec ?? 0) > 0 && data.value.durationSec! <= maxDurationSec)
+    ) {
+      fail(tooLongCopy ?? UPLOAD_FAILED_COPY);
+      return;
+    }
     revokePreview();
     uploaded.value = {
       uploadId: data.value.uploadId,
       name: file.name,
       durationSec: data.value.durationSec,
-      previewUrl: purpose === 'video-image' ? URL.createObjectURL(file) : undefined,
+      previewUrl: PREVIEW_PURPOSES.includes(purpose) ? URL.createObjectURL(file) : undefined,
     };
     status.value = 'ready';
   }

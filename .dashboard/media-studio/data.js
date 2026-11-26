@@ -1,5 +1,5 @@
 window.DASHBOARD = {
- "generatedAt": "2026-11-24T10:02:28.897Z",
+ "generatedAt": "2026-11-26T09:18:16.441Z",
  "maxAttempts": 5,
  "feature": {
   "slug": "media-studio",
@@ -34,26 +34,24 @@ window.DASHBOARD = {
    "source": "agent_docs/media-studio/TASKS.md"
   }
  ],
- "costUsd": 74.5766,
- "elapsedMs": 104760211,
+ "costUsd": 83.6805,
+ "elapsedMs": 271457607,
  "costByRole": {
-  "reviewer-security": 6.6203,
-  "unit": 9.1034,
-  "reviewer-ux": 2.1046,
-  "e2e": 6.0184,
-  "reviewer-code": 3.3346,
-  "builder": 23.2112,
-  "verifier": 21.9842,
-  "reviewer-ui": 2.1058,
+  "e2e": 6.8435,
+  "reviewer-ui": 2.3803,
+  "unit": 9.9182,
+  "reviewer-security": 7.4553,
+  "builder": 26.6997,
+  "reviewer-code": 3.7264,
+  "reviewer-ux": 2.3377,
+  "verifier": 24.2253,
   "runner": 0.0941
  },
  "totals": {
   "phases": 6,
   "tasks": 87,
   "byStatus": {
-   "verified": 78,
-   "ready": 1,
-   "waiting": 8
+   "verified": 87
   }
  },
  "phases": [
@@ -5121,7 +5119,7 @@ window.DASHBOARD = {
      "line": 1349,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-24T10:02:28.863Z",
+     "updatedAt": "2026-11-24T10:02:51.440Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -5195,7 +5193,7 @@ window.DASHBOARD = {
      "line": 1372,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-24T10:02:28.863Z",
+     "updatedAt": "2026-11-24T10:02:51.440Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -5277,7 +5275,7 @@ window.DASHBOARD = {
      "line": 1396,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-24T10:02:28.863Z",
+     "updatedAt": "2026-11-24T10:02:51.440Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -5370,7 +5368,7 @@ window.DASHBOARD = {
      "line": 1423,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-24T10:02:28.863Z",
+     "updatedAt": "2026-11-24T10:02:51.440Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -5442,7 +5440,7 @@ window.DASHBOARD = {
      "line": 1445,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-24T10:02:28.863Z",
+     "updatedAt": "2026-11-24T10:02:51.440Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -5494,7 +5492,7 @@ window.DASHBOARD = {
      "line": 1456,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-24T10:02:28.863Z",
+     "updatedAt": "2026-11-24T10:02:51.440Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -5543,7 +5541,7 @@ window.DASHBOARD = {
      "line": 1467,
      "ui": true,
      "status": "verified",
-     "updatedAt": "2026-11-24T10:02:28.863Z",
+     "updatedAt": "2026-11-24T10:02:51.440Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -5603,7 +5601,7 @@ window.DASHBOARD = {
      "line": 1481,
      "ui": false,
      "status": "verified",
-     "updatedAt": "2026-11-24T10:02:28.863Z",
+     "updatedAt": "2026-11-24T10:02:51.440Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -5696,8 +5694,8 @@ window.DASHBOARD = {
      ],
      "line": 1502,
      "ui": true,
-     "status": "ready",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T12:23:15.379Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -5724,16 +5722,31 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.0316,
+     "costApprox": true,
+     "elapsedMs": 5001564,
+     "summary": [
+      "T5.4: `bun run check` for the whole repo exits 0 (0 errors, 18 pre-existing warnings). `task_built` for T5.4 is already present in events.jsonl."
+     ]
     },
     {
      "id": "T5.2",
      "title": "Video watermark tool and placement fallback (S5.2)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T5.1"
@@ -5752,7 +5765,7 @@ window.DASHBOARD = {
      "filesDeclared": true,
      "acceptance": [
       "AC1: A video over 120 seconds or 100MB is rejected with specific limit copy and nothing is billed.",
-      "AC2: Cost uses the stored upload duration and is charged once on success.",
+      "AC2: Cost is the flat per-run price from SPEC (lines 64 and 316) and is charged once on success; the stored upload duration is used only for the 120 s limit check.",
       "AC3: VIDEO_WATERMARK_PLACEMENT is a named constant sourced per gap G10 (no paid call if the read step answered it; otherwise the single approved run is recorded as call 1 of 1), no test or e2e run made a paid call, and the caption \"Position is fixed by this tool; you can change the text and size.\" is shown.",
       "AC4: 402 and failure states match the shared components.",
       "AC5: At 375px width there is no horizontal scroll and tap targets are at least 44px high. Every interactive element has a visible focus ring and an accessible name and works by keyboard alone."
@@ -5767,8 +5780,8 @@ window.DASHBOARD = {
      ],
      "line": 1527,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-26T09:18:16.381Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -5795,16 +5808,67 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "CHANGES",
+        "security": "PASS"
+       },
+       "verifier": null
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "code": "PASS",
+        "ui": "CHANGES",
+        "security": "PASS"
+       },
+       "verifier": null
+      },
+      {
+       "n": 5,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      },
+      {
+       "n": 4,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ui": "PASS",
+        "ux": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "FAIL"
+      }
+     ],
+     "costUsd": 1.3368,
+     "costApprox": true,
+     "elapsedMs": 166697395,
+     "summary": [
+      "T5.4: `bun run check` for the whole repo exits 0 (0 errors, 18 pre-existing warnings). `task_built` for T5.4 is already present in events.jsonl."
+     ]
     },
     {
      "id": "T5.3",
      "title": "Autocaption tool (S5.3)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T5.2"
@@ -5838,8 +5902,8 @@ window.DASHBOARD = {
      ],
      "line": 1552,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-26T09:18:16.381Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -5866,16 +5930,55 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "CHANGES",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ui": "PASS",
+        "ux": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 4,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.1471,
+     "costApprox": true,
+     "elapsedMs": 166697396,
+     "summary": [
+      "T5.4: `bun run check` for the whole repo exits 0 (0 errors, 18 pre-existing warnings). `task_built` for T5.4 is already present in events.jsonl."
+     ]
     },
     {
      "id": "T5.4",
      "title": "Sketch to image tool (S5.4)",
-     "done": false,
+     "done": true,
      "kind": "implementation",
      "depends": [
       "T5.3"
@@ -5905,8 +6008,8 @@ window.DASHBOARD = {
      ],
      "line": 1577,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-26T09:18:16.381Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "high",
@@ -5933,11 +6036,50 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "CHANGES",
+        "ui": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": null
+      },
+      {
+       "n": 3,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "code": "PASS",
+        "ui": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "FAIL"
+      },
+      {
+       "n": 4,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.1471,
+     "costApprox": true,
+     "elapsedMs": 166697396,
+     "summary": [
+      "T5.4: `bun run check` for the whole repo exits 0 (0 errors, 18 pre-existing warnings). `task_built` for T5.4 is already present in events.jsonl."
+     ]
     },
     {
      "id": "T5.5",
@@ -5971,8 +6113,8 @@ window.DASHBOARD = {
      ],
      "line": 1599,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T12:23:15.379Z",
      "verifierRouted": true,
      "pending": [],
      "risk": "medium",
@@ -5999,11 +6141,26 @@ window.DASHBOARD = {
        "model": "opus"
       }
      ],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {
+        "ux": "PASS",
+        "ui": "PASS",
+        "code": "PASS",
+        "security": "PASS"
+       },
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.15,
+     "costApprox": true,
+     "elapsedMs": 4247487,
+     "summary": [
+      "T5.4: `bun run check` for the whole repo exits 0 (0 errors, 18 pre-existing warnings). `task_built` for T5.4 is already present in events.jsonl."
+     ]
     },
     {
      "id": "T5.6",
@@ -6031,18 +6188,28 @@ window.DASHBOARD = {
      ],
      "line": 1621,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T12:23:15.379Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.7095,
+     "costApprox": true,
+     "elapsedMs": 4109337,
+     "summary": [
+      "T5.4: `bun run check` for the whole repo exits 0 (0 errors, 18 pre-existing warnings). `task_built` for T5.4 is already present in events.jsonl."
+     ]
     },
     {
      "id": "T5.7",
@@ -6072,18 +6239,30 @@ window.DASHBOARD = {
      ],
      "line": 1632,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-26T09:02:15.721Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.6034,
+     "costApprox": true,
+     "elapsedMs": 164849679,
+     "summary": [
+      "T5.4: `bun run check` for the whole repo exits 0 (0 errors, 18 pre-existing warnings). `task_built` for T5.4 is already present in events.jsonl."
+     ]
     },
     {
      "id": "T5.8",
@@ -6108,18 +6287,30 @@ window.DASHBOARD = {
      ],
      "line": 1643,
      "ui": true,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-26T09:02:15.721Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [
+      "ui"
+     ],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": "PASS",
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 1.0741,
+     "costApprox": true,
+     "elapsedMs": 164849679,
+     "summary": [
+      "T5.4: `bun run check` for the whole repo exits 0 (0 errors, 18 pre-existing warnings). `task_built` for T5.4 is already present in events.jsonl."
+     ]
     },
     {
      "id": "T5.9",
@@ -6147,25 +6338,35 @@ window.DASHBOARD = {
      ],
      "line": 1657,
      "ui": false,
-     "status": "waiting",
-     "updatedAt": null,
+     "status": "verified",
+     "updatedAt": "2026-11-24T12:23:15.379Z",
      "verifierRouted": true,
      "pending": [],
-     "risk": null,
-     "surfaces": null,
+     "risk": "medium",
+     "surfaces": [],
      "reviewers": [],
-     "attempts": [],
-     "costUsd": null,
-     "costApprox": false,
-     "elapsedMs": null,
-     "summary": []
+     "attempts": [
+      {
+       "n": 1,
+       "gate": "PASS",
+       "slop": null,
+       "reviews": {},
+       "verifier": "PASS"
+      }
+     ],
+     "costUsd": 0.9043,
+     "costApprox": true,
+     "elapsedMs": 2641704,
+     "summary": [
+      "T5.4: `bun run check` for the whole repo exits 0 (0 errors, 18 pre-existing warnings). `task_built` for T5.4 is already present in events.jsonl."
+     ]
     }
    ],
-   "verified": 0,
+   "verified": 3,
    "total": 9,
    "complete": false,
-   "costUsd": null,
-   "elapsedMs": null
+   "costUsd": 9.1039,
+   "elapsedMs": 166697396
   }
  ],
  "current": null,
@@ -6447,10 +6648,99 @@ window.DASHBOARD = {
    "text": "AC3 says Stable Audio cost scales with duration, but SPEC.md (lines 89, 218, 221, 301) and the registry price it flat at $0.20 per file. Code follows SPEC. Amend AC3 to flat per-file, or change SPEC and registry to per-second?",
    "answer": "Flat per file; AC3 and Do text amended in TASKS.md",
    "answeredAt": "2026-11-23T13:36:49.967Z"
+  },
+  {
+   "at": "2026-11-24T11:11:55.675Z",
+   "type": "question",
+   "tasks": [
+    "T5.2"
+   ],
+   "id": "Q26",
+   "text": "VIDEO_WATERMARK_PLACEMENT source unreadable by builder",
+   "default": "provisional bottom-right",
+   "alternatives": "orchestrator single paid run",
+   "answer": null,
+   "answeredAt": null
+  },
+  {
+   "at": "2026-11-24T11:11:55.876Z",
+   "type": "question",
+   "tasks": [
+    "T5.4"
+   ],
+   "id": "Q27",
+   "text": "Sketch reference upload reuse",
+   "default": "optional referenceFiles param on generateImage",
+   "alternatives": "page-level upload",
+   "answer": null,
+   "answeredAt": null
+  },
+  {
+   "at": "2026-11-24T12:06:22.995Z",
+   "type": "question",
+   "tasks": [
+    "T5.2"
+   ],
+   "id": "Q28",
+   "text": "VIDEO_WATERMARK_PLACEMENT (G10) needs one paid Replicate run to source the real watermark position. Not approved; builder told to use null constant + caption-only preview as safe default. Approve one paid call to source it?",
+   "answer": null,
+   "answeredAt": null
+  },
+  {
+   "at": "2026-11-24T12:23:19.619Z",
+   "type": "question",
+   "tasks": [
+    "T5.2"
+   ],
+   "id": "Q29",
+   "text": "SPEC_ISSUE: T5.2 AC2 says cost uses stored upload duration but SPEC lines 64/316 make video watermark a flat price per run; code follows SPEC. Also AC3 code fixes pending (placement bottom-right sourced from public model source; caption wording).",
+   "answer": "Edit AC2 to flat price per run",
+   "answeredAt": "2026-11-24T12:24:08.356Z"
+  },
+  {
+   "at": "2026-11-26T09:04:14.577Z",
+   "type": "question",
+   "tasks": [
+    "T5.2"
+   ],
+   "id": "Q30",
+   "text": "Plan reports ASK exhausted: three spurious unparseable-report INCONCLUSIVE events from a code-review report (since fixed and re-recorded as PASS). All 4 reviewers PASS on T5.2-T5.4; last verifier FAIL was only a formatting error, since fixed (bun run check exit 0). Needs a verifier re-run which the planner will not schedule.",
+   "answer": null,
+   "answeredAt": null
   }
  ],
  "stuck": [],
  "commits": [
+  {
+   "at": "2026-11-24T10:02:51.440Z",
+   "ok": true,
+   "phase": "4",
+   "tasks": [
+    "T4.1",
+    "T4.2",
+    "T4.3",
+    "T4.4",
+    "T4.5",
+    "T4.6",
+    "T4.7",
+    "T4.8"
+   ],
+   "attempt": "3",
+   "branch": "feature/media-studio",
+   "pushed": true,
+   "evidence": "e2e 37/37 x3, unit lowest 100% lines",
+   "error": null,
+   "sha": "3cce1387f29f799e4eabb4100573a53ed937224a",
+   "shortSha": "3cce138",
+   "url": "https://github.com/deepakkumardewani/visual-ai/commit/3cce1387f29f799e4eabb4100573a53ed937224a",
+   "subject": "feat(media): phase 4 video studio",
+   "missing": false,
+   "author": "Deepak Dewani",
+   "committedAt": "2026-11-24T15:32:42+05:30",
+   "filesChanged": 31,
+   "added": 4482,
+   "removed": 818
+  },
   {
    "at": "2026-11-24T08:15:12.646Z",
    "ok": true,
@@ -9046,9 +9336,881 @@ window.DASHBOARD = {
    "file": "4/T4.7-11.png",
    "phase": "4",
    "href": "shots/4/T4.7-11.png"
+  },
+  {
+   "taskId": "T5.1",
+   "kind": "proof",
+   "step": "Empty state: Add an image and the text for your watermark.",
+   "attempt": null,
+   "caption": "Image watermark tool empty state with the upload zone, text field and position grid.",
+   "annotations": [
+    {
+     "x": 55.4,
+     "y": 17.6,
+     "w": 21.1,
+     "h": 2.5,
+     "label": "Empty state copy"
+    },
+    {
+     "x": 6.9,
+     "y": 36.9,
+     "w": 43.8,
+     "h": 5.8,
+     "label": "Required watermark text (0/500)"
+    },
+    {
+     "x": 6.9,
+     "y": 45.7,
+     "w": 43.8,
+     "h": 22,
+     "label": "Position grid"
+    },
+    {
+     "x": 6.9,
+     "y": 89.2,
+     "w": 43.8,
+     "h": 2.4,
+     "label": "Reason Generate is disabled"
+    }
+   ],
+   "at": "2026-11-24T12:03:30.966Z",
+   "file": "5/T5.1-1.png",
+   "phase": "5",
+   "href": "shots/5/T5.1-1.png"
+  },
+  {
+   "taskId": "T5.1",
+   "kind": "proof",
+   "step": "AC6: 375px layout, no horizontal scroll, tap targets at least 44px",
+   "attempt": null,
+   "caption": "At 375px the tool fits the screen with no horizontal scroll; controls are full-size tap targets.",
+   "annotations": [
+    {
+     "x": 8.8,
+     "y": 46.7,
+     "w": 31.5,
+     "h": 5.4,
+     "label": "Choose image button"
+    },
+    {
+     "x": 4.3,
+     "y": 68.8,
+     "w": 91.5,
+     "h": 21.7,
+     "label": "Position grid"
+    }
+   ],
+   "at": "2026-11-24T12:03:35.598Z",
+   "file": "5/T5.1-2.png",
+   "phase": "5",
+   "href": "shots/5/T5.1-2.png"
+  },
+  {
+   "taskId": "T5.1",
+   "kind": "proof",
+   "step": "AC5: result can be downloaded",
+   "attempt": null,
+   "caption": "Stubbed e2e run of the image watermark: result image appears with Download and Use in... actions and a Your result is ready toast.",
+   "annotations": [
+    {
+     "x": 53.8,
+     "y": 9.6,
+     "w": 39.4,
+     "h": 70,
+     "label": "Watermarked result"
+    },
+    {
+     "x": 53.8,
+     "y": 81.3,
+     "w": 16,
+     "h": 6.3,
+     "label": "Download and Use in... actions"
+    }
+   ],
+   "at": "2026-11-24T12:04:08.871Z",
+   "file": "5/T5.1-3.png",
+   "phase": "5",
+   "href": "shots/5/T5.1-3.png"
+  },
+  {
+   "taskId": "T5.1",
+   "kind": "proof",
+   "step": "AC4: failure shows No credits were used.",
+   "attempt": null,
+   "caption": "Stubbed failure: Generation failed. No credits were used. with Try again; the credit chip still shows 500.",
+   "annotations": [
+    {
+     "x": 53.8,
+     "y": 12.2,
+     "w": 39.4,
+     "h": 15.3,
+     "label": "Failure copy with Try again"
+    },
+    {
+     "x": 86.5,
+     "y": 1.4,
+     "w": 5.3,
+     "h": 4.4,
+     "label": "Credit balance unchanged"
+    }
+   ],
+   "at": "2026-11-24T12:04:09.068Z",
+   "file": "5/T5.1-4.png",
+   "phase": "5",
+   "href": "shots/5/T5.1-4.png"
+  },
+  {
+   "taskId": "T5.2",
+   "kind": "proof",
+   "step": "AC3: caption Position is fixed by this tool; you can change the text and size.",
+   "attempt": null,
+   "caption": "Video watermark empty state: upload zone with the limits, text size slider and the fixed-position caption; no drag, opacity or colour control.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 57.7,
+     "w": 43.8,
+     "h": 2,
+     "label": "Fixed-position caption"
+    },
+    {
+     "x": 8.2,
+     "y": 24.8,
+     "w": 16.1,
+     "h": 2.5,
+     "label": "Limit copy (120 s / 100 MB)"
+    },
+    {
+     "x": 6.9,
+     "y": 45.7,
+     "w": 43.8,
+     "h": 2.5,
+     "label": "Size control"
+    }
+   ],
+   "at": "2026-11-24T12:03:10.032Z",
+   "file": "5/T5.2-1.png",
+   "phase": "5",
+   "href": "shots/5/T5.2-1.png"
+  },
+  {
+   "taskId": "T5.2",
+   "kind": "proof",
+   "step": "AC5: 375px layout, no horizontal scroll, tap targets at least 44px",
+   "attempt": null,
+   "caption": "At 375px the video watermark tool fits with no horizontal scroll.",
+   "annotations": [
+    {
+     "x": 8.8,
+     "y": 46.7,
+     "w": 30.5,
+     "h": 5.4,
+     "label": "Choose video button"
+    },
+    {
+     "x": 4.3,
+     "y": 80.6,
+     "w": 91.5,
+     "h": 2,
+     "label": "Fixed-position caption"
+    }
+   ],
+   "at": "2026-11-24T12:03:39.957Z",
+   "file": "5/T5.2-2.png",
+   "phase": "5",
+   "href": "shots/5/T5.2-2.png"
+  },
+  {
+   "taskId": "T5.2",
+   "kind": "proof",
+   "step": "AC1: over-limit video rejected with limit copy",
+   "attempt": null,
+   "caption": "A video over the limit is rejected with specific copy Videos up to 2 minutes and 100 MB; Generate stays disabled and nothing is billed.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 35,
+     "w": 43.8,
+     "h": 2.5,
+     "label": "Specific limit copy"
+    },
+    {
+     "x": 40.6,
+     "y": 73.5,
+     "w": 10,
+     "h": 6,
+     "label": "Generate disabled"
+    }
+   ],
+   "at": "2026-11-24T12:04:09.248Z",
+   "file": "5/T5.2-3.png",
+   "phase": "5",
+   "href": "shots/5/T5.2-3.png"
+  },
+  {
+   "taskId": "T5.2",
+   "kind": "proof",
+   "step": "AC4: 402 and failure states match the shared components",
+   "attempt": null,
+   "caption": "Video watermark failure state uses the shared error card.",
+   "annotations": [
+    {
+     "x": 53.8,
+     "y": 12.2,
+     "w": 39.4,
+     "h": 15.3,
+     "label": "Shared failure card"
+    }
+   ],
+   "at": "2026-11-24T12:04:09.425Z",
+   "file": "5/T5.2-4.png",
+   "phase": "5",
+   "href": "shots/5/T5.2-4.png"
+  },
+  {
+   "taskId": "T5.2",
+   "kind": "proof",
+   "step": "AC3: caption \"Position is fixed by this tool; you can change the text and size.\" is shown",
+   "attempt": 4,
+   "caption": "Verifier retake: the shipped caption reads \"The tool places the watermark itself; the preview does not show where. You can change the text and size.\", not the AC3 text.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 57.7,
+     "w": 43.75,
+     "h": 2,
+     "label": "caption text differs from AC3"
+    }
+   ],
+   "at": "2026-11-24T12:19:33.871Z",
+   "file": "5/T5.2-5.png",
+   "phase": "5",
+   "href": "shots/5/T5.2-5.png"
+  },
+  {
+   "taskId": "T5.2",
+   "kind": "proof",
+   "step": "AC5: 375px layout, no horizontal scroll, tap targets at least 44px",
+   "attempt": 4,
+   "caption": "Verifier retake at 375px: no horizontal scroll, Choose video 44px; the caption shows the current (non-AC3) wording.",
+   "annotations": [
+    {
+     "x": 4.3,
+     "y": 80.6,
+     "w": 91.5,
+     "h": 3.9,
+     "label": "current caption text"
+    }
+   ],
+   "at": "2026-11-24T12:22:32.823Z",
+   "file": "5/T5.2-6.png",
+   "phase": "5",
+   "href": "shots/5/T5.2-6.png"
+  },
+  {
+   "taskId": "T5.2",
+   "kind": "proof",
+   "step": "AC3 preview + caption (desktop)",
+   "attempt": 7,
+   "caption": "Loaded video with entered text previewed at the chosen size, and the fixed-position caption.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 51.6,
+     "w": 43.8,
+     "h": 48.4,
+     "label": "video preview"
+    },
+    {
+     "x": 6.9,
+     "y": 91.9,
+     "w": 43.8,
+     "h": 5,
+     "label": "text preview scaled by size"
+    }
+   ],
+   "at": "2026-11-26T08:54:03.501Z",
+   "file": "5/T5.2-7.png",
+   "phase": "5",
+   "href": "shots/5/T5.2-7.png"
+  },
+  {
+   "taskId": "T5.2",
+   "kind": "proof",
+   "step": "AC3 preview + caption (375px)",
+   "attempt": 7,
+   "caption": "Same preview at 375px, no horizontal scroll.",
+   "annotations": [
+    {
+     "x": 4.3,
+     "y": 67.4,
+     "w": 91.5,
+     "h": 32.6,
+     "label": "video preview"
+    },
+    {
+     "x": 4.3,
+     "y": 92.1,
+     "w": 91.5,
+     "h": 4.9,
+     "label": "text preview"
+    }
+   ],
+   "at": "2026-11-26T08:54:03.658Z",
+   "file": "5/T5.2-8.png",
+   "phase": "5",
+   "href": "shots/5/T5.2-8.png"
+  },
+  {
+   "taskId": "T5.3",
+   "kind": "proof",
+   "step": "Empty state: Add a video to caption it.",
+   "attempt": null,
+   "caption": "Autocaption empty state: Add a video to caption it, with the per-block credit cost shown before running.",
+   "annotations": [
+    {
+     "x": 55.4,
+     "y": 17.6,
+     "w": 11.3,
+     "h": 2.5,
+     "label": "Empty state copy"
+    },
+    {
+     "x": 8.2,
+     "y": 24.8,
+     "w": 16.1,
+     "h": 2.5,
+     "label": "Upload zone with limits"
+    },
+    {
+     "x": 9.6,
+     "y": 34.9,
+     "w": 3.1,
+     "h": 2.6,
+     "label": "Cost shown before running"
+    }
+   ],
+   "at": "2026-11-24T12:03:14.463Z",
+   "file": "5/T5.3-1.png",
+   "phase": "5",
+   "href": "shots/5/T5.3-1.png"
+  },
+  {
+   "taskId": "T5.3",
+   "kind": "proof",
+   "step": "AC5: 375px layout, no horizontal scroll, tap targets at least 44px",
+   "attempt": null,
+   "caption": "At 375px autocaption fits with no horizontal scroll.",
+   "annotations": [
+    {
+     "x": 8.8,
+     "y": 46.7,
+     "w": 30.5,
+     "h": 5.4,
+     "label": "Choose video button"
+    },
+    {
+     "x": 17.9,
+     "y": 59.7,
+     "w": 10.6,
+     "h": 2.6,
+     "label": "Cost"
+    }
+   ],
+   "at": "2026-11-24T12:03:44.268Z",
+   "file": "5/T5.3-2.png",
+   "phase": "5",
+   "href": "shots/5/T5.3-2.png"
+  },
+  {
+   "taskId": "T5.3",
+   "kind": "proof",
+   "step": "AC1-AC3: two blocks for 31 s; transcript plain text with Copy/Download; HTML shown escaped",
+   "attempt": null,
+   "caption": "Stubbed autocaption run: a 31 s video bills 22 credits (two blocks), the result video appears with a transcript shown as escaped plain text with Copy and Download.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 21.8,
+     "w": 7,
+     "h": 2.8,
+     "label": "22 credits for 31 s (two blocks)"
+    },
+    {
+     "x": 78.1,
+     "y": 77.5,
+     "w": 15,
+     "h": 6.1,
+     "label": "Copy and Download"
+    },
+    {
+     "x": 53.8,
+     "y": 85.3,
+     "w": 39.4,
+     "h": 11.4,
+     "label": "Transcript with HTML tags displayed as text"
+    }
+   ],
+   "at": "2026-11-24T12:04:09.604Z",
+   "file": "5/T5.3-3.png",
+   "phase": "5",
+   "href": "shots/5/T5.3-3.png"
+  },
+  {
+   "taskId": "T5.3",
+   "kind": "proof",
+   "step": "AC4: failure state matches shared components",
+   "attempt": null,
+   "caption": "Autocaption failure state uses the shared error card.",
+   "annotations": [
+    {
+     "x": 53.8,
+     "y": 12.2,
+     "w": 39.4,
+     "h": 15.3,
+     "label": "Shared failure card"
+    }
+   ],
+   "at": "2026-11-24T12:04:09.782Z",
+   "file": "5/T5.3-4.png",
+   "phase": "5",
+   "href": "shots/5/T5.3-4.png"
+  },
+  {
+   "taskId": "T5.4",
+   "kind": "proof",
+   "step": "AC3: empty canvas disables Generate with the reason Draw something first.",
+   "attempt": null,
+   "caption": "Sketch tool with an empty canvas: Generate is disabled and the reason reads Draw something first.",
+   "annotations": [
+    {
+     "x": 40.6,
+     "y": 88.1,
+     "w": 10,
+     "h": 5.5,
+     "label": "Generate disabled on empty canvas"
+    },
+    {
+     "x": 6.9,
+     "y": 94.6,
+     "w": 43.8,
+     "h": 2.4,
+     "label": "Reason: Draw something first."
+    }
+   ],
+   "at": "2026-11-24T12:01:48.990Z",
+   "file": "5/T5.4-1.png",
+   "phase": "5",
+   "href": "shots/5/T5.4-1.png"
+  },
+  {
+   "taskId": "T5.4",
+   "kind": "proof",
+   "step": "AC1/AC4: drawing paints strokes; toolbar has brush, eraser, undo, clear; canvas has a text alternative",
+   "attempt": null,
+   "caption": "A stroke drawn with pointer events on the sketch canvas; brush and eraser, size, Undo and Clear are in the toolbar.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 18.2,
+     "w": 5.7,
+     "h": 5.5,
+     "label": "Brush (keyboard selectable)"
+    },
+    {
+     "x": 13.2,
+     "y": 18.2,
+     "w": 5.9,
+     "h": 5.5,
+     "label": "Eraser"
+    },
+    {
+     "x": 34.7,
+     "y": 18.2,
+     "w": 5.5,
+     "h": 5.5,
+     "label": "Undo removes the last stroke"
+    },
+    {
+     "x": 41.2,
+     "y": 18.2,
+     "w": 5.4,
+     "h": 5.5,
+     "label": "Clear asks for confirmation"
+    },
+    {
+     "x": 6.9,
+     "y": 25.7,
+     "w": 43.8,
+     "h": 70,
+     "label": "Canvas with the stroke"
+    }
+   ],
+   "at": "2026-11-24T12:02:02.652Z",
+   "file": "5/T5.4-2.png",
+   "phase": "5",
+   "href": "shots/5/T5.4-2.png"
+  },
+  {
+   "taskId": "T5.4",
+   "kind": "proof",
+   "step": "AC1: clear asks for confirmation",
+   "attempt": null,
+   "caption": "Pressing Clear asks Clear the whole sketch? with Clear and Keep before anything is erased.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 25.2,
+     "w": 24.2,
+     "h": 5.5,
+     "label": "Confirmation to clear the sketch"
+    }
+   ],
+   "at": "2026-11-24T12:02:59.063Z",
+   "file": "5/T5.4-3.png",
+   "phase": "5",
+   "href": "shots/5/T5.4-3.png"
+  },
+  {
+   "taskId": "T5.4",
+   "kind": "proof",
+   "step": "AC5: 375px layout, no horizontal scroll, tap targets at least 44px",
+   "attempt": null,
+   "caption": "At 375px the sketch canvas and toolbar fit the screen with no horizontal scroll.",
+   "annotations": [
+    {
+     "x": 4.3,
+     "y": 52,
+     "w": 91.5,
+     "h": 42.2,
+     "label": "Canvas fits 375px"
+    },
+    {
+     "x": 4.3,
+     "y": 37.7,
+     "w": 19.5,
+     "h": 5.4,
+     "label": "Brush"
+    },
+    {
+     "x": 25.9,
+     "y": 37.7,
+     "w": 20.2,
+     "h": 5.4,
+     "label": "Eraser"
+    }
+   ],
+   "at": "2026-11-24T12:03:48.856Z",
+   "file": "5/T5.4-4.png",
+   "phase": "5",
+   "href": "shots/5/T5.4-4.png"
+  },
+  {
+   "taskId": "T5.4",
+   "kind": "proof",
+   "step": "AC2: Generate uses the image route, one of 3 sketch models, image credit cost",
+   "attempt": null,
+   "caption": "Stubbed sketch run: the sketch is sent through the image route with Nano Banana 2 at the image cost of 1 credit and the result appears on the right.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 80.8,
+     "w": 43.8,
+     "h": 6.4,
+     "label": "Sketch model choice"
+    },
+    {
+     "x": 6.9,
+     "y": 91.9,
+     "w": 13,
+     "h": 3.3,
+     "label": "Image credit cost"
+    },
+    {
+     "x": 53.8,
+     "y": 12.2,
+     "w": 39.4,
+     "h": 70,
+     "label": "Generated result"
+    }
+   ],
+   "at": "2026-11-24T12:04:09.959Z",
+   "file": "5/T5.4-5.png",
+   "phase": "5",
+   "href": "shots/5/T5.4-5.png"
+  },
+  {
+   "taskId": "T5.4",
+   "kind": "proof",
+   "step": "AC2: credits path shared with image generation",
+   "attempt": null,
+   "caption": "Sketch with 0 credits on Seedream 4 (402 path stubbed).",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 91.9,
+     "w": 13,
+     "h": 3.3,
+     "label": "Cost shown"
+    },
+    {
+     "x": 86.5,
+     "y": 1.4,
+     "w": 5.3,
+     "h": 4.4,
+     "label": "Balance 0"
+    }
+   ],
+   "at": "2026-11-24T12:04:10.136Z",
+   "file": "5/T5.4-6.png",
+   "phase": "5",
+   "href": "shots/5/T5.4-6.png"
+  },
+  {
+   "taskId": "T5.4",
+   "kind": "proof",
+   "step": "AC3: empty canvas disables Generate with the reason \"Draw something first.\"",
+   "attempt": 4,
+   "caption": "Verifier retake: empty canvas, Generate disabled with the reason \"Draw something first.\"; empty-state copy now reads \"Draw a sketch, then describe the picture.\"",
+   "annotations": [
+    {
+     "x": 40.6,
+     "y": 88.1,
+     "w": 10,
+     "h": 5.5,
+     "label": "Generate disabled"
+    },
+    {
+     "x": 6.9,
+     "y": 94.6,
+     "w": 43.75,
+     "h": 2.4,
+     "label": "reason Draw something first."
+    },
+    {
+     "x": 53.75,
+     "y": 11,
+     "w": 39.4,
+     "h": 11.75,
+     "label": "current empty-state copy"
+    }
+   ],
+   "at": "2026-11-24T12:19:34.077Z",
+   "file": "5/T5.4-7.png",
+   "phase": "5",
+   "href": "shots/5/T5.4-7.png"
+  },
+  {
+   "taskId": "T5.4",
+   "kind": "proof",
+   "step": "AC5: 375px, no horizontal scroll, tap targets at least 44px",
+   "attempt": 4,
+   "caption": "Verifier retake at 375px: scrollWidth 375 = clientWidth; the brush size slider is now 44px tall (was 16px), Undo and Clear 44px.",
+   "annotations": [
+    {
+     "x": 16.6,
+     "y": 44.6,
+     "w": 34.4,
+     "h": 5.4,
+     "label": "size slider 44px tall"
+    }
+   ],
+   "at": "2026-11-24T12:22:32.606Z",
+   "file": "5/T5.4-8.png",
+   "phase": "5",
+   "href": "shots/5/T5.4-8.png"
+  },
+  {
+   "taskId": "T5.5",
+   "kind": "proof",
+   "step": "AC2: choosing a handoff opens the target with the asset preloaded",
+   "attempt": null,
+   "caption": "Handing an image to Image watermark opens the tool with the asset preloaded in the upload row.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 24.3,
+     "w": 43.8,
+     "h": 10,
+     "label": "Preloaded asset"
+    }
+   ],
+   "at": "2026-11-24T12:04:10.314Z",
+   "file": "5/T5.5-1.png",
+   "phase": "5",
+   "href": "shots/5/T5.5-1.png"
+  },
+  {
+   "taskId": "T5.5",
+   "kind": "proof",
+   "step": "AC3: foreign asset id shows the not-found state",
+   "attempt": null,
+   "caption": "A handoff with another user's asset id shows That file could not be found. No credits were used. and loads nothing.",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 20.4,
+     "w": 43.8,
+     "h": 19.6,
+     "label": "Not-found state"
+    }
+   ],
+   "at": "2026-11-24T12:04:10.491Z",
+   "file": "5/T5.5-2.png",
+   "phase": "5",
+   "href": "shots/5/T5.5-2.png"
+  },
+  {
+   "taskId": "T5.5",
+   "kind": "proof",
+   "step": "AC1: History items offer Use in... for supported assets",
+   "attempt": null,
+   "caption": "History item shows an Image Watermark chip and a Use in... action next to Download and Delete.",
+   "annotations": [
+    {
+     "x": 11.9,
+     "y": 53.5,
+     "w": 6.6,
+     "h": 6.9,
+     "label": "Use in... action"
+    },
+    {
+     "x": 3,
+     "y": 53.5,
+     "w": 8,
+     "h": 4.5,
+     "label": "Tool chip"
+    }
+   ],
+   "at": "2026-11-24T12:04:10.669Z",
+   "file": "5/T5.5-3.png",
+   "phase": "5",
+   "href": "shots/5/T5.5-3.png"
+  },
+  {
+   "taskId": "T5.5",
+   "kind": "proof",
+   "step": "AC5: 375px layout, no horizontal scroll",
+   "attempt": null,
+   "caption": "375px layout of a tool page reached from a handoff: no horizontal scroll.",
+   "annotations": [
+    {
+     "x": 4,
+     "y": 40,
+     "w": 92,
+     "h": 12,
+     "label": "Preloaded asset row at 375px"
+    }
+   ],
+   "at": "2026-11-24T12:04:10.848Z",
+   "file": "5/T5.5-4.png",
+   "phase": "5",
+   "href": "shots/5/T5.5-4.png"
+  },
+  {
+   "taskId": "T5.5",
+   "kind": "proof",
+   "step": "Visual pass: /video on the dev server",
+   "attempt": null,
+   "caption": "The Video studio page loads, the target that accepts an image handed off from a result or History (Use in... > Video image input).",
+   "annotations": [
+    {
+     "x": 6.9,
+     "y": 11,
+     "w": 43.8,
+     "h": 4.2,
+     "label": "Video studio"
+    }
+   ],
+   "at": "2026-11-24T12:04:23.726Z",
+   "file": "5/T5.5-5.png",
+   "phase": "5",
+   "href": "shots/5/T5.5-5.png"
+  },
+  {
+   "taskId": "T5.8",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "tools: image-watermark-success",
+   "annotations": [],
+   "at": "2026-11-24T11:38:56.716Z",
+   "file": "5/T5.8-1.png",
+   "phase": "5",
+   "href": "shots/5/T5.8-1.png"
+  },
+  {
+   "taskId": "T5.8",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "tools: autocaption-success",
+   "annotations": [],
+   "at": "2026-11-24T11:38:56.974Z",
+   "file": "5/T5.8-2.png",
+   "phase": "5",
+   "href": "shots/5/T5.8-2.png"
+  },
+  {
+   "taskId": "T5.8",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "tools: sketch-success",
+   "annotations": [],
+   "at": "2026-11-24T11:38:57.147Z",
+   "file": "5/T5.8-3.png",
+   "phase": "5",
+   "href": "shots/5/T5.8-3.png"
+  },
+  {
+   "taskId": "T5.8",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "tools: history-image",
+   "annotations": [],
+   "at": "2026-11-24T11:38:57.320Z",
+   "file": "5/T5.8-4.png",
+   "phase": "5",
+   "href": "shots/5/T5.8-4.png"
+  },
+  {
+   "taskId": "T5.8",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "tools: handoff-not-found",
+   "annotations": [],
+   "at": "2026-11-24T11:38:57.492Z",
+   "file": "5/T5.8-5.png",
+   "phase": "5",
+   "href": "shots/5/T5.8-5.png"
+  },
+  {
+   "taskId": "T5.8",
+   "kind": "proof",
+   "step": null,
+   "attempt": null,
+   "caption": "tools: mobile-375-sketch",
+   "annotations": [],
+   "at": "2026-11-24T11:38:57.668Z",
+   "file": "5/T5.8-6.png",
+   "phase": "5",
+   "href": "shots/5/T5.8-6.png"
   }
  ],
  "deliverables": [
+  {
+   "at": "2026-11-26T09:18:16.381Z",
+   "type": "deliverable",
+   "tasks": [
+    "T5.2",
+    "T5.3",
+    "T5.4"
+   ],
+   "text": "Phase 5 tools: video watermark, autocaption, sketch-to-image verified"
+  },
   {
    "at": "2026-11-24T10:02:28.863Z",
    "type": "deliverable",
@@ -9167,6 +10329,78 @@ window.DASHBOARD = {
   }
  ],
  "advisories": [
+  {
+   "at": "2026-11-26T09:01:46.120Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.8"
+   ],
+   "text": "tools.spec does not assert the video watermark caption text or that FULLJOURNEY.AI is absent from the video-watermark POST body"
+  },
+  {
+   "at": "2026-11-26T09:01:45.954Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.2"
+   ],
+   "text": "VIDEO_WATERMARK_PLACEMENT=null (PLAN G10 fallback); constant comment says model source unread, so step 1 of G10 is not recorded as done"
+  },
+  {
+   "at": "2026-11-26T09:01:45.741Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.4"
+   ],
+   "text": "SPEC R-TOOL-SK-1 and T5.4 Do name an upload-a-sketch option; page ships draw-only and the empty copy was changed to \"Draw a sketch, then describe the picture.\""
+  },
+  {
+   "at": "2026-11-24T12:20:31.663Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.9"
+   ],
+   "text": "History.test.ts hits ECONNREFUSED :3000 via /media/assets fetch (unmocked network in a unit test; passes, pre-existing from phase 4)"
+  },
+  {
+   "at": "2026-11-24T12:20:31.500Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.7"
+   ],
+   "text": "WatermarkForm.vue 87.5% funcs (line 41 v-model update from ToolFileInput untested); HandoffMenu.vue 92% branches (28,91); above 80% with justification"
+  },
+  {
+   "at": "2026-11-24T12:20:31.341Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.6"
+   ],
+   "text": "Lint warnings in phase-5 specs: routes/media.test.ts:123,680 unused index; web useStudioHandoff.test.ts:114 floating promise"
+  },
+  {
+   "at": "2026-11-24T12:20:31.181Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.9"
+   ],
+   "text": "Gate fixes outside Files: stores/generate.ts (402 INSUFFICIENT_CREDITS dialog, sketch reference override) and SketchToolbar.vue; declared EXTRA, suites green"
+  },
+  {
+   "at": "2026-11-24T12:20:31.020Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.4"
+   ],
+   "text": "Sketch upload path (SPEC R-TOOL-SK-1 \"or upload an image/sketch\") not built; empty-state copy changed from the Do line to \"Draw a sketch, then describe the picture.\""
+  },
+  {
+   "at": "2026-11-24T12:20:30.853Z",
+   "type": "advisory",
+   "tasks": [
+    "T5.9"
+   ],
+   "text": "TASKS.md T5.9 AC1/V4 still name voice-clone.spec.ts; voice cloning descoped by owner (Q5 answered 2026-11-24); V4 run without it"
+  },
   {
    "at": "2026-11-24T10:02:12.637Z",
    "type": "advisory",
@@ -9554,691 +10788,721 @@ window.DASHBOARD = {
  ],
  "activity": [
   {
-   "at": "2026-11-24T10:02:28.863Z",
+   "at": "2026-11-26T09:18:16.381Z",
    "type": "deliverable",
    "tasks": [
-    "T4.1",
-    "T4.2",
-    "T4.3",
-    "T4.4",
-    "T4.5",
-    "T4.6",
-    "T4.7",
-    "T4.8"
+    "T5.2",
+    "T5.3",
+    "T5.4"
    ],
-   "text": "Phase 4 video studio: API route, page, uploads, draft/render-final, unit and e2e tests",
-   "files": [
-    "apps/web/src/pages/Video.vue"
-   ]
+   "text": "Phase 5 tools: video watermark, autocaption, sketch-to-image verified"
   },
   {
-   "at": "2026-11-24T10:02:24.259Z",
+   "at": "2026-11-26T09:18:11.211Z",
    "tasks": [
-    "T4.8"
+    "T5.4"
    ],
-   "attempt": "3",
+   "attempt": "9",
    "type": "verify_passed",
-   "evidence": "V1 `bun run check` exits 0 with 0 errors and 17 warnings (the same as a7). V2 root `bun run test` gives 361 files, 4190/4190. V3 check:model-docs passes (15 models). V4 `video.spec + media-nav-player.spec --repeat-each=2 --workers=1` gives 41/41 in 57.6s, finishing 15:31:53, which is more than 10 minutes after the V1 run. The media-nav-player.spec gate edit swaps the stale placeholder testid for `",
-   "fingerprint": "6f7a49054ffc8439efa91c8a7fd16f0ce09f0f98ffd276d57c555c14f94ad06a",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a10.md"
+   "evidence": "`bun run check` exits 0, which clears its only a9 blocker (V2). tools e2e 15/15. The ACs proven in a9 still hold, and the files are unchanged.",
+   "fingerprint": "b0712743704c4988e6bac0ba0e9c834219a289757385a71369268a31fec03377",
+   "report": ".dashboard/media-studio/reports/phase-5-verifier-a15.md"
   },
   {
-   "at": "2026-11-24T10:02:24.258Z",
+   "at": "2026-11-26T09:18:11.211Z",
    "tasks": [
-    "T4.7"
+    "T5.3"
    ],
-   "attempt": "3",
+   "attempt": "9",
    "type": "verify_passed",
-   "evidence": "Verify V1 `bunx playwright test e2e/qa/video.spec.ts --repeat-each=3 --workers=1` (E2E_SERVER=dev) gives 37/37 x3 clean in 1.0m, finishing 15:11:15. The a7 BLOCKING flake is fixed. `holdProgress()` (fixtures/media.ts:216-225) gates the /progress route, and the spec asserts `job-progress` visible plus `result-card` count 0 before release (video.spec.ts:157-173). That is stronger than before, not we",
-   "fingerprint": "818208da0f66d59c301a050cb388aecbf5f4377c0850b1cde2a2a98fad0ea3a3",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a10.md"
+   "evidence": "the same check fix (the tool-video purpose lives in useToolVideoUpload.ts). `bun run check` exits 0. Web unit 2383/2383. tools e2e 15/15. The ACs proven in a9 still hold, and the files are unchanged.",
+   "fingerprint": "8703a034350265a06d9966e55157d42662bd678ea66e25f529e646e8c941f82d",
+   "report": ".dashboard/media-studio/reports/phase-5-verifier-a15.md"
   },
   {
-   "at": "2026-11-24T10:02:12.637Z",
-   "type": "advisory",
+   "at": "2026-11-26T09:18:11.210Z",
    "tasks": [
-    "T4.7"
+    "T5.2"
    ],
-   "text": "Verify V1 has no --workers=1; it was added because of the upload rate limit (30 per 10 min)"
+   "attempt": "9",
+   "type": "verify_passed",
+   "evidence": "a9 blocker fixed. `bun run check` exits 0 (0 errors, 18 pre-existing warnings), and PREVIEW_PURPOSES in useToolVideoUpload.ts is now on one line. Web unit 2383/2383. tools e2e 15/15 against the dev server. The behaviour ACs were proven in a9 and their files are unchanged since then.",
+   "fingerprint": "ee7ac6c3fe57ed57ebaab1ead47c98bcfa090186650efbd12e302c93ba7ebe0e",
+   "report": ".dashboard/media-studio/reports/phase-5-verifier-a15.md"
   },
   {
-   "at": "2026-11-24T10:02:12.497Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.7"
-   ],
-   "text": "Shot T4.7-9 was mouse-opened so no focus ring; verifier retook as 4/T4.7-11 via keyboard (focus-visible ring on Cancel)"
-  },
-  {
-   "at": "2026-11-24T10:02:12.353Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.7"
-   ],
-   "text": "Low credits dialog (shot 4/T4.7-10) says \"To generate an AI image\" on the Video studio; shared copy is not feature-aware"
-  },
-  {
-   "at": "2026-11-24T09:29:10.799Z",
+   "at": "2026-11-26T09:16:41.470Z",
    "type": "verify_started",
    "tasks": [
-    "T4.7",
-    "T4.8"
+    "T5.2",
+    "T5.3",
+    "T5.4"
    ],
-   "attempt": "3"
+   "attempt": "9"
   },
   {
-   "at": "2026-11-24T09:29:07.868Z",
+   "at": "2026-11-26T09:16:38.976Z",
+   "tasks": [
+    "T5.4"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Unchanged since a8. The sketch is a fixed sketch.png of type image/png from canvas.toBlob, sent through the existing /generate/reference-images and /generate/image routes, which do their own validation (validateReferenceImageUrls) and billing. The result <img :src> is bound to the store URL, and there is no v-html, innerHTML, target=_blank or secret.",
+   "fingerprint": "b0712743704c4988e6bac0ba0e9c834219a289757385a71369268a31fec03377",
+   "report": ".dashboard/media-studio/reports/phase-5-review-security-opus-a14.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-26T09:16:38.976Z",
+   "tasks": [
+    "T5.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "The server is unchanged since a7 and a8. POST /generate/tools/autocaption bills with getAutocaptionCreditCost from the stored durationSec, not from any client value. The new client duration check in useToolVideoUpload.ts adds no trust in client input. CaptionResult.vue still renders the transcript through {{ }} inside a <pre>, with no v-html, and uses a revoked text/plain Blob URL for download.",
+   "fingerprint": "8703a034350265a06d9966e55157d42662bd678ea66e25f529e646e8c941f82d",
+   "report": ".dashboard/media-studio/reports/phase-5-review-security-opus-a14.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-26T09:16:38.976Z",
+   "tasks": [
+    "T5.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Since a8, the only source file that changed is apps/web/src/composables/useToolVideoUpload.ts; find -newer shows no server or shared files. Its diff adds the tool-image and tool-video purposes, client-side type, size and duration checks (MAX_TOOL_VIDEO_BYTES and MAX_TOOL_VIDEO_SECONDS), and object-URL previews for those purposes. These are UX gates only. The server still enforces the limits: resol",
+   "fingerprint": "ee7ac6c3fe57ed57ebaab1ead47c98bcfa090186650efbd12e302c93ba7ebe0e",
+   "report": ".dashboard/media-studio/reports/phase-5-review-security-opus-a14.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-26T09:16:38.799Z",
+   "tasks": [
+    "T5.4"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Canvas, toolbar, clear confirm, result and 375px layout are consistent.",
+   "fingerprint": "b0712743704c4988e6bac0ba0e9c834219a289757385a71369268a31fec03377",
+   "report": ".dashboard/media-studio/reports/phase-5-review-ui-sonnet-a14.md",
+   "verdict": "PASS",
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-26T09:16:38.799Z",
+   "tasks": [
+    "T5.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Empty state, 22-credit billing, result with plain-text transcript, failure card and 375px layout are consistent.",
+   "fingerprint": "8703a034350265a06d9966e55157d42662bd678ea66e25f529e646e8c941f82d",
+   "report": ".dashboard/media-studio/reports/phase-5-review-ui-sonnet-a14.md",
+   "verdict": "PASS",
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-26T09:16:38.799Z",
+   "tasks": [
+    "T5.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Empty state, over-limit rejection copy, loaded video with text preview, failure card and 375px layout read clearly on the design tokens; no horizontal scroll (shots 1-8).",
+   "fingerprint": "ee7ac6c3fe57ed57ebaab1ead47c98bcfa090186650efbd12e302c93ba7ebe0e",
+   "report": ".dashboard/media-studio/reports/phase-5-review-ui-sonnet-a14.md",
+   "verdict": "PASS",
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-26T09:16:38.616Z",
+   "tasks": [
+    "T5.4"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Passed in a13. Shots T5.4-7 (empty-state copy, disabled Generate with \"Draw something first.\"), T5.4-3 (Clear confirmation), T5.4-6 (0 credits) and T5.4-8 (375px) cover the required states. No code has changed since.",
+   "fingerprint": "b0712743704c4988e6bac0ba0e9c834219a289757385a71369268a31fec03377",
+   "report": ".dashboard/media-studio/reports/phase-5-review-ux-sonnet-a14.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-26T09:16:38.616Z",
+   "tasks": [
+    "T5.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Passed in a13. Shots T5.3-1, T5.3-2 (375px, disabled Generate with reason), T5.3-3 (result, Copy and Download) and T5.3-4 (error card) cover the required states. No code has changed since.",
+   "fingerprint": "8703a034350265a06d9966e55157d42662bd678ea66e25f529e646e8c941f82d",
+   "report": ".dashboard/media-studio/reports/phase-5-review-ux-sonnet-a14.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-26T09:16:38.615Z",
+   "tasks": [
+    "T5.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Passed in a13 with no blocking items. Shots T5.2-1 (empty state, cost, Generate disabled with \"Add a video first.\"), T5.2-3 (over-limit rejection), T5.2-4 (shared error card with retry) and T5.2-6/T5.2-8 (375px, no overflow, 44px Choose video) still apply. No code has changed since.",
+   "fingerprint": "ee7ac6c3fe57ed57ebaab1ead47c98bcfa090186650efbd12e302c93ba7ebe0e",
+   "report": ".dashboard/media-studio/reports/phase-5-review-ux-sonnet-a14.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-26T09:16:38.441Z",
+   "tasks": [
+    "T5.4"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "The a13 verdict stands: the ACs on strokes and undo, flattened PNG as a reference image, the empty-canvas message, keyboard access and 375px layout are all met.",
+   "fingerprint": "b0712743704c4988e6bac0ba0e9c834219a289757385a71369268a31fec03377",
+   "report": ".dashboard/media-studio/reports/phase-5-review-code-sonnet-a14.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-26T09:16:38.440Z",
+   "tasks": [
+    "T5.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "The a13 verdict stands: the Download link on the transcript fetch-failure path, the copy-timer cleanup and the billing criterion are all met.",
+   "fingerprint": "8703a034350265a06d9966e55157d42662bd678ea66e25f529e646e8c941f82d",
+   "report": ".dashboard/media-studio/reports/phase-5-review-code-sonnet-a14.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-26T09:16:38.440Z",
+   "tasks": [
+    "T5.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1 is met: `resolveToolUpload` rejects a video with no stored duration or one over 120 s before `queueMediaJob`, so nothing is billed. The client check in `useToolVideoUpload` also rejects a missing or over-long duration. The 100 MB cap is `MAX_TOOL_VIDEO_BYTES` in the upload rules. ; AC2 is met: `getVideoWatermarkCreditCost()` is the flat per-run cost, and the stored duration is used only for th",
+   "fingerprint": "ee7ac6c3fe57ed57ebaab1ead47c98bcfa090186650efbd12e302c93ba7ebe0e",
+   "report": ".dashboard/media-studio/reports/phase-5-review-code-sonnet-a14.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-26T09:15:42.796Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T5.4"
+   ],
+   "fingerprint": "b0712743704c4988e6bac0ba0e9c834219a289757385a71369268a31fec03377",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-26T09:15:42.796Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T5.3"
+   ],
+   "fingerprint": "8703a034350265a06d9966e55157d42662bd678ea66e25f529e646e8c941f82d",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-26T09:15:42.796Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T5.2"
+   ],
+   "fingerprint": "ee7ac6c3fe57ed57ebaab1ead47c98bcfa090186650efbd12e302c93ba7ebe0e",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-26T09:04:14.577Z",
+   "type": "question",
+   "tasks": [
+    "T5.2"
+   ],
+   "id": "Q30",
+   "text": "Plan reports ASK exhausted: three spurious unparseable-report INCONCLUSIVE events from a code-review report (since fixed and re-recorded as PASS). All 4 reviewers PASS on T5.2-T5.4; last verifier FAIL was only a formatting error, since fixed (bun run check exit 0). Needs a verifier re-run which the planner will not schedule."
+  },
+  {
+   "at": "2026-11-26T09:04:07.422Z",
+   "tasks": [
+    "T5.4"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Unchanged since a8. The sketch is a fixed sketch.png of type image/png from canvas.toBlob, sent through the existing /generate/reference-images and /generate/image routes, which do their own validation (validateReferenceImageUrls) and billing. The result <img :src> is bound to the store URL, and there is no v-html, innerHTML, target=_blank or secret.",
+   "fingerprint": "69081ad7a5167017eab698784da120e6b0cabe40c7e061911215332154f159e7",
+   "report": ".dashboard/media-studio/reports/phase-5-review-security-opus-a13.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-26T09:04:07.422Z",
+   "tasks": [
+    "T5.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "The server is unchanged since a7 and a8. POST /generate/tools/autocaption bills with getAutocaptionCreditCost from the stored durationSec, not from any client value. The new client duration check in useToolVideoUpload.ts adds no trust in client input. CaptionResult.vue still renders the transcript through {{ }} inside a <pre>, with no v-html, and uses a revoked text/plain Blob URL for download.",
+   "fingerprint": "d7192f0a756130e0dea7eacf4bc082708c5d921ce0101e78d2aa6f6451194303",
+   "report": ".dashboard/media-studio/reports/phase-5-review-security-opus-a13.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-26T09:04:07.421Z",
+   "tasks": [
+    "T5.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Since a8, the only source file that changed is apps/web/src/composables/useToolVideoUpload.ts; find -newer shows no server or shared files. Its diff adds the tool-image and tool-video purposes, client-side type, size and duration checks (MAX_TOOL_VIDEO_BYTES and MAX_TOOL_VIDEO_SECONDS), and object-URL previews for those purposes. These are UX gates only. The server still enforces the limits: resol",
+   "fingerprint": "50e5b7765861eceec5537b07574bf2fe6426a6fef791b62348381c6ab5119024",
+   "report": ".dashboard/media-studio/reports/phase-5-review-security-opus-a13.md",
+   "verdict": "PASS",
+   "reviewer": "security"
+  },
+  {
+   "at": "2026-11-26T09:04:01.224Z",
+   "tasks": [
+    "T5.4"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Unchanged since a8. The ACs on strokes and undo, flattened PNG as a reference image, the empty-canvas message, keyboard access and 375px layout all remain met.",
+   "fingerprint": "69081ad7a5167017eab698784da120e6b0cabe40c7e061911215332154f159e7",
+   "report": ".dashboard/media-studio/reports/phase-5-review-code-sonnet-a13.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-26T09:04:01.224Z",
+   "tasks": [
+    "T5.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Unchanged since a8. The Download link on the transcript fetch-failure path, the copy-timer cleanup and the billing criterion all remain met.",
+   "fingerprint": "d7192f0a756130e0dea7eacf4bc082708c5d921ce0101e78d2aa6f6451194303",
+   "report": ".dashboard/media-studio/reports/phase-5-review-code-sonnet-a13.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-26T09:04:01.223Z",
+   "tasks": [
+    "T5.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "AC1 is met: `resolveToolUpload` rejects a video with no stored duration or one over 120 s before `queueMediaJob`, so nothing is billed. The client check in `useToolVideoUpload` also rejects a missing or over-long duration. The 100 MB cap is `MAX_TOOL_VIDEO_BYTES` in the upload rules. ; AC2 is met: `getVideoWatermarkCreditCost()` is the flat per-run cost, and the stored duration is used only for th",
+   "fingerprint": "50e5b7765861eceec5537b07574bf2fe6426a6fef791b62348381c6ab5119024",
+   "report": ".dashboard/media-studio/reports/phase-5-review-code-sonnet-a13.md",
+   "verdict": "PASS",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-26T09:03:57.168Z",
+   "tasks": [
+    "T5.4"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Canvas, toolbar, clear confirm, result and 375px layout are consistent (unchanged since the last pass).",
+   "fingerprint": "69081ad7a5167017eab698784da120e6b0cabe40c7e061911215332154f159e7",
+   "report": ".dashboard/media-studio/reports/phase-5-review-ui-sonnet-a13.md",
+   "verdict": "PASS",
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-26T09:03:57.168Z",
+   "tasks": [
+    "T5.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Empty state, 22-credit billing, result with plain-text transcript, failure card and 375px layout are consistent (unchanged since the last pass).",
+   "fingerprint": "d7192f0a756130e0dea7eacf4bc082708c5d921ce0101e78d2aa6f6451194303",
+   "report": ".dashboard/media-studio/reports/phase-5-review-ui-sonnet-a13.md",
+   "verdict": "PASS",
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-26T09:03:57.167Z",
+   "tasks": [
+    "T5.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Empty state, over-limit rejection copy, loaded video with text preview, failure card and 375px layout read clearly on the design tokens; no horizontal scroll (shots 1-8).",
+   "fingerprint": "50e5b7765861eceec5537b07574bf2fe6426a6fef791b62348381c6ab5119024",
+   "report": ".dashboard/media-studio/reports/phase-5-review-ui-sonnet-a13.md",
+   "verdict": "PASS",
+   "reviewer": "ui"
+  },
+  {
+   "at": "2026-11-26T09:03:54.141Z",
+   "tasks": [
+    "T5.4"
+   ],
+   "type": "verify_inconclusive",
+   "text": "unparseable-report",
+   "sigs": [
+    "T5.4|inconclusive|unparseable-report"
+   ],
+   "report": ".dashboard/media-studio/reports/phase-5-review-code-sonnet-a13.md",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-26T09:03:54.141Z",
+   "tasks": [
+    "T5.3"
+   ],
+   "type": "verify_inconclusive",
+   "text": "unparseable-report",
+   "sigs": [
+    "T5.3|inconclusive|unparseable-report"
+   ],
+   "report": ".dashboard/media-studio/reports/phase-5-review-code-sonnet-a13.md",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-26T09:03:54.140Z",
+   "tasks": [
+    "T5.2"
+   ],
+   "type": "verify_inconclusive",
+   "text": "unparseable-report",
+   "sigs": [
+    "T5.2|inconclusive|unparseable-report"
+   ],
+   "report": ".dashboard/media-studio/reports/phase-5-review-code-sonnet-a13.md",
+   "reviewer": "code"
+  },
+  {
+   "at": "2026-11-26T09:03:47.196Z",
+   "tasks": [
+    "T5.4"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Passed in a8. Shots T5.4-7 (empty-state copy, disabled Generate with \"Draw something first.\"), T5.4-3 (Clear confirmation), T5.4-6 (0 credits) and T5.4-8 (375px) cover the required states.",
+   "fingerprint": "69081ad7a5167017eab698784da120e6b0cabe40c7e061911215332154f159e7",
+   "report": ".dashboard/media-studio/reports/phase-5-review-ux-sonnet-a13.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-26T09:03:47.196Z",
+   "tasks": [
+    "T5.3"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Passed in a7 and a8. Shots T5.3-1, T5.3-2 (375px, disabled Generate with reason), T5.3-3 (result, Copy and Download) and T5.3-4 (error card) cover the required states.",
+   "fingerprint": "d7192f0a756130e0dea7eacf4bc082708c5d921ce0101e78d2aa6f6451194303",
+   "report": ".dashboard/media-studio/reports/phase-5-review-ux-sonnet-a13.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-26T09:03:47.195Z",
+   "tasks": [
+    "T5.2"
+   ],
+   "type": "reviewer_verdict",
+   "evidence": "Passed in a7 with no blocking items. Shots T5.2-1 (empty state, cost, Generate disabled with \"Add a video first.\"), T5.2-3 (over-limit rejection), T5.2-4 (shared error card with retry) and T5.2-6/T5.2-8 (375px, no overflow, 44px Choose video) still apply. The only change since is a formatting fix in useToolVideoUpload.ts, which does not change behaviour.",
+   "fingerprint": "50e5b7765861eceec5537b07574bf2fe6426a6fef791b62348381c6ab5119024",
+   "report": ".dashboard/media-studio/reports/phase-5-review-ux-sonnet-a13.md",
+   "verdict": "PASS",
+   "reviewer": "ux"
+  },
+  {
+   "at": "2026-11-26T09:03:23.297Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T5.4"
+   ],
+   "fingerprint": "69081ad7a5167017eab698784da120e6b0cabe40c7e061911215332154f159e7",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-26T09:03:00.388Z",
+   "type": "task_started",
+   "tasks": [
+    "T5.4"
+   ],
+   "attempt": "4"
+  },
+  {
+   "at": "2026-11-26T09:03:00.219Z",
+   "type": "build_started",
+   "tasks": [
+    "T5.4"
+   ],
+   "attempt": "4"
+  },
+  {
+   "at": "2026-11-26T09:02:56.148Z",
+   "type": "preflight_passed",
+   "tasks": [
+    "T5.3"
+   ],
+   "fingerprint": "d7192f0a756130e0dea7eacf4bc082708c5d921ce0101e78d2aa6f6451194303",
+   "slop": "PASS"
+  },
+  {
+   "at": "2026-11-26T09:02:36.881Z",
+   "type": "task_started",
+   "tasks": [
+    "T5.3"
+   ],
+   "attempt": "4"
+  },
+  {
+   "at": "2026-11-26T09:02:36.713Z",
+   "type": "build_started",
+   "tasks": [
+    "T5.3"
+   ],
+   "attempt": "4"
+  },
+  {
+   "at": "2026-11-26T09:02:33.388Z",
    "type": "dirty_snapshot",
    "tasks": [],
    "hashes": {
-    "agent_docs/media-studio/TASKS.md": "9047534f5d10477c97650dc17bda9ef4709659d3",
-    "apps/api/src/queue/generation-worker.ts": "2918bd544f2ff595b06bb00228791f12ea4ebbd0",
-    "apps/api/src/routes/media.test.ts": "96ac68ac0f7980304d45225515da18c05c92b408",
-    "apps/api/src/routes/media.ts": "13e96dc9de2bbcdcfe45070e00e7e37faf18bca3",
-    "apps/api/src/services/media-asset-service.ts": "04d69fa3745074c66d3ba1994a87ac46d133aa49",
-    "apps/api/src/services/media-service.test.ts": "e355cc814377e13991967383388a3116db88eb03",
-    "apps/api/src/services/media-service.ts": "4b1450d3c9781a45602e2e72e2e31aafaf6d6b71",
-    "apps/web/e2e/fixtures/media.ts": "87f361cd2340ee9454b5d6285db3860beaa2dd26",
-    "apps/web/e2e/qa/media-nav-player.spec.ts": "9cd47dacd607e734d006df7f4978f803f56c3080",
-    "apps/web/src/components.d.ts": "a0ef84be23e55bfd75d23238cda2b47d47489bdf",
-    "apps/web/src/router/index.ts": "6c4df4ad0857988f12fccfa247ec3e8e0ffc95a5",
-    "packages/shared/src/schemas/index.ts": "2d09447c0616d653a93a4c0b868015701cc7f606",
-    "packages/shared/src/schemas/media.ts": "5d2a1bf7adda6590e50bb15651cf038df1726706",
-    "apps/web/e2e/qa/video.spec.ts": "d7d8f566016d60960724ce36458951051b7378ca",
-    "apps/web/src/components/Video/AttachedFile.vue": "3b88df102c311cc7aaf2db1ac3ddb3067b275ad3",
-    "apps/web/src/components/Video/AudioInput.test.ts": "6976e0c45dedaa02c0dded5dea874d2f557d89a8",
-    "apps/web/src/components/Video/AudioInput.vue": "b2cde069cbdab2a1913b746a43854ca9884b48f5",
-    "apps/web/src/components/Video/DraftToggle.test.ts": "762e5ecfce364ddc6534a6e55912212551cb0aa9",
-    "apps/web/src/components/Video/DraftToggle.vue": "fe25bfccae86352b4791b104ea6b5ea96ff2523a",
-    "apps/web/src/components/Video/ImageInput.test.ts": "1700aedbfdb6ea6a0625fb6ad2fc4f0f5fd67f2c",
-    "apps/web/src/components/Video/ImageInput.vue": "f71efffe46b7ac3f6c80bdf57c46ed99ec69599c",
-    "apps/web/src/components/Video/UploadDropZone.vue": "d0eeec79a5f1d27e6fa000628640fe8e40e27f66",
-    "apps/web/src/components/Video/VideoComposer.test.ts": "7e2d2621da1d4e545112e187a07db3d661cf9796",
-    "apps/web/src/components/Video/VideoComposer.vue": "9c313a7962877a42459986258d7ac60424bdc5bc",
-    "apps/web/src/components/Video/VideoResult.vue": "1aca72d7ee3124a392c3d804671cf5cfa989b2d7",
-    "apps/web/src/components/Video/VideoSettings.vue": "62ab5234e39af47f149ab1bbf11d9218abc563d6",
-    "apps/web/src/composables/useToolVideoUpload.test.ts": "d66b4d7dcf6a55a09c337137cbc92731a87fbe5d",
-    "apps/web/src/composables/useToolVideoUpload.ts": "68c05f8149b0b61f2af5701eab7c502d7e6b9661",
-    "apps/web/src/pages/Video.vue": "485b2c63eb70feca027afbaff6ee8d1b2ab0e67c"
+    "agent_docs/media-studio/TASKS.md": "f4a7118bdd0e452fa89856d3a73ccc8c6f50168f",
+    "apps/api/src/lib/fake-cloudinary.ts": "3f00344de848fb12a89fa509bca5eaa5bfefada8",
+    "apps/api/src/models/media-asset.ts": "9919fdff2f7afa3ab66c78df4546225c7f4530b1",
+    "apps/api/src/queue/generation-worker.ts": "3ba6e25f61ff07354b54ca09c08a5f208f31e62b",
+    "apps/api/src/routes/media.test.ts": "c83ea20074edf32796cc3cd09d104c1c15c45656",
+    "apps/api/src/routes/media.ts": "4bf58ce0155f0b961d8555c702f3ecc837b9875c",
+    "apps/api/src/services/cloudinary-service.ts": "d8870cce6386c5c4bf2be078e195bbbeea5e738f",
+    "apps/api/src/services/media-asset-service.test.ts": "9c78357d09c107f33717b7c686c5def2a191a1a2",
+    "apps/api/src/services/media-asset-service.ts": "a99b35aa500f293e21b07debbdd68d2fe05e27ef",
+    "apps/api/src/services/media-service.test.ts": "15e9915eac169fc1f39acc32e1ad8ebfd1e37bcc",
+    "apps/api/src/services/media-service.ts": "3780046c166cd1d720b980776fb95b5760313739",
+    "apps/api/src/utils/cloudinary.ts": "57d9e2cd5c50eecac2064f31948abc31fa841456",
+    "apps/web/e2e/fixtures/media.ts": "eb9abafcbe130e57129f47280e5e640ab713c1c7",
+    "apps/web/e2e/qa/media-nav-player.spec.ts": "a6ab8144471d3a7798e4096b01a25cee95113106",
+    "apps/web/e2e/support/mediaAssetSeed.ts": "d1a9e8faf795525fac020d51c5425bd036be3436",
+    "apps/web/src/components.d.ts": "0577ea7920e6b901b170dd8cb18854cfc14037f3",
+    "apps/web/src/components/History/History.vue": "ceac07bf77c9b3f60d3f87b1d8e2efc2eaa7f9f8",
+    "apps/web/src/components/Studio/ResultCard.vue": "35566f52444adff7d25d60544e95fac1022e7027",
+    "apps/web/src/components/Studio/StudioEmptyState.vue": "464709408750bae1ab72608e5c76ae02553e7028",
+    "apps/web/src/composables/useToolVideoUpload.ts": "d713d5cc3bd76ea7028ed4f61fb7fbe51484d28f",
+    "apps/web/src/pages/Video.vue": "50b45e7d8faa3d0837832e95fc234c405e2c9d77",
+    "apps/web/src/router/index.ts": "6fc5aaaa598a504af12a19387ef440bb39877c71",
+    "apps/web/src/stores/generate.ts": "2d5c7e155355518d0d41c5700a53f472e345e357",
+    "packages/shared/src/models/media-limits.ts": "fdbf06cd1016a47857cc5364e0e42b86a033ecb0",
+    "packages/shared/src/models/registry.test.ts": "7d0b9a57824b3052de046dc03fe314e48ce96759",
+    "packages/shared/src/models/registry.ts": "613087ff8c90efea3994955f37cfdcb3e29fd606",
+    "packages/shared/src/schemas/index.ts": "f597f15bf23c9c8059b76a423865c0d6bee37602",
+    "packages/shared/src/schemas/media.ts": "a6ea5957bd79ea8a9d45efb4586812caa5d336c3",
+    "packages/shared/src/types/domain.ts": "9d80118c74ea763e35ee30ca03b1c7057870a40c",
+    "apps/web/e2e/fixtures/assets/transcript.txt": "05b5ee0d16709af4c03cbff6756c37c6699654be",
+    "apps/web/e2e/qa/tools.spec.ts": "62262b6e8f20b3b827a956df30dadc566aabdd13",
+    "apps/web/e2e/scenarios/tools.feature.md": "5627d5ba76ad579ce1259d76b8fdf588e699cc01",
+    "apps/web/src/components/Studio/HandoffMenu.test.ts": "0a150d1657fb37c0fdc8227a181359e786cd9a64",
+    "apps/web/src/components/Studio/HandoffMenu.vue": "7eb4dbeda5963bf33cc8e872728bfd04b9e23e73",
+    "apps/web/src/components/Tools/CaptionResult.test.ts": "b2f02adf5c7e3d425c69a000df053e85a604a4f9",
+    "apps/web/src/components/Tools/CaptionResult.vue": "6612b78554254e6f3b0fc4bcc855b67cdbdb6501",
+    "apps/web/src/components/Tools/SketchCanvas.vue": "f4e0424e753fe3a172a257f1e4537bfbc0d35662",
+    "apps/web/src/components/Tools/SketchToolbar.vue": "3ff4da84bc3fbcef56d7f742bdfdb81976e12c4b",
+    "apps/web/src/components/Tools/ToolFileInput.vue": "cd9ce3a4e1237812b13d38c64a7bff5c919a8beb",
+    "apps/web/src/components/Tools/ToolResultPanel.vue": "06cccfb36efcc2a02e354047f1f0b56f64abdef8",
+    "apps/web/src/components/Tools/VideoWatermarkForm.vue": "247d896add35aafc287ccba0547e01f9880e93b6",
+    "apps/web/src/components/Tools/WatermarkForm.test.ts": "3248ef4b4ef12f683c805f3a3fec8b1345be83c2",
+    "apps/web/src/components/Tools/WatermarkForm.vue": "bfd7ea7679443dc3ae20f5bd0a2f9201922fbdab",
+    "apps/web/src/composables/useSketchCanvas.test.ts": "929241584288e6c1e1a52dd579d43b589d4bc48d",
+    "apps/web/src/composables/useSketchCanvas.ts": "6502d7c12e041bbfa9e0b4efbcc04983c4948055",
+    "apps/web/src/composables/useStudioHandoff.test.ts": "9dec9fb9344c5046fa44ad73ee352b371bdb1b20",
+    "apps/web/src/composables/useStudioHandoff.ts": "7de8ac31876c01a91fc9b64d574eac52e3ff577a",
+    "apps/web/src/pages/ToolAutocaption.vue": "9db2ec70f7a3a809b7cd3752ff7d4d8977b63dbf",
+    "apps/web/src/pages/ToolImageWatermark.vue": "afa0ef5f28baa7e80a9a5cd05b3f5d57143df488",
+    "apps/web/src/pages/ToolSketchToImage.vue": "67511046b06e4dc2688f5ebabdb03166d579ae06",
+    "apps/web/src/pages/ToolVideoWatermark.vue": "f991136fa7e257f713c8483470c8e0b70879ab2f"
    }
   },
   {
-   "at": "2026-11-24T09:29:07.708Z",
+   "at": "2026-11-26T09:02:33.240Z",
    "type": "preflight_passed",
    "tasks": [
-    "T4.8"
+    "T5.2"
    ],
-   "fingerprint": "6f7a49054ffc8439efa91c8a7fd16f0ce09f0f98ffd276d57c555c14f94ad06a"
-  },
-  {
-   "at": "2026-11-24T09:29:07.708Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.7"
-   ],
-   "fingerprint": "818208da0f66d59c301a050cb388aecbf5f4377c0850b1cde2a2a98fad0ea3a3",
+   "fingerprint": "50e5b7765861eceec5537b07574bf2fe6426a6fef791b62348381c6ab5119024",
    "slop": "PASS"
   },
   {
-   "at": "2026-11-24T09:29:00.257Z",
-   "type": "task_built",
-   "tasks": [
-    "T4.8"
-   ],
-   "text": "gate V1-V4 pass: 4190 tests, e2e 41 x2",
-   "files": [
-    "apps/web/e2e/qa/media-nav-player.spec.ts"
-   ]
-  },
-  {
-   "at": "2026-11-24T09:17:26.569Z",
+   "at": "2026-11-26T09:02:18.075Z",
    "type": "task_started",
    "tasks": [
-    "T4.8"
+    "T5.2"
    ],
-   "attempt": "2"
+   "attempt": "5"
   },
   {
-   "at": "2026-11-24T09:17:26.412Z",
+   "at": "2026-11-26T09:02:17.907Z",
    "type": "build_started",
    "tasks": [
-    "T4.8"
+    "T5.2"
    ],
-   "attempt": "2"
+   "attempt": "5"
   },
   {
-   "at": "2026-11-24T09:17:22.977Z",
-   "type": "task_built",
+   "at": "2026-11-26T09:02:15.721Z",
    "tasks": [
-    "T4.7"
+    "T5.8"
    ],
-   "text": "e2e PASS 37/37 x3 clean; progress made deterministic, shots retaken",
-   "files": [
-    "apps/web/e2e/qa/video.spec.ts",
-    "apps/web/e2e/fixtures/media.ts"
-   ]
-  },
-  {
-   "at": "2026-11-24T09:02:07.486Z",
-   "type": "task_started",
-   "tasks": [
-    "T4.7"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-24T09:02:07.273Z",
-   "type": "build_started",
-   "tasks": [
-    "T4.7"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-24T09:02:04.535Z",
-   "tasks": [
-    "T4.6"
-   ],
-   "attempt": "2",
+   "attempt": "6",
    "type": "verify_passed",
-   "evidence": "rerun Verify V1 gives 222/222. media-service.ts and media-input.ts are 100% on all metrics. routes/media.ts is 100 stmts / 95 branch / 100 funcs / 100 lines; uncovered 106,153,199,246 are `issues[0]?.` fallbacks (justified). No it.fails.",
-   "fingerprint": "3dba9137a46e357d598c11019fa9e050ba412c1b336668cf74316d65051e55e8",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
+   "evidence": "`playwright test e2e/qa/tools.spec.ts --repeat-each=3 --workers=1` (E2E_SERVER=dev): 43 passed (14 tests x3 + setup), 0 flaky, 1.5m. All 9 Scenarios are covered. Paid POSTs are stubbed (mediaGenerationStub/generationStub; interceptedPosts/acceptedRequestCount asserted), readCredits is asserted in each spending test, and the guard grep is clean.",
+   "fingerprint": "346e17ecabbdd96468dd19fb96478170f967c8b71ec14c4f5b8089f8dcbaf996",
+   "report": ".dashboard/media-studio/reports/phase-5-verifier-a9.md"
   },
   {
-   "at": "2026-11-24T09:02:04.535Z",
+   "at": "2026-11-26T09:02:15.721Z",
    "tasks": [
-    "T4.5"
+    "T5.7"
    ],
-   "attempt": "2",
+   "attempt": "6",
    "type": "verify_passed",
-   "evidence": "rerun Verify V1 gives 40/40 tests, all 5 files 100/100/100/100. The skip/fails/only grep is empty, and mocks go through vi.mock(useFetch).",
-   "fingerprint": "3da8671d26ef24420ad64246d3830e93d8e70af05c4fe6534f87ff51e0219a3f",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
+   "evidence": "vitest 5 files 58/58 green. Coverage (lines/branches/funcs/stmts): HandoffMenu 100/92/100/98, CaptionResult 100/100/100/100, WatermarkForm 95.83/100/87.5/96, useSketchCanvas 100/100/100/100, useStudioHandoff 100/96/100/100. All at least 80%. No it.fails/skip/only. fetch, clipboard and router are stubbed with vi.stubGlobal/vi.mock.",
+   "fingerprint": "17ce5f2f86612dc988fd8ab21705cccf58a46d0fac445c0b6fa73e01a701befa",
+   "report": ".dashboard/media-studio/reports/phase-5-verifier-a9.md"
   },
   {
-   "at": "2026-11-24T09:02:04.535Z",
+   "at": "2026-11-26T09:02:15.720Z",
    "tasks": [
-    "T4.4"
+    "T5.4"
    ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "e2e covers draft on by default with \"saves 15 credits\", the Draft label, and Render final showing 20 credits with the prompt kept, draft:false and 2 accepted POSTs. Cost toggles 5 to 20. Fresh jobId per start (useMediaJob.ts:227 uuidv4). Attachments are kept after a draft (Video.vue watch) and re-sent via buildRequest. Shot T4.4-4 shows a mid-tween badge (advisory). web 2325/2325.",
-   "fingerprint": "338582ab9c83abc3204bda468478f31b8a204ef15b102147052d1a3c6051eb97",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
-  },
-  {
-   "at": "2026-11-24T09:02:04.535Z",
-   "tasks": [
-    "T4.3"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "AC1/AC2/AC3/AC5 retaken by me as shots 4/T4.3-2..4 (thumbnail plus Remove, 5 s plus Estimated, the 21 MB file rejected with \"Audio must be 20 MB or smaller.\", the renamed .mp3 rejected by the server). AC4 has a unit test (stored 60 s billed at 80, the 20 s clamp, null duration -> 400) and a route test (stored 10.2 s -> required 44). AC6 has a keyboard picker e2e. api/web/shared suites green.",
-   "fingerprint": "26a921c556b8d65e072ef8b22652b6aed025239d001b85b301d56b382568124e",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
-  },
-  {
-   "at": "2026-11-24T09:02:04.534Z",
-   "tasks": [
-    "T4.2"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "web 2325/2325, check clean. e2e verifies the empty copy, Wan 3 hiding draft (70 to 154 cost), a 154-credit confirm with Cancel focused, a paused video with controls and no autoplay, Generate closing the mini-player with no audio playing, success/402/failure through the shared components, and 375px with no h-scroll and every tap target at least 44px. Model switch clamps duration and resolution (Vid",
-   "fingerprint": "c2b2491afa1badc30a4ffd017747411b46d00b6bbd88de4e048d1b7426a6029d",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
-  },
-  {
-   "at": "2026-11-24T09:02:04.534Z",
-   "tasks": [
-    "T4.1"
-   ],
-   "attempt": "2",
-   "type": "verify_passed",
-   "evidence": "shared 386/386; api type-check exit 0; api 1509/1509; `bun run check` 0 errors (all 17 warnings in HEAD-era files). AC1 route tests cover P_VIDEO 1/20 and WAN_3 2/30 boundaries, plus 0/21/1/31 -> field-level 400. AC2 cost table (7 rows plus draft) checked against getVideoCreditCost, with processVideo deducting 20 (and 5 with draft) whatever the client cost. AC3 422 before 402, with no enqueue. AC4",
-   "fingerprint": "0b26e8f90852473fe99f7921c59b595e0e12513cc73e85914b128f83e024d4d1",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
-  },
-  {
-   "at": "2026-11-24T09:02:04.534Z",
-   "tasks": [
-    "T4.8"
-   ],
-   "attempt": "2",
+   "attempt": "6",
    "type": "verify_failed",
-   "category": "test-quality",
-   "text": "[test-quality] · AC1 \"phase QA specs pass\" · Gate V4 (`video.spec + media-nav-player.spec --repeat-each=2`) passed 41/41 in this run. V1-V3 are also green: check 0 errors, root `bun run test` 4190/4190, model-docs pass. But video.spec has the confirmed flake above, so the phase QA spec does not pass reliably · Re-run the gate after the T4.7 fix.",
+   "category": "type-lint",
+   "text": "[type-lint] · V2 `bun run check` · the same repo-wide formatting failure makes this Verify step red · the same one-line fix (no T5.4 code change needed)",
    "files": [
-    "ac1 \"phase qa specs pass\""
+    "v2 `bun run check"
    ],
    "sigs": [
-    "T4.8|test-quality|ac1 \"phase qa specs pass\""
+    "T5.4|type-lint|v2 `bun run check"
    ],
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
+   "report": ".dashboard/media-studio/reports/phase-5-verifier-a9.md"
   },
   {
-   "at": "2026-11-24T09:02:04.534Z",
+   "at": "2026-11-26T09:02:15.720Z",
    "tasks": [
-    "T4.7"
+    "T5.3"
    ],
-   "attempt": "2",
+   "attempt": "6",
    "type": "verify_failed",
-   "category": "test-quality",
-   "text": "[test-quality] · e2e/qa/video.spec.ts:157 (`@critical generate a video charges the server cost once`) · The Verify run `--repeat-each=3 --workers=1` gave 36 passed and 1 failed. The failing check is `getByTestId('job-progress')` toBeVisible, which timed out. The page had already reached the result (chip 480, Download link), because the `slow` stub variant (e2e/fixtures/media.ts:127-133) writes eve",
+   "category": "type-lint",
+   "text": "[type-lint] · V5 `bun run check` · the same formatting failure in useToolVideoUpload.ts, which carries the tool-video purpose this page uses · the same one-line fix",
    "files": [
-    "e2e/qa/video.spec.ts"
+    "v5 `bun run check"
    ],
    "sigs": [
-    "T4.7|test-quality|e2e/qa/video.spec.ts"
+    "T5.3|type-lint|v5 `bun run check"
    ],
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-verifier-a7.md"
+   "report": ".dashboard/media-studio/reports/phase-5-verifier-a9.md"
   },
   {
-   "at": "2026-11-24T09:01:43.082Z",
+   "at": "2026-11-26T09:02:15.720Z",
+   "tasks": [
+    "T5.2"
+   ],
+   "attempt": "6",
+   "type": "verify_failed",
+   "category": "type-lint",
+   "text": "[type-lint] · V5 `bun run check` · exit 1: \"Formatting issues found apps/web/src/composables/useToolVideoUpload.ts\". The `PREVIEW_PURPOSES` array (lines 18-22) must be on one line. The tool-video/tool-image purposes were added there by the b1 builder (EXTRA). This failure persisted after a recheck at 14:31; file mtime 14:23 · run `vp check --fix` (or join the array onto one line) and re-run `bun r",
+   "files": [
+    "v5 `bun run check"
+   ],
+   "sigs": [
+    "T5.2|type-lint|v5 `bun run check"
+   ],
+   "report": ".dashboard/media-studio/reports/phase-5-verifier-a9.md"
+  },
+  {
+   "at": "2026-11-26T09:01:46.120Z",
    "type": "advisory",
    "tasks": [
-    "T4.4"
+    "T5.8"
    ],
-   "text": "T4.4-4 shot shows the cost badge mid-tween at 12 with Draft still on; AC3 full-price badge proven by e2e (video.spec.ts:295), not by the shot. Render final test does not compare jobIds or re-send attachments (source: useMediaJob uuidv4 per start, Video.vue keeps attachments after draft)"
+   "text": "tools.spec does not assert the video watermark caption text or that FULLJOURNEY.AI is absent from the video-watermark POST body"
   },
   {
-   "at": "2026-11-24T09:01:42.930Z",
+   "at": "2026-11-26T09:01:45.954Z",
    "type": "advisory",
    "tasks": [
-    "T4.3"
+    "T5.2"
    ],
-   "text": "Renamed-file rejection shows raw server text \"file: unsupported or unrecognized file type\"; Seconds stepper stays enabled while audio drives the length"
+   "text": "VIDEO_WATERMARK_PLACEMENT=null (PLAN G10 fallback); constant comment says model source unread, so step 1 of G10 is not recorded as done"
   },
   {
-   "at": "2026-11-24T09:01:42.771Z",
+   "at": "2026-11-26T09:01:45.741Z",
    "type": "advisory",
    "tasks": [
-    "T4.1"
+    "T5.4"
    ],
-   "text": "videoPosterUrl and the video posterUrl write (media-asset-service.ts:84,159) have no unit test; e2e stub asset has no posterUrl so poster rendering is never exercised"
+   "text": "SPEC R-TOOL-SK-1 and T5.4 Do name an upload-a-sketch option; page ships draw-only and the empty copy was changed to \"Draw a sketch, then describe the picture.\""
   },
   {
-   "at": "2026-11-24T09:01:42.588Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.2"
-   ],
-   "text": "At >=1024px the fixed mini-player covers the static Generate button (no bottom padding for --mini-player-h)"
-  },
-  {
-   "at": "2026-11-24T09:01:42.446Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.7"
-   ],
-   "text": "Engineer report claims reverse overlap (audio stops video) is covered by a component test; no VideoResult test exists (behaviour in VideoResult.vue:27-34, source only)"
-  },
-  {
-   "at": "2026-11-24T09:01:42.245Z",
-   "type": "advisory",
-   "tasks": [
-    "T4.7"
-   ],
-   "text": "T4.7-4 shot caption claims the Estimated badge but is cropped above it; verifier re-shot as 4/T4.7-8"
-  },
-  {
-   "at": "2026-11-24T08:52:14.483Z",
+   "at": "2026-11-26T08:57:17.117Z",
    "type": "verify_started",
    "tasks": [
-    "T4.1",
-    "T4.2",
-    "T4.3",
-    "T4.4",
-    "T4.5",
-    "T4.6",
-    "T4.7",
-    "T4.8"
+    "T5.2",
+    "T5.3",
+    "T5.4",
+    "T5.7",
+    "T5.8"
    ],
-   "attempt": "2"
+   "attempt": "6"
   },
   {
-   "at": "2026-11-24T08:52:12.151Z",
+   "at": "2026-11-26T08:57:14.237Z",
    "tasks": [
-    "T4.3"
+    "T5.4"
    ],
    "type": "reviewer_verdict",
-   "evidence": "findOwnedUpload (media-service.ts:380) validates the ObjectId and filters by userId, purpose and unexpired expiresAt, so there is no IDOR and no reuse across purposes. The a4 advisory is fixed: audio with no stored durationSec is rejected with a 400 (:412), so billing never falls back to the client duration. The a4 underbilling advisory is fixed: Replicate now gets durationSec = getVideoBillableSe",
-   "fingerprint": "26a921c556b8d65e072ef8b22652b6aed025239d001b85b301d56b382568124e",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a6.md",
+   "evidence": "Client-only diff with no new server sink. The sketch PNG comes from canvas.toBlob as a fixed sketch.png of type image/png (useSketchCanvas.ts:108-116) and goes through the existing generateStore.generateImage. The server-side upload check is POST /generate/reference-images, and validateReferenceImageUrls runs on /generate/image (generate.ts:112, :137). That keeps the server-side image billing and ",
+   "fingerprint": "69081ad7a5167017eab698784da120e6b0cabe40c7e061911215332154f159e7",
+   "report": ".dashboard/media-studio/reports/phase-5-review-security-opus-a8.md",
    "verdict": "PASS",
    "reviewer": "security"
   },
   {
-   "at": "2026-11-24T08:52:12.150Z",
+   "at": "2026-11-26T08:57:14.237Z",
    "tasks": [
-    "T4.1"
+    "T5.3"
    ],
    "type": "reviewer_verdict",
-   "evidence": "Route /generate/video (routes/media.ts:238) uses requireAuth and the session userId. VideoRequestSchema.safeParse strips unknown fields, and validateMediaParams runs next. The cost comes from getVideoCreditCost on the server, with the audio length taken from stored uploads (:253-261). The order is then safety 422, balance 402, and hasExistingJob scoped to userId, before enqueue. processVideo (medi",
-   "fingerprint": "0b26e8f90852473fe99f7921c59b595e0e12513cc73e85914b128f83e024d4d1",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a6.md",
+   "evidence": "The server code is unchanged since a7: media.ts, media-service.ts and media-limits.ts were last modified on 11-24. The a7 trace still holds: auth comes from sessionUserId, AutocaptionRequestSchema parses the body, resolveToolUpload scopes the upload by owner, purpose and expiry, and the route and worker both bill from the stored durationSec with no client duration accepted. The only file changed s",
+   "fingerprint": "d7192f0a756130e0dea7eacf4bc082708c5d921ce0101e78d2aa6f6451194303",
+   "report": ".dashboard/media-studio/reports/phase-5-review-security-opus-a8.md",
    "verdict": "PASS",
    "reviewer": "security"
   },
   {
-   "at": "2026-11-24T08:51:57.645Z",
+   "at": "2026-11-26T08:57:09.330Z",
    "tasks": [
-    "T4.4"
+    "T5.4"
    ],
    "type": "reviewer_verdict",
-   "evidence": "Draft preview, Draft label and Render final: the saving copy sits beside the switch, the cost badge changes between 5 and 20, and the Draft pill sits above the video. The action bar (cost and Generate) now stays in view at 1280x720 and 375px, so the earlier below-the-fold advisory is resolved. Render final is the single filled action on the result side.",
-   "fingerprint": "338582ab9c83abc3204bda468478f31b8a204ef15b102147052d1a3c6051eb97",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a6.md",
-   "verdict": "PASS",
-   "reviewer": "ui"
-  },
-  {
-   "at": "2026-11-24T08:51:57.644Z",
-   "tasks": [
-    "T4.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "Image and audio inputs: dashed drop zones with copper pill buttons are consistent and legible. The Choose buttons are tap-sized at 375px.",
-   "fingerprint": "26a921c556b8d65e072ef8b22652b6aed025239d001b85b301d56b382568124e",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a6.md",
-   "verdict": "PASS",
-   "reviewer": "ui"
-  },
-  {
-   "at": "2026-11-24T08:51:57.644Z",
-   "tasks": [
-    "T4.2"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "Video studio page: warm dark palette, serif title, copper accents and the hairline dashed empty card match the design system. The empty-state copy is clear. The 375px stack has no overflow.",
-   "fingerprint": "c2b2491afa1badc30a4ffd017747411b46d00b6bbd88de4e048d1b7426a6029d",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ui-sonnet-a6.md",
-   "verdict": "PASS",
-   "reviewer": "ui"
-  },
-  {
-   "at": "2026-11-24T08:51:51.669Z",
-   "tasks": [
-    "T4.4"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "shots 4/T4.4-1.png to 4/T4.4-6.png. The Draft toggle has a visible label, a saving hint and a cost that updates (5 credits at 375px). Render final restores full price. The layout fits at 375px.",
-   "fingerprint": "338582ab9c83abc3204bda468478f31b8a204ef15b102147052d1a3c6051eb97",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a6.md",
-   "verdict": "PASS",
-   "reviewer": "ux"
-  },
-  {
-   "at": "2026-11-24T08:51:51.668Z",
-   "tasks": [
-    "T4.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "shot 4/T4.3-1.png. The \"Choose image\" and \"Choose audio\" pickers are real buttons with a clear optional label, and the upload zones fit at 375px (4/T4.4-5.png).",
-   "fingerprint": "26a921c556b8d65e072ef8b22652b6aed025239d001b85b301d56b382568124e",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a6.md",
-   "verdict": "PASS",
-   "reviewer": "ux"
-  },
-  {
-   "at": "2026-11-24T08:51:51.668Z",
-   "tasks": [
-    "T4.2"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "shots 4/T4.2-1.png (empty state, example button, duration and resolution controls) and 4/T4.2-2.png (375px stack, no overflow). Video.vue gives the disabled Generate a reason (disabledReason) and guards generate() against busy state.",
-   "fingerprint": "c2b2491afa1badc30a4ffd017747411b46d00b6bbd88de4e048d1b7426a6029d",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-ux-sonnet-a6.md",
-   "verdict": "PASS",
-   "reviewer": "ux"
-  },
-  {
-   "at": "2026-11-24T08:51:49.152Z",
-   "tasks": [
-    "T4.4"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1-AC4 unchanged and met (DraftToggle, Draft label, render-final flips toggle with full cost, reactive cost on isDraft).",
-   "fingerprint": "338582ab9c83abc3204bda468478f31b8a204ef15b102147052d1a3c6051eb97",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a6.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-24T08:51:49.152Z",
-   "tasks": [
-    "T4.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "Previous blocker 1 fixed: Video.vue watch on state.phase clears image/audio and revokes preview URLs after a non-draft success, keeps them after a draft. Previous blocker 2 fixed: media-service.ts throws BadRequestError when audio has no durationSec, and a unit test (\"rejects audio with no stored duration...\") covers it.",
-   "fingerprint": "26a921c556b8d65e072ef8b22652b6aed025239d001b85b301d56b382568124e",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a6.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-24T08:51:49.152Z",
-   "tasks": [
-    "T4.2"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1-AC6 unchanged and met (empty copy, registry ranges, shared StudioActionBar, player.close on generate, native video via ResultCard, shared Studio components).",
-   "fingerprint": "c2b2491afa1badc30a4ffd017747411b46d00b6bbd88de4e048d1b7426a6029d",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a6.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-24T08:51:49.151Z",
-   "tasks": [
-    "T4.1"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1-AC5 unchanged since the previous report; registry-driven validation, server-side cost, safety 422 before 402 before enqueue, video poster, deduction in runMediaJob. resolveVideoAttachments now rejects audio with no stored duration (400), so the charge cannot fall back to the client's length.",
-   "fingerprint": "0b26e8f90852473fe99f7921c59b595e0e12513cc73e85914b128f83e024d4d1",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a6.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-24T08:51:24.765Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.8"
-   ],
-   "fingerprint": "f258a5bf618a4828b966899ce30b6969b509f357e4df07365641d81a2153e49e"
-  },
-  {
-   "at": "2026-11-24T08:51:24.765Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.7"
-   ],
-   "fingerprint": "0ab5d1cbdefc2e015d99588c0bc1678e7aee50c45dcba7bfb4127e36578a9464",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-24T08:51:24.765Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.6"
-   ],
-   "fingerprint": "3dba9137a46e357d598c11019fa9e050ba412c1b336668cf74316d65051e55e8"
-  },
-  {
-   "at": "2026-11-24T08:51:24.765Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.5"
-   ],
-   "fingerprint": "3da8671d26ef24420ad64246d3830e93d8e70af05c4fe6534f87ff51e0219a3f",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-24T08:51:19.758Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.4"
-   ],
-   "fingerprint": "338582ab9c83abc3204bda468478f31b8a204ef15b102147052d1a3c6051eb97",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-24T08:51:19.758Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.2"
-   ],
-   "fingerprint": "c2b2491afa1badc30a4ffd017747411b46d00b6bbd88de4e048d1b7426a6029d",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-24T08:51:19.758Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.1"
-   ],
-   "fingerprint": "0b26e8f90852473fe99f7921c59b595e0e12513cc73e85914b128f83e024d4d1"
-  },
-  {
-   "at": "2026-11-24T08:51:15.377Z",
-   "type": "dirty_snapshot",
-   "tasks": [],
-   "hashes": {
-    "agent_docs/media-studio/TASKS.md": "c3f562c7ad9212307756042453163c19495051cf",
-    "apps/api/src/queue/generation-worker.ts": "2918bd544f2ff595b06bb00228791f12ea4ebbd0",
-    "apps/api/src/routes/media.test.ts": "96ac68ac0f7980304d45225515da18c05c92b408",
-    "apps/api/src/routes/media.ts": "13e96dc9de2bbcdcfe45070e00e7e37faf18bca3",
-    "apps/api/src/services/media-asset-service.ts": "04d69fa3745074c66d3ba1994a87ac46d133aa49",
-    "apps/api/src/services/media-service.test.ts": "e355cc814377e13991967383388a3116db88eb03",
-    "apps/api/src/services/media-service.ts": "4b1450d3c9781a45602e2e72e2e31aafaf6d6b71",
-    "apps/web/e2e/qa/media-nav-player.spec.ts": "9cd47dacd607e734d006df7f4978f803f56c3080",
-    "apps/web/src/components.d.ts": "a0ef84be23e55bfd75d23238cda2b47d47489bdf",
-    "apps/web/src/router/index.ts": "6c4df4ad0857988f12fccfa247ec3e8e0ffc95a5",
-    "packages/shared/src/schemas/index.ts": "2d09447c0616d653a93a4c0b868015701cc7f606",
-    "packages/shared/src/schemas/media.ts": "5d2a1bf7adda6590e50bb15651cf038df1726706",
-    "apps/web/e2e/qa/video.spec.ts": "83a72072c9d0fd2eeca4de66f2aa57f488df653f",
-    "apps/web/src/components/Video/AttachedFile.vue": "3b88df102c311cc7aaf2db1ac3ddb3067b275ad3",
-    "apps/web/src/components/Video/AudioInput.test.ts": "6976e0c45dedaa02c0dded5dea874d2f557d89a8",
-    "apps/web/src/components/Video/AudioInput.vue": "b2cde069cbdab2a1913b746a43854ca9884b48f5",
-    "apps/web/src/components/Video/DraftToggle.test.ts": "762e5ecfce364ddc6534a6e55912212551cb0aa9",
-    "apps/web/src/components/Video/DraftToggle.vue": "fe25bfccae86352b4791b104ea6b5ea96ff2523a",
-    "apps/web/src/components/Video/ImageInput.test.ts": "1700aedbfdb6ea6a0625fb6ad2fc4f0f5fd67f2c",
-    "apps/web/src/components/Video/ImageInput.vue": "f71efffe46b7ac3f6c80bdf57c46ed99ec69599c",
-    "apps/web/src/components/Video/UploadDropZone.vue": "d0eeec79a5f1d27e6fa000628640fe8e40e27f66",
-    "apps/web/src/components/Video/VideoComposer.test.ts": "7e2d2621da1d4e545112e187a07db3d661cf9796",
-    "apps/web/src/components/Video/VideoComposer.vue": "9c313a7962877a42459986258d7ac60424bdc5bc",
-    "apps/web/src/components/Video/VideoResult.vue": "1aca72d7ee3124a392c3d804671cf5cfa989b2d7",
-    "apps/web/src/components/Video/VideoSettings.vue": "62ab5234e39af47f149ab1bbf11d9218abc563d6",
-    "apps/web/src/composables/useToolVideoUpload.test.ts": "d66b4d7dcf6a55a09c337137cbc92731a87fbe5d",
-    "apps/web/src/composables/useToolVideoUpload.ts": "68c05f8149b0b61f2af5701eab7c502d7e6b9661",
-    "apps/web/src/pages/Video.vue": "485b2c63eb70feca027afbaff6ee8d1b2ab0e67c"
-   }
-  },
-  {
-   "at": "2026-11-24T08:51:15.188Z",
-   "type": "preflight_passed",
-   "tasks": [
-    "T4.3"
-   ],
-   "fingerprint": "26a921c556b8d65e072ef8b22652b6aed025239d001b85b301d56b382568124e",
-   "slop": "PASS"
-  },
-  {
-   "at": "2026-11-24T08:50:16.119Z",
-   "type": "task_started",
-   "tasks": [
-    "T4.3"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-24T08:50:15.954Z",
-   "type": "build_started",
-   "tasks": [
-    "T4.3"
-   ],
-   "attempt": "2"
-  },
-  {
-   "at": "2026-11-24T08:50:12.686Z",
-   "tasks": [
-    "T4.3"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "Attachments arrive only as uploadIds. findOwnedUpload (media-service.ts:200) validates the ObjectId and filters by userId, the expected purpose, not consumed and unexpired, so there is no IDOR and no cross-purpose reuse such as a tool-video passed as video-image. Billable audio seconds come from the stored MediaUpload.durationSec (getVideoBillableSeconds clamps to P_VIDEO_MAX_SEC), never from the ",
-   "fingerprint": "6efcc96579c2d4a3275522265535b59f76fe1c0ee7a4f6af515c907f17d3a72d",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a4.md",
+   "evidence": "Client-only diff with no new server sink. The sketch PNG comes from canvas.toBlob as a fixed sketch.png of type image/png (useSketchCanvas.ts:108-116) and goes through the existing generateStore.generateImage. The server-side upload check is POST /generate/reference-images, and validateReferenceImageUrls runs on /generate/image (generate.ts:112, :137). That keeps the server-side image billing and ",
+   "fingerprint": "69081ad7a5167017eab698784da120e6b0cabe40c7e061911215332154f159e7",
+   "report": ".dashboard/media-studio/reports/phase-5-review-security-opus-a8.md",
    "verdict": "PASS",
    "reviewer": "security"
   },
   {
-   "at": "2026-11-24T08:50:12.685Z",
+   "at": "2026-11-26T08:57:09.329Z",
    "tasks": [
-    "T4.1"
+    "T5.3"
    ],
    "type": "reviewer_verdict",
-   "evidence": "VideoRequestSchema (schemas/media.ts:465) is a non-passthrough z.object, so unknown fields such as lastFrameImage or aspectRatio are stripped before validateMediaParams/buildMediaInput; jobId is a UUID, prompt is trimmed and capped at MEDIA_PROMPT_MAX_CHARS, durationSec is an int checked against registry min/max, resolution is checked against registry keys and draft is gated on supportsDraft (refi",
-   "fingerprint": "561880e1d443bd3999e17414f998c992d23ce5d46d229292f15b2e53c3a6ac4c",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-security-opus-a4.md",
+   "evidence": "The server code is unchanged since a7: media.ts, media-service.ts and media-limits.ts were last modified on 11-24. The a7 trace still holds: auth comes from sessionUserId, AutocaptionRequestSchema parses the body, resolveToolUpload scopes the upload by owner, purpose and expiry, and the route and worker both bill from the stored durationSec with no client duration accepted. The only file changed s",
+   "fingerprint": "d7192f0a756130e0dea7eacf4bc082708c5d921ce0101e78d2aa6f6451194303",
+   "report": ".dashboard/media-studio/reports/phase-5-review-security-opus-a8.md",
    "verdict": "PASS",
    "reviewer": "security"
   },
   {
-   "at": "2026-11-24T08:49:41.387Z",
+   "at": "2026-11-26T08:56:51.569Z",
    "tasks": [
-    "T4.4"
+    "T5.4"
    ],
    "type": "reviewer_verdict",
-   "evidence": "AC1 DraftToggle shows saving, v-if on supportsDraft; AC2 Draft label; AC3 render-final flips toggle, full cost on button and bar, new submit gets new jobId; AC4 cost reactive on isDraft; 44px targets and focus rings present",
-   "fingerprint": "32538050164c878e4a309b87397ce06a2e91317f4ddc8d0729c936ce7c422398",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a4.md",
+   "evidence": "AC1 is met: pointer events drive strokes, undo replays all but the last stroke, and clear needs a confirmation step. AC2 is met: `generateImage(..., [file])` sends the flattened PNG as a reference image through the image route, the cost comes from the model's creditCost, and the model list is limited to the 3 sketch keys. AC3 is met: an empty canvas gives \"Draw something first.\". AC4 is met: the b",
+   "fingerprint": "69081ad7a5167017eab698784da120e6b0cabe40c7e061911215332154f159e7",
+   "report": ".dashboard/media-studio/reports/phase-5-review-code-sonnet-a8.md",
    "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-24T08:49:41.387Z",
-   "tasks": [
-    "T4.2"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1 empty copy and example fill; AC2 ranges/resolutions from getVideoModelOptions with model-switch clamping; AC3 shared StudioActionBar; AC4 player.close() on generate and ResultCard pause/watch both directions; AC5 native video via ResultCard; AC6 shared Studio components used",
-   "fingerprint": "024f83dc694554d23563d166bfc25c51f9942815472e6f76a5679a5c7279d575",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a4.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-24T08:49:41.387Z",
-   "tasks": [
-    "T4.1"
-   ],
-   "type": "reviewer_verdict",
-   "evidence": "AC1 field-level 400 via refineVideoRequest (duration, resolution, draft, audio ranges from registry); AC2 getVideoCreditCost recomputed server-side in route and again in processVideo; AC3 safety 422 precedes 402 precedes enqueue; AC4 copyMediaAssetToCloudinary sets posterUrl for video; AC5 deduction stays in runMediaJob, worker case wired",
-   "fingerprint": "561880e1d443bd3999e17414f998c992d23ce5d46d229292f15b2e53c3a6ac4c",
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a4.md",
-   "verdict": "PASS",
-   "reviewer": "code"
-  },
-  {
-   "at": "2026-11-24T08:49:41.386Z",
-   "tasks": [
-    "T4.3"
-   ],
-   "type": "reviewer_verdict",
-   "category": "logic",
-   "text": "[logic] · apps/web/src/pages/Video.vue:generate / apps/api/src/services/media-service.ts:processVideo end · After a non-draft success the server deletes the attached uploads, but the page keeps image/audio refs, so the next Generate sends dead uploadIds and gets 400 \"upload not found or expired\" · Clear image.value and audio.value (and their previews) when a non-draft job reaches succeeded; keep t",
-   "files": [
-    "apps/web/src/pages/Video.vue",
-    "apps/api/src/services/media-service.ts"
-   ],
-   "sigs": [
-    "T4.3|logic|apps/web/src/pages/Video.vue",
-    "T4.3|logic|apps/api/src/services/media-service.ts"
-   ],
-   "report": "/Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai/.dashboard/media-studio/reports/media-studio-review-code-sonnet-a4.md",
-   "verdict": "CHANGES",
    "reviewer": "code"
   }
  ]

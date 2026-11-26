@@ -281,6 +281,7 @@ describe("copyMediaAssetToCloudinary", () => {
         expect(uploadMediaToCloudinary).toHaveBeenCalledWith(
             "https://tmp/x",
             `base/user_1/${FeatureType.MUSIC}`,
+            "video",
         )
         const [filter, update, options] = MediaAssetModel.findOneAndUpdate.mock.calls[0]
         expect(filter).toEqual({ _id: OID_A, userId: "user_1" })
@@ -514,7 +515,7 @@ describe("deleteMediaAsset", () => {
             userId: "user_1",
             parentId: { $in: [child._id] },
         })
-        expect(deleteMediaByPublicIds).toHaveBeenCalledWith(["p-root", "p-child"])
+        expect(deleteMediaByPublicIds).toHaveBeenCalledWith(["p-root", "p-child"], "video")
         expect(MediaAssetModel.deleteMany).toHaveBeenCalledWith({
             userId: "user_1",
             _id: { $in: [root._id, child._id, grandchild._id] },

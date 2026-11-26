@@ -146,10 +146,8 @@ async function openMenuAndGo(page: Page, item: (typeof MENU_ITEMS)[number]) {
   await expect(page).toHaveURL(new RegExp(`${item.path}$`));
 }
 
-// Audio studios are real pages; Tools routes stay placeholders until phase 5 builds them.
-function studioMarker(item: { menu: string }) {
-  return item.menu === 'audio' ? 'studio-shell' : 'studio-placeholder';
-}
+// Audio and Tools routes are all real studio pages and render inside StudioShell.
+const STUDIO_MARKER = 'studio-shell';
 
 test.describe('header menus and studio routes', () => {
   test(
@@ -161,7 +159,7 @@ test.describe('header menus and studio routes', () => {
 
       for (const item of MENU_ITEMS) {
         await openMenuAndGo(page, item);
-        await expect(page.getByTestId(studioMarker(item))).toBeVisible();
+        await expect(page.getByTestId(STUDIO_MARKER)).toBeVisible();
         await expect(page.getByTestId(`nav-menu-${item.menu}`)).toBeVisible();
       }
       await page.screenshot({ path: shotPath('tools-route') });
@@ -254,7 +252,7 @@ test.describe('mini-player and History', () => {
 
       // Navigating away unmounts the History card; the global player must keep going.
       await openMenuAndGo(page, MENU_ITEMS[0]);
-      await expect(page.getByTestId(studioMarker(MENU_ITEMS[0]))).toBeVisible();
+      await expect(page.getByTestId(STUDIO_MARKER)).toBeVisible();
       await expect(page.getByTestId('mini-player-title')).toHaveText(first.title);
       await expect(miniPlayer.getByTestId('play-button')).toHaveAttribute('aria-pressed', 'true');
       expect(await audioState(page)).toEqual({ count: 1, playing: 1 });

@@ -3,13 +3,17 @@ import type { NextFunction, Request, Response } from "express"
 import multer from "multer"
 
 import {
+    AutocaptionRequestSchema,
+    ImageWatermarkRequestSchema,
     MAX_VERSION_FILE_BYTES,
     MusicRequestSchema,
     SongRequestSchema,
     SpeechRequestSchema,
     VideoRequestSchema,
+    VideoWatermarkRequestSchema,
 } from "@visual-ai/shared"
 import type { MediaAssetType, MediaModelKey } from "@visual-ai/shared"
+import type { ZodType } from "zod"
 
 import { asyncHandler } from "../lib/async-handler.js"
 import { BadRequestError, UnauthorizedError } from "../lib/errors.js"
@@ -28,6 +32,7 @@ import { mapUploadError, UPLOAD_BY_KIND } from "../middlewares/multer.js"
 import { uploadRateLimiter } from "../middlewares/rate-limit.js"
 import { resolveUserIsPro } from "../services/generation-service.js"
 import { enqueueGeneration } from "../queue/generation-queue.js"
+import type { MediaJobBody, MediaJobKind } from "../queue/generation-queue.js"
 import {
     createVersion,
     deleteMediaAsset,
@@ -35,11 +40,15 @@ import {
     listMediaAssets,
 } from "../services/media-asset-service.js"
 import {
+    getAutocaptionCreditCost,
     getAvailableCredits,
+    getImageWatermarkCreditCost,
     getMusicCreditCost,
     getSongCreditCost,
     getSpeechCreditCost,
     getVideoCreditCost,
+    getVideoWatermarkCreditCost,
+    resolveToolUpload,
     resolveVideoAttachments,
     hasExistingJob,
     SONG_MODEL_KEY,
@@ -51,7 +60,7 @@ const PROMPT_REJECTED_CODE = "PROMPT_REJECTED"
 const PROMPT_REJECTED_MESSAGE = "This text can't be used. Try rephrasing it."
 const INSUFFICIENT_CREDITS_CODE = "INSUFFICIENT_CREDITS"
 
-const MEDIA_TYPES: readonly MediaAssetType[] = ["audio", "video"]
+const MEDIA_TYPES: readonly MediaAssetType[] = ["audio", "video", "image"]
 const MEDIA_MIME_PATTERN = /^(audio|video)\//
 /** Enough leading bytes for every signature sniffMime checks. */
 const SNIFF_HEAD_BYTES = 16
@@ -92,6 +101,43 @@ function sessionUserId(req: Request): string {
     return userId
 }
 
+/** Parses a request body, naming the first offending field so the client can show it inline. */
+function parseBody<T>(schema: ZodType<T>, body: unknown): T {
+    const parsed = schema.safeParse(body)
+    if (parsed.success) return parsed.data
+    const [issue] = parsed.error.issues
+    throw new BadRequestError(
+        `${issue?.path.join(".") || "body"}: ${issue?.message ?? "invalid request"}`,
+    )
+}
+
+interface QueueMediaJobArgs {
+    userId: string
+    kind: MediaJobKind
+    body: MediaJobBody
+    /** Credits the job will cost, computed server-side. */
+    required: number
+}
+
+/**
+ * The tail every media route shares: reject with 402 when the user cannot afford the job,
+ * accept a repeated jobId without a second paid run, otherwise enqueue it.
+ */
+async function queueMediaJob(res: Response, args: QueueMediaJobArgs): Promise<void> {
+    const { userId, kind, body, required } = args
+    const available = await getAvailableCredits(userId)
+    if (available < required) {
+        res.status(402).json({ code: INSUFFICIENT_CREDITS_CODE, required, available })
+        return
+    }
+    if (await hasExistingJob(body.jobId, userId)) {
+        acceptResponse(res)
+        return
+    }
+    await enqueueGeneration({ kind, body, isPro: await resolveUserIsPro(userId) })
+    acceptResponse(res)
+}
+
 mediaRoutes.post(
     "/generate/audio/music",
     // @ts-ignore
@@ -99,14 +145,8 @@ mediaRoutes.post(
     asyncHandler(async (req: Request, res: Response) => {
         const userId = sessionUserId(req)
 
-        const parsed = MusicRequestSchema.safeParse(req.body)
-        if (!parsed.success) {
-            const [issue] = parsed.error.issues
-            throw new BadRequestError(
-                `${issue?.path.join(".") || "body"}: ${issue?.message ?? "invalid request"}`,
-            )
-        }
-        const { jobId, modelKey, ...params } = parsed.data
+        const data = parseBody(MusicRequestSchema, req.body)
+        const { jobId, modelKey, ...params } = data
         validateMediaParams(modelKey, "music", params)
 
         const mediaKey = modelKey as MediaModelKey
@@ -119,23 +159,12 @@ mediaRoutes.post(
             return
         }
 
-        const available = await getAvailableCredits(userId)
-        if (available < required) {
-            res.status(402).json({ code: INSUFFICIENT_CREDITS_CODE, required, available })
-            return
-        }
-
-        if (await hasExistingJob(jobId, userId)) {
-            acceptResponse(res)
-            return
-        }
-
-        await enqueueGeneration({
+        await queueMediaJob(res, {
+            userId,
             kind: "music",
             body: { ...params, jobId, modelKey: mediaKey, userId },
-            isPro: await resolveUserIsPro(userId),
+            required,
         })
-        acceptResponse(res)
     }),
 )
 
@@ -146,14 +175,8 @@ mediaRoutes.post(
     asyncHandler(async (req: Request, res: Response) => {
         const userId = sessionUserId(req)
 
-        const parsed = SongRequestSchema.safeParse(req.body)
-        if (!parsed.success) {
-            const [issue] = parsed.error.issues
-            throw new BadRequestError(
-                `${issue?.path.join(".") || "body"}: ${issue?.message ?? "invalid request"}`,
-            )
-        }
-        const { jobId, prompt, lyrics } = parsed.data
+        const data = parseBody(SongRequestSchema, req.body)
+        const { jobId, prompt, lyrics } = data
         const params = { stylePrompt: prompt, lyrics }
         validateMediaParams(SONG_MODEL_KEY, "song", params)
 
@@ -165,23 +188,12 @@ mediaRoutes.post(
             return
         }
 
-        const available = await getAvailableCredits(userId)
-        if (available < required) {
-            res.status(402).json({ code: INSUFFICIENT_CREDITS_CODE, required, available })
-            return
-        }
-
-        if (await hasExistingJob(jobId, userId)) {
-            acceptResponse(res)
-            return
-        }
-
-        await enqueueGeneration({
+        await queueMediaJob(res, {
+            userId,
             kind: "song",
             body: { ...params, jobId, modelKey: SONG_MODEL_KEY, userId },
-            isPro: await resolveUserIsPro(userId),
+            required,
         })
-        acceptResponse(res)
     }),
 )
 
@@ -192,14 +204,8 @@ mediaRoutes.post(
     asyncHandler(async (req: Request, res: Response) => {
         const userId = sessionUserId(req)
 
-        const parsed = SpeechRequestSchema.safeParse(req.body)
-        if (!parsed.success) {
-            const [issue] = parsed.error.issues
-            throw new BadRequestError(
-                `${issue?.path.join(".") || "body"}: ${issue?.message ?? "invalid request"}`,
-            )
-        }
-        const { jobId, modelKey, ...params } = parsed.data
+        const data = parseBody(SpeechRequestSchema, req.body)
+        const { jobId, modelKey, ...params } = data
         validateMediaParams(modelKey, "tts", params)
 
         const mediaKey = modelKey as MediaModelKey
@@ -212,23 +218,12 @@ mediaRoutes.post(
             return
         }
 
-        const available = await getAvailableCredits(userId)
-        if (available < required) {
-            res.status(402).json({ code: INSUFFICIENT_CREDITS_CODE, required, available })
-            return
-        }
-
-        if (await hasExistingJob(jobId, userId)) {
-            acceptResponse(res)
-            return
-        }
-
-        await enqueueGeneration({
+        await queueMediaJob(res, {
+            userId,
             kind: "speech",
             body: { ...params, jobId, modelKey: mediaKey, userId },
-            isPro: await resolveUserIsPro(userId),
+            required,
         })
-        acceptResponse(res)
     }),
 )
 
@@ -239,14 +234,8 @@ mediaRoutes.post(
     asyncHandler(async (req: Request, res: Response) => {
         const userId = sessionUserId(req)
 
-        const parsed = VideoRequestSchema.safeParse(req.body)
-        if (!parsed.success) {
-            const [issue] = parsed.error.issues
-            throw new BadRequestError(
-                `${issue?.path.join(".") || "body"}: ${issue?.message ?? "invalid request"}`,
-            )
-        }
-        const { jobId, modelKey, imageUploadId, audioUploadId, ...params } = parsed.data
+        const data = parseBody(VideoRequestSchema, req.body)
+        const { jobId, modelKey, imageUploadId, audioUploadId, ...params } = data
         validateMediaParams(modelKey, "video", params)
 
         // Duration for billing comes from the stored audio file, never from the client.
@@ -266,30 +255,75 @@ mediaRoutes.post(
             return
         }
 
-        const available = await getAvailableCredits(userId)
-        if (available < required) {
-            res.status(402).json({ code: INSUFFICIENT_CREDITS_CODE, required, available })
-            return
-        }
-
-        if (await hasExistingJob(jobId, userId)) {
-            acceptResponse(res)
-            return
-        }
-
-        await enqueueGeneration({
+        await queueMediaJob(res, {
+            userId,
             kind: "video",
             body: { ...params, imageUploadId, audioUploadId, jobId, modelKey: mediaKey, userId },
-            isPro: await resolveUserIsPro(userId),
+            required,
         })
-        acceptResponse(res)
+    }),
+)
+
+/** A tool's input file is named by upload id; its URL and (for video) duration come from storage. */
+mediaRoutes.post(
+    "/generate/tools/image-watermark",
+    // @ts-ignore
+    requireAuth,
+    asyncHandler(async (req: Request, res: Response) => {
+        const userId = sessionUserId(req)
+        const data = parseBody(ImageWatermarkRequestSchema, req.body)
+        await resolveToolUpload(userId, data.uploadId, "image")
+
+        await queueMediaJob(res, {
+            userId,
+            kind: "image-watermark",
+            body: { ...data, modelKey: "IMAGE_WATERMARK", userId },
+            required: getImageWatermarkCreditCost(),
+        })
+    }),
+)
+
+mediaRoutes.post(
+    "/generate/tools/video-watermark",
+    // @ts-ignore
+    requireAuth,
+    asyncHandler(async (req: Request, res: Response) => {
+        const userId = sessionUserId(req)
+        const data = parseBody(VideoWatermarkRequestSchema, req.body)
+        await resolveToolUpload(userId, data.uploadId, "video")
+
+        await queueMediaJob(res, {
+            userId,
+            kind: "video-watermark",
+            body: { ...data, modelKey: "VIDEO_WATERMARK", userId },
+            required: getVideoWatermarkCreditCost(),
+        })
+    }),
+)
+
+mediaRoutes.post(
+    "/generate/tools/autocaption",
+    // @ts-ignore
+    requireAuth,
+    asyncHandler(async (req: Request, res: Response) => {
+        const userId = sessionUserId(req)
+        const data = parseBody(AutocaptionRequestSchema, req.body)
+        const video = await resolveToolUpload(userId, data.uploadId, "video")
+
+        await queueMediaJob(res, {
+            userId,
+            kind: "autocaption",
+            body: { ...data, modelKey: "AUTOCAPTION", userId },
+            // Billed from the stored duration, never from the client.
+            required: getAutocaptionCreditCost(video.durationSec ?? 0),
+        })
     }),
 )
 
 function parseListQuery(req: Request) {
     const { type, cursor, limit } = req.query
     if (type !== undefined && !MEDIA_TYPES.includes(type as MediaAssetType)) {
-        throw new BadRequestError("type: must be audio or video")
+        throw new BadRequestError("type: must be audio, video or image")
     }
     const parsedLimit = limit === undefined ? undefined : Number(limit)
     if (parsedLimit !== undefined && !Number.isInteger(parsedLimit)) {

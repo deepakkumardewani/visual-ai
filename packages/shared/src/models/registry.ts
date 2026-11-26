@@ -7,6 +7,7 @@ import type {
   ModelKey,
 } from './types.js';
 import {
+  AUTOCAPTION_USD_PER_30S,
   CHATTERBOX_TEXT_LIMIT,
   INWORLD_TEXT_LIMIT,
   LYRIA_CLIP_SEC,
@@ -157,8 +158,11 @@ export const FIXED_INPUTS: Record<MediaModelKey, MediaFixedInputs> = {
   MINIMAX_MUSIC_26: { neverSend: ['audio_format'] },
   MINIMAX_MUSIC_15: { neverSend: ['audio_format'] },
   STABLE_AUDIO_25: {},
-  IMAGE_WATERMARK: {},
-  AUTOCAPTION: {},
+  // The model's default watermark text must never reach the user's image.
+  // Text stamping is the only mode the tool exposes; tiled output is not offered.
+  IMAGE_WATERMARK: { alwaysSend: ['watermark_text'], send: { mode: 'single' } },
+  // The tool returns the captioned video and its transcript; both are always requested.
+  AUTOCAPTION: { send: { output_video: true, output_transcript: true } },
   // The model's default text is a vendor brand and must never reach the user's video.
   VIDEO_WATERMARK: { alwaysSend: ['watermark'] },
   INWORLD_TTS_2: {},
@@ -813,7 +817,7 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       kind: 'tool',
     },
     {
-      pricing: { unit: 'run', usd: 0.055, blockSec: AUTOCAPTION_BLOCK_SEC },
+      pricing: { unit: 'run', usd: AUTOCAPTION_USD_PER_30S, blockSec: AUTOCAPTION_BLOCK_SEC },
       // SPEC 5.4 Autocaption
       inputs: mediaInputs({
         video: 'video_file_input',

@@ -28,6 +28,7 @@ import Filter from '@/components/History/Filter.vue';
 import ImageActionButtons from '@/components/History/ImageActionButtons.vue';
 import NoResults from '@/components/History/NoResults.vue';
 import SelectActionButtons from '@/components/History/SelectActionButtons.vue';
+import HandoffMenu from '@/components/Studio/HandoffMenu.vue';
 import AppModal from '@/components/AppModal.vue';
 
 import { thumbUrl } from '@/utils/cloudinaryUrl';
@@ -366,6 +367,13 @@ watch(
               :data-testid="`history-${entry.item.type}-item`"
             >
               <TrackCard v-if="entry.item.type === 'audio'" :track="toPlayerTrack(entry.item)" />
+              <img
+                v-else-if="entry.item.type === 'image'"
+                :src="entry.item.url"
+                :alt="entry.item.title"
+                loading="lazy"
+                class="tw-aspect-video tw-w-full tw-rounded-card tw-bg-surface-2 tw-object-contain"
+              />
               <video
                 v-else
                 :src="entry.item.url"
@@ -376,8 +384,9 @@ watch(
                 playsinline
                 class="tw-aspect-video tw-w-full tw-rounded-card tw-bg-surface-2 tw-object-cover"
               />
-              <div class="tw-flex tw-items-center tw-gap-2">
+              <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-2">
                 <FeatureIcon :feature="entry.item.feature" />
+                <HandoffMenu :asset="entry.item" />
                 <div class="tw-ml-auto tw-flex tw-items-center tw-gap-1">
                   <a
                     :href="entry.item.url"

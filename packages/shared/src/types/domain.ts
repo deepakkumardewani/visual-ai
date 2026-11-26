@@ -80,7 +80,7 @@ export type NoChargeReason =
   | 'CONTENT_SAFETY'
   | 'VOICE_UNAVAILABLE';
 
-export type MediaAssetType = 'audio' | 'video';
+export type MediaAssetType = 'audio' | 'video' | 'image';
 
 /** Client-facing media asset; the Replicate output URL is never exposed after the Cloudinary copy. */
 export interface MediaAssetDto {

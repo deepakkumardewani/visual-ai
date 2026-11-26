@@ -1524,7 +1524,7 @@
   - V4: `bun run check`
   - V5: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/image-watermark path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T5.2 Video watermark tool and placement fallback (S5.2)
+### ✅ T5.2 Video watermark tool and placement fallback (S5.2)
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/media.ts` (edit), `apps/api/src/services/media-service.ts` (edit), `apps/web/src/pages/ToolVideoWatermark.vue` (new), `apps/web/src/components/Tools/VideoWatermarkForm.vue` (new), `packages/shared/src/models/media-limits.ts` (edit), `apps/web/src/router/index.ts` (edit)
@@ -1537,7 +1537,7 @@
 - **Do:** Run the impeccable skill first (never frontend-design). Reuse existing design tokens and primitives; no generic AI look; obey Standing UI rules in the header. Video is limited to MAX_TOOL_VIDEO_SECONDS = 120 and MAX_TOOL_VIDEO_BYTES = 100MB and billed from the stored upload duration. Gap G10 (RESOLVED 2026-11-16): record VIDEO_WATERMARK_PLACEMENT in media-limits.ts, first by reading the model's published source and public example outputs (no cost). Only if that does not determine the position, exactly ONE owner-approved real paid run of charlesmccarthy/addwatermark is allowed: maximum one call ever, made only by the main orchestrator session (never by a test, e2e run or automated retry), which tells the user the endpoint/model, expected cost and that it is call 1 of 1 immediately before; write the observed position into the constant and record the result in this task. If the read step answers it, no paid call is made. The preview overlays the text on a frame of the user's video and the size slider (1 to 500, default 40) scales it; the caption reads exactly "Position is fixed by this tool; you can change the text and size."; no drag, opacity, colour or logo control exists; the default text FULLJOURNEY.AI is never sent and empty text disables Generate. Route copy: POST /generate/tools/video-watermark follows the music route order (auth, Zod, 402, jobId, enqueue). Duration comes from the Cloudinary-reported value, never the client. Empty state copy: "Add a video and the text for your watermark.". Tests are not written here: T5.6, T5.8 cover Unit (tools unit task): limit boundaries; Unit: duration source; E2E tools spec: over-limit copy; E2E tools spec: 402 and failure; E2E tools spec at 375px.
 - **Acceptance:**
   - AC1: A video over 120 seconds or 100MB is rejected with specific limit copy and nothing is billed.
-  - AC2: Cost uses the stored upload duration and is charged once on success.
+  - AC2: Cost is the flat per-run price from SPEC (lines 64 and 316) and is charged once on success; the stored upload duration is used only for the 120 s limit check.
   - AC3: VIDEO_WATERMARK_PLACEMENT is a named constant sourced per gap G10 (no paid call if the read step answered it; otherwise the single approved run is recorded as call 1 of 1), no test or e2e run made a paid call, and the caption "Position is fixed by this tool; you can change the text and size." is shown.
   - AC4: 402 and failure states match the shared components.
   - AC5: At 375px width there is no horizontal scroll and tap targets are at least 44px high. Every interactive element has a visible focus ring and an accessible name and works by keyboard alone.
@@ -1549,7 +1549,7 @@
   - V5: `bun run check`
   - V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/video-watermark path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T5.3 Autocaption tool (S5.3)
+### ✅ T5.3 Autocaption tool (S5.3)
 
 - **Kind:** implementation
 - **Files:** `apps/api/src/routes/media.ts` (edit), `apps/api/src/services/media-service.ts` (edit), `apps/web/src/pages/ToolAutocaption.vue` (new), `apps/web/src/components/Tools/CaptionResult.vue` (new), `packages/shared/src/models/media-limits.ts` (edit), `apps/web/src/router/index.ts` (edit)
@@ -1574,7 +1574,7 @@
   - V5: `bun run check`
   - V6: agent-browser visual pass (evidence only, not behaviour): `export AGENT_BROWSER_SESSION=visual-ai`, signed in as the seeded e2e QA user (storage state AUTH_STATE_PATH from e2e/support/env.ts), open WEB_URL plus the /tools/autocaption path on the always-running dev server (never start it), screenshot at 1280px and 375px in light and dark, never press a paid Generate outside a stubbed spec, then `agent-browser close`
 
-### ☐ T5.4 Sketch to image tool (S5.4)
+### ✅ T5.4 Sketch to image tool (S5.4)
 
 - **Kind:** implementation
 - **Files:** `apps/web/src/pages/ToolSketchToImage.vue` (new), `apps/web/src/components/Tools/SketchCanvas.vue` (new), `apps/web/src/components/Tools/SketchToolbar.vue` (new), `apps/web/src/composables/useSketchCanvas.ts` (new), `apps/web/src/router/index.ts` (edit)

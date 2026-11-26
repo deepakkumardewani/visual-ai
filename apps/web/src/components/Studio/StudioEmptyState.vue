@@ -3,7 +3,7 @@ defineProps<{
   title: string;
   description: string;
   /** Label of the one example action, e.g. "Try an example". */
-  exampleLabel: string;
+  exampleLabel?: string;
 }>();
 
 defineEmits<{ example: [] }>();
@@ -19,6 +19,7 @@ defineEmits<{ example: [] }>();
     </h3>
     <p class="tw-m-0 tw-text-sm tw-text-ink-muted">{{ description }}</p>
     <button
+      v-if="exampleLabel"
       type="button"
       data-testid="studio-empty-example"
       class="empty-btn"

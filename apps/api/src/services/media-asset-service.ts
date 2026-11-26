@@ -10,6 +10,7 @@ import { createLogger } from "../lib/logger.js"
 import { MediaAssetModel } from "../models/media-asset.js"
 import { UserModel as User } from "../models/user.js"
 import { buildMediaFolder, uploadMediaToCloudinary } from "../utils/cloudinary.js"
+import type { MediaUploadResult } from "../utils/cloudinary.js"
 import { deleteMediaByPublicIds } from "./cloudinary-service.js"
 import { resolveUserIsPro } from "./generation-service.js"
 
@@ -25,6 +26,8 @@ const VIDEO_FEATURES: ReadonlySet<string> = new Set([
     FeatureType.WATERMARK_VIDEO,
     FeatureType.AUTOCAPTION,
 ])
+const IMAGE_FEATURES: ReadonlySet<string> = new Set([FeatureType.WATERMARK_IMAGE])
+const TRANSCRIPT_FOLDER_SUFFIX = "transcripts"
 
 export interface PersistAssetArgs {
     userId: string
@@ -33,6 +36,8 @@ export interface PersistAssetArgs {
     featureType: FeatureType
     prompt: string
     outputUrl: string
+    /** Second output of a tool (the autocaption transcript); copied off the expiring provider URL. */
+    transcriptUrl?: string
     creditsCharged: number
     /** Model input snapshot; the caller guarantees it holds no secrets. */
     params?: Record<string, unknown>
@@ -47,7 +52,13 @@ export interface ListAssetsOptions {
 type AssetDoc = InstanceType<typeof MediaAssetModel>
 
 function mediaTypeOf(feature: string): MediaAssetType {
-    return VIDEO_FEATURES.has(feature) ? "video" : "audio"
+    if (VIDEO_FEATURES.has(feature)) return "video"
+    return IMAGE_FEATURES.has(feature) ? "image" : "audio"
+}
+
+/** Cloudinary files audio and video under "video"; pictures stay "image". */
+function resourceTypeOf(type: MediaAssetType): "image" | "video" {
+    return type === "image" ? "image" : "video"
 }
 
 /** Maps a row to the client shape; the stored publicId and params stay server-side. */
@@ -113,13 +124,24 @@ async function isHistoryFull(userId: string): Promise<boolean> {
  * The row keeps the provider URL until copyMediaAssetToCloudinary swaps in the permanent one.
  */
 export async function persistMediaAsset(args: PersistAssetArgs): Promise<MediaAssetDto> {
-    const { userId, jobId, modelKey, featureType, prompt, outputUrl, creditsCharged, params } = args
+    const {
+        userId,
+        jobId,
+        modelKey,
+        featureType,
+        prompt,
+        outputUrl,
+        transcriptUrl,
+        creditsCharged,
+        params,
+    } = args
     const base = {
         type: mediaTypeOf(featureType),
         feature: featureType,
         modelKey,
         title: prompt.slice(0, TITLE_MAX_CHARS),
         url: outputUrl,
+        transcriptUrl,
         prompt,
         creditsCharged,
     }
@@ -129,6 +151,16 @@ export async function persistMediaAsset(args: PersistAssetArgs): Promise<MediaAs
     }
     const doc = await MediaAssetModel.create({ ...base, userId, jobId, params, saved: true })
     return toMediaAssetDto(doc)
+}
+
+/** The transcript is a text file, so it is filed as a Cloudinary "raw" resource. */
+async function copyTranscript(
+    sourceUrl: string,
+    userId: string,
+    folder: string,
+): Promise<MediaUploadResult> {
+    if (isE2eUser(userId)) return fakeMediaUpload("raw")
+    return uploadMediaToCloudinary(sourceUrl, `${folder}/${TRANSCRIPT_FOLDER_SUFFIX}`, "raw")
 }
 
 /**
@@ -142,20 +174,27 @@ export async function copyMediaAssetToCloudinary(
     if (!asset.saved) return asset
     try {
         // E2E users never reach real Cloudinary.
+        const resourceType = resourceTypeOf(asset.type)
+        const folder = buildMediaFolder(userId, asset.feature)
         const uploaded = isE2eUser(userId)
-            ? fakeMediaUpload(asset.type === "audio" ? "audio" : "video")
-            : await uploadMediaToCloudinary(asset.url, buildMediaFolder(userId, asset.feature))
+            ? fakeMediaUpload(asset.type)
+            : await uploadMediaToCloudinary(asset.url, folder, resourceType)
+        const transcript = asset.transcriptUrl
+            ? await copyTranscript(asset.transcriptUrl, userId, folder)
+            : undefined
         const doc = await MediaAssetModel.findOneAndUpdate(
             { _id: asset.id, userId },
             {
                 url: uploaded.url,
                 publicId: uploaded.publicId,
-                resourceType: "video",
+                resourceType,
                 format: uploaded.format,
                 bytes: uploaded.bytes,
                 durationSec: uploaded.durationSec,
                 width: uploaded.width,
                 height: uploaded.height,
+                transcriptUrl: transcript?.url,
+                transcriptPublicId: transcript?.publicId,
                 posterUrl: asset.type === "video" ? videoPosterUrl(uploaded.url) : undefined,
             },
             { new: true },
@@ -271,10 +310,24 @@ async function collectWithDescendants(userId: string, root: AssetDoc): Promise<A
     return all
 }
 
-/** Removes the asset, its versions and their Cloudinary files (resource_type video). */
+/** Removes the asset, its versions and their Cloudinary files, each under its own resource_type. */
 export async function deleteMediaAsset(userId: string, id: string): Promise<void> {
     const root = await findOwnedAsset(userId, id)
     const assets = await collectWithDescendants(userId, root)
-    await deleteMediaByPublicIds(assets.map((a) => a.publicId).filter(Boolean))
+    const publicIdsOf = (resourceType: "image" | "video") =>
+        assets
+            .filter((a) => (a.resourceType ?? "video") === resourceType)
+            .map((a) => a.publicId)
+            .filter(Boolean)
+    await Promise.all([
+        deleteMediaByPublicIds(publicIdsOf("video"), "video"),
+        deleteMediaByPublicIds(publicIdsOf("image"), "image"),
+        deleteMediaByPublicIds(
+            assets
+                .map((a) => a.transcriptPublicId)
+                .filter((publicId): publicId is string => !!publicId),
+            "raw",
+        ),
+    ])
     await MediaAssetModel.deleteMany({ userId, _id: { $in: assets.map((a) => a._id) } })
 }

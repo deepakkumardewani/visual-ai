@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 const Schema = mongoose.Schema
 
-export const MEDIA_ASSET_TYPES = ["audio", "video"] as const
+export const MEDIA_ASSET_TYPES = ["audio", "video", "image"] as const
 export const MEDIA_RESOURCE_TYPES = ["video", "image"] as const
 
 const MediaAssetSchema = new Schema({
@@ -21,6 +21,7 @@ const MediaAssetSchema = new Schema({
     height: { type: Number },
     posterUrl: { type: String },
     transcriptUrl: { type: String },
+    transcriptPublicId: { type: String },
     prompt: { type: String, default: "" },
     lyrics: { type: String },
     // Snapshot of the model input; never holds secrets.

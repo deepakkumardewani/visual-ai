@@ -1,7 +1,12 @@
 import type { Prediction } from "replicate"
 import { Types } from "mongoose"
 
-import { getMediaCreditCost, getVideoBillableSeconds, MODEL_REGISTRY } from "@visual-ai/shared"
+import {
+    getMediaCreditCost,
+    getVideoBillableSeconds,
+    MAX_TOOL_VIDEO_SECONDS,
+    MODEL_REGISTRY,
+} from "@visual-ai/shared"
 import type {
     MediaAssetDto,
     MediaCostInput,
@@ -66,6 +71,8 @@ export interface MediaJobParams {
     input: Record<string, unknown>
     prompt: string
     creditCost: number
+    /** The model returns a transcript as its second output; keep it with the asset. */
+    keepTranscript?: boolean
 }
 
 const defaultServices: MediaJobServices = {
@@ -116,10 +123,18 @@ function classifyFailure(message: string): NoChargeReason {
 // Only remote https output may reach Cloudinary; a bare string would be read as a local path.
 const HTTPS_URL_PATTERN = /^https:\/\//i
 
+function asHttpsUrl(value: unknown): string | undefined {
+    return typeof value === "string" && HTTPS_URL_PATTERN.test(value) ? value : undefined
+}
+
 /** Replicate returns a URL, or a list of them; the first is the primary output. */
 function firstOutputUrl(output: unknown): string | undefined {
-    const first = Array.isArray(output) ? output[0] : output
-    return typeof first === "string" && HTTPS_URL_PATTERN.test(first) ? first : undefined
+    return asHttpsUrl(Array.isArray(output) ? output[0] : output)
+}
+
+/** The second output, when the model returns one (autocaption's transcript). */
+function secondOutputUrl(output: unknown): string | undefined {
+    return Array.isArray(output) ? asHttpsUrl(output[1]) : undefined
 }
 
 async function reportNoCharge(
@@ -189,7 +204,8 @@ export async function runMediaJob(
         return
     }
 
-    const settled = await settleJob(params, outputUrl, services)
+    const transcriptUrl = params.keepTranscript ? secondOutputUrl(output) : undefined
+    const settled = await settleJob(params, { outputUrl, transcriptUrl }, services)
     if (!settled.ok) {
         logger.error({ err: settled.error }, `media failed   job=${jid} stage=settle +${elapsed()}`)
         if (settled.charged) {
@@ -216,7 +232,7 @@ type SettleResult =
  */
 async function settleJob(
     params: MediaJobParams,
-    outputUrl: string,
+    outputs: { outputUrl: string; transcriptUrl?: string },
     services: MediaJobServices,
 ): Promise<SettleResult> {
     const { jobId, userId, modelKey, featureType, prompt, creditCost, input } = params
@@ -230,7 +246,8 @@ async function settleJob(
             modelKey,
             featureType,
             prompt,
-            outputUrl,
+            outputUrl: outputs.outputUrl,
+            transcriptUrl: outputs.transcriptUrl,
             creditsCharged: creditCost,
             params: input,
         })
@@ -469,10 +486,7 @@ function trackCompletion(services: MediaJobServices): {
 }
 
 /** Attached files are single-use: once the video is delivered they are removed everywhere. */
-async function deleteConsumedUploads(userId: string, ids: VideoUploadIds): Promise<void> {
-    const uploadIds = [ids.imageUploadId, ids.audioUploadId].filter(
-        (id): id is string => typeof id === "string",
-    )
+async function deleteConsumedUploads(userId: string, uploadIds: string[]): Promise<void> {
     const rows = await MediaUploadModel.find({ _id: { $in: uploadIds }, userId }).lean()
     for (const row of rows) {
         try {
@@ -523,5 +537,159 @@ export async function processVideo(
         tracked.services,
     )
     // A draft keeps its files so "Render final" can reuse them; the expired-upload sweep covers the rest.
-    if (tracked.completed() && !costParams.draft) await deleteConsumedUploads(body.userId, ids)
+    if (tracked.completed() && !costParams.draft) {
+        const uploadIds = [ids.imageUploadId, ids.audioUploadId].filter(
+            (id): id is string => typeof id === "string",
+        )
+        await deleteConsumedUploads(body.userId, uploadIds)
+    }
+}
+
+// ── Tools: image watermark, video watermark, autocaption ──────────────────────
+
+/** The upload purposes a tool's input file must have been stored under. */
+const TOOL_UPLOAD_PURPOSE = { image: "tool-image", video: "tool-video" } as const satisfies Record<
+    string,
+    UploadPurpose
+>
+type ToolInputKind = keyof typeof TOOL_UPLOAD_PURPOSE
+
+const TOOL_VIDEO_LIMIT_MESSAGE = "uploadId: Videos up to 2 minutes and 100 MB"
+const AUTOCAPTION_RESULT_LABEL = "Captioned video"
+
+export interface ToolUpload {
+    url: string
+    /** Stored duration (read from Cloudinary at upload), never a client value. */
+    durationSec?: number
+}
+
+/**
+ * Resolves a tool's input file. A video must carry a stored duration within the cap, so an
+ * unreadable or over-long file is refused before anything is billed.
+ */
+export async function resolveToolUpload(
+    userId: string,
+    uploadId: string,
+    kind: ToolInputKind,
+): Promise<ToolUpload> {
+    const upload = await findOwnedUpload(uploadId, userId, TOOL_UPLOAD_PURPOSE[kind], "uploadId")
+    if (kind === "image") return { url: upload.url }
+    const durationSec = upload.durationSec ?? 0
+    if (durationSec <= 0 || durationSec > MAX_TOOL_VIDEO_SECONDS) {
+        throw new BadRequestError(TOOL_VIDEO_LIMIT_MESSAGE)
+    }
+    return { url: upload.url, durationSec }
+}
+
+export function getImageWatermarkCreditCost(): number {
+    return getMediaCreditCost("IMAGE_WATERMARK", { kind: "run" })
+}
+
+export function getVideoWatermarkCreditCost(): number {
+    return getMediaCreditCost("VIDEO_WATERMARK", { kind: "run" })
+}
+
+/** Billed per started 30-second block of the stored duration (gap G6). */
+export function getAutocaptionCreditCost(videoSec: number): number {
+    return getMediaCreditCost("AUTOCAPTION", { kind: "blocks", videoSec })
+}
+
+interface ToolJobSpec {
+    modelKey: MediaModelKey
+    featureType: FeatureType
+    inputKind: ToolInputKind
+    /** Model fields, keyed by registry field name, for this upload. */
+    params: (upload: ToolUpload) => Record<string, unknown>
+    prompt: string
+    creditCost: (upload: ToolUpload) => number
+    keepTranscript?: boolean
+}
+
+/** Shared body of the three tool processors; the input file is single-use once delivered. */
+async function processToolJob(
+    body: MediaJobBody,
+    spec: ToolJobSpec,
+    services: MediaJobServices = defaultServices,
+): Promise<void> {
+    const uploadId = String(body.uploadId)
+    const upload = await resolveToolUpload(body.userId, uploadId, spec.inputKind)
+    const tracked = trackCompletion(services)
+    await runMediaJob(
+        {
+            jobId: body.jobId,
+            userId: body.userId,
+            modelKey: spec.modelKey,
+            featureType: spec.featureType,
+            input: buildMediaInput(spec.modelKey, "tool", spec.params(upload)),
+            prompt: spec.prompt,
+            // Recomputed here: the queued payload carries no trusted cost.
+            creditCost: spec.creditCost(upload),
+            keepTranscript: spec.keepTranscript,
+        },
+        tracked.services,
+    )
+    if (tracked.completed()) await deleteConsumedUploads(body.userId, [uploadId])
+}
+
+export async function processImageWatermark(
+    body: MediaJobBody,
+    services?: MediaJobServices,
+): Promise<void> {
+    const text = String(body.watermarkText)
+    return processToolJob(
+        body,
+        {
+            modelKey: "IMAGE_WATERMARK",
+            featureType: FeatureType.WATERMARK_IMAGE,
+            inputKind: "image",
+            params: (upload) => ({
+                image: upload.url,
+                watermarkText: text,
+                position: body.position,
+                scale: body.scale,
+                opacity: body.opacity,
+            }),
+            prompt: text,
+            creditCost: getImageWatermarkCreditCost,
+        },
+        services,
+    )
+}
+
+export async function processVideoWatermark(
+    body: MediaJobBody,
+    services?: MediaJobServices,
+): Promise<void> {
+    const text = String(body.watermarkText)
+    return processToolJob(
+        body,
+        {
+            modelKey: "VIDEO_WATERMARK",
+            featureType: FeatureType.WATERMARK_VIDEO,
+            inputKind: "video",
+            params: (upload) => ({ video: upload.url, watermarkText: text, size: body.size }),
+            prompt: text,
+            creditCost: getVideoWatermarkCreditCost,
+        },
+        services,
+    )
+}
+
+export async function processAutocaption(
+    body: MediaJobBody,
+    services?: MediaJobServices,
+): Promise<void> {
+    return processToolJob(
+        body,
+        {
+            modelKey: "AUTOCAPTION",
+            featureType: FeatureType.AUTOCAPTION,
+            inputKind: "video",
+            params: (upload) => ({ video: upload.url }),
+            prompt: AUTOCAPTION_RESULT_LABEL,
+            creditCost: (upload) => getAutocaptionCreditCost(upload.durationSec ?? 0),
+            keepTranscript: true,
+        },
+        services,
+    )
 }

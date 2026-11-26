@@ -10,7 +10,14 @@ const FAKE_PUBLIC_ID_PREFIX = "e2e-fake/"
 export const FAKE_UPLOAD_DURATION_SEC = 5
 export const FAKE_IMAGE_SIZE_PX = 64
 
-export type FakeUploadKind = "audio" | "image" | "video"
+const FAKE_FORMATS: Record<FakeUploadKind, string> = {
+    audio: "mp3",
+    image: "png",
+    raw: "srt",
+    video: "mp4",
+}
+
+export type FakeUploadKind = "audio" | "image" | "raw" | "video"
 
 /** True for ids minted by fakeMediaUpload, so delete paths can skip the real Cloudinary API. */
 export function isFakeCloudinaryId(publicId: string): boolean {
@@ -21,12 +28,13 @@ export function isFakeCloudinaryId(publicId: string): boolean {
 export function fakeMediaUpload(kind: FakeUploadKind, bytes = 0): MediaUploadResult {
     const publicId = `${FAKE_PUBLIC_ID_PREFIX}${randomUUID()}`
     const isImage = kind === "image"
+    const hasDuration = kind === "audio" || kind === "video"
     return {
         url: `${FAKE_CLOUDINARY_ORIGIN}/${publicId}`,
         publicId,
-        format: isImage ? "png" : kind === "audio" ? "mp3" : "mp4",
+        format: FAKE_FORMATS[kind],
         bytes,
-        durationSec: isImage ? undefined : FAKE_UPLOAD_DURATION_SEC,
+        durationSec: hasDuration ? FAKE_UPLOAD_DURATION_SEC : undefined,
         width: isImage ? FAKE_IMAGE_SIZE_PX : undefined,
         height: isImage ? FAKE_IMAGE_SIZE_PX : undefined,
     }

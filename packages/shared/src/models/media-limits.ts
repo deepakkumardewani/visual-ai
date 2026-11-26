@@ -87,6 +87,19 @@ export const MAX_TOOL_VIDEO_SECONDS = 120;
 export const MAX_TOOL_VIDEO_BYTES = 100 * BYTES_PER_MB;
 export const IMAGE_WATERMARK_TEXT_LIMIT = 500;
 export const VIDEO_WATERMARK_SIZE = { min: 1, max: 500, default: 40 } as const;
+/** Video watermark text is a single short line (SPEC R-TOOL-VW-1). */
+export const VIDEO_WATERMARK_TEXT_LIMIT = 100;
+
+/** Replicate lists about this much per run; billed per AUTOCAPTION_BLOCK_SEC of input video (gap G6). */
+export const AUTOCAPTION_USD_PER_30S = 0.055;
+
+/**
+ * Where charlesmccarthy/addwatermark draws its text is unverified (G10: model source unread, the
+ * single paid run not approved), so no position is claimed. Replace with a fractional anchor
+ * only once confirmed from the model page or an approved run; until then the preview must not
+ * show a position (SPEC R-TOOL-VW-1).
+ */
+export const VIDEO_WATERMARK_PLACEMENT = null;
 
 // ── Editor and export ────────────────────────────────────────────────────────
 

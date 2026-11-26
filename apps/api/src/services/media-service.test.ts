@@ -59,6 +59,13 @@ const {
     getSongCreditCost,
     getVideoCreditCost,
     processVideo,
+    processImageWatermark,
+    processVideoWatermark,
+    processAutocaption,
+    resolveToolUpload,
+    getImageWatermarkCreditCost,
+    getVideoWatermarkCreditCost,
+    getAutocaptionCreditCost,
     resolveVideoAttachments,
     getSpeechCharCount,
     getSpeechCreditCost,
@@ -874,5 +881,310 @@ describe("processVideo", () => {
         await processVideo(videoBody)
 
         expect(redisSetStatus).toHaveBeenCalled()
+    })
+})
+
+const TOOL_ID = "665f1f77bcf86cd799439021"
+const VIDEO_URL = "https://cdn.invalid/clip.mp4"
+const IMAGE_URL = "https://cdn.invalid/pic.png"
+
+describe("tool cost", () => {
+    it("charges one credit per watermark run", () => {
+        expect(getImageWatermarkCreditCost()).toBe(1)
+        expect(getVideoWatermarkCreditCost()).toBe(1)
+    })
+
+    it.each([
+        [1, 11],
+        [30, 11],
+        [31, 22],
+        [60, 22],
+        [120, 44],
+    ])(
+        "bills autocaption for %is of video at %i credits (per started 30s block)",
+        (sec, credits) => {
+            expect(getAutocaptionCreditCost(sec)).toBe(credits)
+        },
+    )
+})
+
+describe("resolveToolUpload", () => {
+    beforeEach(() => vi.clearAllMocks())
+
+    it("returns only the url for an image, scoped to owner and tool-image purpose", async () => {
+        uploadModel.findOne.mockReturnValue(leanOf(storedUpload({ url: IMAGE_URL })))
+
+        await expect(resolveToolUpload("user_1", TOOL_ID, "image")).resolves.toEqual({
+            url: IMAGE_URL,
+        })
+        expect(uploadModel.findOne).toHaveBeenCalledWith(
+            expect.objectContaining({ _id: TOOL_ID, userId: "user_1", purpose: "tool-image" }),
+        )
+    })
+
+    it("returns the url and stored duration for a video, under the tool-video purpose", async () => {
+        uploadModel.findOne.mockReturnValue(
+            leanOf(storedUpload({ url: VIDEO_URL, durationSec: 45 })),
+        )
+
+        await expect(resolveToolUpload("user_1", TOOL_ID, "video")).resolves.toEqual({
+            url: VIDEO_URL,
+            durationSec: 45,
+        })
+        expect(uploadModel.findOne).toHaveBeenCalledWith(
+            expect.objectContaining({ purpose: "tool-video" }),
+        )
+    })
+
+    it("accepts a video of exactly the 120 second cap", async () => {
+        uploadModel.findOne.mockReturnValue(leanOf(storedUpload({ durationSec: 120 })))
+
+        await expect(resolveToolUpload("user_1", TOOL_ID, "video")).resolves.toMatchObject({
+            durationSec: 120,
+        })
+    })
+
+    it.each([
+        ["just over the cap", 120.01],
+        ["zero", 0],
+        ["missing", undefined],
+        ["null", null],
+    ])(
+        "rejects a video whose stored duration is %s with the limit copy",
+        async (_label, durationSec) => {
+            uploadModel.findOne.mockReturnValue(leanOf(storedUpload({ durationSec })))
+
+            await expect(resolveToolUpload("user_1", TOOL_ID, "video")).rejects.toMatchObject({
+                statusCode: 400,
+                message: "uploadId: Videos up to 2 minutes and 100 MB",
+            })
+        },
+    )
+
+    it("rejects a missing, foreign or expired upload with a field-level 400", async () => {
+        uploadModel.findOne.mockReturnValue(leanOf(null))
+
+        await expect(resolveToolUpload("user_1", TOOL_ID, "image")).rejects.toMatchObject({
+            statusCode: 400,
+            message: "uploadId: upload not found or expired",
+        })
+    })
+
+    it("rejects a malformed id without querying the database", async () => {
+        await expect(resolveToolUpload("user_1", "nope", "image")).rejects.toMatchObject({
+            statusCode: 400,
+        })
+        expect(uploadModel.findOne).not.toHaveBeenCalled()
+    })
+})
+
+describe("tool processors", () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+        uploadModel.findOne.mockReturnValue(leanOf(null))
+        uploadModel.find.mockReturnValue(leanOf([]))
+        deleteUploadedFile.mockResolvedValue(undefined)
+        uploadModel.deleteOne.mockResolvedValue(undefined)
+    })
+
+    const base = { jobId: "job_123456", userId: "user_1", uploadId: TOOL_ID }
+    const imageBody: MediaJobBody = {
+        ...base,
+        modelKey: "IMAGE_WATERMARK",
+        watermarkText: "(c) Me",
+        position: "center",
+        scale: 0.2,
+        opacity: 0.5,
+    }
+    const videoBody: MediaJobBody = {
+        ...base,
+        modelKey: "VIDEO_WATERMARK",
+        watermarkText: "Me",
+        size: 40,
+    }
+    const captionBody: MediaJobBody = { ...base, modelKey: "AUTOCAPTION" }
+
+    describe("processImageWatermark", () => {
+        it("sends the stored url and the user's text, charges once and persists a watermark asset", async () => {
+            uploadModel.findOne.mockReturnValue(leanOf(storedUpload({ url: IMAGE_URL })))
+            runReplicate.mockResolvedValue("https://fake.invalid/out.png")
+            const { services } = makeServices()
+
+            await processImageWatermark(imageBody, services)
+
+            const { input } = runReplicate.mock.calls[0][0]
+            expect(input).toMatchObject({
+                image: IMAGE_URL,
+                watermark_text: "(c) Me",
+                position: "center",
+                scale: 0.2,
+                opacity: 0.5,
+            })
+            expect(input).not.toHaveProperty("uploadId")
+            expect(services.deductCredits).toHaveBeenCalledTimes(1)
+            expect(services.deductCredits).toHaveBeenCalledWith("user_1", 1)
+            expect(services.persistAsset).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    modelKey: "IMAGE_WATERMARK",
+                    featureType: FeatureType.WATERMARK_IMAGE,
+                    prompt: "(c) Me",
+                }),
+            )
+        })
+
+        it("deletes the consumed upload once the result is delivered", async () => {
+            const row = storedUpload()
+            uploadModel.findOne.mockReturnValue(leanOf(row))
+            uploadModel.find.mockReturnValue(leanOf([row]))
+            runReplicate.mockResolvedValue("https://fake.invalid/out.png")
+            const { services } = makeServices()
+
+            await processImageWatermark(imageBody, services)
+
+            expect(uploadModel.find).toHaveBeenCalledWith({
+                _id: { $in: [TOOL_ID] },
+                userId: "user_1",
+            })
+            expect(deleteUploadedFile).toHaveBeenCalledWith(row)
+            expect(uploadModel.deleteOne).toHaveBeenCalledWith({ _id: "u1" })
+        })
+
+        it("keeps the upload and charges nothing when generation fails", async () => {
+            uploadModel.findOne.mockReturnValue(leanOf(storedUpload()))
+            runReplicate.mockRejectedValue(new Error("replicate down"))
+            const { services } = makeServices()
+
+            await processImageWatermark(imageBody, services)
+
+            expect(services.deductCredits).not.toHaveBeenCalled()
+            expect(deleteUploadedFile).not.toHaveBeenCalled()
+        })
+
+        it("rejects before generating when the upload is not the caller's", async () => {
+            const { services } = makeServices()
+
+            await expect(processImageWatermark(imageBody, services)).rejects.toMatchObject({
+                statusCode: 400,
+            })
+            expect(runReplicate).not.toHaveBeenCalled()
+        })
+
+        it("uses the default services when none are injected", async () => {
+            uploadModel.findOne.mockReturnValue(leanOf(storedUpload()))
+            runReplicate.mockRejectedValue(new Error("down"))
+
+            await processImageWatermark(imageBody)
+
+            expect(redisSetStatus).toHaveBeenCalled()
+        })
+    })
+
+    describe("processVideoWatermark", () => {
+        it("sends the stored video url, text and size, and charges the flat rate once", async () => {
+            uploadModel.findOne.mockReturnValue(
+                leanOf(storedUpload({ url: VIDEO_URL, durationSec: 100 })),
+            )
+            runReplicate.mockResolvedValue("https://fake.invalid/out.mp4")
+            const { services } = makeServices()
+
+            await processVideoWatermark(videoBody, services)
+
+            expect(runReplicate.mock.calls[0][0].input).toMatchObject({
+                video: VIDEO_URL,
+                watermark: "Me",
+                size: 40,
+            })
+            expect(services.deductCredits).toHaveBeenCalledTimes(1)
+            expect(services.deductCredits).toHaveBeenCalledWith("user_1", 1)
+            expect(services.persistAsset).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    featureType: FeatureType.WATERMARK_VIDEO,
+                    prompt: "Me",
+                }),
+            )
+        })
+
+        it("refuses an over-long stored video before generating or charging", async () => {
+            uploadModel.findOne.mockReturnValue(leanOf(storedUpload({ durationSec: 121 })))
+            const { services } = makeServices()
+
+            await expect(processVideoWatermark(videoBody, services)).rejects.toMatchObject({
+                statusCode: 400,
+            })
+            expect(runReplicate).not.toHaveBeenCalled()
+            expect(services.deductCredits).not.toHaveBeenCalled()
+        })
+    })
+
+    describe("processAutocaption", () => {
+        it.each([
+            [30, 11],
+            [31, 22],
+            [120, 44],
+        ])(
+            "bills a %is video at %i credits from the stored duration",
+            async (durationSec, credits) => {
+                uploadModel.findOne.mockReturnValue(
+                    leanOf(storedUpload({ url: VIDEO_URL, durationSec })),
+                )
+                runReplicate.mockResolvedValue([
+                    "https://fake.invalid/c.mp4",
+                    "https://fake.invalid/t.txt",
+                ])
+                const { services } = makeServices()
+
+                await processAutocaption({ ...captionBody, durationSec: 1 }, services)
+
+                expect(runReplicate.mock.calls[0][0].input).toMatchObject({
+                    video_file_input: VIDEO_URL,
+                })
+                expect(services.deductCredits).toHaveBeenCalledTimes(1)
+                expect(services.deductCredits).toHaveBeenCalledWith("user_1", credits)
+            },
+        )
+
+        it("keeps the transcript, the second output, with the asset", async () => {
+            uploadModel.findOne.mockReturnValue(leanOf(storedUpload({ durationSec: 10 })))
+            runReplicate.mockResolvedValue([
+                "https://fake.invalid/c.mp4",
+                "https://fake.invalid/t.txt",
+            ])
+            const { services } = makeServices()
+
+            await processAutocaption(captionBody, services)
+
+            expect(services.persistAsset).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    featureType: FeatureType.AUTOCAPTION,
+                    prompt: "Captioned video",
+                    outputUrl: "https://fake.invalid/c.mp4",
+                    transcriptUrl: "https://fake.invalid/t.txt",
+                }),
+            )
+        })
+
+        it("stores no transcript when the model returns a single output", async () => {
+            uploadModel.findOne.mockReturnValue(leanOf(storedUpload({ durationSec: 10 })))
+            runReplicate.mockResolvedValue("https://fake.invalid/c.mp4")
+            const { services } = makeServices()
+
+            await processAutocaption(captionBody, services)
+
+            expect(services.persistAsset).toHaveBeenCalledWith(
+                expect.objectContaining({ transcriptUrl: undefined }),
+            )
+        })
+
+        it("ignores a transcript that is not an https url", async () => {
+            uploadModel.findOne.mockReturnValue(leanOf(storedUpload({ durationSec: 10 })))
+            runReplicate.mockResolvedValue(["https://fake.invalid/c.mp4", "javascript:alert(1)"])
+            const { services } = makeServices()
+
+            await processAutocaption(captionBody, services)
+
+            expect(services.persistAsset).toHaveBeenCalledWith(
+                expect.objectContaining({ transcriptUrl: undefined }),
+            )
+        })
     })
 })

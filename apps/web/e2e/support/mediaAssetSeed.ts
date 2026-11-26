@@ -46,6 +46,38 @@ export async function seedAudioAsset(options: SeedAudioAssetOptions): Promise<Se
   return { id: insertedId.toString(), title };
 }
 
+export type SeedImageAssetOptions = {
+  userId: string;
+  token: string;
+  /** Where the browser fetches the file from; a stubbed fixture URL in e2e. */
+  url: string;
+};
+
+/** Inserts one saved image asset Mongo-direct, shaped like a finished image-watermark job. */
+export async function seedImageAsset(options: SeedImageAssetOptions): Promise<SeededAsset> {
+  const title = `e2e-image-${options.token}`;
+  const doc = {
+    userId: options.userId,
+    type: 'image',
+    feature: 'watermark_image',
+    modelKey: 'IMAGE_WATERMARK',
+    title,
+    url: options.url,
+    publicId: '',
+    resourceType: 'image',
+    prompt: title,
+    jobId: `job-${options.token}`,
+    creditsCharged: 0,
+    saved: true,
+    createdAt: new Date(),
+  };
+  const { insertedId } = await withMediaAssets((assets) => assets.insertOne(doc));
+  return { id: insertedId.toString(), title };
+}
+
 export async function deleteAudioAsset(id: string): Promise<void> {
   await withMediaAssets((assets) => assets.deleteOne({ _id: new mongoose.Types.ObjectId(id) }));
 }
+
+/** Type-neutral alias: the same delete works for any seeded media asset. */
+export const deleteMediaAsset = deleteAudioAsset;

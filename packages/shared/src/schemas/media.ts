@@ -1,12 +1,15 @@
 import { z } from 'zod';
 
 import {
+  IMAGE_WATERMARK_TEXT_LIMIT,
   MEDIA_PROMPT_MAX_CHARS,
   P_VIDEO_MAX_SEC,
   SONG_LYRICS_LIMITS,
   SONG_PROMPT_LIMITS,
   STABLE_AUDIO_CFG_SCALE,
   STABLE_AUDIO_STEPS,
+  VIDEO_WATERMARK_SIZE,
+  VIDEO_WATERMARK_TEXT_LIMIT,
 } from '../models/media-limits.js';
 import { MODEL_REGISTRY } from '../models/registry.js';
 import type { MediaModelConfig } from '../models/types.js';
@@ -313,3 +316,58 @@ export const VideoRequestSchema = z
   .superRefine(refineVideoRequest);
 
 export type VideoRequest = z.infer<typeof VideoRequestSchema>;
+
+// ── Tools ────────────────────────────────────────────────────────────────────
+
+/** The nine anchors the image watermark model accepts. */
+export const IMAGE_WATERMARK_POSITIONS = [
+  'top-left',
+  'top-center',
+  'top-right',
+  'center-left',
+  'center',
+  'center-right',
+  'bottom-left',
+  'bottom-center',
+  'bottom-right',
+] as const;
+export type ImageWatermarkPosition = (typeof IMAGE_WATERMARK_POSITIONS)[number];
+
+export const IMAGE_WATERMARK_SCALE = { min: 0.01, max: 1, default: 0.18 } as const;
+export const IMAGE_WATERMARK_OPACITY = { min: 0, max: 1, default: 0.65 } as const;
+
+/** A tool's input file arrives only as an upload id; the stored file, never the client, supplies its URL. */
+const toolUploadId = z.string().min(1, 'uploadId is required');
+
+/** Text is trimmed and must be non-empty so the model's built-in default is never used. */
+function watermarkText(maxChars: number) {
+  return z
+    .string()
+    .trim()
+    .min(1, 'Watermark text is required')
+    .max(maxChars, `Watermark text must be at most ${maxChars} characters`);
+}
+
+export const ImageWatermarkRequestSchema = z.object({
+  jobId: mediaRequestBase.jobId,
+  uploadId: toolUploadId,
+  watermarkText: watermarkText(IMAGE_WATERMARK_TEXT_LIMIT),
+  position: z.enum(IMAGE_WATERMARK_POSITIONS),
+  scale: z.number().min(IMAGE_WATERMARK_SCALE.min).max(IMAGE_WATERMARK_SCALE.max),
+  opacity: z.number().min(IMAGE_WATERMARK_OPACITY.min).max(IMAGE_WATERMARK_OPACITY.max),
+});
+export type ImageWatermarkRequest = z.infer<typeof ImageWatermarkRequestSchema>;
+
+export const VideoWatermarkRequestSchema = z.object({
+  jobId: mediaRequestBase.jobId,
+  uploadId: toolUploadId,
+  watermarkText: watermarkText(VIDEO_WATERMARK_TEXT_LIMIT),
+  size: z.number().int().min(VIDEO_WATERMARK_SIZE.min).max(VIDEO_WATERMARK_SIZE.max),
+});
+export type VideoWatermarkRequest = z.infer<typeof VideoWatermarkRequestSchema>;
+
+export const AutocaptionRequestSchema = z.object({
+  jobId: mediaRequestBase.jobId,
+  uploadId: toolUploadId,
+});
+export type AutocaptionRequest = z.infer<typeof AutocaptionRequestSchema>;

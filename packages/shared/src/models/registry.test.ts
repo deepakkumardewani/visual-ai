@@ -334,6 +334,8 @@ describe('FIXED_INPUTS', () => {
       'MINIMAX_MUSIC_26',
       'MINIMAX_MUSIC_15',
       'VIDEO_WATERMARK',
+      'IMAGE_WATERMARK',
+      'AUTOCAPTION',
     ];
     for (const key of MEDIA_KEYS as MediaModelKey[]) {
       if (withRules.includes(key)) continue;

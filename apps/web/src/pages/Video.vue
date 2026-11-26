@@ -23,6 +23,7 @@ import { useMediaCost } from '@/composables/useMediaCost';
 import { useMediaDraft } from '@/composables/useMediaDraft';
 import { useMediaJob } from '@/composables/useMediaJob';
 import { usePageSeo } from '@/composables/usePageSeo';
+import { useHandoffPreload } from '@/composables/useStudioHandoff';
 import type { UploadedFile } from '@/composables/useToolVideoUpload';
 import { usePlayerStore } from '@/stores/player';
 
@@ -51,6 +52,7 @@ const durationSec = ref(options.value.durationSec.default);
 const resolution = ref(options.value.defaultResolution);
 const useDraft = ref(true);
 const image = ref<UploadedFile | null>(null);
+const handoff = useHandoffPreload({ assetType: 'image', purpose: 'video-image', target: image });
 const audio = ref<UploadedFile | null>(null);
 /** What the visible result was rendered with; the toggle may have moved since. */
 const resultWasDraft = ref(false);
@@ -153,6 +155,13 @@ onKeyStroke('Enter', (event) => {
     <h1 class="tw-m-0 tw-mb-6 tw-font-display tw-text-display-md tw-text-ink-primary">
       Video studio
     </h1>
+    <StudioErrorState
+      v-if="handoff.status.value === 'error'"
+      class="tw-mb-6"
+      :message="handoff.message.value"
+      action-label="Dismiss"
+      @action="handoff.dismiss()"
+    />
     <VideoComposer
       v-model:model-key="modelKey"
       v-model:prompt="mediaDraft.prompt"
