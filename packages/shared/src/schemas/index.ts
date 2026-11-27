@@ -32,3 +32,19 @@ export type {
 
 export { CreateSavedPromptSchema } from './saved-prompt.js';
 export type { CreateSavedPrompt } from './saved-prompt.js';
+
+export {
+  CreateFeedbackSchema,
+  FeedbackContextSchema,
+  FeedbackEligibilityRequestSchema,
+  UpdateFeedbackAdminSchema,
+  AdminFeedbackQuerySchema,
+} from './feedback.js';
+
+export type {
+  CreateFeedbackRequest,
+  FeedbackContext,
+  FeedbackEligibilityRequest,
+  UpdateFeedbackAdminRequest,
+  AdminFeedbackQuery,
+} from './feedback.js';
