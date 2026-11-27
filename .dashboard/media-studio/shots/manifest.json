@@ -1,0 +1,2978 @@
+[
+ {
+  "file": "0/T0.30-1.png",
+  "taskId": "T0.30",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Audio menu open from the keyboard with the first item focused",
+  "annotations": [],
+  "at": "2026-11-22T15:58:47.639Z"
+ },
+ {
+  "file": "0/T0.30-2.png",
+  "taskId": "T0.30",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Mini-player keeps playing the History track on a studio route",
+  "annotations": [],
+  "at": "2026-11-22T15:58:47.707Z"
+ },
+ {
+  "file": "0/T0.30-3.png",
+  "taskId": "T0.30",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Second History track replaces the first in the mini-player",
+  "annotations": [],
+  "at": "2026-11-22T15:58:47.773Z"
+ },
+ {
+  "file": "0/T0.30-4.png",
+  "taskId": "T0.30",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Question mark opens the keyboard shortcuts popover",
+  "annotations": [],
+  "at": "2026-11-22T15:58:47.840Z"
+ },
+ {
+  "file": "0/T0.30-5.png",
+  "taskId": "T0.30",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "History with the Song filter shows only the song asset",
+  "annotations": [],
+  "at": "2026-11-22T15:58:47.912Z"
+ },
+ {
+  "file": "0/T0.30-6.png",
+  "taskId": "T0.30",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "375px Audio accordion with 44px items and no horizontal scroll",
+  "annotations": [],
+  "at": "2026-11-22T15:58:47.981Z"
+ },
+ {
+  "file": "0/T0.18-1.png",
+  "taskId": "T0.18",
+  "kind": "proof",
+  "step": "AC2/AC4 Audio menu opens",
+  "attempt": 1,
+  "caption": "Audio menu open with Song, Music and Speech; Audio tab highlighted with caret.",
+  "annotations": [
+   {
+    "x": 39,
+    "y": 8,
+    "w": 25,
+    "h": 24,
+    "label": "Audio dropdown items"
+   }
+  ],
+  "at": "2026-11-22T16:02:23.124Z"
+ },
+ {
+  "file": "0/T0.18-2.png",
+  "taskId": "T0.18",
+  "kind": "proof",
+  "step": "AC6 mobile accordion",
+  "attempt": 1,
+  "caption": "At 375px the Audio and Tools groups form an accordion with no horizontal scroll.",
+  "annotations": [
+   {
+    "x": 4,
+    "y": 22,
+    "w": 92,
+    "h": 50,
+    "label": "Accordion items"
+   }
+  ],
+  "at": "2026-11-22T16:02:30.082Z"
+ },
+ {
+  "file": "0/T0.19-1.png",
+  "taskId": "T0.19",
+  "kind": "proof",
+  "step": "AC6/AC4 mobile placeholder accent",
+  "attempt": 1,
+  "caption": "Music placeholder at 375px with a cool accent bar, no horizontal scroll.",
+  "annotations": [
+   {
+    "x": 4,
+    "y": 51,
+    "w": 92,
+    "h": 26,
+    "label": "Placeholder with studio accent"
+   }
+  ],
+  "at": "2026-11-22T16:02:30.151Z"
+ },
+ {
+  "file": "0/T0.19-2.png",
+  "taskId": "T0.19",
+  "kind": "proof",
+  "step": "AC3 Song placeholder",
+  "attempt": 1,
+  "caption": "Song placeholder shows \"Song studio is coming soon\" and a Back to Image link.",
+  "annotations": [
+   {
+    "x": 7,
+    "y": 10,
+    "w": 35,
+    "h": 33,
+    "label": "Title, copy and Back to Image link"
+   }
+  ],
+  "at": "2026-11-22T16:02:34.030Z"
+ },
+ {
+  "file": "0/T0.25-1.png",
+  "taskId": "T0.25",
+  "kind": "proof",
+  "step": "AC3 popover lists every shortcut",
+  "attempt": 1,
+  "caption": "Shortcuts popover lists every media shortcut (Space, arrows, M, L, brackets) beside the existing ones.",
+  "annotations": [
+   {
+    "x": 34,
+    "y": 13,
+    "w": 32,
+    "h": 75,
+    "label": "Shortcut list"
+   }
+  ],
+  "at": "2026-11-22T16:02:43.357Z"
+ },
+ {
+  "file": "0/T0.26-1.png",
+  "taskId": "T0.26",
+  "kind": "proof",
+  "step": "AC2 pricing rows per media model",
+  "attempt": 1,
+  "caption": "Pricing lists one row per media model grouped Song, Music, Speech, Video with credit costs.",
+  "annotations": [
+   {
+    "x": 5,
+    "y": 57,
+    "w": 92,
+    "h": 40,
+    "label": "Media model price rows"
+   }
+  ],
+  "at": "2026-11-22T16:02:53.490Z"
+ },
+ {
+  "file": "0/T0.26-2.png",
+  "taskId": "T0.26",
+  "kind": "proof",
+  "step": "AC3 no horizontal scroll at 375px",
+  "attempt": 1,
+  "caption": "At 375px the media price rows fit with no horizontal scroll (scrollWidth 375).",
+  "annotations": [
+   {
+    "x": 4,
+    "y": 50,
+    "w": 92,
+    "h": 48,
+    "label": "Media rows within viewport"
+   }
+  ],
+  "at": "2026-11-22T16:03:08.899Z"
+ },
+ {
+  "file": "0/T0.26-3.png",
+  "taskId": "T0.26",
+  "kind": "proof",
+  "step": "AC3 media FAQs shown",
+  "attempt": 1,
+  "caption": "Pricing FAQ includes the media questions (speech model, tags, text limit, speech cost).",
+  "annotations": [
+   {
+    "x": 4,
+    "y": 38,
+    "w": 92,
+    "h": 58,
+    "label": "Media FAQ entries"
+   }
+  ],
+  "at": "2026-11-22T16:03:13.448Z"
+ },
+ {
+  "file": "0/T0.22-1.png",
+  "taskId": "T0.22",
+  "kind": "proof",
+  "step": "AC1/AC3 media in History",
+  "attempt": 1,
+  "caption": "History lists media under date groups with Song/Music/Speech/Video/Tools filter chips and play controls.",
+  "annotations": [
+   {
+    "x": 18,
+    "y": 10,
+    "w": 38,
+    "h": 12,
+    "label": "Media filter chips"
+   },
+   {
+    "x": 3,
+    "y": 31,
+    "w": 94,
+    "h": 9,
+    "label": "Audio items with play control"
+   }
+  ],
+  "at": "2026-11-22T16:03:21.940Z"
+ },
+ {
+  "file": "0/T0.21-1.png",
+  "taskId": "T0.21",
+  "kind": "proof",
+  "step": "AC1 mini-player appears with title and time",
+  "attempt": 1,
+  "caption": "After pressing play on a track the 56px mini-player appears with title, scrubber, time readout and close button.",
+  "annotations": [
+   {
+    "x": 4,
+    "y": 93,
+    "w": 92,
+    "h": 7,
+    "label": "Mini-player bar"
+   }
+  ],
+  "at": "2026-11-22T16:03:28.725Z"
+ },
+ {
+  "file": "0/T0.22-2.png",
+  "taskId": "T0.22",
+  "kind": "proof",
+  "step": "AC3 audio plays via shared player",
+  "attempt": 1,
+  "caption": "History audio item plays through the shared player (inline card and mini-player).",
+  "annotations": [
+   {
+    "x": 3,
+    "y": 31,
+    "w": 19,
+    "h": 19,
+    "label": "Inline player in card"
+   },
+   {
+    "x": 4,
+    "y": 93,
+    "w": 92,
+    "h": 7,
+    "label": "Shared mini-player"
+   }
+  ],
+  "at": "2026-11-22T16:03:28.799Z"
+ },
+ {
+  "file": "0/T0.25-2.png",
+  "taskId": "T0.25",
+  "kind": "proof",
+  "step": "AC3: ? opens, Escape closes",
+  "attempt": 2,
+  "caption": "? opens the keyboard shortcuts popover (dark theme); Escape closes it",
+  "annotations": [
+   {
+    "x": 30,
+    "y": 15,
+    "w": 40,
+    "h": 60,
+    "label": "shortcuts popover"
+   }
+  ],
+  "at": "2026-11-22T16:13:33.215Z"
+ },
+ {
+  "file": "0/T0.22-3.png",
+  "taskId": "T0.22",
+  "kind": "proof",
+  "step": "History audio card",
+  "attempt": 2,
+  "caption": "History audio card with mini-player (dark theme)",
+  "annotations": [
+   {
+    "x": 5,
+    "y": 20,
+    "w": 90,
+    "h": 25,
+    "label": "audio history card"
+   }
+  ],
+  "at": "2026-11-22T16:13:33.335Z"
+ },
+ {
+  "file": "0/T0.25-3.png",
+  "taskId": "T0.25",
+  "kind": "proof",
+  "step": "AC3: ? opens, Escape closes",
+  "attempt": 2,
+  "caption": "? opens the keyboard shortcuts popover (light theme); Escape closes it",
+  "annotations": [
+   {
+    "x": 30,
+    "y": 15,
+    "w": 40,
+    "h": 60,
+    "label": "shortcuts popover"
+   }
+  ],
+  "at": "2026-11-22T16:13:33.435Z"
+ },
+ {
+  "file": "0/T0.22-4.png",
+  "taskId": "T0.22",
+  "kind": "proof",
+  "step": "History audio card",
+  "attempt": 2,
+  "caption": "History audio card with mini-player (light theme)",
+  "annotations": [
+   {
+    "x": 5,
+    "y": 20,
+    "w": 90,
+    "h": 25,
+    "label": "audio history card"
+   }
+  ],
+  "at": "2026-11-22T16:13:33.538Z"
+ },
+ {
+  "file": "0/T0.25-4.png",
+  "taskId": "T0.25",
+  "kind": "proof",
+  "step": "AC3",
+  "attempt": 1,
+  "caption": "Verifier retake: ? on /create/image opens the Keyboard shortcuts popover listing all 12 MEDIA_SHORTCUTS (on /audio/song ? does nothing)",
+  "annotations": [
+   {
+    "x": 33.7,
+    "y": 12.6,
+    "w": 32.5,
+    "h": 74.8,
+    "label": "shortcuts popover"
+   }
+  ],
+  "at": "2026-11-22T16:32:47.512Z"
+ },
+ {
+  "file": "0/T0.25-5.png",
+  "taskId": "T0.25",
+  "kind": "proof",
+  "step": "AC2/AC3: global shortcuts work on every route",
+  "attempt": 3,
+  "caption": "? opens the keyboard shortcuts popover on /audio/song, a non-Dashboard route.",
+  "annotations": [
+   {
+    "x": 35.7,
+    "y": 7.6,
+    "w": 28.6,
+    "h": 95,
+    "label": "Shortcuts popover open on /audio/song"
+   }
+  ],
+  "at": "2026-11-22T16:38:26.465Z"
+ },
+ {
+  "file": "1/T1.3-1.png",
+  "taskId": "T1.3",
+  "kind": "proof",
+  "step": "AC1/AC3 empty state and counters",
+  "attempt": 2,
+  "caption": "Song studio empty state with style chips, three example ideas, lyrics ruler and counters.",
+  "annotations": [
+   {
+    "x": 7,
+    "y": 19,
+    "w": 39,
+    "h": 13,
+    "label": "style counter and chips"
+   },
+   {
+    "x": 54,
+    "y": 11,
+    "w": 39,
+    "h": 12,
+    "label": "empty state copy"
+   }
+  ],
+  "at": "2026-11-23T07:11:37.995Z"
+ },
+ {
+  "file": "1/T1.6-1.png",
+  "taskId": "T1.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Song generated, result card with Play focused",
+  "annotations": [],
+  "at": "2026-11-23T07:18:11.192Z"
+ },
+ {
+  "file": "1/T1.6-2.png",
+  "taskId": "T1.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "402 opens the Low credits dialog",
+  "annotations": [],
+  "at": "2026-11-23T07:18:11.327Z"
+ },
+ {
+  "file": "1/T1.6-3.png",
+  "taskId": "T1.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Failure shows No credits were used",
+  "annotations": [],
+  "at": "2026-11-23T07:18:11.427Z"
+ },
+ {
+  "file": "1/T1.6-4.png",
+  "taskId": "T1.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Result in History playing in the mini-player",
+  "annotations": [],
+  "at": "2026-11-23T07:18:11.525Z"
+ },
+ {
+  "file": "1/T1.6-5.png",
+  "taskId": "T1.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Example idea fills style and lyrics",
+  "annotations": [],
+  "at": "2026-11-23T07:18:11.625Z"
+ },
+ {
+  "file": "1/T1.6-6.png",
+  "taskId": "T1.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "375px layout without horizontal scroll",
+  "annotations": [],
+  "at": "2026-11-23T07:18:11.729Z"
+ },
+ {
+  "file": "1/T1.10-1.png",
+  "taskId": "T1.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Theme suggestion shown for review, lyrics untouched",
+  "annotations": [],
+  "at": "2026-11-23T07:25:35.187Z"
+ },
+ {
+  "file": "1/T1.10-2.png",
+  "taskId": "T1.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "429 shows daily-limit copy, lyrics kept",
+  "annotations": [],
+  "at": "2026-11-23T07:25:35.339Z"
+ },
+ {
+  "file": "1/T1.10-3.png",
+  "taskId": "T1.10",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Lyrics help at 375px, no overflow",
+  "annotations": [],
+  "at": "2026-11-23T07:25:35.455Z"
+ },
+ {
+  "file": "1/T1.18-1.png",
+  "taskId": "T1.18",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Editor under the song result shows the empty-selection hint with edit tools disabled",
+  "annotations": [],
+  "at": "2026-11-23T07:46:52.350Z"
+ },
+ {
+  "file": "1/T1.18-2.png",
+  "taskId": "T1.18",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "After trimming a selection the editor Length drops below the original",
+  "annotations": [],
+  "at": "2026-11-23T07:46:52.494Z"
+ },
+ {
+  "file": "1/T1.18-3.png",
+  "taskId": "T1.18",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Over-cap audio shows the exact export error copy",
+  "annotations": [],
+  "at": "2026-11-23T07:46:52.598Z"
+ },
+ {
+  "file": "1/T1.18-4.png",
+  "taskId": "T1.18",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Region set by keyboard only and trimmed",
+  "annotations": [],
+  "at": "2026-11-23T07:46:52.706Z"
+ },
+ {
+  "file": "1/T1.18-5.png",
+  "taskId": "T1.18",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Editor at 375px with the toolbar wrapped and no horizontal scroll",
+  "annotations": [],
+  "at": "2026-11-23T07:46:52.811Z"
+ },
+ {
+  "file": "1/T1.8-1.png",
+  "taskId": "T1.8",
+  "kind": "after",
+  "step": "AC2 suggestion with Accept/Undo",
+  "attempt": 1,
+  "caption": "Write from a theme shows a reviewable suggestion with Accept and Discard; the original lyrics stay untouched underneath.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 46.8,
+    "w": 43.8,
+    "h": 24.2,
+    "label": "Suggestion box with Accept and Discard"
+   }
+  ],
+  "at": "2026-11-23T07:57:06.917Z"
+ },
+ {
+  "file": "1/T1.8-2.png",
+  "taskId": "T1.8",
+  "kind": "after",
+  "step": "AC1 Fit to limit visible over limit",
+  "attempt": 1,
+  "caption": "Over the 3000-char limit the AI menu lists Fit to limit, but the item labels render near-black on the dark menu and are barely legible.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 46.8,
+    "w": 14.9,
+    "h": 22.9,
+    "label": "AI menu with Write, Rewrite and Fit to limit (low-contrast text)"
+   }
+  ],
+  "at": "2026-11-23T07:57:07.028Z"
+ },
+ {
+  "file": "1/T1.11-1.png",
+  "taskId": "T1.11",
+  "kind": "after",
+  "step": "AC1 trim updates duration; AC2 undo",
+  "attempt": 1,
+  "caption": "After Trim the displayed length drops to 0:04 and Undo and Reset become enabled.",
+  "annotations": [
+   {
+    "x": 53.8,
+    "y": 39.9,
+    "w": 39.4,
+    "h": 25,
+    "label": "Waveform with length and zoom"
+   },
+   {
+    "x": 55,
+    "y": 74,
+    "w": 32,
+    "h": 6,
+    "label": "Undo and Reset enabled"
+   }
+  ],
+  "at": "2026-11-23T07:57:07.126Z"
+ },
+ {
+  "file": "1/T1.11-2.png",
+  "taskId": "T1.11",
+  "kind": "after",
+  "step": "Handles and waveform at 375px",
+  "attempt": 1,
+  "caption": "At 375px the waveform shows the selected region with its handles.",
+  "annotations": [
+   {
+    "x": 7.7,
+    "y": 54.6,
+    "w": 84.8,
+    "h": 14.2,
+    "label": "Waveform with selected region"
+   }
+  ],
+  "at": "2026-11-23T07:57:07.224Z"
+ },
+ {
+  "file": "1/T1.12-1.png",
+  "taskId": "T1.12",
+  "kind": "after",
+  "step": "AC1 disabled tools; AC2 hint copy",
+  "attempt": 1,
+  "caption": "Before any selection the edit buttons are disabled and the hint reads Drag on the waveform to select a part.",
+  "annotations": [
+   {
+    "x": 54.8,
+    "y": 66.2,
+    "w": 37.5,
+    "h": 17.6,
+    "label": "Toolbar with edit tools disabled"
+   },
+   {
+    "x": 54.8,
+    "y": 81,
+    "w": 17.3,
+    "h": 2.2,
+    "label": "Exact hint copy"
+   }
+  ],
+  "at": "2026-11-23T07:57:07.323Z"
+ },
+ {
+  "file": "1/T1.12-2.png",
+  "taskId": "T1.12",
+  "kind": "after",
+  "step": "AC5 toolbar wraps at 375px",
+  "attempt": 1,
+  "caption": "At 375px the toolbar wraps onto rows with no horizontal scroll and tall tap targets.",
+  "annotations": [
+   {
+    "x": 7.7,
+    "y": 70.6,
+    "w": 84.8,
+    "h": 18.5,
+    "label": "Wrapped toolbar"
+   }
+  ],
+  "at": "2026-11-23T07:57:07.422Z"
+ },
+ {
+  "file": "1/T1.16-1.png",
+  "taskId": "T1.16",
+  "kind": "after",
+  "step": "AC1 formats and estimate",
+  "attempt": 1,
+  "caption": "Export dialog offers MP3 or WAV with size estimates, plus Download and Save as new version.",
+  "annotations": [
+   {
+    "x": 32.5,
+    "y": 28.2,
+    "w": 35,
+    "h": 43.6,
+    "label": "Export dialog"
+   }
+  ],
+  "at": "2026-11-23T07:57:07.520Z"
+ },
+ {
+  "file": "1/T1.16-2.png",
+  "taskId": "T1.16",
+  "kind": "after",
+  "step": "AC7 dialog at 375px",
+  "attempt": 1,
+  "caption": "The export dialog at 375px fits the screen with no horizontal scroll (scrollWidth 375).",
+  "annotations": [
+   {
+    "x": 4.3,
+    "y": 29.7,
+    "w": 91.5,
+    "h": 40.6,
+    "label": "Export dialog at 375px"
+   }
+  ],
+  "at": "2026-11-23T07:57:07.620Z"
+ },
+ {
+  "file": "1/T1.8-3.png",
+  "taskId": "T1.8",
+  "kind": "after",
+  "step": "AC5: menu operable and legible",
+  "attempt": 3,
+  "caption": "The AI help menu items are now readable ink on the dark popover.",
+  "annotations": [
+   {
+    "x": 7.9,
+    "y": 69.5,
+    "w": 13,
+    "h": 11.5,
+    "label": "menu items in light ink"
+   }
+  ],
+  "at": "2026-11-23T08:02:37.805Z"
+ },
+ {
+  "file": "1/T1.12-3.png",
+  "taskId": "T1.12",
+  "kind": "after",
+  "step": "Result controls legible",
+  "attempt": 3,
+  "caption": "Download pill under the player now reads in the ink colour on the dark surface.",
+  "annotations": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 40,
+    "h": 15,
+    "label": "Download label legible"
+   }
+  ],
+  "at": "2026-11-23T08:03:32.104Z"
+ },
+ {
+  "file": "1/T1.8-4.png",
+  "taskId": "T1.8",
+  "kind": "after",
+  "step": "AC1 Fit to limit visible over the limit",
+  "attempt": 19,
+  "caption": "Over the 3000-character limit the counter turns red and the AI help menu lists Fit to limit in legible ink.",
+  "annotations": [
+   {
+    "x": 7.9,
+    "y": 67.4,
+    "w": 13,
+    "h": 5.5,
+    "label": "Fit to limit item"
+   },
+   {
+    "x": 46.5,
+    "y": 37.6,
+    "w": 4.1,
+    "h": 2,
+    "label": "3247/3000 counter in danger red"
+   }
+  ],
+  "at": "2026-11-23T08:40:48.274Z"
+ },
+ {
+  "file": "1/T1.8-5.png",
+  "taskId": "T1.8",
+  "kind": "after",
+  "step": "AC2 Accept replaces, Undo restores",
+  "attempt": 19,
+  "caption": "After Accept the suggestion replaces the lyrics and an Undo button appears; Undo restored the original text.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 47.3,
+    "w": 12.4,
+    "h": 5.5,
+    "label": "Lyrics replaced. with Undo"
+   }
+  ],
+  "at": "2026-11-23T08:40:48.404Z"
+ },
+ {
+  "file": "1/T1.8-6.png",
+  "taskId": "T1.8",
+  "kind": "after",
+  "step": "AC3 loading state",
+  "attempt": 19,
+  "caption": "While a lyrics request is pending the AI help button is disabled and shows a spinner with Writing.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 47.3,
+    "w": 7.9,
+    "h": 5.5,
+    "label": "disabled trigger with spinner"
+   }
+  ],
+  "at": "2026-11-23T08:40:48.506Z"
+ },
+ {
+  "file": "1/T1.8-7.png",
+  "taskId": "T1.8",
+  "kind": "after",
+  "step": "AC3 failure keeps lyrics",
+  "attempt": 19,
+  "caption": "A failed lyrics request shows the mapped toast and leaves the lyrics untouched.",
+  "annotations": [
+   {
+    "x": 80.7,
+    "y": 92.5,
+    "w": 18.1,
+    "h": 5.5,
+    "label": "failure toast"
+   },
+   {
+    "x": 6.9,
+    "y": 54.8,
+    "w": 43.8,
+    "h": 42.2,
+    "label": "lyrics unchanged"
+   }
+  ],
+  "at": "2026-11-23T08:40:48.600Z"
+ },
+ {
+  "file": "2/T2.6-1.png",
+  "taskId": "T2.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Lyria generate: result card, balance dropped by 12",
+  "annotations": [],
+  "at": "2026-11-23T13:13:39.602Z"
+ },
+ {
+  "file": "2/T2.6-2.png",
+  "taskId": "T2.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "402 opens Low credits dialog",
+  "annotations": [],
+  "at": "2026-11-23T13:13:39.787Z"
+ },
+ {
+  "file": "2/T2.6-3.png",
+  "taskId": "T2.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Failure shows No credits were used",
+  "annotations": [],
+  "at": "2026-11-23T13:13:39.929Z"
+ },
+ {
+  "file": "2/T2.6-4.png",
+  "taskId": "T2.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Duration control only on Stable Audio, cost 40",
+  "annotations": [],
+  "at": "2026-11-23T13:13:40.073Z"
+ },
+ {
+  "file": "2/T2.6-5.png",
+  "taskId": "T2.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Music studio at 375px",
+  "annotations": [],
+  "at": "2026-11-23T13:13:40.215Z"
+ },
+ {
+  "file": "2/T2.2-1.png",
+  "taskId": "T2.2",
+  "kind": "proof",
+  "step": "AC1 empty state copy",
+  "attempt": 2,
+  "caption": "Empty state shows the exact copy and a Try an example button.",
+  "annotations": [
+   {
+    "x": 54.4,
+    "y": 12.2,
+    "w": 40,
+    "h": 20,
+    "label": "empty-state copy and example button"
+   }
+  ],
+  "at": "2026-11-23T13:17:07.311Z"
+ },
+ {
+  "file": "2/T2.2-2.png",
+  "taskId": "T2.2",
+  "kind": "proof",
+  "step": "AC1/AC2/AC3 example fills prompt, model select, no duration for Lyria",
+  "attempt": 2,
+  "caption": "Example filled the prompt; model list with one-line notes, Lyria selected has no duration control.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 24,
+    "w": 43.8,
+    "h": 20,
+    "label": "prompt filled by example"
+   },
+   {
+    "x": 6.9,
+    "y": 58.8,
+    "w": 43.8,
+    "h": 31,
+    "label": "model select with notes"
+   }
+  ],
+  "at": "2026-11-23T13:17:07.437Z"
+ },
+ {
+  "file": "2/T2.2-3.png",
+  "taskId": "T2.2",
+  "kind": "proof",
+  "step": "AC2 duration visible only for supporting models",
+  "attempt": 2,
+  "caption": "Stable Audio selected: prompt kept and Duration control appears.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 92.7,
+    "w": 43.8,
+    "h": 7,
+    "label": "duration control"
+   },
+   {
+    "x": 6.9,
+    "y": 58.8,
+    "w": 43.8,
+    "h": 9.4,
+    "label": "selected model"
+   }
+  ],
+  "at": "2026-11-23T13:17:07.561Z"
+ },
+ {
+  "file": "2/T2.3-1.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": "AC4 visible focus ring",
+  "attempt": 2,
+  "caption": "Keyboard focus shows a visible ring on the mood chip.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 38.3,
+    "w": 13.6,
+    "h": 6.1,
+    "label": "focus ring"
+   }
+  ],
+  "at": "2026-11-23T13:17:07.682Z"
+ },
+ {
+  "file": "2/T2.3-2.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": "dark mode",
+  "attempt": 2,
+  "caption": "Studio in dark theme is legible with sufficient contrast.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 12,
+    "w": 43.8,
+    "h": 80,
+    "label": "composer in dark mode"
+   }
+  ],
+  "at": "2026-11-23T13:17:07.802Z"
+ },
+ {
+  "file": "2/T2.3-3.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": "AC4 375px layout",
+  "attempt": 2,
+  "caption": "At 375px there is no horizontal scroll (375/375).",
+  "annotations": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 100,
+    "h": 100,
+    "label": "no horizontal overflow"
+   }
+  ],
+  "at": "2026-11-23T13:17:07.923Z"
+ },
+ {
+  "file": "2/T2.3-4.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": "AC2/AC4 light 1280px",
+  "attempt": 3,
+  "caption": "Light theme, 1280px: model cards use the light surface and dark ink tokens; Minimax shows its instrumental-only line.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 47.1,
+    "w": 43.8,
+    "h": 24.4,
+    "label": "model cards readable on light surface"
+   }
+  ],
+  "at": "2026-11-23T13:19:33.323Z"
+ },
+ {
+  "file": "2/T2.3-5.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": "AC4 375px light",
+  "attempt": 3,
+  "caption": "Light theme, 375px: cards stay legible with no horizontal scroll.",
+  "annotations": [
+   {
+    "x": 4,
+    "y": 17,
+    "w": 92,
+    "h": 41,
+    "label": "model cards at 375px"
+   }
+  ],
+  "at": "2026-11-23T13:19:33.485Z"
+ },
+ {
+  "file": "2/T2.3-6.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": "dark parity",
+  "attempt": 3,
+  "caption": "Dark theme, 1280px: same cards on the dark surface.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 46.8,
+    "w": 43.8,
+    "h": 24.4,
+    "label": "model cards in dark"
+   }
+  ],
+  "at": "2026-11-23T13:19:33.605Z"
+ },
+ {
+  "file": "2/T2.3-7.png",
+  "taskId": "T2.3",
+  "kind": "proof",
+  "step": "AC2 lyrics hidden and one-line note in instrumental mode",
+  "attempt": 1,
+  "caption": "Minimax 2.6 Instrumental selected: no lyrics field, a one-line instrumental note under the model list, result generated via the stub.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 75.7,
+    "w": 43.8,
+    "h": 9.2,
+    "label": "Minimax 2.6 Instrumental selected"
+   },
+   {
+    "x": 6.9,
+    "y": 87.5,
+    "w": 31.5,
+    "h": 3.3,
+    "label": "one-line instrumental note, no lyrics field"
+   }
+  ],
+  "at": "2026-11-23T13:26:38.729Z"
+ },
+ {
+  "file": "2/T2.2-4.png",
+  "taskId": "T2.2",
+  "kind": "proof",
+  "step": "AC6 the draft survives a reload",
+  "attempt": 1,
+  "caption": "After typing a prompt and reloading the page, the typed prompt is restored from the draft.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 30.2,
+    "w": 43.8,
+    "h": 16.3,
+    "label": "prompt restored after reload"
+   }
+  ],
+  "at": "2026-11-23T13:28:27.786Z"
+ },
+ {
+  "file": "2/T2.2-5.png",
+  "taskId": "T2.2",
+  "kind": "proof",
+  "step": "AC4/AC5 Mod+Enter submits; 402 dialog is the shared component",
+  "attempt": 1,
+  "caption": "Ctrl+Enter in the prompt submits; the server answers 402 for the 8-credit QA user, so the shared Low credits dialog opens.",
+  "annotations": [
+   {
+    "x": 31.3,
+    "y": 25.8,
+    "w": 37.5,
+    "h": 48.4,
+    "label": "shared Low credits dialog after Mod+Enter"
+   }
+  ],
+  "at": "2026-11-23T13:28:27.955Z"
+ },
+ {
+  "file": "2/T2.6-6.png",
+  "taskId": "T2.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Lyria success, seeded balance, chip shows realistic remaining credits",
+  "annotations": [],
+  "at": "2026-11-23T13:33:20.422Z"
+ },
+ {
+  "file": "2/T2.6-7.png",
+  "taskId": "T2.6",
+  "kind": "proof",
+  "step": null,
+  "attempt": 2,
+  "caption": "Verifier retake (x3 run): Lyria success, seeded 500, chip 488 after the per-file 12; supersedes stale T2.6-1 (-4)",
+  "annotations": [
+   {
+    "x": 86,
+    "y": 0,
+    "w": 9,
+    "h": 7,
+    "label": "balance 488"
+   }
+  ],
+  "at": "2026-11-23T13:35:19.941Z"
+ },
+ {
+  "file": "3/T3.3-1.png",
+  "taskId": "T3.3",
+  "kind": "proof",
+  "step": "AC1 empty state copy",
+  "attempt": null,
+  "caption": "Speech studio empty state with tag toolbar, script counter, model and voice select.",
+  "annotations": [
+   {
+    "x": 55,
+    "y": 13,
+    "w": 45,
+    "h": 20,
+    "label": "script editor with live counter"
+   }
+  ],
+  "at": "2026-11-24T02:55:57.016Z"
+ },
+ {
+  "file": "3/T3.6-1.png",
+  "taskId": "T3.6",
+  "kind": "proof",
+  "step": "AC5 375px layout",
+  "attempt": null,
+  "caption": "Speech studio at 375px with no horizontal scroll.",
+  "annotations": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 100,
+    "h": 100,
+    "label": "single column layout"
+   }
+  ],
+  "at": "2026-11-24T02:55:57.228Z"
+ },
+ {
+  "file": "3/T3.14-1.png",
+  "taskId": "T3.14",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Speech generated with the stubbed job, result card shown",
+  "annotations": [],
+  "at": "2026-11-24T03:17:34.049Z"
+ },
+ {
+  "file": "3/T3.14-2.png",
+  "taskId": "T3.14",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Over-limit script: red counter, Generate disabled with reason",
+  "annotations": [],
+  "at": "2026-11-24T03:17:34.251Z"
+ },
+ {
+  "file": "3/T3.14-3.png",
+  "taskId": "T3.14",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Model switch dialog listing the tag that will be removed",
+  "annotations": [],
+  "at": "2026-11-24T03:17:34.390Z"
+ },
+ {
+  "file": "3/T3.14-4.png",
+  "taskId": "T3.14",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Speech studio at 375px, no horizontal scroll",
+  "annotations": [],
+  "at": "2026-11-24T03:17:34.527Z"
+ },
+ {
+  "file": "3/T3.4-1.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": "AC1: inserting a tag adds one chip",
+  "attempt": null,
+  "caption": "Laugh chip inserted inline at the cursor in the speech editor",
+  "annotations": [
+   {
+    "x": 16.5,
+    "y": 36.9,
+    "w": 6.1,
+    "h": 3.5,
+    "label": "Laugh chip with remove button"
+   }
+  ],
+  "at": "2026-11-24T03:20:09.950Z"
+ },
+ {
+  "file": "3/T3.5-1.png",
+  "taskId": "T3.5",
+  "kind": "proof",
+  "step": "AC1: supported-tag switch has no dialog",
+  "attempt": null,
+  "caption": "Switching to Inworld TTS 1.5 Max, which supports Laugh, changes the model with no dialog and keeps the chip",
+  "annotations": [
+   {
+    "x": 8,
+    "y": 93,
+    "w": 50,
+    "h": 6,
+    "label": "Inworld 1.5 Max selected, text unchanged"
+   },
+   {
+    "x": 16.5,
+    "y": 43.5,
+    "w": 6.1,
+    "h": 3.5,
+    "label": "Laugh chip kept"
+   }
+  ],
+  "at": "2026-11-24T03:20:35.536Z"
+ },
+ {
+  "file": "3/T3.4-2.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": "AC2: pause outside 0.1 to 10 seconds is rejected",
+  "attempt": null,
+  "caption": "A pause of 99 seconds is rejected with an inline range message",
+  "annotations": [
+   {
+    "x": 30.2,
+    "y": 43.4,
+    "w": 8.8,
+    "h": 3.5,
+    "label": "Pause chip with invalid 99 value"
+   },
+   {
+    "x": 30.2,
+    "y": 46.9,
+    "w": 8.8,
+    "h": 5.3,
+    "label": "Inline range message"
+   }
+  ],
+  "at": "2026-11-24T03:20:48.305Z"
+ },
+ {
+  "file": "3/T3.4-3.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": "AC1: pause chip inserted from the toolbar",
+  "attempt": null,
+  "caption": "Pause chip with an editable seconds field sits inline after the text",
+  "annotations": [
+   {
+    "x": 30.2,
+    "y": 43.4,
+    "w": 8.8,
+    "h": 3.5,
+    "label": "Pause chip with seconds field"
+   },
+   {
+    "x": 29,
+    "y": 36.3,
+    "w": 6,
+    "h": 4.7,
+    "label": "Pause toolbar button"
+   }
+  ],
+  "at": "2026-11-24T03:20:48.483Z"
+ },
+ {
+  "file": "3/T3.5-2.png",
+  "taskId": "T3.5",
+  "kind": "proof",
+  "step": "AC2: dialog lists each approximated and dropped tag",
+  "attempt": null,
+  "caption": "Switching to Chatterbox Turbo opens a dialog listing the pause tag that will be removed",
+  "annotations": [
+   {
+    "x": 33,
+    "y": 50.5,
+    "w": 30,
+    "h": 5,
+    "label": "Removed list names pause of 1 s"
+   },
+   {
+    "x": 49.5,
+    "y": 60.9,
+    "w": 18,
+    "h": 5.5,
+    "label": "Keep original and Convert actions"
+   }
+  ],
+  "at": "2026-11-24T03:21:06.005Z"
+ },
+ {
+  "file": "3/T3.5-3.png",
+  "taskId": "T3.5",
+  "kind": "proof",
+  "step": "AC3: Convert applies the conversion and offers Undo",
+  "attempt": null,
+  "caption": "After Convert the model is Chatterbox Turbo and an Undo notice appears",
+  "annotations": [
+   {
+    "x": 13.7,
+    "y": 59.8,
+    "w": 50.3,
+    "h": 5.7,
+    "label": "Converted notice with Undo"
+   },
+   {
+    "x": 6.9,
+    "y": 46,
+    "w": 73,
+    "h": 12.5,
+    "label": "Chatterbox Turbo selected"
+   }
+  ],
+  "at": "2026-11-24T03:21:13.119Z"
+ },
+ {
+  "file": "3/T3.5-4.png",
+  "taskId": "T3.5",
+  "kind": "proof",
+  "step": "AC3: Undo restores the previous text",
+  "attempt": null,
+  "caption": "Undo restores the pause chip and the previous model",
+  "annotations": [
+   {
+    "x": 30.2,
+    "y": 43.4,
+    "w": 8.8,
+    "h": 3.5,
+    "label": "Pause chip restored"
+   },
+   {
+    "x": 6.9,
+    "y": 92.9,
+    "w": 73,
+    "h": 7,
+    "label": "Inworld 1.5 Max selected again"
+   }
+  ],
+  "at": "2026-11-24T03:21:36.819Z"
+ },
+ {
+  "file": "3/T3.5-5.png",
+  "taskId": "T3.5",
+  "kind": "proof",
+  "step": "AC4/AC5: Escape keeps old model, focus returns to model select",
+  "attempt": null,
+  "caption": "Escape closes the dialog: the model stays Inworld 1.5 Max and focus returns to the model list",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 10.8,
+    "w": 73,
+    "h": 10.8,
+    "label": "Inworld 1.5 Max still selected"
+   },
+   {
+    "x": 6.9,
+    "y": 46,
+    "w": 73,
+    "h": 11,
+    "label": "Focus ring back on the model option"
+   }
+  ],
+  "at": "2026-11-24T03:21:47.776Z"
+ },
+ {
+  "file": "3/T3.4-4.png",
+  "taskId": "T3.4",
+  "kind": "proof",
+  "step": "AC7: 375px has no horizontal scroll and 44px targets",
+  "attempt": null,
+  "caption": "At 375px the tag toolbar wraps, nothing scrolls sideways and chips are 44px high",
+  "annotations": [
+   {
+    "x": 3,
+    "y": 41,
+    "w": 94,
+    "h": 24,
+    "label": "Wrapped tag toolbar with 44px buttons"
+   },
+   {
+    "x": 4,
+    "y": 80,
+    "w": 92,
+    "h": 12,
+    "label": "Editor with Laugh and Pause chips"
+   }
+  ],
+  "at": "2026-11-24T03:22:02.895Z"
+ },
+ {
+  "file": "3/T3.5-6.png",
+  "taskId": "T3.5",
+  "kind": "proof",
+  "step": "AC6: 375px dialog layout and targets",
+  "attempt": null,
+  "caption": "At 375px the conversion dialog fits without sideways scroll; Keep original and Convert are 44px high (the close X measures 40px)",
+  "annotations": [
+   {
+    "x": 4,
+    "y": 27,
+    "w": 92,
+    "h": 43,
+    "label": "Dialog fits the 375px viewport"
+   },
+   {
+    "x": 30,
+    "y": 64,
+    "w": 60,
+    "h": 7,
+    "label": "Keep original and Convert at 44px"
+   }
+  ],
+  "at": "2026-11-24T03:22:10.685Z"
+ },
+ {
+  "file": "3/T3.3-2.png",
+  "taskId": "T3.3",
+  "kind": "proof",
+  "step": "AC2: cost updates and reads Estimated for Minimax",
+  "attempt": 3,
+  "caption": "Minimax Speech 2.8 HD selected: the cost reads 21 credits with an Estimated label for a 1,012-character script.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 92,
+    "w": 13,
+    "h": 4.5,
+    "label": "21 credits with Estimated label"
+   },
+   {
+    "x": 6.9,
+    "y": 45.8,
+    "w": 43.8,
+    "h": 9.5,
+    "label": "Minimax Speech 2.8 HD selected"
+   }
+  ],
+  "at": "2026-11-24T03:34:24.373Z"
+ },
+ {
+  "file": "3/T3.3-3.png",
+  "taskId": "T3.3",
+  "kind": "proof",
+  "step": "AC3: over-limit counter in danger colour, text not truncated",
+  "attempt": 3,
+  "caption": "Chatterbox Turbo with 501 characters: the counter turns danger red and the full script stays in the editor.",
+  "annotations": [
+   {
+    "x": 47,
+    "y": 20.5,
+    "w": 4,
+    "h": 2.5,
+    "label": "501/500 counter in danger red"
+   },
+   {
+    "x": 6.9,
+    "y": 38.5,
+    "w": 44,
+    "h": 35,
+    "label": "whole script kept"
+   }
+  ],
+  "at": "2026-11-24T03:34:24.559Z"
+ },
+ {
+  "file": "3/T3.3-4.png",
+  "taskId": "T3.3",
+  "kind": "proof",
+  "step": "AC3: Generate disabled with a reason",
+  "attempt": 3,
+  "caption": "Over the Chatterbox limit Generate is disabled and the reason under it names the excess characters.",
+  "annotations": [
+   {
+    "x": 40.6,
+    "y": 92,
+    "w": 10,
+    "h": 4.9,
+    "label": "Generate disabled"
+   },
+   {
+    "x": 6.9,
+    "y": 97.8,
+    "w": 43.8,
+    "h": 2.2,
+    "label": "reason: 512 characters over the 500 limit"
+   }
+  ],
+  "at": "2026-11-24T03:34:24.730Z"
+ },
+ {
+  "file": "3/T3.5-7.png",
+  "taskId": "T3.5",
+  "kind": "proof",
+  "step": "AC6: tap targets at least 44px at 375px (fails: close button 40px)",
+  "attempt": 3,
+  "caption": "At 375px the dialog close button measures 40x40px, below the 44px tap target AC6 requires.",
+  "annotations": [
+   {
+    "x": 81.2,
+    "y": 29.1,
+    "w": 10.7,
+    "h": 4.9,
+    "label": "Close dialog button 40x40px"
+   }
+  ],
+  "at": "2026-11-24T03:34:24.905Z"
+ },
+ {
+  "file": "3/T3.3-5.png",
+  "taskId": "T3.3",
+  "kind": "proof",
+  "step": "AC1: Try an example fills the text",
+  "attempt": 3,
+  "caption": "After Try an example the editor holds the example script and the counter reads 63/2,000",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 31,
+    "w": 43.8,
+    "h": 18,
+    "label": "example text"
+   },
+   {
+    "x": 46.5,
+    "y": 15.5,
+    "w": 4.5,
+    "h": 3,
+    "label": "counter"
+   }
+  ],
+  "at": "2026-11-24T03:44:19.869Z"
+ },
+ {
+  "file": "3/T3.3-6.png",
+  "taskId": "T3.3",
+  "kind": "proof",
+  "step": "AC4: voice fallback notice (fails: names the previous voice)",
+  "attempt": 3,
+  "caption": "Minimax HD selected with English_Wiselady, but the status notice reads Voice changed to Andy (the old voice)",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 82,
+    "w": 43.8,
+    "h": 5,
+    "label": "selected voice"
+   },
+   {
+    "x": 6.6,
+    "y": 87.6,
+    "w": 10,
+    "h": 2.2,
+    "label": "wrong notice"
+   }
+  ],
+  "at": "2026-11-24T03:44:20.083Z"
+ },
+ {
+  "file": "3/T3.3-7.png",
+  "taskId": "T3.3",
+  "kind": "proof",
+  "step": "AC5: success uses shared result card",
+  "attempt": 3,
+  "caption": "Stubbed success shows the shared result card, player, download and editor",
+  "annotations": [
+   {
+    "x": 53.7,
+    "y": 10,
+    "w": 39.4,
+    "h": 17.8,
+    "label": "result card"
+   }
+  ],
+  "at": "2026-11-24T03:44:20.239Z"
+ },
+ {
+  "file": "3/T3.3-8.png",
+  "taskId": "T3.3",
+  "kind": "proof",
+  "step": "AC5: no-charge failure uses shared error state",
+  "attempt": 3,
+  "caption": "Stubbed failure shows Generation failed. No credits were used. with Try again",
+  "annotations": [
+   {
+    "x": 53.7,
+    "y": 12.2,
+    "w": 39.4,
+    "h": 15.3,
+    "label": "error state"
+   }
+  ],
+  "at": "2026-11-24T03:44:20.393Z"
+ },
+ {
+  "file": "3/T3.14-5.png",
+  "taskId": "T3.14",
+  "kind": "proof",
+  "step": "AC1: success scenario passes with the stub",
+  "attempt": 3,
+  "caption": "Speech generated with the stubbed job; result card shown",
+  "annotations": [
+   {
+    "x": 53.7,
+    "y": 10,
+    "w": 39.4,
+    "h": 17.8,
+    "label": "result card"
+   }
+  ],
+  "at": "2026-11-24T03:44:20.545Z"
+ },
+ {
+  "file": "3/T3.14-6.png",
+  "taskId": "T3.14",
+  "kind": "proof",
+  "step": "AC1: over-limit scenario",
+  "attempt": 3,
+  "caption": "Over-limit script: danger counter, Generate disabled with reason",
+  "annotations": [],
+  "at": "2026-11-24T03:44:20.690Z"
+ },
+ {
+  "file": "3/T3.14-7.png",
+  "taskId": "T3.14",
+  "kind": "proof",
+  "step": "AC1: model switch dialog scenario",
+  "attempt": 3,
+  "caption": "Model switch dialog listing the tag that will be removed",
+  "annotations": [],
+  "at": "2026-11-24T03:44:20.834Z"
+ },
+ {
+  "file": "3/T3.14-8.png",
+  "taskId": "T3.14",
+  "kind": "proof",
+  "step": "AC2: failure scenario, balance unchanged",
+  "attempt": 3,
+  "caption": "Failure shows No credits were used.; spec asserts balance via readCredits",
+  "annotations": [
+   {
+    "x": 53.7,
+    "y": 12.2,
+    "w": 39.4,
+    "h": 15.3,
+    "label": "error state"
+   }
+  ],
+  "at": "2026-11-24T03:44:20.977Z"
+ },
+ {
+  "file": "3/T3.14-9.png",
+  "taskId": "T3.14",
+  "kind": "proof",
+  "step": "AC1: 375px scenario",
+  "attempt": 3,
+  "caption": "Speech studio at 375px, no horizontal scroll",
+  "annotations": [],
+  "at": "2026-11-24T03:44:21.118Z"
+ },
+ {
+  "file": "3/T3.3-9.png",
+  "taskId": "T3.3",
+  "kind": "proof",
+  "step": "AC5: 402",
+  "attempt": 5,
+  "caption": "A 402 from generate opens the Low credits dialog showing 2 credits available; nothing is queued.",
+  "annotations": [
+   {
+    "x": 31.3,
+    "y": 30.7,
+    "w": 37.5,
+    "h": 38.8,
+    "label": "Low credits dialog with required and available credits"
+   }
+  ],
+  "at": "2026-11-24T03:47:00.736Z"
+ },
+ {
+  "file": "3/T3.3-10.png",
+  "taskId": "T3.3",
+  "kind": "proof",
+  "step": "AC4: voice fallback notice names the new voice",
+  "attempt": 8,
+  "caption": "After switching from Inworld TTS 2.0 to Minimax Speech 2.8 HD, the selected voice and the status notice both name English_Wiselady.",
+  "annotations": [
+   {
+    "x": 4,
+    "y": 89,
+    "w": 92,
+    "h": 6,
+    "label": "selected fallback voice English_Wiselady"
+   },
+   {
+    "x": 4,
+    "y": 95.5,
+    "w": 52,
+    "h": 2.5,
+    "label": "notice reads Voice changed to English_Wiselady"
+   }
+  ],
+  "at": "2026-11-24T03:54:21.697Z"
+ },
+ {
+  "file": "3/T3.5-8.png",
+  "taskId": "T3.5",
+  "kind": "proof",
+  "step": "AC6: tap targets at least 44px at 375px",
+  "attempt": 8,
+  "caption": "At 375px the conversion dialog fits with no sideways scroll; the close button, Keep original and Convert all measure 44px high.",
+  "annotations": [
+   {
+    "x": 80,
+    "y": 29.1,
+    "w": 11.7,
+    "h": 5.4,
+    "label": "close button 44x44px"
+   },
+   {
+    "x": 30.4,
+    "y": 64.3,
+    "w": 58.7,
+    "h": 5.4,
+    "label": "Keep original and Convert 44px high"
+   }
+  ],
+  "at": "2026-11-24T03:54:21.890Z"
+ },
+ {
+  "file": "4/T4.2-1.png",
+  "taskId": "T4.2",
+  "kind": "proof",
+  "step": "AC1/AC2 empty state and ranges",
+  "attempt": null,
+  "caption": "Video studio empty state with exact copy and example button; duration and resolution controls for P-Video.",
+  "annotations": [
+   {
+    "x": 55,
+    "y": 15,
+    "w": 40,
+    "h": 15,
+    "label": "empty state copy and example"
+   },
+   {
+    "x": 7,
+    "y": 43,
+    "w": 40,
+    "h": 30,
+    "label": "duration and resolution for P-Video"
+   }
+  ],
+  "at": "2026-11-24T08:25:15.337Z"
+ },
+ {
+  "file": "4/T4.2-2.png",
+  "taskId": "T4.2",
+  "kind": "proof",
+  "step": "AC7 375px layout",
+  "attempt": null,
+  "caption": "At 375px the studio stacks with no horizontal scroll.",
+  "annotations": [
+   {
+    "x": 0,
+    "y": 0,
+    "w": 100,
+    "h": 100,
+    "label": "single column, no horizontal scroll"
+   }
+  ],
+  "at": "2026-11-24T08:25:15.543Z"
+ },
+ {
+  "file": "4/T4.3-1.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": "AC6 inputs available",
+  "attempt": null,
+  "caption": "Start image and Audio track inputs with picker buttons.",
+  "annotations": [
+   {
+    "x": 7,
+    "y": 74,
+    "w": 40,
+    "h": 25,
+    "label": "image and audio drop zones"
+   }
+  ],
+  "at": "2026-11-24T08:25:15.698Z"
+ },
+ {
+  "file": "4/T4.7-1.png",
+  "taskId": "T4.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Video generated: result card with native video, balance updated once",
+  "annotations": [],
+  "at": "2026-11-24T08:33:36.880Z"
+ },
+ {
+  "file": "4/T4.7-2.png",
+  "taskId": "T4.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "154-credit Wan 3 job opens the confirm dialog with Cancel focused",
+  "annotations": [],
+  "at": "2026-11-24T08:33:37.140Z"
+ },
+ {
+  "file": "4/T4.7-3.png",
+  "taskId": "T4.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Draft result with Draft label and Render final action",
+  "annotations": [],
+  "at": "2026-11-24T08:33:37.323Z"
+ },
+ {
+  "file": "4/T4.7-4.png",
+  "taskId": "T4.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Image and audio attached; cost badge reads Estimated",
+  "annotations": [],
+  "at": "2026-11-24T08:33:37.506Z"
+ },
+ {
+  "file": "4/T4.7-5.png",
+  "taskId": "T4.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "402 opens the Low credits dialog",
+  "annotations": [],
+  "at": "2026-11-24T08:33:37.689Z"
+ },
+ {
+  "file": "4/T4.7-6.png",
+  "taskId": "T4.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "Failure shows No credits were used.",
+  "annotations": [],
+  "at": "2026-11-24T08:33:37.873Z"
+ },
+ {
+  "file": "4/T4.7-7.png",
+  "taskId": "T4.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "375px layout, no horizontal scroll",
+  "annotations": [],
+  "at": "2026-11-24T08:33:38.240Z"
+ },
+ {
+  "file": "4/T4.4-1.png",
+  "taskId": "T4.4",
+  "kind": "proof",
+  "step": "AC1/AC4: toggle shows saving; cost badge",
+  "attempt": 1,
+  "caption": "Draft preview switch on by default, with the saving (15 credits) beside its label and the 5-credit cost on the action bar.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 80.8,
+    "w": 43.8,
+    "h": 7.5,
+    "label": "Draft preview switch with saving label"
+   },
+   {
+    "x": 6.9,
+    "y": 91.6,
+    "w": 5.8,
+    "h": 3.9,
+    "label": "Cost badge at draft price"
+   }
+  ],
+  "at": "2026-11-24T08:48:34.109Z"
+ },
+ {
+  "file": "4/T4.4-2.png",
+  "taskId": "T4.4",
+  "kind": "proof",
+  "step": "AC4: toggling draft updates cost badge",
+  "attempt": 1,
+  "caption": "Draft switched off: the cost badge updates immediately to the full 20 credits.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 80.8,
+    "w": 43.8,
+    "h": 7.5,
+    "label": "Draft switch off"
+   },
+   {
+    "x": 6.9,
+    "y": 91.6,
+    "w": 6.5,
+    "h": 3.9,
+    "label": "Cost badge now full price"
+   }
+  ],
+  "at": "2026-11-24T08:48:34.271Z"
+ },
+ {
+  "file": "4/T4.4-3.png",
+  "taskId": "T4.4",
+  "kind": "proof",
+  "step": "AC2: draft result labelled Draft",
+  "attempt": 1,
+  "caption": "A draft result carries a visible Draft label above the video.",
+  "annotations": [
+   {
+    "x": 53.8,
+    "y": 12.2,
+    "w": 4,
+    "h": 3.3,
+    "label": "Draft label"
+   }
+  ],
+  "at": "2026-11-24T08:48:34.428Z"
+ },
+ {
+  "file": "4/T4.4-4.png",
+  "taskId": "T4.4",
+  "kind": "proof",
+  "step": "AC3: Render final with full price",
+  "attempt": 1,
+  "caption": "Render final at full quality action shows the full 20-credit price before confirming.",
+  "annotations": [
+   {
+    "x": 53.8,
+    "y": 90.5,
+    "w": 23.3,
+    "h": 6.1,
+    "label": "Render final button with 20 credits"
+   }
+  ],
+  "at": "2026-11-24T08:48:34.585Z"
+ },
+ {
+  "file": "4/T4.4-5.png",
+  "taskId": "T4.4",
+  "kind": "proof",
+  "step": "AC5: 375px layout",
+  "attempt": 1,
+  "caption": "At 375px the draft switch and cost badge fit with no horizontal scroll and a tall tap target.",
+  "annotations": [
+   {
+    "x": 4.3,
+    "y": 58.4,
+    "w": 91.5,
+    "h": 6.7,
+    "label": "Draft switch full-width tap target"
+   },
+   {
+    "x": 8.5,
+    "y": 69.7,
+    "w": 19.9,
+    "h": 3.4,
+    "label": "Cost badge"
+   }
+  ],
+  "at": "2026-11-24T08:48:34.742Z"
+ },
+ {
+  "file": "4/T4.4-6.png",
+  "taskId": "T4.4",
+  "kind": "proof",
+  "step": "AC2 at 375px",
+  "attempt": 1,
+  "caption": "At 375px the draft result shows the Draft label above the video.",
+  "annotations": [
+   {
+    "x": 4.3,
+    "y": 53.8,
+    "w": 13.8,
+    "h": 3,
+    "label": "Draft label"
+   }
+  ],
+  "at": "2026-11-24T08:48:34.901Z"
+ },
+ {
+  "file": "4/T4.3-2.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": "AC1/AC2: image thumbnail with Remove; audio duration and Estimated cost",
+  "attempt": 2,
+  "caption": "An attached image shows its thumbnail with Remove, the attached audio shows its 5 s duration, and the cost badge reads Estimated.",
+  "annotations": [
+   {
+    "x": 7.6,
+    "y": 63.2,
+    "w": 4.4,
+    "h": 5.6,
+    "label": "image thumbnail"
+   },
+   {
+    "x": 44.4,
+    "y": 63.8,
+    "w": 5.5,
+    "h": 4.4,
+    "label": "Remove control"
+   },
+   {
+    "x": 7.6,
+    "y": 78.2,
+    "w": 4,
+    "h": 1.8,
+    "label": "stored audio duration"
+   },
+   {
+    "x": 6.9,
+    "y": 91.3,
+    "w": 11.6,
+    "h": 2.8,
+    "label": "cost badge reads Estimated"
+   }
+  ],
+  "at": "2026-11-24T08:58:47.774Z"
+ },
+ {
+  "file": "4/T4.3-3.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": "AC3: audio over 20MB rejected with limit copy",
+  "attempt": 2,
+  "caption": "A 21 MB audio file is rejected before upload with the copy \"Audio must be 20 MB or smaller.\"",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 79.1,
+    "w": 43.8,
+    "h": 2,
+    "label": "exact 20 MB limit copy"
+   }
+  ],
+  "at": "2026-11-24T08:58:47.983Z"
+ },
+ {
+  "file": "4/T4.3-4.png",
+  "taskId": "T4.3",
+  "kind": "proof",
+  "step": "AC5: non-audio file renamed .mp3 rejected",
+  "attempt": 2,
+  "caption": "A text file renamed .mp3 is rejected by the server sniff and no audio is attached.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 79.1,
+    "w": 43.8,
+    "h": 2,
+    "label": "server rejection of the renamed file"
+   },
+   {
+    "x": 6.9,
+    "y": 68.2,
+    "w": 43.8,
+    "h": 10,
+    "label": "audio slot stays empty"
+   }
+  ],
+  "at": "2026-11-24T08:58:48.130Z"
+ },
+ {
+  "file": "4/T4.7-8.png",
+  "taskId": "T4.7",
+  "kind": "proof",
+  "step": "@high image and audio attach with Estimated cost",
+  "attempt": 2,
+  "caption": "Image and audio attached; the cost badge reads Estimated (replaces the cropped T4.7-4 shot).",
+  "annotations": [
+   {
+    "x": 7.6,
+    "y": 63.2,
+    "w": 4.4,
+    "h": 5.6,
+    "label": "image thumbnail"
+   },
+   {
+    "x": 6.9,
+    "y": 91.3,
+    "w": 11.6,
+    "h": 2.8,
+    "label": "Estimated cost badge"
+   }
+  ],
+  "at": "2026-11-24T08:58:48.275Z"
+ },
+ {
+  "file": "4/T4.7-9.png",
+  "taskId": "T4.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "150-credit confirm dialog fully open, Cancel focused",
+  "annotations": [],
+  "at": "2026-11-24T09:17:09.883Z"
+ },
+ {
+  "file": "4/T4.7-10.png",
+  "taskId": "T4.7",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "402 Low credits dialog fully shown (5 required, 2 available)",
+  "annotations": [],
+  "at": "2026-11-24T09:17:10.036Z"
+ },
+ {
+  "file": "4/T4.7-11.png",
+  "taskId": "T4.7",
+  "kind": "proof",
+  "step": "@critical 150-credit job asks for confirmation and Cancel is the default",
+  "attempt": 3,
+  "caption": "154-credit Wan 3 job opened by keyboard: the confirm dialog is fully open and Cancel holds default focus with its visible focus ring (supersedes T4.7-9, whose mouse-opened dialog shows no ring).",
+  "annotations": [
+   {
+    "x": 51.3,
+    "y": 54.2,
+    "w": 6.1,
+    "h": 5.6,
+    "label": "Cancel focused by default (focus ring)"
+   },
+   {
+    "x": 40.4,
+    "y": 47.5,
+    "w": 10,
+    "h": 3.5,
+    "label": "cost 154 credits"
+   }
+  ],
+  "at": "2026-11-24T09:31:44.671Z"
+ },
+ {
+  "file": "5/T5.8-1.png",
+  "taskId": "T5.8",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "tools: image-watermark-success",
+  "annotations": [],
+  "at": "2026-11-24T11:38:56.716Z"
+ },
+ {
+  "file": "5/T5.8-2.png",
+  "taskId": "T5.8",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "tools: autocaption-success",
+  "annotations": [],
+  "at": "2026-11-24T11:38:56.974Z"
+ },
+ {
+  "file": "5/T5.8-3.png",
+  "taskId": "T5.8",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "tools: sketch-success",
+  "annotations": [],
+  "at": "2026-11-24T11:38:57.147Z"
+ },
+ {
+  "file": "5/T5.8-4.png",
+  "taskId": "T5.8",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "tools: history-image",
+  "annotations": [],
+  "at": "2026-11-24T11:38:57.320Z"
+ },
+ {
+  "file": "5/T5.8-5.png",
+  "taskId": "T5.8",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "tools: handoff-not-found",
+  "annotations": [],
+  "at": "2026-11-24T11:38:57.492Z"
+ },
+ {
+  "file": "5/T5.8-6.png",
+  "taskId": "T5.8",
+  "kind": "proof",
+  "step": null,
+  "attempt": null,
+  "caption": "tools: mobile-375-sketch",
+  "annotations": [],
+  "at": "2026-11-24T11:38:57.668Z"
+ },
+ {
+  "file": "5/T5.4-1.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": "AC3: empty canvas disables Generate with the reason Draw something first.",
+  "attempt": null,
+  "caption": "Sketch tool with an empty canvas: Generate is disabled and the reason reads Draw something first.",
+  "annotations": [
+   {
+    "x": 40.6,
+    "y": 88.1,
+    "w": 10,
+    "h": 5.5,
+    "label": "Generate disabled on empty canvas"
+   },
+   {
+    "x": 6.9,
+    "y": 94.6,
+    "w": 43.8,
+    "h": 2.4,
+    "label": "Reason: Draw something first."
+   }
+  ],
+  "at": "2026-11-24T12:01:48.990Z"
+ },
+ {
+  "file": "5/T5.4-2.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": "AC1/AC4: drawing paints strokes; toolbar has brush, eraser, undo, clear; canvas has a text alternative",
+  "attempt": null,
+  "caption": "A stroke drawn with pointer events on the sketch canvas; brush and eraser, size, Undo and Clear are in the toolbar.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 18.2,
+    "w": 5.7,
+    "h": 5.5,
+    "label": "Brush (keyboard selectable)"
+   },
+   {
+    "x": 13.2,
+    "y": 18.2,
+    "w": 5.9,
+    "h": 5.5,
+    "label": "Eraser"
+   },
+   {
+    "x": 34.7,
+    "y": 18.2,
+    "w": 5.5,
+    "h": 5.5,
+    "label": "Undo removes the last stroke"
+   },
+   {
+    "x": 41.2,
+    "y": 18.2,
+    "w": 5.4,
+    "h": 5.5,
+    "label": "Clear asks for confirmation"
+   },
+   {
+    "x": 6.9,
+    "y": 25.7,
+    "w": 43.8,
+    "h": 70,
+    "label": "Canvas with the stroke"
+   }
+  ],
+  "at": "2026-11-24T12:02:02.652Z"
+ },
+ {
+  "file": "5/T5.4-3.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": "AC1: clear asks for confirmation",
+  "attempt": null,
+  "caption": "Pressing Clear asks Clear the whole sketch? with Clear and Keep before anything is erased.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 25.2,
+    "w": 24.2,
+    "h": 5.5,
+    "label": "Confirmation to clear the sketch"
+   }
+  ],
+  "at": "2026-11-24T12:02:59.063Z"
+ },
+ {
+  "file": "5/T5.2-1.png",
+  "taskId": "T5.2",
+  "kind": "proof",
+  "step": "AC3: caption Position is fixed by this tool; you can change the text and size.",
+  "attempt": null,
+  "caption": "Video watermark empty state: upload zone with the limits, text size slider and the fixed-position caption; no drag, opacity or colour control.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 57.7,
+    "w": 43.8,
+    "h": 2,
+    "label": "Fixed-position caption"
+   },
+   {
+    "x": 8.2,
+    "y": 24.8,
+    "w": 16.1,
+    "h": 2.5,
+    "label": "Limit copy (120 s / 100 MB)"
+   },
+   {
+    "x": 6.9,
+    "y": 45.7,
+    "w": 43.8,
+    "h": 2.5,
+    "label": "Size control"
+   }
+  ],
+  "at": "2026-11-24T12:03:10.032Z"
+ },
+ {
+  "file": "5/T5.3-1.png",
+  "taskId": "T5.3",
+  "kind": "proof",
+  "step": "Empty state: Add a video to caption it.",
+  "attempt": null,
+  "caption": "Autocaption empty state: Add a video to caption it, with the per-block credit cost shown before running.",
+  "annotations": [
+   {
+    "x": 55.4,
+    "y": 17.6,
+    "w": 11.3,
+    "h": 2.5,
+    "label": "Empty state copy"
+   },
+   {
+    "x": 8.2,
+    "y": 24.8,
+    "w": 16.1,
+    "h": 2.5,
+    "label": "Upload zone with limits"
+   },
+   {
+    "x": 9.6,
+    "y": 34.9,
+    "w": 3.1,
+    "h": 2.6,
+    "label": "Cost shown before running"
+   }
+  ],
+  "at": "2026-11-24T12:03:14.463Z"
+ },
+ {
+  "file": "5/T5.1-1.png",
+  "taskId": "T5.1",
+  "kind": "proof",
+  "step": "Empty state: Add an image and the text for your watermark.",
+  "attempt": null,
+  "caption": "Image watermark tool empty state with the upload zone, text field and position grid.",
+  "annotations": [
+   {
+    "x": 55.4,
+    "y": 17.6,
+    "w": 21.1,
+    "h": 2.5,
+    "label": "Empty state copy"
+   },
+   {
+    "x": 6.9,
+    "y": 36.9,
+    "w": 43.8,
+    "h": 5.8,
+    "label": "Required watermark text (0/500)"
+   },
+   {
+    "x": 6.9,
+    "y": 45.7,
+    "w": 43.8,
+    "h": 22,
+    "label": "Position grid"
+   },
+   {
+    "x": 6.9,
+    "y": 89.2,
+    "w": 43.8,
+    "h": 2.4,
+    "label": "Reason Generate is disabled"
+   }
+  ],
+  "at": "2026-11-24T12:03:30.966Z"
+ },
+ {
+  "file": "5/T5.1-2.png",
+  "taskId": "T5.1",
+  "kind": "proof",
+  "step": "AC6: 375px layout, no horizontal scroll, tap targets at least 44px",
+  "attempt": null,
+  "caption": "At 375px the tool fits the screen with no horizontal scroll; controls are full-size tap targets.",
+  "annotations": [
+   {
+    "x": 8.8,
+    "y": 46.7,
+    "w": 31.5,
+    "h": 5.4,
+    "label": "Choose image button"
+   },
+   {
+    "x": 4.3,
+    "y": 68.8,
+    "w": 91.5,
+    "h": 21.7,
+    "label": "Position grid"
+   }
+  ],
+  "at": "2026-11-24T12:03:35.598Z"
+ },
+ {
+  "file": "5/T5.2-2.png",
+  "taskId": "T5.2",
+  "kind": "proof",
+  "step": "AC5: 375px layout, no horizontal scroll, tap targets at least 44px",
+  "attempt": null,
+  "caption": "At 375px the video watermark tool fits with no horizontal scroll.",
+  "annotations": [
+   {
+    "x": 8.8,
+    "y": 46.7,
+    "w": 30.5,
+    "h": 5.4,
+    "label": "Choose video button"
+   },
+   {
+    "x": 4.3,
+    "y": 80.6,
+    "w": 91.5,
+    "h": 2,
+    "label": "Fixed-position caption"
+   }
+  ],
+  "at": "2026-11-24T12:03:39.957Z"
+ },
+ {
+  "file": "5/T5.3-2.png",
+  "taskId": "T5.3",
+  "kind": "proof",
+  "step": "AC5: 375px layout, no horizontal scroll, tap targets at least 44px",
+  "attempt": null,
+  "caption": "At 375px autocaption fits with no horizontal scroll.",
+  "annotations": [
+   {
+    "x": 8.8,
+    "y": 46.7,
+    "w": 30.5,
+    "h": 5.4,
+    "label": "Choose video button"
+   },
+   {
+    "x": 17.9,
+    "y": 59.7,
+    "w": 10.6,
+    "h": 2.6,
+    "label": "Cost"
+   }
+  ],
+  "at": "2026-11-24T12:03:44.268Z"
+ },
+ {
+  "file": "5/T5.4-4.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": "AC5: 375px layout, no horizontal scroll, tap targets at least 44px",
+  "attempt": null,
+  "caption": "At 375px the sketch canvas and toolbar fit the screen with no horizontal scroll.",
+  "annotations": [
+   {
+    "x": 4.3,
+    "y": 52,
+    "w": 91.5,
+    "h": 42.2,
+    "label": "Canvas fits 375px"
+   },
+   {
+    "x": 4.3,
+    "y": 37.7,
+    "w": 19.5,
+    "h": 5.4,
+    "label": "Brush"
+   },
+   {
+    "x": 25.9,
+    "y": 37.7,
+    "w": 20.2,
+    "h": 5.4,
+    "label": "Eraser"
+   }
+  ],
+  "at": "2026-11-24T12:03:48.856Z"
+ },
+ {
+  "file": "5/T5.1-3.png",
+  "taskId": "T5.1",
+  "kind": "proof",
+  "step": "AC5: result can be downloaded",
+  "attempt": null,
+  "caption": "Stubbed e2e run of the image watermark: result image appears with Download and Use in... actions and a Your result is ready toast.",
+  "annotations": [
+   {
+    "x": 53.8,
+    "y": 9.6,
+    "w": 39.4,
+    "h": 70,
+    "label": "Watermarked result"
+   },
+   {
+    "x": 53.8,
+    "y": 81.3,
+    "w": 16,
+    "h": 6.3,
+    "label": "Download and Use in... actions"
+   }
+  ],
+  "at": "2026-11-24T12:04:08.871Z"
+ },
+ {
+  "file": "5/T5.1-4.png",
+  "taskId": "T5.1",
+  "kind": "proof",
+  "step": "AC4: failure shows No credits were used.",
+  "attempt": null,
+  "caption": "Stubbed failure: Generation failed. No credits were used. with Try again; the credit chip still shows 500.",
+  "annotations": [
+   {
+    "x": 53.8,
+    "y": 12.2,
+    "w": 39.4,
+    "h": 15.3,
+    "label": "Failure copy with Try again"
+   },
+   {
+    "x": 86.5,
+    "y": 1.4,
+    "w": 5.3,
+    "h": 4.4,
+    "label": "Credit balance unchanged"
+   }
+  ],
+  "at": "2026-11-24T12:04:09.068Z"
+ },
+ {
+  "file": "5/T5.2-3.png",
+  "taskId": "T5.2",
+  "kind": "proof",
+  "step": "AC1: over-limit video rejected with limit copy",
+  "attempt": null,
+  "caption": "A video over the limit is rejected with specific copy Videos up to 2 minutes and 100 MB; Generate stays disabled and nothing is billed.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 35,
+    "w": 43.8,
+    "h": 2.5,
+    "label": "Specific limit copy"
+   },
+   {
+    "x": 40.6,
+    "y": 73.5,
+    "w": 10,
+    "h": 6,
+    "label": "Generate disabled"
+   }
+  ],
+  "at": "2026-11-24T12:04:09.248Z"
+ },
+ {
+  "file": "5/T5.2-4.png",
+  "taskId": "T5.2",
+  "kind": "proof",
+  "step": "AC4: 402 and failure states match the shared components",
+  "attempt": null,
+  "caption": "Video watermark failure state uses the shared error card.",
+  "annotations": [
+   {
+    "x": 53.8,
+    "y": 12.2,
+    "w": 39.4,
+    "h": 15.3,
+    "label": "Shared failure card"
+   }
+  ],
+  "at": "2026-11-24T12:04:09.425Z"
+ },
+ {
+  "file": "5/T5.3-3.png",
+  "taskId": "T5.3",
+  "kind": "proof",
+  "step": "AC1-AC3: two blocks for 31 s; transcript plain text with Copy/Download; HTML shown escaped",
+  "attempt": null,
+  "caption": "Stubbed autocaption run: a 31 s video bills 22 credits (two blocks), the result video appears with a transcript shown as escaped plain text with Copy and Download.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 21.8,
+    "w": 7,
+    "h": 2.8,
+    "label": "22 credits for 31 s (two blocks)"
+   },
+   {
+    "x": 78.1,
+    "y": 77.5,
+    "w": 15,
+    "h": 6.1,
+    "label": "Copy and Download"
+   },
+   {
+    "x": 53.8,
+    "y": 85.3,
+    "w": 39.4,
+    "h": 11.4,
+    "label": "Transcript with HTML tags displayed as text"
+   }
+  ],
+  "at": "2026-11-24T12:04:09.604Z"
+ },
+ {
+  "file": "5/T5.3-4.png",
+  "taskId": "T5.3",
+  "kind": "proof",
+  "step": "AC4: failure state matches shared components",
+  "attempt": null,
+  "caption": "Autocaption failure state uses the shared error card.",
+  "annotations": [
+   {
+    "x": 53.8,
+    "y": 12.2,
+    "w": 39.4,
+    "h": 15.3,
+    "label": "Shared failure card"
+   }
+  ],
+  "at": "2026-11-24T12:04:09.782Z"
+ },
+ {
+  "file": "5/T5.4-5.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": "AC2: Generate uses the image route, one of 3 sketch models, image credit cost",
+  "attempt": null,
+  "caption": "Stubbed sketch run: the sketch is sent through the image route with Nano Banana 2 at the image cost of 1 credit and the result appears on the right.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 80.8,
+    "w": 43.8,
+    "h": 6.4,
+    "label": "Sketch model choice"
+   },
+   {
+    "x": 6.9,
+    "y": 91.9,
+    "w": 13,
+    "h": 3.3,
+    "label": "Image credit cost"
+   },
+   {
+    "x": 53.8,
+    "y": 12.2,
+    "w": 39.4,
+    "h": 70,
+    "label": "Generated result"
+   }
+  ],
+  "at": "2026-11-24T12:04:09.959Z"
+ },
+ {
+  "file": "5/T5.4-6.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": "AC2: credits path shared with image generation",
+  "attempt": null,
+  "caption": "Sketch with 0 credits on Seedream 4 (402 path stubbed).",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 91.9,
+    "w": 13,
+    "h": 3.3,
+    "label": "Cost shown"
+   },
+   {
+    "x": 86.5,
+    "y": 1.4,
+    "w": 5.3,
+    "h": 4.4,
+    "label": "Balance 0"
+   }
+  ],
+  "at": "2026-11-24T12:04:10.136Z"
+ },
+ {
+  "file": "5/T5.5-1.png",
+  "taskId": "T5.5",
+  "kind": "proof",
+  "step": "AC2: choosing a handoff opens the target with the asset preloaded",
+  "attempt": null,
+  "caption": "Handing an image to Image watermark opens the tool with the asset preloaded in the upload row.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 24.3,
+    "w": 43.8,
+    "h": 10,
+    "label": "Preloaded asset"
+   }
+  ],
+  "at": "2026-11-24T12:04:10.314Z"
+ },
+ {
+  "file": "5/T5.5-2.png",
+  "taskId": "T5.5",
+  "kind": "proof",
+  "step": "AC3: foreign asset id shows the not-found state",
+  "attempt": null,
+  "caption": "A handoff with another user's asset id shows That file could not be found. No credits were used. and loads nothing.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 20.4,
+    "w": 43.8,
+    "h": 19.6,
+    "label": "Not-found state"
+   }
+  ],
+  "at": "2026-11-24T12:04:10.491Z"
+ },
+ {
+  "file": "5/T5.5-3.png",
+  "taskId": "T5.5",
+  "kind": "proof",
+  "step": "AC1: History items offer Use in... for supported assets",
+  "attempt": null,
+  "caption": "History item shows an Image Watermark chip and a Use in... action next to Download and Delete.",
+  "annotations": [
+   {
+    "x": 11.9,
+    "y": 53.5,
+    "w": 6.6,
+    "h": 6.9,
+    "label": "Use in... action"
+   },
+   {
+    "x": 3,
+    "y": 53.5,
+    "w": 8,
+    "h": 4.5,
+    "label": "Tool chip"
+   }
+  ],
+  "at": "2026-11-24T12:04:10.669Z"
+ },
+ {
+  "file": "5/T5.5-4.png",
+  "taskId": "T5.5",
+  "kind": "proof",
+  "step": "AC5: 375px layout, no horizontal scroll",
+  "attempt": null,
+  "caption": "375px layout of a tool page reached from a handoff: no horizontal scroll.",
+  "annotations": [
+   {
+    "x": 4,
+    "y": 40,
+    "w": 92,
+    "h": 12,
+    "label": "Preloaded asset row at 375px"
+   }
+  ],
+  "at": "2026-11-24T12:04:10.848Z"
+ },
+ {
+  "file": "5/T5.5-5.png",
+  "taskId": "T5.5",
+  "kind": "proof",
+  "step": "Visual pass: /video on the dev server",
+  "attempt": null,
+  "caption": "The Video studio page loads, the target that accepts an image handed off from a result or History (Use in... > Video image input).",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 11,
+    "w": 43.8,
+    "h": 4.2,
+    "label": "Video studio"
+   }
+  ],
+  "at": "2026-11-24T12:04:23.726Z"
+ },
+ {
+  "file": "5/T5.2-5.png",
+  "taskId": "T5.2",
+  "kind": "proof",
+  "step": "AC3: caption \"Position is fixed by this tool; you can change the text and size.\" is shown",
+  "attempt": 4,
+  "caption": "Verifier retake: the shipped caption reads \"The tool places the watermark itself; the preview does not show where. You can change the text and size.\", not the AC3 text.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 57.7,
+    "w": 43.75,
+    "h": 2,
+    "label": "caption text differs from AC3"
+   }
+  ],
+  "at": "2026-11-24T12:19:33.871Z"
+ },
+ {
+  "file": "5/T5.4-7.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": "AC3: empty canvas disables Generate with the reason \"Draw something first.\"",
+  "attempt": 4,
+  "caption": "Verifier retake: empty canvas, Generate disabled with the reason \"Draw something first.\"; empty-state copy now reads \"Draw a sketch, then describe the picture.\"",
+  "annotations": [
+   {
+    "x": 40.6,
+    "y": 88.1,
+    "w": 10,
+    "h": 5.5,
+    "label": "Generate disabled"
+   },
+   {
+    "x": 6.9,
+    "y": 94.6,
+    "w": 43.75,
+    "h": 2.4,
+    "label": "reason Draw something first."
+   },
+   {
+    "x": 53.75,
+    "y": 11,
+    "w": 39.4,
+    "h": 11.75,
+    "label": "current empty-state copy"
+   }
+  ],
+  "at": "2026-11-24T12:19:34.077Z"
+ },
+ {
+  "file": "5/T5.4-8.png",
+  "taskId": "T5.4",
+  "kind": "proof",
+  "step": "AC5: 375px, no horizontal scroll, tap targets at least 44px",
+  "attempt": 4,
+  "caption": "Verifier retake at 375px: scrollWidth 375 = clientWidth; the brush size slider is now 44px tall (was 16px), Undo and Clear 44px.",
+  "annotations": [
+   {
+    "x": 16.6,
+    "y": 44.6,
+    "w": 34.4,
+    "h": 5.4,
+    "label": "size slider 44px tall"
+   }
+  ],
+  "at": "2026-11-24T12:22:32.606Z"
+ },
+ {
+  "file": "5/T5.2-6.png",
+  "taskId": "T5.2",
+  "kind": "proof",
+  "step": "AC5: 375px layout, no horizontal scroll, tap targets at least 44px",
+  "attempt": 4,
+  "caption": "Verifier retake at 375px: no horizontal scroll, Choose video 44px; the caption shows the current (non-AC3) wording.",
+  "annotations": [
+   {
+    "x": 4.3,
+    "y": 80.6,
+    "w": 91.5,
+    "h": 3.9,
+    "label": "current caption text"
+   }
+  ],
+  "at": "2026-11-24T12:22:32.823Z"
+ },
+ {
+  "file": "5/T5.2-7.png",
+  "taskId": "T5.2",
+  "kind": "proof",
+  "step": "AC3 preview + caption (desktop)",
+  "attempt": 7,
+  "caption": "Loaded video with entered text previewed at the chosen size, and the fixed-position caption.",
+  "annotations": [
+   {
+    "x": 6.9,
+    "y": 51.6,
+    "w": 43.8,
+    "h": 48.4,
+    "label": "video preview"
+   },
+   {
+    "x": 6.9,
+    "y": 91.9,
+    "w": 43.8,
+    "h": 5,
+    "label": "text preview scaled by size"
+   }
+  ],
+  "at": "2026-11-26T08:54:03.501Z"
+ },
+ {
+  "file": "5/T5.2-8.png",
+  "taskId": "T5.2",
+  "kind": "proof",
+  "step": "AC3 preview + caption (375px)",
+  "attempt": 7,
+  "caption": "Same preview at 375px, no horizontal scroll.",
+  "annotations": [
+   {
+    "x": 4.3,
+    "y": 67.4,
+    "w": 91.5,
+    "h": 32.6,
+    "label": "video preview"
+   },
+   {
+    "x": 4.3,
+    "y": 92.1,
+    "w": 91.5,
+    "h": 4.9,
+    "label": "text preview"
+   }
+  ],
+  "at": "2026-11-26T08:54:03.658Z"
+ }
+]
