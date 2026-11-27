@@ -20,10 +20,13 @@ const shotPath = (name: string) => `../../agent_docs/qa/landing-nav-theme/${name
 
 const toggles = (page: Page) => page.getByRole('button', { name: TOGGLE_NAME });
 
+// The home page is dark-only and hides the toggle, so the shared nav is exercised on a feature lander.
+const FEATURE_LANDER_PATH = '/text-to-image';
+
 async function openLanding(page: Page, width: number) {
   await page.setViewportSize({ width, height: HEIGHT });
-  await page.goto('/');
-  await expect(page.locator('.hero')).toBeVisible();
+  await page.goto(FEATURE_LANDER_PATH);
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 }
 
 const isDark = (page: Page) =>
@@ -108,6 +111,13 @@ test.describe('landing nav theme toggle', () => {
     expect(toggleBox.x + toggleBox.width).toBeLessThanOrEqual(ctaBox.x);
     await expectToggleFlipsTheme(page);
     await snap('toggle-1440');
+  });
+
+  test('the dark-only home page hides the theme toggle @medium', async ({ page }) => {
+    await page.setViewportSize({ width: WIDTH_DESKTOP, height: HEIGHT });
+    await page.goto('/');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await expect(toggles(page)).toBeHidden();
   });
 
   test('signed-out header on /pricing still has a single working ThemeButton @medium', async ({

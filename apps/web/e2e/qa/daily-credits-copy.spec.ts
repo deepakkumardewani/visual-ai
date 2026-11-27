@@ -10,6 +10,8 @@ import { gotoStudio } from '../support/studio';
 
 import { CURRENT_INTRO_VERSION } from '@visual-ai/shared';
 
+import { creditEconomyLines, creditEconomyPhrase } from '../../src/utils/creditCopy';
+
 const test = mergeTests(qaTest, generationTest);
 
 const E2E_USER_ID = requireEnv('E2E_CLERK_USER_ID');
@@ -68,15 +70,15 @@ test.describe('daily credits copy (Free = 30)', () => {
     try {
       await page.goto('/pricing');
       await expect(page.getByText(`${FREE_DAILY} new ones every day`)).toBeVisible();
-      await expect(
-        page.getByText('Premium upscalers are 4 and premium generation is 5'),
-      ).toBeVisible();
-      await expect(page.getByText(/Budget generation is 1 credit/)).toBeVisible();
+      // Expected copy comes from the same source PricingCreditStory renders, so ranges cannot drift.
+      for (const line of creditEconomyLines()) {
+        await expect(page.getByText(creditEconomyPhrase(line)).first()).toBeVisible();
+      }
       await page.screenshot({ path: shotPath('pricing'), fullPage: true });
 
       await page.goto('/');
-      await expect(page.getByText(`${FREE_DAILY} daily credits (unused reset)`)).toBeVisible();
-      await expect(page.getByText(`and ${FREE_DAILY} more every day.`)).toBeVisible();
+      // Hero and final CTA both carry the free-credits line; the hero one is in view on load.
+      await expect(page.getByText(`plus ${FREE_DAILY} more each day`).first()).toBeVisible();
       await page.screenshot({ path: shotPath('landing'), fullPage: true });
     } finally {
       await context.close();

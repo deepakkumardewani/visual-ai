@@ -20,7 +20,9 @@ Candidate models and pricing research: [MODELS_COMPARISON.md](../MODELS_COMPARIS
     - Community models: pin the version hash — `owner/name:versionhash` (see
       `FLUX_REALISM`, `UPSCALE_IMAGE` for examples).
   - `label`, `tier` (`budget` | `standard` | `premium`), `pricePerImage`
-    (credits ≈ Replicate per-image cost × margin).
+    (required; Replicate USD cost of one output). The credit cost is derived from it:
+    `ceil(pricePerImage / USD_PER_CREDIT)` with `USD_PER_CREDIT = 0.005`, minimum 1
+    (`getCreditCost` in `packages/shared/src/models/credits.ts`). Do not hand-set credits.
   - `utility: true` if it's a non-generation model (upscale/colorize/etc.).
   - `fields` — declare **only** the params the model's Replicate OpenAPI
     schema actually accepts (`aspectRatio`, `outputFormat`, `outputQuality`,

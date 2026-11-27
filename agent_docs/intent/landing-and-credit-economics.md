@@ -21,19 +21,21 @@ Current problem: credits sell for ~$0.0074 each while some models cost up to $0.
 2. **Pro gate**: premium-tier models require an active Pro subscription. Enforce on the API (reject with a typed error) and in the UI (locked state in model picker + "Upgrade to Pro" prompt; Pro users unaffected). Pack credits do not unlock premium models.
 3. **Packs** (4, third marked **Most popular**, visually emphasised on pricing page and wherever packs are listed):
 
-   | Credits | USD | INR |
-   |---|---|---|
-   | 300 | $5 | ₹249 |
-   | 700 | $10 | ₹549 |
+   | Credits              | USD | INR    |
+   | -------------------- | --- | ------ |
+   | 300                  | $5  | ₹249   |
+   | 700                  | $10 | ₹549   |
    | 1,600 ★ Most popular | $20 | ₹1,149 |
-   | 4,500 | $50 | ₹2,999 |
+   | 4,500                | $50 | ₹2,999 |
 
    Savings badges computed from per-100 price vs the smallest pack. Rename pack IDs to match credit sizes.
+
 4. **Currency**: India (country `IN`) sees and pays INR; everyone else sees and pays plain USD. Remove the INR→local-currency conversion for packs. Pack model holds separate per-currency prices (not converted). Check Dodo docs (`dodopayments` skills / docs MCP) for the right way to charge different INR/USD amounts (separate products per currency vs. per-currency pricing); map products via env (`productMap.ts`, `env.ts`) and update `.env.example`. **Ask me before creating test-mode products**, or give me the exact list to create.
 5. **Existing balances**: unchanged. Add one FAQ line explaining model credit costs changed.
 6. **Unchanged**: Pro $5/mo, daily credits (Free 30, Pro 50), signup 30, referral 30.
 
 ## Verification (must pass before done)
+
 - Unit tests + typecheck + lint green for web, api, shared; e2e green with all paid endpoints mocked.
 - Browser (agent-browser), desktop + mobile: modal stays identical size across ≥3 images of different aspect ratios; no hint text; Start free doesn't move on hover (compare bounding box before/after hover); `/` shows the new landing, `/v2` `/v3` 404/redirect; FeatureLanding pages render; pricing page shows 4 packs with Most popular third, INR when country=IN and USD otherwise; premium model locked for a free user and usable for Pro; studio shows new credit costs.
 - Dodo test-mode checkout for one pack in each currency via webhook stub credits the right amount.

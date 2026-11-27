@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 
 import { clerk } from '@clerk/testing/playwright';
 import { mergeTests, type Locator, type Page } from '@playwright/test';
+import { getCreditCost, type ModelKey } from '@visual-ai/shared';
 
 import { test as generationTest } from '../fixtures/generation';
 import { expect, test as qaTest } from '../fixtures/qa';
@@ -140,16 +141,21 @@ test.describe('Pro tier UI', () => {
   });
 
   test.describe('model tiers and gating', () => {
+    // Premium-tier generation models (shared `requiresPro`); premium upscalers stay open.
     const PRO_ONLY_MODELS = [
+      { title: 'Flux Pro', company: 'Black Forest Labs' },
+      { title: 'Flux 1.1 Pro', company: 'Black Forest Labs' },
       { title: 'Flux Realism', company: 'Black Forest Labs' },
-      { title: 'Flux Kontext Pro', company: 'Black Forest Labs' },
+      { title: 'Flux 2 Max', company: 'Black Forest Labs' },
       { title: 'Flux Kontext Max', company: 'Black Forest Labs' },
-      { title: 'Imagen 4 Ultra', company: 'Google' },
       { title: 'Nano Banana Pro', company: 'Google' },
       { title: 'GPT Image 2', company: 'OpenAI' },
     ];
-    const FREE_MAX_MODEL = { title: 'Flux 2 Max', company: 'Black Forest Labs' };
-    const PREMIUM_CREDIT_COST = 5;
+    const FREE_MAX_MODEL = { title: 'Imagen 4 Ultra', company: 'Google' };
+    const FREE_MAX_KEY: ModelKey = 'IMAGEN_4_ULTRA';
+    /** DEFAULT_MODE in stores/aside.ts, the fallback for a stale Pro-only selection. */
+    const DEFAULT_MODEL_TITLE = 'Flux Lightning';
+    const creditsLabel = (key: ModelKey) => `${getCreditCost(key)} credits`;
 
     /** Opens the picker if needed; the flat list scrolls, so bring the model's row into view. */
     async function modelOption(page: Page, model: { title: string; company: string }) {
@@ -163,7 +169,7 @@ test.describe('Pro tier UI', () => {
       return option;
     }
 
-    test('@critical free sees lock and PRO badge on the six Pro-only models and clicking opens pricing', async ({
+    test('@critical free sees lock and PRO badge on every Pro-only model and clicking opens pricing', async ({
       page,
       snap,
     }) => {
@@ -181,6 +187,8 @@ test.describe('Pro tier UI', () => {
         }
         await expect(option.getByTestId('premium-lock-badge')).toHaveText(/Pro/);
         await expect(option).toHaveAttribute('data-locked', 'true');
+        // Still actionable (opens the upsell), so described rather than aria-disabled.
+        await expect(option).toHaveAccessibleDescription(/Requires Pro/);
         await option.click();
         const dialog = pricingDialog(page);
         await expect(dialog).toBeVisible();
@@ -189,11 +197,11 @@ test.describe('Pro tier UI', () => {
         await expect(page.getByTestId('model-chip')).not.toContainText(model.title);
       }
       await modelOption(page, PRO_ONLY_MODELS[0]);
-      await snap('free-six-locked');
-      await page.screenshot({ path: shotPath('free-six-locked'), fullPage: true });
+      await snap('free-premium-models-locked');
+      await page.screenshot({ path: shotPath('free-premium-models-locked'), fullPage: true });
     });
 
-    test('@critical free can select FLUX.2 Max with no lock and cost shows 5', async ({
+    test('@critical free can select Imagen 4 Ultra with no lock and its registry cost shows', async ({
       page,
       snap,
     }) => {
@@ -201,7 +209,7 @@ test.describe('Pro tier UI', () => {
       const option = await modelOption(page, FREE_MAX_MODEL);
       await expect(option.getByTestId('premium-lock-badge')).toHaveCount(0);
       await expect(option).not.toHaveAttribute('data-locked', 'true');
-      await expect(option.getByLabel(`${PREMIUM_CREDIT_COST} credits`)).toBeVisible();
+      await expect(option.getByLabel(creditsLabel(FREE_MAX_KEY))).toBeVisible();
       await option.scrollIntoViewIfNeeded(); // the submenu scrolls: Flux 2 Max must be in the shot
       await snap('free-flux-2-max-unlocked');
       await page.screenshot({ path: shotPath('free-flux-2-max-unlocked'), fullPage: true });
@@ -231,11 +239,42 @@ test.describe('Pro tier UI', () => {
       // (one combined regex: a 2-element array in test.use is read as a [value, options] fixture tuple).
       test.use({ expectedConsoleErrors: [/status of 403|ERROR api GET .* 403 /] });
 
-      test('@high stale Pro-only selection for Free shows the upsell, not a raw error', async ({
+      test('@high stale Pro-only selection for Free falls back to the default model', async ({
         page,
         snap,
       }) => {
-        const prompt = `stale premium ${uniqueToken()}`;
+        await page.addInitScript(
+          ([key, modelId]) =>
+            window.localStorage.setItem(
+              key,
+              JSON.stringify({ modelId, prompt: '', noOfOutputs: 1 }),
+            ),
+          ['visual-ai-composer-state', 'FLUX_REALISM'],
+        );
+
+        await gotoStudio(page);
+        await expect(page.getByTestId('model-chip')).toContainText(DEFAULT_MODEL_TITLE);
+        await expect(
+          page.getByText('Flux Realism is a Pro model.', { exact: false }),
+        ).toBeVisible();
+        await snap('stale-selection-fallback');
+        await page.screenshot({ path: shotPath('stale-selection-fallback'), fullPage: true });
+      });
+
+      test('@high a server-side Pro rejection shows the upsell, not a raw error', async ({
+        page,
+        snap,
+      }) => {
+        // The UI still thinks the user is Pro (e.g. the plan lapsed mid-session); the API says no.
+        await gotoStudio(page);
+        await activatePro(page, 'lapsed');
+        await gotoStudio(page);
+        // The cheapest gated model, so the client-side low-credits check never pre-empts the request.
+        const cheapPremium = { title: 'Flux Realism', company: 'Black Forest Labs' };
+        await (await modelOption(page, cheapPremium)).click();
+        await expect(page.getByTestId('model-chip')).toContainText(cheapPremium.title);
+
+        const prompt = `lapsed premium ${uniqueToken()}`;
         let generateRequests = 0;
         // The API would answer 403 + code; stubbing it keeps the paid endpoint off the network.
         await page.route(/\/generate\/image$/, (route) => {
@@ -256,17 +295,7 @@ test.describe('Pro tier UI', () => {
             },
           });
         });
-        await page.addInitScript(
-          ([key, modelId]) =>
-            window.localStorage.setItem(
-              key,
-              JSON.stringify({ modelId, prompt: '', noOfOutputs: 1 }),
-            ),
-          ['visual-ai-composer-state', 'FLUX_REALISM'],
-        );
 
-        await gotoStudio(page);
-        await expect(page.getByTestId('model-chip')).toContainText('Flux Realism');
         await page.getByTestId('composer-textarea-input').fill(prompt);
         await page.getByTestId('generate-cta').dispatchEvent('click');
 
@@ -278,7 +307,10 @@ test.describe('Pro tier UI', () => {
       });
     });
 
-    test('@medium cost table shows the 5-credit group', async ({ page, snap }) => {
+    test('@medium cost table lists premium models at their registry cost', async ({
+      page,
+      snap,
+    }) => {
       await page.goto('/pricing');
       const costs = page.locator('#model-costs');
       await expect(costs).toBeVisible();
@@ -287,10 +319,10 @@ test.describe('Pro tier UI', () => {
       for (const title of [...PRO_ONLY_MODELS.map((m) => m.title), FREE_MAX_MODEL.title]) {
         await expect(premium).toContainText(title);
       }
-      await expect(premium).toContainText('Flux 2 Pro');
-      // One flat rate for the whole band: every premium model costs 5, so no 3-5 style range.
-      await expect(premium.getByLabel(`${PREMIUM_CREDIT_COST} credits`).first()).toBeVisible();
-      await expect(premium.getByLabel(/\d+–\d+ credits/)).toHaveCount(0);
+      // Rows group models by exact cost, so each row chip carries that model's registry cost.
+      for (const key of ['FLUX_2_MAX', 'NANO_BANANA_PRO', 'GPT_IMAGE_2'] as const) {
+        await expect(premium.getByLabel(creditsLabel(key)).first()).toBeVisible();
+      }
       await costs.scrollIntoViewIfNeeded();
       await snap('cost-table-five');
       await costs.screenshot({ path: shotPath('cost-table-five') });
@@ -362,10 +394,8 @@ test.describe('Pro tier UI', () => {
     });
   });
 
-  test('@high mocked geo header shows local currency, no header shows USD', async ({
-    page,
-    snap,
-  }) => {
+  // Pro is billed in USD everywhere; only credit packs switch to INR for India.
+  test('@high Pro price stays USD with or without an India geo header', async ({ page, snap }) => {
     await gotoStudio(page);
     const dialog = await openPricingDialogFromLock(page);
     await expect(dialog.getByTestId('pro-price')).toContainText('$');
@@ -375,7 +405,8 @@ test.describe('Pro tier UI', () => {
     await mockGeoCountry(page, 'IN');
     await gotoStudio(page);
     const indiaDialog = await openPricingDialogFromLock(page);
-    await expect(indiaDialog.getByTestId('pro-price')).toContainText('₹');
+    await expect(indiaDialog.getByTestId('pro-price')).toContainText('$');
+    await expect(indiaDialog.getByTestId('pro-price')).not.toContainText('₹');
     await expect(indiaDialog.getByTestId('pro-price-note')).toHaveCount(0);
     await expect(indiaDialog.getByText('Approx. price')).toHaveCount(0);
     await snap('pricing-inr');

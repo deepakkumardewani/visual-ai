@@ -61,3 +61,4 @@ apps/web/playwright-report/
 agent_docs/qa/
 node-jiti/
 playwright-transform-cache-*/
+*.tsbuildinfo
