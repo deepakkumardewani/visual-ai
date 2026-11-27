@@ -1,10 +1,10 @@
+import { packCurrencyForCountry } from "@visual-ai/shared"
 import { Router } from "express"
 import type { Request, Response } from "express"
 
 import { asyncHandler } from "../lib/async-handler.js"
 import { BadRequestError } from "../lib/errors.js"
 import { PAYMENTS_MESSAGES } from "./constants.js"
-import { getFxRates } from "./fx.js"
 import { resolveCountry } from "./geo.js"
 import { buildPrices } from "./prices.js"
 import { AlreadySubscribedError, ProviderApiError, UnknownPackError } from "./errors.js"
@@ -23,11 +23,8 @@ export const paymentsPublicRouter = Router()
 paymentsPublicRouter.get(
     "/payments/prices",
     asyncHandler(async (req: Request, res: Response) => {
-        const [country, rates] = await Promise.all([
-            resolveCountry(req, req.query.country),
-            getFxRates(),
-        ])
-        res.status(200).json(buildPrices(country, rates))
+        const country = await resolveCountry(req, req.query.country)
+        res.status(200).json(buildPrices(country))
     }),
 )
 
@@ -59,9 +56,11 @@ paymentsApiRouter.post(
         }
 
         const email = getSessionEmail(req)
+        // Same country source as /payments/prices; a client-sent currency is never read.
+        const currency = packCurrencyForCountry(await resolveCountry(req, req.query.country))
 
         try {
-            const result = await createCheckout(userId, packId, email)
+            const result = await createCheckout({ userId, packId, currency, email })
             res.status(201).json(result)
         } catch (error) {
             if (error instanceof UnknownPackError) {

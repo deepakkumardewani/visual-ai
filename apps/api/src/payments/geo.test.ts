@@ -40,17 +40,25 @@ describe("resolveCountry", () => {
         expect(fetchMock).not.toHaveBeenCalled()
     })
 
-    it("checks later headers when earlier ones are missing or malformed", async () => {
+    it("ignores client-spoofable geo headers the edge proxy does not overwrite", async () => {
+        fetchMock.mockResolvedValue({ ok: true, text: async () => "us\n" })
+
         const country = await resolveCountry(
-            makeReq({ "cf-ipcountry": "XX1", "x-vercel-ip-country": "de" }),
+            makeReq(
+                {
+                    "cf-ipcountry": "XX1",
+                    "x-vercel-ip-country": "in",
+                    "cloudfront-viewer-country": "in",
+                },
+                "1.2.3.4",
+            ),
         )
 
-        expect(country).toBe("DE")
-        expect(fetchMock).not.toHaveBeenCalled()
+        expect(country).toBe("US")
     })
 
     it("takes the first value of an array header", async () => {
-        const country = await resolveCountry(makeReq({ "cloudfront-viewer-country": ["fr", "es"] }))
+        const country = await resolveCountry(makeReq({ "cf-ipcountry": ["fr", "es"] }))
 
         expect(country).toBe("FR")
     })

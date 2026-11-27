@@ -7,7 +7,6 @@ import { AlreadySubscribedError, ProviderApiError, UnknownPackError } from "./er
 
 const integrationMocks = vi.hoisted(() => ({
     env: { NODE_ENV: "test", DEV_COUNTRY_OVERRIDE: undefined as string | undefined },
-    getFxRates: vi.fn(),
     providerCreateCheckout: vi.fn(),
     providerGetSessionStatus: vi.fn(),
     paymentCreate: vi.fn(),
@@ -21,8 +20,6 @@ vi.mock("../config/env.js", () => ({
         LOG_LEVEL: "info",
     }),
 }))
-
-vi.mock("./fx.js", () => ({ getFxRates: integrationMocks.getFxRates }))
 
 vi.mock("../lib/logger.js", () => ({
     createLogger: () => ({ debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() }),
@@ -90,9 +87,9 @@ function createTestApp(auth?: { userId: string; email?: string }) {
     return app
 }
 
-const FX_RATES = { USD: 1, INR: 80, EUR: 0.9, JPY: 150 }
-const PRO_USD_MINOR = 500
-const PRO_INR_MINOR = 40_000 // $5 * 80 INR/USD, in paise
+const PRO_USD = { amountMinor: 500, currency: "USD" }
+const INR_PACK_MINORS = [24_900, 54_900, 114_900, 299_900]
+const USD_PACK_MINORS = [500, 1_000, 2_000, 5_000]
 
 describe("GET /payments/prices", () => {
     const fetchMock = vi.fn()
@@ -107,7 +104,6 @@ describe("GET /payments/prices", () => {
         vi.clearAllMocks()
         integrationMocks.env.NODE_ENV = "test"
         integrationMocks.env.DEV_COUNTRY_OVERRIDE = undefined
-        integrationMocks.getFxRates.mockResolvedValue(FX_RATES)
         // ipapi.co must never be reached for real
         fetchMock.mockResolvedValue({ ok: false, text: async () => "" })
         vi.stubGlobal("fetch", fetchMock)
@@ -125,7 +121,11 @@ describe("GET /payments/prices", () => {
         expect(res.status).toBe(200)
         expect(res.body.country).toBe("IN")
         expect(res.body.currency).toBe("INR")
-        expect(res.body.pro).toEqual({ amountMinor: PRO_INR_MINOR, currency: "INR" })
+        expect(res.body.packs.map((p: { amountMinor: number }) => p.amountMinor)).toEqual(
+            INR_PACK_MINORS,
+        )
+        // Pro is a single USD product; only packs are priced per country.
+        expect(res.body.pro).toEqual(PRO_USD)
         expect(fetchMock).not.toHaveBeenCalled()
     })
 
@@ -134,7 +134,11 @@ describe("GET /payments/prices", () => {
 
         expect(res.status).toBe(200)
         expect(res.body.country).toBeNull()
-        expect(res.body.pro).toEqual({ amountMinor: PRO_USD_MINOR, currency: "USD" })
+        expect(res.body.currency).toBe("USD")
+        expect(res.body.packs.map((p: { amountMinor: number }) => p.amountMinor)).toEqual(
+            USD_PACK_MINORS,
+        )
+        expect(res.body.pro).toEqual(PRO_USD)
     })
 
     it("honours ?country=IN over a US header in test", async () => {
@@ -166,7 +170,7 @@ describe("GET /payments/prices", () => {
             .set("cf-ipcountry", "JP")
 
         expect(res.body.country).toBe("JP")
-        expect(res.body.pro).toEqual({ amountMinor: 750, currency: "JPY" })
+        expect(res.body.currency).toBe("USD")
     })
 
     it("ignores ?country=ZZ and falls back to the header", async () => {
@@ -182,6 +186,14 @@ describe("GET /payments/prices", () => {
 describe("paymentsApiRouter", () => {
     beforeEach(() => {
         vi.clearAllMocks()
+        integrationMocks.env.NODE_ENV = "test"
+        integrationMocks.env.DEV_COUNTRY_OVERRIDE = undefined
+        // ipapi.co must never be reached for real
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, text: async () => "" }))
+    })
+
+    afterEach(() => {
+        vi.unstubAllGlobals()
     })
 
     describe("POST /payments/checkout", () => {
@@ -214,16 +226,63 @@ describe("paymentsApiRouter", () => {
                 sessionId: "cks_abc",
             })
             const app = createTestApp({ userId: "user_1", email: "buyer@example.com" })
-            const res = await request(app).post("/payments/checkout").send({ packId: "pack_200" })
+            const res = await request(app).post("/payments/checkout").send({ packId: "pack_300" })
             expect(res.status).toBe(201)
             expect(res.body).toEqual({
                 checkoutUrl: "https://checkout.test/pay",
                 sessionId: "cks_abc",
             })
+            expect(service.createCheckout).toHaveBeenCalledWith({
+                userId: "user_1",
+                packId: "pack_300",
+                currency: "USD",
+                email: "buyer@example.com",
+            })
+        })
+
+        it("charges INR when the geo header says India", async () => {
+            vi.mocked(service.createCheckout).mockResolvedValue({
+                checkoutUrl: "https://checkout.test/pay",
+                sessionId: "cks_in",
+            })
+            const app = createTestApp({ userId: "user_1" })
+            await request(app)
+                .post("/payments/checkout")
+                .set("cf-ipcountry", "IN")
+                .send({ packId: "pack_300" })
             expect(service.createCheckout).toHaveBeenCalledWith(
-                "user_1",
-                "pack_200",
-                "buyer@example.com",
+                expect.objectContaining({ packId: "pack_300", currency: "INR" }),
+            )
+        })
+
+        it("never takes the currency from the request body", async () => {
+            vi.mocked(service.createCheckout).mockResolvedValue({
+                checkoutUrl: "https://checkout.test/pay",
+                sessionId: "cks_us",
+            })
+            const app = createTestApp({ userId: "user_1" })
+            await request(app)
+                .post("/payments/checkout")
+                .set("cf-ipcountry", "US")
+                .send({ packId: "pack_300", currency: "INR", country: "IN" })
+            expect(service.createCheckout).toHaveBeenCalledWith(
+                expect.objectContaining({ currency: "USD" }),
+            )
+        })
+
+        it("ignores ?country on checkout in production, using the header", async () => {
+            integrationMocks.env.NODE_ENV = "production"
+            vi.mocked(service.createCheckout).mockResolvedValue({
+                checkoutUrl: "https://checkout.test/pay",
+                sessionId: "cks_prod",
+            })
+            const app = createTestApp({ userId: "user_1" })
+            await request(app)
+                .post("/payments/checkout?country=IN")
+                .set("cf-ipcountry", "US")
+                .send({ packId: "pack_300" })
+            expect(service.createCheckout).toHaveBeenCalledWith(
+                expect.objectContaining({ currency: "USD" }),
             )
         })
 
@@ -234,12 +293,17 @@ describe("paymentsApiRouter", () => {
             })
             const app = createTestApp({ userId: "user_1" })
             await request(app).post("/payments/checkout").send({
-                packId: "pack_450",
+                packId: "pack_700",
                 amount: 9999,
                 credits: 9999,
                 userId: "attacker",
             })
-            expect(service.createCheckout).toHaveBeenCalledWith("user_1", "pack_450", undefined)
+            expect(service.createCheckout).toHaveBeenCalledWith({
+                userId: "user_1",
+                packId: "pack_700",
+                currency: "USD",
+                email: undefined,
+            })
         })
 
         it("returns 502 with a generic message on provider failure", async () => {
@@ -430,24 +494,25 @@ describe("payments checkout service integration", () => {
     })
 
     it("calls the provider with catalog pack values, not client price or credits", async () => {
-        await service.createCheckout("user_catalog", "pack_200", "a@b.com")
+        await service.createCheckout({
+            userId: "user_catalog",
+            packId: "pack_1600",
+            currency: "INR",
+            email: "a@b.com",
+        })
         expect(integrationMocks.providerCreateCheckout).toHaveBeenCalledWith({
             userId: "user_catalog",
-            pack: expect.objectContaining({
-                id: "pack_200",
-                credits: 200,
-                priceMinor: 13_000,
-                currency: "INR",
-            }),
+            pack: expect.objectContaining({ id: "pack_1600", credits: 1600 }),
+            currency: "INR",
             email: "a@b.com",
             returnUrl: "https://visual-ai.app/checkout/return",
         })
         expect(integrationMocks.paymentCreate).toHaveBeenCalledWith(
             expect.objectContaining({
                 userId: "user_catalog",
-                packId: "pack_200",
-                credits: 200,
-                amount: 130,
+                packId: "pack_1600",
+                credits: 1600,
+                amount: 1149,
                 currency: "INR",
             }),
         )

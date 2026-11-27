@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import {
   CURRENCY_MINOR_DIGITS,
   FALLBACK_CURRENCY,
-  currencyForCountry,
   isSupportedCurrency,
   normalizeCountryCode,
 } from './currencyMap.js';
@@ -20,28 +19,8 @@ describe('normalizeCountryCode', () => {
   );
 });
 
-describe('currencyForCountry', () => {
-  it.each([
-    ['US', 'USD'],
-    ['GB', 'GBP'],
-    ['IN', 'INR'],
-    ['JP', 'JPY'],
-    ['KR', 'KRW'],
-    ['DE', 'EUR'],
-    ['FR', 'EUR'],
-    ['sg', 'SGD'],
-  ])('maps %s to %s', (country, currency) => {
-    expect(currencyForCountry(country)).toBe(currency);
-  });
-
-  it.each([undefined, null, '', 'ZZ', 'XX', 'garbage', '__proto__'])(
-    'falls back to USD for %j',
-    (raw) => {
-      expect(currencyForCountry(raw)).toBe('USD');
-    },
-  );
-
-  it('uses USD as the fallback constant', () => {
+describe('FALLBACK_CURRENCY', () => {
+  it('is USD', () => {
     expect(FALLBACK_CURRENCY).toBe('USD');
   });
 });

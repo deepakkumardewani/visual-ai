@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { MODEL_REGISTRY } from './registry.js';
 import type { ModelKey } from './types.js';
 
 export const PLAN = { FREE: 'free', PRO: 'pro' } as const;
@@ -40,15 +41,22 @@ export function getHistoryFullLevel(count: number, cap: number): HistoryFullLeve
   return 'none';
 }
 
-/** Explicit list (not derived from price) so registry price edits never silently change the gate. */
-export const PREMIUM_MODEL_KEYS: readonly ModelKey[] = [
-  'FLUX_REALISM',
-  'FLUX_KONTEXT_PRO',
-  'FLUX_KONTEXT_MAX',
-  'IMAGEN_4_ULTRA',
-  'NANO_BANANA_PRO',
-  'GPT_IMAGE_2',
-];
+/**
+ * Whether a model needs an active Pro subscription. Only premium-tier generation
+ * models are gated; premium utilities (e.g. Topaz, Clarity upscalers) stay open.
+ * Pack credits never unlock these. Unknown keys return false so callers can fall
+ * through to their own validation.
+ */
+export function requiresPro(modelKey: string): boolean {
+  const model = MODEL_REGISTRY[modelKey as ModelKey];
+  if (!model) return false;
+  return model.tier === 'premium' && !model.utility;
+}
+
+/** Pro-gated model keys in registry order, derived from `requiresPro`. */
+export const PREMIUM_MODEL_KEYS: readonly ModelKey[] = (
+  Object.keys(MODEL_REGISTRY) as ModelKey[]
+).filter(requiresPro);
 
 /** BullMQ priority: lower number is served sooner. */
 export const QUEUE_PRIORITY = { PRO: 1, FREE: 10 } as const;

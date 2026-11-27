@@ -1,4 +1,4 @@
-import type { CreditPackId } from "@visual-ai/shared"
+import type { CreditPackId, PackCurrency } from "@visual-ai/shared"
 
 import { env } from "../../config/env.js"
 
@@ -10,16 +10,32 @@ export function getDodoProductIdForPro(): string {
     return productId
 }
 
-export function getDodoProductIdForPack(packId: CreditPackId): string {
-    const productIdByPack: Record<CreditPackId, string | undefined> = {
-        pack_200: env.DODO_PRODUCT_ID_PACK_200,
-        pack_450: env.DODO_PRODUCT_ID_PACK_450,
-        pack_960: env.DODO_PRODUCT_ID_PACK_960,
-        pack_2000: env.DODO_PRODUCT_ID_PACK_2000,
+/** One Dodo product per pack and currency, each with its own fixed price. */
+function productIdsByPack(): Record<CreditPackId, Record<PackCurrency, string | undefined>> {
+    return {
+        pack_300: {
+            USD: env.DODO_PRODUCT_ID_PACK_300_USD,
+            INR: env.DODO_PRODUCT_ID_PACK_300_INR,
+        },
+        pack_700: {
+            USD: env.DODO_PRODUCT_ID_PACK_700_USD,
+            INR: env.DODO_PRODUCT_ID_PACK_700_INR,
+        },
+        pack_1600: {
+            USD: env.DODO_PRODUCT_ID_PACK_1600_USD,
+            INR: env.DODO_PRODUCT_ID_PACK_1600_INR,
+        },
+        pack_4500: {
+            USD: env.DODO_PRODUCT_ID_PACK_4500_USD,
+            INR: env.DODO_PRODUCT_ID_PACK_4500_INR,
+        },
     }
-    const productId = productIdByPack[packId]
+}
+
+export function getDodoProductIdForPack(packId: CreditPackId, currency: PackCurrency): string {
+    const productId = productIdsByPack()[packId]?.[currency]
     if (!productId) {
-        throw new Error(`Missing Dodo product id for pack ${packId}`)
+        throw new Error(`Missing Dodo product id for pack ${packId} in ${currency}`)
     }
     return productId
 }

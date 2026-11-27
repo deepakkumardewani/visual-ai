@@ -408,6 +408,8 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       'philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e',
     label: 'Clarity Upscaler',
     tier: 'standard',
+    // Replicate estimate (per-second billing, A100): ~$0.016 per run.
+    pricePerImage: 0.016,
     utility: true,
     fields: {
       prompt: true,
@@ -421,6 +423,8 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       'arielreplicate/deoldify_image:0da600fab0c45a66211339f1c16b71345d22f26ef5fea3dca1bb90bb5711e950',
     label: 'DeOldify',
     tier: 'budget',
+    // Replicate estimate (per-second billing, T4): ~$0.038 per run.
+    pricePerImage: 0.038,
     utility: true,
     fields: {
       prompt: true,
@@ -433,6 +437,8 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     replicateId: 'piddnad/ddcolor:ca494ba129e44e45f661d6ece83c4c98a9a7c774309beca01429b58fce8aa695',
     label: 'DDColor',
     tier: 'standard',
+    // Replicate estimate (per-second billing, L40S): ~$0.00098 per run.
+    pricePerImage: 0.00098,
     utility: true,
     fields: {
       prompt: true,
@@ -446,6 +452,8 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       'tencentarc/gfpgan:0fbacf7afc6c144e5be9767cff80f25aff23e52b0708f17e20f9879b2f21516c',
     label: 'GFPGAN',
     tier: 'budget',
+    // Replicate estimate (per-second billing, L40S): ~$0.010 per run.
+    pricePerImage: 0.01,
     utility: true,
     fields: {
       prompt: true,
@@ -459,6 +467,8 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       'microsoft/bringing-old-photos-back-to-life:c75db81db6cbd809d93cc3b7e7a088a351a3349c9fa02b6d393e35e0d51ba799',
     label: 'Restore Old Photos',
     tier: 'standard',
+    // Replicate estimate (per-second billing, T4): ~$0.0097 per run.
+    pricePerImage: 0.0097,
     utility: true,
     fields: {
       prompt: true,
@@ -472,6 +482,8 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       '851-labs/background-remover:a029dff38972b5fda4ec5d75d7d1cd25aeff621d2cf4946a41055d7db66b80bc',
     label: 'Background Remover',
     tier: 'standard',
+    // Replicate estimate (per-second billing, T4): ~$0.00078 per run.
+    pricePerImage: 0.00078,
     utility: true,
     fields: {
       prompt: true,
@@ -487,6 +499,8 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       'nightmareai/real-esrgan:b3ef194191d13140337468c916c2c5b96dd0cb06dffc032a022a31807f6a5ea8',
     label: 'Real-ESRGAN',
     tier: 'budget',
+    // Replicate: $0.002 per output image.
+    pricePerImage: 0.002,
     utility: true,
     fields: {
       imageInput: { inputKey: 'image', array: false },
@@ -506,6 +520,9 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       'prunaai/p-image-upscale:b998e77850c393ccddb1a4c32e5c298c91f89f2af9d9fc72bb85e1949fd80ae3',
     label: 'Pruna',
     tier: 'budget',
+    // Replicate: $0.005 per output up to 4MP ($0.01 for 4–8MP, $0.02 for 8–16MP).
+    // TODO verify price: large scale factors land in the pricier tiers.
+    pricePerImage: 0.005,
     utility: true,
     fields: {
       imageInput: { inputKey: 'image', array: false },
@@ -527,6 +544,8 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     replicateId: 'recraft-ai/recraft-crisp-upscale',
     label: 'Recraft',
     tier: 'budget',
+    // Replicate: $0.006 per output image.
+    pricePerImage: 0.006,
     utility: true,
     fields: {
       imageInput: { inputKey: 'image', array: false },
@@ -538,6 +557,8 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     replicateId: 'google/upscaler',
     label: 'Google Upscaler',
     tier: 'standard',
+    // TODO verify price: Replicate page not found; $0.03 is the Fal list price for this model.
+    pricePerImage: 0.03,
     utility: true,
     fields: {
       imageInput: { inputKey: 'image', array: false },
@@ -557,6 +578,9 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
       'philz1337x/clarity-pro-upscaler:8e33eb474936d75d3ceaa787f3e66f5ba16f35db0853a7697a4ca4e5fc14b6cd',
     label: 'Clarity Pro',
     tier: 'premium',
+    // Replicate: $0.03 per output megapixel, $0.03 minimum per image.
+    // TODO verify price: this is the minimum; 2x of a 1MP input already costs $0.12.
+    pricePerImage: 0.03,
     utility: true,
     fields: {
       imageInput: { inputKey: 'image', array: false },
@@ -578,6 +602,9 @@ export const MODEL_REGISTRY: Record<ModelKey, ModelDefinition> = {
     replicateId: 'topazlabs/image-upscale',
     label: 'Topaz',
     tier: 'premium',
+    // Replicate: $0.08 per unit, 1 unit covers outputs up to 24MP.
+    // TODO verify price: the model readme table still lists $0.05 per unit.
+    pricePerImage: 0.08,
     utility: true,
     fields: {
       imageInput: { inputKey: 'image', array: false },

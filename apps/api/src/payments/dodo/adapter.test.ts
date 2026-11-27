@@ -5,10 +5,8 @@ import { describe, expect, it, vi } from "vitest"
 
 const mockEnv = vi.hoisted(() => ({
     DODO_PRODUCT_ID_PRO: "pdt_env_pro",
-    DODO_PRODUCT_ID_PACK_200: "pdt_from_env_200",
-    DODO_PRODUCT_ID_PACK_450: "pdt_env_450",
-    DODO_PRODUCT_ID_PACK_960: "pdt_env_960",
-    DODO_PRODUCT_ID_PACK_2000: "pdt_env_2000",
+    DODO_PRODUCT_ID_PACK_300_USD: "pdt_from_env_300_usd",
+    DODO_PRODUCT_ID_PACK_300_INR: "pdt_from_env_300_inr",
 }))
 
 vi.mock("../../config/env.js", () => ({
@@ -27,7 +25,7 @@ import { PAYMENT_STATUS, WEBHOOK_HEADERS } from "../constants.js"
 import { InvalidSignatureError, ProviderApiError } from "../errors.js"
 import { createDodoPaymentProvider } from "./adapter.js"
 
-const pack200 = CREDIT_PACKS[0]!
+const pack300 = CREDIT_PACKS[0]!
 
 function makeMockClient() {
     return {
@@ -52,7 +50,8 @@ describe("createDodoPaymentProvider", () => {
         const provider = createDodoPaymentProvider(client as never)
         const result = await provider.createCheckout({
             userId: "user_1",
-            pack: pack200,
+            pack: pack300,
+            currency: "USD",
             email: "buyer@example.com",
             returnUrl: "https://app.example/return",
         })
@@ -62,15 +61,42 @@ describe("createDodoPaymentProvider", () => {
             sessionId: "cks_abc",
         })
         expect(client.checkoutSessions.create).toHaveBeenCalledWith({
-            product_cart: [{ product_id: "pdt_from_env_200", quantity: 1 }],
-            metadata: { userId: "user_1", packId: "pack_200" },
+            product_cart: [{ product_id: "pdt_from_env_300_usd", quantity: 1 }],
+            metadata: { userId: "user_1", packId: "pack_300", currency: "USD" },
             customer: { email: "buyer@example.com" },
+            billing_currency: "USD",
+            feature_flags: { allow_currency_selection: false },
             return_url: "https://app.example/return",
         })
         const payload = client.checkoutSessions.create.mock.calls[0]![0] as Record<string, unknown>
         expect(payload).not.toHaveProperty("price")
         expect(payload).not.toHaveProperty("credits")
         expect(JSON.stringify(payload)).not.toMatch(/99999/)
+    })
+
+    it("pins an INR pack checkout to the INR product, INR billing and an Indian address", async () => {
+        const client = makeMockClient()
+        client.checkoutSessions.create.mockResolvedValue({
+            checkout_url: "https://checkout.example/inr",
+            session_id: "cks_inr",
+        })
+
+        const provider = createDodoPaymentProvider(client as never)
+        await provider.createCheckout({
+            userId: "user_in",
+            pack: pack300,
+            currency: "INR",
+            returnUrl: "https://app.example/return",
+        })
+
+        expect(client.checkoutSessions.create).toHaveBeenCalledWith({
+            product_cart: [{ product_id: "pdt_from_env_300_inr", quantity: 1 }],
+            metadata: { userId: "user_in", packId: "pack_300", currency: "INR" },
+            billing_currency: "INR",
+            feature_flags: { allow_currency_selection: false },
+            billing_address: { country: "IN" },
+            return_url: "https://app.example/return",
+        })
     })
 
     it("creates a subscription session from the Pro product id with only userId metadata", async () => {
@@ -138,7 +164,8 @@ describe("createDodoPaymentProvider", () => {
         const provider = createDodoPaymentProvider(client as never)
         await provider.createCheckout({
             userId: "user_2",
-            pack: pack200,
+            pack: pack300,
+            currency: "USD",
             returnUrl: "https://app.example/return",
         })
 
@@ -157,7 +184,8 @@ describe("createDodoPaymentProvider", () => {
         await expect(
             provider.createCheckout({
                 userId: "user_1",
-                pack: pack200,
+                pack: pack300,
+                currency: "USD",
                 returnUrl: "https://app.example/return",
             }),
         ).rejects.toMatchObject({
@@ -176,7 +204,8 @@ describe("createDodoPaymentProvider", () => {
         await expect(
             provider.createCheckout({
                 userId: "user_1",
-                pack: pack200,
+                pack: pack300,
+                currency: "USD",
                 returnUrl: "https://app.example/return",
             }),
         ).rejects.toMatchObject({
@@ -194,7 +223,8 @@ describe("createDodoPaymentProvider", () => {
         await expect(
             provider.createCheckout({
                 userId: "user_1",
-                pack: pack200,
+                pack: pack300,
+                currency: "USD",
                 returnUrl: "https://app.example/return",
             }),
         ).rejects.toBe(original)
@@ -264,7 +294,8 @@ describe("createDodoPaymentProvider", () => {
         await expect(
             provider.createCheckout({
                 userId: "user_1",
-                pack: pack200,
+                pack: pack300,
+                currency: "USD",
                 returnUrl: "https://app.example/return",
             }),
         ).rejects.toMatchObject({
@@ -287,7 +318,7 @@ describe("createDodoPaymentProvider", () => {
             data: {
                 payment_id: "pay_hdr",
                 total_amount: 13_000,
-                metadata: { userId: "u1", packId: "pack_200" },
+                metadata: { userId: "u1", packId: "pack_300" },
             },
         })
 
@@ -320,7 +351,8 @@ describe("createDodoPaymentProvider", () => {
         const provider = createDodoPaymentProvider()
         await provider.createCheckout({
             userId: "user_default",
-            pack: pack200,
+            pack: pack300,
+            currency: "USD",
             returnUrl: "https://app.example/return",
         })
 

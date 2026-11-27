@@ -35,7 +35,8 @@ vi.mock("../models/payment.js", () => ({
 
 import { applyEvent } from "./service.js"
 
-const pack200 = CREDIT_PACKS[0]!
+const pack300 = CREDIT_PACKS[0]!
+const pack1600 = CREDIT_PACKS[2]!
 
 function completedPaymentGuardFilter(userId: string, paymentId: string) {
     return {
@@ -70,9 +71,11 @@ function baseEvent(overrides: Partial<ParsedWebhookEvent> = {}): ParsedWebhookEv
         type: NORMALIZED_EVENT_TYPE.PAYMENT_SUCCEEDED,
         providerPaymentId: "pay_1",
         userId: "user_1",
-        packId: "pack_200",
-        amountMinor: pack200.priceMinor,
-        currency: pack200.currency,
+        packId: "pack_300",
+        checkoutCurrency: "USD",
+        amountMinor: pack300.prices.USD,
+        taxMinor: 0,
+        currency: "USD",
         occurredAt: new Date("2026-03-15T10:00:00.000Z"),
         providerSessionId: "cks_pending_1",
         paymentMethod: "card",
@@ -93,7 +96,7 @@ describe("applyEvent", () => {
 
         expect(User.updateOne).toHaveBeenCalledOnce()
         const [, update] = User.updateOne.mock.calls[0]!
-        expect(update.$inc).toEqual({ credits: pack200.credits })
+        expect(update.$inc).toEqual({ credits: pack300.credits })
         expect(Payment.updateOne).toHaveBeenCalledWith(
             { providerSessionId: "cks_pending_1", userId: "user_1" },
             expect.objectContaining({
@@ -112,7 +115,7 @@ describe("applyEvent", () => {
             await applyEvent(
                 baseEvent({
                     packId: pack.id,
-                    amountMinor: pack.priceMinor,
+                    amountMinor: pack.prices.USD,
                     providerPaymentId: `pay_${pack.id}`,
                 }),
             )
@@ -135,7 +138,7 @@ describe("applyEvent", () => {
             expect(filter).toEqual(completedPaymentGuardFilter("user_1", "pay_1"))
             expect(update).toMatchObject({
                 $push: { payments: expect.any(Object) },
-                $inc: { credits: pack200.credits },
+                $inc: { credits: pack300.credits },
             })
             if (grants === 0) {
                 grants += 1
@@ -160,7 +163,7 @@ describe("applyEvent", () => {
             expect(filter).toEqual(completedPaymentGuardFilter("user_1", "pay_1"))
             expect(update).toMatchObject({
                 $push: { payments: expect.any(Object) },
-                $inc: { credits: pack200.credits },
+                $inc: { credits: pack300.credits },
             })
         }
     })
@@ -201,7 +204,7 @@ describe("applyEvent", () => {
                 providerEventId: "wh_success",
             }),
         )
-        expect(User.updateOne.mock.calls[1]![1].$inc).toEqual({ credits: pack200.credits })
+        expect(User.updateOne.mock.calls[1]![1].$inc).toEqual({ credits: pack300.credits })
     })
 
     it("does not revoke credits when succeeded is followed by failed", async () => {
@@ -259,7 +262,7 @@ describe("applyEvent", () => {
         expect(User.updateOne).not.toHaveBeenCalled()
         expect(logger.error).toHaveBeenCalledWith(
             expect.objectContaining({ reason: "unknown_pack", packId: "pack_does_not_exist" }),
-            "Unknown pack",
+            "Unknown pack or checkout currency",
         )
     })
 
@@ -340,7 +343,95 @@ describe("applyEvent", () => {
     })
 
     it("withholds credits when currency mismatches catalog", async () => {
-        await applyEvent(baseEvent({ currency: "USD" }))
+        await applyEvent(baseEvent({ currency: "INR" }))
+        expect(User.updateOne.mock.calls[0]![1]).not.toHaveProperty("$inc")
+    })
+
+    it("credits 1600 for a pack_1600 USD checkout paid $20", async () => {
+        await applyEvent(baseEvent({ packId: "pack_1600", amountMinor: 2_000 }))
+        const update = User.updateOne.mock.calls[0]![1]
+        expect(update.$inc).toEqual({ credits: pack1600.credits })
+        expect(update.$push.payments).toMatchObject({
+            packId: "pack_1600",
+            credits: 1600,
+            currency: "USD",
+            amount: 20,
+        })
+    })
+
+    it("credits 300 for a pack_300 INR checkout paid ₹249", async () => {
+        await applyEvent(
+            baseEvent({ checkoutCurrency: "INR", currency: "INR", amountMinor: 24_900 }),
+        )
+        const update = User.updateOne.mock.calls[0]![1]
+        expect(update.$inc).toEqual({ credits: 300 })
+        expect(update.$push.payments).toMatchObject({ currency: "INR", amount: 249 })
+    })
+
+    it("rejects an INR checkout paid in USD at the USD price", async () => {
+        await applyEvent(baseEvent({ checkoutCurrency: "INR", currency: "USD", amountMinor: 500 }))
+        expect(User.updateOne.mock.calls[0]![1]).not.toHaveProperty("$inc")
+        expect(logger.error).toHaveBeenCalledWith(
+            expect.objectContaining({ expectedCurrency: "INR", expectedMinor: 24_900 }),
+            "Webhook amount or currency mismatch",
+        )
+    })
+
+    it("rejects a USD checkout paid the INR amount in INR", async () => {
+        await applyEvent(baseEvent({ currency: "INR", amountMinor: 24_900 }))
+        expect(User.updateOne.mock.calls[0]![1]).not.toHaveProperty("$inc")
+    })
+
+    it("rejects a pack_1600 USD checkout paid a smaller pack's price", async () => {
+        await applyEvent(baseEvent({ packId: "pack_1600", amountMinor: 500 }))
+        expect(User.updateOne.mock.calls[0]![1]).not.toHaveProperty("$inc")
+    })
+
+    it("accepts a tax-exclusive total whose pre-tax amount equals the price", async () => {
+        await applyEvent(baseEvent({ amountMinor: 540, taxMinor: 40 }))
+        expect(User.updateOne.mock.calls[0]![1].$inc).toEqual({ credits: 300 })
+    })
+
+    it("rejects a current pack whose checkout carried no currency", async () => {
+        await applyEvent(baseEvent({ checkoutCurrency: null }))
+        expect(User.updateOne).not.toHaveBeenCalled()
+        expect(logger.error).toHaveBeenCalledWith(
+            expect.objectContaining({ reason: "unknown_pack" }),
+            "Unknown pack or checkout currency",
+        )
+    })
+
+    it("rejects a checkout currency packs are not sold in", async () => {
+        await applyEvent(baseEvent({ checkoutCurrency: "EUR", currency: "EUR" }))
+        expect(User.updateOne).not.toHaveBeenCalled()
+    })
+
+    it.each([
+        ["pack_200", 200, 13_000],
+        ["pack_450", 450, 29_000],
+        ["pack_960", 960, 50_000],
+        ["pack_2000", 2000, 90_000],
+    ])(
+        "credits a pre-change %s checkout (no currency metadata) at its old INR price",
+        async (packId, credits, amountMinor) => {
+            await applyEvent(
+                baseEvent({ packId, checkoutCurrency: null, currency: "INR", amountMinor }),
+            )
+            const update = User.updateOne.mock.calls[0]![1]
+            expect(update.$inc).toEqual({ credits })
+            expect(update.$push.payments).toMatchObject({ packId, currency: "INR" })
+        },
+    )
+
+    it("rejects a legacy checkout paid anything but its old INR price", async () => {
+        await applyEvent(
+            baseEvent({
+                packId: "pack_200",
+                checkoutCurrency: null,
+                currency: "USD",
+                amountMinor: 500,
+            }),
+        )
         expect(User.updateOne.mock.calls[0]![1]).not.toHaveProperty("$inc")
     })
 

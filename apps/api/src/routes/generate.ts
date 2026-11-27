@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { NextFunction, Request, Response } from "express"
-import { PREMIUM_MODEL_KEYS, type ModelKey } from "@visual-ai/shared"
+import { requiresPro, type ModelKey } from "@visual-ai/shared"
 
 import { asyncHandler } from "../lib/async-handler.js"
 import { BadRequestError, PremiumModelRequiresProError } from "../lib/errors.js"
@@ -136,7 +136,7 @@ generateRoute.post(
         const modelKey = (req.body.modelId ?? "FLUX_BASIC") as ModelKey
         validateReferenceImageUrls(modelKey, req.body.referenceImageUrls)
         const isPro = await resolveUserIsPro(authedUserId(req))
-        if (!isPro && PREMIUM_MODEL_KEYS.includes(modelKey)) {
+        if (!isPro && requiresPro(modelKey)) {
             // Rejected before queueing, so no credits are ever deducted for a gated request.
             const error = new PremiumModelRequiresProError()
             res.status(error.statusCode).json({ error: error.message, code: error.code })

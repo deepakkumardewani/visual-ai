@@ -1,4 +1,4 @@
-import type { CreditPack, PaymentProviderName } from "@visual-ai/shared"
+import type { CreditPack, PackCurrency, PaymentProviderName } from "@visual-ai/shared"
 import type { IncomingHttpHeaders } from "http"
 
 import type { NormalizedEventType, PaymentStatus, SubscriptionEventType } from "./constants.js"
@@ -14,7 +14,12 @@ export interface NormalizedPaymentEvent {
     providerPaymentId: string
     userId: string | null
     packId: string | null
+    /** Currency the server stamped into checkout metadata; null on pre-change (legacy) checkouts. */
+    checkoutCurrency: string | null
+    /** Total charged, tax included. */
     amountMinor: number
+    /** Tax inside `amountMinor`; 0 when the provider reports none. */
+    taxMinor: number
     currency: string
     occurredAt: Date
 }
@@ -36,6 +41,8 @@ export interface PaymentProvider {
     createCheckout(req: {
         userId: string
         pack: CreditPack
+        /** Server-decided from the buyer's country; never taken from the client. */
+        currency: PackCurrency
         email?: string
         returnUrl: string
     }): Promise<CheckoutResult>

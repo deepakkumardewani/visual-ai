@@ -1,3 +1,4 @@
+import type { PackCurrency } from "@visual-ai/shared"
 import type { IncomingHttpHeaders } from "http"
 
 import {
@@ -21,6 +22,22 @@ interface CheckoutSessionInput {
     metadata: Record<string, string>
     email?: string
     returnUrl: string
+    /** Pins the charge currency so Adaptive Currency cannot switch it at checkout. */
+    currency?: PackCurrency
+}
+
+/** INR is only sold to India, so its checkout is pinned to an Indian billing address too. */
+const INR_BILLING_COUNTRY = "IN"
+
+function currencyLock(currency: PackCurrency | undefined) {
+    if (!currency) {
+        return {}
+    }
+    return {
+        billing_currency: currency,
+        feature_flags: { allow_currency_selection: false },
+        ...(currency === "INR" ? { billing_address: { country: INR_BILLING_COUNTRY } } : {}),
+    } as const
 }
 
 function normalizeWebhookHeaders(headers: IncomingHttpHeaders): Record<string, string> {
@@ -62,12 +79,13 @@ function mapPaymentStatus(
 
 async function createSession(
     client: DodoClient,
-    { productId, metadata, email, returnUrl }: CheckoutSessionInput,
+    { productId, metadata, email, returnUrl, currency }: CheckoutSessionInput,
 ): Promise<CheckoutResult> {
     const session = await client.checkoutSessions.create({
         product_cart: [{ product_id: productId, quantity: 1 }],
         metadata,
         ...(email ? { customer: { email } } : {}),
+        ...currencyLock(currency),
         return_url: returnUrl,
     })
 
@@ -84,13 +102,14 @@ export function createDodoPaymentProvider(
     return {
         name: PAYMENT_PROVIDER_DODO,
 
-        async createCheckout({ userId, pack, email, returnUrl }) {
+        async createCheckout({ userId, pack, currency, email, returnUrl }) {
             try {
                 return await createSession(client, {
-                    productId: getDodoProductIdForPack(pack.id),
-                    metadata: { userId, packId: pack.id },
+                    productId: getDodoProductIdForPack(pack.id, currency),
+                    metadata: { userId, packId: pack.id, currency },
                     email,
                     returnUrl,
+                    currency,
                 })
             } catch (error) {
                 throw asProviderApiError(error, "Dodo checkout session creation failed")

@@ -270,15 +270,22 @@ describe("generateRoute", () => {
         })
 
         describe("model tier gate (SPEC item 7)", () => {
+            // Premium-tier generation models (shared `requiresPro`); pack credits never unlock them.
             const proOnlyKeys = [
+                "FLUX_PRO",
+                "FLUX_1_1_PRO",
                 "FLUX_REALISM",
-                "FLUX_KONTEXT_PRO",
+                "FLUX_2_MAX",
                 "FLUX_KONTEXT_MAX",
-                "IMAGEN_4_ULTRA",
                 "NANO_BANANA_PRO",
                 "GPT_IMAGE_2",
             ]
-            const freeFiveCreditKeys = ["FLUX_2_PRO", "FLUX_1_1_PRO", "FLUX_2_MAX", "FLUX_PRO"]
+            const freeFiveCreditKeys = [
+                "FLUX_BASIC",
+                "FLUX_2_PRO",
+                "FLUX_KONTEXT_PRO",
+                "IMAGEN_4_ULTRA",
+            ]
 
             it.each(proOnlyKeys)(
                 "rejects %s for a Free user with the premium code",
@@ -337,6 +344,28 @@ describe("generateRoute", () => {
                         body: { prompt: "p", modelId, userId: "user_1" },
                         isPro: true,
                     })
+                },
+            )
+
+            it.each(["UPSCALE_TOPAZ", "UPSCALE_CLARITY_PRO"])(
+                "accepts premium upscaler %s for a Free user",
+                async (model) => {
+                    const res = mockRes()
+                    await dispatch(
+                        "post",
+                        "/generate/upscale/image",
+                        {
+                            body: { model, scale: "2" },
+                            auth: { userId: "user_1" },
+                            file: { path: "/tmp/photo.png", filename: "photo.png" },
+                        },
+                        res,
+                    )
+
+                    expect(res.statusCode).toBe(202)
+                    expect(enqueueGeneration).toHaveBeenCalledWith(
+                        expect.objectContaining({ kind: "upscale", isPro: false }),
+                    )
                 },
             )
         })
