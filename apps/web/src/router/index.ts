@@ -4,6 +4,8 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import Landing from '@/pages/Landing.vue';
 
+import { ADMIN_FEEDBACK_ROUTE, adminGuardForRoute } from '@/router/adminGuard';
+
 import {
   APP_SURFACE,
   dashboardRedirectLocation,
@@ -11,6 +13,7 @@ import {
 } from '@/utils/dashboardRoutes';
 import { toSafeInternalPath } from '@/utils/safeRedirect';
 
+const AdminFeedback = () => import('@/pages/AdminFeedback.vue');
 const Compare = () => import('@/pages/Compare.vue');
 const Contact = () => import('@/pages/Contact.vue');
 const Dashboard = () => import('@/pages/Dashboard.vue');
@@ -105,6 +108,12 @@ const routes: RouteRecordRaw[] = [
     path: '/profile',
     name: 'profile',
     component: Profile,
+  },
+  {
+    path: '/admin/feedback',
+    name: ADMIN_FEEDBACK_ROUTE,
+    component: AdminFeedback,
+    beforeEnter: adminGuardForRoute,
   },
   {
     path: '/faqs',

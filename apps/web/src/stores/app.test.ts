@@ -54,6 +54,7 @@ vi.mock('@/composables/useFetch', () => ({
 }));
 
 import { useAppStore } from '@/stores/app';
+import { useFeedbackStore } from '@/stores/feedback';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
 import { FeatureType } from '@/types';
@@ -269,6 +270,22 @@ describe('useAppStore', () => {
     await flushPromises();
     expect(userStore.history).toHaveLength(1);
     expect(userStore.history[0].createdAt).toBeInstanceOf(Date);
+  });
+
+  it('asks for feedback when an image generation completes, not for other features', async () => {
+    useAppStore();
+    const prompt = vi.spyOn(useFeedbackStore(), 'maybePrompt').mockResolvedValue();
+    eventSources.upscale.data.value = JSON.stringify({
+      status: 'completed',
+      image: { ...resultImage, _id: 'img_up' },
+    });
+    await flushPromises();
+    expect(prompt).not.toHaveBeenCalled();
+
+    eventSources.image.data.value = JSON.stringify({ status: 'completed', image: resultImage });
+    await flushPromises();
+    expect(prompt).toHaveBeenCalledTimes(1);
+    expect(prompt).toHaveBeenCalledWith('generation');
   });
 
   it('completed payloads without an image still close the stream', async () => {

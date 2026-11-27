@@ -1,4 +1,5 @@
 // Plugins
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { URL, fileURLToPath } from 'node:url';
 import AutoImport from 'unplugin-auto-import/vite';
@@ -15,6 +16,11 @@ import tailwindcss from 'tailwindcss';
 const appDir = path.dirname(fileURLToPath(import.meta.url));
 const tailwindConfigPath = path.join(appDir, 'tailwind.config.js');
 const srcDir = fileURLToPath(new URL('./src', import.meta.url));
+
+/** Shipped with feedback submissions so reports can be tied to a release. */
+const APP_VERSION = (
+  JSON.parse(readFileSync(path.join(appDir, 'package.json'), 'utf8')) as { version: string }
+).version;
 
 /** Fake Clerk pk_test used only when VITE_PRERENDER=1 and the real key is unset. Never used by `vp dev`. */
 const PRERENDER_CLERK_PLACEHOLDER = 'pk_test_prerender-placeholder-not-a-real-key';
@@ -154,7 +160,11 @@ export default defineConfig(({ mode }) => ({
     Vue(),
     marketingPrerenderPlugin(),
   ],
-  define: { 'process.env': {}, ...clerkKeyDefine(mode) },
+  define: {
+    'process.env': {},
+    __APP_VERSION__: JSON.stringify(APP_VERSION),
+    ...clerkKeyDefine(mode),
+  },
   resolve: {
     alias: {
       '@': srcDir,

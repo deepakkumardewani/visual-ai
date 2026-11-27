@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia';
 import type { IImage, IImageObject } from '@/types';
 
 import { useDialogStore } from '@/stores/dialog';
+import { useFeedbackStore } from '@/stores/feedback';
 import { useGenerateStore } from '@/stores/generate';
 import { useHistoryStore } from '@/stores/history';
 import { useUserStore } from '@/stores/user';
@@ -152,8 +153,11 @@ export const downloadItemImage = async (
   const image = item.images?.[resolvedIndex];
   if (!image) return false;
 
-  if (item._id) return downloadHistoryImage(undefined, item._id, resolvedIndex);
-  return downloadImage(undefined, getDownloadImageUrl(image));
+  const downloaded = item._id
+    ? await downloadHistoryImage(undefined, item._id, resolvedIndex)
+    : await downloadImage(undefined, getDownloadImageUrl(image));
+  if (downloaded) void useFeedbackStore().maybePrompt('download');
+  return downloaded;
 };
 
 export const bulkFavorite = async (images: IImageObject[]) => {
@@ -218,6 +222,7 @@ export const bulkDelete = async (images: IImageObject[]) => {
   }
 };
 export const bulkDownload = async (images: IImageObject[]) => {
+  let downloadedAny = false;
   await Promise.all(
     images.map(async (image) => {
       if (!image?._id) return;
@@ -225,13 +230,16 @@ export const bulkDownload = async (images: IImageObject[]) => {
 
       try {
         for (const [index, img] of image.images.entries()) {
-          if (img[publicIdKey]) await downloadHistoryImage(undefined, image._id, index);
+          if (!img[publicIdKey]) continue;
+          if (await downloadHistoryImage(undefined, image._id, index)) downloadedAny = true;
         }
       } catch (error) {
         log.error('bulkDownload failed', { error, imageId: image._id });
       }
     }),
   );
+  // Bulk bypasses downloadItemImage, so it asks once for the whole batch.
+  if (downloadedAny) void useFeedbackStore().maybePrompt('download');
 };
 
 export const applyReferralCode = async (code: string) => {
