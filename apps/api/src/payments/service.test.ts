@@ -54,6 +54,8 @@ import { CHECKOUT_SESSION_STATUS, PAYMENT_STATUS } from "./constants.js"
 import { ProviderApiError, UnknownPackError } from "./errors.js"
 import { createCheckout, getCheckoutSessionStatus, listPaymentsForUser } from "./service.js"
 
+const USD_300 = { userId: "user_1", packId: "pack_300", currency: "USD" } as const
+
 describe("createCheckout", () => {
     beforeEach(() => {
         vi.clearAllMocks()
@@ -65,28 +67,37 @@ describe("createCheckout", () => {
     })
 
     it("throws UnknownPackError for an unknown pack id", async () => {
-        await expect(createCheckout("user_1", "pack_not_real")).rejects.toBeInstanceOf(
-            UnknownPackError,
-        )
+        await expect(
+            createCheckout({ userId: "user_1", packId: "pack_not_real", currency: "USD" }),
+        ).rejects.toBeInstanceOf(UnknownPackError)
         expect(mockProvider.createCheckout).not.toHaveBeenCalled()
     })
 
     it("passes catalog pack terms to the provider, not client-supplied price or credits", async () => {
-        await createCheckout("user_1", "pack_200", "buyer@example.com")
+        await createCheckout({
+            userId: "user_1",
+            packId: "pack_300",
+            currency: "USD",
+            email: "buyer@example.com",
+        })
 
         expect(mockProvider.createCheckout).toHaveBeenCalledWith({
             userId: "user_1",
             pack: CREDIT_PACKS[0],
+            currency: "USD",
             email: "buyer@example.com",
             returnUrl: "https://visual-ai.app/checkout/return",
         })
         const callArg = mockProvider.createCheckout.mock.calls[0]![0]
-        expect(callArg.pack.credits).toBe(200)
-        expect(callArg.pack.priceMinor).toBe(13_000)
+        expect(callArg.pack.credits).toBe(300)
     })
 
     it("persists a pending payment row and returns checkout details", async () => {
-        const result = await createCheckout("user_1", "pack_200")
+        const result = await createCheckout({
+            userId: "user_1",
+            packId: "pack_300",
+            currency: "USD",
+        })
 
         expect(result).toEqual({
             checkoutUrl: "https://pay.example/checkout",
@@ -97,14 +108,14 @@ describe("createCheckout", () => {
                 userId: "user_1",
                 provider: "dodo",
                 providerSessionId: "cks_test_1",
-                packId: "pack_200",
-                credits: 200,
-                currency: "INR",
-                amount: 130,
+                packId: "pack_300",
+                credits: 300,
+                currency: "USD",
+                amount: 5,
                 status: PAYMENT_STATUS.PENDING,
                 transactionId: "cks_test_1",
                 paymentMethod: "other",
-                description: "200 credits",
+                description: "300 credits",
                 humanReadableDate: "03/15/2026",
             }),
         )
@@ -114,13 +125,13 @@ describe("createCheckout", () => {
         const providerError = new ProviderApiError("provider down")
         mockProvider.createCheckout.mockRejectedValue(providerError)
 
-        await expect(createCheckout("user_1", "pack_200")).rejects.toBe(providerError)
+        await expect(createCheckout(USD_300)).rejects.toBe(providerError)
     })
 
     it("wraps non-ProviderApiError failures as ProviderApiError", async () => {
         mockProvider.createCheckout.mockRejectedValue(new Error("timeout"))
 
-        await expect(createCheckout("user_1", "pack_200")).rejects.toMatchObject({
+        await expect(createCheckout(USD_300)).rejects.toMatchObject({
             name: "ProviderApiError",
             message: "timeout",
         })
@@ -129,7 +140,7 @@ describe("createCheckout", () => {
     it("wraps non-Error rejections with a generic ProviderApiError message", async () => {
         mockProvider.createCheckout.mockRejectedValue(null)
 
-        await expect(createCheckout("user_1", "pack_200")).rejects.toMatchObject({
+        await expect(createCheckout(USD_300)).rejects.toMatchObject({
             name: "ProviderApiError",
             message: "Payment provider request failed",
         })

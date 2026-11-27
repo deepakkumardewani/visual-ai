@@ -14,8 +14,8 @@ describe("calculateCreditCost", () => {
 
     it("uses the shared model cost for IMAGE generation when a model is provided", () => {
         expect(calculateCreditCost(FeatureType.IMAGE, "FLUX_QUICK")).toBe(1)
-        expect(calculateCreditCost(FeatureType.IMAGE, "FLUX_PRO")).toBe(5)
-        expect(calculateCreditCost(FeatureType.IMAGE, "IMAGEN_4_ULTRA")).toBe(5)
+        expect(calculateCreditCost(FeatureType.IMAGE, "FLUX_PRO")).toBe(8)
+        expect(calculateCreditCost(FeatureType.IMAGE, "IMAGEN_4_ULTRA")).toBe(12)
     })
 
     it("throws when a utility feature is missing a modelKey", () => {
@@ -34,9 +34,10 @@ describe("calculateCreditCost", () => {
     })
 
     it("returns the shared utility cost when a modelKey is provided", () => {
-        expect(calculateCreditCost(FeatureType.UPSCALE, "UPSCALE_IMAGE")).toBe(2)
-        expect(calculateCreditCost(FeatureType.UPSCALE, "UPSCALE_TOPAZ")).toBe(4)
-        expect(calculateCreditCost(FeatureType.COLORIZE, "COLORIZE_BASIC")).toBe(2)
-        expect(calculateCreditCost(FeatureType.REMOVE_BG, "BACKGROUND_REMOVER")).toBe(2)
+        expect(calculateCreditCost(FeatureType.UPSCALE, "UPSCALE_IMAGE")).toBe(4)
+        expect(calculateCreditCost(FeatureType.UPSCALE, "UPSCALE_TOPAZ")).toBe(16)
+        expect(calculateCreditCost(FeatureType.COLORIZE, "COLORIZE_ADVANCED")).toBe(1)
+        expect(calculateCreditCost(FeatureType.REVIVE, "REVIVE")).toBe(2)
+        expect(calculateCreditCost(FeatureType.REMOVE_BG, "BACKGROUND_REMOVER")).toBe(1)
     })
 })

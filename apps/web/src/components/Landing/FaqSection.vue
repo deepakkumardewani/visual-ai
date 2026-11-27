@@ -8,7 +8,7 @@ const props = withDefaults(
   defineProps<{
     faqs?: Faq[];
     heading?: string;
-    /** Centred, lv2-token variant for the LandingV2 pages. */
+    /** Centred, home-token variant for the home page. */
     centered?: boolean;
   }>(),
   {
@@ -31,7 +31,7 @@ function toggle(i: number) {
 <template>
   <section id="faq" class="faq" :class="{ 'faq--centered': centered }">
     <div class="faq__head">
-      <p v-reveal="reveal()" :class="centered ? 'lv2-eyebrow' : 'eyebrow'">Questions</p>
+      <p v-reveal="reveal()" :class="centered ? 'home-eyebrow' : 'eyebrow'">Questions</p>
       <h2 v-reveal="reveal(0.05)" class="faq__title">{{ heading }}</h2>
     </div>
 
@@ -165,38 +165,38 @@ function toggle(i: number) {
   color: rgb(var(--tw-ink-muted));
 }
 
-/* Centred variant: lv2 type and hairline tokens, matching the other LandingV2 scenes. */
+/* Centred variant: home type and hairline tokens, matching the home scenes. */
 .faq--centered {
   max-width: none;
-  padding: var(--lv2-section-y) var(--lv2-gutter);
+  padding: var(--home-section-y) var(--home-gutter);
 
   .faq__head {
     text-align: center;
-    margin-bottom: var(--lv2-space-2xl);
+    margin-bottom: var(--home-space-2xl);
   }
   .faq__title {
-    margin: var(--lv2-space-md) 0 0;
-    font-family: var(--lv2-font-display);
-    font-size: var(--lv2-text-display);
-    line-height: var(--lv2-leading-display);
-    letter-spacing: var(--lv2-tracking-display);
+    margin: var(--home-space-md) 0 0;
+    font-family: var(--home-font-display);
+    font-size: var(--home-text-display);
+    line-height: var(--home-leading-display);
+    letter-spacing: var(--home-tracking-display);
     text-wrap: balance;
   }
   .faq__list {
-    max-width: var(--lv2-measure);
+    max-width: var(--home-measure);
     margin-inline: auto;
   }
   .faq__item {
     border-bottom-color: rgb(var(--tw-hairline));
   }
   .faq__q {
-    font-family: var(--lv2-font-body);
-    font-size: var(--lv2-text-lede);
+    font-family: var(--home-font-body);
+    font-size: var(--home-text-lede);
   }
   .faq__a {
     max-width: none;
-    font-size: var(--lv2-text-body);
-    line-height: var(--lv2-leading-body);
+    font-size: var(--home-text-body);
+    line-height: var(--home-leading-body);
   }
 }
 

@@ -2,6 +2,7 @@ import { useFetch } from '@/composables/useFetch';
 import { createLogger } from '@/utils/logger';
 
 import { HTTP_CONFLICT } from './constants';
+import { withDevCountry } from './devCountry';
 
 const log = createLogger('checkout-client');
 
@@ -33,7 +34,8 @@ export type CheckoutStatusResponse = {
 };
 
 export async function createCheckoutSession(packId: string): Promise<CheckoutSessionResponse> {
-  const { error, data, response } = await useFetch('/payments/checkout', {
+  // The server picks the currency from the buyer's country; the body carries only the pack.
+  const { error, data, response } = await useFetch(withDevCountry('/payments/checkout'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ packId }),

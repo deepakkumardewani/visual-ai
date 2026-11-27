@@ -5,6 +5,7 @@ import { computed } from 'vue';
 import LandingButton from '@/components/Landing/LandingButton.vue';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
+import { formatPaymentAmount } from '@/utils/paymentAmount';
 import type { PaymentRecord } from '@visual-ai/shared';
 
 const userStore = useUserStore();
@@ -62,7 +63,7 @@ function statusClass(status: string) {
         <tbody>
           <tr v-for="item in payments" :key="paymentRowKey(item as PaymentRecord)">
             <td data-label="Date">{{ item.humanReadableDate }}</td>
-            <td data-label="Amount" class="payments__amount">₹{{ item.amount.toFixed(2) }}</td>
+            <td data-label="Amount" class="payments__amount">{{ formatPaymentAmount(item) }}</td>
             <td data-label="Status">
               <span :class="statusClass(item.status)">{{ item.status }}</span>
             </td>

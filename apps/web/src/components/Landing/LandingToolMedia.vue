@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BeforeAfter from '@/components/Landing/BeforeAfter.vue';
-import ToolCutoutCards from '@/components/LandingV2/ToolCutoutCards.vue';
+import ToolCutoutCards from '@/components/Home/ToolCutoutCards.vue';
 
 import type { ToolChapter } from '@/utils/landing';
 

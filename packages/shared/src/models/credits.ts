@@ -1,4 +1,4 @@
-import type { ModelKey } from './types.js';
+import type { ModelDefinition, ModelKey } from './types.js';
 import { MODEL_REGISTRY } from './registry.js';
 
 /** Signup credits for new users */
@@ -10,9 +10,6 @@ export const DAILY_CREDITS = { free: 30, pro: 50 } as const;
 /** Hour (UTC) at which daily credits reset. */
 export const DAILY_RESET_UTC_HOUR = 0;
 
-/** Credit cost of every premium-tier generation model. */
-export const PREMIUM_CREDIT_COST = 5;
-
 export function getDailyCredits(isPro: boolean): number {
   return isPro ? DAILY_CREDITS.pro : DAILY_CREDITS.free;
 }
@@ -20,65 +17,69 @@ export function getDailyCredits(isPro: boolean): number {
 /** Bonus credits for successful referral (both referrer and referee) */
 export const REFERRAL_BONUS = 30;
 
-/**
- * Get the integer credit cost for a model.
- * Budget/standard generation: 1 credit
- * Premium generation (FLUX Pro/Max/Realism/Kontext, Imagen Ultra, Nano Banana Pro, GPT Image 2): 5 credits
- * Utility models (upscale/colorize/revive/remove-bg): 2 credits
- * Premium upscalers (Clarity Pro, Topaz): 4 credits
- */
+/** One credit covers roughly this much Replicate cost (USD). */
+export const USD_PER_CREDIT = 0.005;
+
+/** Lowest charge for any run, so cheap models are never free. */
+export const MIN_CREDIT_COST = 1;
+
+const MICRO_USD_PER_USD = 1_000_000;
+
+/** Integer micro-USD avoids float error: 0.07 / 0.005 is 14.000000000000002 in JS. */
+function toMicroUsd(usd: number): number {
+  return Math.round(usd * MICRO_USD_PER_USD);
+}
+
+/** Credits for a Replicate price: ceil(price / USD_PER_CREDIT), at least MIN_CREDIT_COST. */
+export function creditsForPrice(usd: number): number {
+  if (!Number.isFinite(usd) || usd < 0) {
+    throw new Error(`Invalid model price: ${usd}`);
+  }
+  const credits = Math.ceil(toMicroUsd(usd) / toMicroUsd(USD_PER_CREDIT));
+  return Math.max(MIN_CREDIT_COST, credits);
+}
+
+/** Integer credit cost for a model, derived from its registry `pricePerImage`. */
 export function getCreditCost(modelKey: ModelKey): number {
   const model = MODEL_REGISTRY[modelKey];
   if (!model) {
     throw new Error(`Unknown model key: ${modelKey}`);
   }
+  return creditsForPrice(model.pricePerImage);
+}
 
-  // Map model keys to credit costs
-  const costs: Record<ModelKey, number> = {
-    // Budget generation: 1 credit
-    FLUX_QUICK: 1,
-    FLUX_FAST: 1,
-    P_IMAGE: 1,
-    Z_IMAGE_TURBO: 1,
-    GROK_IMAGINE: 1,
-    COLORIZE_BASIC: 2,
-    REVIVE: 2,
-    UPSCALE_REAL_ESRGAN: 2,
-    UPSCALE_PRUNA: 2,
-    UPSCALE_RECRAFT: 2,
+/** Pricing groups shown to users: text-to-image, studio tools, upscalers. */
+export type CreditCategory = 'generation' | 'utility' | 'upscale';
 
-    // Standard generation: 1 credit (FLUX_2_PRO and FLUX_KONTEXT_PRO are 5)
-    FLUX_BASIC: 1,
-    GROK_IMAGINE_QUALITY: 1,
-    SEEDREAM_4: 1,
-    FLUX_2_DEV: 1,
-    FLUX_2_PRO: PREMIUM_CREDIT_COST,
-    FLUX_KONTEXT_PRO: PREMIUM_CREDIT_COST,
-    UPSCALE_IMAGE: 2,
-    COLORIZE_ADVANCED: 2,
-    OLD_PHOTOS: 2,
-    BACKGROUND_REMOVER: 2,
-    UPSCALE_GOOGLE: 2,
-    NANO_BANANA_2: 1,
-    IMAGEN_4_ULTRA: PREMIUM_CREDIT_COST,
+export function getCreditCategory(model: ModelDefinition): CreditCategory {
+  if (!model.utility) return 'generation';
+  return model.key.startsWith('UPSCALE') ? 'upscale' : 'utility';
+}
 
-    // Premium generation: PREMIUM_CREDIT_COST credits
-    FLUX_PRO: PREMIUM_CREDIT_COST,
-    FLUX_1_1_PRO: PREMIUM_CREDIT_COST,
-    FLUX_REALISM: PREMIUM_CREDIT_COST,
-    FLUX_2_MAX: PREMIUM_CREDIT_COST,
-    FLUX_KONTEXT_MAX: PREMIUM_CREDIT_COST,
-    NANO_BANANA_PRO: PREMIUM_CREDIT_COST,
-    GPT_IMAGE_2: PREMIUM_CREDIT_COST,
+export type CreditCostRange = { min: number; max: number };
 
-    // Premium upscalers: 4 credits
-    UPSCALE_CLARITY_PRO: 4,
-    UPSCALE_TOPAZ: 4,
-  };
-
-  const cost = costs[modelKey];
-  if (cost === undefined) {
-    throw new Error(`No credit cost defined for model: ${modelKey}`);
+/** Cheapest and most expensive credit cost across the given models. */
+export function getCreditCostRange(keys: readonly ModelKey[]): CreditCostRange {
+  if (keys.length === 0) {
+    throw new Error('Cannot compute a credit range for zero models');
   }
-  return cost;
+  const costs = keys.map(getCreditCost);
+  return { min: Math.min(...costs), max: Math.max(...costs) };
+}
+
+/** Model keys in a pricing category, in registry order. */
+export function getModelKeysByCategory(category: CreditCategory): ModelKey[] {
+  return Object.values(MODEL_REGISTRY)
+    .filter((model) => getCreditCategory(model) === category)
+    .map((model) => model.key);
+}
+
+/** Credit range for a pricing category, e.g. generation → { min: 1, max: 30 }. */
+export function getCategoryCreditRange(category: CreditCategory): CreditCostRange {
+  return getCreditCostRange(getModelKeysByCategory(category));
+}
+
+/** Range label such as "1–30", or "2" when every model costs the same. */
+export function formatCreditRange({ min, max }: CreditCostRange): string {
+  return min === max ? String(min) : `${min}–${max}`;
 }

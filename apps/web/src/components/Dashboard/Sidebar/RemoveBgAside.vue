@@ -32,7 +32,7 @@ const { removeBgInProgress } = storeToRefs(generateStore);
 
 const imageUpload = ref<InstanceType<typeof ImageUpload> | null>(null);
 const canSubmit = computed(() => Boolean(imageUpload.value?.image) && !removeBgInProgress.value);
-const creditCost = getTransformCreditCost();
+const creditCost = getTransformCreditCost('remove_bg');
 
 async function removeBackground() {
   if (!isSignedIn.value) {

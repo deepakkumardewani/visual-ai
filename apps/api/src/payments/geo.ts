@@ -6,12 +6,12 @@ import { createLogger } from "../lib/logger.js"
 
 const logger = createLogger("payments-geo")
 
-/** Checked in order; the production proxy header is unconfirmed (Cloudflare sets the first). */
-export const GEO_COUNTRY_HEADERS = [
-    "cf-ipcountry",
-    "cloudfront-viewer-country",
-    "x-vercel-ip-country",
-] as const
+/**
+ * Only headers our edge proxy (Cloudflare) overwrites are trusted. Any other geo header passes
+ * through from the client untouched, and since INR packs are cheaper, a spoofable header would
+ * let anyone buy at the INR price.
+ */
+export const GEO_COUNTRY_HEADERS = ["cf-ipcountry"] as const
 export const IP_LOOKUP_URL = "https://ipapi.co"
 export const IP_LOOKUP_TIMEOUT_MS = 2000
 

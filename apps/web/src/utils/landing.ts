@@ -1,6 +1,7 @@
 import { DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
 
 import { MODELS as CATALOG_MODELS, getFeaturedModels } from '@/utils/models';
+import { transformCreditsLabel } from '@/utils/creditCopy';
 import galleryData from '@/utils/gallery.json';
 
 /** Single source for the free-credits promise so the hero and final CTA cannot drift. */
@@ -188,7 +189,7 @@ export const TOOLS: ToolChapter[] = [
     body: 'Isolate a person or product for listings and composites. Download a transparent PNG without a desktop cutout tool.',
     points: [
       'Transparent PNG export',
-      '2 credits per image',
+      `${transformCreditsLabel('remove_bg')} per image`,
       'Same studio as generate and restore',
     ],
     ctaLabel: 'Remove a background',

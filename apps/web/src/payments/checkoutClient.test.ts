@@ -41,13 +41,13 @@ describe('checkoutClient', () => {
         },
       });
 
-      const result = await createCheckoutSession('pack_200');
+      const result = await createCheckoutSession('pack_300');
 
       expect(useFetch).toHaveBeenCalledWith(
         '/payments/checkout',
         expect.objectContaining({
           method: 'POST',
-          body: JSON.stringify({ packId: 'pack_200' }),
+          body: JSON.stringify({ packId: 'pack_300' }),
         }),
       );
       expect(result).toEqual({
@@ -62,8 +62,8 @@ describe('checkoutClient', () => {
         response: { value: { ok: false, status: 503 } },
       });
 
-      await expect(createCheckoutSession('pack_200')).rejects.toThrow(CheckoutClientError);
-      await expect(createCheckoutSession('pack_200')).rejects.toThrow('Could not start checkout');
+      await expect(createCheckoutSession('pack_300')).rejects.toThrow(CheckoutClientError);
+      await expect(createCheckoutSession('pack_300')).rejects.toThrow('Could not start checkout');
     });
 
     it('throws when the response body is invalid', async () => {
@@ -71,7 +71,7 @@ describe('checkoutClient', () => {
         data: { value: { checkoutUrl: 'https://pay.example/c' } },
       });
 
-      await expect(createCheckoutSession('pack_200')).rejects.toThrow('Invalid checkout response');
+      await expect(createCheckoutSession('pack_300')).rejects.toThrow('Invalid checkout response');
     });
   });
 

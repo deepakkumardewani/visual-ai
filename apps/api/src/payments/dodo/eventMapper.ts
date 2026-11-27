@@ -60,7 +60,12 @@ export function mapDodoWebhookEvent(
         return null
     }
 
-    const currency = typeof data.currency === "string" ? data.currency : "INR"
+    // A charge with no currency cannot be checked against the pack price, so it is dropped.
+    const currency = typeof data.currency === "string" ? data.currency : null
+    if (!currency) {
+        return null
+    }
+    const tax = typeof data.tax === "number" && Number.isFinite(data.tax) ? data.tax : 0
     const metadata =
         data.metadata && typeof data.metadata === "object"
             ? (data.metadata as Record<string, unknown>)
@@ -79,7 +84,9 @@ export function mapDodoWebhookEvent(
         providerPaymentId: paymentId,
         userId: readMetadataString(metadata, "userId"),
         packId: readMetadataString(metadata, "packId"),
+        checkoutCurrency: readMetadataString(metadata, "currency"),
         amountMinor,
+        taxMinor: tax,
         currency,
         occurredAt,
         providerSessionId: checkoutSessionId,

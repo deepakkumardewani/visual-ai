@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Model } from '@/types/model';
-import { MODEL_REGISTRY, PREMIUM_MODEL_KEYS, type ModelKey } from '@visual-ai/shared';
+import { MODEL_REGISTRY, requiresPro, type ModelKey } from '@visual-ai/shared';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, useId } from 'vue';
 
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
@@ -35,9 +35,9 @@ const creditCost = computed(() => props.model.creditCost ?? 1);
 const imageInput = computed(() => MODEL_REGISTRY[props.model.id as ModelKey]?.fields?.imageInput);
 const referenceTooltip = computed(() => `Up to ${imageInput.value?.max ?? 1} reference images`);
 const bestFor = computed(() => getModelBestForHint(props.model));
-const isLocked = computed(
-  () => !isPro.value && PREMIUM_MODEL_KEYS.includes(props.model.id as ModelKey),
-);
+const isLocked = computed(() => !isPro.value && requiresPro(props.model.id));
+// Not aria-disabled: a locked option stays actionable (it opens the upgrade prompt).
+const lockHintId = useId();
 
 // Locked models upsell instead of selecting, so a free user never queues a request the API rejects.
 function onClick() {
@@ -62,6 +62,7 @@ function onClick() {
       selected ? 'tw-bg-surface-2 tw-ring-1 tw-ring-accent/30' : '',
     ]"
     :data-locked="isLocked || undefined"
+    :aria-describedby="isLocked ? lockHintId : undefined"
     @click="onClick"
   >
     <img
@@ -103,6 +104,9 @@ function onClick() {
     </Tooltip>
 
     <PremiumLockBadge v-if="isLocked" />
+    <span v-if="isLocked" :id="lockHintId" class="tw-sr-only"
+      >Requires Pro. Opens upgrade options.</span
+    >
 
     <span
       class="tw-inline-flex tw-shrink-0 tw-items-center tw-gap-1 tw-tabular-nums tw-text-xs tw-font-medium tw-text-ink"

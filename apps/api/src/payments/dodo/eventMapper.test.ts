@@ -104,25 +104,45 @@ describe("mapDodoWebhookEvent", () => {
         ).toBeNull()
     })
 
-    it("coerces string total_amount and defaults currency when absent", () => {
+    it("coerces string total_amount and reads checkout currency and tax", () => {
         const result = mapDodoWebhookEvent(
             {
                 type: "payment.succeeded",
                 business_id: "biz_1",
                 data: {
                     payment_id: "pay_str_amt",
-                    total_amount: "13000",
-                    metadata: { userId: "user_1", packId: "pack_200" },
+                    total_amount: "540",
+                    tax: 40,
+                    currency: "USD",
+                    metadata: { userId: "user_1", packId: "pack_300", currency: "USD" },
                 },
             } as never,
             "wh_str",
         )
 
         expect(result).toMatchObject({
-            amountMinor: 13_000,
-            currency: "INR",
+            amountMinor: 540,
+            taxMinor: 40,
+            currency: "USD",
+            checkoutCurrency: "USD",
             userId: "user_1",
         })
+    })
+
+    it("drops a payment event that carries no currency", () => {
+        const result = mapDodoWebhookEvent(
+            {
+                type: "payment.succeeded",
+                business_id: "biz_1",
+                data: {
+                    payment_id: "pay_no_cur",
+                    total_amount: 500,
+                    metadata: { userId: "user_1", packId: "pack_300" },
+                },
+            } as never,
+            "wh_no_cur",
+        )
+        expect(result).toBeNull()
     })
 
     it("ignores invalid metadata and empty string metadata values", () => {
@@ -134,6 +154,7 @@ describe("mapDodoWebhookEvent", () => {
                 data: {
                     payment_id: "pay_meta",
                     total_amount: 13_000,
+                    currency: "INR",
                     metadata: "not-an-object",
                 },
             } as never,
@@ -150,6 +171,7 @@ describe("mapDodoWebhookEvent", () => {
                 data: {
                     payment_id: "pay_empty_meta",
                     total_amount: 13_000,
+                    currency: "INR",
                     metadata: { userId: "", packId: 42 },
                 },
             } as never,

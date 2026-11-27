@@ -121,17 +121,17 @@ describe("calculateCreditCost", () => {
     })
 
     it("IMAGE with standard modelKey returns correct cost", () => {
-        expect(calculateCreditCost(FeatureType.IMAGE, "FLUX_BASIC")).toBe(1)
+        expect(calculateCreditCost(FeatureType.IMAGE, "FLUX_BASIC")).toBe(3)
     })
 
     it("IMAGE with premium modelKey returns correct cost", () => {
-        expect(calculateCreditCost(FeatureType.IMAGE, "FLUX_PRO")).toBe(5)
+        expect(calculateCreditCost(FeatureType.IMAGE, "FLUX_PRO")).toBe(8)
     })
 
     it("utility models return registry costs", () => {
-        expect(calculateCreditCost(FeatureType.UPSCALE, "UPSCALE_REAL_ESRGAN")).toBe(2)
+        expect(calculateCreditCost(FeatureType.UPSCALE, "UPSCALE_REAL_ESRGAN")).toBe(1)
         expect(calculateCreditCost(FeatureType.REVIVE, "REVIVE")).toBe(2)
-        expect(calculateCreditCost(FeatureType.COLORIZE, "COLORIZE_BASIC")).toBe(2)
+        expect(calculateCreditCost(FeatureType.COLORIZE, "COLORIZE_BASIC")).toBe(8)
     })
 
     it("requires modelKey for utility operations", () => {
@@ -472,27 +472,29 @@ describe("processImage", () => {
         setupHappyPersist()
     })
 
-    it.each(["FLUX_2_PRO", "FLUX_1_1_PRO", "FLUX_2_MAX", "FLUX_PRO"])(
-        "charges 5 credits for %s",
-        async (modelId) => {
-            await processImage({
-                userId: "user_1",
-                jobId: "job_cost",
-                modelId,
-                modelName: "Flux",
-                imageType: "generated",
-                prompt: "a cat",
-                numOfOutputs: 1,
-                outputQuality: 80,
-                aspectRatio: "1:1",
-                outputFormat: "png",
-            } as never)
+    it.each([
+        ["FLUX_2_PRO", 3],
+        ["FLUX_1_1_PRO", 8],
+        ["FLUX_2_MAX", 24],
+        ["FLUX_PRO", 8],
+    ])("charges %s its price-derived cost of %i credits", async (modelId, cost) => {
+        await processImage({
+            userId: "user_1",
+            jobId: "job_cost",
+            modelId,
+            modelName: "Flux",
+            imageType: "generated",
+            prompt: "a cat",
+            numOfOutputs: 1,
+            outputQuality: 80,
+            aspectRatio: "1:1",
+            outputFormat: "png",
+        } as never)
 
-            const [filter, update] = User.findOneAndUpdate.mock.calls[1]
-            expect(filter.$expr.$gte[1]).toBe(5)
-            expect(update[0].$set.dailyCredits.$max[1].$subtract[1]).toBe(5)
-        },
-    )
+        const [filter, update] = User.findOneAndUpdate.mock.calls[1]
+        expect(filter.$expr.$gte[1]).toBe(cost)
+        expect(update[0].$set.dailyCredits.$max[1].$subtract[1]).toBe(cost)
+    })
 
     it("prepares a prompt and unwraps a single-item output array for Cloudinary", async () => {
         replicateRun.mockResolvedValue(["https://only.png"])

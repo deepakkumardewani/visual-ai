@@ -5,8 +5,6 @@ import { expect, test } from './fixtures/base';
 import { API_URL, E2E_WEB_ORIGIN } from './support/env';
 
 const USER_PROFILE_URL = /\/users\/user_/;
-const SHOWCASE_FIRST_PROMPT =
-  'A futuristic city skyline at dusk, with glowing neon lights reflecting off sleek glass buildings, flying cars zooming by, and a vibrant sunset fading into the horizon.';
 
 const API_CORS = {
   'Access-Control-Allow-Origin': E2E_WEB_ORIGIN,
@@ -49,6 +47,8 @@ test.describe('marketing — signed-out visitor', () => {
   });
 
   test('landing tool cards open the matching feature page', async ({ page }) => {
+    // Reduced motion lays every tool chapter out in turn instead of a scroll-scrubbed pin.
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
     await page.getByRole('link', { name: /Try the upscaler/i }).click();
     await expect(page).toHaveURL(/\/image-upscaler$/);
@@ -74,15 +74,20 @@ test.describe('marketing — signed-out visitor', () => {
 
   test('showcase copy prompt copies the example prompt', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
 
-    await page.locator('#showcase .tile__btn').first().click();
-    await expect(page.getByRole('dialog')).toBeVisible();
-    await page.getByRole('button', { name: 'Copy prompt' }).click();
-    await expect(page.getByRole('status')).toHaveText('Prompt copied');
+    await page.locator('#showcase .tile__media').filter({ visible: true }).first().click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    const copyButton = dialog.getByRole('button', { name: 'Copy prompt' });
+    await copyButton.click();
+    await expect(dialog.getByRole('button', { name: 'Copied' })).toBeVisible();
 
+    const shownPrompt = (await dialog.locator('.sd__prompt').textContent())?.trim();
+    expect(shownPrompt).toBeTruthy();
     const clipboard = await page.evaluate(() => navigator.clipboard.readText());
-    expect(clipboard).toBe(SHOWCASE_FIRST_PROMPT);
+    expect(clipboard).toBe(shownPrompt);
   });
 
   test('feature page secondary action opens pricing', async ({ page }) => {
@@ -194,6 +199,18 @@ test.describe('marketing — signed-out visitor', () => {
     );
     await page.locator('footer').getByRole('link', { name: 'Contact' }).click();
     await expect(page).toHaveURL(/\/contact$/);
+  });
+
+  test('unknown URL shows the 404 page, keeps the URL and links home', async ({ page }) => {
+    await page.goto('/this/page/does-not-exist');
+    await expect(
+      page.getByRole('heading', { name: 'Nothing rendered here.', level: 1 }),
+    ).toBeVisible();
+    await expect(page).toHaveURL(/\/this\/page\/does-not-exist$/);
+    await expect(page).toHaveTitle(/Page not found/);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+    await page.getByRole('main').getByRole('link', { name: 'Back home' }).click();
+    await expect(page).toHaveURL(/\/$/);
   });
 });
 

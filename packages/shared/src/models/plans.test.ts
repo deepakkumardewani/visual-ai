@@ -8,6 +8,7 @@ import {
   PRO_PRICE_USD_MONTHLY,
   PREMIUM_MODEL_KEYS,
   QUEUE_PRIORITY,
+  requiresPro,
   HISTORY_NEAR_FULL_RATIO,
   getHistoryFullLevel,
 } from './plans.js';
@@ -28,24 +29,47 @@ describe('plan constants', () => {
   });
 });
 
+/** Pinned so a registry tier edit that changes the Pro gate fails loudly here. */
+const GATED_KEYS = [
+  'FLUX_PRO',
+  'FLUX_1_1_PRO',
+  'FLUX_REALISM',
+  'FLUX_2_MAX',
+  'FLUX_KONTEXT_MAX',
+  'NANO_BANANA_PRO',
+  'GPT_IMAGE_2',
+];
+
+describe('requiresPro', () => {
+  it('gates exactly the premium-tier generation models', () => {
+    const gated = Object.keys(MODEL_REGISTRY).filter(requiresPro);
+    expect(gated).toEqual(GATED_KEYS);
+  });
+
+  it.each(['UPSCALE_CLARITY_PRO', 'UPSCALE_TOPAZ'])('leaves premium utility %s open', (key) => {
+    expect(MODEL_REGISTRY[key as keyof typeof MODEL_REGISTRY].tier).toBe('premium');
+    expect(requiresPro(key)).toBe(false);
+  });
+
+  it.each(['FLUX_BASIC', 'FLUX_KONTEXT_PRO', 'IMAGEN_4_ULTRA'])(
+    'leaves non-premium generation model %s open',
+    (key) => {
+      expect(requiresPro(key)).toBe(false);
+    },
+  );
+
+  it('returns false for an unknown key', () => {
+    expect(requiresPro('NOT_A_MODEL')).toBe(false);
+  });
+});
+
 describe('PREMIUM_MODEL_KEYS', () => {
-  it('lists the six Pro-only models', () => {
-    expect([...PREMIUM_MODEL_KEYS]).toEqual([
-      'FLUX_REALISM',
-      'FLUX_KONTEXT_PRO',
-      'FLUX_KONTEXT_MAX',
-      'IMAGEN_4_ULTRA',
-      'NANO_BANANA_PRO',
-      'GPT_IMAGE_2',
-    ]);
+  it('matches the requiresPro set in registry order', () => {
+    expect([...PREMIUM_MODEL_KEYS]).toEqual(GATED_KEYS);
   });
 
   it.each([...PREMIUM_MODEL_KEYS])('%s exists in the registry', (key) => {
     expect(MODEL_REGISTRY[key]).toBeDefined();
-  });
-
-  it('has exactly six entries', () => {
-    expect(PREMIUM_MODEL_KEYS).toHaveLength(6);
   });
 
   it('has no duplicates', () => {

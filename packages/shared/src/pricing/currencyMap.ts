@@ -18,44 +18,6 @@ export const CURRENCY_MINOR_DIGITS = {
 
 export type SupportedCurrency = keyof typeof CURRENCY_MINOR_DIGITS;
 
-const EURO_COUNTRIES = [
-  'AT',
-  'BE',
-  'CY',
-  'DE',
-  'EE',
-  'ES',
-  'FI',
-  'FR',
-  'GR',
-  'HR',
-  'IE',
-  'IT',
-  'LT',
-  'LU',
-  'LV',
-  'MT',
-  'NL',
-  'PT',
-  'SI',
-  'SK',
-] as const;
-
-const COUNTRY_TO_CURRENCY: Readonly<Record<string, SupportedCurrency>> = {
-  US: 'USD',
-  GB: 'GBP',
-  IN: 'INR',
-  CA: 'CAD',
-  AU: 'AUD',
-  SG: 'SGD',
-  CH: 'CHF',
-  BR: 'BRL',
-  MX: 'MXN',
-  JP: 'JPY',
-  KR: 'KRW',
-  ...Object.fromEntries(EURO_COUNTRIES.map((country) => [country, 'EUR' as const])),
-};
-
 const COUNTRY_CODE_PATTERN = /^[A-Z]{2}$/;
 
 export function isSupportedCurrency(code: string): code is SupportedCurrency {
@@ -66,10 +28,4 @@ export function isSupportedCurrency(code: string): code is SupportedCurrency {
 export function normalizeCountryCode(raw: string | null | undefined): string | undefined {
   const code = raw?.trim().toUpperCase();
   return code && COUNTRY_CODE_PATTERN.test(code) ? code : undefined;
-}
-
-/** Unknown, missing or malformed country gives USD. */
-export function currencyForCountry(raw: string | null | undefined): SupportedCurrency {
-  const country = normalizeCountryCode(raw);
-  return (country && COUNTRY_TO_CURRENCY[country]) || FALLBACK_CURRENCY;
 }

@@ -29,7 +29,7 @@ const { reviveInProgress } = storeToRefs(generateStore);
 
 const imageUpload = ref<InstanceType<typeof ImageUpload> | null>(null);
 const canSubmit = computed(() => Boolean(imageUpload.value?.image) && !reviveInProgress.value);
-const creditCost = getTransformCreditCost();
+const creditCost = getTransformCreditCost('revive');
 
 async function reviveImage() {
   if (!isSignedIn.value) {

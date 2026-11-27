@@ -10,7 +10,8 @@ defineProps<{
   <nav v-if="pages.length" class="more" aria-labelledby="more-title">
     <header class="more__head">
       <p id="more-title" class="more__eyebrow">Also in the studio</p>
-      <p class="more__sub">Four other tools. Same credits. Same browser.</p>
+      <!-- Tools cost different credits now; what they share is the balance, not the price. -->
+      <p class="more__sub">One credit balance for every tool. Same browser.</p>
     </header>
 
     <ul class="more__list">

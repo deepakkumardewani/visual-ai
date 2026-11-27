@@ -1,12 +1,16 @@
 import { describe, expect, it, vi } from "vitest"
 
-const mockEnv = vi.hoisted(() => ({
-    DODO_PRODUCT_ID_PRO: "pdt_env_pro",
-    DODO_PRODUCT_ID_PACK_200: "pdt_env_200",
-    DODO_PRODUCT_ID_PACK_450: "pdt_env_450",
-    DODO_PRODUCT_ID_PACK_960: "pdt_env_960",
-    DODO_PRODUCT_ID_PACK_2000: "pdt_env_2000",
-}))
+import { CREDIT_PACKS, PACK_CURRENCIES } from "@visual-ai/shared"
+
+const mockEnv = vi.hoisted(() => {
+    const env: Record<string, string> = { DODO_PRODUCT_ID_PRO: "pdt_env_pro" }
+    for (const credits of [300, 700, 1600, 4500]) {
+        for (const currency of ["USD", "INR"]) {
+            env[`DODO_PRODUCT_ID_PACK_${credits}_${currency}`] = `pdt_${credits}_${currency}`
+        }
+    }
+    return env
+})
 
 vi.mock("../../config/env.js", () => ({
     env: mockEnv,
@@ -15,19 +19,26 @@ vi.mock("../../config/env.js", () => ({
 import { getDodoProductIdForPack, getDodoProductIdForPro } from "./productMap.js"
 
 describe("getDodoProductIdForPack", () => {
-    it("returns the env-mapped product id for each pack", () => {
-        expect(getDodoProductIdForPack("pack_200")).toBe("pdt_env_200")
-        expect(getDodoProductIdForPack("pack_450")).toBe("pdt_env_450")
-        expect(getDodoProductIdForPack("pack_960")).toBe("pdt_env_960")
-        expect(getDodoProductIdForPack("pack_2000")).toBe("pdt_env_2000")
+    it("maps every pack and currency to its own env product id", () => {
+        for (const pack of CREDIT_PACKS) {
+            for (const currency of PACK_CURRENCIES) {
+                expect(getDodoProductIdForPack(pack.id, currency)).toBe(
+                    `pdt_${pack.credits}_${currency}`,
+                )
+            }
+        }
     })
 
-    it("throws when the env product id is missing", () => {
-        mockEnv.DODO_PRODUCT_ID_PACK_200 = ""
-        expect(() => getDodoProductIdForPack("pack_200")).toThrow(
-            "Missing Dodo product id for pack pack_200",
-        )
-        mockEnv.DODO_PRODUCT_ID_PACK_200 = "pdt_env_200"
+    it("never falls back to the other currency's product", () => {
+        mockEnv.DODO_PRODUCT_ID_PACK_300_INR = ""
+        try {
+            expect(() => getDodoProductIdForPack("pack_300", "INR")).toThrow(
+                "Missing Dodo product id for pack pack_300 in INR",
+            )
+            expect(getDodoProductIdForPack("pack_300", "USD")).toBe("pdt_300_USD")
+        } finally {
+            mockEnv.DODO_PRODUCT_ID_PACK_300_INR = "pdt_300_INR"
+        }
     })
 })
 

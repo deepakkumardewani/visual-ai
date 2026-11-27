@@ -19,34 +19,29 @@ const userStore = useUserStore();
 const { showBuyCreditsDialog } = storeToRefs(dialogStore);
 const { credits, dailyCredits, isPro } = storeToRefs(userStore);
 const { start } = usePurchase();
-const { formatPackPrice, formatPackPer100Credits, loadPrices } = usePricingCatalog();
+const { formatPackPrice, formatPackPer100Credits, packSavingsPercent, loadPrices } =
+  usePricingCatalog();
 
 onMounted(loadPrices);
 
 const loading = shallowRef(false);
 const successBalance = shallowRef<number | null>(null);
 const packages = [...CREDIT_PACKS];
-const selectedIndex = shallowRef(0);
+// Start on the pack most buyers pick; the first pack when none is flagged.
+const selectedIndex = shallowRef(
+  Math.max(
+    0,
+    packages.findIndex((pkg) => pkg.popular),
+  ),
+);
 
 const currentPackage = computed(() => packages[selectedIndex.value]);
-
-const bestValueIndex = computed(() => {
-  return packages.reduce((maxIdx, pkg, idx) => {
-    return pkg.savingsPercent > packages[maxIdx].savingsPercent ? idx : maxIdx;
-  }, 0);
-});
-
-const mostPopularIndex = computed(() => {
-  const ranked = packages
-    .map((pkg, idx) => ({ idx, credits: pkg.credits }))
-    .sort((a, b) => b.credits - a.credits);
-  return ranked[1]?.idx ?? 0;
-});
 
 const totalCredits = computed(() => credits.value + dailyCredits.value);
 
 function savingsLabel(pack: CreditPack) {
-  return pack.savingsPercent > 0 ? `${pack.savingsPercent}%` : undefined;
+  const percent = packSavingsPercent(pack);
+  return percent > 0 ? `${percent}%` : undefined;
 }
 
 function openPricing() {
@@ -124,19 +119,15 @@ async function handlePurchase() {
               class="buy__pkg"
               :class="{
                 'buy__pkg--active': selectedIndex === index,
-                'buy__pkg--best-value': index === bestValueIndex,
-                'buy__pkg--popular': index === mostPopularIndex,
+                'buy__pkg--popular': pkg.popular,
               }"
               role="radio"
               :aria-checked="selectedIndex === index"
               @click="selectedIndex = index"
             >
-              <span v-if="index === bestValueIndex" class="badge badge--value">Best value</span>
-              <span v-else-if="index === mostPopularIndex" class="badge badge--popular">
-                Most popular
-              </span>
+              <span v-if="pkg.popular" class="badge badge--popular">Most popular</span>
 
-              <span class="pkg-credits">{{ pkg.credits }}</span>
+              <span class="pkg-credits">{{ pkg.credits.toLocaleString() }}</span>
               <span class="pkg-credits-label">credits</span>
               <span class="pkg-price">{{ formatPackPrice(pkg) }}</span>
               <span v-if="savingsLabel(pkg)" class="pkg-savings">Save {{ savingsLabel(pkg) }}</span>
@@ -171,7 +162,7 @@ async function handlePurchase() {
         :disabled="loading"
         @click="handlePurchase"
       >
-        {{ loading ? 'Processing…' : `Buy ${currentPackage?.credits} credits` }}
+        {{ loading ? 'Processing…' : `Buy ${currentPackage?.credits.toLocaleString()} credits` }}
       </button>
     </template>
   </AppModal>
@@ -313,6 +304,11 @@ async function handlePurchase() {
     outline-offset: 2px;
   }
 
+  /* Unselected, the popular pack keeps a faint gold hairline so it reads as the suggested pick. */
+  &.buy__pkg--popular:not(.buy__pkg--active) {
+    border-color: rgb(201 168 76 / 0.35);
+  }
+
   &.buy__pkg--active {
     border-color: #c9a84c;
     background: rgb(201 168 76 / 0.1);
@@ -328,10 +324,6 @@ async function handlePurchase() {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
-
-  &.badge--value {
-    color: #6faf7a;
-  }
 
   &.badge--popular {
     color: #c9a84c;

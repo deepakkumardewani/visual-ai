@@ -72,6 +72,12 @@ describe('router', () => {
     expect(router.currentRoute.value.path).toBe('/create');
   });
 
+  it('renders unknown paths as not-found without redirecting', async () => {
+    await router.push('/definitely/not/a/page');
+    expect(router.currentRoute.value.name).toBe('not-found');
+    expect(router.currentRoute.value.path).toBe('/definitely/not/a/page');
+  });
+
   it('scrolls to the top on every navigation', () => {
     const scroll = router.options.scrollBehavior;
     expect(scroll?.({} as never, {} as never, null)).toEqual({ top: 0 });

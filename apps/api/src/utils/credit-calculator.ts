@@ -1,24 +1,22 @@
 import { FeatureType } from "../types/index.js"
 import type { ModelKey } from "@visual-ai/shared"
-import { getCreditCost } from "@visual-ai/shared"
+import { getCreditCost, MIN_CREDIT_COST } from "@visual-ai/shared"
 
 /**
  * Returns the integer credit cost for a generation or utility job.
  * Pure function — no side effects, safe to import in tests without env deps.
  *
- * All costs are now unified via the shared getCreditCost function:
- * - IMAGE/generation: 1 credit (budget/standard), 5 (premium)
- * - Utilities: 2 credits, premium upscalers: 4 credits
+ * Every cost comes from the shared getCreditCost, which derives credits from the
+ * model's registry price (1 credit ≈ USD_PER_CREDIT of Replicate cost).
  */
 export function calculateCreditCost(featureType: FeatureType, modelKey?: ModelKey): number {
     // Generation images
     if (featureType === FeatureType.IMAGE) {
-        // Default generation cost is 1 credit for most models
-        // Use modelKey if provided, otherwise return default
+        // Without a model the run is priced at the floor; callers always pass one in practice.
         if (modelKey) {
             return getCreditCost(modelKey)
         }
-        return 1 // Default for unspecified generation
+        return MIN_CREDIT_COST
     }
 
     // Utility model — must have modelKey

@@ -20,6 +20,7 @@ import ImageUpload from '@/components/Dashboard/Sidebar/ImageUpload.vue';
 import UpscaleModelPicker from '@/components/Dashboard/ModelPicker/UpscaleModelPicker.vue';
 
 import { IMAGE_FORMATS } from '@/utils/constants';
+import { getTransformCreditCost } from '@/utils/generationCredits';
 import { UPSCALER_MODELS } from '@/utils/models';
 
 const userStore = useUserStore();
@@ -52,7 +53,9 @@ function segmentClass(active: boolean) {
 
 const hasImage = computed(() => Boolean(imageUpload.value?.image));
 const canSubmit = computed(() => hasImage.value && !upscaleInProgress.value);
-const creditCost = computed(() => upscaleModel.value.creditCost ?? 2);
+const creditCost = computed(
+  () => upscaleModel.value.creditCost ?? getTransformCreditCost('upscale'),
+);
 const isPremium = computed(() => upscaleModel.value.tier === 'premium');
 
 const showScale = computed(() => Boolean(selectedUpscaleModelFields.value?.scale));

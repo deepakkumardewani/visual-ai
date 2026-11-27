@@ -92,12 +92,15 @@ async function startCheckout(
   const pack = getCreditPack(packId);
   if (!pack) throw new Error(`Unknown pack ${packId}`);
 
+  // The dialog preselects the popular pack, so pick the requested one explicitly.
+  await packRadio(page, packId).click();
+
   const checkoutResponsePromise = page.waitForResponse(
     (res) => res.url().includes('/payments/checkout') && res.request().method() === 'POST',
   );
 
   await buyCreditsDialog(page)
-    .getByRole('button', { name: `Buy ${pack.credits} credits` })
+    .getByRole('button', { name: `Buy ${pack.credits.toLocaleString()} credits` })
     .click();
 
   const checkoutResponse = await checkoutResponsePromise;
@@ -126,11 +129,11 @@ function webhookPayload(
     business_id: 'biz_e2e',
     data: {
       payment_id: opts.paymentId,
-      total_amount: pack.priceMinor,
-      currency: pack.currency,
+      total_amount: pack.prices.USD,
+      currency: 'USD',
       checkout_session_id: opts.sessionId,
       payment_method: 'card',
-      metadata: { userId: opts.userId ?? E2E_USER_ID, packId: opts.packId },
+      metadata: { userId: opts.userId ?? E2E_USER_ID, packId: opts.packId, currency: 'USD' },
     },
   };
 }
@@ -214,7 +217,7 @@ test.describe('Billing purchase', () => {
     );
 
     await buyCreditsDialog(page)
-      .getByRole('button', { name: `Buy ${target.credits} credits` })
+      .getByRole('button', { name: `Buy ${target.credits.toLocaleString()} credits` })
       .click();
     const checkoutResponse = await checkoutResponsePromise;
 
@@ -229,7 +232,7 @@ test.describe('Billing purchase', () => {
     "Signed payment success grants exactly the pack's credits and shows the row in Profile -> Payments",
     { tag: ['@critical'] },
     async ({ page, request }) => {
-      const packId: CreditPackId = 'pack_450';
+      const packId: CreditPackId = 'pack_700';
       const pack = getCreditPack(packId)!;
       const paymentId = `pay_e2e_${randomUUID()}`;
       const webhookId = randomUUID();
@@ -238,7 +241,6 @@ test.describe('Billing purchase', () => {
       const creditsBefore = await refreshPaidCredits(page);
 
       await openBuyCreditsDialog(page);
-      await packRadio(page, packId).click();
       const { session } = await startCheckout(page, packId);
 
       await closeE2eOverlay(page);
@@ -269,7 +271,7 @@ test.describe('Billing purchase', () => {
       const purchaseRow = page
         .getByRole('row')
         .filter({ hasText: pack.description })
-        .filter({ hasText: `₹${(pack.priceMinor / 100).toFixed(2)}` });
+        .filter({ hasText: `$${(pack.prices.USD / 100).toFixed(2)}` });
       await expect(purchaseRow.first()).toBeVisible();
     },
   );
@@ -278,7 +280,7 @@ test.describe('Billing purchase', () => {
     'Duplicate webhook delivery is a no-op',
     { tag: ['@critical'] },
     async ({ page, request }) => {
-      const packId: CreditPackId = 'pack_200';
+      const packId: CreditPackId = 'pack_300';
       const pack = getCreditPack(packId)!;
       const paymentId = `pay_e2e_dup_${randomUUID()}`;
       const webhookId = `wh_dup_${randomUUID()}`;
@@ -316,7 +318,7 @@ test.describe('Billing purchase', () => {
     'Invalid signature gets 401 and credits are unchanged',
     { tag: ['@high'] },
     async ({ page, request }) => {
-      const packId: CreditPackId = 'pack_200';
+      const packId: CreditPackId = 'pack_300';
       const paymentId = `pay_e2e_bad_sig_${randomUUID()}`;
 
       await gotoStudio(page);
@@ -351,7 +353,7 @@ test.describe('Billing purchase', () => {
     'Failed payment shows an error and credits are unchanged',
     { tag: ['@high'] },
     async ({ page, request }) => {
-      const packId: CreditPackId = 'pack_200';
+      const packId: CreditPackId = 'pack_300';
       const paymentId = `pay_e2e_fail_${randomUUID()}`;
 
       await gotoStudio(page);
@@ -379,7 +381,7 @@ test.describe('Billing purchase', () => {
     'Overlay closed then poll timeout shows the processing message',
     { tag: ['@medium'] },
     async ({ page }) => {
-      const packId: CreditPackId = 'pack_200';
+      const packId: CreditPackId = 'pack_300';
 
       await page.clock.install();
       await gotoStudio(page);

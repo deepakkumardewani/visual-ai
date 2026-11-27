@@ -10,6 +10,7 @@ import { useAppStore } from '@/stores/app';
 import { useComposerPersistence } from '@/composables/useComposerPersistence';
 import { useGlobalShortcuts } from '@/composables/useGlobalShortcuts';
 import { usePageSeo } from '@/composables/usePageSeo';
+import { usePremiumModelFallback } from '@/composables/usePremiumModelFallback';
 import { useStudioPromptPrefill } from '@/composables/useStudioPromptPrefill';
 
 import BuyMoreCreditsDialog from '@/components/Dialogs/BuyMoreCreditsDialog.vue';
@@ -39,6 +40,7 @@ const route = useRoute();
 const isSmUp = useMediaQuery(`(min-width: ${CREATE_LAYOUT_SM}px)`);
 
 useComposerPersistence();
+usePremiumModelFallback();
 useStudioPromptPrefill();
 useGlobalShortcuts();
 

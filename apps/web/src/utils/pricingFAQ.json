@@ -5,11 +5,15 @@
   },
   {
     "question": "How do credits work?",
-    "answer": "Credits are the only currency on Visual AI. Each generate or edit spends credits based on the model (budget generation 1 credit; premium generation 5; utility tools 2; premium upscalers 4).<br><br>Signup credits (30) and bought credits persist and never expire. Daily credits (30) reset every day at 00:00 UTC — unused daily credits are lost and do not roll over. Visual AI Pro is an optional subscription with a higher daily allowance."
+    "answer": "Credits are the only currency on Visual AI. Each generate or edit spends credits based on what the model costs to run, and the studio shows the exact cost before you run. Image generation: 1–30 credits. Studio tools: 1–2 credits. Upscaling: 1–16 credits.<br><br>Signup credits (30) and bought credits persist and never expire. Daily credits (30) reset every day at 00:00 UTC — unused daily credits are lost and do not roll over. Visual AI Pro is an optional subscription with a higher daily allowance."
   },
   {
     "question": "Do unused credits expire?",
     "answer": "Daily credits reset every day at 00:00 UTC and do not roll over. Signup credits and purchased credits persist and never expire."
+  },
+  {
+    "question": "Why did model credit costs change?",
+    "answer": "Credits now track what each model really costs to run, so cheaper models cost fewer credits and premium models cost more. Your existing credit balance is unchanged."
   },
   {
     "question": "Can I use my generated images for commercial projects?",
@@ -17,6 +21,6 @@
   },
   {
     "question": "How do I pay for the service?",
-    "answer": "Buy credit packs in INR on the pricing page. Checkout is handled by Dodo Payments (merchant of record); you can pay by card or UPI where available. Current packs: 200 credits for ₹130, 450 for ₹290, 960 for ₹500, and 2000 for ₹900. Purchased credits never expire."
+    "answer": "Buy credit packs on the pricing page. Checkout is handled by Dodo Payments (merchant of record). Buyers in India pay in INR (card or UPI where available); everyone else pays in USD. Current packs: 300 credits for $5 / ₹249, 700 for $10 / ₹549, 1,600 for $20 / ₹1,149 (most popular), and 4,500 for $50 / ₹2,999. Purchased credits never expire."
   }
 ]

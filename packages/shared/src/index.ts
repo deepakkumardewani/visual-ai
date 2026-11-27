@@ -5,5 +5,4 @@ export * from './types/index.js';
 export * from './schemas/index.js';
 export * from './models/index.js';
 export * from './pricing/currencyMap.js';
-export * from './pricing/convert.js';
 export * from './pricing/format.js';

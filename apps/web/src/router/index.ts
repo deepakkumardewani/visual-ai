@@ -2,7 +2,7 @@
 import { useUser } from 'vue-clerk';
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 
-import Landing from '@/pages/Landing.vue';
+import Home from '@/pages/Home.vue';
 
 import {
   APP_SURFACE,
@@ -19,8 +19,7 @@ const Examples = () => import('@/pages/Examples.vue');
 const FeatureLanding = () => import('@/pages/FeatureLanding.vue');
 const Faqs = () => import('@/pages/Frequent.vue');
 const Gallery = () => import('@/pages/Gallery.vue');
-const LandingV2 = () => import('@/pages/LandingV2.vue');
-const LandingV3 = () => import('@/pages/LandingV3.vue');
+const NotFound = () => import('@/pages/NotFound.vue');
 const Pricing = () => import('@/pages/Pricing.vue');
 const Privacy = () => import('@/pages/PrivacyPolicy.vue');
 const Profile = () => import('@/pages/Profile.vue');
@@ -33,17 +32,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'landing',
-    component: Landing,
-  },
-  {
-    path: '/v2',
-    name: 'landing-v2',
-    component: LandingV2,
-  },
-  {
-    path: '/v3',
-    name: 'landing-v3',
-    component: LandingV3,
+    component: Home,
   },
   {
     path: '/text-to-image',
@@ -173,6 +162,12 @@ const routes: RouteRecordRaw[] = [
         },
       ]
     : []),
+  {
+    // Unknown paths render a real 404 in place, keeping the bad URL visible to the visitor.
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: NotFound,
+  },
 ];
 
 const router = createRouter({

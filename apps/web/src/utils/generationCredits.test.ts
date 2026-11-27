@@ -61,18 +61,24 @@ describe('canAffordGeneration', () => {
 });
 
 describe('getTransformCreditCost', () => {
-  it('returns the flat utility cost', () => {
-    expect(getTransformCreditCost()).toBe(2);
+  it.each([
+    ['upscale', 4],
+    ['colorize', 1],
+    ['revive', 2],
+    ['remove_bg', 1],
+  ] as const)('prices %s by the model it runs (%i credits)', (action, cost) => {
+    expect(getTransformCreditCost(action)).toBe(cost);
+  });
+
+  it('returns the cheapest studio-tool cost without an action', () => {
+    expect(getTransformCreditCost()).toBe(1);
   });
 });
 
 describe('getTierCreditLabel', () => {
-  it('labels budget and standard as 1 cr', () => {
+  it('labels each tier with its cheapest generation model', () => {
     expect(getTierCreditLabel('budget')).toBe('1 cr');
-    expect(getTierCreditLabel('standard')).toBe('1 cr');
-  });
-
-  it('labels premium as 4 cr', () => {
-    expect(getTierCreditLabel('premium')).toBe('4 cr');
+    expect(getTierCreditLabel('standard')).toBe('3 cr');
+    expect(getTierCreditLabel('premium')).toBe('6 cr');
   });
 });

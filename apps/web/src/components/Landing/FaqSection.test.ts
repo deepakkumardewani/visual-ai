@@ -64,7 +64,7 @@ describe('FaqSection', () => {
     expect(plain.classes()).not.toContain('faq--centered');
     expect(plain.find('p').classes()).toContain('eyebrow');
     expect(centered.classes()).toContain('faq--centered');
-    expect(centered.find('p').classes()).toContain('lv2-eyebrow');
+    expect(centered.find('p').classes()).toContain('home-eyebrow');
   });
 
   describe('reveal scroller', () => {

@@ -3,7 +3,7 @@ import {
     getCreditPack,
     PLAN,
     SUBSCRIPTION_STATUS,
-    type CreditPack,
+    type PackCurrency,
 } from "@visual-ai/shared"
 import moment from "moment"
 
@@ -25,6 +25,7 @@ import {
 } from "./constants.js"
 import { type ParsedWebhookEvent } from "./dodo/eventMapper.js"
 import { AlreadySubscribedError, asProviderApiError, UnknownPackError } from "./errors.js"
+import { packCharge, resolveWebhookCharge, type PackCharge } from "./packCharge.js"
 import { getPaymentProvider } from "./providerFactory.js"
 import type {
     NormalizedPaymentEvent,
@@ -34,15 +35,25 @@ import type {
 
 const paymentsLogger = createLogger("payments-service")
 
-export async function createCheckout(
-    userId: string,
-    packId: string,
-    email?: string,
-): Promise<{ checkoutUrl: string; sessionId: string }> {
+export interface CreateCheckoutInput {
+    userId: string
+    packId: string
+    /** Decided server-side from the buyer's country; never a client value. */
+    currency: PackCurrency
+    email?: string
+}
+
+export async function createCheckout({
+    userId,
+    packId,
+    currency,
+    email,
+}: CreateCheckoutInput): Promise<{ checkoutUrl: string; sessionId: string }> {
     const pack = getCreditPack(packId)
     if (!pack) {
         throw new UnknownPackError(packId)
     }
+    const charge = packCharge(pack, currency)
 
     const provider = getPaymentProvider()
     let checkout: { checkoutUrl: string; sessionId: string }
@@ -50,6 +61,7 @@ export async function createCheckout(
         checkout = await provider.createCheckout({
             userId,
             pack,
+            currency,
             email,
             returnUrl: env.PAYMENT_RETURN_URL as string,
         })
@@ -61,14 +73,14 @@ export async function createCheckout(
         userId,
         provider: PAYMENT_PROVIDER_DODO,
         providerSessionId: checkout.sessionId,
-        packId: pack.id,
-        credits: pack.credits,
-        currency: pack.currency,
-        amount: pack.priceMinor / MINOR_UNITS_PER_MAJOR,
+        packId: charge.packId,
+        credits: charge.credits,
+        currency: charge.currency,
+        amount: charge.amountMinor / MINOR_UNITS_PER_MAJOR,
         status: PAYMENT_STATUS.PENDING,
         transactionId: checkout.sessionId,
         paymentMethod: "other",
-        description: pack.description,
+        description: charge.description,
         humanReadableDate: moment().format("MM/DD/YYYY"),
     })
 
@@ -193,7 +205,7 @@ function normalizePaymentMethod(method: string | null): string {
 
 function buildEmbeddedPaymentRecord(
     event: ParsedWebhookEvent,
-    pack: CreditPack,
+    charge: PackCharge,
     status: typeof PAYMENT_STATUS.COMPLETED | typeof PAYMENT_STATUS.FAILED,
 ) {
     return {
@@ -201,14 +213,14 @@ function buildEmbeddedPaymentRecord(
         provider: PAYMENT_PROVIDER_DODO,
         providerPaymentId: event.providerPaymentId,
         providerSessionId: event.providerSessionId ?? undefined,
-        packId: pack.id,
-        credits: pack.credits,
-        currency: pack.currency,
-        amount: pack.priceMinor / MINOR_UNITS_PER_MAJOR,
+        packId: charge.packId,
+        credits: charge.credits,
+        currency: charge.currency,
+        amount: charge.amountMinor / MINOR_UNITS_PER_MAJOR,
         status,
         transactionId: event.providerPaymentId,
         paymentMethod: normalizePaymentMethod(event.paymentMethod),
-        description: pack.description,
+        description: charge.description,
         humanReadableDate: moment(event.occurredAt).format("MM/DD/YYYY"),
         createdAt: event.occurredAt,
     }
@@ -242,20 +254,20 @@ function noExistingPaymentGuard(paymentId: string) {
 
 async function syncCheckoutPaymentRow(
     event: ParsedWebhookEvent,
-    pack: CreditPack,
+    charge: PackCharge,
     status: typeof PAYMENT_STATUS.COMPLETED | typeof PAYMENT_STATUS.FAILED,
 ) {
     const rowUpdate = {
         status,
         provider: PAYMENT_PROVIDER_DODO,
         providerPaymentId: event.providerPaymentId,
-        packId: pack.id,
-        credits: pack.credits,
-        currency: pack.currency,
-        amount: pack.priceMinor / MINOR_UNITS_PER_MAJOR,
+        packId: charge.packId,
+        credits: charge.credits,
+        currency: charge.currency,
+        amount: charge.amountMinor / MINOR_UNITS_PER_MAJOR,
         transactionId: event.providerPaymentId,
         paymentMethod: normalizePaymentMethod(event.paymentMethod),
-        description: pack.description,
+        description: charge.description,
     }
 
     if (event.providerSessionId) {
@@ -273,24 +285,26 @@ async function syncCheckoutPaymentRow(
     )
 }
 
-async function recordFailedPayment(event: ParsedWebhookEvent, pack: CreditPack) {
+async function recordFailedPayment(event: ParsedWebhookEvent, charge: PackCharge) {
     const result = await User.updateOne(
         { userId: event.userId, ...noExistingPaymentGuard(event.providerPaymentId) },
-        { $push: { payments: buildEmbeddedPaymentRecord(event, pack, PAYMENT_STATUS.FAILED) } },
+        { $push: { payments: buildEmbeddedPaymentRecord(event, charge, PAYMENT_STATUS.FAILED) } },
     )
 
     if (result.modifiedCount > 0) {
-        await syncCheckoutPaymentRow(event, pack, PAYMENT_STATUS.FAILED)
+        await syncCheckoutPaymentRow(event, charge, PAYMENT_STATUS.FAILED)
     }
 }
 
-async function grantSucceeded(event: ParsedWebhookEvent, pack: CreditPack) {
+async function grantSucceeded(event: ParsedWebhookEvent, charge: PackCharge) {
     const logCtx = webhookLogContext(event)
     const result = await User.updateOne(
         { userId: event.userId, ...completedPaymentGuard(event.providerPaymentId) },
         {
-            $push: { payments: buildEmbeddedPaymentRecord(event, pack, PAYMENT_STATUS.COMPLETED) },
-            $inc: { credits: pack.credits },
+            $push: {
+                payments: buildEmbeddedPaymentRecord(event, charge, PAYMENT_STATUS.COMPLETED),
+            },
+            $inc: { credits: charge.credits },
         },
     )
 
@@ -299,13 +313,13 @@ async function grantSucceeded(event: ParsedWebhookEvent, pack: CreditPack) {
         return
     }
 
-    paymentsLogger.info({ ...logCtx, credits: pack.credits }, "Payment credits granted")
-    await syncCheckoutPaymentRow(event, pack, PAYMENT_STATUS.COMPLETED)
+    paymentsLogger.info({ ...logCtx, credits: charge.credits }, "Payment credits granted")
+    await syncCheckoutPaymentRow(event, charge, PAYMENT_STATUS.COMPLETED)
 }
 
 async function resolveWebhookGrant(
     event: NormalizedPaymentEvent,
-): Promise<{ parsed: ParsedWebhookEvent; pack: CreditPack } | null> {
+): Promise<{ parsed: ParsedWebhookEvent; charge: PackCharge } | null> {
     const logCtx = webhookLogContext(event)
 
     if (!event.userId) {
@@ -324,43 +338,64 @@ async function resolveWebhookGrant(
         return null
     }
 
-    const pack = getCreditPack(event.packId)
-    if (!pack) {
+    const charge = resolveWebhookCharge(event.packId, event.checkoutCurrency)
+    if (!charge) {
         paymentsLogger.error(
-            { ...logCtx, packId: event.packId, reason: "unknown_pack" },
-            "Unknown pack",
+            {
+                ...logCtx,
+                packId: event.packId,
+                checkoutCurrency: event.checkoutCurrency,
+                reason: "unknown_pack",
+            },
+            "Unknown pack or checkout currency",
         )
         return null
     }
 
-    return { parsed: asParsedEvent(event), pack }
+    return { parsed: asParsedEvent(event), charge }
 }
 
-async function dispatchWebhookPayment(parsed: ParsedWebhookEvent, pack: CreditPack): Promise<void> {
-    const amountMatches =
-        parsed.amountMinor === pack.priceMinor && parsed.currency.toUpperCase() === pack.currency
-    if (!amountMatches) {
+/**
+ * The paid total must be the checkout's pack price in the checkout's currency. Tax may sit on top
+ * (tax-exclusive product) or inside it (tax-inclusive), so either the total or the pre-tax amount
+ * may equal the price.
+ */
+function chargeMatches(event: NormalizedPaymentEvent, charge: PackCharge): boolean {
+    if (event.currency.toUpperCase() !== charge.currency) {
+        return false
+    }
+    const preTaxMinor = event.amountMinor - event.taxMinor
+    return event.amountMinor === charge.amountMinor || preTaxMinor === charge.amountMinor
+}
+
+async function dispatchWebhookPayment(
+    parsed: ParsedWebhookEvent,
+    charge: PackCharge,
+): Promise<void> {
+    if (!chargeMatches(parsed, charge)) {
         paymentsLogger.error(
             {
                 ...webhookLogContext(parsed),
-                packId: pack.id,
-                expectedMinor: pack.priceMinor,
+                packId: charge.packId,
+                expectedMinor: charge.amountMinor,
+                expectedCurrency: charge.currency,
                 receivedMinor: parsed.amountMinor,
+                receivedTaxMinor: parsed.taxMinor,
                 currency: parsed.currency,
             },
             "Webhook amount or currency mismatch",
         )
-        await recordFailedPayment(parsed, pack)
+        await recordFailedPayment(parsed, charge)
         return
     }
 
     if (parsed.type === NORMALIZED_EVENT_TYPE.PAYMENT_FAILED) {
-        await recordFailedPayment(parsed, pack)
+        await recordFailedPayment(parsed, charge)
         return
     }
 
     if (parsed.type === NORMALIZED_EVENT_TYPE.PAYMENT_SUCCEEDED) {
-        await grantSucceeded(parsed, pack)
+        await grantSucceeded(parsed, charge)
     }
 }
 
@@ -484,5 +519,5 @@ export async function applyEvent(event: NormalizedWebhookEvent): Promise<void> {
     if (!resolved) {
         return
     }
-    await dispatchWebhookPayment(resolved.parsed, resolved.pack)
+    await dispatchWebhookPayment(resolved.parsed, resolved.charge)
 }

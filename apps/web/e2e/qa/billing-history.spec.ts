@@ -36,7 +36,7 @@ async function createDodoPaymentViaApi(
   page: Page,
   request: APIRequestContext,
   postSignedWebhook: (payload: unknown) => Promise<import('@playwright/test').APIResponse>,
-  packId: CreditPackId = 'pack_200',
+  packId: CreditPackId = 'pack_300',
 ) {
   const userId = requireEnv('E2E_CLERK_USER_ID');
   const pack = CREDIT_PACKS.find((p) => p.id === packId)!;
@@ -59,11 +59,11 @@ async function createDodoPaymentViaApi(
     business_id: 'biz_e2e',
     data: {
       payment_id: paymentId,
-      total_amount: pack.priceMinor,
-      currency: pack.currency,
+      total_amount: pack.prices.USD,
+      currency: 'USD',
       checkout_session_id: sessionId,
       payment_method: 'card',
-      metadata: { userId, packId: pack.id },
+      metadata: { userId, packId: pack.id, currency: 'USD' },
     },
   };
 
@@ -73,7 +73,7 @@ async function createDodoPaymentViaApi(
   return {
     paymentId,
     description: pack.description,
-    amountDisplay: `₹${(pack.priceMinor / 100).toFixed(2)}`,
+    amountDisplay: `$${(pack.prices.USD / 100).toFixed(2)}`,
   };
 }
 
@@ -139,7 +139,7 @@ test('@medium Empty state when the user has no payments', async ({ page }) => {
 });
 
 test('@medium Payment rows persist after reload', async ({ page, request, postSignedWebhook }) => {
-  const dodo = await createDodoPaymentViaApi(page, request, postSignedWebhook, 'pack_960');
+  const dodo = await createDodoPaymentViaApi(page, request, postSignedWebhook, 'pack_1600');
 
   await interceptUserPayments(page, (payments) => {
     const row = paymentWithProviderId(payments, dodo.paymentId);

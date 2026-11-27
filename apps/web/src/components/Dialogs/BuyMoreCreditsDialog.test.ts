@@ -13,20 +13,17 @@ vi.mock('@/composables/useFetch', () => ({ useFetch: vi.fn() }));
 
 const startPurchase = vi.fn();
 
-const PACK_200_EUR_MINOR = 250;
-
 function mockPricesResponse(data: unknown, error: unknown = null) {
   vi.mocked(useFetch).mockReturnValue({
     json: async () => ({ data: { value: data }, error: { value: error } }),
   } as unknown as ReturnType<typeof useFetch>);
 }
 
-const EUR_PRICES = {
-  country: 'DE',
-  currency: 'EUR',
-  isEstimate: true,
-  pro: { amountMinor: 450, currency: 'EUR' },
-  packs: [{ id: 'pack_200', amountMinor: PACK_200_EUR_MINOR, currency: 'EUR' }],
+const INR_PRICES = {
+  country: 'IN',
+  currency: 'INR',
+  pro: { amountMinor: 500, currency: 'USD' },
+  packs: [],
 };
 
 vi.mock('@/payments/usePurchase', () => ({
@@ -151,34 +148,29 @@ describe('BuyMoreCreditsDialog', () => {
     });
 
     const packages = wrapper.findAll('.buy__pkg');
-    expect(packages[0].text()).toContain('₹65.00 per 100 credits');
-    expect(packages[0].text()).toContain('≈ 200 images at 1 credit / 40 at 5 credits');
-    expect(packages[3].text()).toContain('₹45.00 per 100 credits');
-    expect(packages[3].text()).toContain('≈ 2000 images at 1 credit / 400 at 5 credits');
+    expect(packages[0].text()).toContain('$1.67 per 100 credits');
+    expect(packages[0].text()).toContain('≈ 300 images at 1 credit / 10 at 30 credits');
+    expect(packages[3].text()).toContain('$1.11 per 100 credits');
+    expect(packages[3].text()).toContain('≈ 4500 images at 1 credit / 150 at 30 credits');
 
     await packages[3].trigger('click');
 
-    expect(packages[0].text()).toContain('₹65.00 per 100 credits');
-    expect(packages[3].text()).toContain('₹45.00 per 100 credits');
+    expect(packages[0].text()).toContain('$1.67 per 100 credits');
+    expect(packages[3].text()).toContain('$1.11 per 100 credits');
   });
 
-  it('highlights best value package', () => {
-    const userStore = useUserStore();
-    userStore.credits = 50;
-    userStore.dailyCredits = 10;
-
+  it('shows USD savings computed against the smallest pack', () => {
     const wrapper = mount(BuyMoreCreditsDialog, {
-      global: {
-        stubs: {
-          AppModal: modalStub,
-          'font-awesome-icon': true,
-        },
-      },
+      global: { stubs: { AppModal: modalStub, 'font-awesome-icon': true } },
     });
 
-    const bestValuePackage = wrapper.find('.buy__pkg--best-value');
-    expect(bestValuePackage.exists()).toBe(true);
-    expect(bestValuePackage.text()).toContain('Best value');
+    const savings = wrapper.findAll('.buy__pkg').map((pkg) => pkg.find('.pkg-savings'));
+    expect(savings[0].exists()).toBe(false);
+    expect(savings.slice(1).map((badge) => badge.text())).toEqual([
+      'Save 14%',
+      'Save 25%',
+      'Save 33%',
+    ]);
   });
 
   it('highlights most popular package', () => {
@@ -195,9 +187,13 @@ describe('BuyMoreCreditsDialog', () => {
       },
     });
 
+    const packages = wrapper.findAll('.buy__pkg');
     const popularPackage = wrapper.find('.buy__pkg--popular');
-    expect(popularPackage.exists()).toBe(true);
+    expect(wrapper.findAll('.buy__pkg--popular')).toHaveLength(1);
+    expect(packages[2].classes()).toContain('buy__pkg--popular');
     expect(popularPackage.text()).toContain('Most popular');
+    // The popular pack is the default pick.
+    expect(popularPackage.classes()).toContain('buy__pkg--active');
   });
 
   it('changes selected package on click', async () => {
@@ -254,7 +250,7 @@ describe('BuyMoreCreditsDialog', () => {
 
     await wrapper.get('.modal-btn--primary').trigger('click');
     await wrapper.vm.$nextTick();
-    expect(startPurchase).toHaveBeenCalledWith('pack_200');
+    expect(startPurchase).toHaveBeenCalledWith('pack_1600');
     expect(wrapper.text()).toContain('Purchase successful');
     expect(wrapper.text()).toContain('60');
 
@@ -299,14 +295,15 @@ describe('BuyMoreCreditsDialog', () => {
     errorSpy.mockRestore();
   });
 
-  it('shows localized pack prices once /payments/prices resolves', async () => {
-    mockPricesResponse(EUR_PRICES);
+  it('shows INR prices and INR savings when the server resolves India', async () => {
+    mockPricesResponse(INR_PRICES);
     const wrapper = mount(BuyMoreCreditsDialog, {
       global: { stubs: { AppModal: modalStub, 'font-awesome-icon': true } },
     });
     await flushPromises();
-    const pack200 = wrapper.findAll('.buy__pkg')[0];
-    expect(pack200.text()).toContain('€2.50');
-    expect(pack200.text()).not.toContain('₹');
+    const packages = wrapper.findAll('.buy__pkg');
+    expect(packages[0].text()).toMatch(/₹\s?249/);
+    expect(packages[0].text()).not.toContain('$');
+    expect(packages[3].find('.pkg-savings').text()).toBe('Save 19%');
   });
 });

@@ -1,11 +1,12 @@
 import {
-  CREDIT_PACKS,
   DAILY_CREDITS,
+  getCategoryCreditRange,
   MODEL_REGISTRY,
   PREMIUM_MODEL_KEYS,
   SIGNUP_CREDITS,
 } from '@visual-ai/shared';
 
+import { formatCredits } from '@/utils/creditCopy';
 import { PRO_PERKS } from '@/utils/proPerks';
 
 export interface PlanContent {
@@ -14,8 +15,6 @@ export interface PlanContent {
   cta: string;
   to: string;
 }
-
-const BEST_SAVING_PERCENT = Math.max(...CREDIT_PACKS.map((pack) => pack.savingsPercent));
 
 const NAMED_PREMIUM_MODELS = 2;
 
@@ -33,7 +32,7 @@ export const FREE_PLAN: PlanContent = {
     `${SIGNUP_CREDITS} persistent credits at signup`,
     `${DAILY_CREDITS.free} daily credits (unused reset)`,
     'Budget and standard models',
-    'Everyday models cost 1 credit',
+    `Models from ${formatCredits(getCategoryCreditRange('generation').min)}`,
   ],
   cta: 'Start free',
   to: '/signin',
@@ -51,7 +50,8 @@ export const CREDIT_PACKS_PLAN: PlanContent = {
   points: [
     'Purchased credits never expire',
     'Combine with daily allowance',
-    `Larger packs save up to ${BEST_SAVING_PERCENT}%`,
+    // Currency-neutral: the saving differs between USD and INR, so no single figure is true.
+    'Larger packs cost less per credit',
   ],
   cta: 'See packs',
   to: '/pricing#packs',

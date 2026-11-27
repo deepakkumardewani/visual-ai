@@ -5,8 +5,10 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import LowCreditsDialog from '@/components/Dialogs/LowCreditsDialog.vue';
 import { FeatureType } from '@/types';
 import { useAppStore } from '@/stores/app';
+import { useAsideStore } from '@/stores/aside';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
+import { MODELS } from '@/utils/models';
 
 const stubs = {
   AppModal: {
@@ -33,13 +35,16 @@ describe('LowCreditsDialog', () => {
     userStore.dailyCredits = 2;
     const appStore = useAppStore();
     appStore.feature = FeatureType.IMAGE;
+    const asideStore = useAsideStore();
+    asideStore.mode = MODELS.find((model) => model.id === 'NANO_BANANA_2')!;
+    asideStore.noOfOutputs = 2;
     const dialogStore = useDialogStore();
     dialogStore.showLowCredits();
 
     const wrapper = mount(LowCreditsDialog, { global: { stubs } });
     expect(wrapper.text()).toContain('Low credits');
     expect(wrapper.text()).toContain('generate an AI image');
-    expect(wrapper.text()).toContain('1 credit is required');
+    expect(wrapper.text()).toContain('28 credits are required');
     expect(wrapper.text()).toContain('6 credits available');
     expect(wrapper.find('.low__chip--critical').exists()).toBe(false);
   });
@@ -55,7 +60,7 @@ describe('LowCreditsDialog', () => {
 
     const wrapper = mount(LowCreditsDialog, { global: { stubs } });
     expect(wrapper.text()).toContain('upscale an image');
-    expect(wrapper.text()).toContain('2 credits are required');
+    expect(wrapper.text()).toContain('4 credits are required');
     expect(wrapper.find('.low__chip--critical').exists()).toBe(true);
   });
 

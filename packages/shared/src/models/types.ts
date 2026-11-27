@@ -53,7 +53,8 @@ export interface ModelDefinition {
   replicateId: `${string}/${string}` | `${string}/${string}:${string}`;
   label: string;
   tier: Tier;
-  pricePerImage?: number;
+  /** Replicate cost (USD) for one typical output; drives the credit cost via getCreditCost. */
+  pricePerImage: number;
   /** true if this is a utility model (upscale, colorize, revive, etc.) not a generation model */
   utility?: boolean;
   fields: {
