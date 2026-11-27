@@ -5,7 +5,7 @@
  * quintic settle with a wide stagger, so the closing shot lands rather than
  * replays. Nothing but `ctaTileFrame` may move a tile.
  */
-import { FINAL_CTA_ITEMS } from '@/components/LandingV2/galleryRanges';
+import { FINAL_CTA_ITEMS } from '@/components/Home/galleryRanges';
 import type { GalleryItem } from '@/utils/landing';
 
 export interface CtaSlot {

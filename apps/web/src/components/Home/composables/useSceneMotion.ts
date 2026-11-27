@@ -18,7 +18,7 @@ export interface SceneConditions {
 export type SceneSetup = (conditions: SceneConditions, root: HTMLElement) => void | (() => void);
 
 /**
- * Shared motion gate for every /v2 scene. Read-only for scene builders.
+ * Shared motion gate for every home scene. Read-only for scene builders.
  *
  *   useSceneMotion(rootRef, ({ isDesktop, motionOk }, root) => {
  *     if (!motionOk) return;             // static layout, no tweens

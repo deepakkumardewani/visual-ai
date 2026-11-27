@@ -43,7 +43,12 @@ function rateAriaLabel(band: PricingBand) {
             <p v-if="band.hint" class="band__hint">{{ band.hint }}</p>
             <template v-for="row in band.rows" :key="`${row.cost}-${row.names}`">
               <p v-if="row.names" class="band__names">
-                <span v-if="hasSplitCosts(band)" class="band__cost-chip">{{ row.cost }}</span>
+                <span
+                  v-if="hasSplitCosts(band)"
+                  class="band__cost-chip"
+                  :aria-label="`${row.cost} credits`"
+                  >{{ row.cost }}</span
+                >
                 {{ row.names }}
               </p>
             </template>

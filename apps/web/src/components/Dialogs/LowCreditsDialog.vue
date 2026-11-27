@@ -6,14 +6,18 @@ import { computed } from 'vue';
 import { FeatureType } from '@/types';
 
 import { useAppStore } from '@/stores/app';
+import { useAsideStore } from '@/stores/aside';
 import { useDialogStore } from '@/stores/dialog';
 import { useUserStore } from '@/stores/user';
 
 import AppModal from '@/components/AppModal.vue';
 
+import { getGenerationCreditCost, getTransformCreditCost } from '@/utils/generationCredits';
+
 const dialogStore = useDialogStore();
 const userStore = useUserStore();
 const appStore = useAppStore();
+const asideStore = useAsideStore();
 const { feature } = storeToRefs(appStore);
 
 function closeDialog() {
@@ -29,18 +33,25 @@ const { dailyAllowance } = storeToRefs(userStore);
 
 const isCritical = computed(() => (userStore.dailyCredits || 0) + (userStore.credits || 0) <= 5);
 
+const { mode, noOfOutputs, upscaleModel } = storeToRefs(asideStore);
+
+/** Cost of the run the user just attempted, priced by the model it would use. */
 const creditRequirement = computed(() => {
-  // Unified cost for all users (no Pro distinction)
-  if (feature.value === FeatureType.IMAGE) return 1;
-  if (
-    feature.value === FeatureType.UPSCALE ||
-    feature.value === FeatureType.COLORIZE ||
-    feature.value === FeatureType.REVIVE ||
-    feature.value === FeatureType.REMOVE_BG
-  ) {
-    return 2; // Utility models cost 2 credits
+  switch (feature.value) {
+    case FeatureType.UPSCALE:
+    case 'image_upscaler':
+      return upscaleModel.value.creditCost ?? getTransformCreditCost('upscale');
+    case FeatureType.COLORIZE:
+    case 'colorize_image':
+      return getTransformCreditCost('colorize');
+    case FeatureType.REVIVE:
+    case 'revive_old_photos':
+      return getTransformCreditCost('revive');
+    case FeatureType.REMOVE_BG:
+      return getTransformCreditCost('remove_bg');
+    default:
+      return getGenerationCreditCost(noOfOutputs.value, mode.value.creditCost);
   }
-  return 1;
 });
 
 const featureText = computed(() => {

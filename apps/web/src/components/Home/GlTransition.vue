@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { useSceneMotion } from '@/components/LandingV2/composables/useSceneMotion';
+import { useSceneMotion } from '@/components/Home/composables/useSceneMotion';
 
-import { startTransitionSession } from '@/components/LandingV3/glTransitionSession';
-import { useWebglSupport } from '@/components/LandingV3/useWebglSupport';
+import { startTransitionSession } from '@/components/Home/glTransitionSession';
+import { useWebglSupport } from '@/components/Home/useWebglSupport';
 
 /**
- * /v3 scene-handover veil: a fixed film-grain layer that fades in while a scene
+ * Home scene-handover veil: a fixed film-grain layer that fades in while a scene
  * boundary crosses the middle of the screen. Purely decorative and never in the
  * way of input; mobile, reduced-motion and no-WebGL visitors get nothing here.
  */

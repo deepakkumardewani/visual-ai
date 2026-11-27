@@ -82,7 +82,7 @@ describe('useViewerTransform', () => {
     expect(viewer.isProcessing.value).toBe(false);
 
     isSignedIn.value = true;
-    useUserStore().credits = 1;
+    useUserStore().credits = 0;
     await viewer.startAction('colorize');
     expect(showLowCredits).toHaveBeenCalled();
   });

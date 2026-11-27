@@ -128,8 +128,10 @@ describe('upscaler models', () => {
   it('assigns higher credit costs to premium upscalers', () => {
     const premiumUpscalers = UPSCALER_MODELS.filter((m) => m.tier === 'premium');
     expect(premiumUpscalers.length).toBe(2); // Clarity Pro and Topaz
-    for (const model of premiumUpscalers) {
-      expect(model.creditCost).toBe(4);
+    const cheapestPremium = Math.min(...premiumUpscalers.map((m) => m.creditCost ?? 0));
+    const standardUpscalers = UPSCALER_MODELS.filter((m) => m.tier !== 'premium');
+    for (const model of standardUpscalers) {
+      expect(model.creditCost).toBeLessThanOrEqual(cheapestPremium);
     }
   });
 
@@ -246,7 +248,7 @@ describe('groupModelsByCompany', () => {
     const sections = groupModelsByCompany([
       free('FREE_G', 'Free G', { companyName: 'Google' }),
       free('NANO_BANANA_PRO', 'Nano Banana Pro', { companyName: 'Google' }),
-      free('IMAGEN_4_ULTRA', 'Imagen 4 Ultra', { companyName: 'Google' }),
+      free('GPT_IMAGE_2', 'GPT Image 2', { companyName: 'Google' }),
     ]);
     const freeSection = sections.find((s) => s.section === 'Free');
     const proSection = sections.find((s) => s.section === 'Pro');
@@ -256,10 +258,7 @@ describe('groupModelsByCompany', () => {
     expect(freeGoogle.map((c) => c.company)).toEqual(['Google']);
     expect(proGoogle.map((c) => c.company)).toEqual(['Google']);
     expect(freeGoogle[0].models.map((m) => m.id)).toEqual(['FREE_G']);
-    expect(proGoogle[0].models.map((m) => m.id).sort()).toEqual([
-      'IMAGEN_4_ULTRA',
-      'NANO_BANANA_PRO',
-    ]);
+    expect(proGoogle[0].models.map((m) => m.id).sort()).toEqual(['GPT_IMAGE_2', 'NANO_BANANA_PRO']);
   });
 
   it('sorts models inside a company by cost then title', () => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { STAGE_ASPECT_RATIO } from '@/components/LandingV2/toolsMedia';
+import { STAGE_ASPECT_RATIO } from '@/components/Home/toolsMedia';
 
 defineProps<{
   before: string;
@@ -83,29 +83,29 @@ defineProps<{
   right: 0;
   width: 2px;
   height: 100%;
-  background-color: var(--lv2-copper);
+  background-color: var(--home-copper);
   box-shadow: 0 0 24px rgb(201 138 90 / 0.55);
 }
 
 .wipe__tag {
   position: absolute;
-  bottom: var(--lv2-space-md);
-  padding: var(--lv2-space-2xs) var(--lv2-space-xs);
+  bottom: var(--home-space-md);
+  padding: var(--home-space-2xs) var(--home-space-xs);
   border-radius: 4px;
   background-color: rgb(var(--tw-canvas) / 0.78);
-  font-size: var(--lv2-text-label);
+  font-size: var(--home-text-label);
   font-weight: 600;
-  letter-spacing: var(--lv2-tracking-label);
+  letter-spacing: var(--home-tracking-label);
   text-transform: uppercase;
   color: rgb(var(--tw-ink-secondary));
 }
 
 .wipe__tag--before {
-  right: var(--lv2-space-md);
+  right: var(--home-space-md);
 }
 
 .wipe__tag--after {
-  left: var(--lv2-space-md);
-  color: var(--lv2-copper-text);
+  left: var(--home-space-md);
+  color: var(--home-copper-text);
 }
 </style>

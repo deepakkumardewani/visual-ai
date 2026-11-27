@@ -1,7 +1,7 @@
 import { onBeforeUnmount, onMounted } from 'vue';
 
-/** Styled in `landingV2.scss`. Separate from `tw-dark`, which the theme store owns. */
-export const LV2_DOCUMENT_CLASS = 'lv2-doc';
+/** Styled in `home.scss`. Separate from `tw-dark`, which the theme store owns. */
+export const HOME_DOCUMENT_CLASS = 'home-doc';
 
 /**
  * Darkens the whole document while a candidate landing page is mounted, so
@@ -9,6 +9,6 @@ export const LV2_DOCUMENT_CLASS = 'lv2-doc';
  * user's saved theme untouched.
  */
 export function useDocumentDarkScope(): void {
-  onMounted(() => document.documentElement.classList.add(LV2_DOCUMENT_CLASS));
-  onBeforeUnmount(() => document.documentElement.classList.remove(LV2_DOCUMENT_CLASS));
+  onMounted(() => document.documentElement.classList.add(HOME_DOCUMENT_CLASS));
+  onBeforeUnmount(() => document.documentElement.classList.remove(HOME_DOCUMENT_CLASS));
 }

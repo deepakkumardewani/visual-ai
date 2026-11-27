@@ -2,7 +2,6 @@
 import { gsap } from 'gsap';
 import { ref } from 'vue';
 
-import { useMagnetic } from '@/composables/useMagnetic';
 import { FREE_CREDITS_COPY } from '@/utils/landing';
 
 import LandingButton from '@/components/Landing/LandingButton.vue';
@@ -14,13 +13,11 @@ import {
   MOBILE_CTA_TILES,
   toCssAspectRatio,
   type CtaTile,
-} from '@/components/LandingV2/finalCtaLayout';
-import { usePrimaryCta } from '@/components/LandingV2/composables/usePrimaryCta';
-import { useSceneMotion } from '@/components/LandingV2/composables/useSceneMotion';
-import { bindCursorLight } from '@/components/LandingV2/useCursorLight';
+} from '@/components/Home/finalCtaLayout';
+import { usePrimaryCta } from '@/components/Home/composables/usePrimaryCta';
+import { useSceneMotion } from '@/components/Home/composables/useSceneMotion';
+import { bindCursorLight } from '@/components/Home/useCursorLight';
 
-const MAGNET_STRENGTH = 0.25;
-const FINE_POINTER_QUERY = '(pointer: fine)';
 /** Scroll window (section top, in viewport terms) over which the frame converges. */
 const SCRUB_START = 'top 85%';
 const SCRUB_END = 'top 8%';
@@ -32,10 +29,6 @@ const root = ref<HTMLElement | null>(null);
 const stage = ref<HTMLElement | null>(null);
 const wall = ref<HTMLElement | null>(null);
 const light = ref<HTMLElement | null>(null);
-// Magnetic needs a DOM node; the button is a component, so the wrapper span is what moves.
-const magnet = ref<HTMLElement | null>(null);
-
-useMagnetic(magnet, window.matchMedia(FINE_POINTER_QUERY).matches ? MAGNET_STRENGTH : 0);
 
 const composedTransform = (tile: CtaTile): string =>
   ctaFrameToTransform(ctaTileFrame(tile, CTA_COMPOSED));
@@ -90,7 +83,7 @@ useSceneMotion(root, ({ isDesktop, motionOk }) => {
 </script>
 
 <template>
-  <section id="final-cta" ref="root" class="lv2-section cta" aria-labelledby="final-cta-title">
+  <section id="final-cta" ref="root" class="home-section cta" aria-labelledby="final-cta-title">
     <div ref="stage" class="cta__stage">
       <div ref="wall" class="cta__wall cta__wall--desktop" aria-hidden="true">
         <div
@@ -116,17 +109,15 @@ useSceneMotion(root, ({ isDesktop, motionOk }) => {
       </div>
 
       <div class="cta__copy">
-        <p class="lv2-eyebrow">Ready when you are</p>
-        <h2 id="final-cta-title" class="lv2-display cta__title">
+        <p class="home-eyebrow">Ready when you are</p>
+        <h2 id="final-cta-title" class="home-display cta__title">
           Your next image is one prompt away.
         </h2>
-        <p class="lv2-lede cta__sub">
+        <p class="home-lede cta__sub">
           Generate, upscale, colorize and revive. {{ FREE_CREDITS_COPY }}
         </p>
         <div class="cta__actions">
-          <span ref="magnet" class="cta__magnet">
-            <LandingButton :to="ctaTo" size="lg">{{ ctaLabel }}</LandingButton>
-          </span>
+          <LandingButton :to="ctaTo" size="lg">{{ ctaLabel }}</LandingButton>
           <LandingButton to="/pricing" variant="ghost" size="lg">See pricing</LandingButton>
         </div>
       </div>
@@ -136,7 +127,7 @@ useSceneMotion(root, ({ isDesktop, motionOk }) => {
 
 <style scoped lang="scss">
 .cta {
-  /* Block padding comes from `.lv2-section`, the rhythm every scene shares. */
+  /* Block padding comes from `.home-section`, the rhythm every scene shares. */
   /* Converging tiles start outside the stage; clip them so they never cross into the FAQ or footer. */
   overflow: clip;
 }
@@ -158,7 +149,7 @@ useSceneMotion(root, ({ isDesktop, motionOk }) => {
 
 .cta__wall--mobile {
   aspect-ratio: 6 / 4.2;
-  margin-bottom: var(--lv2-space-xl);
+  margin-bottom: var(--home-space-xl);
 }
 
 .cta__wall--desktop {
@@ -216,42 +207,23 @@ useSceneMotion(root, ({ isDesktop, motionOk }) => {
 }
 
 .cta__title {
-  margin-top: var(--lv2-space-md);
+  margin-top: var(--home-space-md);
   max-width: 14ch;
   text-wrap: balance;
 }
 
 .cta__sub {
-  margin-top: var(--lv2-space-lg);
+  margin-top: var(--home-space-lg);
   max-width: 34rem;
   text-wrap: balance;
-}
-
-.cta__magnet {
-  display: inline-flex;
-}
-
-/*
- * Fine pointers: the moved element is a padded field around the button, so the
- * lean starts ~3rem out. Matching negative margin keeps layout still; the right
- * side stays inside the actions gap so the field never covers the ghost button.
- */
-@media (hover: hover) and (pointer: fine) {
-  .cta__magnet {
-    --magnet-reach: 3rem;
-    --magnet-reach-end: var(--lv2-space-sm);
-    padding: var(--magnet-reach) var(--magnet-reach-end) var(--magnet-reach) var(--magnet-reach);
-    margin: calc(var(--magnet-reach) * -1) calc(var(--magnet-reach-end) * -1)
-      calc(var(--magnet-reach) * -1) calc(var(--magnet-reach) * -1);
-  }
 }
 
 .cta__actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--lv2-space-md);
-  margin-top: var(--lv2-space-xl);
+  gap: var(--home-space-md);
+  margin-top: var(--home-space-xl);
 }
 
 /*
@@ -319,7 +291,7 @@ useSceneMotion(root, ({ isDesktop, motionOk }) => {
   }
 
   .cta__title {
-    font-size: calc(var(--lv2-text-hero) * 0.66);
+    font-size: calc(var(--home-text-hero) * 0.66);
     max-width: 16ch;
   }
 }

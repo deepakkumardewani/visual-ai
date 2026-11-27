@@ -1,6 +1,6 @@
 /*
- * Global styles for the /v2 and /v3 candidates. Everything is scoped under
- * `.lv2` or `html.lv2-doc`, so loading this chunk never restyles other pages.
+ * Global styles for the home page. Everything is scoped under
+ * `.home` or `html.home-doc`, so loading this chunk never restyles other pages.
  */
 
 /* Mirrors the `.tw-dark` block in src/style.scss, which this chunk cannot @extend. */
@@ -21,7 +21,7 @@
 }
 
 /* Set by useDocumentDarkScope while a candidate page is mounted. */
-html.lv2-doc {
+html.home-doc {
   @include dark-tokens;
   color-scheme: dark;
   background-color: rgb(var(--tw-canvas));
@@ -33,7 +33,7 @@ html.lv2-doc {
  * swipe back up, so the candidate drops it there.
  */
 @media (max-width: 899px) {
-  html.lv2-doc .scroll-top-btn {
+  html.home-doc .scroll-top-btn {
     display: none;
   }
 }
@@ -42,110 +42,110 @@ html.lv2-doc {
  * Section rhythm shared by every scene. Scenes read these properties instead of
  * inventing their own spacing and type sizes.
  */
-.lv2 {
+.home {
   /* Type */
-  --lv2-font-display: 'Young Serif', Georgia, serif;
-  --lv2-font-body: 'Source Sans 3', system-ui, sans-serif;
-  --lv2-text-hero: clamp(2.6rem, 1.2rem + 4.6vw, 5.25rem);
-  --lv2-text-display: clamp(2.25rem, 1.4rem + 3vw, 4rem);
-  --lv2-text-title: clamp(1.6rem, 1.25rem + 1.3vw, 2.25rem);
-  --lv2-text-lede: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
-  --lv2-text-body: 1rem;
-  --lv2-text-small: 0.875rem;
-  --lv2-text-label: 0.78rem;
-  --lv2-leading-display: 1.04;
+  --home-font-display: 'Young Serif', Georgia, serif;
+  --home-font-body: 'Source Sans 3', system-ui, sans-serif;
+  --home-text-hero: clamp(2.6rem, 1.2rem + 4.6vw, 5.25rem);
+  --home-text-display: clamp(2.25rem, 1.4rem + 3vw, 4rem);
+  --home-text-title: clamp(1.6rem, 1.25rem + 1.3vw, 2.25rem);
+  --home-text-lede: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --home-text-body: 1rem;
+  --home-text-small: 0.875rem;
+  --home-text-label: 0.78rem;
+  --home-leading-display: 1.04;
   /* Light text on dark wants a little more air than the usual 1.6. */
-  --lv2-leading-body: 1.7;
-  --lv2-tracking-display: -0.02em;
-  --lv2-tracking-label: 0.16em;
-  --lv2-measure: 62ch;
+  --home-leading-body: 1.7;
+  --home-tracking-display: -0.02em;
+  --home-tracking-label: 0.16em;
+  --home-measure: 62ch;
 
   /* Space (4pt scale) and layout */
-  --lv2-space-2xs: 0.25rem;
-  --lv2-space-xs: 0.5rem;
-  --lv2-space-sm: 0.75rem;
-  --lv2-space-md: 1rem;
-  --lv2-space-lg: 1.5rem;
-  --lv2-space-xl: 2rem;
-  --lv2-space-2xl: 3rem;
-  --lv2-space-3xl: 4rem;
-  --lv2-space-4xl: 6rem;
-  --lv2-gutter: clamp(1.25rem, 0.6rem + 3vw, 3.5rem);
+  --home-space-2xs: 0.25rem;
+  --home-space-xs: 0.5rem;
+  --home-space-sm: 0.75rem;
+  --home-space-md: 1rem;
+  --home-space-lg: 1.5rem;
+  --home-space-xl: 2rem;
+  --home-space-2xl: 3rem;
+  --home-space-3xl: 4rem;
+  --home-space-4xl: 6rem;
+  --home-gutter: clamp(1.25rem, 0.6rem + 3vw, 3.5rem);
   /*
    * The visible gap between two scenes (~146px at 1440, 72px at 390). Each
    * scene pads by half of it on either side, so any two neighbours add up to
    * exactly one gap whatever order they sit in.
    */
-  --lv2-section-gap: clamp(4.5rem, 1.5rem + 8.5vw, 10rem);
-  --lv2-section-y: calc(var(--lv2-section-gap) / 2);
-  --lv2-max-width: 82rem;
+  --home-section-gap: clamp(4.5rem, 1.5rem + 8.5vw, 10rem);
+  --home-section-y: calc(var(--home-section-gap) / 2);
+  --home-max-width: 82rem;
   /*
    * Inline padding that puts content on the same left edge as a full-width
-   * `.lv2-container` (64px at 1440), for blocks that cannot use the container.
+   * `.home-container` (64px at 1440), for blocks that cannot use the container.
    * Only valid on direct children of the full-width page: `100%` resolves there.
    */
-  --lv2-edge: max(var(--lv2-gutter), calc((100% - var(--lv2-max-width)) / 2));
-  --lv2-nav-height: 4.5rem;
+  --home-edge: max(var(--home-gutter), calc((100% - var(--home-max-width)) / 2));
+  --home-nav-height: 4.5rem;
 
   /* Accents (values from DESIGN.md / style.scss). Gold is a solid colour, never gradient text. */
-  --lv2-copper: #c98a5a;
-  --lv2-copper-text: #d29467;
-  --lv2-gold: #c9a84c;
-  --lv2-focus-ring: 2px solid var(--lv2-copper);
+  --home-copper: #c98a5a;
+  --home-copper-text: #d29467;
+  --home-gold: #c9a84c;
+  --home-focus-ring: 2px solid var(--home-copper);
 
   /* Motion */
-  --lv2-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --lv2-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --home-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --home-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
   position: relative;
   background-color: rgb(var(--tw-canvas));
   color: rgb(var(--tw-ink-primary));
-  font-family: var(--lv2-font-body);
+  font-family: var(--home-font-body);
   /* clip, not hidden: hidden makes a scroll container and breaks pinning. */
   overflow-x: clip;
 }
 
-.lv2-section {
+.home-section {
   position: relative;
-  padding: var(--lv2-section-y) var(--lv2-gutter);
+  padding: var(--home-section-y) var(--home-gutter);
 }
 
-.lv2-container {
+.home-container {
   width: 100%;
-  max-width: var(--lv2-max-width);
+  max-width: var(--home-max-width);
   margin-inline: auto;
 }
 
-.lv2-eyebrow {
+.home-eyebrow {
   margin: 0;
-  font-size: var(--lv2-text-label);
+  font-size: var(--home-text-label);
   font-weight: 600;
-  letter-spacing: var(--lv2-tracking-label);
+  letter-spacing: var(--home-tracking-label);
   text-transform: uppercase;
-  color: var(--lv2-copper-text);
+  color: var(--home-copper-text);
 }
 
-.lv2-display {
+.home-display {
   margin: 0;
-  font-family: var(--lv2-font-display);
+  font-family: var(--home-font-display);
   font-weight: 400;
-  font-size: var(--lv2-text-display);
-  line-height: var(--lv2-leading-display);
-  letter-spacing: var(--lv2-tracking-display);
+  font-size: var(--home-text-display);
+  line-height: var(--home-leading-display);
+  letter-spacing: var(--home-tracking-display);
   color: rgb(var(--tw-ink-primary));
   text-wrap: balance;
 }
 
-.lv2-lede {
+.home-lede {
   margin: 0;
-  max-width: var(--lv2-measure);
-  font-size: var(--lv2-text-lede);
-  line-height: var(--lv2-leading-body);
+  max-width: var(--home-measure);
+  font-size: var(--home-text-lede);
+  line-height: var(--home-leading-body);
   color: rgb(var(--tw-ink-muted));
   text-wrap: pretty;
 }
 
-.lv2 :focus-visible {
-  outline: var(--lv2-focus-ring);
+.home :focus-visible {
+  outline: var(--home-focus-ring);
   outline-offset: 3px;
 }

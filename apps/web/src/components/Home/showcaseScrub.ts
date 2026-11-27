@@ -1,4 +1,4 @@
-import type { RowDriftControl } from '@/components/LandingV2/showcaseDrift';
+import type { RowDriftControl } from '@/components/Home/showcaseDrift';
 
 /** Pointer travel before a press becomes a drag; below it, the press stays a click. */
 export const DRAG_THRESHOLD_PX = 6;

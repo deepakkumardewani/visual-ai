@@ -7,13 +7,13 @@ import {
   typeTween,
   type PromptCycle,
   type SpotlightDial,
-} from '@/components/LandingV2/heroPromptCycle';
+} from '@/components/Home/heroPromptCycle';
 import {
   HERO_PROMPT_CYCLE,
   NO_SPOTLIGHT,
   type HeroPromptStop,
   type WallProgress,
-} from '@/components/LandingV2/heroWallLayout';
+} from '@/components/Home/heroWallLayout';
 
 const FIRST_STOP = 0;
 const PROMPT_TEXTS: readonly string[] = HERO_PROMPT_CYCLE.map((stop) => stop.prompt);

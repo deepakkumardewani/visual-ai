@@ -163,7 +163,7 @@ async function handleColorize() {
 
   const confirmed = await confirmChainAction({
     action: 'colorize',
-    creditCost: getTransformCreditCost(),
+    creditCost: getTransformCreditCost('colorize'),
     extraCopy: alreadyLooksColored ? COLORIZE_ALREADY_COLORED_COPY : undefined,
   });
   if (!confirmed) return;

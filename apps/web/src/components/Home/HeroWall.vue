@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { computed, onBeforeUpdate, ref, watch, type ComponentPublicInstance } from 'vue';
 
 import { useReducedMotion } from '@/composables/useReducedMotion';
-import { useSceneMotion } from '@/components/LandingV2/composables/useSceneMotion';
+import { useSceneMotion } from '@/components/Home/composables/useSceneMotion';
 
 import {
   HIDDEN_INPUT,
@@ -17,7 +17,7 @@ import {
   type WallBand,
   type WallInput,
   type WallTile,
-} from '@/components/LandingV2/heroWallLayout';
+} from '@/components/Home/heroWallLayout';
 
 const props = defineProps<HeroWallProps>();
 

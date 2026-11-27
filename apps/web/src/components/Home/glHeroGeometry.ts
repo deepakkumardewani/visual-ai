@@ -9,9 +9,9 @@ import {
   type WallLayer,
   type WallPointer,
   type WallTile,
-} from '@/components/LandingV2/heroWallLayout';
+} from '@/components/Home/heroWallLayout';
 
-import type { GlStageSize } from '@/components/LandingV3/glStage';
+import type { GlStageSize } from '@/components/Home/glStage';
 
 /** Matches HeroWall's per-layer `border-radius`. */
 const LAYER_RADIUS_PX: Readonly<Record<WallLayer, number>> = { 0: 8, 1: 12, 2: 16 };

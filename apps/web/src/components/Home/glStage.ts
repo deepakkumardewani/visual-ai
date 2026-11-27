@@ -2,7 +2,7 @@ import type { OGLRenderingContext, Renderer } from 'ogl';
 
 import { createLogger } from '@/utils/logger';
 
-const log = createLogger('LandingV3:glStage');
+const log = createLogger('Home:glStage');
 
 // Above 2x the extra pixels cost fill rate without a visible gain.
 const MAX_DEVICE_PIXEL_RATIO = 2;

@@ -1,12 +1,6 @@
 import type { Model } from '@/types/model';
 
-import {
-  MODEL_IDS,
-  MODEL_REGISTRY,
-  PREMIUM_MODEL_KEYS,
-  getCreditCost,
-  type ModelKey,
-} from '@visual-ai/shared';
+import { MODEL_IDS, MODEL_REGISTRY, getCreditCost, requiresPro } from '@visual-ai/shared';
 
 /**
  * Derive Model fields from the shared registry entry.
@@ -343,7 +337,7 @@ export function sortByCostThenName(models: Model[]): Model[] {
   );
 }
 
-const isPremiumModel = (model: Model): boolean => PREMIUM_MODEL_KEYS.includes(model.id as ModelKey);
+const isPremiumModel = (model: Model): boolean => requiresPro(model.id);
 
 function groupByCompany(models: Model[]): CompanyGroup[] {
   const byCompany = new Map<string, Model[]>();

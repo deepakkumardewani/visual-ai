@@ -5,19 +5,19 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { computed, ref, type Component } from 'vue';
 
 import { useReducedMotion } from '@/composables/useReducedMotion';
-import { DESKTOP_QUERY, useSceneMotion } from '@/components/LandingV2/composables/useSceneMotion';
+import { DESKTOP_QUERY, useSceneMotion } from '@/components/Home/composables/useSceneMotion';
 
-import HeroCopy from '@/components/LandingV2/HeroCopy.vue';
-import HeroWall from '@/components/LandingV2/HeroWall.vue';
+import HeroCopy from '@/components/Home/HeroCopy.vue';
+import HeroWall from '@/components/Home/HeroWall.vue';
 
-import { useHeroPrompt } from '@/components/LandingV2/composables/useHeroPrompt';
-import type { PromptCycle } from '@/components/LandingV2/heroPromptCycle';
+import { useHeroPrompt } from '@/components/Home/composables/useHeroPrompt';
+import type { PromptCycle } from '@/components/Home/heroPromptCycle';
 import {
   DESKTOP_WALL,
   MOBILE_WALL,
   RADIAL_EXIT_SHARE,
   type WallProgress,
-} from '@/components/LandingV2/heroWallLayout';
+} from '@/components/Home/heroWallLayout';
 
 const props = defineProps<{
   /** Replaces the DOM wall; receives `HeroWallProps`. */
@@ -251,7 +251,7 @@ useSceneMotion(root, ({ isDesktop: desktop, motionOk }, section) => {
   /* Above the next scene, so tiles flying past its top edge stay on top. */
   z-index: 2;
   overflow: clip;
-  padding: var(--hero-band-top) var(--lv2-gutter) var(--hero-band-bottom);
+  padding: var(--hero-band-top) var(--home-gutter) var(--hero-band-bottom);
   /* Only the copy is interactive; the transparent rest must not block the scene below. */
   pointer-events: none;
 }
@@ -268,8 +268,8 @@ useSceneMotion(root, ({ isDesktop: desktop, motionOk }, section) => {
     align-items: center;
     height: 100svh;
     min-height: 40rem;
-    /* --lv2-edge, so the copy starts on the same left edge as every scene below. */
-    padding: var(--lv2-nav-height) var(--lv2-edge) var(--lv2-space-2xl);
+    /* --home-edge, so the copy starts on the same left edge as every scene below. */
+    padding: var(--home-nav-height) var(--home-edge) var(--home-space-2xl);
   }
 
   .hero__copy {

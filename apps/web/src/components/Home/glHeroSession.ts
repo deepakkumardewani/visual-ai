@@ -3,7 +3,7 @@
  * DOM wall, loop while on screen, and undo all of it. Every failure path leaves
  * the DOM wall showing.
  */
-import type { WallProgress, WallTile } from '@/components/LandingV2/heroWallLayout';
+import type { WallProgress, WallTile } from '@/components/Home/heroWallLayout';
 import { createLogger } from '@/utils/logger';
 
 import {
@@ -12,14 +12,14 @@ import {
   handOverToCanvas,
   restoreDomWall,
   styleCanvas,
-} from '@/components/LandingV3/glHeroDom';
-import { trackHeroPointer, type HeroPointer } from '@/components/LandingV3/glHeroPointer';
-import { createHeroScene, type HeroScene, type RgbColor } from '@/components/LandingV3/glHeroScene';
-import { loadImage, runVisibleLoop } from '@/components/LandingV3/glRuntime';
-import { createGlStage, type GlStage } from '@/components/LandingV3/glStage';
+} from '@/components/Home/glHeroDom';
+import { trackHeroPointer, type HeroPointer } from '@/components/Home/glHeroPointer';
+import { createHeroScene, type HeroScene, type RgbColor } from '@/components/Home/glHeroScene';
+import { loadImage, runVisibleLoop } from '@/components/Home/glRuntime';
+import { createGlStage, type GlStage } from '@/components/Home/glStage';
 
 const LOG_OWNER = 'GlHeroWall';
-const log = createLogger(`LandingV3:${LOG_OWNER}`);
+const log = createLogger(`Home:${LOG_OWNER}`);
 
 /** Shader effects ease in after the crossfade, so the handover itself shows the plain DOM look. */
 const EFFECT_RAMP_MS = 900;

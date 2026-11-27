@@ -1,7 +1,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-import { clusterLayout, deckOffset } from '@/components/LandingV2/toolsMedia';
+import { clusterLayout, deckOffset } from '@/components/Home/toolsMedia';
 import type { ToolChapter } from '@/utils/landing';
 
 /**

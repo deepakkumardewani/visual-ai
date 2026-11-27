@@ -5,7 +5,7 @@
  */
 import { createLogger } from '@/utils/logger';
 
-import { loadImage, runVisibleLoop } from '@/components/LandingV3/glRuntime';
+import { loadImage, runVisibleLoop } from '@/components/Home/glRuntime';
 import {
   allTiles,
   handOverToCanvas,
@@ -14,7 +14,7 @@ import {
   restoreDomRows,
   styleCanvas,
   type ShowcaseRowEls,
-} from '@/components/LandingV3/glShowcaseDom';
+} from '@/components/Home/glShowcaseDom';
 import {
   clampFrameMs,
   measureRow,
@@ -22,16 +22,16 @@ import {
   trackTileLooks,
   type TileBox,
   type TileLook,
-} from '@/components/LandingV3/glShowcaseMotion';
+} from '@/components/Home/glShowcaseMotion';
 import {
   createShowcaseScene,
   type PrintQuad,
   type ShowcaseScene,
-} from '@/components/LandingV3/glShowcaseScene';
-import { createGlStage, type GlStage } from '@/components/LandingV3/glStage';
+} from '@/components/Home/glShowcaseScene';
+import { createGlStage, type GlStage } from '@/components/Home/glStage';
 
 const LOG_OWNER = 'GlShowcaseMedia';
-const log = createLogger(`LandingV3:${LOG_OWNER}`);
+const log = createLogger(`Home:${LOG_OWNER}`);
 
 /** Textures start loading about a screen before the scene arrives, never at page load. */
 const NEAR_ROOT_MARGIN = '100% 0px';

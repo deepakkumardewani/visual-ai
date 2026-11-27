@@ -1,10 +1,10 @@
 import type { GalleryItem } from '@/utils/landing';
 
-export { toCssAspectRatio } from '@/components/LandingV2/heroWallLayout';
+export { toCssAspectRatio } from '@/components/Home/heroWallLayout';
 
 /**
  * Contract for anything that renders the showcase media layer: the DOM rows
- * here, or a WebGL layer in /v3. Progress is read through a getter on every
+ * here, or the WebGL layer in `GlShowcaseMedia`. Progress is read through a getter on every
  * frame, so it is never a reactive ref.
  */
 export interface ShowcaseMediaProps {

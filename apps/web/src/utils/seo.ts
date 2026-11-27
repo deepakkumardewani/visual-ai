@@ -1,5 +1,7 @@
 import { DAILY_CREDITS, REFERRAL_BONUS, SIGNUP_CREDITS } from '@visual-ai/shared';
 
+import { transformCreditsLabel } from '@/utils/creditCopy';
+
 export const SITE_ORIGIN = 'https://visual-ai.app';
 export const SITE_NAME = 'Visual AI';
 export const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
@@ -14,7 +16,7 @@ export function freeTierSignupFaqAnswer(): string {
 }
 
 export function colorizeFreeTierFaqAnswer(): string {
-  return `Yes, using your ${DAILY_CREDITS.free} daily credits (and the ${SIGNUP_CREDITS} credits you receive at signup). Each colorize run costs 2 credits.`;
+  return `Yes, using your ${DAILY_CREDITS.free} daily credits (and the ${SIGNUP_CREDITS} credits you receive at signup). Each colorize run costs ${transformCreditsLabel('colorize')}.`;
 }
 
 export function referralGiveEarnCopy(): string {

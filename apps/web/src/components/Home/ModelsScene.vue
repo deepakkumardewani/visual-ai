@@ -2,9 +2,9 @@
 import { gsap } from 'gsap';
 import { ref } from 'vue';
 
-import { useSceneMotion } from '@/components/LandingV2/composables/useSceneMotion';
-import { GENERATION_MODEL_COUNT, ROSTER_ROWS } from '@/components/LandingV2/modelsRoster';
-import { bindCursorLight } from '@/components/LandingV2/useCursorLight';
+import { useSceneMotion } from '@/components/Home/composables/useSceneMotion';
+import { GENERATION_MODEL_COUNT, ROSTER_ROWS } from '@/components/Home/modelsRoster';
+import { bindCursorLight } from '@/components/Home/useCursorLight';
 
 const REVEAL_START = 'top 70%';
 const LINE_DURATION = 1.1;
@@ -38,15 +38,15 @@ useSceneMotion(root, ({ isDesktop, motionOk }, rootEl) => {
 </script>
 
 <template>
-  <section id="models" ref="root" class="models lv2-section" aria-labelledby="models-title">
-    <div class="lv2-container models__inner">
+  <section id="models" ref="root" class="models home-section" aria-labelledby="models-title">
+    <div class="home-container models__inner">
       <header class="models__head">
-        <p class="lv2-eyebrow models__eyebrow">Models</p>
-        <h2 id="models-title" class="lv2-display models__title">
+        <p class="home-eyebrow models__eyebrow">Models</p>
+        <h2 id="models-title" class="home-display models__title">
           <span class="models__count">{{ GENERATION_MODEL_COUNT }}</span>
           models from several labs.
         </h2>
-        <p class="lv2-lede models__lede">
+        <p class="home-lede models__lede">
           Pick the one that fits the picture you have in mind. The credit cost sits beside each
           name.
         </p>
@@ -63,7 +63,7 @@ useSceneMotion(root, ({ isDesktop, motionOk }, rootEl) => {
           >
             <p
               v-if="row.finishing && !ROSTER_ROWS[index - 1]?.finishing"
-              class="lv2-eyebrow lab__group"
+              class="home-eyebrow lab__group"
             >
               Finishing
             </p>
@@ -90,19 +90,19 @@ useSceneMotion(root, ({ isDesktop, motionOk }, rootEl) => {
 <style scoped lang="scss">
 .models__inner {
   display: grid;
-  gap: var(--lv2-space-3xl);
+  gap: var(--home-space-3xl);
 }
 
 .models__head {
   display: grid;
-  gap: var(--lv2-space-lg);
+  gap: var(--home-space-lg);
 }
 
 .models__title {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  column-gap: var(--lv2-space-md);
+  column-gap: var(--home-space-md);
 }
 
 /* The live count, set large to anchor the header. */
@@ -146,18 +146,18 @@ useSceneMotion(root, ({ isDesktop, motionOk }, rootEl) => {
 
 .lab {
   display: grid;
-  gap: var(--lv2-space-sm);
-  padding-block: var(--lv2-space-xl);
+  gap: var(--home-space-sm);
+  padding-block: var(--home-space-xl);
   border-top: 1px solid rgb(var(--tw-hairline));
 }
 
 .lab__name {
   margin: 0;
-  font-family: var(--lv2-font-display);
+  font-family: var(--home-font-display);
   font-weight: 400;
   font-size: var(--lab-name-size);
-  line-height: var(--lv2-leading-display);
-  letter-spacing: var(--lv2-tracking-display);
+  line-height: var(--home-leading-display);
+  letter-spacing: var(--home-tracking-display);
 }
 
 /* Padding and matching negative margin keep descenders inside the clip without moving layout. */
@@ -175,7 +175,7 @@ useSceneMotion(root, ({ isDesktop, motionOk }, rootEl) => {
 .lab__featured {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-  gap: var(--lv2-space-sm) var(--lv2-space-xl);
+  gap: var(--home-space-sm) var(--home-space-xl);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -185,36 +185,36 @@ useSceneMotion(root, ({ isDesktop, motionOk }, rootEl) => {
 .model {
   display: flex;
   align-items: baseline;
-  gap: var(--lv2-space-sm);
+  gap: var(--home-space-sm);
 }
 
 .model__title {
   color: rgb(var(--tw-ink-secondary));
-  font-size: var(--lv2-text-lede);
+  font-size: var(--home-text-lede);
 }
 
 .model__cost {
   margin: 0;
-  color: var(--lv2-copper-text);
-  font-size: var(--lv2-text-label);
+  color: var(--home-copper-text);
+  font-size: var(--home-text-label);
   font-weight: 600;
-  letter-spacing: var(--lv2-tracking-label);
+  letter-spacing: var(--home-tracking-label);
   text-transform: uppercase;
 }
 
 .lab__group {
-  margin-bottom: var(--lv2-space-sm);
+  margin-bottom: var(--home-space-sm);
 }
 
 .lab--finishing-start {
-  margin-top: var(--lv2-space-3xl);
+  margin-top: var(--home-space-3xl);
 }
 
 @media (min-width: 900px) {
   .models__head {
     grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
     align-items: end;
-    column-gap: var(--lv2-space-2xl);
+    column-gap: var(--home-space-2xl);
   }
 
   .models__eyebrow {
@@ -222,14 +222,14 @@ useSceneMotion(root, ({ isDesktop, motionOk }, rootEl) => {
   }
 
   .models__lede {
-    padding-bottom: var(--lv2-space-md);
+    padding-bottom: var(--home-space-md);
   }
 
   .lab {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr);
     /* The lab name's first line and the first model share a baseline, row after row. */
     align-items: first baseline;
-    gap: var(--lv2-space-2xl);
+    gap: var(--home-space-2xl);
   }
 
   .lab__group {

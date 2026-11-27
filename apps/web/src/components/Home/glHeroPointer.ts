@@ -3,7 +3,7 @@
  * pointer handling (same normalisation, ease and fine-pointer gate) so the GL
  * tiles drift exactly as the DOM tiles would; HeroWall is read-only, hence the copy.
  */
-import type { WallPointer } from '@/components/LandingV2/heroWallLayout';
+import type { WallPointer } from '@/components/Home/heroWallLayout';
 
 const POINTER_FINE_QUERY = '(pointer: fine)';
 /** Per-frame share of the gap closed toward the real pointer, as in HeroWall. */

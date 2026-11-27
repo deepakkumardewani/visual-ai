@@ -4,14 +4,14 @@ import { ref } from 'vue';
 
 import { TOOLS } from '@/utils/landing';
 
-import { useSceneMotion } from '@/components/LandingV2/composables/useSceneMotion';
-import ToolChapterCopy from '@/components/LandingV2/ToolChapterCopy.vue';
-import ToolChapterStacked from '@/components/LandingV2/ToolChapterStacked.vue';
-import ToolRail from '@/components/LandingV2/ToolRail.vue';
-import ToolStage from '@/components/LandingV2/ToolStage.vue';
+import { useSceneMotion } from '@/components/Home/composables/useSceneMotion';
+import ToolChapterCopy from '@/components/Home/ToolChapterCopy.vue';
+import ToolChapterStacked from '@/components/Home/ToolChapterStacked.vue';
+import ToolRail from '@/components/Home/ToolRail.vue';
+import ToolStage from '@/components/Home/ToolStage.vue';
 
-import { buildToolsTimeline, clearTail, queryStage } from '@/components/LandingV2/toolsTimeline';
-import { STAGE_RATIO_HEIGHT, STAGE_RATIO_WIDTH } from '@/components/LandingV2/toolsMedia';
+import { buildToolsTimeline, clearTail, queryStage } from '@/components/Home/toolsTimeline';
+import { STAGE_RATIO_HEIGHT, STAGE_RATIO_WIDTH } from '@/components/Home/toolsMedia';
 
 const REVEAL_SHIFT = 28;
 const REVEAL_DURATION = 0.8;
@@ -62,17 +62,17 @@ useSceneMotion(root, ({ isDesktop, motionOk }, section) => {
 </script>
 
 <template>
-  <section id="tools" ref="root" class="tools lv2-section" aria-labelledby="tools-title">
+  <section id="tools" ref="root" class="tools home-section" aria-labelledby="tools-title">
     <!--
       Desktop with motion: one pinned screen scrubbed through every chapter, the
       section heading as its top block. Elsewhere only the heading shows here.
     -->
     <div ref="pin" class="tools__pin" :style="STAGE_RATIO_STYLE">
-      <div class="lv2-container tools__frame">
+      <div class="home-container tools__frame">
         <div class="tools__copy-column" data-stage-copy-column>
           <header class="tools__header">
-            <p class="lv2-eyebrow">{{ TOOLS.length }} tools, one studio</p>
-            <h2 id="tools-title" class="lv2-display tools__title" tabindex="-1">
+            <p class="home-eyebrow">{{ TOOLS.length }} tools, one studio</p>
+            <h2 id="tools-title" class="home-display tools__title" tabindex="-1">
               See what each one does.
             </h2>
           </header>
@@ -95,7 +95,7 @@ useSceneMotion(root, ({ isDesktop, motionOk }, section) => {
     </div>
 
     <!-- Mobile and reduced motion: every chapter laid out in turn. -->
-    <div class="lv2-container tools__list">
+    <div class="home-container tools__list">
       <ToolChapterStacked
         v-for="(tool, index) in TOOLS"
         :key="tool.id"
@@ -118,7 +118,7 @@ $pinned-query: '(min-width: 900px) and (prefers-reduced-motion: no-preference)';
 .tools__header {
   display: flex;
   flex-direction: column;
-  gap: var(--lv2-space-md);
+  gap: var(--home-space-md);
 }
 
 .tools__title {
@@ -136,8 +136,8 @@ $pinned-query: '(min-width: 900px) and (prefers-reduced-motion: no-preference)';
 .tools__list {
   display: flex;
   flex-direction: column;
-  gap: var(--lv2-space-4xl);
-  margin-top: var(--lv2-space-3xl);
+  gap: var(--home-space-4xl);
+  margin-top: var(--home-space-3xl);
 }
 
 @media #{$pinned-query} {
@@ -153,7 +153,7 @@ $pinned-query: '(min-width: 900px) and (prefers-reduced-motion: no-preference)';
   .tools__pin {
     display: flex;
     height: 100svh;
-    padding: var(--lv2-nav-height) 0 var(--lv2-space-xl);
+    padding: var(--home-nav-height) 0 var(--home-space-xl);
   }
 
   /* Copy column and stage are both centred in the screen; the stage spans its full height. */
@@ -161,7 +161,7 @@ $pinned-query: '(min-width: 900px) and (prefers-reduced-motion: no-preference)';
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     align-items: center;
-    gap: var(--lv2-space-3xl);
+    gap: var(--home-space-3xl);
   }
 
   .tools__copy-column {
@@ -171,23 +171,23 @@ $pinned-query: '(min-width: 900px) and (prefers-reduced-motion: no-preference)';
 
   /* Heading and rail read as one masthead; the chapter copy starts a clear step below. */
   .tools__header {
-    gap: var(--lv2-space-xs);
+    gap: var(--home-space-xs);
   }
 
   .tools__title {
     max-width: none;
-    font-size: var(--lv2-text-title);
+    font-size: var(--home-text-title);
   }
 
   .tools .tools__rail {
     display: flex;
-    margin-top: var(--lv2-space-lg);
+    margin-top: var(--home-space-lg);
   }
 
   /* All five blocks share one cell, so the column is as tall as the longest and never jumps. */
   .tools__copies {
     display: grid;
-    margin-top: var(--lv2-space-2xl);
+    margin-top: var(--home-space-2xl);
   }
 
   .tools__copy {

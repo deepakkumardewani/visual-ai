@@ -1,8 +1,7 @@
-import { formatPrice, PREMIUM_CREDIT_COST } from '@visual-ai/shared';
+import { formatPrice, getCategoryCreditRange } from '@visual-ai/shared';
 import type { SupportedCurrency } from '@visual-ai/shared';
 
 export const PRICE_BASIS_CREDITS = 100;
-const BUDGET_IMAGE_CREDIT_COST = 1;
 
 /**
  * Localized price of 100 credits. Scaling before rounding keeps a pack's per-credit
@@ -20,15 +19,19 @@ export function formatPricePer100Credits(
 
 export type ImageEstimate = { budgetImages: number; premiumImages: number };
 
-/** How many images a credit amount buys at the cheapest and the premium model price. */
+const pluralCredits = (count: number): string => `${count} credit${count === 1 ? '' : 's'}`;
+
+/** How many images a credit amount buys at the cheapest and the priciest generation model. */
 export function estimateImages(credits: number): ImageEstimate {
+  const { min, max } = getCategoryCreditRange('generation');
   return {
-    budgetImages: Math.floor(credits / BUDGET_IMAGE_CREDIT_COST),
-    premiumImages: Math.floor(credits / PREMIUM_CREDIT_COST),
+    budgetImages: Math.floor(credits / min),
+    premiumImages: Math.floor(credits / max),
   };
 }
 
 export function formatImageEstimate(credits: number): string {
+  const { min, max } = getCategoryCreditRange('generation');
   const { budgetImages, premiumImages } = estimateImages(credits);
-  return `≈ ${budgetImages} images at ${BUDGET_IMAGE_CREDIT_COST} credit / ${premiumImages} at ${PREMIUM_CREDIT_COST} credits`;
+  return `≈ ${budgetImages} images at ${pluralCredits(min)} / ${premiumImages} at ${pluralCredits(max)}`;
 }

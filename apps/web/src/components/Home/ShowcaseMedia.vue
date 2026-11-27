@@ -2,12 +2,12 @@
 import { useMediaQuery } from '@vueuse/core';
 import { computed } from 'vue';
 
-import { DESKTOP_QUERY } from '@/components/LandingV2/composables/useSceneMotion';
-import ShowcaseDialog from '@/components/LandingV2/ShowcaseDialog.vue';
-import ShowcaseRail from '@/components/LandingV2/ShowcaseRail.vue';
-import ShowcaseRows from '@/components/LandingV2/ShowcaseRows.vue';
-import type { ShowcaseMediaProps } from '@/components/LandingV2/showcaseLayout';
-import { useShowcaseLightbox } from '@/components/LandingV2/useShowcaseLightbox';
+import { DESKTOP_QUERY } from '@/components/Home/composables/useSceneMotion';
+import ShowcaseDialog from '@/components/Home/ShowcaseDialog.vue';
+import ShowcaseRail from '@/components/Home/ShowcaseRail.vue';
+import ShowcaseRows from '@/components/Home/ShowcaseRows.vue';
+import type { ShowcaseMediaProps } from '@/components/Home/showcaseLayout';
+import { useShowcaseLightbox } from '@/components/Home/useShowcaseLightbox';
 
 const props = defineProps<ShowcaseMediaProps>();
 

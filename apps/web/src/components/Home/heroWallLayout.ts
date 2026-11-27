@@ -1,11 +1,11 @@
 /**
  * The hero wall's look, as data plus one pure function.
  *
- * Renderers (the DOM `HeroWall` today, a WebGL wall on /v3 later) place each
+ * Renderers (the DOM `HeroWall` and the WebGL `GlHeroWall`) place each
  * tile at its slot and apply `tileFrame(tile, input)` every frame. Nothing else
  * may move a tile, so every renderer stays in step with the same scroll story.
  */
-import { HERO_ITEMS } from '@/components/LandingV2/galleryRanges';
+import { HERO_ITEMS } from '@/components/Home/galleryRanges';
 import type { GalleryItem } from '@/utils/landing';
 
 /** 0 is the far layer, 2 the near layer. */
@@ -71,7 +71,7 @@ export interface WallInput extends WallProgress {
 }
 
 /**
- * Props every hero wall renderer accepts (the DOM `HeroWall`, a WebGL wall on /v3).
+ * Props every hero wall renderer accepts (the DOM `HeroWall` and the WebGL `GlHeroWall`).
  * `getProgress` is read once per frame and is deliberately not reactive.
  */
 export interface HeroWallProps {

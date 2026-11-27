@@ -44,13 +44,9 @@ watch(
   },
   { immediate: true },
 );
-// Landing, its design candidates and keyword feature landers ship their own nav/footer.
-const CANDIDATE_LANDING_PATHS: ReadonlySet<string> = new Set(['/v2', '/v3']);
+// The home page and keyword feature landers ship their own nav/footer.
 const isMarketingShell = computed(
-  () =>
-    route.path === '/' ||
-    CANDIDATE_LANDING_PATHS.has(route.path) ||
-    String(route.name ?? '').startsWith('seo-'),
+  () => route.path === '/' || String(route.name ?? '').startsWith('seo-'),
 );
 const isExploreViewer = computed(() => route.name === 'explore-image');
 const isHeaderVisible = computed(() => {

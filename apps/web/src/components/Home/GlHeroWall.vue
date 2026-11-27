@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 
-import HeroWall from '@/components/LandingV2/HeroWall.vue';
-import { useSceneMotion } from '@/components/LandingV2/composables/useSceneMotion';
-import type { HeroWallProps } from '@/components/LandingV2/heroWallLayout';
+import HeroWall from '@/components/Home/HeroWall.vue';
+import { useSceneMotion } from '@/components/Home/composables/useSceneMotion';
+import type { HeroWallProps } from '@/components/Home/heroWallLayout';
 
-import { startHeroSession } from '@/components/LandingV3/glHeroSession';
-import { useWebglSupport } from '@/components/LandingV3/useWebglSupport';
+import { startHeroSession } from '@/components/Home/glHeroSession';
+import { useWebglSupport } from '@/components/Home/useWebglSupport';
 
 /**
- * /v3 hero wall. The DOM HeroWall always renders first (it is the LCP and the
+ * Home hero wall. The DOM HeroWall always renders first (it is the LCP and the
  * fallback); on desktop with motion allowed and WebGL available, a canvas inside
  * its clip box takes over once every texture is ready.
  */

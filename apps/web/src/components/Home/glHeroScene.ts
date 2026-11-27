@@ -1,5 +1,5 @@
 /**
- * Builds and draws the /v3 hero wall: one textured, segmented quad per tile, all
+ * Builds and draws the home hero wall: one textured, segmented quad per tile, all
  * sharing one shader program. Frame state comes in; nothing here reads the DOM.
  */
 import type { Mesh, Program, Texture, Transform } from 'ogl';
@@ -12,7 +12,7 @@ import {
   type WallPointer,
   type WallProgress,
   type WallTile,
-} from '@/components/LandingV2/heroWallLayout';
+} from '@/components/Home/heroWallLayout';
 
 import {
   coverScale,
@@ -24,10 +24,10 @@ import {
   tileShadow,
   type TileQuad,
   type TileShadow,
-} from '@/components/LandingV3/glHeroGeometry';
-import { HERO_FRAGMENT, HERO_VERTEX } from '@/components/LandingV3/glHeroShaders';
-import { createSpotlightYield } from '@/components/LandingV3/glSpotlightYield';
-import type { GlStage, GlStageSize } from '@/components/LandingV3/glStage';
+} from '@/components/Home/glHeroGeometry';
+import { HERO_FRAGMENT, HERO_VERTEX } from '@/components/Home/glHeroShaders';
+import { createSpotlightYield } from '@/components/Home/glSpotlightYield';
+import type { GlStage, GlStageSize } from '@/components/Home/glStage';
 
 /** Enough vertices for the exit bow to read as a curve rather than a fold. */
 const PLANE_SEGMENTS = 16;

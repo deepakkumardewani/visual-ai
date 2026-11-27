@@ -1,5 +1,5 @@
 /**
- * Shaders for the /v3 showcase. One program draws every print; per-tile values
+ * Shaders for the home showcase. One program draws every print; per-tile values
  * arrive as uniforms. Lengths are CSS pixels, y down, origin at the canvas's
  * top-left corner, matching the DOM rows' layout boxes.
  */
@@ -66,7 +66,7 @@ void main() {
   float inside = 1.0 - smoothstep(-0.75, 0.75, edge);
 
   vec3 color = sampleSplit(ripple(vLocal / uSize));
-  // The /v2 spotlight fades an image over its tile backing, not over the page.
+  // The DOM spotlight fades an image over its tile backing, not over the page.
   color = mix(uBacking, color, uDim);
   gl_FragColor = vec4(color * inside, inside);
 }

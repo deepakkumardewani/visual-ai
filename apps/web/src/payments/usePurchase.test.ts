@@ -55,7 +55,7 @@ describe('usePurchase', () => {
     const getUserDetails = vi.spyOn(userStore, 'getUserDetails').mockResolvedValue(undefined);
 
     const { start } = usePurchase();
-    const outcomePromise = start('pack_200');
+    const outcomePromise = start('pack_300');
 
     await vi.runAllTimersAsync();
     const outcome = await outcomePromise;
@@ -78,7 +78,7 @@ describe('usePurchase', () => {
     fetchCheckoutStatus.mockResolvedValue({ status: 'failed' });
 
     const { start } = usePurchase();
-    const outcome = await start('pack_200');
+    const outcome = await start('pack_300');
 
     expect(outcome).toBe('failed');
     const appStore = useAppStore();
@@ -94,7 +94,7 @@ describe('usePurchase', () => {
     fetchCheckoutStatus.mockResolvedValue({ status: 'pending' });
 
     const { start } = usePurchase();
-    const outcomePromise = start('pack_200');
+    const outcomePromise = start('pack_300');
 
     await vi.advanceTimersByTimeAsync(PAYMENT_POLL_TIMEOUT_MS + PAYMENT_POLL_INTERVAL_MS);
     const outcome = await outcomePromise;
@@ -109,7 +109,7 @@ describe('usePurchase', () => {
     createCheckoutSession.mockRejectedValue(new CheckoutClientError('Could not start checkout'));
 
     const { start } = usePurchase();
-    const outcome = await start('pack_200');
+    const outcome = await start('pack_300');
 
     expect(outcome).toBe('failed');
     expect(openDodoCheckout).not.toHaveBeenCalled();
@@ -124,7 +124,7 @@ describe('usePurchase', () => {
     appStore.snackbarText = 'unchanged';
 
     const { start } = usePurchase();
-    const outcome = await start('pack_200');
+    const outcome = await start('pack_300');
 
     expect(outcome).toBe('failed');
     expect(appStore.snackbarText).toBe('unchanged');
@@ -148,8 +148,8 @@ describe('usePurchase', () => {
     fetchCheckoutStatus.mockResolvedValue({ status: 'succeeded' });
 
     const purchase = usePurchase();
-    const first = purchase.start('pack_200');
-    const second = await purchase.start('pack_200');
+    const first = purchase.start('pack_300');
+    const second = await purchase.start('pack_300');
 
     expect(second).toBe('cancelled');
     expect(createCheckoutSession).toHaveBeenCalledTimes(1);

@@ -36,20 +36,21 @@ let useUserStore: typeof import('@/stores/user').useUserStore;
 
 const packs = [...CREDIT_PACKS];
 
-const PACK_200_EUR_MINOR = 250;
-
 function mockPricesResponse(data: unknown, error: unknown = null) {
   vi.mocked(useFetch).mockReturnValue({
     json: async () => ({ data: { value: data }, error: { value: error } }),
   } as unknown as ReturnType<typeof useFetch>);
 }
 
-const EUR_PRICES = {
-  country: 'DE',
-  currency: 'EUR',
-  isEstimate: true,
-  pro: { amountMinor: 450, currency: 'EUR' },
-  packs: [{ id: 'pack_200', amountMinor: PACK_200_EUR_MINOR, currency: 'EUR' }],
+const INR_PRICES = {
+  country: 'IN',
+  currency: 'INR',
+  pro: { amountMinor: 500, currency: 'USD' },
+  packs: CREDIT_PACKS.map((pack) => ({
+    id: pack.id,
+    amountMinor: pack.prices.INR,
+    currency: 'INR',
+  })),
 };
 
 const stubs = {
@@ -73,14 +74,19 @@ describe('PricingPacks', () => {
     mockPricesResponse(null, new Error('offline'));
   });
 
-  it('renders credit packs and features the best savings', () => {
+  it('renders the four packs in USD with per-currency savings', () => {
     const wrapper = mount(PricingPacks, {
       props: { packs },
       global: { stubs },
     });
-    expect(wrapper.text()).toMatch(/200 credits|2000 credits/i);
-    expect(wrapper.find('.pack--featured').text()).toContain('2000 credits');
-    expect(wrapper.text()).toContain('₹45.00 per 100 credits');
+    const articles = wrapper.findAll('article');
+    expect(articles).toHaveLength(4);
+    expect(articles[0].text()).toContain('$5.00');
+    expect(articles[0].text()).not.toContain('Save');
+    expect(articles[1].text()).toContain('Save 14%');
+    expect(articles[2].text()).toContain('Save 25%');
+    expect(articles[3].text()).toContain('Save 33%');
+    expect(wrapper.text()).toContain('$1.25 per 100 credits');
   });
 
   it('sends signed-out buyers to sign in', async () => {
@@ -99,14 +105,18 @@ describe('PricingPacks', () => {
     expect(startPurchase).not.toHaveBeenCalled();
   });
 
-  it('lists the featured pack first in the grid', () => {
+  it('keeps natural order and emphasises the popular third pack', () => {
     const wrapper = mount(PricingPacks, {
       props: { packs },
       global: { stubs },
     });
     const articles = wrapper.findAll('article');
-    expect(articles[0].classes()).toContain('pack--featured');
-    expect(articles[0].text()).toContain('2000 credits');
+    expect(articles.map((article) => article.attributes('data-testid'))).toEqual(
+      CREDIT_PACKS.map((pack) => `pack-${pack.id}`),
+    );
+    expect(articles[2].classes()).toContain('pack--popular');
+    expect(articles[2].text()).toContain('Most popular');
+    expect(wrapper.findAll('.pack--popular')).toHaveLength(1);
   });
 
   it('shows opening checkout while purchase is in flight', async () => {
@@ -145,24 +155,23 @@ describe('PricingPacks', () => {
       props: { packs },
       global: { stubs },
     });
-    await wrapper
-      .findAll('button')
-      .find((btn) => btn.text().includes('Buy this pack'))!
-      .trigger('click');
+    await wrapper.get('[data-testid="pack-pack_1600"] button').trigger('click');
     await flushPromises();
-    expect(startPurchase).toHaveBeenCalledWith('pack_2000');
+    expect(startPurchase).toHaveBeenCalledWith('pack_1600');
   });
 
-  it('shows localized pack prices once /payments/prices resolves', async () => {
-    mockPricesResponse(EUR_PRICES);
+  it('shows INR prices and INR savings when the server resolves India', async () => {
+    mockPricesResponse(INR_PRICES);
     const wrapper = mount(PricingPacks, {
       props: { packs },
       global: { stubs },
     });
     await flushPromises();
-    const pack200 = wrapper.findAll('article').find((a) => a.text().includes('200 credits'))!;
-    expect(pack200.text()).toContain('€2.50');
-    expect(pack200.text()).toContain('€1.25 per 100 credits');
-    expect(pack200.text()).not.toContain('₹');
+    const articles = wrapper.findAll('article');
+    expect(articles[0].text()).toMatch(/₹\s?249/);
+    expect(articles[0].text()).not.toContain('$');
+    expect(articles[1].text()).toContain('Save 5%');
+    expect(articles[2].text()).toContain('Save 13%');
+    expect(articles[3].text()).toContain('Save 19%');
   });
 });

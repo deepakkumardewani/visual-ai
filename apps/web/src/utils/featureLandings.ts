@@ -1,4 +1,13 @@
+import { getCategoryCreditRange } from '@visual-ai/shared';
+
 import { FeatureType } from '@/types';
+import {
+  formatCredits,
+  formatCreditsRange,
+  premiumUpscaleCreditRange,
+  standardUpscaleCreditRange,
+  transformCreditsLabel,
+} from '@/utils/creditCopy';
 import {
   colorizeFreeTierFaqAnswer,
   freeTierSignupFaqAnswer,
@@ -43,7 +52,7 @@ export const FEATURE_LANDINGS: FeatureLandingCopy[] = [
     howHeading: 'How to generate an image',
     steps: [
       'Open the generator and write a clear prompt (subject, lighting, style).',
-      'Choose a model — faster drafts cost 1 credit; higher-fidelity models cost more.',
+      `Choose a model — faster drafts cost ${formatCredits(getCategoryCreditRange('generation').min)}; higher-fidelity models cost more.`,
       'Pick an aspect ratio and generate. Download JPG, PNG, or WebP.',
     ],
     ctaLabel: 'Generate an image',
@@ -73,12 +82,11 @@ export const FEATURE_LANDINGS: FeatureLandingCopy[] = [
     description:
       'Upscale photos to 4K with AI on Visual AI. Compare models, keep edges sharp, and pay in credits — not a monthly Pro plan. Start with free daily credits.',
     h1: 'AI image upscaler — sharper 4K without mush',
-    definition:
-      'Visual AI’s image upscaler rebuilds detail so a small photo can reach up to 4K. Utility upscalers cost 2 credits; Clarity Pro and Topaz cost 4. Compare outputs on /compare, then run the same models on your file.',
+    definition: `Visual AI’s image upscaler rebuilds detail so a small photo can reach up to 4K. Standard upscalers cost ${formatCreditsRange(standardUpscaleCreditRange())}; Clarity Pro and Topaz cost ${formatCreditsRange(premiumUpscaleCreditRange())}. Compare outputs on /compare, then run the same models on your file.`,
     howHeading: 'How to upscale an image',
     steps: [
       'Upload a JPG, PNG, or WebP on the upscaler.',
-      'Pick a model. Start with a 2-credit upscaler; use premium models when you need extra texture.',
+      `Pick a model. Start with a ${formatCredits(standardUpscaleCreditRange().min)} upscaler; use premium models when you need extra texture.`,
       'Download the result. Side-by-side model samples live on the compare page.',
     ],
     ctaLabel: 'Open the upscaler',
@@ -90,8 +98,7 @@ export const FEATURE_LANDINGS: FeatureLandingCopy[] = [
       },
       {
         question: 'How many credits does upscaling cost?',
-        answer:
-          'Standard upscalers are 2 credits. Premium upscalers (Clarity Pro, Topaz) are 4 credits. Daily and purchased credits both apply.',
+        answer: `Standard upscalers are ${formatCreditsRange(standardUpscaleCreditRange())}. Premium upscalers (Clarity Pro, Topaz) are ${formatCreditsRange(premiumUpscaleCreditRange())}. Daily and purchased credits both apply.`,
       },
       {
         question: 'Where can I compare upscale models?',
@@ -107,11 +114,9 @@ export const FEATURE_LANDINGS: FeatureLandingCopy[] = [
     keyword: 'colorize black and white photo',
     navLabel: 'Colorize',
     title: 'Colorize Black and White Photos | Visual AI',
-    description:
-      'Colorize a black and white photo with AI. Visual AI adds period-appropriate color to family and archival scans. 2 credits per run, free daily credits to start.',
+    description: `Colorize a black and white photo with AI. Visual AI adds period-appropriate color to family and archival scans. ${transformCreditsLabel('colorize')} per run, free daily credits to start.`,
     h1: 'Colorize black and white photos with AI',
-    definition:
-      'Upload a monochrome scan and Visual AI predicts natural color — skin, fabric, sky — without a desktop plugin. Colorize costs 2 credits per image. It is built for family archives, not for inventing a new scene; keep the original file as your master.',
+    definition: `Upload a monochrome scan and Visual AI predicts natural color — skin, fabric, sky — without a desktop plugin. Colorize costs ${transformCreditsLabel('colorize')} per image. It is built for family archives, not for inventing a new scene; keep the original file as your master.`,
     howHeading: 'How do I colorize an old photo?',
     steps: [
       'Scan or photograph the print so the subject is sharp and well lit.',
@@ -122,8 +127,7 @@ export const FEATURE_LANDINGS: FeatureLandingCopy[] = [
     faqs: [
       {
         question: 'How do I colorize an old photo?',
-        answer:
-          'Open /create/colorize, upload a black-and-white scan, run colorize (2 credits), and download PNG, JPG, or WebP. For torn prints, restore first, then colorize.',
+        answer: `Open /create/colorize, upload a black-and-white scan, run colorize (${transformCreditsLabel('colorize')}), and download PNG, JPG, or WebP. For torn prints, restore first, then colorize.`,
       },
       {
         question: 'Will the colors look historically accurate?',
@@ -143,15 +147,13 @@ export const FEATURE_LANDINGS: FeatureLandingCopy[] = [
     keyword: 'restore old photos',
     navLabel: 'Restore',
     title: 'Restore Old Photos with AI | Visual AI',
-    description:
-      'Restore old photos with AI: repair scratches, fading, and creases. Visual AI Revive is 2 credits per image, with free daily credits and optional colorize after repair.',
+    description: `Restore old photos with AI: repair scratches, fading, and creases. Visual AI Revive is ${transformCreditsLabel('revive')} per image, with free daily credits and optional colorize after repair.`,
     h1: 'Restore old photos — scratches, fade, and tears',
-    definition:
-      'Revive is Visual AI’s photo restorer. It reduces scratches, creases, and age noise so faces and handwriting are readable again. A restore costs 2 credits. Pair it with Colorize when the print is black and white. Files stay in your account; we do not claim ownership of your family photos.',
+    definition: `Revive is Visual AI’s photo restorer. It reduces scratches, creases, and age noise so faces and handwriting are readable again. A restore costs ${transformCreditsLabel('revive')}. Pair it with Colorize when the print is black and white. Files stay in your account; we do not claim ownership of your family photos.`,
     howHeading: 'How to restore a damaged print',
     steps: [
       'Photograph the print flat, with even light and no glare.',
-      'Upload to Revive and run a restore (2 credits).',
+      `Upload to Revive and run a restore (${transformCreditsLabel('revive')}).`,
       'If the original is monochrome, send the result to Colorize next.',
     ],
     ctaLabel: 'Restore a photo',
@@ -168,8 +170,7 @@ export const FEATURE_LANDINGS: FeatureLandingCopy[] = [
       },
       {
         question: 'How much does photo restore cost?',
-        answer:
-          '2 credits per run. Use daily credits or bought packs. Credits you purchase do not expire.',
+        answer: `${transformCreditsLabel('revive')} per run. Use daily credits or bought packs. Credits you purchase do not expire.`,
       },
     ],
   },
@@ -180,15 +181,13 @@ export const FEATURE_LANDINGS: FeatureLandingCopy[] = [
     keyword: 'AI background remover',
     navLabel: 'Remove background',
     title: 'AI Background Remover | Visual AI',
-    description:
-      'Remove image backgrounds with AI in the browser. Visual AI isolates the subject for listings and composites. 2 credits per image, free daily credits, PNG download.',
+    description: `Remove image backgrounds with AI in the browser. Visual AI isolates the subject for listings and composites. ${transformCreditsLabel('remove_bg')} per image, free daily credits, PNG download.`,
     h1: 'AI background remover for product and portraits',
-    definition:
-      'Visual AI’s background remover isolates the subject so you can drop it on a new backdrop or keep a transparent PNG. Each run costs 2 credits. It is a photo tool in the same studio as generate, upscale, colorize, and restore — not a separate desktop app.',
+    definition: `Visual AI’s background remover isolates the subject so you can drop it on a new backdrop or keep a transparent PNG. Each run costs ${transformCreditsLabel('remove_bg')}. It is a photo tool in the same studio as generate, upscale, colorize, and restore — not a separate desktop app.`,
     howHeading: 'How to remove a background',
     steps: [
       'Upload a photo with a clear subject.',
-      'Run Remove background (2 credits).',
+      `Run Remove background (${transformCreditsLabel('remove_bg')}).`,
       'Download a transparent PNG, or composite in your editor.',
     ],
     ctaLabel: 'Remove a background',
@@ -200,7 +199,7 @@ export const FEATURE_LANDINGS: FeatureLandingCopy[] = [
       },
       {
         question: 'How many credits does background removal cost?',
-        answer: '2 credits per image. Daily credits and purchased credits both work.',
+        answer: `${transformCreditsLabel('remove_bg')} per image. Daily credits and purchased credits both work.`,
       },
       {
         question: 'Does it work on product shots and portraits?',

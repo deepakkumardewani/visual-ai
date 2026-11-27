@@ -6,7 +6,7 @@ import {
   rowDriftRange,
   type DriftRange,
   type RowDirection,
-} from '@/components/LandingV2/showcaseLayout';
+} from '@/components/Home/showcaseLayout';
 
 /** Per-frame share of the gap closed toward the scroll target; gives the drift a little weight. */
 const DRIFT_EASE = 0.1;

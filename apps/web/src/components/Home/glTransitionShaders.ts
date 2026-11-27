@@ -1,5 +1,5 @@
 /**
- * Shaders for the /v3 scene-handover veil: one full-screen triangle of animated
+ * Shaders for the home scene-handover veil: one full-screen triangle of animated
  * film grain over a soft edge darkening. Every term scales with `uStrength`, so
  * 0 draws a fully transparent frame.
  */

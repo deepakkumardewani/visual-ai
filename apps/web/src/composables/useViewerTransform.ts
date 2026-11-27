@@ -12,10 +12,8 @@ import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
 
 import { MODEL_IDS } from '@/utils/constants';
+import { getTransformCreditCost } from '@/utils/generationCredits';
 import { createLogger } from '@/utils/logger';
-
-/** Credit cost for viewer transform actions (utility models) */
-const TRANSFORM_CREDIT_COST = 2;
 
 export type ViewerTransformAction = 'upscale' | 'colorize' | 'remove_bg';
 
@@ -54,7 +52,6 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
   const resultItem = ref<IImageObject | null>(null);
   const resultIsTransparent = ref(false);
 
-  const creditCost = TRANSFORM_CREDIT_COST;
   const isProcessing = computed(() => processingAction.value !== null);
   const processingLabel = computed(() =>
     processingAction.value ? `${ACTION_LABELS[processingAction.value]}…` : '',
@@ -68,12 +65,12 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
     resultIsTransparent.value = false;
   }
 
-  function guardCredits(): boolean {
+  function guardCredits(action: ViewerTransformAction): boolean {
     if (!isSignedIn.value) {
       dialogStore.showSignup();
       return false;
     }
-    if (credits.value < creditCost) {
+    if (credits.value < getTransformCreditCost(action)) {
       dialogStore.showLowCredits();
       return false;
     }
@@ -105,7 +102,7 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
 
   async function startAction(action: ViewerTransformAction) {
     if (isProcessing.value) return;
-    if (!guardCredits()) return;
+    if (!guardCredits(action)) return;
 
     processingAction.value = action;
     resetResult();
@@ -191,7 +188,6 @@ export function useViewerTransform(item: Ref<ExploreFeedItem>) {
   );
 
   return {
-    creditCost,
     isProcessing,
     processingAction,
     processingLabel,

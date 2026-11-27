@@ -30,7 +30,7 @@ const { colorizeInProgress } = storeToRefs(generateStore);
 
 const imageUpload = ref<InstanceType<typeof ImageUpload> | null>(null);
 const canSubmit = computed(() => Boolean(imageUpload.value?.image) && !colorizeInProgress.value);
-const creditCost = getTransformCreditCost();
+const creditCost = getTransformCreditCost('colorize');
 
 async function colorizeImage() {
   if (!isSignedIn.value) {

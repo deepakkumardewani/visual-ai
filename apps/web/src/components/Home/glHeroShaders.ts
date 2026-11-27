@@ -1,5 +1,5 @@
 /**
- * Shaders for the /v3 hero wall. One program draws every tile; per-tile values
+ * Shaders for the home hero wall. One program draws every tile; per-tile values
  * arrive as uniforms. All lengths are CSS pixels, y pointing down, origin at the
  * canvas's top-left corner, so they line up with the DOM wall's layout maths.
  */

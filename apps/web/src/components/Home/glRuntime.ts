@@ -1,7 +1,7 @@
 /**
- * Runtime pieces every /v3 WebGL layer shares: decoding texture images and a
+ * Runtime pieces every home WebGL layer shares: decoding texture images and a
  * frame loop that only runs while its element is on screen. Imported only by
- * LandingV3 GL sessions, so it never reaches the /v2 chunks.
+ * the GL sessions, so pages without WebGL never load it.
  */
 
 /** Decodes `url` off the main thread; rejects with the owner named for the logs. */

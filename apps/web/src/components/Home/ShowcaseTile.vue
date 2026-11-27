@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { toCssAspectRatio } from '@/components/LandingV2/showcaseLayout';
-import { useShowcaseCopy } from '@/components/LandingV2/useShowcaseCopy';
+import { toCssAspectRatio } from '@/components/Home/showcaseLayout';
+import { useShowcaseCopy } from '@/components/Home/useShowcaseCopy';
 import type { GalleryItem } from '@/utils/landing';
 
 const props = withDefaults(
@@ -122,47 +122,47 @@ const ratio = computed(() =>
   height: 100%;
   object-fit: cover;
   transition:
-    opacity 420ms var(--lv2-ease-out),
-    transform 900ms var(--lv2-ease-out);
+    opacity 420ms var(--home-ease-out),
+    transform 900ms var(--home-ease-out);
 }
 
 .tile__copy {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: 0 var(--lv2-space-md);
+  padding: 0 var(--home-space-md);
   /* Solid surface, brighter hairline and a static drop so it reads on any image. */
   border: 1px solid rgb(var(--tw-ink-primary) / 0.28);
   border-radius: 9999px;
   background-color: rgb(var(--tw-canvas));
   box-shadow: 0 6px 20px rgb(0 0 0 / 0.5);
   color: rgb(var(--tw-ink-primary));
-  font: 600 var(--lv2-text-small) / 1 var(--lv2-font-body);
+  font: 600 var(--home-text-small) / 1 var(--home-font-body);
   cursor: pointer;
   transition:
-    opacity 260ms var(--lv2-ease-out),
-    transform 260ms var(--lv2-ease-out);
+    opacity 260ms var(--home-ease-out),
+    transform 260ms var(--home-ease-out);
 
   &:hover {
-    border-color: var(--lv2-copper);
+    border-color: var(--home-copper);
   }
 }
 
 /* The one gold moment in this scene: a prompt has just landed on the clipboard. */
 .tile__copy--copied {
-  color: var(--lv2-gold);
-  border-color: var(--lv2-gold);
+  color: var(--home-gold);
+  border-color: var(--home-gold);
 }
 
 .tile__copy--failed {
-  color: var(--lv2-copper-text);
+  color: var(--home-copper-text);
 }
 
 /* Desktop row tile: fixed height from the row, width from the image's real ratio. */
 .tile--row {
   height: 100%;
   aspect-ratio: var(--tile-ratio);
-  transition: transform 520ms var(--lv2-ease-out);
+  transition: transform 520ms var(--home-ease-out);
 
   .tile__media {
     height: 100%;
@@ -177,17 +177,17 @@ const ratio = computed(() =>
     border-radius: 12px;
     box-shadow: 0 30px 70px rgb(0 0 0 / 0.65);
     opacity: 0;
-    transition: opacity 520ms var(--lv2-ease-out);
+    transition: opacity 520ms var(--home-ease-out);
     pointer-events: none;
   }
 
   .tile__copy {
     position: absolute;
-    bottom: var(--lv2-space-sm);
+    bottom: var(--home-space-sm);
     /* Centred and compact so it fits the narrowest portrait tile in the short row. */
     left: 50%;
     translate: -50% 0;
-    padding-inline: var(--lv2-space-sm);
+    padding-inline: var(--home-space-sm);
     white-space: nowrap;
     /* Hidden by opacity only, so keyboard users can still tab onto it. */
     opacity: 0;
@@ -223,7 +223,7 @@ const ratio = computed(() =>
 .tile--rail {
   display: flex;
   flex-direction: column;
-  gap: var(--lv2-space-sm);
+  gap: var(--home-space-sm);
   align-items: flex-start;
   width: min(80vw, 22rem);
   height: 100%;
@@ -234,8 +234,8 @@ const ratio = computed(() =>
 }
 
 .tile__caption {
-  font-size: var(--lv2-text-small);
-  line-height: var(--lv2-leading-body);
+  font-size: var(--home-text-small);
+  line-height: var(--home-leading-body);
   color: rgb(var(--tw-ink-secondary));
   text-wrap: pretty;
 }

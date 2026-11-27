@@ -1,11 +1,11 @@
 /**
- * Builds and draws the /v3 handover veil: one full-screen triangle, one program.
+ * Builds and draws the home handover veil: one full-screen triangle, one program.
  * Frame state comes in; nothing here reads the DOM.
  */
 import type { Mesh } from 'ogl';
 
-import type { GlStage } from '@/components/LandingV3/glStage';
-import { TRANSITION_FRAGMENT, TRANSITION_VERTEX } from '@/components/LandingV3/glTransitionShaders';
+import type { GlStage } from '@/components/Home/glStage';
+import { TRANSITION_FRAGMENT, TRANSITION_VERTEX } from '@/components/Home/glTransitionShaders';
 
 /**
  * Grain is drawn at one device pixel per CSS pixel: on a 2x screen the specks

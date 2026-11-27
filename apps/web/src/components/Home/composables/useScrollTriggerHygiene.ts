@@ -17,7 +17,7 @@ export function useScrollTriggerHygiene(): void {
       .then(() => {
         if (active) ScrollTrigger.refresh();
       })
-      .catch((error: Error) => console.error('[LandingV2] font load before refresh failed', error));
+      .catch((error: Error) => console.error('[Home] font load before refresh failed', error));
   });
 
   onBeforeUnmount(() => {

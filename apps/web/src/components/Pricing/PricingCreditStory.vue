@@ -1,7 +1,15 @@
 <script setup lang="ts">
-import { DAILY_CREDITS, SIGNUP_CREDITS } from '@visual-ai/shared';
+import { DAILY_CREDITS, formatCreditRange, SIGNUP_CREDITS } from '@visual-ai/shared';
 
+import { creditEconomyLines, creditEconomyPhrase } from '@/utils/creditCopy';
 import { dailyResetLabel } from '@/utils/dailyReset';
+
+const economy = creditEconomyLines();
+const overallRange = {
+  min: Math.min(...economy.map((line) => line.range.min)),
+  max: Math.max(...economy.map((line) => line.range.max)),
+};
+const economyCopy = economy.map((line) => `${creditEconomyPhrase(line)}.`).join(' ');
 
 const beats = [
   {
@@ -16,8 +24,8 @@ const beats = [
   },
   {
     label: 'Pay Per Use',
-    value: '1–5',
-    copy: 'Budget generation is 1 credit. Utilities are 2. Premium upscalers are 4 and premium generation is 5. The studio shows the cost before you run.',
+    value: formatCreditRange(overallRange),
+    copy: `${economyCopy} Each model is priced by what it costs us to run, and the studio shows the cost before you run.`,
   },
 ] as const;
 </script>

@@ -1,12 +1,12 @@
 /**
- * Builds and draws the /v3 showcase prints: one textured quad per tile, all
+ * Builds and draws the home showcase prints: one textured quad per tile, all
  * sharing one shader program. Frame state comes in; nothing here reads the DOM.
  */
 import type { Mesh, Program, Texture, Transform } from 'ogl';
 
-import { coverScale } from '@/components/LandingV3/glHeroGeometry';
-import { SHOWCASE_FRAGMENT, SHOWCASE_VERTEX } from '@/components/LandingV3/glShowcaseShaders';
-import type { GlStage, GlStageSize } from '@/components/LandingV3/glStage';
+import { coverScale } from '@/components/Home/glHeroGeometry';
+import { SHOWCASE_FRAGMENT, SHOWCASE_VERTEX } from '@/components/Home/glShowcaseShaders';
+import type { GlStage, GlStageSize } from '@/components/Home/glStage';
 
 /** Matches ShowcaseTile's `.tile__media { border-radius: 12px }`. */
 const TILE_RADIUS_PX = 12;

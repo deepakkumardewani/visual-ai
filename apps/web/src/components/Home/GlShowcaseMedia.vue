@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import ShowcaseMedia from '@/components/LandingV2/ShowcaseMedia.vue';
-import { useSceneMotion } from '@/components/LandingV2/composables/useSceneMotion';
-import type { ShowcaseMediaProps } from '@/components/LandingV2/showcaseLayout';
+import ShowcaseMedia from '@/components/Home/ShowcaseMedia.vue';
+import { useSceneMotion } from '@/components/Home/composables/useSceneMotion';
+import type { ShowcaseMediaProps } from '@/components/Home/showcaseLayout';
 
-import { startShowcaseSession } from '@/components/LandingV3/glShowcaseSession';
-import { useWebglSupport } from '@/components/LandingV3/useWebglSupport';
+import { startShowcaseSession } from '@/components/Home/glShowcaseSession';
+import { useWebglSupport } from '@/components/Home/useWebglSupport';
 
 /**
- * /v3 showcase media. The DOM media always renders (drifting rows on desktop, the
+ * Home showcase media. The DOM media always renders (drifting rows on desktop, the
  * swipe rail on mobile) and keeps layout, focus and labels; on desktop with motion
  * allowed and WebGL available, a canvas under the rows paints the prints instead.
  */
@@ -46,7 +46,7 @@ useSceneMotion(root, ({ isDesktop, motionOk }, el) => {
  */
 .gl-showcase__stage {
   position: absolute;
-  inset: calc(-1 * var(--lv2-space-lg)) 0;
+  inset: calc(-1 * var(--home-space-lg)) 0;
   z-index: -1;
   pointer-events: none;
 }

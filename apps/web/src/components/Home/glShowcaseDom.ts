@@ -1,9 +1,9 @@
 /**
- * The DOM touches the WebGL showcase needs from the /v2 `ShowcaseRows` it sits
+ * The DOM touches the WebGL showcase needs from the DOM `ShowcaseRows` it sits
  * under: which elements to track, what the tile backing colour is, and what to
  * hide during the handover. The rows themselves stay for layout, focus and labels.
  */
-import { CROSSFADE_MS } from '@/components/LandingV3/glHeroDom';
+import { CROSSFADE_MS } from '@/components/Home/glHeroDom';
 
 const TRACK_SELECTOR = '.rows__track';
 const CELL_SELECTOR = '.rows__cell';
@@ -59,7 +59,7 @@ export const allTiles = (rows: readonly ShowcaseRowEls[]): ShowcaseTileEls[] =>
 
 /**
  * The tile's own backing colour (0..1 RGB), read before the handover clears it.
- * The /v2 spotlight dims an image over this colour, so GL dims toward it too.
+ * The DOM spotlight dims an image over this colour, so GL dims toward it too.
  */
 export function readBackingColor(tile: ShowcaseTileEls): readonly [number, number, number] {
   const channels = getComputedStyle(tile.media)

@@ -3,11 +3,7 @@ import { computed } from 'vue';
 
 import type { ToolChapter } from '@/utils/landing';
 
-import {
-  STAGE_ASPECT_RATIO,
-  clusterLayout,
-  type ClusterCard,
-} from '@/components/LandingV2/toolsMedia';
+import { STAGE_ASPECT_RATIO, clusterLayout, type ClusterCard } from '@/components/Home/toolsMedia';
 
 const props = defineProps<{
   tool: ToolChapter;

@@ -23,7 +23,7 @@ const log = createLogger('aside');
 const IMAGE_INPUT_FEATURES = new Set<string>([FeatureType.UPSCALE, FeatureType.REMOVE_BG]);
 
 const DEFAULT_REGISTRY_ENTRY = MODEL_REGISTRY.FLUX_BASIC;
-const DEFAULT_MODE: Model = {
+export const DEFAULT_MODE: Model = {
   ...FLUX_MODES[0],
   tier: DEFAULT_REGISTRY_ENTRY.tier,
   pricePerImage: DEFAULT_REGISTRY_ENTRY.pricePerImage,

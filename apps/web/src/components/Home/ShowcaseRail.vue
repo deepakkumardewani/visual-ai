@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useReducedMotion } from '@/composables/useReducedMotion';
-import ShowcaseTile from '@/components/LandingV2/ShowcaseTile.vue';
+import ShowcaseTile from '@/components/Home/ShowcaseTile.vue';
 import type { GalleryItem } from '@/utils/landing';
 
 defineProps<{
@@ -53,16 +53,16 @@ function revealFocusedCell(event: FocusEvent): void {
 <style scoped lang="scss">
 .rail {
   display: flex;
-  gap: var(--lv2-space-lg);
+  gap: var(--home-space-lg);
   /* Stretch so every card is as tall as the longest; copy buttons share one baseline. */
   align-items: stretch;
   margin: 0;
-  padding: var(--lv2-space-2xs) var(--lv2-gutter) var(--lv2-space-md);
+  padding: var(--home-space-2xs) var(--home-gutter) var(--home-space-md);
   list-style: none;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
-  scroll-padding-inline: var(--lv2-gutter);
+  scroll-padding-inline: var(--home-gutter);
   scrollbar-width: none;
 
   &::-webkit-scrollbar {

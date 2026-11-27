@@ -1,8 +1,8 @@
 /**
  * Per-frame state the WebGL showcase reads from the page: where each tile sits,
- * how the /v2 hover treatment has progressed, and how fast the page scrolls.
+ * how the DOM hover treatment has progressed, and how fast the page scrolls.
  */
-import type { ShowcaseRowEls, ShowcaseTileEls } from '@/components/LandingV3/glShowcaseDom';
+import type { ShowcaseRowEls, ShowcaseTileEls } from '@/components/Home/glShowcaseDom';
 
 const ACTIVE_QUERY = ':hover, :focus-within';
 /** Mirrors ShowcaseTile's hover `.tile__img { transform: scale(1.04) }` over 900ms. */
@@ -32,7 +32,7 @@ export interface TileBox {
   readonly height: number;
 }
 
-/** The /v2 hover treatment for one tile, as it stands this frame. */
+/** The DOM hover treatment for one tile, as it stands this frame. */
 export interface TileLook {
   /** Vertical lift in px (negative is up), read from the figure's live transform. */
   lift: number;

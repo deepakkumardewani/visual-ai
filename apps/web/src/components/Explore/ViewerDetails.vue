@@ -14,7 +14,7 @@ import {
   faWandMagicSparkles,
 } from '@/plugins/icons';
 import { getAuthorAvatarColor } from '@/utils/authorAvatarColor';
-import { getTransformCreditCost } from '@/utils/generationCredits';
+import { getTransformCreditCost, type TransformAction } from '@/utils/generationCredits';
 
 const props = defineProps<{
   item: ExploreFeedItem;
@@ -36,8 +36,10 @@ const emit = defineEmits<{
 }>();
 
 const { interactiveTransition, pressable } = useDashboardMotion();
-const creditCost = getTransformCreditCost();
-const creditLabel = `${creditCost} credit${creditCost === 1 ? '' : 's'}`;
+function creditLabel(action: TransformAction): string {
+  const cost = getTransformCreditCost(action);
+  return `${cost} credit${cost === 1 ? '' : 's'}`;
+}
 
 const authorInitials = computed(() => {
   const parts = props.item.author.trim().split(/\s+/).filter(Boolean);
@@ -172,7 +174,7 @@ const downloadLabel = computed(() => (props.hasResult ? 'Download result' : 'Dow
                 <font-awesome-icon :icon="faExpand" aria-hidden="true" />
                 Upscale this
               </span>
-              <span class="viewer-details__credit">{{ creditLabel }}</span>
+              <span class="viewer-details__credit">{{ creditLabel('upscale') }}</span>
             </button>
             <button
               type="button"
@@ -186,7 +188,7 @@ const downloadLabel = computed(() => (props.hasResult ? 'Download result' : 'Dow
                 <font-awesome-icon :icon="faPalette" aria-hidden="true" />
                 Colorize
               </span>
-              <span class="viewer-details__credit">{{ creditLabel }}</span>
+              <span class="viewer-details__credit">{{ creditLabel('colorize') }}</span>
             </button>
             <button
               type="button"
@@ -200,7 +202,7 @@ const downloadLabel = computed(() => (props.hasResult ? 'Download result' : 'Dow
                 <font-awesome-icon :icon="faObjectUngroup" aria-hidden="true" />
                 Remove background
               </span>
-              <span class="viewer-details__credit">{{ creditLabel }}</span>
+              <span class="viewer-details__credit">{{ creditLabel('remove_bg') }}</span>
             </button>
           </div>
         </section>

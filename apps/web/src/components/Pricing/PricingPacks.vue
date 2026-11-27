@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, shallowRef } from 'vue';
+import { onMounted, shallowRef } from 'vue';
 
 import { useRouter } from 'vue-router';
 
@@ -9,34 +9,22 @@ import { usePurchase } from '@/payments/usePurchase';
 import { useUserStore } from '@/stores/user';
 import type { CreditPack } from '@visual-ai/shared';
 
-const props = defineProps<{
+defineProps<{
   packs: CreditPack[];
 }>();
 
 const router = useRouter();
 const userStore = useUserStore();
 const { start } = usePurchase();
-const { formatPackPrice, formatPackPer100Credits, loadPrices } = usePricingCatalog();
+const { formatPackPrice, formatPackPer100Credits, packSavingsPercent, loadPrices } =
+  usePricingCatalog();
 const buyingId = shallowRef<string | null>(null);
 
 onMounted(loadPrices);
 
-const featuredId = computed(() => {
-  return props.packs.reduce((best, pack) => {
-    return pack.savingsPercent > best.savingsPercent ? pack : best;
-  }, props.packs[0]).id;
-});
-
-const orderedPacks = computed(() => {
-  return [...props.packs].sort((a, b) => {
-    if (a.id === featuredId.value) return -1;
-    if (b.id === featuredId.value) return 1;
-    return 0;
-  });
-});
-
 function savingsLabel(pack: CreditPack) {
-  return pack.savingsPercent > 0 ? `${pack.savingsPercent}%` : undefined;
+  const percent = packSavingsPercent(pack);
+  return percent > 0 ? `${percent}%` : undefined;
 }
 
 async function buyPack(pack: CreditPack) {
@@ -67,18 +55,25 @@ async function buyPack(pack: CreditPack) {
 
     <div class="packs__grid">
       <article
-        v-for="pack in orderedPacks"
+        v-for="pack in packs"
         :key="pack.id"
         class="pack"
-        :class="{ 'pack--featured': pack.id === featuredId }"
+        :class="{ 'pack--popular': pack.popular }"
+        :aria-label="
+          pack.popular ? `${pack.credits.toLocaleString()} credits, most popular` : undefined
+        "
+        :data-testid="`pack-${pack.id}`"
       >
-        <p v-if="savingsLabel(pack)" class="pack__save">Save {{ savingsLabel(pack) }}</p>
-        <h3 class="pack__credits">{{ pack.credits }} credits</h3>
+        <div class="pack__tags">
+          <p v-if="pack.popular" class="pack__popular">Most popular</p>
+          <p v-if="savingsLabel(pack)" class="pack__save">Save {{ savingsLabel(pack) }}</p>
+        </div>
+        <h3 class="pack__credits">{{ pack.credits.toLocaleString() }} credits</h3>
         <p class="pack__price">{{ formatPackPrice(pack) }}</p>
         <p class="pack__unit">{{ formatPackPer100Credits(pack) }} per 100 credits</p>
         <LandingButton
           class="pack__cta"
-          :variant="pack.id === featuredId ? 'primary' : 'ghost'"
+          :variant="pack.popular ? 'primary' : 'ghost'"
           size="md"
           type="button"
           :disabled="buyingId === pack.id"
@@ -129,7 +124,7 @@ async function buyPack(pack: CreditPack) {
   }
 
   @media (min-width: 1100px) {
-    grid-template-columns: 1.15fr repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     align-items: stretch;
   }
 }
@@ -146,25 +141,45 @@ async function buyPack(pack: CreditPack) {
   border-radius: 1.15rem;
 }
 
-.pack--featured {
-  border-color: color-mix(in oklab, rgb(var(--tw-accent)) 45%, rgb(var(--tw-hairline)));
+/* The one pack we steer people to: raised surface, accent hairline, the only filled CTA. */
+.pack--popular {
+  border-color: color-mix(in oklab, rgb(var(--tw-accent)) 55%, rgb(var(--tw-hairline)));
   background: rgb(var(--tw-surface-3));
+  box-shadow: 0 0 0 1px color-mix(in oklab, rgb(var(--tw-accent)) 18%, transparent);
 
   @media (min-width: 1100px) {
-    padding: 2rem 1.75rem 1.6rem;
+    transform: translateY(-0.5rem);
   }
 }
 
+.pack__tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pack__popular,
 .pack__save {
-  margin: 0 0 0.5rem;
+  margin: 0;
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgb(var(--tw-canvas));
-  background: rgb(var(--tw-accent));
   padding: 0.28rem 0.55rem;
   border-radius: 999px;
+}
+
+.pack__popular {
+  color: rgb(var(--tw-canvas));
+  background: rgb(var(--tw-accent));
+}
+
+.pack__save {
+  color: rgb(var(--tw-ink-secondary));
+  border: 1px solid rgb(var(--tw-hairline));
 }
 
 .pack__credits {
@@ -173,10 +188,6 @@ async function buyPack(pack: CreditPack) {
   font-weight: 400;
   font-size: 1.45rem;
   color: rgb(var(--tw-ink-primary));
-}
-
-.pack--featured .pack__credits {
-  font-size: 1.85rem;
 }
 
 .pack__price {

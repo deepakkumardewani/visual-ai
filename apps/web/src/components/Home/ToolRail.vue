@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ToolChapter } from '@/utils/landing';
 
-import { chapterNumber } from '@/components/LandingV2/toolsMedia';
+import { chapterNumber } from '@/components/Home/toolsMedia';
 
 defineProps<{
   tools: readonly ToolChapter[];
@@ -34,7 +34,7 @@ defineProps<{
 .rail {
   display: flex;
   flex-direction: column;
-  gap: var(--lv2-space-sm);
+  gap: var(--home-space-sm);
 }
 
 .rail__list {
@@ -48,7 +48,7 @@ defineProps<{
 
 .rail__step {
   color: rgb(var(--tw-ink-faint));
-  transition: color 0.4s var(--lv2-ease-out);
+  transition: color 0.4s var(--home-ease-out);
 }
 
 .rail__step--done {
@@ -60,8 +60,8 @@ defineProps<{
 }
 
 .rail__number {
-  font-family: var(--lv2-font-display);
-  font-size: var(--lv2-text-body);
+  font-family: var(--home-font-display);
+  font-size: var(--home-text-body);
   font-variant-numeric: tabular-nums;
 }
 
@@ -84,7 +84,7 @@ defineProps<{
 .rail__fill {
   position: absolute;
   inset: 0;
-  background-color: var(--lv2-copper);
+  background-color: var(--home-copper);
   transform-origin: left center;
 }
 </style>

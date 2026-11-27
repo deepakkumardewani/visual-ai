@@ -4,7 +4,7 @@
  * WebGL wall has a cursor light, so only it yields: the DOM wall keeps the
  * spotlight on, and moving over the copy never hides it.
  */
-import type { WallProgress } from '@/components/LandingV2/heroWallLayout';
+import type { WallProgress } from '@/components/Home/heroWallLayout';
 
 /** Per-frame share of the gap closed: quick to give way, slower to return. */
 const YIELD_OUT_EASE = 0.15;

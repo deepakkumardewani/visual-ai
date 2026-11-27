@@ -30,7 +30,11 @@ defineProps<{
       >
     </p>
     <p class="card__cadence">{{ cadence }}</p>
-    <ul class="card__points">
+    <!-- Default slot replaces the bullet points (the packs card lists its packs instead). -->
+    <div v-if="$slots.default" class="card__body">
+      <slot />
+    </div>
+    <ul v-else class="card__points">
       <li v-for="point in points" :key="point" class="card__point">{{ point }}</li>
     </ul>
     <LandingButton :to="to" :variant="lead ? 'primary' : 'ghost'" size="lg" class="card__cta">
@@ -44,20 +48,20 @@ defineProps<{
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: var(--lv2-space-xl) var(--lv2-space-lg);
+  padding: var(--home-space-xl) var(--home-space-lg);
   border-top: 1px solid rgb(var(--tw-hairline));
 }
 
 .card--lead {
-  border-top-color: var(--lv2-gold);
+  border-top-color: var(--home-gold);
 }
 
 .card__name {
   margin: 0;
-  color: var(--lv2-copper-text);
-  font-size: var(--lv2-text-label);
+  color: var(--home-copper-text);
+  font-size: var(--home-text-label);
   font-weight: 600;
-  letter-spacing: var(--lv2-tracking-label);
+  letter-spacing: var(--home-tracking-label);
   text-transform: uppercase;
 }
 
@@ -65,36 +69,36 @@ defineProps<{
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--lv2-space-xs);
-  margin: var(--lv2-space-lg) 0 0;
-  font-family: var(--lv2-font-display);
+  gap: var(--home-space-xs);
+  margin: var(--home-space-lg) 0 0;
+  font-family: var(--home-font-display);
   --card-figure-size: clamp(3rem, 2.2rem + 2.4vw, 4.5rem);
   font-size: var(--card-figure-size);
   /* Keeps the card height when the figure is swapped for a smaller note. */
   min-height: var(--card-figure-size);
   line-height: 1;
-  letter-spacing: var(--lv2-tracking-display);
+  letter-spacing: var(--home-tracking-display);
 }
 
 .card__lead {
-  font-family: var(--lv2-font-body);
-  font-size: var(--lv2-text-small);
+  font-family: var(--home-font-body);
+  font-size: var(--home-text-small);
   letter-spacing: 0;
   color: rgb(var(--tw-ink-muted));
 }
 
 .card--lead .card__figure {
-  color: var(--lv2-gold);
+  color: var(--home-gold);
 }
 
 .card__figure {
-  transition: opacity 0.4s var(--lv2-ease-out);
+  transition: opacity 0.4s var(--home-ease-out);
 }
 
 /* A note is not a price: body type, same slot, so card heights do not change. */
 .card__figure--note {
-  font-family: var(--lv2-font-body);
-  font-size: var(--lv2-text-body);
+  font-family: var(--home-font-body);
+  font-size: var(--home-text-body);
   letter-spacing: 0;
   color: rgb(var(--tw-ink-muted));
 }
@@ -105,26 +109,32 @@ defineProps<{
 }
 
 .card__cadence {
-  margin: var(--lv2-space-xs) 0 0;
+  margin: var(--home-space-xs) 0 0;
   color: rgb(var(--tw-ink-muted));
-  font-size: var(--lv2-text-small);
+  font-size: var(--home-text-small);
+}
+
+.card__body {
+  flex: 1;
+  width: 100%;
+  margin: var(--home-space-xl) 0;
 }
 
 .card__points {
   flex: 1;
-  margin: var(--lv2-space-xl) 0;
+  margin: var(--home-space-xl) 0;
   padding: 0;
   list-style: none;
   display: grid;
   align-content: start;
-  gap: var(--lv2-space-sm);
+  gap: var(--home-space-sm);
 }
 
 .card__point {
-  padding-left: var(--lv2-space-lg);
+  padding-left: var(--home-space-lg);
   position: relative;
   color: rgb(var(--tw-ink-secondary));
-  font-size: var(--lv2-text-body);
+  font-size: var(--home-text-body);
   line-height: 1.45;
 
   &::before {
@@ -134,7 +144,7 @@ defineProps<{
     top: 0.5em;
     width: 0.5rem;
     height: 1px;
-    background: var(--lv2-copper);
+    background: var(--home-copper);
   }
 }
 </style>

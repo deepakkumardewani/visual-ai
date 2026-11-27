@@ -57,13 +57,13 @@ describe('formatPricePer100Credits', () => {
 });
 
 describe('estimateImages', () => {
-  it('buys one image per credit at the cheapest price and one per 5 credits at premium', () => {
-    expect(estimateImages(200)).toEqual({ budgetImages: 200, premiumImages: 40 });
-    expect(estimateImages(2000)).toEqual({ budgetImages: 2000, premiumImages: 400 });
+  it('buys one image per credit at the cheapest model and one per 30 credits at the priciest', () => {
+    expect(estimateImages(200)).toEqual({ budgetImages: 200, premiumImages: 6 });
+    expect(estimateImages(2000)).toEqual({ budgetImages: 2000, premiumImages: 66 });
   });
 
   it('floors partial premium images', () => {
-    expect(estimateImages(7)).toEqual({ budgetImages: 7, premiumImages: 1 });
+    expect(estimateImages(31)).toEqual({ budgetImages: 31, premiumImages: 1 });
   });
 
   it('returns zero images for zero credits', () => {
@@ -73,6 +73,6 @@ describe('estimateImages', () => {
 
 describe('formatImageEstimate', () => {
   it('renders the estimate sentence', () => {
-    expect(formatImageEstimate(500)).toBe('≈ 500 images at 1 credit / 100 at 5 credits');
+    expect(formatImageEstimate(500)).toBe('≈ 500 images at 1 credit / 16 at 30 credits');
   });
 });

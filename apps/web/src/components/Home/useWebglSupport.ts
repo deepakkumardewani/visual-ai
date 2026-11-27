@@ -1,6 +1,6 @@
 import { createLogger } from '@/utils/logger';
 
-const log = createLogger('LandingV3:webgl');
+const log = createLogger('Home:webgl');
 
 // Refuse software renderers: a slow fallback context is worse than the DOM media.
 const PROBE_ATTRIBUTES: WebGLContextAttributes = { failIfMajorPerformanceCaveat: true };

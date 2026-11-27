@@ -1,7 +1,7 @@
 import type { CutoutPair, GalleryItem, ToolChapter } from '@/utils/landing';
 
-import { GALLERY_RANGES, sliceGallery } from '@/components/LandingV2/galleryRanges';
-import { toCssAspectRatio } from '@/components/LandingV2/heroWallLayout';
+import { GALLERY_RANGES, sliceGallery } from '@/components/Home/galleryRanges';
+import { toCssAspectRatio } from '@/components/Home/heroWallLayout';
 
 /**
  * Every tool frame shares one box so the stage never resizes between chapters.

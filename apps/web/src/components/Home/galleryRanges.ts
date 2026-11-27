@@ -9,7 +9,7 @@ export interface GalleryRange {
 }
 
 /**
- * Which slice of `gallery.json` each /v2 scene may use. Kept disjoint so no
+ * Which slice of `gallery.json` each home scene may use. Kept disjoint so no
  * image repeats between the hero and the scenes right after it. Tools (0-2,
  * the generate chapter only; remove-bg uses its own cutout assets) and showcase
  * (0-11) are already fixed by `TOOLS` and `SHOWCASE` in `utils/landing.ts` and

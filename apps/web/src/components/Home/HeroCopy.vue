@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { scrollToSection } from '@/composables/useLenis';
 
-import { usePrimaryCta } from '@/components/LandingV2/composables/usePrimaryCta';
-import HeroPrompt from '@/components/LandingV2/HeroPrompt.vue';
+import { usePrimaryCta } from '@/components/Home/composables/usePrimaryCta';
+import HeroPrompt from '@/components/Home/HeroPrompt.vue';
 import { FREE_CREDITS_COPY } from '@/utils/landing';
 import { createLogger } from '@/utils/logger';
 import LandingButton from '@/components/Landing/LandingButton.vue';
@@ -22,7 +22,7 @@ const emit = defineEmits<{
   promptReading: [reading: boolean];
 }>();
 
-const log = createLogger('LandingV2:HeroCopy');
+const log = createLogger('Home:HeroCopy');
 const TOOLS_ANCHOR = '#tools';
 /** Takes focus after the scroll, so keyboard users continue from the tools, not the faded hero. */
 const TOOLS_HEADING = '#tools-title';
@@ -45,14 +45,14 @@ function seeTheTools(): void {
 
 <template>
   <div class="copy">
-    <p class="lv2-eyebrow copy__eyebrow">Image studio</p>
+    <p class="home-eyebrow copy__eyebrow">Image studio</p>
 
     <h1 id="hero-title" class="copy__title">
       <span class="copy__line">A sentence in.</span>
       <span class="copy__line copy__line--gold">An image out.</span>
     </h1>
 
-    <p class="lv2-lede copy__sub">
+    <p class="home-lede copy__sub">
       Generate from a prompt with models from several labs, then upscale, colorize, restore old
       photos or remove the background without switching apps. {{ FREE_CREDITS_COPY }}
     </p>
@@ -85,12 +85,12 @@ function seeTheTools(): void {
 }
 
 .copy__title {
-  margin: var(--lv2-space-lg) 0 0;
-  font-family: var(--lv2-font-display);
+  margin: var(--home-space-lg) 0 0;
+  font-family: var(--home-font-display);
   font-weight: 400;
-  font-size: var(--lv2-text-hero);
-  line-height: var(--lv2-leading-display);
-  letter-spacing: var(--lv2-tracking-display);
+  font-size: var(--home-text-hero);
+  line-height: var(--home-leading-display);
+  letter-spacing: var(--home-tracking-display);
   color: rgb(var(--tw-ink-primary));
 }
 
@@ -100,22 +100,22 @@ function seeTheTools(): void {
 
 /* The page's one gold moment above the fold besides the primary button. Solid, not gradient. */
 .copy__line--gold {
-  color: var(--lv2-gold);
+  color: var(--home-gold);
 }
 
 .copy__sub {
-  margin-top: var(--lv2-space-lg);
+  margin-top: var(--home-space-lg);
   max-width: 34rem;
 }
 
 .copy__prompt {
-  margin-top: var(--lv2-space-xl);
+  margin-top: var(--home-space-xl);
 }
 
 .copy__ctas {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--lv2-space-md);
-  margin-top: var(--lv2-space-xl);
+  gap: var(--home-space-md);
+  margin-top: var(--home-space-xl);
 }
 </style>

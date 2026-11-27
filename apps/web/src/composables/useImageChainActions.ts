@@ -187,7 +187,7 @@ export function useImageChainActions() {
     }
     const confirmed = await confirmChainAction({
       action: 'upscale',
-      creditCost: getTransformCreditCost(),
+      creditCost: getTransformCreditCost('upscale'),
     });
     if (!confirmed) return false;
     const url = resolveImageUrl(source);
@@ -214,7 +214,7 @@ export function useImageChainActions() {
     }
     const confirmed = await confirmChainAction({
       action: 'remove-bg',
-      creditCost: getTransformCreditCost(),
+      creditCost: getTransformCreditCost('remove_bg'),
     });
     if (!confirmed) return false;
     const url = resolveImageUrl(source);

@@ -3,7 +3,7 @@ import type { ToolChapter } from '@/utils/landing';
 
 import LandingButton from '@/components/Landing/LandingButton.vue';
 
-import { chapterNumber } from '@/components/LandingV2/toolsMedia';
+import { chapterNumber } from '@/components/Home/toolsMedia';
 
 defineProps<{
   tool: ToolChapter;
@@ -13,7 +13,7 @@ defineProps<{
 
 <template>
   <div class="chapter-copy">
-    <p class="lv2-eyebrow chapter-copy__eyebrow">
+    <p class="home-eyebrow chapter-copy__eyebrow">
       <span class="chapter-copy__number">{{ chapterNumber(index) }}</span>
       {{ tool.eyebrow }}
     </p>
@@ -37,7 +37,7 @@ defineProps<{
 
 .chapter-copy__eyebrow {
   display: flex;
-  gap: var(--lv2-space-sm);
+  gap: var(--home-space-sm);
 }
 
 .chapter-copy__number {
@@ -45,21 +45,21 @@ defineProps<{
 }
 
 .chapter-copy__title {
-  margin: var(--lv2-space-md) 0 0;
-  font-family: var(--lv2-font-display);
+  margin: var(--home-space-md) 0 0;
+  font-family: var(--home-font-display);
   font-weight: 400;
-  font-size: var(--lv2-text-display);
-  line-height: var(--lv2-leading-display);
-  letter-spacing: var(--lv2-tracking-display);
+  font-size: var(--home-text-display);
+  line-height: var(--home-leading-display);
+  letter-spacing: var(--home-tracking-display);
   color: rgb(var(--tw-ink-primary));
   text-wrap: balance;
 }
 
 .chapter-copy__body {
-  margin: var(--lv2-space-lg) 0 0;
+  margin: var(--home-space-lg) 0 0;
   max-width: 34rem;
-  font-size: var(--lv2-text-body);
-  line-height: var(--lv2-leading-body);
+  font-size: var(--home-text-body);
+  line-height: var(--home-leading-body);
   color: rgb(var(--tw-ink-muted));
   text-wrap: pretty;
 }
@@ -67,7 +67,7 @@ defineProps<{
 .chapter-copy__points {
   display: flex;
   flex-direction: column;
-  margin: var(--lv2-space-lg) 0 0;
+  margin: var(--home-space-lg) 0 0;
   padding: 0;
   /* Body width, so the hairlines are one length in every chapter instead of each list's longest line. */
   align-self: stretch;
@@ -76,14 +76,14 @@ defineProps<{
 }
 
 .chapter-copy__point {
-  padding: var(--lv2-space-xs) 0;
+  padding: var(--home-space-xs) 0;
   border-top: 1px solid rgb(var(--tw-hairline));
-  font-size: var(--lv2-text-small);
+  font-size: var(--home-text-small);
   line-height: 1.5;
   color: rgb(var(--tw-ink-secondary));
 }
 
 .chapter-copy__cta {
-  margin-top: var(--lv2-space-xl);
+  margin-top: var(--home-space-xl);
 }
 </style>

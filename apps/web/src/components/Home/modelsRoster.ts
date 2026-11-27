@@ -1,6 +1,6 @@
 import { getCreditCost } from '@visual-ai/shared';
 
-import { getTierCreditLabel } from '@/utils/generationCredits';
+import { getTierCreditLabel, TRANSFORM_MODEL_KEYS } from '@/utils/generationCredits';
 import { MODELS, UPSCALER_MODELS } from '@/utils/models';
 import type { Model } from '@/types/model';
 
@@ -65,9 +65,9 @@ const finishingRows: RosterRow[] = [
   {
     name: 'Tools',
     models: [
-      finishingTool('colorize', 'Colorize', 'COLORIZE_BASIC'),
-      finishingTool('restore', 'Restore faces', 'REVIVE'),
-      finishingTool('remove-bg', 'Remove background', 'BACKGROUND_REMOVER'),
+      finishingTool('colorize', 'Colorize', TRANSFORM_MODEL_KEYS.colorize),
+      finishingTool('restore', 'Restore faces', TRANSFORM_MODEL_KEYS.revive),
+      finishingTool('remove-bg', 'Remove background', TRANSFORM_MODEL_KEYS.remove_bg),
     ],
     finishing: true,
   },

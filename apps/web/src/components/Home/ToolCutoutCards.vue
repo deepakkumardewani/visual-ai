@@ -8,7 +8,7 @@ import {
   cutoutCards,
   type CutoutCard,
   type CutoutLayout,
-} from '@/components/LandingV2/toolsMedia';
+} from '@/components/Home/toolsMedia';
 
 const props = withDefaults(
   defineProps<{

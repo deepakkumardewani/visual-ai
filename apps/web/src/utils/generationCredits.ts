@@ -1,13 +1,18 @@
-import type { Tier } from '@visual-ai/shared';
+import {
+  getCategoryCreditRange,
+  getCreditCost,
+  getCreditCostRange,
+  getModelKeysByCategory,
+  MIN_CREDIT_COST,
+  MODEL_REGISTRY,
+} from '@visual-ai/shared';
+import type { ModelKey, Tier } from '@visual-ai/shared';
 
-/** Flat per-image base cost for text-to-image generation. */
-const GENERATION_BASE_COST_PER_IMAGE = 1;
+/** Per-image base cost when no model cost is known (the cheapest possible run). */
+const GENERATION_BASE_COST_PER_IMAGE = MIN_CREDIT_COST;
 
 /** Default quality multiplier when quality does not change pricing. */
 const DEFAULT_QUALITY_MULTIPLIER = 1;
-
-/** Credit cost for utility models (upscale, colorize, revive, remove-bg) */
-const TRANSFORM_CREDIT_COST = 2;
 
 export type GenerationCreditBreakdown = {
   baseCostPerImage: number;
@@ -50,20 +55,31 @@ export function canAffordGeneration(
 }
 
 /**
- * Credits for upscale / colorize / revive / remove-bg transforms.
- * Returns the flat utility model cost (2 credits).
+ * Model each one-click transform runs. Must match the API defaults
+ * (generation-service: UPSCALE_IMAGE default, REVIVE, BACKGROUND_REMOVER).
  */
-export function getTransformCreditCost(): number {
-  return TRANSFORM_CREDIT_COST;
+export const TRANSFORM_MODEL_KEYS = {
+  upscale: 'UPSCALE_IMAGE',
+  colorize: 'COLORIZE_ADVANCED',
+  revive: 'REVIVE',
+  remove_bg: 'BACKGROUND_REMOVER',
+} as const satisfies Record<string, ModelKey>;
+
+export type TransformAction = keyof typeof TRANSFORM_MODEL_KEYS;
+
+/**
+ * Credits for an upscale / colorize / revive / remove-bg transform, priced by the model it runs.
+ * Without an action it returns the cheapest studio-tool cost (a "from" price).
+ */
+export function getTransformCreditCost(action?: TransformAction): number {
+  if (!action) return getCategoryCreditRange('utility').min;
+  return getCreditCost(TRANSFORM_MODEL_KEYS[action]);
 }
 
-/** Get the credit cost label for a tier (e.g., "1 cr", "4 cr", "5 cr"). */
+/** Cheapest generation model in a tier, e.g. "1 cr" for budget. */
 export function getTierCreditLabel(tier: Tier): string {
-  // Map tiers to their minimum credit cost for display
-  const tierCosts: Record<Tier, number> = {
-    budget: 1,
-    standard: 1,
-    premium: 4,
-  };
-  return `${tierCosts[tier]} cr`;
+  const tierKeys = getModelKeysByCategory('generation').filter(
+    (key) => MODEL_REGISTRY[key].tier === tier,
+  );
+  return `${getCreditCostRange(tierKeys).min} cr`;
 }

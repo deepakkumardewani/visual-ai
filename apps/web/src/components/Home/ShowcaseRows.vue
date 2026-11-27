@@ -2,18 +2,18 @@
 import { computed, onBeforeUpdate, ref, shallowRef, type ComponentPublicInstance } from 'vue';
 
 import { useReducedMotion } from '@/composables/useReducedMotion';
-import { useSceneMotion } from '@/components/LandingV2/composables/useSceneMotion';
-import ShowcaseLabel from '@/components/LandingV2/ShowcaseLabel.vue';
-import ShowcaseTile from '@/components/LandingV2/ShowcaseTile.vue';
-import { startRowDrift, type DriftRowEls } from '@/components/LandingV2/showcaseDrift';
-import { bindRowScrub } from '@/components/LandingV2/showcaseScrub';
+import { useSceneMotion } from '@/components/Home/composables/useSceneMotion';
+import ShowcaseLabel from '@/components/Home/ShowcaseLabel.vue';
+import ShowcaseTile from '@/components/Home/ShowcaseTile.vue';
+import { startRowDrift, type DriftRowEls } from '@/components/Home/showcaseDrift';
+import { bindRowScrub } from '@/components/Home/showcaseScrub';
 import {
   aspectValue,
   rowAspectSum,
   splitRows,
   type ShowcaseEntry,
   type ShowcaseMediaProps,
-} from '@/components/LandingV2/showcaseLayout';
+} from '@/components/Home/showcaseLayout';
 
 const props = defineProps<ShowcaseMediaProps>();
 
@@ -121,18 +121,18 @@ onBeforeUpdate(() => {
    */
   --row-height-tall: clamp(14rem, 26vw, 44rem);
   --row-height-short: calc(var(--row-height-tall) * 0.75);
-  --row-gap: var(--lv2-space-md);
+  --row-gap: var(--home-space-md);
 
   display: grid;
   /* minmax(0, ...) so the max-content tracks cannot widen the grid past the viewport. */
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--lv2-space-xl);
+  gap: var(--home-space-xl);
 }
 
 .rows__viewport {
   /* Room above each row so a lifted tile and its shadow are not clipped. */
-  padding-block: var(--lv2-space-lg);
-  margin-block: calc(-1 * var(--lv2-space-lg));
+  padding-block: var(--home-space-lg);
+  margin-block: calc(-1 * var(--home-space-lg));
   overflow: clip;
   container-type: inline-size;
   /* Sideways touch moves the row (showcaseScrub.ts); vertical touch still scrolls the page. */
@@ -164,7 +164,7 @@ onBeforeUpdate(() => {
 }
 
 .rows__focus {
-  transition: transform 480ms var(--lv2-ease-out);
+  transition: transform 480ms var(--home-ease-out);
 }
 
 /* Full bleed with no inline padding: the drift keeps tiles past both edges. */
@@ -222,7 +222,7 @@ onBeforeUpdate(() => {
  * proportion to their ratio.
  */
 .rows.is-static .rows__track {
-  --fit-width: min(100cqi - 2 * var(--lv2-gutter), var(--lv2-max-width));
+  --fit-width: min(100cqi - 2 * var(--home-gutter), var(--home-max-width));
   /* 1px of slack absorbs sub-pixel rounding so the last tile never wraps alone. */
   --fit-height: calc(
     (var(--fit-width) - var(--row-gap-count) * var(--row-gap) - 1px) / var(--row-aspect)

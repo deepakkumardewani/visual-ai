@@ -73,7 +73,7 @@ describe('ColorizeImageAside', () => {
   it('opens low-credits dialog when signed in without enough credits', async () => {
     isSignedIn.value = true;
     const { wrapper, pinia } = mountAside();
-    useUserStore(pinia).credits = 1;
+    useUserStore(pinia).credits = 0;
     await wrapper.getComponent(FeatureCta).vm.$emit('click');
     expect(useDialogStore(pinia).showLowCreditsDialog).toBe(true);
   });

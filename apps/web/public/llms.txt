@@ -28,14 +28,14 @@ You buy credits. There are no paid subscription tiers.
 - New account: 30 persistent credits (they do not expire).
 - Every day: 30 daily credits. Unused daily credits reset (use-or-lose).
 - Purchased credits persist and never expire.
-- Pay in INR via Dodo Payments (card or UPI where available). Packs and prices: https://visual-ai.app/pricing
+- Credit packs via Dodo Payments: 300 credits $5 / ₹249, 700 $10 / ₹549, 1,600 $20 / ₹1,149, 4,500 $50 / ₹2,999. India pays INR (card or UPI where available); everywhere else pays USD. Details: https://visual-ai.app/pricing
 
 Typical spend (exact cost is shown in the studio before you run):
 
-- Budget / standard generation: 1 credit
-- Premium generation (e.g. FLUX Pro/Max): 4–5 credits
-- Utility (upscale, colorize, restore, remove background): 2 credits
-- Premium upscalers: 4 credits
+- Image generation: 1–30 credits (cheap drafts like FLUX Schnell cost 1; Nano Banana Pro costs 30)
+- Studio tools: 1–2 credits (colorize, restore, remove background)
+- Upscaling: 1–16 credits (premium upscalers such as Topaz cost the most)
+- One credit covers roughly $0.005 of model cost, so each model's price follows what it costs to run.
 
 ## Ownership
 

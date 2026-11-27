@@ -2,31 +2,29 @@
 import { CREDIT_PACKS } from '@visual-ai/shared';
 import { computed, onMounted, ref } from 'vue';
 
-import PricingPlanCard from '@/components/LandingV2/PricingPlanCard.vue';
+import PricingPackLadder from '@/components/Home/PricingPackLadder.vue';
+import PricingPlanCard from '@/components/Home/PricingPlanCard.vue';
 import { usePricingCatalog } from '@/composables/usePricingCatalog';
-import { usePrimaryCta } from '@/components/LandingV2/composables/usePrimaryCta';
+import { usePrimaryCta } from '@/components/Home/composables/usePrimaryCta';
 import { CREDIT_PACKS_PLAN, FREE_PLAN, PRO_PLAN } from '@/utils/pricingPlans';
 
 const primaryCta = usePrimaryCta();
 const { formatPackPrice, hasServerPrices, loadPrices, proPrice } = usePricingCatalog();
 
-const cheapestPack = CREDIT_PACKS.reduce((lowest, pack) =>
-  pack.priceMinor < lowest.priceMinor ? pack : lowest,
-);
-const fromPrice = computed(() => formatPackPrice(cheapestPack));
+// CREDIT_PACKS is ordered smallest first, so the first pack is the cheapest.
+const fromPrice = computed(() => formatPackPrice(CREDIT_PACKS[0]));
 const FREE_FIGURE = 'Free';
 const CADENCE_FREE = 'No card needed';
 const CADENCE_PRO = 'per month';
-const CADENCE_PACKS = `${cheapestPack.credits} credits, one-time`;
+const CADENCE_PACKS = 'One-time, credits never expire';
 const PRICE_LEAD = 'From';
-// Fallback prices mix USD (Pro) and INR (packs), so none are shown rather than a misleading pair.
+// Pack currency depends on the buyer's country; if it can't be resolved no pack price is guessed.
 const PRICE_NOTE = 'See current prices';
 
 const root = ref<HTMLElement | null>(null);
 
-// Same read-only GET /payments/prices the /pricing page makes. The price stays hidden (space
-// reserved) until it settles so the currency never flips on screen; the composable logs a failure
-// and the formatted fallback is shown.
+// Same read-only GET /payments/prices the /pricing page makes. Pack prices stay hidden (space
+// reserved) until it settles so the currency never flips on screen.
 const priceResolved = ref(false);
 onMounted(async () => {
   try {
@@ -40,11 +38,11 @@ const showNote = computed(() => priceResolved.value && !hasServerPrices.value);
 </script>
 
 <template>
-  <section id="pricing" ref="root" class="pricing lv2-section" aria-labelledby="pricing-title">
-    <div class="lv2-container pricing__inner">
+  <section id="pricing" ref="root" class="pricing home-section" aria-labelledby="pricing-title">
+    <div class="home-container pricing__inner">
       <header class="pricing__head">
-        <p class="lv2-eyebrow">Pricing</p>
-        <h2 id="pricing-title" class="lv2-display">Free to start. Credits when you need more.</h2>
+        <p class="home-eyebrow">Pricing</p>
+        <h2 id="pricing-title" class="home-display">Free to start. Credits when you need more.</h2>
       </header>
 
       <div class="pricing__cards">
@@ -57,11 +55,10 @@ const showNote = computed(() => priceResolved.value && !hasServerPrices.value);
           :cta="primaryCta.label.value"
           :to="primaryCta.to.value"
         />
+        <!-- Pro is one USD price everywhere, so it never waits on /payments/prices. -->
         <PricingPlanCard
           :name="PRO_PLAN.name"
-          :price="showNote ? PRICE_NOTE : proPrice"
-          :price-note="showNote"
-          :price-hidden="priceHidden"
+          :price="proPrice"
           :cadence="CADENCE_PRO"
           :points="PRO_PLAN.points"
           :cta="PRO_PLAN.cta"
@@ -77,7 +74,13 @@ const showNote = computed(() => priceResolved.value && !hasServerPrices.value);
           :points="CREDIT_PACKS_PLAN.points"
           :cta="CREDIT_PACKS_PLAN.cta"
           :to="CREDIT_PACKS_PLAN.to"
-        />
+        >
+          <PricingPackLadder
+            :packs="CREDIT_PACKS"
+            :format-price="formatPackPrice"
+            :prices-hidden="priceHidden || showNote"
+          />
+        </PricingPlanCard>
       </div>
     </div>
   </section>
@@ -86,25 +89,25 @@ const showNote = computed(() => priceResolved.value && !hasServerPrices.value);
 <style scoped lang="scss">
 .pricing__inner {
   display: grid;
-  gap: var(--lv2-space-3xl);
+  gap: var(--home-space-3xl);
 }
 
 .pricing__head {
   display: grid;
-  gap: var(--lv2-space-lg);
+  gap: var(--home-space-lg);
   max-width: 40rem;
 }
 
 .pricing__cards {
   display: grid;
-  gap: var(--lv2-space-lg);
+  gap: var(--home-space-lg);
   grid-template-columns: 1fr;
 }
 
 @media (min-width: 900px) {
   .pricing__cards {
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--lv2-space-xl);
+    gap: var(--home-space-xl);
   }
 }
 </style>

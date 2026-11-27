@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { formatPlate, type ShowcaseEntry } from '@/components/LandingV2/showcaseLayout';
+import { formatPlate, type ShowcaseEntry } from '@/components/Home/showcaseLayout';
 
 const props = defineProps<{
   /** The tile being looked at, or null before the visitor has pointed at one. */
@@ -24,7 +24,7 @@ const isIdle = computed(() => props.entry === null);
 <template>
   <div class="label" aria-hidden="true">
     <div class="label__meta">
-      <p class="lv2-eyebrow">Prompt</p>
+      <p class="home-eyebrow">Prompt</p>
       <p class="label__plate">
         <span class="label__no">{{ formatPlate(shown.index) }}</span>
         <span class="label__total">/ {{ formatPlate(total - 1) }}</span>
@@ -48,10 +48,10 @@ const isIdle = computed(() => props.entry === null);
 .label {
   display: grid;
   grid-template-columns: minmax(8rem, 1fr) minmax(0, 4fr);
-  gap: var(--lv2-space-xl);
+  gap: var(--home-space-xl);
   align-items: start;
-  /* Same left edge as the other scenes' `.lv2-section` + `.lv2-container`. */
-  width: min(100% - 2 * var(--lv2-gutter), var(--lv2-max-width));
+  /* Same left edge as the other scenes' `.home-section` + `.home-container`. */
+  width: min(100% - 2 * var(--home-gutter), var(--home-max-width));
   margin-inline: auto;
 }
 
@@ -66,36 +66,36 @@ const isIdle = computed(() => props.entry === null);
    */
   display: flex;
   flex-direction: column;
-  gap: var(--lv2-space-sm);
+  gap: var(--home-space-sm);
   min-height: calc(
-    4 * var(--prompt-size) * var(--prompt-leading) + var(--lv2-space-sm) + var(--lv2-text-small) *
+    4 * var(--prompt-size) * var(--prompt-leading) + var(--home-space-sm) + var(--home-text-small) *
       var(--hint-leading)
   );
 }
 
 .label__meta {
   display: grid;
-  gap: var(--lv2-space-2xs);
+  gap: var(--home-space-2xs);
 }
 
 .label__plate {
   margin: 0;
-  font-family: var(--lv2-font-display);
-  font-size: var(--lv2-text-title);
+  font-family: var(--home-font-display);
+  font-size: var(--home-text-title);
   line-height: 1;
   font-variant-numeric: tabular-nums;
   color: rgb(var(--tw-ink-primary));
 }
 
 .label__total {
-  font-size: var(--lv2-text-small);
+  font-size: var(--home-text-small);
   color: rgb(var(--tw-ink-faint));
 }
 
 .label__ratio {
   margin: 0;
-  font-size: var(--lv2-text-label);
-  letter-spacing: var(--lv2-tracking-label);
+  font-size: var(--home-text-label);
+  letter-spacing: var(--home-tracking-label);
   color: rgb(var(--tw-ink-muted));
 }
 
@@ -107,7 +107,7 @@ const isIdle = computed(() => props.entry === null);
   grid-area: 1 / 1;
   max-width: 54ch;
   margin: 0;
-  font-family: var(--lv2-font-display);
+  font-family: var(--home-font-display);
   font-size: var(--prompt-size);
   line-height: var(--prompt-leading);
   color: rgb(var(--tw-ink-primary));
@@ -116,10 +116,10 @@ const isIdle = computed(() => props.entry === null);
 
 .label__hint {
   margin: 0;
-  font-size: var(--lv2-text-small);
+  font-size: var(--home-text-small);
   line-height: var(--hint-leading);
   color: rgb(var(--tw-ink-muted));
-  transition: opacity 220ms var(--lv2-ease-out);
+  transition: opacity 220ms var(--home-ease-out);
 
   &.is-hidden {
     opacity: 0;
@@ -129,8 +129,8 @@ const isIdle = computed(() => props.entry === null);
 .label-swap-enter-active,
 .label-swap-leave-active {
   transition:
-    opacity 220ms var(--lv2-ease-out),
-    transform 220ms var(--lv2-ease-out);
+    opacity 220ms var(--home-ease-out),
+    transform 220ms var(--home-ease-out);
 }
 
 .label-swap-enter-from {

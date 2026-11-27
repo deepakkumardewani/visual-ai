@@ -1,17 +1,14 @@
 /**
- * One run of the /v3 handover veil: mount a full-screen stage, then draw only
+ * One run of the home handover veil: mount a full-screen stage, then draw only
  * while the visitor scrolls across a boundary between two scenes. Between
  * handovers, and once scrolling settles, no frames are requested at all.
  */
 import { createLogger } from '@/utils/logger';
 
-import { createGlStage, type GlStage } from '@/components/LandingV3/glStage';
-import {
-  createTransitionScene,
-  type TransitionScene,
-} from '@/components/LandingV3/glTransitionScene';
+import { createGlStage, type GlStage } from '@/components/Home/glStage';
+import { createTransitionScene, type TransitionScene } from '@/components/Home/glTransitionScene';
 
-const log = createLogger('LandingV3:GlTransition');
+const log = createLogger('Home:GlTransition');
 
 /** Where in the viewport (fraction of its height from the top) a handover peaks. */
 const HANDOVER_ANCHOR = 0.5;

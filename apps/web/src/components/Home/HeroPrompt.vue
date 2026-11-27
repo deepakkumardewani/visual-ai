@@ -2,7 +2,7 @@
 import { useEventListener } from '@vueuse/core';
 import { computed, ref, watch } from 'vue';
 
-import PromptPauseToggle from '@/components/LandingV2/PromptPauseToggle.vue';
+import PromptPauseToggle from '@/components/Home/PromptPauseToggle.vue';
 
 const props = defineProps<{
   prompt: string;
@@ -62,7 +62,7 @@ const isTyping = computed(() => props.typed < props.prompt.length);
 <template>
   <div class="prompt">
     <div class="prompt__head">
-      <p class="prompt__label lv2-eyebrow">Prompt</p>
+      <p class="prompt__label home-eyebrow">Prompt</p>
       <PromptPauseToggle
         v-if="rotating"
         class="prompt__toggle"
@@ -93,9 +93,9 @@ const isTyping = computed(() => props.typed < props.prompt.length);
 <style scoped lang="scss">
 .prompt {
   display: grid;
-  gap: var(--lv2-space-xs);
+  gap: var(--home-space-xs);
   max-width: 34rem;
-  padding: var(--lv2-space-md) var(--lv2-space-lg) var(--lv2-space-md) var(--lv2-space-md);
+  padding: var(--home-space-md) var(--home-space-lg) var(--home-space-md) var(--home-space-md);
   border: 1px solid rgb(var(--tw-hairline));
   border-radius: 12px;
   background-color: rgb(var(--tw-surface-1) / 0.82);
@@ -122,7 +122,7 @@ const isTyping = computed(() => props.typed < props.prompt.length);
 
 .prompt__text {
   margin: 0;
-  font-size: var(--lv2-text-small);
+  font-size: var(--home-text-small);
   line-height: 1.6;
   color: rgb(var(--tw-ink-secondary));
 }
@@ -164,7 +164,7 @@ const isTyping = computed(() => props.typed < props.prompt.length);
     top: 0.05em;
     width: 2px;
     height: 1.05em;
-    background-color: var(--lv2-copper);
+    background-color: var(--home-copper);
     opacity: 0;
   }
 }

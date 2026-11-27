@@ -7,7 +7,7 @@
  */
 import { gsap } from 'gsap';
 
-import type { HeroPromptStop } from '@/components/LandingV2/heroWallLayout';
+import type { HeroPromptStop } from '@/components/Home/heroWallLayout';
 
 /** Seconds to type a whole prompt; prompts run ~180 characters, so this is brisk on purpose. */
 export const TYPE_DURATION = 1.7;

@@ -2,9 +2,9 @@
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { computed, ref, type Component } from 'vue';
 
-import { useSceneMotion } from '@/components/LandingV2/composables/useSceneMotion';
-import ShowcaseMedia from '@/components/LandingV2/ShowcaseMedia.vue';
-import type { ShowcaseMediaProps } from '@/components/LandingV2/showcaseLayout';
+import { useSceneMotion } from '@/components/Home/composables/useSceneMotion';
+import ShowcaseMedia from '@/components/Home/ShowcaseMedia.vue';
+import type { ShowcaseMediaProps } from '@/components/Home/showcaseLayout';
 import { SHOWCASE } from '@/utils/landing';
 
 const props = defineProps<{
@@ -47,11 +47,11 @@ useSceneMotion(root, ({ motionOk }, section) => {
   <section id="showcase" ref="root" class="showcase" aria-labelledby="showcase-title">
     <header class="showcase__head">
       <div class="showcase__intro">
-        <p class="lv2-eyebrow">Showcase</p>
-        <h2 id="showcase-title" class="lv2-display showcase__title">
+        <p class="home-eyebrow">Showcase</p>
+        <h2 id="showcase-title" class="home-display showcase__title">
           Every image here began as a sentence.
         </h2>
-        <p class="lv2-lede">
+        <p class="home-lede">
           A small slice of what creators have generated, each with the exact prompt that made it.
           Real prompts, untouched output.
         </p>
@@ -71,21 +71,21 @@ useSceneMotion(root, ({ motionOk }, section) => {
 <style scoped lang="scss">
 .showcase {
   position: relative;
-  /* Not a `.lv2-section`: the rows run full bleed, so only the block rhythm is shared. */
-  padding-block: var(--lv2-section-y);
+  /* Not a `.home-section`: the rows run full bleed, so only the block rhythm is shared. */
+  padding-block: var(--home-section-y);
 }
 
 .showcase__head {
   display: grid;
-  gap: var(--lv2-space-lg);
-  /* Same left edge as the other scenes' `.lv2-section` + `.lv2-container`; the rows stay full bleed. */
-  width: min(100% - 2 * var(--lv2-gutter), var(--lv2-max-width));
-  margin: 0 auto var(--lv2-space-2xl);
+  gap: var(--home-space-lg);
+  /* Same left edge as the other scenes' `.home-section` + `.home-container`; the rows stay full bleed. */
+  width: min(100% - 2 * var(--home-gutter), var(--home-max-width));
+  margin: 0 auto var(--home-space-2xl);
 }
 
 .showcase__intro {
   display: grid;
-  gap: var(--lv2-space-md);
+  gap: var(--home-space-md);
 }
 
 .showcase__title {
@@ -94,16 +94,16 @@ useSceneMotion(root, ({ motionOk }, section) => {
 
 .showcase__link {
   display: inline-flex;
-  gap: var(--lv2-space-xs);
+  gap: var(--home-space-xs);
   align-items: center;
   justify-self: start;
   min-height: 44px;
   font-weight: 600;
-  color: var(--lv2-copper-text);
+  color: var(--home-copper-text);
   text-decoration: underline;
   text-decoration-color: rgb(var(--tw-border));
   text-underline-offset: 0.3em;
-  transition: text-decoration-color 200ms var(--lv2-ease-out);
+  transition: text-decoration-color 200ms var(--home-ease-out);
 
   &:hover {
     text-decoration-color: currentColor;
@@ -115,14 +115,14 @@ useSceneMotion(root, ({ motionOk }, section) => {
 }
 
 .showcase__arrow {
-  transition: transform 240ms var(--lv2-ease-out);
+  transition: transform 240ms var(--home-ease-out);
 }
 
 @media (min-width: 900px) {
   .showcase__head {
     grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
     align-items: end;
-    margin-bottom: var(--lv2-space-3xl);
+    margin-bottom: var(--home-space-3xl);
   }
 
   .showcase__link {

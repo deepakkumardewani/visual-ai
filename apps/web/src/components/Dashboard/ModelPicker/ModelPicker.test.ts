@@ -20,7 +20,9 @@ vi.mock('vue-router', () => ({
 }));
 
 import ModelPicker from '@/components/Dashboard/ModelPicker/ModelPicker.vue';
-import { MODEL_IDS } from '@visual-ai/shared';
+import { MODEL_IDS, PLAN } from '@visual-ai/shared';
+import { useDialogStore } from '@/stores/dialog';
+import { useUserStore } from '@/stores/user';
 import { FLUX_MODES, getFeaturedModels, MODELS } from '@/utils/models';
 import { installMatchMedia } from '@/test/matchMediaMock';
 import { BREAKPOINT } from '@/utils/layout';
@@ -110,7 +112,7 @@ describe('ModelPicker', () => {
     expect(document.activeElement).toBe(second);
   });
 
-  it('emits selected model regardless of tier', async () => {
+  it('opens the upgrade prompt instead of selecting a premium model on the free plan', async () => {
     const pinia = createPinia();
     setActivePinia(pinia);
 
@@ -118,30 +120,39 @@ describe('ModelPicker', () => {
     await wrapper.get('button').trigger('click');
 
     const fluxPro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_PRO)!;
-    const proOption = findOption(fluxPro.title);
+    await findOption(fluxPro.title).trigger('click');
 
-    await proOption.trigger('click');
-
-    expect(wrapper.emitted('update:selected')).toBeTruthy();
-    const emittedModel = wrapper.emitted('update:selected')?.[0]?.[0] as any;
-    expect(emittedModel?.id).toBe(MODEL_IDS.FLUX_PRO);
+    expect(wrapper.emitted('update:selected')).toBeFalsy();
+    expect(useDialogStore().showPricingDialog).toBe(true);
   });
 
-  it('allows selection of FLUX_1_1_PRO model', async () => {
+  it('emits a premium model for a Pro user', async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    useUserStore().plan = PLAN.PRO;
+
+    const { wrapper } = mountPicker({ pinia });
+    await wrapper.get('button').trigger('click');
+
+    const flux11Pro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_1_1_PRO)!;
+    await findOption(flux11Pro.title).trigger('click');
+
+    const emittedModel = wrapper.emitted('update:selected')?.[0]?.[0] as { id: string };
+    expect(emittedModel?.id).toBe(MODEL_IDS.FLUX_1_1_PRO);
+  });
+
+  it('emits a non-premium model on the free plan', async () => {
     const pinia = createPinia();
     setActivePinia(pinia);
 
     const { wrapper } = mountPicker({ pinia });
     await wrapper.get('button').trigger('click');
 
-    const flux11Pro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_1_1_PRO)!;
-    const proOption = findOption(flux11Pro.title);
+    const flux2Pro = MODELS.find((m) => m.id === MODEL_IDS.FLUX_2_PRO)!;
+    await findOption(flux2Pro.title).trigger('click');
 
-    await proOption.trigger('click');
-
-    expect(wrapper.emitted('update:selected')).toBeTruthy();
-    const emittedModel = wrapper.emitted('update:selected')?.[0]?.[0] as any;
-    expect(emittedModel?.id).toBe(MODEL_IDS.FLUX_1_1_PRO);
+    const emittedModel = wrapper.emitted('update:selected')?.[0]?.[0] as { id: string };
+    expect(emittedModel?.id).toBe(MODEL_IDS.FLUX_2_PRO);
   });
 
   it('accepts and uses different model lists', () => {
@@ -187,7 +198,7 @@ describe('ModelPicker', () => {
     const { wrapper } = mountPicker({ attachTo: document.body });
     await wrapper.get('button').trigger('click');
 
-    const target = MODELS.find((m) => m.id === MODEL_IDS.FLUX_1_1_PRO)!;
+    const target = MODELS.find((m) => m.id === MODEL_IDS.FLUX_2_PRO)!;
     const input = body().find('[data-testid="model-search-input"]');
     await input.setValue(target.title);
 
@@ -207,7 +218,7 @@ describe('ModelPicker', () => {
     const emitted = wrapper.emitted('update:selected')?.[0]?.[0] as {
       id: string;
     };
-    expect(emitted.id).toBe(MODEL_IDS.FLUX_1_1_PRO);
+    expect(emitted.id).toBe(MODEL_IDS.FLUX_2_PRO);
   });
 });
 
@@ -316,11 +327,11 @@ describe('ModelPicker responsive container', () => {
     const w = mountAt(390);
     await w.get('button').trigger('click');
 
-    const target = MODELS.find((m) => m.id === MODEL_IDS.FLUX_1_1_PRO)!;
+    const target = MODELS.find((m) => m.id === MODEL_IDS.FLUX_2_PRO)!;
     await findOption(target.title).trigger('click');
 
     expect((w.emitted('update:selected')?.[0]?.[0] as { id: string }).id).toBe(
-      MODEL_IDS.FLUX_1_1_PRO,
+      MODEL_IDS.FLUX_2_PRO,
     );
     expect(body().find(SHEET).exists()).toBe(false);
   });

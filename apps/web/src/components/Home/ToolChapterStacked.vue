@@ -2,11 +2,11 @@
 import type { ToolChapter } from '@/utils/landing';
 
 import BeforeAfter from '@/components/Landing/BeforeAfter.vue';
-import ToolChapterCopy from '@/components/LandingV2/ToolChapterCopy.vue';
-import ToolCluster from '@/components/LandingV2/ToolCluster.vue';
-import ToolCutoutCards from '@/components/LandingV2/ToolCutoutCards.vue';
+import ToolChapterCopy from '@/components/Home/ToolChapterCopy.vue';
+import ToolCluster from '@/components/Home/ToolCluster.vue';
+import ToolCutoutCards from '@/components/Home/ToolCutoutCards.vue';
 
-import { STAGE_ASPECT_RATIO } from '@/components/LandingV2/toolsMedia';
+import { STAGE_ASPECT_RATIO } from '@/components/Home/toolsMedia';
 
 defineProps<{
   tool: ToolChapter;
@@ -35,7 +35,7 @@ defineProps<{
 <style scoped lang="scss">
 .stacked {
   display: grid;
-  gap: var(--lv2-space-xl);
+  gap: var(--home-space-xl);
 }
 
 .stacked__compare {
@@ -50,7 +50,7 @@ defineProps<{
   .stacked {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     align-items: center;
-    gap: var(--lv2-space-3xl);
+    gap: var(--home-space-3xl);
   }
 
   .stacked:nth-child(even) .stacked__media {
