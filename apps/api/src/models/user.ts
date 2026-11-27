@@ -56,6 +56,12 @@ const UserSchema = new Schema(
             },
         },
         seenIntroVersion: { type: String, default: null },
+        feedback: {
+            // Image generations that completed successfully; drives the feedback prompt threshold.
+            successfulGenerations: { type: Number, default: 0 },
+            // Last time the feedback prompt was claimed (shown); drives the cooldown.
+            lastPromptedAt: { type: Date, default: null },
+        },
         referrals: {
             type: [ReferralSchema],
             default: [],

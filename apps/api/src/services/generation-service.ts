@@ -12,6 +12,7 @@ import { isContentSafetyError, PromptModerationError } from "../lib/prompt-moder
 import { runReplicate } from "../lib/replicate.js"
 import { ImageModel as Image } from "../models/image.js"
 import { UserModel as User } from "../models/user.js"
+import { recordSuccessfulGeneration } from "../services/feedback-service.js"
 import { RedisService } from "../services/redis-service.js"
 import {
     type Body,
@@ -299,6 +300,7 @@ async function runGenerationJob(
         const credits = await updateAndGetUserCredits(userId, creditCost)
 
         if (!newImage) {
+            await recordSuccessfulGeneration(userId, featureType)
             // History is full: hand back the Replicate URL as-is, with no Cloudinary upload or cleanup job.
             await jobStatus.setStatus(jobId, {
                 status: "completed",
@@ -322,6 +324,7 @@ async function runGenerationJob(
         logger.debug(`gen progress job=${jid} stage=upload +${elapsed()}`)
         const cloudinaryData = buildCloudinaryPayload(output, newImage._id)
         await uploadToCloudinary(cloudinaryData)
+        await recordSuccessfulGeneration(userId, featureType)
         await finalizeJob(jobId, userId, newImage._id?.toString(), jobStatus)
 
         logger.info(

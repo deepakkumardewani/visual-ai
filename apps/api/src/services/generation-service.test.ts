@@ -12,6 +12,8 @@ const getImageDetails = vi.hoisted(() => vi.fn())
 const uploadToCloudinary = vi.hoisted(() => vi.fn())
 const redisSetStatus = vi.hoisted(() => vi.fn())
 
+const recordSuccessfulGeneration = vi.hoisted(() => vi.fn())
+
 const User = vi.hoisted(() => ({
     findOne: vi.fn(),
     findOneAndUpdate: vi.fn(),
@@ -52,6 +54,10 @@ vi.mock("../lib/model-input.js", () => ({
 vi.mock("../utils/cloudinary.js", () => ({
     getImageDetails,
     uploadToCloudinary,
+}))
+
+vi.mock("./feedback-service.js", () => ({
+    recordSuccessfulGeneration,
 }))
 
 vi.mock("../models/user.js", () => ({
@@ -314,6 +320,76 @@ describe("runGenerationJob", () => {
                 userCreditsRemaining: 5,
                 savedToHistory: false,
             })
+        })
+    })
+
+    describe("feedback generation counter ordering", () => {
+        const job = {
+            model: "owner/model",
+            input: {},
+            jobId: "job_order",
+            userId: "user_1",
+            featureType: FeatureType.IMAGE,
+            creditCost: 1,
+            buildCloudinaryPayload: () => ({}),
+        } as never
+
+        function completedCallOrder(setStatus: ReturnType<typeof vi.fn>): number {
+            const index = setStatus.mock.calls.findIndex(
+                ([, status]) => status.status === "completed",
+            )
+            return setStatus.mock.invocationCallOrder[index]
+        }
+
+        it("counts the generation before the saved job is marked completed", async () => {
+            replicateRun.mockResolvedValue("https://out.png")
+            setupHappyPersist()
+            const services = { jobStatus: jobStatus() }
+
+            await runGenerationJob(job, services)
+
+            expect(recordSuccessfulGeneration).toHaveBeenCalledWith("user_1", FeatureType.IMAGE)
+            expect(recordSuccessfulGeneration.mock.invocationCallOrder[0]).toBeLessThan(
+                completedCallOrder(services.jobStatus.setStatus),
+            )
+        })
+
+        it("counts the generation before the history-cap job is marked completed", async () => {
+            replicateRun.mockResolvedValue("https://out.png")
+            User.findOne.mockResolvedValue({ plan: "free" })
+            User.findOneAndUpdate
+                .mockResolvedValueOnce(null)
+                .mockResolvedValueOnce({ dailyCredits: 3, credits: 2 })
+            const services = { jobStatus: jobStatus() }
+
+            await runGenerationJob(job, services)
+
+            expect(recordSuccessfulGeneration).toHaveBeenCalledTimes(1)
+            expect(recordSuccessfulGeneration.mock.invocationCallOrder[0]).toBeLessThan(
+                completedCallOrder(services.jobStatus.setStatus),
+            )
+        })
+
+        it("waits for the counter to finish before completing", async () => {
+            replicateRun.mockResolvedValue("https://out.png")
+            setupHappyPersist()
+            let releaseCounter: () => void = () => undefined
+            recordSuccessfulGeneration.mockImplementationOnce(
+                () => new Promise<void>((resolve) => (releaseCounter = resolve)),
+            )
+            const services = { jobStatus: jobStatus() }
+
+            const running = runGenerationJob(job, services)
+            await vi.waitFor(() => expect(recordSuccessfulGeneration).toHaveBeenCalled())
+            expect(
+                services.jobStatus.setStatus.mock.calls.some(([, s]) => s.status === "completed"),
+            ).toBe(false)
+
+            releaseCounter()
+            await running
+            expect(
+                services.jobStatus.setStatus.mock.calls.some(([, s]) => s.status === "completed"),
+            ).toBe(true)
         })
     })
 

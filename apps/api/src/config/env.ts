@@ -1,6 +1,17 @@
 import { normalizeCountryCode } from "@visual-ai/shared"
 import { z } from "zod"
 
+/** Comma-separated env value to a trimmed list without empty entries; unset means empty. */
+const commaSeparatedList = z
+    .string()
+    .default("")
+    .transform((v) =>
+        v
+            .split(",")
+            .map((item) => item.trim())
+            .filter(Boolean),
+    )
+
 /**
  * Environment variable schema with zod validation
  * All required environment variables are validated at application boot.
@@ -55,15 +66,7 @@ const envSchema = z
         REPLICATE_API_TOKEN: z.string().min(1, "REPLICATE_API_TOKEN is required"),
         // Comma-separated user ids whose generations never reach real Replicate (e2e test users).
         // Parsed once at startup, so changing it requires an API restart.
-        E2E_USER_IDS: z
-            .string()
-            .default("")
-            .transform((v) =>
-                v
-                    .split(",")
-                    .map((id) => id.trim())
-                    .filter(Boolean),
-            ),
+        E2E_USER_IDS: commaSeparatedList,
 
         // Dev/test only: price for this ISO country instead of the request's geo. Invalid values
         // become undefined so a typo never blocks boot; production/staging ignore it.
@@ -99,6 +102,12 @@ const envSchema = z
         MAIL_FROM: z.string().optional(),
         EMAIL_REPLY_TO: z.string().optional(),
         MAIL_POSTAL_ADDRESS: z.string().optional(),
+
+        // Feedback (all optional). ADMIN_USER_IDS gates the admin routes; an empty list means no admins.
+        ADMIN_USER_IDS: commaSeparatedList,
+        FEEDBACK_NOTIFY_EMAIL: z.string().optional(),
+        // "log" never sends; only an explicit "send" reaches Resend. A typo falls back to "log".
+        FEEDBACK_EMAIL_MODE: z.enum(["log", "send"]).default("log").catch("log"),
 
         // Webhooks
         WEBHOOK_SECRET: z.string().min(1, "WEBHOOK_SECRET is required"),
