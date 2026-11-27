@@ -233,7 +233,7 @@ describe('UserMenu', () => {
     const wrapper = mount(UserMenu, { global: { stubs }, attachTo: document.body });
     await wrapper.get('[data-testid="user-menu-trigger"]').trigger('click');
     const items = wrapper.findAll('[role="menuitem"]');
-    const last = wrapper.get('[data-testid="user-menu-item-whats-new"]');
+    const last = wrapper.get('[data-testid="user-menu-item-feedback"]');
     await last.trigger('keydown', { key: 'ArrowDown' });
     expect(document.activeElement).toBe(items[0].element);
     await items[0].trigger('keydown', { key: 'ArrowUp' });

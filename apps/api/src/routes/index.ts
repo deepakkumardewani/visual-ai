@@ -5,6 +5,7 @@ import { collectionRoutes } from "../routes/collections.js"
 import { emailRoutes } from "../routes/email.js"
 import { creditsRoute } from "../routes/credits.js"
 import { exploreRoutes } from "../routes/explore.js"
+import { feedbackRoutes } from "../routes/feedback.js"
 import { generateRoute } from "../routes/generate.js"
 import { imageRoutes } from "../routes/image.js"
 import { paymentsApiRouter, paymentsPublicRouter } from "../payments/router.js"
@@ -29,3 +30,4 @@ router.use(requireAuth as any, creditsRoute)
 router.use(requireAuth as any, imageRoutes)
 router.use(requireAuth as any, collectionRoutes)
 router.use(requireAuth as any, paymentsApiRouter)
+router.use(requireAuth as any, feedbackRoutes)

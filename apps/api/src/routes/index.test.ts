@@ -10,6 +10,7 @@ vi.mock("../routes/collections.js", () => ({ collectionRoutes: "collectionRoutes
 vi.mock("../routes/credits.js", () => ({ creditsRoute: "creditsRoute" }))
 vi.mock("../routes/email.js", () => ({ emailRoutes: "emailRoutes" }))
 vi.mock("../routes/explore.js", () => ({ exploreRoutes: "exploreRoutes" }))
+vi.mock("../routes/feedback.js", () => ({ feedbackRoutes: "feedbackRoutes" }))
 vi.mock("../routes/generate.js", () => ({ generateRoute: "generateRoute" }))
 vi.mock("../routes/image.js", () => ({ imageRoutes: "imageRoutes" }))
 vi.mock("../payments/router.js", () => ({
@@ -59,6 +60,7 @@ describe("api router index", () => {
         expect(mounted).toContainEqual(["clerk-auth", "imageRoutes"])
         expect(mounted).toContainEqual(["clerk-auth", "collectionRoutes"])
         expect(mounted).toContainEqual(["clerk-auth", "paymentsApiRouter"])
+        expect(mounted).toContainEqual(["clerk-auth", "feedbackRoutes"])
     })
 
     it("registers every application router exactly once", async () => {
@@ -79,6 +81,7 @@ describe("api router index", () => {
             "imageRoutes",
             "collectionRoutes",
             "paymentsApiRouter",
+            "feedbackRoutes",
         ])
     })
 })

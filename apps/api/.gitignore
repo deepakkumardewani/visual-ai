@@ -30,4 +30,8 @@ dist/
 buildcache/
 scripts/*
 !scripts/send-v2-announcement.ts
+!scripts/send-feedback-digest.ts
 !.env.example
+
+# Local feedback email output (log mode)
+.tmp/

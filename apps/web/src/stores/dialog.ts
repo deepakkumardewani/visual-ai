@@ -29,6 +29,7 @@ export const useDialogStore = defineStore('dialog', () => {
   const showCopyReferralDialog = ref(false);
   const showDeleteDialog = ref(false);
   const showBuyCreditsDialog = ref(false);
+  const showFeedbackDialog = ref(false);
   const imageUrl = ref('');
   const prompt = ref('');
   const originalImage = ref('');
@@ -85,6 +86,12 @@ export const useDialogStore = defineStore('dialog', () => {
   function hideBuyCredits() {
     showBuyCreditsDialog.value = false;
   }
+  function showFeedback() {
+    showFeedbackDialog.value = true;
+  }
+  function hideFeedback() {
+    showFeedbackDialog.value = false;
+  }
   function hideReferral() {
     showReferralDialog.value = false;
   }
@@ -136,6 +143,7 @@ export const useDialogStore = defineStore('dialog', () => {
     showCopyReferralDialog,
     showLowCreditsDialog,
     showBuyCreditsDialog,
+    showFeedbackDialog,
     showDeleteDialog,
     imageUrl,
     originalImage,
@@ -158,6 +166,8 @@ export const useDialogStore = defineStore('dialog', () => {
     hideDelete,
     showBuyCredits,
     hideBuyCredits,
+    showFeedback,
+    hideFeedback,
     showCopyReferral,
     hideCopyReferral,
     showSignup,

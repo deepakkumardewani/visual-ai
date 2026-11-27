@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 const mocks = vi.hoisted(() => ({
     schedule: vi.fn(),
     updateMany: vi.fn(),
+    sendFeedbackDigest: vi.fn(),
     logger: { info: vi.fn(), error: vi.fn(), warn: vi.fn(), debug: vi.fn() },
     env: { ENABLE_CRON: true },
 }))
@@ -17,6 +18,10 @@ vi.mock("../lib/logger.js", () => ({
 
 vi.mock("../models/user.js", () => ({
     UserModel: { updateMany: mocks.updateMany },
+}))
+
+vi.mock("../services/feedback-digest-service.js", () => ({
+    sendFeedbackDigest: mocks.sendFeedbackDigest,
 }))
 
 vi.mock("../config/env.js", () => ({
@@ -80,6 +85,24 @@ describe("cronJobs", () => {
         expect(mocks.logger.error).toHaveBeenCalledWith(
             { err: expect.any(Error) },
             "Error resetting daily credits",
+        )
+    })
+
+    it("schedules the weekly feedback digest and logs failures", async () => {
+        mocks.sendFeedbackDigest.mockRejectedValueOnce(new Error("mail down"))
+
+        await import("./cronJobs.js")
+
+        expect(mocks.schedule).toHaveBeenCalledWith("0 9 * * 1", expect.any(Function), {
+            timezone: "UTC",
+        })
+        const digestCall = mocks.schedule.mock.calls.find(([expr]) => expr === "0 9 * * 1")
+        await (digestCall?.[1] as () => Promise<void>)()
+
+        expect(mocks.sendFeedbackDigest).toHaveBeenCalledTimes(1)
+        expect(mocks.logger.error).toHaveBeenCalledWith(
+            { err: expect.any(Error) },
+            "Error sending weekly feedback digest",
         )
     })
 

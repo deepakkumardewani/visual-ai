@@ -11,10 +11,19 @@ import { useUserStore } from '@/stores/user';
 import AppFooter from '@/components/AppFooter.vue';
 import ConfirmChainActionDialog from '@/components/Dialogs/ConfirmChainActionDialog.vue';
 import ReferralDialog from '@/components/Dialogs/ReferralDialog.vue';
+import FeedbackPopup from '@/components/Feedback/FeedbackPopup.vue';
 import AppHeader from '@/components/Header/AppHeader.vue';
 import Toast from '@/components/primitives/Toast.vue';
 
+import { ADMIN_FEEDBACK_ROUTE } from '@/router/adminGuard';
 import { APP_SURFACE, isAppShellRoute } from '@/utils/dashboardRoutes';
+
+/** Signed-out visitors on these routes are sent to signin once Clerk has loaded. */
+const PROTECTED_ROUTE_NAMES: ReadonlySet<string> = new Set([
+  'profile',
+  'explore-image',
+  ADMIN_FEEDBACK_ROUTE,
+]);
 
 const appStore = useAppStore();
 const userStore = useUserStore();
@@ -34,7 +43,7 @@ watch(
     if (!currentUser) {
       // Signed-out visitors never fetch a profile; the header waits on this flag.
       userStore.isReady = true;
-      const protectedRoute = route.name === 'profile' || route.name === 'explore-image';
+      const protectedRoute = PROTECTED_ROUTE_NAMES.has(String(route.name));
       if (protectedRoute) {
         void router.replace({ name: 'signin', query: { redirect: route.fullPath } });
       }
@@ -113,6 +122,7 @@ const isHeaderInFlowBand = computed(
     </div>
     <AppFooter v-if="isFooterVisible" />
 
+    <FeedbackPopup />
     <Toast v-model="snackbar" :timeout="snackbarTimeout" :text="snackbarText" />
     <ConfirmChainActionDialog
       :open="showChainActionDialog"

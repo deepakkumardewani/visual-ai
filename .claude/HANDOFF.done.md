@@ -1,7 +1,7 @@
-# HANDOFF — landing-v3-polish: implement agent_docs/landing-v3-polish/PLAN.md
+# HANDOFF — Landing + credit economics (agent_docs/intent/landing-and-credit-economics.md)
 
-Saved: 2026-11-16T17:27:24Z · Repo: /Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai · Model: claude-fable-5-2 · Effort: unknown
-Mode: freeform (orchestrated per PLAN.md section 4)
+Saved: 2026-11-26T20:25+05:30 · Repo: /Users/deepakdewani1/Documents/Programs/vue/text-to-image/visual-ai · Model: claude-opus-5-5 · Effort: medium
+Mode: freeform · Branch: feat/landing-and-credit-economics
 
 ## Context discipline (mandatory for the resuming session)
 
@@ -10,33 +10,37 @@ verification to subagents, one task per subagent. Keep raw output out of main co
 
 ## Where we are
 
-Plan has 8 phases on `/v3` (shared `apps/web/src/components/LandingV2/*`). Owner decisions: drop the model name on showcase tiles; keep "No card needed"; pricing shows Free + Pro + Credit packs.
-Built, reviewed, fixes applied: phases 1, 4, 6, 8. Built, NOT reviewed: 2 (hero), 7 (showcase).
-Phase 3 (tools) builder was killed mid-verification: code is edited and 53 shots exist, but there is no report; reduced-motion and v1-page checks were not done. Phase 5 (rotating hero prompt) not started.
-Rules: Opus for phases 2/3/5/7 and UI/UX review, Sonnet for the rest; no new or changed tests; no commits; dev app already runs on http://localhost:4300; agent-browser with a repo-unique session.
+Implementing the intent doc above. All parts built (A1–A4 landing, B1 derived credit costs,
+B2 Pro gate, B3/B4 USD/INR packs + FAQ). Independent verifier: all behaviour checks PASS;
+run FAILED only on stale e2e tests + formatting + one security advisory. Fixing those now.
 
 ## Done this session
 
-- Phases 1, 2, 4, 6, 7, 8 built; reviews in agent_docs/landing-v3-polish/reviews/ (ui/ux for p1-p6 and p4-p8), shots in agent_docs/landing-v3-polish/shots/
-- 6 approved Replicate calls made (3 Flux 1.1 Pro, 3 background removals); assets in apps/web/public/landing/remove-bg-\*.webp. No further paid calls are approved.
-- Phase 7 file list: see git status (safeRedirect.ts, useStudioPromptPrefill.ts, ShowcaseDialog.vue, showcaseScrub.ts, useShowcaseLightbox.ts, useTryPromptLink.ts, Signin.vue, Dashboard.vue, router/index.ts, useLenis.ts, useFocusTrap.ts, AppModal.vue)
-- Usage guard fixed in ~/dotfiles/claude/.claude/hooks/usage-guard.sh (skips subagents, hard stop at 98%)
+- A1–A3: fixed-size showcase dialog, arrow-key hint removed, "Start free" magnetic hover removed.
+- A4: v3 landing is `/` (components/Home/, pages/Home.vue); v2/v3 + 30 unused files deleted; catch-all → `/`.
+- B1: getCreditCost = ceil(price/0.005); 4 utility prices marked `// TODO verify price`.
+- B2: requiresPro(key) in shared plans.ts; API 403 PREMIUM_MODEL_REQUIRES_PRO; picker locks; usePremiumModelFallback.
+- B3/B4: packs 300/700/1600/4500 with USD+INR prices; server-side currency; webhook validates recorded currency; legacy pack ids resolvable. 8 Dodo TEST products created, ids in apps/api/.env.
+- Post-verify fixes: geo.ts now trusts only `cf-ipcountry` (geo.test.ts updated); PricingCreditStory uses creditEconomyPhrase (fixes "is" grammar); PricingModelCosts row chips get aria-label "N credits"; pro-tier.spec.ts range-label assertion removed.
 
 ## Next step (exact)
 
-1. Opus subagent: finish phase 3 verification (PLAN.md phase 3; `vp check`, `vp lint`, shots at 1440x900, 1920x1080, 390, WebGL off, reduced motion, `/v2` and v1 pages) and report what the killed agent changed (ToolsScene.vue, toolsTimeline.ts, ToolStage.vue, ToolChapterCopy.vue, ToolCluster.vue).
-2. reviewer-ui + reviewer-ux (Opus) on phases 2+3 together and on phase 7; reviewer-security on phase 7 (sign-in `redirect` param now read app-wide, `?prompt=` prefill). Apply must-fixes with fix subagents.
-3. Phase 5 (Opus), then its review.
-4. Final "Landing v3 polish Implementation Summary" with task list and Verification Steps.
+1. `apps/web/e2e/qa/daily-credits-copy.spec.ts:71-73` still expects "Premium upscalers are 4 and premium generation is 5" — update to the new copy rendered by PricingCreditStory (creditEconomyPhrase, apps/web/src/utils/creditCopy.ts).
+2. `bunx vp check --fix apps/web/e2e/qa/pro-tier.spec.ts apps/web/src/components/Pricing/*.vue`, then `bun run check`, `bun run lint`, `bunx vp test run` (rebuild shared dist first), api geo tests.
+3. Re-run e2e: qa/pro-tier, qa/daily-credits-copy, qa/pricing-layout (paid endpoints stay mocked).
+4. Delete/gitignore stray `*.tsbuildinfo` (apps/web, packages/shared). Then final summary to user (format in CLAUDE.md). Do NOT commit unless told.
 
 ## In flight when stopped
 
-Phase 3 builder (killed, see above). agent-browser session `visual-ai-p3` may still be open; close that session only.
+none
 
 ## Uncommitted changes
 
-69 paths, all uncommitted, mixed with unrelated edits (Header, .dashboard). Never commit; leave others' files alone.
+~207 entries in git status (all branch work, uncommitted by design).
 
 ## Open questions for the user
 
-None blocking. To flag in the final summary: utils/landing.test.ts fails (4 tests, 2 TS2339) because of the new `cutout` media kind; local API CORS rejects localhost:4300 so `/payments/prices` fails there; v1 teaser says "From ₹99" but the cheapest pack is ₹130; mobile hero "Start free" clipped ~13px at 390x844; `/signup` drops the redirect; `marketing.spec.ts` looks for the missing `.tile__btn`.
+- Pro-gated set changed vs old list (now also FLUX_PRO, FLUX_1_1_PRO, FLUX_2_MAX; no longer KONTEXT_PRO, IMAGEN_4_ULTRA) — confirm or retier in registry.
+- Catch-all redirect to `/` vs a real 404 page.
+- User must add 8 live-mode DODO*PRODUCT_ID_PACK*{300,700,1600,4500}\_{USD,INR} to .env.production/.env.staging.
+- Known unrelated failure: .dashboard/media-studio/.../speech-route.test.ts.

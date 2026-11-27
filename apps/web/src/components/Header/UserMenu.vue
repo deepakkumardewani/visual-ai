@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   faChevronDown,
+  faCommentDots,
   faCreditCard,
   faLink,
   faMoon,
@@ -23,6 +24,7 @@ import { useUserStore } from '@/stores/user';
 
 import { useIntro } from '@/composables/useIntro';
 
+import FeedbackDialog from '@/components/Dialogs/FeedbackDialog.vue';
 import PricingDialog from '@/components/Dialogs/PricingDialog.vue';
 import ProPerksDialog from '@/components/Dialogs/ProPerksDialog.vue';
 import ReferralCopyDialog from '@/components/Dialogs/ReferralCopyDialog.vue';
@@ -78,6 +80,7 @@ const menuItems = computed(() => [
   { id: 'use-referral', label: 'Use Referral Code', icon: faUsers, action: showReferralDialog },
   { id: 'refer-earn', label: 'Refer & Earn Credits', icon: faLink, action: copyReferralCode },
   { id: 'whats-new', label: "What's new", icon: faRocket, action: showWhatsNew },
+  { id: 'feedback', label: 'Send feedback', icon: faCommentDots, action: showFeedbackDialog },
 ]);
 
 function toggleMenu() {
@@ -155,6 +158,11 @@ async function showWhatsNew() {
     await router.push({ name: APP_SURFACE.CREATE });
   }
   intro.open();
+}
+
+function showFeedbackDialog() {
+  closeMenu();
+  dialogStore.showFeedback();
 }
 
 function onPlanPillClick() {
@@ -332,6 +340,7 @@ function setItemRef(index: number) {
   </div>
   <ReferralDialog />
   <PricingDialog />
+  <FeedbackDialog />
   <ProPerksDialog />
   <ReferralCopyDialog />
 </template>

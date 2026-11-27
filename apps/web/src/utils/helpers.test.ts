@@ -7,6 +7,7 @@ vi.mock('@/composables/useFetch', () => ({
 
 import { useFetch } from '@/composables/useFetch';
 import { useDialogStore } from '@/stores/dialog';
+import { useFeedbackStore } from '@/stores/feedback';
 import { useGenerateStore } from '@/stores/generate';
 import { useHistoryStore } from '@/stores/history';
 import { useUserStore } from '@/stores/user';
@@ -331,6 +332,35 @@ describe('store-backed helpers', () => {
     expect(fetchMock).toHaveBeenCalledWith('https://cdn.example/dl.jpg');
   });
 
+  it('bulkDownload asks for feedback once per batch, and not when nothing downloaded', async () => {
+    const prompt = vi.spyOn(useFeedbackStore(), 'maybePrompt').mockResolvedValue();
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      blob: async () => new Blob(['x'], { type: 'image/jpeg' }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    const originalUrl = { create: URL.createObjectURL, revoke: URL.revokeObjectURL };
+    URL.createObjectURL = () => 'blob:x';
+    URL.revokeObjectURL = () => {};
+    mockFetchJson({
+      data: { value: { url: 'https://cdn.example/dl.jpg' } },
+      error: { value: null },
+    });
+
+    await bulkDownload([imageObject({ _id: 'a' }), imageObject({ _id: 'b' })]);
+    expect(prompt).toHaveBeenCalledTimes(1);
+    expect(prompt).toHaveBeenCalledWith('download');
+
+    prompt.mockClear();
+    mockFetchJson({ data: { value: null }, error: { value: new Error('404') } });
+    await bulkDownload([imageObject({ _id: 'c' })]);
+    expect(prompt).not.toHaveBeenCalled();
+
+    URL.createObjectURL = originalUrl.create;
+    URL.revokeObjectURL = originalUrl.revoke;
+    vi.unstubAllGlobals();
+  });
+
   it('bulkDownload contains a malformed entry and still processes the others', async () => {
     mockFetchJson({ data: { value: null }, error: { value: new Error('404') } });
 
@@ -419,6 +449,20 @@ describe('store-backed helpers', () => {
     it('returns false when the item has no images', async () => {
       await expect(downloadItemImage(undefined, imageObject({ images: [] }))).resolves.toBe(false);
       expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it('asks for feedback after a successful download only', async () => {
+      const prompt = vi.spyOn(useFeedbackStore(), 'maybePrompt').mockResolvedValue();
+      const item = imageObject({ _id: undefined, images: [providerImage] });
+
+      await downloadItemImage(undefined, item);
+      expect(prompt).toHaveBeenCalledTimes(1);
+      expect(prompt).toHaveBeenCalledWith('download');
+
+      prompt.mockClear();
+      fetchMock.mockResolvedValue({ ok: false, status: 500 });
+      await downloadItemImage(undefined, item);
+      expect(prompt).not.toHaveBeenCalled();
     });
 
     it('stops event propagation', async () => {

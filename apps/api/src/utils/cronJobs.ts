@@ -1,10 +1,11 @@
 import cron from "node-cron"
-import { DAILY_RESET_UTC_HOUR, getDailyCredits } from "@visual-ai/shared"
+import { DAILY_RESET_UTC_HOUR, FEEDBACK_DIGEST_CRON, getDailyCredits } from "@visual-ai/shared"
 
 import { env } from "../config/env.js"
 import { freeUsersFilter, proUsersFilter } from "../lib/isPro.js"
 import { createLogger } from "../lib/logger.js"
 import { UserModel as User } from "../models/user.js"
+import { sendFeedbackDigest } from "../services/feedback-digest-service.js"
 
 const logger = createLogger("cron-jobs")
 
@@ -26,6 +27,17 @@ if (env.ENABLE_CRON) {
                 logger.info("Daily credits successfully reset")
             } catch (error) {
                 logger.error({ err: error }, "Error resetting daily credits")
+            }
+        },
+        { timezone: "UTC" },
+    )
+    cron.schedule(
+        FEEDBACK_DIGEST_CRON,
+        async () => {
+            try {
+                await sendFeedbackDigest()
+            } catch (error) {
+                logger.error({ err: error }, "Error sending weekly feedback digest")
             }
         },
         { timezone: "UTC" },

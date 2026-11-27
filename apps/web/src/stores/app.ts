@@ -6,6 +6,7 @@ import { computed, ref, watch } from 'vue';
 import type { JobStatus } from '@/types';
 import { FeatureType } from '@/types';
 
+import { useFeedbackStore } from '@/stores/feedback';
 import { useGenerateStore } from '@/stores/generate';
 import { useUserStore } from '@/stores/user';
 import { createLogger } from '@/utils/logger';
@@ -138,6 +139,8 @@ export const useAppStore = defineStore('app', () => {
           images.value = result.images;
           imageData.value = result;
           isLoading.value = false;
+          // Resolved lazily: the feedback store reads the generate store, which this store builds on.
+          void useFeedbackStore().maybePrompt('generation');
         }
       }
     }

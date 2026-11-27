@@ -23,6 +23,8 @@ const webServer = useProdServer
   : undefined;
 
 const VITEST_FILE_PATTERN = /\.test\.ts$/;
+// README screenshot capture: only runs in the `readme` project, never in the normal suite.
+const README_CAPTURE_PATTERN = /e2e\/readme\//;
 
 // Default (unset or E2E_SERVER=dev): no webServer — web app and API are already running locally.
 export default defineConfig({
@@ -58,9 +60,20 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], storageState: AUTH_STATE_PATH },
     },
     {
+      name: 'readme',
+      testMatch: README_CAPTURE_PATTERN,
+      workers: 1,
+      use: { ...devices['Desktop Chrome'], storageState: AUTH_STATE_PATH },
+    },
+    {
       name: 'chromium',
       // A project-level testIgnore replaces the top-level one, so repeat the Vitest-file pattern.
-      testIgnore: [VITEST_FILE_PATTERN, /auth\.setup\.ts/, /billing-(purchase|history)\.spec\.ts/],
+      testIgnore: [
+        VITEST_FILE_PATTERN,
+        /auth\.setup\.ts/,
+        /billing-(purchase|history)\.spec\.ts/,
+        README_CAPTURE_PATTERN,
+      ],
       grepInvert: /@guest/,
       dependencies: ['setup'],
       // Real local API + one Clerk user: parallel signed-in specs race on /users/user_*.

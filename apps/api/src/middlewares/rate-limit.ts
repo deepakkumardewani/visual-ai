@@ -8,7 +8,7 @@ import { redisClient } from "../config/redis.js"
 
 const STT_LIMIT_MESSAGE = "Too many voice requests. Try again later."
 
-function sttRateLimitKey(req: Request): string {
+export function userOrIpRateLimitKey(req: Request): string {
     const userId = req.auth?.userId
     if (userId) {
         return userId
@@ -16,14 +16,14 @@ function sttRateLimitKey(req: Request): string {
     return ipKeyGenerator(req.ip ?? "127.0.0.1", 56)
 }
 
-function createStore() {
+export function createRateLimitStore(prefixName: string) {
     if (env.NODE_ENV === "test") {
         return undefined
     }
     return new RedisStore({
         sendCommand: (command: string, ...args: string[]) =>
             redisClient.call(command, ...args) as Promise<number>,
-        prefix: `${env.QUEUE_PREFIX}:stt-rl:`,
+        prefix: `${env.QUEUE_PREFIX}:${prefixName}:`,
     })
 }
 
@@ -33,8 +33,8 @@ export const sttRateLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
     message: STT_LIMIT_MESSAGE,
-    keyGenerator: sttRateLimitKey,
-    store: createStore(),
+    keyGenerator: userOrIpRateLimitKey,
+    store: createRateLimitStore("stt-rl"),
     handler: (req, res, _next, options) => {
         const retryAfterSeconds = Math.ceil(options.windowMs / 1000)
         res.setHeader("Retry-After", String(retryAfterSeconds))
