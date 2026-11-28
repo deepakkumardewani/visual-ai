@@ -64,3 +64,4 @@ playwright-transform-cache-*/
 
 agent-browser-chrome-*/
 *.tsbuildinfo
+agent_docs/*/design/refs/

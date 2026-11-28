@@ -1,0 +1,1 @@
+Mock-only: Replicate, Dodo live and email are never called; every paid POST is intercepted by existing stubs, paidCallGuard stays on and is never bypassed or narrowed. The dev server is never started.
